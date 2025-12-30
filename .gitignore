@@ -95,6 +95,12 @@ playwright-report/
 test-run-output.txt
 test-screenshots/
 
+# Visual Testing - snapshots and reports are runtime-only
+.visual-testing/snapshots/
+.visual-testing/reports/
+# Keep baselines tracked
+!.visual-testing/baselines/
+
 # Working test files and directories
 /tests/browser-automation/
 /tests/e2e/vercel/
@@ -103,6 +109,7 @@ test-screenshots/
 playwright.*.config.ts
 !playwright.config.ts
 !playwright.cart.config.ts
+!playwright.visual-regression.config.ts
 
 # Theme and build artifacts
 .themes/
@@ -147,6 +154,9 @@ visual-regression-screenshots/
 *.jpg
 *.jpeg
 
+# Exception: Visual regression test snapshots must be tracked
+!tests/visual-regression/*.spec.ts-snapshots/*.png
+
 # Hero video assets are required for builds and MUST be tracked
 # Exceptions for public/videos/hero directory
 !public/videos/hero/*.jpg
@@ -176,3 +186,6 @@ debug-*.log
 !CLAUDE.md
 !CONTRIBUTING.md
 !LICENSE.md
+
+# Claude flow metrics (auto-generated)
+.claude-flow/

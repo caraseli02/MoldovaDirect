@@ -252,6 +252,62 @@ npx supabase status      # Check Supabase connection
 
 ---
 
-**Last Updated:** 2025-12-08
+## 📸 Visual Testing
+
+Visual regression testing captures screenshots for review. All visual testing assets are organized in `.visual-testing/`.
+
+### Directory Structure
+
+```
+.visual-testing/
+├── baselines/          # Reference screenshots (git tracked)
+│   └── [feature]/      # e.g., orders, products, checkout
+│       └── [name]-[viewport].png
+├── snapshots/          # Current test run (gitignored)
+│   └── [timestamp]/
+│       └── [feature]/
+├── reports/            # HTML review reports (gitignored)
+│   └── index.html
+├── utils.ts            # Shared utilities
+└── README.md           # Detailed documentation
+```
+
+### Commands
+
+```bash
+# Run visual tests for orders page
+pnpm run test:visual:orders
+
+# Run all visual tests
+pnpm run test:visual:all
+
+# Serve visual review report (starts local server)
+pnpm run visual:serve
+# Then open http://localhost:3333
+```
+
+### Naming Convention
+
+Screenshots follow: `[name]-[viewport].png`
+
+- **name**: Descriptive (kebab-case) - `full-page`, `metrics-section`, `filter-active`
+- **viewport**: `mobile` (375px), `tablet` (768px), `desktop` (1440px)
+
+### Adding Visual Tests
+
+1. Create test in `tests/e2e/visual/[feature].spec.ts`
+2. Import utilities from `.visual-testing/utils.ts`
+3. Use `captureScreenshot()` or `captureResponsiveScreenshots()`
+4. Run tests and review `.visual-testing/reports/index.html`
+
+### Git Policy
+
+- **baselines/** - Committed (reference images)
+- **snapshots/** - Ignored (runtime)
+- **reports/** - Ignored (generated)
+
+---
+
+**Last Updated:** 2025-12-28
 **Admin Status:** All 5 pages working ✅
 **New Files:** `feature_list.json`, `claude-progress.md`, `init.sh`

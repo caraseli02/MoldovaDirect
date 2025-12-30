@@ -35,12 +35,14 @@
     "orderSummary": "Resumen del Pedido",
     "retry": "Reintentar",
     "cancel": "Cancelar",
+    "undo": "Deshacer",
     "showMore": "Mostrar Más",
     "showLess": "Mostrar Menos",
     "swipe_to_remove": "Desliza para eliminar",
     "release_to_remove": "Suelta para eliminar",
     "help": "Ayuda",
     "each": "cada",
+    "items": "artículos",
     "refresh": "Actualizar",
     "tryAgain": "Intentar de nuevo",
     "error": "Error",
@@ -56,7 +58,10 @@
     "cartError": "Error en el carrito",
     "cartValidationError": "Error de validación",
     "proceedToCheckout": "Proceder al Pago",
-    "showOrderSummary": "Mostrar resumen del pedido"
+    "showOrderSummary": "Mostrar resumen del pedido",
+    "hideOrderSummary": "Ocultar resumen del pedido",
+    "item": "artículo",
+    "items": "artículos"
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculado al finalizar",
@@ -235,7 +240,33 @@
     "recommendedProducts": "Productos recomendados",
     "decreaseQuantity": "Disminuir cantidad",
     "increaseQuantity": "Aumentar cantidad",
-    "removeItem": "Eliminar artículo"
+    "removeItem": "Eliminar artículo",
+    "itemCount": "{count} artículos",
+    "youSave": "Estás ahorrando",
+    "secureCheckout": "Pago seguro",
+    "allCardsAccepted": "Todas las tarjetas aceptadas",
+    "add": "Añadir",
+    "stock": {
+      "inStock": "En stock",
+      "low": "¡Solo quedan {count}!",
+      "outOfStock": "Agotado"
+    },
+    "shipping": {
+      "progress": "Progreso de envío gratis",
+      "freeShipping": "Envío gratis",
+      "qualified": "¡Tu pedido califica para envío gratis!",
+      "addMore": "Añade {amount} más para envío gratis"
+    },
+    "recommendations": {
+      "boughtTogether": "Comprados juntos",
+      "similar": "Similar",
+      "priceDrop": "Precio rebajado",
+      "backInStock": "Disponible de nuevo",
+      "recommended": "Recomendado",
+      "noRecommendations": "No hay recomendaciones disponibles",
+      "loadFailed": "No se pudieron cargar las recomendaciones"
+    },
+    "quantity": "{count} artículos"
   },
   "auth": {
     "signIn": "Iniciar Sesión",
@@ -270,6 +301,11 @@
     "sendMagicLink": "Enviar Enlace Mágico",
     "magicLinkSent": "¡Enlace mágico enviado! Revisa tu correo para iniciar sesión.",
     "magicLinkError": "Error al enviar el enlace mágico. Por favor, inténtalo de nuevo.",
+    "continueWithGoogle": "Google",
+    "continueWithApple": "Apple",
+    "socialLoginNote": "Al continuar, aceptas nuestros Términos de Servicio y Política de Privacidad",
+    "socialLoginError": "Error al iniciar sesión con {provider}. Por favor, inténtalo de nuevo.",
+    "socialLoginRedirectFailed": "El inicio de sesión fue bloqueado. Por favor, permite las ventanas emergentes para este sitio e inténtalo de nuevo.",
     "resendIn": "Reenviar en",
     "emailRequired": "Por favor, introduce tu dirección de correo",
     "emailVerification": "Verificación de Correo",
@@ -340,6 +376,7 @@
       "passwordMismatch": "Las contraseñas no coinciden",
       "termsRequired": "Debes aceptar los términos y condiciones",
       "sessionExpired": "Tu sesión ha expirado. Por favor inicia sesión nuevamente",
+      "logoutFailed": "Error al cerrar sesión. Por favor intenta de nuevo.",
       "rateLimitExceeded": "Demasiados intentos. Intenta nuevamente en {minutes} minutos",
       "tokenExpired": "El enlace de verificación ha expirado",
       "tokenInvalid": "Enlace de verificación inválido",
@@ -538,6 +575,11 @@
     "wishlistItems": "Artículos en Lista de Deseos",
     "recentOrders": "Pedidos Recientes",
     "noOrdersYet": "Aún no tienes pedidos",
+    "viewProfile": "Ver perfil",
+    "quickAccess": "Acceso Rápido",
+    "myProfile": "Mi Perfil",
+    "paymentMethods": "Métodos de Pago",
+    "returns": "Devoluciones",
     "sections": {
       "admin": "Admin",
       "adminUser": "Usuario Admin",
@@ -558,6 +600,7 @@
     "reorder": "Volver a Pedir",
     "estimatedDelivery": "Entrega Estimada",
     "viewAndManage": "Ver y gestionar tu historial de pedidos",
+    "viewAllOrders": "Ver Todos los Pedidos",
     "showing": "Mostrando {start}-{end} de {total} pedidos",
     "orders": "pedidos",
     "gridView": "Vista de cuadrícula",
@@ -622,6 +665,31 @@
       "to": "Hasta",
       "clearAll": "Limpiar Todos los Filtros"
     },
+    "metrics": {
+      "active": "Activos",
+      "delivered": "Entregados",
+      "total": "Total",
+      "thisMonth": "Este Mes",
+      "activeOrders": "Pedidos Activos",
+      "deliveredThisMonth": "Entregados Este Mes",
+      "totalOrders": "Total de Pedidos",
+      "spentThisMonth": "Gastado Este Mes"
+    },
+    "filters": {
+      "quickFilters": "Filtros Rápidos",
+      "inTransit": "En Tránsito",
+      "deliveredThisMonth": "Entregados Este Mes",
+      "last3Months": "Últimos 3 Meses",
+      "allOrders": "Todos los Pedidos"
+    },
+    "progress": {
+      "deliveryProgress": "Progreso de entrega",
+      "estimatedArrival": "Llegada estimada",
+      "deliveredSuccessfully": "Entregado exitosamente"
+    },
+    "track": "Seguimiento",
+    "liveStatus": "En vivo",
+    "updateCount": "{count} actualización | {count} actualizaciones",
     "notifications": {
       "title": "Actualizaciones de Pedidos",
       "delivered": {
@@ -667,6 +735,8 @@
       "statusBadge": "Estado del pedido: {status}",
       "reorderButton": "Volver a pedir todos los artículos de este pedido",
       "viewDetailsButton": "Ver información detallada de este pedido",
+      "trackButton": "Rastrear este pedido",
+      "orderActions": "Acciones del pedido",
       "searchInput": "Buscar pedidos por número de pedido o nombre de producto",
       "clearSearch": "Limpiar búsqueda",
       "statusFilter": "Filtrar pedidos por estado",
@@ -726,15 +796,42 @@
     }
   },
   "profile": {
-    "title": "Configuración del Perfil",
+    "title": "Mi Perfil",
     "description": "Gestiona tu información personal y preferencias de cuenta",
+    "autoSaveDescription": "Los cambios se guardan automáticamente",
     "profilePicture": "Foto de Perfil",
     "profilePictureDescription": "Sube una foto de perfil para personalizar tu cuenta",
+    "dragDropHint": "Toca la foto o arrastra para cambiar",
     "changePicture": "Cambiar Foto",
     "uploadPicture": "Subir Foto",
     "removePicture": "Eliminar Foto",
     "emailCannotBeChanged": "La dirección de email no se puede cambiar",
     "saveChanges": "Guardar Cambios",
+    "saving": "Guardando...",
+    "saved": "Guardado",
+    "saveError": "Error al guardar",
+    "completion": "Perfil Completado",
+    "unsavedChangesWarning": "Tienes cambios sin guardar. ¿Estás seguro de que quieres salir?",
+    "addressSingular": "dirección guardada",
+    "addressPlural": "direcciones guardadas",
+    "sections": {
+      "personalInfo": "Información Personal",
+      "personalInfoSubtitle": "Nombre, email, teléfono",
+      "preferences": "Preferencias",
+      "preferencesSubtitle": "Idioma, moneda",
+      "currency": "Moneda",
+      "security": "Seguridad",
+      "securitySubtitle": "Contraseña y autenticación",
+      "password": "Contraseña",
+      "change": "Cambiar",
+      "twoFactor": "Autenticación 2FA",
+      "twoFactorDisabled": "No activada",
+      "enable": "Activar",
+      "changePassword": "Cambiar Contraseña",
+      "changePasswordDescription": "Próximamente podrás cambiar tu contraseña desde aquí.",
+      "enable2FA": "Activar 2FA",
+      "enable2FADescription": "La autenticación de dos factores estará disponible próximamente."
+    },
     "addresses": "Direcciones",
     "addressesDescription": "Gestiona tus direcciones de envío y facturación",
     "addAddress": "Añadir Dirección",
@@ -821,7 +918,10 @@
       "loadAddressesFailed": "Error al cargar las direcciones",
       "addressSaveFailed": "Error al guardar la dirección. Por favor, inténtalo de nuevo.",
       "addressDeleteFailed": "Error al eliminar la dirección. Por favor, inténtalo de nuevo.",
-      "deleteFailed": "Error al eliminar la cuenta. Por favor, inténtalo de nuevo."
+      "deleteFailed": "Error al eliminar la cuenta. Por favor, inténtalo de nuevo.",
+      "sessionExpired": "Tu sesión ha expirado. Por favor, inicia sesión de nuevo.",
+      "permissionDenied": "Permiso denegado. No puedes realizar esta acción.",
+      "notAuthenticated": "Por favor, inicia sesión para continuar."
     }
   },
   "home": {
@@ -1157,6 +1257,7 @@
     },
     "addToCart": "Añadir al Carrito",
     "outOfStock": "Agotado",
+    "productOutOfStock": "Producto agotado",
     "inCart": "En el Carrito",
     "adding": "Añadiendo...",
     "addingToCart": "Añadiendo {name}...",
@@ -1223,12 +1324,15 @@
       "clearAllFilters": "Limpiar todos los filtros activos",
       "swipeToClose": "Desliza hacia abajo o toca el botón cerrar para descartar",
       "apply": "Mostrar {count} productos | Mostrar {count} producto | Mostrar {count} productos",
+      "showingCount": "Mostrando {count} productos | Mostrando {count} producto | Mostrando {count} productos",
       "minPrice": "Precio Mínimo",
       "maxPrice": "Precio Máximo",
       "removeFilter": "Eliminar filtro {filter}",
       "unknownCategory": "Categoría Desconocida",
       "openFilters": "Abrir panel de filtros",
-      "activeCount": "{count} filtros activos"
+      "activeCount": "{count} filtros activos",
+      "description": "Filtrar productos por precio, disponibilidad y categorías",
+      "applyFilters": "Aplicar filtros"
     },
     "hero": {
       "seasonal": "Destacados de temporada",
@@ -1544,6 +1648,67 @@
       "emailSubject": "Solicitud de devolución"
     }
   },
+  "trackOrder": {
+    "title": "Rastrear tu Pedido",
+    "subtitle": "Ingresa tu número de pedido y email para rastrear el estado de tu pedido",
+    "pageTitle": "Rastrear Pedido",
+    "pageDescription": "Rastrea el estado de tu pedido y la información de envío de Moldova Direct",
+    "orderNumber": "Número de Pedido",
+    "orderNumberPlaceholder": "ej., MD-2024-XXXXX",
+    "email": "Correo Electrónico",
+    "emailPlaceholder": "Ingresa tu correo electrónico",
+    "trackButton": "Rastrear Pedido",
+    "trackAnother": "Rastrear otro pedido",
+    "trackingNumber": "Número de Seguimiento",
+    "estimatedDelivery": "Entrega Estimada",
+    "orderItems": "Artículos del Pedido",
+    "trackingHistory": "Historial de Seguimiento",
+    "shippingTo": "Enviar a",
+    "needHelp": "¿Necesitas ayuda con tu pedido?",
+    "contactSupport": "Contactar Soporte",
+    "description": "Rastrea el estado de tu pedido e información de envío",
+    "status": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmado",
+      "processing": "Procesando",
+      "shipped": "Enviado",
+      "delivered": "Entregado",
+      "cancelled": "Cancelado"
+    },
+    "steps": {
+      "confirmed": "Confirmado",
+      "processing": "Procesando",
+      "shipped": "Enviado",
+      "delivered": "Entregado"
+    },
+    "errors": {
+      "notFound": "Pedido no encontrado. Por favor verifica tu número de pedido y correo electrónico.",
+      "generic": "Algo salió mal. Por favor intenta de nuevo más tarde.",
+      "invalidInput": "Por favor ingresa un número de pedido y correo electrónico válidos.",
+      "tooManyRequests": "Demasiados intentos. Por favor espera un momento antes de intentar de nuevo.",
+      "serverError": "Error del servidor. Nuestro equipo ha sido notificado.",
+      "networkError": "Error de red. Por favor verifica tu conexión e intenta de nuevo."
+    }
+  },
+  "invoice": {
+    "title": "Factura",
+    "tagline": "Tu fuente de confianza para productos moldavos",
+    "orderNumber": "Número de Pedido",
+    "date": "Fecha",
+    "billTo": "Facturar a",
+    "shippingAddress": "Dirección de Envío",
+    "product": "Producto",
+    "quantity": "Cant.",
+    "unitPrice": "Precio Unitario",
+    "total": "Total",
+    "thankYou": "¡Gracias por comprar en Moldova Direct!",
+    "questions": "¿Preguntas sobre tu pedido?",
+    "print": "Imprimir Factura",
+    "download": "Guardar como PDF",
+    "error": "Error de Factura",
+    "errorNoData": "No se puede generar la factura. Datos del pedido no disponibles.",
+    "errorPopupBlocked": "El bloqueador de ventanas emergentes impidió abrir la factura. Por favor permite ventanas emergentes e intenta de nuevo."
+  },
   "footer": {
     "terms": "Términos y Condiciones",
     "privacy": "Política de Privacidad",
@@ -1596,7 +1761,10 @@
       "sslEncrypted": "Cifrado SSL de 256 bits",
       "dataProtected": "Tus datos están protegidos",
       "moneyBackGuarantee": "Garantía de devolución del dinero",
-      "needHelp": "¿Necesitas ayuda? Contáctanos en"
+      "needHelp": "¿Necesitas ayuda? Contáctanos en",
+      "secure": "Seguro",
+      "easyReturns": "Devoluciones Fáciles",
+      "support247": "Soporte 24/7"
     },
     "steps": {
       "shipping": {
@@ -1626,12 +1794,22 @@
         "orderDetails": "Detalles del Pedido",
         "orderDetailsPlaceholder": "Los detalles de tu pedido se mostrarán aquí",
         "viewOrders": "Ver Mis Pedidos",
-        "continueShopping": "Continuar Comprando"
+        "viewOrderDetails": "Ver Detalles del Pedido",
+        "continueShopping": "Continuar Comprando",
+        "pageTitle": "Confirmación del Pedido - Checkout",
+        "pageDescription": "Tu pedido ha sido realizado correctamente"
       }
     },
     "guestCheckout": {
-      "title": "Opciones de Compra",
-      "description": "Puedes crear una cuenta para una compra más rápida o continuar como invitado."
+      "title": "Inicia sesión para comprar más rápido",
+      "description": "Puedes crear una cuenta para una compra más rápida o continuar como invitado.",
+      "benefits": {
+        "savedAddresses": "Usa direcciones guardadas para comprar más rápido",
+        "fasterCheckout": "Salta el llenado de datos la próxima vez",
+        "orderHistory": "Rastrea pedidos y ve tu historial de compras"
+      },
+      "loginButton": "Iniciar sesión en tu cuenta",
+      "guestButton": "Continuar como invitado"
     },
     "continueAsGuest": "Continuar como Invitado",
     "backToCart": "Volver al Carrito",
@@ -1665,7 +1843,12 @@
       "shippingMethod": "Método de Envío",
       "deliveryInstructions": "Instrucciones de Entrega",
       "paymentMethod": "Método de Pago",
-      "editPayment": "Editar Pago"
+      "editPayment": "Editar Pago",
+      "acceptTerms": "Acepto los",
+      "termsOfService": "Términos y Condiciones",
+      "acceptPrivacy": "Consiento el procesamiento de mis datos personales según la",
+      "privacyPolicy": "Política de Privacidad",
+      "marketingConsent": "Me gustaría recibir comunicaciones de marketing y ofertas especiales"
     },
     "freeShipping": "Gratis",
     "processing": "Procesando...",
@@ -1696,7 +1879,14 @@
       "orderFailed": "Pedido Fallido",
       "orderProcessingFailed": "No se pudo procesar tu pedido. Por favor, inténtalo de nuevo."
     },
+    "warning": {
+      "cartLoadFailed": "Problema al Cargar el Carrito",
+      "cartLoadFailedDetails": "No se pudo cargar tu carrito. Algunos artículos pueden faltar.",
+      "totalsUpdateFailed": "Problema al Actualizar Precios",
+      "totalsUpdateFailedDetails": "No se pudieron actualizar los totales. Los precios mostrados pueden estar desactualizados."
+    },
     "validation": {
+      "fullNameRequired": "El nombre completo es requerido",
       "firstNameRequired": "El nombre es requerido",
       "orderDataMissing": "Faltan datos del pedido. Por favor, inicia el proceso de pago de nuevo.",
       "shippingInfoMissing": "Falta información de envío. Por favor, completa los datos de envío.",
@@ -1719,6 +1909,10 @@
       "emailRequired": "El email es requerido",
       "emailInvalid": "Por favor ingresa un email válido"
     },
+    "warnings": {
+      "concurrentCheckout": "Múltiples Sesiones de Pago Detectadas",
+      "concurrentCheckoutDetails": "Parece que tienes esta página de pago abierta en otra pestaña o ventana. Por favor, completa tu compra en un solo lugar para evitar crear pedidos duplicados."
+    },
     "addressForm": {
       "shipping": {
         "title": "Dirección de Envío",
@@ -1731,25 +1925,28 @@
       "savedAddresses": "Direcciones Guardadas",
       "useNewAddress": "Usar una nueva dirección",
       "default": "Predeterminada",
+      "fullName": "Nombre Completo",
+      "fullNamePlaceholder": "Ej: Juan García López",
       "firstName": "Nombre",
       "firstNamePlaceholder": "Ingresa tu nombre",
       "lastName": "Apellido",
       "lastNamePlaceholder": "Ingresa tu apellido",
-      "company": "Empresa",
-      "companyPlaceholder": "Nombre de la empresa (opcional)",
       "street": "Dirección",
-      "streetPlaceholder": "Ingresa tu dirección",
+      "streetPlaceholder": "Calle, número, piso...",
       "city": "Ciudad",
       "cityPlaceholder": "Ingresa tu ciudad",
       "postalCode": "Código Postal",
-      "postalCodePlaceholder": "Ingresa el código postal",
+      "postalCodePlaceholder": "Ej: 28001",
       "province": "Provincia/Estado",
       "provincePlaceholder": "Provincia o estado (opcional)",
       "country": "País",
       "selectCountry": "Selecciona un país",
-      "phone": "Número de Teléfono",
-      "phonePlaceholder": "Ingresa tu número de teléfono (opcional)",
-      "saveAddress": "Guardar esta dirección para futuros pedidos"
+      "phone": "Teléfono",
+      "phoneHelper": "para notificaciones de entrega",
+      "phonePlaceholder": "+34 600 000 000",
+      "phoneDescription": "Para contactarte sobre la entrega",
+      "saveAddress": "Guardar esta dirección para futuros pedidos",
+      "autocompleteHint": "Comienza a escribir para sugerencias de direcciones"
     },
     "shippingMethod": {
       "title": "Método de Envío",
@@ -1769,6 +1966,11 @@
       "error": "Error cargando métodos de envío",
       "loadError": "Métodos de Envío",
       "usingDefaultOptions": "Usando opciones de envío predeterminadas. Las tarifas reales pueden variar.",
+      "fallbackWarning": {
+        "title": "Tarifas de Envío Estimadas",
+        "description": "No pudimos cargar las tarifas en tiempo real de nuestros transportistas. Mostrando tarifas estimadas a continuación. Las tarifas reales se calcularán antes de la confirmación final.",
+        "retry": "Reintentar cargar tarifas reales"
+      },
       "standard": {
         "name": "Envío Estándar",
         "description": "Entrega en 3-5 días hábiles"
@@ -1780,7 +1982,10 @@
       "freeShipping": {
         "name": "Envío Gratis",
         "description": "Entrega en 5-7 días hábiles (pedidos sobre €50)"
-      }
+      },
+      "autoApplied": "Aplicado automáticamente",
+      "changeMethod": "Cambiar",
+      "estimatedDelivery": "Est. {days} días hábiles"
     },
     "guestInfo": {
       "title": "Información de Contacto",
@@ -1868,6 +2073,8 @@
     },
     "confirmation": {
       "orderNumber": "Número de Pedido",
+      "orderStatus": "Estado del Pedido",
+      "stepIndicator": "Paso {current} de {total}",
       "orderItems": "Artículos del Pedido",
       "shippingInfo": "Información de Envío",
       "shippingAddress": "Dirección de Envío",
@@ -1884,7 +2091,33 @@
       "orderDataMissing": "Datos del pedido no disponibles",
       "checkYourEmail": "Tu pedido se completó correctamente. Revisa tu correo para más detalles",
       "cartClearFailed": "No se pudo vaciar el carrito",
-      "cartClearFailedDetails": "Tu pedido se completó correctamente, pero el carrito no se vació automáticamente"
+      "cartClearFailedDetails": "Tu pedido se completó correctamente, pero el carrito no se vació automáticamente",
+      "needHelp": "¿Necesitas ayuda? Contactar Soporte",
+      "createAccount": {
+        "title": "Guarda tus datos para la próxima vez",
+        "description": "Crea una cuenta para rastrear tu pedido y disfrutar de un pago más rápido en futuras compras.",
+        "benefits": {
+          "trackOrders": "Rastrea este pedido y ve el historial de pedidos",
+          "fasterCheckout": "Paga más rápido con direcciones guardadas",
+          "exclusiveOffers": "Obtén ofertas exclusivas y actualizaciones"
+        },
+        "button": "Crear mi cuenta"
+      },
+      "preparingOrder": "Preparando tu pedido ({days} días)",
+      "delivery": "Entrega",
+      "totalPaid": "Total Pagado",
+      "viewDetails": "Ver detalles",
+      "businessDays": "{days} días hábiles",
+      "status": {
+        "placed": "Pedido Realizado",
+        "confirmed": "Confirmado",
+        "processing": "Procesando",
+        "preparing": "Preparando",
+        "shipped": "Enviado",
+        "delivered": "Entregado",
+        "inProgress": "En Progreso",
+        "pending": "Pendiente"
+      }
     },
     "errors": {
       "failedToLoadAddresses": "No se pudieron cargar las direcciones guardadas",
@@ -1893,7 +2126,10 @@
       "failedToSetDefaultAddress": "No se pudo establecer la dirección predeterminada",
       "failedToDeleteAddress": "No se pudo eliminar la dirección",
       "expressCheckoutFailed": "Falló el pago express",
-      "pleaseTryAgain": "Por favor, inténtalo de nuevo o edita tus datos manualmente"
+      "pleaseTryAgain": "Por favor, inténtalo de nuevo o edita tus datos manualmente",
+      "orderFailed": "Error al procesar el pedido",
+      "initFailed": "Error al inicializar el checkout",
+      "loadFailed": "Error al cargar el checkout"
     },
     "expressCheckout": {
       "title": "Pago Express Disponible",
@@ -1909,8 +2145,35 @@
       "countdownMessage": "Redirigiendo al pago en {seconds} segundos...",
       "cancelButton": "Espera, déjame revisar",
       "countdownCancelled": "Cuenta regresiva cancelada",
-      "countdownCancelledDetails": "Tómate tu tiempo para revisar tu pedido"
-    }
+      "countdownCancelledDetails": "Tómate tu tiempo para revisar tu pedido",
+      "oneClickDescription": "Completa tu pedido con un solo clic",
+      "shippingTo": "Enviar a",
+      "paymentMethod": "Pago",
+      "shipping": "Envío",
+      "placeOrderNow": "Realizar Pedido Ahora",
+      "editDetails": "Editar Detalles"
+    },
+    "hybrid": {
+      "contact": "Contacto",
+      "shippingAddress": "Dirección de Envío",
+      "shippingMethod": "Método de Envío",
+      "payment": "Pago",
+      "reviewAndPay": "Revisar y Pagar"
+    },
+    "trustBadges": {
+      "secure": "Seguro",
+      "guaranteed": "Garantizado",
+      "fastDelivery": "Entrega Rápida"
+    },
+    "showItems": "Mostrar artículos",
+    "hideItems": "Ocultar artículos",
+    "estimatedDelivery": "Entrega estimada",
+    "calculatedAtNextStep": "Calculado",
+    "securePayment": "Pago Seguro",
+    "moneyBackGuarantee": "Garantía de Devolución",
+    "needHelp": "¿Necesitas Ayuda?",
+    "secure": "Seguro",
+    "guaranteed": "Garantizado"
   },
   "admin": {
     "navigation": {
@@ -2704,10 +2967,6 @@
   "faq": {
     "title": "Preguntas Frecuentes",
     "description": "Respuestas a tus dudas más comunes."
-  },
-  "trackOrder": {
-    "title": "Sigue tu Pedido",
-    "description": "Introduce tu número de pedido para conocer su estado."
   },
   "shippingPage": {
     "seo": {

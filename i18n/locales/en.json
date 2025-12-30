@@ -35,12 +35,14 @@
     "orderSummary": "Order Summary",
     "retry": "Retry",
     "cancel": "Cancel",
+    "undo": "Undo",
     "showMore": "Show More",
     "showLess": "Show Less",
     "swipe_to_remove": "Swipe to remove",
     "release_to_remove": "Release to remove",
     "help": "Help",
     "each": "each",
+    "items": "items",
     "refresh": "Refresh",
     "tryAgain": "Try Again",
     "error": "Error",
@@ -60,7 +62,11 @@
       "hours": "h",
       "minutes": "m",
       "seconds": "s"
-    }
+    },
+    "showOrderSummary": "Show order summary",
+    "hideOrderSummary": "Hide order summary",
+    "item": "item",
+    "items": "items"
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculated at checkout",
@@ -236,7 +242,36 @@
     "each": "each",
     "addToCart": "Add to Cart",
     "inCart": "In Cart",
-    "recommendedProducts": "Recommended Products"
+    "recommendedProducts": "Recommended Products",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
+    "removeItem": "Remove item",
+    "itemCount": "{count} items",
+    "youSave": "You're saving",
+    "secureCheckout": "Secure checkout",
+    "allCardsAccepted": "All major cards accepted",
+    "add": "Add",
+    "stock": {
+      "inStock": "In Stock",
+      "low": "Only {count} left!",
+      "outOfStock": "Out of Stock"
+    },
+    "shipping": {
+      "progress": "Free shipping progress",
+      "freeShipping": "Free Shipping",
+      "qualified": "Your order qualifies for free shipping!",
+      "addMore": "Add {amount} more for free shipping"
+    },
+    "recommendations": {
+      "boughtTogether": "Bought together",
+      "similar": "Similar",
+      "priceDrop": "Price drop",
+      "backInStock": "Back in stock",
+      "recommended": "Recommended",
+      "noRecommendations": "No recommendations available",
+      "loadFailed": "Could not load recommendations"
+    },
+    "quantity": "{count} items"
   },
   "auth": {
     "signIn": "Sign In",
@@ -271,6 +306,11 @@
     "sendMagicLink": "Send Magic Link",
     "magicLinkSent": "Magic link sent! Check your email to sign in.",
     "magicLinkError": "Failed to send magic link. Please try again.",
+    "continueWithGoogle": "Google",
+    "continueWithApple": "Apple",
+    "socialLoginNote": "By continuing, you agree to our Terms of Service and Privacy Policy",
+    "socialLoginError": "Failed to sign in with {provider}. Please try again.",
+    "socialLoginRedirectFailed": "Sign-in was blocked. Please allow popups for this site and try again.",
     "resendIn": "Resend in",
     "emailRequired": "Please enter your email address",
     "emailVerification": "Email Verification",
@@ -341,6 +381,7 @@
       "passwordMismatch": "Passwords do not match",
       "termsRequired": "You must accept the terms and conditions",
       "sessionExpired": "Your session has expired. Please sign in again",
+      "logoutFailed": "Failed to logout. Please try again.",
       "rateLimitExceeded": "Too many attempts. Try again in {minutes} minutes",
       "tokenExpired": "Verification link has expired",
       "tokenInvalid": "Invalid verification link",
@@ -539,6 +580,11 @@
     "wishlistItems": "Wishlist Items",
     "recentOrders": "Recent Orders",
     "noOrdersYet": "You don't have any orders yet",
+    "viewProfile": "View profile",
+    "quickAccess": "Quick Access",
+    "myProfile": "My Profile",
+    "paymentMethods": "Payment Methods",
+    "returns": "Returns",
     "sections": {
       "admin": "Admin",
       "adminUser": "Admin User",
@@ -559,6 +605,7 @@
     "reorder": "Reorder",
     "estimatedDelivery": "Estimated Delivery",
     "viewAndManage": "View and manage your order history",
+    "viewAllOrders": "View All Orders",
     "showing": "Showing {start}-{end} of {total} orders",
     "orders": "orders",
     "gridView": "Grid view",
@@ -623,6 +670,31 @@
       "to": "To",
       "clearAll": "Clear All Filters"
     },
+    "metrics": {
+      "active": "Active",
+      "delivered": "Delivered",
+      "total": "Total",
+      "thisMonth": "This Month",
+      "activeOrders": "Active Orders",
+      "deliveredThisMonth": "Delivered This Month",
+      "totalOrders": "Total Orders",
+      "spentThisMonth": "Spent This Month"
+    },
+    "filters": {
+      "quickFilters": "Quick Filters",
+      "inTransit": "In Transit",
+      "deliveredThisMonth": "Delivered This Month",
+      "last3Months": "Last 3 Months",
+      "allOrders": "All Orders"
+    },
+    "progress": {
+      "deliveryProgress": "Delivery progress",
+      "estimatedArrival": "Estimated arrival",
+      "deliveredSuccessfully": "Delivered successfully"
+    },
+    "track": "Track",
+    "liveStatus": "Live",
+    "updateCount": "{count} update | {count} updates",
     "notifications": {
       "title": "Order Updates",
       "delivered": {
@@ -668,6 +740,8 @@
       "statusBadge": "Order status: {status}",
       "reorderButton": "Reorder all items from this order",
       "viewDetailsButton": "View detailed information for this order",
+      "trackButton": "Track this order",
+      "orderActions": "Order actions",
       "searchInput": "Search orders by order number or product name",
       "clearSearch": "Clear search query",
       "statusFilter": "Filter orders by status",
@@ -727,15 +801,42 @@
     }
   },
   "profile": {
-    "title": "Profile Settings",
+    "title": "My Profile",
     "description": "Manage your personal information and account preferences",
+    "autoSaveDescription": "Changes are saved automatically",
     "profilePicture": "Profile Picture",
     "profilePictureDescription": "Upload a profile picture to personalize your account",
+    "dragDropHint": "Tap photo or drag to change",
     "changePicture": "Change Picture",
     "uploadPicture": "Upload Picture",
     "removePicture": "Remove Picture",
     "emailCannotBeChanged": "Email address cannot be changed",
     "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "saveError": "Error saving",
+    "completion": "Profile Completion",
+    "unsavedChangesWarning": "You have unsaved changes. Are you sure you want to leave?",
+    "addressSingular": "address saved",
+    "addressPlural": "addresses saved",
+    "sections": {
+      "personalInfo": "Personal Information",
+      "personalInfoSubtitle": "Name, email, phone",
+      "preferences": "Preferences",
+      "preferencesSubtitle": "Language, currency",
+      "currency": "Currency",
+      "security": "Security",
+      "securitySubtitle": "Password and authentication",
+      "password": "Password",
+      "change": "Change",
+      "twoFactor": "Two-Factor Authentication",
+      "twoFactorDisabled": "Not enabled",
+      "enable": "Enable",
+      "changePassword": "Change Password",
+      "changePasswordDescription": "You will be able to change your password here soon.",
+      "enable2FA": "Enable 2FA",
+      "enable2FADescription": "Two-factor authentication will be available soon."
+    },
     "addresses": "Addresses",
     "addressesDescription": "Manage your shipping and billing addresses",
     "addAddress": "Add Address",
@@ -822,7 +923,10 @@
       "loadAddressesFailed": "Failed to load addresses",
       "addressSaveFailed": "Failed to save address. Please try again.",
       "addressDeleteFailed": "Failed to delete address. Please try again.",
-      "deleteFailed": "Failed to delete account. Please try again."
+      "deleteFailed": "Failed to delete account. Please try again.",
+      "sessionExpired": "Your session has expired. Please log in again.",
+      "permissionDenied": "Permission denied. You cannot perform this action.",
+      "notAuthenticated": "Please log in to continue."
     }
   },
   "home": {
@@ -1114,7 +1218,8 @@
       "cta": "Join the list",
       "success": "Thank you! Look for our next dispatch in your inbox.",
       "error": "Oops! Something went wrong. Please try again.",
-      "disclaimer": "We send one or two emails per month and you can unsubscribe at any time."
+      "disclaimer": "We send one or two emails per month and you can unsubscribe at any time.",
+      "subscribeButton": "Subscribe"
     },
     "faqPreview": {
       "title": "Questions before you order?",
@@ -1203,7 +1308,7 @@
     }
   },
   "products": {
-    "commonProduct": "Product",
+    "commonProduct": "this product",
     "viewDetails": "View Details",
     "featured": "Featured",
     "sale": "Sale",
@@ -1235,11 +1340,13 @@
     },
     "addToCart": "Add to Cart",
     "outOfStock": "Out of Stock",
+    "productOutOfStock": "Product out of stock",
     "inCart": "In Cart",
     "adding": "Adding...",
     "addingToCart": "Adding {name}...",
     "productInCart": "{name} is already in cart",
     "addProductToCart": "Add {name} to cart",
+    "quickViewProduct": "Quick View",
     "cartEmpty": "Your cart is empty",
     "cartEmptyDescription": "Start shopping to add items to your cart",
     "itemsInCart": "items in cart",
@@ -1295,12 +1402,15 @@
       "clearAllFilters": "Clear all active filters",
       "swipeToClose": "Swipe down or tap close button to dismiss",
       "apply": "Show {count} products | Show {count} product | Show {count} products",
+      "showingCount": "Showing {count} products | Showing {count} product | Showing {count} products",
       "minPrice": "Min Price",
       "maxPrice": "Max Price",
       "removeFilter": "Remove {filter} filter",
       "unknownCategory": "Unknown Category",
       "openFilters": "Open filters panel",
-      "activeCount": "{count} active filters"
+      "activeCount": "{count} active filters",
+      "description": "Filter products by price, availability, and categories",
+      "applyFilters": "Apply filters"
     },
     "hero": {
       "seasonal": "Seasonal highlights",
@@ -1489,8 +1599,7 @@
       "sharedSuccess": "Shared—thanks for spreading the word!",
       "shareText": "Discover this Moldovan favourite with me.",
       "copyFallback": "Copy this link to share with friends."
-    },
-    "commonProduct": "this product"
+    }
   },
   "returns": {
     "badge": "Returns ready for MVP",
@@ -1621,6 +1730,67 @@
       "emailSubject": "Return request"
     }
   },
+  "trackOrder": {
+    "title": "Track Your Order",
+    "subtitle": "Enter your order number and email to track your order status",
+    "pageTitle": "Track Order",
+    "pageDescription": "Track your Moldova Direct order status and shipping information",
+    "orderNumber": "Order Number",
+    "orderNumberPlaceholder": "e.g., MD-2024-XXXXX",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email address",
+    "trackButton": "Track Order",
+    "trackAnother": "Track another order",
+    "trackingNumber": "Tracking Number",
+    "estimatedDelivery": "Estimated Delivery",
+    "orderItems": "Order Items",
+    "trackingHistory": "Tracking History",
+    "shippingTo": "Shipping To",
+    "needHelp": "Need help with your order?",
+    "contactSupport": "Contact Support",
+    "description": "Track your order status and shipping information",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "steps": {
+      "confirmed": "Confirmed",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered"
+    },
+    "errors": {
+      "notFound": "Order not found. Please check your order number and email address.",
+      "generic": "Something went wrong. Please try again later.",
+      "invalidInput": "Please enter a valid order number and email address.",
+      "tooManyRequests": "Too many requests. Please wait a moment and try again.",
+      "serverError": "Our servers are experiencing issues. Please try again later.",
+      "networkError": "Network error. Please check your internet connection and try again."
+    }
+  },
+  "invoice": {
+    "title": "Invoice",
+    "tagline": "Your trusted source for Moldovan products",
+    "orderNumber": "Order Number",
+    "date": "Date",
+    "billTo": "Bill To",
+    "shippingAddress": "Shipping Address",
+    "product": "Product",
+    "quantity": "Qty",
+    "unitPrice": "Unit Price",
+    "total": "Total",
+    "thankYou": "Thank you for shopping with Moldova Direct!",
+    "questions": "Questions about your order?",
+    "print": "Print Invoice",
+    "download": "Save as PDF",
+    "error": "Invoice Error",
+    "errorNoData": "Unable to generate invoice. Order data not available.",
+    "errorPopupBlocked": "Could not open invoice. Please allow popups for this site and try again."
+  },
   "footer": {
     "terms": "Terms and Conditions",
     "privacy": "Privacy Policy",
@@ -1673,7 +1843,10 @@
       "sslEncrypted": "256-bit SSL Encrypted",
       "dataProtected": "Your data is protected",
       "moneyBackGuarantee": "Money-back guarantee",
-      "needHelp": "Need help? Contact us at"
+      "needHelp": "Need help? Contact us at",
+      "secure": "Secure",
+      "easyReturns": "Easy Returns",
+      "support247": "24/7 Support"
     },
     "steps": {
       "shipping": {
@@ -1703,12 +1876,22 @@
         "orderDetails": "Order Details",
         "orderDetailsPlaceholder": "Your order details will be displayed here",
         "viewOrders": "View My Orders",
-        "continueShopping": "Continue Shopping"
+        "viewOrderDetails": "View Order Details",
+        "continueShopping": "Continue Shopping",
+        "pageTitle": "Order Confirmation - Checkout",
+        "pageDescription": "Your order has been successfully placed"
       }
     },
     "guestCheckout": {
-      "title": "Checkout Options",
-      "description": "You can create an account for faster checkout or continue as a guest."
+      "title": "Sign in for faster checkout",
+      "description": "You can create an account for faster checkout or continue as a guest.",
+      "benefits": {
+        "savedAddresses": "Use saved addresses for faster checkout",
+        "fasterCheckout": "Skip filling in your details next time",
+        "orderHistory": "Track orders and view purchase history"
+      },
+      "loginButton": "Sign in to your account",
+      "guestButton": "Continue as guest"
     },
     "continueAsGuest": "Continue as Guest",
     "backToCart": "Back to Cart",
@@ -1742,7 +1925,12 @@
       "shippingMethod": "Shipping Method",
       "deliveryInstructions": "Delivery Instructions",
       "paymentMethod": "Payment Method",
-      "editPayment": "Edit Payment"
+      "editPayment": "Edit Payment",
+      "acceptTerms": "I accept the",
+      "termsOfService": "Terms and Conditions",
+      "acceptPrivacy": "I consent to the processing of my personal data as described in the",
+      "privacyPolicy": "Privacy Policy",
+      "marketingConsent": "I would like to receive marketing communications and special offers"
     },
     "freeShipping": "Free",
     "processing": "Processing...",
@@ -1773,7 +1961,14 @@
       "orderFailed": "Order Failed",
       "orderProcessingFailed": "Failed to process your order. Please try again."
     },
+    "warning": {
+      "cartLoadFailed": "Cart Load Issue",
+      "cartLoadFailedDetails": "Failed to load your cart. Some items may be missing.",
+      "totalsUpdateFailed": "Price Update Issue",
+      "totalsUpdateFailedDetails": "Failed to update totals. Prices shown may be outdated."
+    },
     "validation": {
+      "fullNameRequired": "Full name is required",
       "firstNameRequired": "First name is required",
       "orderDataMissing": "Order data is missing. Please start checkout again.",
       "shippingInfoMissing": "Shipping information is missing. Please complete shipping details.",
@@ -1796,6 +1991,10 @@
       "emailRequired": "Email is required",
       "emailInvalid": "Please enter a valid email address"
     },
+    "warnings": {
+      "concurrentCheckout": "Multiple Checkout Sessions Detected",
+      "concurrentCheckoutDetails": "It appears you have this checkout open in another tab or window. Please complete your purchase in one location only to avoid creating duplicate orders."
+    },
     "addressForm": {
       "shipping": {
         "title": "Shipping Address",
@@ -1808,25 +2007,28 @@
       "savedAddresses": "Saved Addresses",
       "useNewAddress": "Use a new address",
       "default": "Default",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "e.g. John Smith",
       "firstName": "First Name",
       "firstNamePlaceholder": "Enter your first name",
       "lastName": "Last Name",
       "lastNamePlaceholder": "Enter your last name",
-      "company": "Company",
-      "companyPlaceholder": "Company name (optional)",
       "street": "Street Address",
-      "streetPlaceholder": "Enter your street address",
+      "streetPlaceholder": "Street, number, apartment...",
       "city": "City",
       "cityPlaceholder": "Enter your city",
       "postalCode": "Postal Code",
-      "postalCodePlaceholder": "Enter postal code",
+      "postalCodePlaceholder": "e.g. 10001",
       "province": "Province/State",
       "provincePlaceholder": "Province or state (optional)",
       "country": "Country",
       "selectCountry": "Select a country",
-      "phone": "Phone Number",
-      "phonePlaceholder": "Enter your phone number (optional)",
-      "saveAddress": "Save this address for future orders"
+      "phone": "Phone",
+      "phoneHelper": "for delivery updates",
+      "phonePlaceholder": "+1 555 000 0000",
+      "phoneDescription": "We'll contact you about your delivery",
+      "saveAddress": "Save this address for future orders",
+      "autocompleteHint": "Start typing for address suggestions"
     },
     "shippingMethod": {
       "title": "Shipping Method",
@@ -1846,6 +2048,11 @@
       "error": "Error loading shipping methods",
       "loadError": "Shipping Methods",
       "usingDefaultOptions": "Using default shipping options. Actual rates may vary.",
+      "fallbackWarning": {
+        "title": "Estimated Shipping Rates",
+        "description": "We couldn't load real-time rates from our carriers. Showing estimated rates below. Actual rates will be calculated before final confirmation.",
+        "retry": "Retry loading real rates"
+      },
       "standard": {
         "name": "Standard Shipping",
         "description": "Delivery in 3-5 business days"
@@ -1857,7 +2064,10 @@
       "freeShipping": {
         "name": "Free Shipping",
         "description": "Delivery in 5-7 business days (orders over €50)"
-      }
+      },
+      "autoApplied": "Auto-applied",
+      "changeMethod": "Change",
+      "estimatedDelivery": "Est. {days} business days"
     },
     "guestInfo": {
       "title": "Contact Information",
@@ -1945,6 +2155,8 @@
     },
     "confirmation": {
       "orderNumber": "Order Number",
+      "orderStatus": "Order Status",
+      "stepIndicator": "Step {current} of {total}",
       "orderItems": "Order Items",
       "shippingInfo": "Shipping Information",
       "shippingAddress": "Shipping Address",
@@ -1961,7 +2173,33 @@
       "orderDataMissing": "Order data not available",
       "checkYourEmail": "Your order completed successfully. Check your email for details",
       "cartClearFailed": "Could not clear cart",
-      "cartClearFailedDetails": "Your order completed successfully, but the cart was not cleared automatically"
+      "cartClearFailedDetails": "Your order completed successfully, but the cart was not cleared automatically",
+      "needHelp": "Need help? Contact Support",
+      "createAccount": {
+        "title": "Save your details for next time",
+        "description": "Create an account to track your order and enjoy faster checkout on future purchases.",
+        "benefits": {
+          "trackOrders": "Track this order and view order history",
+          "fasterCheckout": "Checkout faster with saved addresses",
+          "exclusiveOffers": "Get exclusive offers and updates"
+        },
+        "button": "Create my account"
+      },
+      "preparingOrder": "Preparing your order ({days} days)",
+      "delivery": "Delivery",
+      "totalPaid": "Total Paid",
+      "viewDetails": "View details",
+      "businessDays": "{days} business days",
+      "status": {
+        "placed": "Order Placed",
+        "confirmed": "Confirmed",
+        "processing": "Processing",
+        "preparing": "Preparing",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "inProgress": "In Progress",
+        "pending": "Pending"
+      }
     },
     "errors": {
       "failedToLoadAddresses": "Failed to load saved addresses",
@@ -1970,7 +2208,10 @@
       "failedToSetDefaultAddress": "Failed to set default address",
       "failedToDeleteAddress": "Failed to delete address",
       "expressCheckoutFailed": "Express checkout failed",
-      "pleaseTryAgain": "Please try again or edit your details manually"
+      "pleaseTryAgain": "Please try again or edit your details manually",
+      "orderFailed": "Order processing failed",
+      "initFailed": "Failed to initialize checkout",
+      "loadFailed": "Failed to load checkout"
     },
     "expressCheckout": {
       "title": "Express Checkout Available",
@@ -1986,285 +2227,55 @@
       "countdownMessage": "Redirecting to payment in {seconds} seconds...",
       "cancelButton": "Wait, let me review",
       "countdownCancelled": "Countdown cancelled",
-      "countdownCancelledDetails": "Take your time to review your order"
-    }
+      "countdownCancelledDetails": "Take your time to review your order",
+      "oneClickDescription": "Complete your order with one click",
+      "shippingTo": "Shipping to",
+      "paymentMethod": "Payment",
+      "shipping": "Shipping",
+      "placeOrderNow": "Place Order Now",
+      "editDetails": "Edit Details"
+    },
+    "hybrid": {
+      "contact": "Contact",
+      "shippingAddress": "Shipping Address",
+      "shippingMethod": "Shipping Method",
+      "payment": "Payment",
+      "reviewAndPay": "Review & Pay"
+    },
+    "trustBadges": {
+      "secure": "Secure",
+      "guaranteed": "Guaranteed",
+      "fastDelivery": "Fast Delivery"
+    },
+    "showItems": "Show items",
+    "hideItems": "Hide items",
+    "estimatedDelivery": "Estimated delivery",
+    "calculatedAtNextStep": "Calculated",
+    "securePayment": "Secure Payment",
+    "moneyBackGuarantee": "Money-back Guarantee",
+    "needHelp": "Need Help?",
+    "secure": "Secure",
+    "guaranteed": "Guaranteed"
   },
   "admin": {
     "navigation": {
+      "toggleSidebar": "Toggle sidebar",
+      "notifications": "Notifications",
       "dashboard": "Dashboard",
       "products": "Products",
+      "inventory": "Inventory",
       "orders": "Orders",
       "users": "Users",
       "analytics": "Analytics",
-      "inventory": "Inventory",
-      "testing": "Testing",
       "tools": "Tools",
-      "toggleSidebar": "Toggle sidebar",
-      "notifications": "Notifications"
-    },
-    "errors": {
-      "logoutFailed": "Logout failed",
-      "unknownError": "An unknown error occurred"
-    },
-    "dashboard": {
-      "title": "Dashboard",
-      "welcome": "Welcome back! Here's what's happening with your store.",
-      "autoRefresh": "Auto-refresh",
-      "refreshAll": "Refresh All",
-      "lastUpdated": "Last updated: {time}",
-      "refresh": "Refresh",
-      "criticalAlerts": "Critical Alerts",
-      "stats": {
-        "sectionTitle": "Operational Snapshot",
-        "refreshHint": "Metrics refresh automatically every five minutes.",
-        "totalProducts": "Total Products",
-        "activeProducts": "{count} active",
-        "lowStockProducts": "{count} products low in stock",
-        "totalUsers": "Total Users",
-        "activeUsers": "{count} active",
-        "newUsersToday": "{count} new today",
-        "totalOrders": "Total Orders",
-        "conversionRate": "{rate} conversion",
-        "totalRevenue": "Total Revenue",
-        "revenueToday": "{amount} today",
-        "pendingOrders": "{count} pending",
-        "processingOrders": "{count} processing",
-        "shippedOrders": "{count} shipped",
-        "deliveredOrders": "{count} delivered",
-        "ordersToday": "{count} orders today",
-        "averageOrderValue": "Avg. {amount}"
-      },
-      "quickActions": {
-        "title": "Quick Actions",
-        "addNewProduct": "Add New Product",
-        "viewOrders": "View Orders",
-        "manageUsers": "Manage Users"
-      },
-      "systemStatus": {
-        "title": "System Status",
-        "database": "Database",
-        "api": "API",
-        "lastBackup": "Last Backup",
-        "online": "Online",
-        "operational": "Operational",
-        "offline": "Offline",
-        "error": "Error",
-        "hoursAgo": "{hours} hours ago"
-      },
-      "recentActivity": {
-        "title": "Recent Activity",
-        "noActivity": "No recent activity",
-        "activityDescription": "Activity will appear here as users interact with your store",
-        "justNow": "Just now",
-        "minutesAgo": "{minutes}m ago",
-        "hoursAgo": "{hours}h ago",
-        "daysAgo": "{days}d ago",
-        "types": {
-          "userRegistration": "User",
-          "newOrder": "Order",
-          "lowStock": "Stock Alert",
-          "productUpdate": "Product"
-        }
-      },
-      "errors": {
-        "loadingData": "Error loading dashboard data",
-        "tryAgain": "Please try again"
-      }
+      "testing": "Testing"
     },
     "products": {
-      "title": "Products",
-      "subtitle": "Manage your product catalog",
-      "addProduct": "Add Product",
-      "editProduct": "Edit Product",
-      "deleteProduct": "Delete Product",
-      "bulkActions": "Bulk Actions",
-      "selectAll": "Select All",
-      "deselectAll": "Deselect All",
-      "selectedCount": "{count} selected",
-      "clearSelection": "Clear Selection",
-      "filters": {
-        "search": "Search products...",
-        "category": "Category",
-        "allCategories": "All Categories",
-        "status": "Status",
-        "allStatuses": "All Statuses",
-        "active": "Active",
-        "inactive": "Inactive",
-        "stockLevel": "Stock Level",
-        "allStock": "All Stock",
-        "inStock": "In Stock",
-        "lowStock": "Low Stock",
-        "outOfStock": "Out of Stock",
-        "clearFilters": "Clear Filters",
-        "resultsCount": "{count} results found"
-      },
-      "table": {
-        "name": "Name",
-        "sku": "SKU",
-        "category": "Category",
-        "price": "Price",
-        "stock": "Stock",
-        "status": "Status",
-        "actions": "Actions",
-        "edit": "Edit",
-        "delete": "Delete",
-        "editStock": "Edit Stock",
-        "noProducts": "No products found",
-        "noProductsMessage": "Create your first product to get started"
-      },
-      "form": {
-        "basicInformation": "Basic Information",
-        "productName": "Product Name",
-        "productNameRequired": "Product name is required",
-        "sku": "SKU",
-        "skuRequired": "SKU is required",
-        "category": "Category",
-        "categoryRequired": "Category is required",
-        "selectCategory": "Select a category",
-        "description": "Description",
-        "pricing": "Pricing",
-        "price": "Price (EUR)",
-        "priceRequired": "Price is required",
-        "salePrice": "Sale Price (EUR)",
-        "inventory": "Inventory",
-        "stockQuantity": "Stock Quantity",
-        "stockRequired": "Stock quantity is required",
-        "lowStockThreshold": "Low Stock Threshold",
-        "trackInventory": "Track Inventory",
-        "allowBackorders": "Allow Backorders",
-        "media": "Media",
-        "productImages": "Product Images",
-        "dragImages": "Drag images here or click to upload",
-        "maxImages": "Maximum 5 images",
-        "supportedFormats": "Supported formats: JPG, PNG, WebP",
-        "maxFileSize": "Max file size: 5MB",
-        "settings": "Settings",
-        "featured": "Featured Product",
-        "status": "Status",
-        "active": "Active",
-        "inactive": "Inactive",
-        "metaData": "SEO & Meta Data",
-        "metaTitle": "Meta Title",
-        "metaDescription": "Meta Description",
-        "save": "Save Product",
-        "saving": "Saving...",
-        "cancel": "Cancel",
-        "errors": {
-          "saveFailed": "Failed to save product",
-          "invalidData": "Please check the form data",
-          "networkError": "Network error occurred"
-        }
-      },
-      "stockModal": {
-        "title": "Edit Stock for {product}",
-        "stockQuantity": "Stock Quantity",
-        "cancel": "Cancel",
-        "save": "Save Stock",
-        "saving": "Saving..."
-      },
-      "bulkOperations": {
-        "activate": "Activate Selected",
-        "deactivate": "Deactivate Selected",
-        "delete": "Delete Selected",
-        "confirmDelete": "Are you sure you want to delete {count} products?",
-        "confirmDeleteSingle": "Are you sure you want to delete this product?",
-        "deleteWarning": "This action cannot be undone.",
-        "operationInProgress": "Operation in progress..."
-      },
-      "pagination": {
-        "showing": "Showing {start} to {end} of {total} products",
-        "previous": "Previous",
-        "next": "Next",
-        "page": "Page {page}",
-        "perPage": "Per page",
-        "goToPage": "Go to page {page}"
-      },
-      "success": {
-        "productSaved": "Product saved successfully",
-        "productDeleted": "Product deleted successfully",
-        "stockUpdated": "Stock updated successfully",
-        "bulkActivated": "{count} products activated",
-        "bulkDeactivated": "{count} products deactivated",
-        "bulkDeleted": "{count} products deleted"
-      },
-      "errors": {
-        "loadFailed": "Failed to load products",
-        "saveFailed": "Failed to save product",
-        "deleteFailed": "Failed to delete product",
-        "stockUpdateFailed": "Failed to update stock",
-        "bulkOperationFailed": "Bulk operation failed"
-      },
-      "headers": {
-        "product": "Product",
-        "category": "Category",
-        "price": "Price",
-        "stock": "Stock",
-        "status": "Status",
-        "created": "Created",
-        "actions": "Actions"
-      }
-    },
-    "orders": {
-      "title": "Orders",
-      "subtitle": "Manage customer orders",
-      "viewOrder": "View Order",
-      "editOrder": "Edit Order",
-      "deleteOrder": "Delete Order",
-      "orderNumber": "Order #{number}",
-      "customer": "Customer",
-      "total": "Total",
-      "status": "Status",
-      "date": "Date",
-      "actions": "Actions",
-      "statuses": {
-        "pending": "Pending",
-        "processing": "Processing",
-        "shipped": "Shipped",
-        "delivered": "Delivered",
-        "cancelled": "Cancelled",
-        "refunded": "Refunded"
-      }
+      "select": "Select product"
     },
     "users": {
-      "title": "Users",
-      "subtitle": "Manage user accounts",
-      "viewUser": "View User",
-      "editUser": "Edit User",
-      "deleteUser": "Delete User",
-      "userId": "User ID",
-      "name": "Name",
-      "email": "Email",
-      "role": "Role",
-      "status": "Status",
-      "registered": "Registered",
-      "lastLogin": "Last Login",
-      "lastOrder": "Last Order",
-      "orders": "Orders",
-      "totalSpent": "Total Spent",
-      "language": "Language",
-      "avgOrderValue": "Avg Order Value",
-      "actions": {
-        "view": "View user details",
-        "edit": "Edit user",
-        "clearFilters": "Clear Filters",
-        "refresh": "Refresh",
-        "invite": "Invite User"
-      },
       "loading": "Loading users...",
-      "retry": "Retry",
-      "searchPlaceholder": "Search users by name, email, or ID...",
-      "roles": {
-        "admin": "Administrator",
-        "user": "Customer",
-        "manager": "Manager"
-      },
-      "statuses": {
-        "active": "Active",
-        "inactive": "Inactive",
-        "banned": "Banned",
-        "unverified": "Unverified",
-        "locked": "Locked"
-      },
+      "retry": "Retry loading",
       "columns": {
         "user": "User",
         "email": "Email",
@@ -2274,140 +2285,6 @@
         "registered": "Registered",
         "lastLogin": "Last Login",
         "actions": "Actions"
-      },
-      "filters": {
-        "allStatus": "All Status",
-        "active": "Active",
-        "inactive": "Inactive",
-        "clear": "Clear Filters",
-        "toggle": "Filters",
-        "activeFilters": "Active Filters",
-        "from": "From",
-        "to": "To"
-      },
-      "empty": {
-        "noResults": "No users found",
-        "noUsers": "No users yet",
-        "noData": "No data available",
-        "noResultsForQuery": "No users found for '{query}'",
-        "tryDifferentFilters": "Try different filters or search terms",
-        "noUsersDescription": "No users have registered yet. Users will appear here once they create accounts.",
-        "checkConnection": "Check your connection and try again",
-        "helpTitle": "Tips for managing users:",
-        "helpTip1": "Use search to find specific users quickly",
-        "helpTip2": "Filter by status to focus on specific user groups",
-        "helpTip3": "Click on any user to view detailed information",
-        "swipeHint": "Swipe left on mobile for quick actions"
-      }
-    },
-    "analytics": {
-      "title": "Analytics",
-      "subtitle": "View store performance",
-      "revenue": "Revenue",
-      "orders": "Orders",
-      "customers": "Customers",
-      "products": "Products",
-      "conversionRate": "Conversion Rate",
-      "averageOrderValue": "Average Order Value",
-      "topProducts": "Top Products",
-      "topCategories": "Top Categories",
-      "recentSales": "Recent Sales",
-      "performanceMetrics": "Performance Metrics"
-    },
-    "common": {
-      "save": "Save",
-      "cancel": "Cancel",
-      "delete": "Delete",
-      "edit": "Edit",
-      "view": "View",
-      "create": "Create",
-      "update": "Update",
-      "search": "Search",
-      "filter": "Filter",
-      "sort": "Sort",
-      "export": "Export",
-      "import": "Import",
-      "loading": "Loading...",
-      "saving": "Saving...",
-      "deleting": "Deleting...",
-      "noData": "No data available",
-      "error": "An error occurred",
-      "success": "Operation completed successfully",
-      "confirm": "Are you sure?",
-      "yes": "Yes",
-      "no": "No",
-      "close": "Close",
-      "back": "Back",
-      "next": "Next",
-      "previous": "Previous",
-      "showMore": "Show More",
-      "showLess": "Show Less",
-      "selectAll": "Select All",
-      "deselectAll": "Deselect All",
-      "required": "Required",
-      "optional": "Optional"
-    },
-    "breadcrumbs": {
-      "admin": "Admin",
-      "dashboard": "Dashboard",
-      "products": "Products",
-      "newProduct": "New Product",
-      "editProduct": "Edit Product",
-      "orders": "Orders",
-      "users": "Users",
-      "analytics": "Analytics",
-      "inventory": "Inventory"
-    },
-    "userMenu": {
-      "profile": "Profile",
-      "settings": "Settings",
-      "logout": "Logout",
-      "adminUser": "Admin User",
-      "administrator": "Administrator"
-    },
-    "notifications": {
-      "title": "Notifications",
-      "noNotifications": "No new notifications",
-      "markAllRead": "Mark all as read"
-    },
-    "autoRefresh": {
-      "enabled": "Auto-refresh enabled",
-      "disabled": "Auto-refresh disabled",
-      "interval": "Refresh every {minutes} minutes",
-      "lastRefresh": "Last refresh: {time}"
-    },
-    "emailLogs": {
-      "title": "Email Delivery Logs",
-      "headers": {
-        "order": "Order",
-        "recipient": "Recipient",
-        "type": "Type",
-        "status": "Status",
-        "attempts": "Attempts",
-        "date": "Date",
-        "actions": "Actions"
-      },
-      "buttons": {
-        "view": "View",
-        "retry": "Retry",
-        "retrying": "Retrying..."
-      }
-    },
-    "inventory": {
-      "reports": {
-        "recentMovements": "Recent Movements",
-        "headers": {
-          "product": "Product",
-          "type": "Type",
-          "quantity": "Quantity",
-          "date": "Date",
-          "currentStock": "Current Stock",
-          "threshold": "Threshold",
-          "stockValue": "Stock Value",
-          "priority": "Priority",
-          "recommendedOrder": "Recommended Order",
-          "estimatedCost": "Estimated Cost"
-        }
       }
     }
   },
@@ -2771,37 +2648,6 @@
       "sustainability": {
         "title": "Sustainable Practices",
         "description": "Many of our producers are transitioning to organic and biodynamic farming, ensuring that Moldova's vineyards thrive for generations to come."
-      }
-    }
-  },
-  "admin": {
-    "navigation": {
-      "toggleSidebar": "Toggle sidebar",
-      "notifications": "Notifications",
-      "dashboard": "Dashboard",
-      "products": "Products",
-      "inventory": "Inventory",
-      "orders": "Orders",
-      "users": "Users",
-      "analytics": "Analytics",
-      "tools": "Tools",
-      "testing": "Testing"
-    },
-    "products": {
-      "select": "Select product"
-    },
-    "users": {
-      "loading": "Loading users...",
-      "retry": "Retry loading",
-      "columns": {
-        "user": "User",
-        "email": "Email",
-        "status": "Status",
-        "orders": "Orders",
-        "totalSpent": "Total Spent",
-        "registered": "Registered",
-        "lastLogin": "Last Login",
-        "actions": "Actions"
       }
     }
   },

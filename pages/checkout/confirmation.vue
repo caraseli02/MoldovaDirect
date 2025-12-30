@@ -2,118 +2,401 @@
   <div class="checkout-page">
     <div class="p-6 md:p-8">
       <div class="max-w-4xl mx-auto">
-        <!-- Success Icon -->
+        <!-- Success Header with Animated Checkmark -->
         <div class="mb-8 text-center">
-          <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 dark:bg-green-900/20">
+          <div class="mb-4">
             <svg
-              class="h-8 w-8 text-green-600 dark:text-green-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+              class="w-20 h-20 mx-auto fade-in"
+              viewBox="0 0 100 100"
+              role="img"
+              aria-labelledby="success-icon-title"
             >
+              <title id="success-icon-title">{{ $t('checkout.steps.confirmation.title') }}</title>
+              <circle
+                cx="50"
+                cy="50"
+                r="45"
+                fill="none"
+                stroke="#16a34a"
+                stroke-width="3"
+                class="circle-animated"
+              />
               <path
+                d="M30 50 L42 62 L70 34"
+                fill="none"
+                stroke="#16a34a"
+                stroke-width="5"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                stroke-width="2"
-                d="M5 13l4 4L19 7"
+                class="checkmark-animated"
               />
             </svg>
           </div>
-        </div>
-
-        <!-- Success Message -->
-        <div class="mb-8 text-center">
-          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 class="text-2xl font-bold text-zinc-900 dark:text-white mb-2 slide-up stagger-1">
             {{ $t('checkout.steps.confirmation.title') }}
-          </h2>
-          <p class="text-lg text-gray-600 dark:text-gray-400 mb-2">
+          </h1>
+          <p class="text-base text-zinc-600 dark:text-zinc-400 slide-up stagger-2">
             {{ $t('checkout.steps.confirmation.subtitle') }}
           </p>
-          <p class="text-sm text-gray-500 dark:text-gray-500">
-            {{ $t('checkout.steps.confirmation.emailSent') }}
-          </p>
         </div>
 
-        <!-- Order Number -->
+        <!-- Order Number - Prominent with Green Border -->
         <div
           v-if="orderData"
-          class="bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800 rounded-lg p-6 mb-8 text-center"
+          class="bg-white dark:bg-zinc-800 border-2 border-green-600 rounded-lg p-4 mb-6 slide-up stagger-3"
         >
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">
-            {{ $t('checkout.confirmation.orderNumber') }}
-          </p>
-          <p class="text-2xl font-bold text-green-600 dark:text-green-400">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm text-zinc-600 dark:text-zinc-400">
+              {{ $t('checkout.confirmation.orderNumber') }}
+            </span>
+            <span class="flex items-center gap-2">
+              <span class="w-2 h-2 bg-green-600 rounded-full status-pulse"></span>
+              <span class="text-xs font-medium text-green-600">
+                {{ $t('checkout.confirmation.status.confirmed').toUpperCase() }}
+              </span>
+            </span>
+          </div>
+          <p class="text-2xl font-bold text-zinc-900 dark:text-white mb-3">
             {{ orderData.orderNumber || 'N/A' }}
           </p>
+          <div class="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900 rounded-lg p-3">
+            <svg
+              class="w-4 h-4 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+            </svg>
+            {{ $t('checkout.steps.confirmation.emailSent') }}
+          </div>
         </div>
 
-        <!-- Order Details -->
+        <!-- Mini Progress / Order Status -->
         <div
           v-if="orderData"
-          class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8"
+          class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 mb-6 slide-up stagger-4"
         >
-          <!-- Order Items -->
-          <div class="lg:col-span-2">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                {{ $t('checkout.confirmation.orderItems') }}
-              </h3>
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-semibold text-zinc-900 dark:text-white">
+              {{ $t('checkout.confirmation.orderStatus') }}
+            </h3>
+            <span class="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+              {{ $t('checkout.confirmation.stepIndicator', { current: 2, total: 3 }) }}
+            </span>
+          </div>
 
-              <div class="space-y-4">
+          <!-- Progress Bar with Animation -->
+          <!-- Step 1 (Confirmed) complete, Step 2 (Preparing) in progress = 66% -->
+          <div class="mb-4 bg-zinc-100 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
+            <div
+              class="bg-green-600 h-2 rounded-full progress-fill"
+              :style="{ '--target-width': '66%' }"
+            ></div>
+          </div>
+
+          <!-- Mini Steps -->
+          <div class="flex justify-between text-xs">
+            <!-- Step 1: Confirmed -->
+            <div class="text-center flex-1">
+              <div class="w-6 h-6 bg-green-600 rounded-full mx-auto mb-1 flex items-center justify-center text-white font-semibold text-xs">
+                ✓
+              </div>
+              <p class="font-medium text-green-600">
+                {{ $t('checkout.confirmation.status.confirmed') }}
+              </p>
+            </div>
+
+            <!-- Step 2: Preparing (Current) -->
+            <div class="text-center flex-1">
+              <div class="w-6 h-6 bg-zinc-900 dark:bg-white rounded-full mx-auto mb-1 flex items-center justify-center">
+                <div class="w-1.5 h-1.5 bg-white dark:bg-zinc-900 rounded-full status-pulse"></div>
+              </div>
+              <p class="font-medium text-zinc-900 dark:text-white">
+                {{ $t('checkout.confirmation.status.preparing') }}
+              </p>
+            </div>
+
+            <!-- Step 3: Shipped (Pending) -->
+            <div class="text-center flex-1">
+              <div class="w-6 h-6 bg-zinc-200 dark:bg-zinc-600 rounded-full mx-auto mb-1"></div>
+              <p class="text-zinc-500 dark:text-zinc-400">
+                {{ $t('checkout.confirmation.status.shipped') }}
+              </p>
+            </div>
+          </div>
+
+          <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-4 text-center bg-zinc-50 dark:bg-zinc-900 rounded-lg p-2">
+            {{ $t('checkout.confirmation.preparingOrder', { days: '2-3' }) }}
+          </p>
+        </div>
+
+        <!-- Quick Info Cards -->
+        <div
+          v-if="orderData"
+          class="grid grid-cols-2 gap-3 mb-6 slide-up stagger-5"
+        >
+          <!-- Delivery Card -->
+          <button
+            class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-3 text-left card-interactive bg-white dark:bg-zinc-800"
+            @click="scrollToOrderDetails()"
+          >
+            <p class="text-xs text-zinc-600 dark:text-zinc-400 mb-1">
+              {{ $t('checkout.confirmation.delivery') }}
+            </p>
+            <p
+              v-if="estimatedDeliveryDate"
+              class="text-sm font-semibold text-zinc-900 dark:text-white"
+            >
+              {{ formatShortDate(estimatedDeliveryDate) }}
+            </p>
+            <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+              {{ shippingInfo?.method?.description || $t('checkout.confirmation.businessDays', { days: '3-5' }) }}
+            </p>
+          </button>
+
+          <!-- Total Paid Card -->
+          <button
+            class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-3 text-left card-interactive bg-white dark:bg-zinc-800"
+            @click="toggleOrderSummary"
+          >
+            <p class="text-xs text-zinc-600 dark:text-zinc-400 mb-1">
+              {{ $t('checkout.confirmation.totalPaid') }}
+            </p>
+            <p class="text-lg font-bold text-zinc-900 dark:text-white">
+              {{ formatPrice(orderData.total || 0) }}
+            </p>
+            <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+              {{ $t('checkout.confirmation.viewDetails') }} →
+            </p>
+          </button>
+        </div>
+
+        <!-- Expandable Order Summary -->
+        <div
+          v-if="orderData"
+          :class="['expandable mb-6', { expanded: isOrderSummaryExpanded }]"
+        >
+          <div class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4">
+            <h4 class="font-semibold text-zinc-900 dark:text-white mb-4">
+              {{ $t('common.orderSummary') }}
+            </h4>
+            <div class="space-y-3">
+              <div class="flex justify-between text-sm">
+                <span class="text-zinc-600 dark:text-zinc-400">{{ $t('common.subtotal') }}</span>
+                <span class="font-medium text-zinc-900 dark:text-white">{{ formatPrice(orderData.subtotal || 0) }}</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-zinc-600 dark:text-zinc-400">{{ $t('common.shipping') }}</span>
+                <span class="font-medium text-zinc-900 dark:text-white">
+                  {{ orderData.shippingCost === 0 ? $t('checkout.freeShipping') : formatPrice(orderData.shippingCost || 0) }}
+                </span>
+              </div>
+              <div
+                v-if="orderData.tax"
+                class="flex justify-between text-sm"
+              >
+                <span class="text-zinc-600 dark:text-zinc-400">{{ $t('common.tax') }}</span>
+                <span class="font-medium text-zinc-900 dark:text-white">{{ formatPrice(orderData.tax || 0) }}</span>
+              </div>
+              <div class="flex justify-between pt-3 border-t border-zinc-200 dark:border-zinc-700">
+                <span class="font-semibold text-zinc-900 dark:text-white">{{ $t('common.total') }}</span>
+                <span class="font-bold text-zinc-900 dark:text-white">{{ formatPrice(orderData.total || 0) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust Elements -->
+        <div
+          v-if="orderData"
+          class="flex items-center justify-center gap-6 mb-6 slide-up stagger-6"
+        >
+          <div
+            v-for="trust in trustElements"
+            :key="trust.key"
+            class="text-center"
+          >
+            <div class="w-8 h-8 bg-zinc-100 dark:bg-zinc-700 rounded-full mx-auto mb-1 flex items-center justify-center">
+              <svg
+                class="w-4 h-4 text-zinc-700 dark:text-zinc-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  :d="trust.iconPath"
+                />
+              </svg>
+            </div>
+            <p class="text-xs text-zinc-600 dark:text-zinc-400">
+              {{ $t(trust.labelKey) }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Order Details (Collapsible) -->
+        <div
+          v-if="orderData"
+          id="order-details"
+          class="mb-6"
+        >
+          <!-- Order Items Section -->
+          <div class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden mb-4">
+            <button
+              class="w-full p-4 flex items-center justify-between card-interactive"
+              :aria-expanded="isOrderItemsExpanded"
+              aria-controls="order-items-content"
+              @click="toggleOrderItems"
+            >
+              <div class="flex items-center gap-3">
+                <svg
+                  class="w-5 h-5 text-zinc-700 dark:text-zinc-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                  />
+                </svg>
+                <div class="text-left">
+                  <h4 class="font-semibold text-zinc-900 dark:text-white">
+                    {{ $t('checkout.confirmation.orderItems') }}
+                  </h4>
+                  <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                    {{ orderData.items?.length || 0 }} {{ $t('common.items') }}
+                  </p>
+                </div>
+              </div>
+              <svg
+                :class="['w-5 h-5 text-zinc-400 transition-transform', { 'rotate-180': isOrderItemsExpanded }]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+            <div
+              id="order-items-content"
+              :class="['expandable px-4 pb-4', { expanded: isOrderItemsExpanded }]"
+            >
+              <div class="pt-4 border-t border-zinc-200 dark:border-zinc-700 space-y-4">
                 <div
                   v-for="item in orderData.items || []"
                   :key="item.productId"
-                  class="flex items-center space-x-4 py-4 border-b border-gray-200 dark:border-gray-700 last:border-b-0"
+                  class="flex items-center space-x-4"
                 >
                   <!-- Product Image -->
                   <div class="flex-shrink-0">
                     <img
                       :src="getProductImage(item.productSnapshot)"
-                      :alt="getLocalizedText(item.productSnapshot.name)"
-                      class="w-16 h-16 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
+                      :alt="getLocalizedText(item.productSnapshot.name) || $t('common.product')"
+                      class="w-14 h-14 object-cover rounded-lg border border-zinc-200 dark:border-zinc-600"
                     />
                   </div>
 
                   <!-- Product Details -->
                   <div class="flex-1 min-w-0">
-                    <h4 class="text-sm font-medium text-gray-900 dark:text-white truncate">
+                    <h4 class="text-sm font-medium text-zinc-900 dark:text-white truncate">
                       {{ getLocalizedText(item.productSnapshot.name) }}
                     </h4>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                      {{ $t('common.quantity') }}: {{ item.quantity }}
-                    </p>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                      {{ formatPrice(item.price) }} {{ $t('common.each') }}
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                      {{ $t('common.quantity') }}: {{ item.quantity }} × {{ formatPrice(item.price) }}
                     </p>
                   </div>
 
                   <!-- Item Total -->
                   <div class="text-right">
-                    <p class="text-sm font-medium text-gray-900 dark:text-white">
+                    <p class="text-sm font-medium text-zinc-900 dark:text-white">
                       {{ formatPrice(item.total) }}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- Shipping Information -->
-            <div
-              v-if="shippingInfo"
-              class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mt-6"
+          <!-- Shipping Information Section -->
+          <div
+            v-if="shippingInfo"
+            class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden"
+          >
+            <button
+              class="w-full p-4 flex items-center justify-between card-interactive"
+              :aria-expanded="isShippingInfoExpanded"
+              aria-controls="shipping-info-content"
+              @click="toggleShippingInfo"
             >
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                {{ $t('checkout.confirmation.shippingInfo') }}
-              </h3>
-
-              <div class="space-y-3">
+              <div class="flex items-center gap-3">
+                <svg
+                  class="w-5 h-5 text-zinc-700 dark:text-zinc-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+                <div class="text-left">
+                  <h4 class="font-semibold text-zinc-900 dark:text-white">
+                    {{ $t('checkout.confirmation.shippingInfo') }}
+                  </h4>
+                  <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                    {{ shippingInfo?.address?.city }}, {{ shippingInfo?.address?.country }}
+                  </p>
+                </div>
+              </div>
+              <svg
+                :class="['w-5 h-5 text-zinc-400 transition-transform', { 'rotate-180': isShippingInfoExpanded }]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+            <div
+              id="shipping-info-content"
+              :class="['expandable px-4 pb-4', { expanded: isShippingInfoExpanded }]"
+            >
+              <div class="pt-4 border-t border-zinc-200 dark:border-zinc-700 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <!-- Shipping Address -->
                 <div>
-                  <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                  <h5 class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
                     {{ $t('checkout.confirmation.shippingAddress') }}
-                  </h4>
-                  <div class="text-sm text-gray-600 dark:text-gray-400">
-                    <p>{{ shippingInfo.address.firstName }} {{ shippingInfo.address.lastName }}</p>
+                  </h5>
+                  <div class="text-sm text-zinc-700 dark:text-zinc-300 space-y-1">
+                    <p class="font-medium">
+                      {{ shippingInfo.address.firstName }} {{ shippingInfo.address.lastName }}
+                    </p>
                     <p v-if="shippingInfo.address.company">
                       {{ shippingInfo.address.company }}
                     </p>
@@ -131,71 +414,18 @@
 
                 <!-- Shipping Method -->
                 <div>
-                  <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                  <h5 class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
                     {{ $t('checkout.confirmation.shippingMethod') }}
-                  </h4>
-                  <div class="text-sm text-gray-600 dark:text-gray-400">
+                  </h5>
+                  <div class="text-sm text-zinc-700 dark:text-zinc-300">
                     <p class="font-medium">
                       {{ shippingInfo.method.name }}
                     </p>
-                    <p>{{ shippingInfo.method.description }}</p>
+                    <p class="text-zinc-500 dark:text-zinc-400">
+                      {{ shippingInfo.method.description }}
+                    </p>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Order Summary Sidebar -->
-          <div class="lg:col-span-1">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 sticky top-6">
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                {{ $t('common.orderSummary') }}
-              </h3>
-
-              <div class="space-y-3">
-                <!-- Subtotal -->
-                <div class="flex justify-between text-sm">
-                  <span class="text-gray-600 dark:text-gray-400">{{ $t('common.subtotal') }}</span>
-                  <span class="text-gray-900 dark:text-white">{{ formatPrice(orderData.subtotal || 0) }}</span>
-                </div>
-
-                <!-- Shipping -->
-                <div class="flex justify-between text-sm">
-                  <span class="text-gray-600 dark:text-gray-400">{{ $t('common.shipping') }}</span>
-                  <span class="text-gray-900 dark:text-white">
-                    {{ orderData.shippingCost === 0 ? $t('checkout.freeShipping') : formatPrice(orderData.shippingCost || 0) }}
-                  </span>
-                </div>
-
-                <!-- Tax -->
-                <div class="flex justify-between text-sm">
-                  <span class="text-gray-600 dark:text-gray-400">{{ $t('common.tax') }}</span>
-                  <span class="text-gray-900 dark:text-white">{{ formatPrice(orderData.tax || 0) }}</span>
-                </div>
-
-                <!-- Total -->
-                <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
-                  <div class="flex justify-between">
-                    <span class="text-base font-semibold text-gray-900 dark:text-white">{{ $t('common.total') }}</span>
-                    <span class="text-base font-semibold text-gray-900 dark:text-white">{{ formatPrice(orderData.total || 0) }}</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Estimated Delivery -->
-              <div
-                v-if="estimatedDeliveryDate"
-                class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700"
-              >
-                <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-2">
-                  {{ $t('checkout.confirmation.estimatedDelivery') }}
-                </h4>
-                <p class="text-sm text-gray-600 dark:text-gray-400">
-                  {{ formatDate(estimatedDeliveryDate) }}
-                </p>
-                <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                  {{ $t('checkout.confirmation.deliveryNote') }}
-                </p>
               </div>
             </div>
           </div>
@@ -203,22 +433,22 @@
 
         <!-- Loading State -->
         <div
-          v-else
-          class="flex justify-center items-center py-12"
+          v-if="!orderData"
+          class="flex flex-col justify-center items-center py-12"
         >
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <span class="ml-3 text-gray-600 dark:text-gray-400">{{ $t('common.loading') }}</span>
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mb-3"></div>
+          <span class="text-zinc-600 dark:text-zinc-400">{{ $t('common.loading') }}</span>
         </div>
 
-        <!-- Order Tracking Information -->
+        <!-- Guest to Account Conversion Prompt -->
         <div
-          v-if="orderData"
-          class="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-8"
+          v-if="orderData && isGuestCheckout && !isLoggedIn"
+          class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border border-indigo-200 dark:border-indigo-800 rounded-xl p-5 mb-6 slide-up stagger-6"
         >
-          <div class="flex items-start space-x-3">
-            <div class="flex-shrink-0">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-12 h-12 bg-indigo-100 dark:bg-indigo-800 rounded-full flex items-center justify-center">
               <svg
-                class="w-6 h-6 text-blue-600 dark:text-blue-400"
+                class="w-6 h-6 text-indigo-600 dark:text-indigo-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -227,82 +457,160 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
                 />
               </svg>
             </div>
             <div class="flex-1">
-              <h3 class="text-sm font-medium text-blue-900 dark:text-blue-200 mb-1">
-                {{ $t('checkout.confirmation.trackOrder') }}
+              <h3 class="text-lg font-semibold text-indigo-900 dark:text-indigo-100 mb-2">
+                {{ $t('checkout.confirmation.createAccount.title') }}
               </h3>
-              <p class="text-sm text-blue-700 dark:text-blue-300">
-                {{ $t('checkout.confirmation.trackingAvailable') }}
+              <p class="text-sm text-indigo-700 dark:text-indigo-300 mb-4">
+                {{ $t('checkout.confirmation.createAccount.description') }}
               </p>
-              <div
-                v-if="isAuthenticated"
-                class="mt-3"
+              <ul class="space-y-2 mb-4">
+                <li class="flex items-center gap-2 text-sm text-indigo-700 dark:text-indigo-300">
+                  <svg
+                    class="w-4 h-4 text-green-500 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  {{ $t('checkout.confirmation.createAccount.benefits.trackOrders') }}
+                </li>
+                <li class="flex items-center gap-2 text-sm text-indigo-700 dark:text-indigo-300">
+                  <svg
+                    class="w-4 h-4 text-green-500 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  {{ $t('checkout.confirmation.createAccount.benefits.fasterCheckout') }}
+                </li>
+                <li class="flex items-center gap-2 text-sm text-indigo-700 dark:text-indigo-300">
+                  <svg
+                    class="w-4 h-4 text-green-500 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  {{ $t('checkout.confirmation.createAccount.benefits.exclusiveOffers') }}
+                </li>
+              </ul>
+              <NuxtLink
+                :to="createAccountUrl"
+                class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors"
               >
-                <NuxtLink
-                  :to="localePath(`/account/orders`)"
-                  class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline"
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  {{ $t('checkout.steps.confirmation.viewOrders') }} →
-                </NuxtLink>
-              </div>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                  />
+                </svg>
+                {{ $t('checkout.confirmation.createAccount.button') }}
+              </NuxtLink>
             </div>
           </div>
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700">
-          <NuxtLink
-            v-if="isAuthenticated"
-            :to="localePath('/account/orders')"
-            class="inline-flex items-center px-6 py-2 text-sm font-medium text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
+        <div
+          v-if="orderData"
+          class="space-y-3 slide-up stagger-7"
+        >
+          <!-- Primary: View Order Details (always visible) -->
+          <button
+            class="w-full py-3 bg-green-600 text-white font-semibold rounded-lg btn-primary flex items-center justify-center gap-2"
+            @click="viewOrderDetails"
           >
-            <svg
-              class="w-4 h-4 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-              />
-            </svg>
-            {{ $t('checkout.steps.confirmation.viewOrders') }}
-          </NuxtLink>
+            {{ $t('checkout.steps.confirmation.viewOrderDetails') }}
+          </button>
 
+          <!-- Print/Download Invoice Buttons -->
+          <div class="grid grid-cols-2 gap-3">
+            <button
+              class="py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-medium rounded-lg btn-secondary flex items-center justify-center gap-2"
+              @click="handlePrintInvoice"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                />
+              </svg>
+              {{ $t('invoice.print') }}
+            </button>
+            <button
+              class="py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-medium rounded-lg btn-secondary flex items-center justify-center gap-2"
+              @click="handleDownloadInvoice"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              {{ $t('invoice.download') }}
+            </button>
+          </div>
+
+          <!-- Secondary: Continue Shopping -->
           <NuxtLink
             :to="localePath('/products')"
-            class="inline-flex items-center px-6 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            class="w-full py-3 bg-white dark:bg-zinc-800 border-2 border-zinc-300 dark:border-zinc-600 text-zinc-900 dark:text-white font-semibold rounded-lg btn-secondary flex items-center justify-center gap-2"
           >
-            <svg
-              class="w-4 h-4 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-              />
-            </svg>
             {{ $t('checkout.steps.confirmation.continueShopping') }}
           </NuxtLink>
+        </div>
 
+        <!-- Support Link -->
+        <div
+          v-if="orderData"
+          class="text-center mt-6 slide-up stagger-8"
+        >
           <NuxtLink
-            :to="localePath('/')"
-            class="inline-flex items-center px-6 py-2 text-sm font-medium text-white bg-green-600 dark:bg-green-500 border border-transparent rounded-md hover:bg-green-700 dark:hover:bg-green-600 transition-colors"
+            :to="localePath('/contact')"
+            class="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors inline-flex items-center gap-1"
           >
-            {{ $t('common.home') }}
+            {{ $t('checkout.confirmation.needHelp') || 'Need help? Contact Support' }}
             <svg
-              class="w-4 h-4 ml-2"
+              class="w-4 h-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -311,7 +619,7 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                d="M9 5l7 7-7 7"
               />
             </svg>
           </NuxtLink>
@@ -322,11 +630,10 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick } from 'vue'
 import { useCheckoutStore } from '~/stores/checkout'
 import { useCheckoutSessionStore } from '~/stores/checkout/session'
-import { useAuthStore } from '~/stores/auth'
 import { useCartStore } from '~/stores/cart'
+import { useInvoice } from '~/composables/useInvoice'
 
 // Layout
 definePageMeta({
@@ -337,13 +644,13 @@ definePageMeta({
 // Stores
 const checkoutStore = useCheckoutStore()
 const sessionStore = useCheckoutSessionStore()
-const authStore = useAuthStore()
 const cartStore = useCartStore()
 
 // Composables
 const localePath = useLocalePath()
 const { t, locale } = useI18n()
 const toast = useToast()
+const { printInvoice, openInvoiceForPrint } = useInvoice()
 
 /**
  * Get localized text from a translation object or string
@@ -363,17 +670,16 @@ const getLocalizedText = (text: any): string => {
   return values[0] || ''
 }
 
+const PLACEHOLDER_IMAGE = '/placeholder-product.svg'
+
 /**
- * Get product image URL from snapshot
- * Handles both array of strings and array of image objects
+ * Get product image URL from snapshot.
+ * Handles both array of strings and array of image objects.
  */
-const getProductImage = (snapshot: Record<string, any> | null | undefined): string => {
-  if (!snapshot) return '/placeholder-product.svg'
-  const images = snapshot.images
-  if (!images || !images.length) return '/placeholder-product.svg'
-  const firstImage = images[0]
-  if (typeof firstImage === 'string') return firstImage
-  return firstImage?.url ?? '/placeholder-product.svg'
+function getProductImage(snapshot: Record<string, any> | null | undefined): string {
+  const firstImage = snapshot?.images?.[0]
+  if (!firstImage) return PLACEHOLDER_IMAGE
+  return typeof firstImage === 'string' ? firstImage : (firstImage.url ?? PLACEHOLDER_IMAGE)
 }
 
 // Computed properties
@@ -381,7 +687,6 @@ const getProductImage = (snapshot: Record<string, any> | null | undefined): stri
 // The proxy can return stale refs after restore(), so we use the source directly
 const orderData = computed(() => sessionStore.orderData)
 const shippingInfo = computed(() => sessionStore.shippingInfo)
-const isAuthenticated = computed(() => authStore.isAuthenticated)
 
 const estimatedDeliveryDate = computed(() => {
   if (!shippingInfo.value?.method?.estimatedDays) return null
@@ -393,21 +698,135 @@ const estimatedDeliveryDate = computed(() => {
   return deliveryDate
 })
 
+// Guest checkout detection
+const guestInfo = computed(() => sessionStore.guestInfo)
+const isGuestCheckout = computed(() => !!guestInfo.value?.email)
+
+// Check if user is logged in via Supabase
+const user = useSupabaseUser()
+const isLoggedIn = computed(() => !!user.value)
+
+// Create account URL with pre-filled email
+const createAccountUrl = computed(() => {
+  const email = guestInfo.value?.email || ''
+  const encodedEmail = encodeURIComponent(email)
+  return localePath(`/auth/register?email=${encodedEmail}&from=order`)
+})
+
 // Methods
 const formatPrice = (price: number): string => {
-  return new Intl.NumberFormat('es-ES', {
+  return new Intl.NumberFormat(locale.value, {
     style: 'currency',
-    currency: 'EUR',
+    currency: orderData.value?.currency || 'EUR',
   }).format(price)
 }
 
-const formatDate = (date: Date): string => {
+const formatShortDate = (date: Date): string => {
   return new Intl.DateTimeFormat(locale.value, {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
+    month: 'short',
     day: 'numeric',
   }).format(date)
+}
+
+// Trust elements configuration
+const trustElements = [
+  {
+    key: 'secure',
+    labelKey: 'checkout.trust.secure',
+    iconPath: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
+  },
+  {
+    key: 'easyReturns',
+    labelKey: 'checkout.trust.easyReturns',
+    iconPath: 'M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6',
+  },
+  {
+    key: 'support247',
+    labelKey: 'checkout.trust.support247',
+    iconPath: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z',
+  },
+]
+
+// Expandable section states
+const isOrderSummaryExpanded = ref(false)
+const isOrderItemsExpanded = ref(false)
+const isShippingInfoExpanded = ref(false)
+
+// Toggle methods - consolidated into single function with specific exports
+function toggleSection(section: 'orderSummary' | 'orderItems' | 'shippingInfo'): void {
+  if (section === 'orderSummary') {
+    isOrderSummaryExpanded.value = !isOrderSummaryExpanded.value
+  }
+  else if (section === 'orderItems') {
+    isOrderItemsExpanded.value = !isOrderItemsExpanded.value
+  }
+  else if (section === 'shippingInfo') {
+    isShippingInfoExpanded.value = !isShippingInfoExpanded.value
+  }
+}
+
+const toggleOrderSummary = () => toggleSection('orderSummary')
+const toggleOrderItems = () => toggleSection('orderItems')
+const toggleShippingInfo = () => toggleSection('shippingInfo')
+
+function scrollToOrderDetails(expandShipping = false): void {
+  const element = document.getElementById('order-details')
+  if (!element) return
+
+  element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  isOrderItemsExpanded.value = true
+  if (expandShipping) {
+    isShippingInfoExpanded.value = true
+  }
+}
+
+const viewOrderDetails = () => scrollToOrderDetails(true)
+
+// Invoice handlers
+const getInvoiceData = () => {
+  if (!orderData.value) return null
+
+  return {
+    orderData: orderData.value,
+    shippingInfo: shippingInfo.value,
+    orderNumber: orderData.value.orderNumber || 'N/A',
+    orderDate: new Date(),
+    customerEmail: orderData.value.customerEmail || guestInfo.value?.email,
+  }
+}
+
+const handlePrintInvoice = () => {
+  const data = getInvoiceData()
+  if (!data) {
+    toast.error(t('invoice.error'), t('invoice.errorNoData'))
+    return
+  }
+  const result = printInvoice(data)
+  if (!result.success) {
+    if (result.error === 'popup_blocked') {
+      toast.error(t('invoice.error'), t('invoice.errorPopupBlocked'))
+    }
+    else {
+      toast.error(t('invoice.error'), t('invoice.errorNoData'))
+    }
+  }
+}
+
+const handleDownloadInvoice = () => {
+  const data = getInvoiceData()
+  if (!data) {
+    toast.error(t('invoice.error'), t('invoice.errorNoData'))
+    return
+  }
+  const result = openInvoiceForPrint(data)
+  if (!result.success) {
+    if (result.error === 'popup_blocked') {
+      toast.error(t('invoice.error'), t('invoice.errorPopupBlocked'))
+    }
+    else {
+      toast.error(t('invoice.error'), t('invoice.errorNoData'))
+    }
+  }
 }
 
 // Initialize on mount
@@ -501,9 +920,9 @@ onBeforeUnmount(() => {
 
 // Page meta
 useHead({
-  title: 'Order Confirmation - Checkout',
+  title: computed(() => t('checkout.steps.confirmation.pageTitle')),
   meta: [
-    { name: 'description', content: 'Your order has been successfully placed' },
+    { name: 'description', content: computed(() => t('checkout.steps.confirmation.pageDescription')) },
   ],
 })
 </script>
@@ -511,5 +930,173 @@ useHead({
 <style scoped>
 .checkout-page {
   min-height: 60vh;
+}
+
+/* Clean, minimal animations */
+@keyframes slide-up {
+  0% {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes checkmark-draw {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes circle-draw {
+  0% {
+    stroke-dashoffset: 200;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes progress-fill {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: var(--target-width);
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.slide-up {
+  animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+.checkmark-animated {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: checkmark-draw 0.6s ease-out 0.3s forwards;
+}
+
+.circle-animated {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: circle-draw 0.5s ease-out forwards;
+}
+
+.progress-fill {
+  animation: progress-fill 1.5s ease-out forwards;
+}
+
+.status-pulse {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Staggered animation delays */
+.stagger-1 { animation-delay: 0.2s; }
+.stagger-2 { animation-delay: 0.3s; }
+.stagger-3 { animation-delay: 0.4s; }
+.stagger-4 { animation-delay: 0.5s; }
+.stagger-5 { animation-delay: 0.6s; }
+.stagger-6 { animation-delay: 0.7s; }
+.stagger-7 { animation-delay: 0.8s; }
+.stagger-8 { animation-delay: 0.9s; }
+
+/* Interactive states - following design-guide */
+.btn-primary {
+  transition: all 0.15s ease;
+}
+
+.btn-primary:hover {
+  background-color: #16a34a;
+}
+
+.btn-primary:active {
+  background-color: #15803d;
+}
+
+.btn-secondary {
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #fafafa;
+  border-color: #a1a1aa;
+}
+
+.btn-secondary:active {
+  background-color: #f4f4f5;
+}
+
+:deep(.dark) .btn-secondary:hover {
+  background-color: #3f3f46;
+  border-color: #71717a;
+}
+
+:deep(.dark) .btn-secondary:active {
+  background-color: #52525b;
+}
+
+.card-interactive {
+  transition: all 0.15s ease;
+}
+
+.card-interactive:hover {
+  background-color: #fafafa;
+}
+
+.card-interactive:active {
+  background-color: #f4f4f5;
+}
+
+:deep(.dark) .card-interactive:hover {
+  background-color: #3f3f46;
+}
+
+:deep(.dark) .card-interactive:active {
+  background-color: #52525b;
+}
+
+/* Expandable sections */
+.expandable {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.expandable.expanded {
+  max-height: 600px;
+}
+
+/* Rotate chevron when expanded */
+.rotate-180 {
+  transform: rotate(180deg);
 }
 </style>

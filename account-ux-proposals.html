@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Page UX Proposals - Moldova Direct</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .phone-frame {
+            width: 375px;
+            height: 667px;
+            border: 12px solid #1f2937;
+            border-radius: 36px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            background: white;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 28px;
+            background: #1f2937;
+            border-radius: 0 0 20px 20px;
+            z-index: 100;
+        }
+
+        .phone-content {
+            height: 100%;
+            overflow-y: auto;
+            padding-top: 32px;
+        }
+
+        .demo-card {
+            transition: all 0.3s ease;
+        }
+
+        .demo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .active-variant {
+            border: 3px solid #ef4444;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stats-card-alt {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .quick-action {
+            transition: all 0.2s ease;
+        }
+
+        .quick-action:active {
+            transform: scale(0.95);
+        }
+
+        .comparison-table th {
+            background: #1f2937;
+            color: white;
+        }
+
+        .recommended-badge {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 p-8">
+
+    <!-- Header -->
+    <div class="max-w-7xl mx-auto mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Account Page UX Proposals</h1>
+        <p class="text-lg text-gray-600 mb-6">Moldova Direct - Mobile-First Design Research & Interactive Prototypes</p>
+
+        <!-- Research Summary -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">📊 Research Findings</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">Key Insights:</h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li>✓ 73% of sites have mediocre account UX (Baymard 2025)</li>
+                        <li>✓ Users prefer fewer long pages vs deep navigation</li>
+                        <li>✓ Account features should be in upper-right corner</li>
+                        <li>✓ Display 7-8 essential elements maximum</li>
+                        <li>✓ Orders should be visible by default on dashboard</li>
+                        <li>✓ Mobile-first approach is critical</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">Industry Leaders Studied:</h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li>🛍️ <strong>Amazon:</strong> Quick actions, browsing history, personalized recommendations</li>
+                        <li>🛒 <strong>Shopify:</strong> Order history + reorder, 12-column grid, minimal clutter</li>
+                        <li>📦 <strong>ASOS:</strong> Visual order cards, status tracking, quick reorder</li>
+                        <li>👟 <strong>Nike:</strong> Activity feed, rewards integration, profile completion</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variant Selector -->
+    <div class="max-w-7xl mx-auto mb-8">
+        <div class="flex flex-wrap gap-4 justify-center">
+            <button onclick="showVariant('a')" id="btn-a" class="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+                Option A: Card Grid Pattern
+            </button>
+            <button onclick="showVariant('b')" id="btn-b" class="px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition">
+                Option B: Quick Actions Dashboard
+            </button>
+            <button onclick="showVariant('c')" id="btn-c" class="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition">
+                Option C: Activity Timeline
+            </button>
+            <button onclick="showVariant('d')" id="btn-d" class="px-6 py-3 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-lg font-semibold hover:from-pink-600 hover:to-red-600 transition">
+                ⭐ Option D: Hybrid (RECOMMENDED)
+            </button>
+        </div>
+    </div>
+
+    <!-- Variants Container -->
+    <div class="max-w-7xl mx-auto">
+
+        <!-- OPTION A: Card Grid Pattern -->
+        <div id="variant-a" class="variant-section mb-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-3xl font-bold text-gray-900">Option A: Card Grid Pattern</h2>
+                            <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">Like Amazon/Shopify</span>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Description:</h3>
+                        <p class="text-gray-700 mb-6 leading-relaxed">
+                            Traditional grid-based layout with clear visual cards for each major section. Emphasizes quick scanning and direct navigation to key features. This pattern prioritizes visual hierarchy and clear categorization.
+                        </p>
+
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Companies Using This Pattern:</h3>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center text-gray-700">
+                                <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+                                <strong>Amazon</strong> - Main account dashboard with sectioned cards
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+                                <strong>Shopify</strong> - Customer account pages
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+                                <strong>Walmart</strong> - Account overview page
+                            </li>
+                        </ul>
+
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Key Features:</h3>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span>Clear visual hierarchy with cards</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span>Easy to scan and understand at a glance</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span>Works well on all screen sizes</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span>Industry-standard pattern (high familiarity)</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-red-600 mr-2">✗</span>
+                                <span>Can feel generic/not distinctive</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-red-600 mr-2">✗</span>
+                                <span>Requires more scrolling on mobile</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex justify-center">
+                    <div class="phone-frame active-variant">
+                        <div class="phone-notch"></div>
+                        <div class="phone-content bg-gray-50">
+                            <!-- Header -->
+                            <div class="bg-white px-6 py-4 shadow-sm">
+                                <h1 class="text-2xl font-bold text-gray-900">Mi Cuenta</h1>
+                            </div>
+
+                            <!-- User Profile Card -->
+                            <div class="mx-4 mt-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white shadow-lg">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center">
+                                        <span class="text-2xl font-bold text-blue-600">C</span>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h2 class="text-lg font-semibold">customer</h2>
+                                        <p class="text-sm text-blue-100">customer@moldovadirect.com</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Stats Cards -->
+                            <div class="grid grid-cols-2 gap-4 px-4 mt-6">
+                                <div class="bg-white rounded-lg p-4 shadow demo-card">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-gray-600 text-sm">Pedidos</span>
+                                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="text-3xl font-bold text-gray-900">0</p>
+                                </div>
+
+                                <div class="bg-white rounded-lg p-4 shadow demo-card">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-gray-600 text-sm">Lista Deseos</span>
+                                        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="text-3xl font-bold text-gray-900">0</p>
+                                </div>
+                            </div>
+
+                            <!-- Main Navigation Cards -->
+                            <div class="px-4 mt-6 space-y-3 pb-6">
+                                <div class="bg-white rounded-lg p-4 shadow demo-card cursor-pointer">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-semibold text-gray-900">Mis Pedidos</h3>
+                                                <p class="text-sm text-gray-500">Ver historial completo</p>
+                                            </div>
+                                        </div>
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white rounded-lg p-4 shadow demo-card cursor-pointer">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-semibold text-gray-900">Mi Perfil</h3>
+                                                <p class="text-sm text-gray-500">Editar información personal</p>
+                                            </div>
+                                        </div>
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white rounded-lg p-4 shadow demo-card cursor-pointer">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-semibold text-gray-900">Direcciones</h3>
+                                                <p class="text-sm text-gray-500">Gestionar direcciones de envío</p>
+                                            </div>
+                                        </div>
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white rounded-lg p-4 shadow demo-card cursor-pointer">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mr-3">
+                                                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-semibold text-gray-900">Métodos de Pago</h3>
+                                                <p class="text-sm text-gray-500">Gestionar tarjetas</p>
+                                            </div>
+                                        </div>
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPTION B: Quick Actions Dashboard -->
+        <div id="variant-b" class="variant-section mb-16 hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-3xl font-bold text-gray-900">Option B: Quick Actions Dashboard</h2>
+                            <span class="px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm font-semibold">Like Nike/ASOS</span>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Description:</h3>
+                        <p class="text-gray-700 mb-6 leading-relaxed">
+                            Action-oriented layout featuring prominent buttons for the most common user tasks. Prioritizes task completion speed with clear CTAs and minimal navigation depth. Great for users who know what they want to do.
+                        </p>
+
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Companies Using This Pattern:</h3>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center text-gray-700">
+                                <span class="w-2 h-2 bg-purple-600 rounded-full mr-3"></span>
+                                <strong>Nike</strong> - Member dashboard with activity feed
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <span class="w-2 h-2 bg-purple-600 rounded-full mr-3"></span>
+                                <strong>ASOS</strong> - Quick action buttons for orders/returns
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <span class="w-2 h-2 bg-purple-600 rounded-full mr-3"></span>
+                                <strong>Zalando</strong> - Action-focused account page
+                            </li>
+                        </ul>
+
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Key Features:</h3>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span>Fast task completion - fewer taps</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span>Clear call-to-action buttons</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span>Reduces cognitive load</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span>Great for returning customers</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-red-600 mr-2">✗</span>
+                                <span>May hide secondary features</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-red-600 mr-2">✗</span>
+                                <span>Less suitable for exploration</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex justify-center">
+                    <div class="phone-frame">
+                        <div class="phone-notch"></div>
+                        <div class="phone-content bg-gray-50">
+                            <!-- Header -->
+                            <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-8 text-white">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center mr-4">
+                                        <span class="text-2xl font-bold text-purple-600">C</span>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-lg font-semibold">Hola, customer</h2>
+                                        <p class="text-sm text-purple-100">Bienvenido de nuevo</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Stats -->
+                            <div class="px-4 -mt-6 grid grid-cols-3 gap-3">
+                                <div class="bg-white rounded-lg p-3 shadow-lg text-center">
+                                    <p class="text-2xl font-bold text-gray-900">0</p>
+                                    <p class="text-xs text-gray-600 mt-1">Pedidos</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-3 shadow-lg text-center">
+                                    <p class="text-2xl font-bold text-gray-900">0</p>
+                                    <p class="text-xs text-gray-600 mt-1">Favoritos</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-3 shadow-lg text-center">
+                                    <p class="text-2xl font-bold text-gray-900">€0</p>
+                                    <p class="text-xs text-gray-600 mt-1">Gastado</p>
+                                </div>
+                            </div>
+
+                            <!-- Quick Actions -->
+                            <div class="px-4 mt-8">
+                                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Acciones Rápidas</h3>
+
+                                <div class="space-y-3">
+                                    <button class="quick-action w-full bg-purple-600 text-white rounded-lg p-4 shadow-lg flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                            </svg>
+                                            <span class="font-semibold">Ver Mis Pedidos</span>
+                                        </div>
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </button>
+
+                                    <button class="quick-action w-full bg-white border-2 border-purple-200 text-purple-600 rounded-lg p-4 shadow flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                            </svg>
+                                            <span class="font-semibold">Repetir Último Pedido</span>
+                                        </div>
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </button>
+
+                                    <button class="quick-action w-full bg-white border-2 border-purple-200 text-purple-600 rounded-lg p-4 shadow flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+                                            </svg>
+                                            <span class="font-semibold">Gestionar Devoluciones</span>
+                                        </div>
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </button>
+
+                                    <button class="quick-action w-full bg-white border-2 border-purple-200 text-purple-600 rounded-lg p-4 shadow flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                            </svg>
+                                            <span class="font-semibold">Mi Lista de Deseos</span>
+                                        </div>
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Secondary Menu -->
+                            <div class="px-4 mt-8 pb-6">
+                                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Configuración</h3>
+                                <div class="bg-white rounded-lg shadow divide-y">
+                                    <a href="#" class="flex items-center justify-between p-4">
+                                        <span class="text-gray-700">Mi Perfil</span>
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <a href="#" class="flex items-center justify-between p-4">
+                                        <span class="text-gray-700">Direcciones</span>
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <a href="#" class="flex items-center justify-between p-4">
+                                        <span class="text-gray-700">Métodos de Pago</span>
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPTION C: Activity Timeline -->
+        <div id="variant-c" class="variant-section mb-16 hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-3xl font-bold text-gray-900">Option C: Activity Timeline</h2>
+                            <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-semibold">Like Etsy/eBay</span>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Description:</h3>
+                        <p class="text-gray-700 mb-6 leading-relaxed">
+                            Feed-based interface showing recent account activity chronologically. Combines order updates, recommendations, and account milestones into a unified activity stream. Creates engagement through personalization.
+                        </p>
+
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Companies Using This Pattern:</h3>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center text-gray-700">
+                                <span class="w-2 h-2 bg-green-600 rounded-full mr-3"></span>
+                                <strong>Etsy</strong> - Activity feed with updates and recommendations
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <span class="w-2 h-2 bg-green-600 rounded-full mr-3"></span>
+                                <strong>eBay</strong> - Feed-based account overview
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <span class="w-2 h-2 bg-green-600 rounded-full mr-3"></span>
+                                <strong>Pinterest</strong> - Activity timeline approach
+                            </li>
+                        </ul>
+
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Key Features:</h3>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span>Personalized experience</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span>Shows recent activity at a glance</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span>Encourages exploration and discovery</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span>Good for frequent shoppers</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-red-600 mr-2">✗</span>
+                                <span>Can be overwhelming for new users</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-red-600 mr-2">✗</span>
+                                <span>Harder to find specific features</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex justify-center">
+                    <div class="phone-frame">
+                        <div class="phone-notch"></div>
+                        <div class="phone-content bg-gray-50">
+                            <!-- Header with User -->
+                            <div class="bg-white px-6 py-4 shadow-sm sticky top-0 z-10">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center mr-3">
+                                            <span class="text-lg font-bold text-white">C</span>
+                                        </div>
+                                        <div>
+                                            <h2 class="font-semibold text-gray-900">customer</h2>
+                                            <p class="text-xs text-gray-500">Ver perfil</p>
+                                        </div>
+                                    </div>
+                                    <button class="p-2">
+                                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Quick Stats Bar -->
+                            <div class="bg-white border-b px-6 py-4">
+                                <div class="grid grid-cols-3 gap-4 text-center">
+                                    <div>
+                                        <p class="text-2xl font-bold text-gray-900">0</p>
+                                        <p class="text-xs text-gray-600">Pedidos</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold text-gray-900">0</p>
+                                        <p class="text-xs text-gray-600">Favoritos</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-bold text-gray-900">0</p>
+                                        <p class="text-xs text-gray-600">Puntos</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Activity Feed -->
+                            <div class="px-4 py-6 space-y-4">
+                                <!-- Welcome Card -->
+                                <div class="bg-gradient-to-r from-green-500 to-teal-500 rounded-lg p-6 text-white shadow-lg">
+                                    <h3 class="text-lg font-bold mb-2">¡Bienvenido de nuevo!</h3>
+                                    <p class="text-sm text-green-50 mb-4">Completa tu perfil para obtener recomendaciones personalizadas</p>
+                                    <button class="bg-white text-green-600 px-4 py-2 rounded-lg font-semibold text-sm">
+                                        Completar Perfil
+                                    </button>
+                                </div>
+
+                                <!-- Activity Item 1 -->
+                                <div class="bg-white rounded-lg p-4 shadow">
+                                    <div class="flex items-start">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3 mt-1">
+                                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-900">Listo para empezar a comprar</h4>
+                                            <p class="text-sm text-gray-600 mt-1">Explora nuestros productos y haz tu primer pedido</p>
+                                            <button class="mt-3 text-sm text-blue-600 font-semibold">Ir a la Tienda →</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Activity Item 2 -->
+                                <div class="bg-white rounded-lg p-4 shadow">
+                                    <div class="flex items-start">
+                                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3 mt-1">
+                                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-900">Productos recomendados para ti</h4>
+                                            <p class="text-sm text-gray-600 mt-1">Basado en las tendencias actuales</p>
+                                            <div class="flex gap-2 mt-3">
+                                                <div class="w-16 h-16 bg-gray-200 rounded"></div>
+                                                <div class="w-16 h-16 bg-gray-200 rounded"></div>
+                                                <div class="w-16 h-16 bg-gray-200 rounded"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Activity Item 3 -->
+                                <div class="bg-white rounded-lg p-4 shadow">
+                                    <div class="flex items-start">
+                                        <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center mr-3 mt-1">
+                                            <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-900">Crea tu lista de deseos</h4>
+                                            <p class="text-sm text-gray-600 mt-1">Guarda tus productos favoritos para más tarde</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPTION D: Hybrid/Recommended -->
+        <div id="variant-d" class="variant-section mb-16 hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <div class="bg-white rounded-lg shadow-lg p-8 border-4 border-pink-500">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-3xl font-bold text-gray-900">Option D: Hybrid Dashboard</h2>
+                            <span class="recommended-badge px-4 py-2 text-white rounded-full text-sm font-bold">
+                                ⭐ RECOMMENDED
+                            </span>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Description:</h3>
+                        <p class="text-gray-700 mb-6 leading-relaxed">
+                            Best-of-all-worlds approach combining visual cards, quick actions, and contextual information. Features a compact header, prominent stats, quick access to recent orders, and clear navigation. Optimized for mobile-first with progressive enhancement.
+                        </p>
+
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Why This is Recommended:</h3>
+                        <div class="bg-pink-50 border-l-4 border-pink-500 p-4 mb-6">
+                            <p class="text-gray-800 font-semibold mb-2">This pattern addresses all key UX principles from research:</p>
+                            <ul class="space-y-2 text-gray-700 text-sm">
+                                <li>✓ Follows Baymard's "fewer long pages" guideline</li>
+                                <li>✓ Shows orders by default on dashboard</li>
+                                <li>✓ Displays 7-8 essential elements (not overwhelming)</li>
+                                <li>✓ Mobile-first with touch-friendly targets</li>
+                                <li>✓ Clear visual hierarchy with progressive disclosure</li>
+                                <li>✓ Combines familiarity (cards) with efficiency (quick actions)</li>
+                            </ul>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Pattern Inspiration:</h3>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center text-gray-700">
+                                <span class="w-2 h-2 bg-pink-600 rounded-full mr-3"></span>
+                                <strong>Header:</strong> Shopify's compact profile design
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <span class="w-2 h-2 bg-pink-600 rounded-full mr-3"></span>
+                                <strong>Stats:</strong> Amazon's at-a-glance metrics
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <span class="w-2 h-2 bg-pink-600 rounded-full mr-3"></span>
+                                <strong>Quick Actions:</strong> ASOS's button-based navigation
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <span class="w-2 h-2 bg-pink-600 rounded-full mr-3"></span>
+                                <strong>Recent Orders:</strong> Nike's activity cards
+                            </li>
+                        </ul>
+
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Key Features:</h3>
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span><strong>Compact header</strong> - More space for content</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span><strong>Visual stats</strong> - Quick overview of account status</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span><strong>Recent orders preview</strong> - No extra tap needed</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span><strong>Quick actions grid</strong> - Common tasks accessible</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span><strong>Mobile-optimized</strong> - Touch targets 48px+</span>
+                            </li>
+                            <li class="flex items-start text-gray-700">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span><strong>Clear hierarchy</strong> - Progressive information disclosure</span>
+                            </li>
+                        </ul>
+
+                        <div class="bg-gradient-to-r from-pink-500 to-red-500 text-white p-6 rounded-lg">
+                            <h3 class="font-bold text-lg mb-2">Implementation Ready</h3>
+                            <p class="text-sm text-pink-50">This design uses existing components and follows your Nuxt 4 + Tailwind stack. No new dependencies required.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center">
+                    <div class="phone-frame active-variant">
+                        <div class="phone-notch"></div>
+                        <div class="phone-content bg-gray-50">
+                            <!-- Compact Header -->
+                            <div class="bg-white px-6 py-4 shadow-sm">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
+                                            <span class="text-xl font-bold text-white">C</span>
+                                        </div>
+                                        <div>
+                                            <h2 class="font-bold text-gray-900">customer</h2>
+                                            <p class="text-xs text-gray-500">Ver perfil</p>
+                                        </div>
+                                    </div>
+                                    <button class="p-2">
+                                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Stats Cards -->
+                            <div class="px-4 mt-4 grid grid-cols-2 gap-3">
+                                <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white shadow-lg">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-blue-100">Total Pedidos</span>
+                                        <svg class="w-5 h-5 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="text-3xl font-bold">0</p>
+                                </div>
+
+                                <div class="bg-gradient-to-br from-pink-500 to-red-500 rounded-xl p-4 text-white shadow-lg">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-pink-100">Favoritos</span>
+                                        <svg class="w-5 h-5 text-pink-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="text-3xl font-bold">0</p>
+                                </div>
+                            </div>
+
+                            <!-- Recent Orders Section -->
+                            <div class="px-4 mt-6">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h3 class="font-bold text-gray-900">Pedidos Recientes</h3>
+                                    <a href="#" class="text-sm text-blue-600 font-semibold">Ver todos</a>
+                                </div>
+
+                                <!-- Empty State -->
+                                <div class="bg-white rounded-xl p-8 text-center shadow-sm">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="text-gray-600 text-sm mb-4">Aún no tienes pedidos</p>
+                                    <button class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold text-sm">
+                                        Ir a la Tienda
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Quick Actions Grid -->
+                            <div class="px-4 mt-6">
+                                <h3 class="font-bold text-gray-900 mb-3">Acceso Rápido</h3>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button class="bg-white rounded-xl p-4 shadow-sm flex flex-col items-center text-center quick-action">
+                                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-2">
+                                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="text-sm font-semibold text-gray-900">Mi Perfil</span>
+                                    </button>
+
+                                    <button class="bg-white rounded-xl p-4 shadow-sm flex flex-col items-center text-center quick-action">
+                                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-2">
+                                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="text-sm font-semibold text-gray-900">Direcciones</span>
+                                    </button>
+
+                                    <button class="bg-white rounded-xl p-4 shadow-sm flex flex-col items-center text-center quick-action">
+                                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-2">
+                                            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="text-sm font-semibold text-gray-900">Pagos</span>
+                                    </button>
+
+                                    <button class="bg-white rounded-xl p-4 shadow-sm flex flex-col items-center text-center quick-action">
+                                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-2">
+                                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="text-sm font-semibold text-gray-900">Devoluciones</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Spacing -->
+                            <div class="h-6"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="mt-16 bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Feature Comparison Matrix</h2>
+
+            <div class="overflow-x-auto">
+                <table class="comparison-table w-full text-sm">
+                    <thead>
+                        <tr>
+                            <th class="p-4 text-left">Feature</th>
+                            <th class="p-4 text-center">Option A<br>Card Grid</th>
+                            <th class="p-4 text-center">Option B<br>Quick Actions</th>
+                            <th class="p-4 text-center">Option C<br>Activity Timeline</th>
+                            <th class="p-4 text-center bg-pink-600">Option D<br>Hybrid ⭐</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        <tr>
+                            <td class="p-4 font-semibold">Mobile-First Design</td>
+                            <td class="p-4 text-center">✓</td>
+                            <td class="p-4 text-center">✓✓</td>
+                            <td class="p-4 text-center">✓</td>
+                            <td class="p-4 text-center bg-pink-50">✓✓✓</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold">Quick Task Completion</td>
+                            <td class="p-4 text-center">✓</td>
+                            <td class="p-4 text-center">✓✓✓</td>
+                            <td class="p-4 text-center">✓</td>
+                            <td class="p-4 text-center bg-pink-50">✓✓✓</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold">Information At-a-Glance</td>
+                            <td class="p-4 text-center">✓✓</td>
+                            <td class="p-4 text-center">✓</td>
+                            <td class="p-4 text-center">✓✓</td>
+                            <td class="p-4 text-center bg-pink-50">✓✓✓</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold">Visual Hierarchy</td>
+                            <td class="p-4 text-center">✓✓</td>
+                            <td class="p-4 text-center">✓✓</td>
+                            <td class="p-4 text-center">✓</td>
+                            <td class="p-4 text-center bg-pink-50">✓✓✓</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold">Personalization</td>
+                            <td class="p-4 text-center">✓</td>
+                            <td class="p-4 text-center">✓</td>
+                            <td class="p-4 text-center">✓✓✓</td>
+                            <td class="p-4 text-center bg-pink-50">✓✓</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold">Ease of Implementation</td>
+                            <td class="p-4 text-center">✓✓✓</td>
+                            <td class="p-4 text-center">✓✓</td>
+                            <td class="p-4 text-center">✓</td>
+                            <td class="p-4 text-center bg-pink-50">✓✓</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold">Familiarity (Users)</td>
+                            <td class="p-4 text-center">✓✓✓</td>
+                            <td class="p-4 text-center">✓✓</td>
+                            <td class="p-4 text-center">✓</td>
+                            <td class="p-4 text-center bg-pink-50">✓✓✓</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold">Scalability</td>
+                            <td class="p-4 text-center">✓✓</td>
+                            <td class="p-4 text-center">✓</td>
+                            <td class="p-4 text-center">✓✓</td>
+                            <td class="p-4 text-center bg-pink-50">✓✓✓</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold">Accessibility</td>
+                            <td class="p-4 text-center">✓✓</td>
+                            <td class="p-4 text-center">✓✓</td>
+                            <td class="p-4 text-center">✓</td>
+                            <td class="p-4 text-center bg-pink-50">✓✓✓</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold">Follows Baymard Guidelines</td>
+                            <td class="p-4 text-center">✓✓</td>
+                            <td class="p-4 text-center">✓✓</td>
+                            <td class="p-4 text-center">✓</td>
+                            <td class="p-4 text-center bg-pink-50">✓✓✓</td>
+                        </tr>
+                        <tr class="bg-gray-50 font-bold">
+                            <td class="p-4">TOTAL SCORE</td>
+                            <td class="p-4 text-center text-lg">19</td>
+                            <td class="p-4 text-center text-lg">18</td>
+                            <td class="p-4 text-center text-lg">14</td>
+                            <td class="p-4 text-center text-lg bg-pink-100 text-pink-900">26</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-8 bg-gradient-to-r from-pink-100 to-red-100 border-l-4 border-pink-500 p-6 rounded">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Why Option D is Recommended:</h3>
+                <ul class="space-y-2 text-gray-800">
+                    <li><strong>1. Research-Backed:</strong> Addresses all 6 key findings from Baymard 2025 benchmark</li>
+                    <li><strong>2. Best Practices:</strong> Combines proven patterns from Amazon, Shopify, Nike, and ASOS</li>
+                    <li><strong>3. Mobile-First:</strong> Optimized for touch with 48px+ targets, compact header, efficient use of space</li>
+                    <li><strong>4. Quick Access:</strong> Recent orders visible immediately (no extra navigation)</li>
+                    <li><strong>5. Visual Hierarchy:</strong> Clear progression from stats → orders → actions → settings</li>
+                    <li><strong>6. Familiar UX:</strong> Users recognize patterns from industry leaders</li>
+                    <li><strong>7. Implementation Ready:</strong> Uses existing Tailwind components, no new dependencies</li>
+                    <li><strong>8. Scalable:</strong> Easy to add features (rewards, browsing history, recommendations)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Research Sources -->
+        <div class="mt-12 bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">📚 Research Sources</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">Industry Research & Guidelines:</h3>
+                    <ul class="space-y-2 text-blue-600">
+                        <li>
+                            <a href="https://baymard.com/blog/current-state-accounts-selfservice" target="_blank" class="hover:underline">
+                                → Baymard Institute: Accounts & Self-Service UX Best Practices 2025
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://baymard.com/ecommerce-design-examples/58-account-dashboard" target="_blank" class="hover:underline">
+                                → Baymard: 780 Account Dashboard Design Examples
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.uxpin.com/studio/blog/dashboard-design-principles/" target="_blank" class="hover:underline">
+                                → UXPin: Effective Dashboard Design Principles for 2025
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.aufaitux.com/blog/dashboard-design-principles/" target="_blank" class="hover:underline">
+                                → AufaitUX: 30 Proven Dashboard Design Principles
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">Platform-Specific Patterns:</h3>
+                    <ul class="space-y-2 text-blue-600">
+                        <li>
+                            <a href="https://blog.getflits.com/shopify-customer-account-ux-design/" target="_blank" class="hover:underline">
+                                → Shopify Customer Account UX Design Best Practices
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://shopify.dev/docs/apps/build/customer-accounts/ux" target="_blank" class="hover:underline">
+                                → Shopify Dev: UX for Customer Accounts
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.richpanel.com/blog/shopify-customer-accounts" target="_blank" class="hover:underline">
+                                → Richpanel: Guide to Creating Customer Account Pages
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">Mobile & E-commerce UX:</h3>
+                    <ul class="space-y-2 text-blue-600">
+                        <li>
+                            <a href="https://www.adjust.com/blog/mobile-e-commerce-ux-best-practices/" target="_blank" class="hover:underline">
+                                → Adjust: Mobile E-commerce UX Best Practices
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.netguru.com/blog/ecommerce-user-experience" target="_blank" class="hover:underline">
+                                → Netguru: Best E-commerce UX Practices for 2025
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.toptal.com/designers/ux/ecommerce-ux-mobile-experience" target="_blank" class="hover:underline">
+                                → Toptal: E-commerce UX for Mobile Experience
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tech Stack Note -->
+        <div class="mt-8 bg-gray-900 text-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">💻 Implementation Notes</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">Current Stack:</h3>
+                    <ul class="space-y-1 text-gray-300">
+                        <li>• Nuxt 4.1.3</li>
+                        <li>• Vue 3.5 (Composition API)</li>
+                        <li>• Tailwind CSS 4.1.17</li>
+                        <li>• Supabase (backend)</li>
+                        <li>• Shadcn UI components</li>
+                        <li>• i18n (4 locales)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">Option D Benefits:</h3>
+                    <ul class="space-y-1 text-gray-300">
+                        <li>✓ No new dependencies needed</li>
+                        <li>✓ Uses existing components</li>
+                        <li>✓ Mobile-first responsive design</li>
+                        <li>✓ Dark mode compatible</li>
+                        <li>✓ i18n ready (all text translatable)</li>
+                        <li>✓ Supabase queries already optimized</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function showVariant(variant) {
+            // Hide all variants
+            document.querySelectorAll('.variant-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show selected variant
+            document.getElementById(`variant-${variant}`).classList.remove('hidden');
+
+            // Update button styles
+            document.querySelectorAll('[id^="btn-"]').forEach(btn => {
+                btn.classList.remove('ring-4', 'ring-pink-300');
+            });
+            document.getElementById(`btn-${variant}`).classList.add('ring-4', 'ring-pink-300');
+
+            // Scroll to top of variants
+            document.getElementById(`variant-${variant}`).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Show Option A by default on load
+        document.addEventListener('DOMContentLoaded', () => {
+            showVariant('a');
+        });
+    </script>
+
+</body>
+</html>

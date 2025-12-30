@@ -902,18 +902,6 @@ const openZoomModal = () => {
   showZoomModal.value = true
 }
 
-const handlePreviousImage = () => {
-  if (selectedImageIndex.value > 0) {
-    selectedImageIndex.value--
-  }
-}
-
-const handleNextImage = () => {
-  if (product.value?.images && selectedImageIndex.value < product.value.images.length - 1) {
-    selectedImageIndex.value++
-  }
-}
-
 const addToCart = async () => {
   if (!product.value) return
 

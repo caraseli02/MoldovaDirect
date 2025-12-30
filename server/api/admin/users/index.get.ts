@@ -17,17 +17,6 @@ import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { prepareSearchPattern } from '~/server/utils/searchSanitization'
 
-interface UserFilters {
-  search?: string
-  registrationDateFrom?: string
-  registrationDateTo?: string
-  status?: 'active' | 'inactive'
-  sortBy?: 'name' | 'email' | 'created_at' | 'last_login'
-  sortOrder?: 'asc' | 'desc'
-  page?: number
-  limit?: number
-}
-
 interface UserWithProfile {
   id: string
   email: string
