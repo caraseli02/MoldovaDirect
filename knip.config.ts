@@ -1,25 +1,47 @@
 import type { KnipConfig } from 'knip'
 
+/**
+ * Knip Configuration for Moldova Direct
+ *
+ * Knip finds unused files, dependencies, and exports in your codebase.
+ *
+ * HOW IT WORKS WITH NUXT:
+ * - Setting `nuxt: true` enables the built-in Nuxt plugin
+ * - The Nuxt plugin automatically detects: nuxt.config.ts, pages, components,
+ *   composables, layouts, middleware, plugins, server routes, and modules
+ * - We add custom entry points for stores and additional test configs
+ *
+ * Run: pnpm lint:knip
+ * Fix: pnpm lint:knip:fix (auto-removes unused exports)
+ */
+
 const config: KnipConfig = {
-  // Entry points for the application
+  // Additional entry points beyond Nuxt defaults
+  // Note: Nuxt auto-imports components, composables, utils from these directories
+  // We need to include them as entry points so Knip knows they're used
   entry: [
-    'nuxt.config.ts',
-    'pages/**/*.vue',
-    'layouts/**/*.vue',
+    // Nuxt auto-imported directories (components are auto-registered)
     'components/**/*.vue',
     'composables/**/*.ts',
-    'plugins/**/*.ts',
-    'server/**/*.ts',
-    'middleware/**/*.ts',
     'utils/**/*.ts',
+    // Nuxt auto-loaded plugins
+    'plugins/**/*.ts',
+    // Nuxt server utilities (auto-imported in server context)
+    'server/utils/**/*.ts',
+    // Pinia stores
     'stores/**/*.ts',
+    // Custom type definitions
+    'types/**/*.ts',
+    // Lib utilities
+    'lib/**/*.ts',
   ],
 
   // Project files to analyze
   project: ['**/*.{ts,vue,js,mjs}'],
 
-  // Ignore patterns
+  // Ignore patterns - files that should not be analyzed
   ignore: [
+    // Build outputs
     '.nuxt/**',
     '.output/**',
     'node_modules/**',
@@ -29,11 +51,13 @@ const config: KnipConfig = {
     'playwright-report/**',
     '.visual-testing/**',
     'supabase/**',
-    // Manual test scripts (intentionally standalone)
+
+    // Scripts (intentionally standalone, run via CLI)
     'tests/manual/**',
     'scripts/**',
     '.github/scripts/**',
-    // Test templates and fixtures (reference/helper files)
+
+    // Test infrastructure (imported by test framework, not app code)
     'tests/templates/**',
     'tests/fixtures/**',
     'tests/utils/**',
@@ -44,62 +68,79 @@ const config: KnipConfig = {
     'tests/e2e/setup/**',
     'tests/e2e/visual-regression/**',
     'tests/server/utils/mocks/**',
-    // Documentation patches
+
+    // Documentation
     'docs/**/*.ts',
-    // Nuxt modules
+
+    // Nuxt modules (custom modules)
     'modules/**',
-    // UI component index files (re-exports)
+
+    // UI component barrel exports (re-exports for convenience)
     'components/ui/**/index.ts',
   ],
 
-  // Ignore dependencies that are used implicitly by Nuxt/Vite
+  // Dependencies used implicitly (not imported in code)
   ignoreDependencies: [
-    // Image processing (used by @nuxt/image)
-    'ipx',
-    'sharp',
-    // Tailwind (loaded via CSS, not JS imports)
-    'tailwindcss',
+    // ===== Nuxt Auto-Imports =====
+    // These are provided globally by Nuxt/modules, not imported in code
+    'vue-i18n', // via @nuxtjs/i18n
+    'h3', // via Nuxt server
+    'ofetch', // via Nuxt ($fetch)
+    'vue3-carousel', // component import
+
+    // ===== Build Tools =====
+    // Used by build system, not imported in code
+    'ipx', // @nuxt/image optimizer
+    'sharp', // image processing
+    'tailwindcss', // loaded via CSS
     'tailwindcss-animate',
-    // Type definitions (used by TypeScript, not imported)
-    '@types/uuid',
-    // Testing frameworks (used via config files)
-    '@axe-core/playwright',
-    '@pinia/testing', // Used in test setup
-    // Nuxt modules (auto-loaded via nuxt.config)
+
+    // ===== Nuxt Modules =====
+    // Loaded via nuxt.config, not imported
     'shadcn-nuxt',
     'nuxt-swiper',
-    // Dev tools
+
+    // ===== Testing Tools =====
+    // Used via config files, not imported in app code
+    '@axe-core/playwright',
+    '@pinia/testing',
+
+    // ===== Dev Tools =====
+    // CLI tools, not imported
     'husky',
     'dotenv',
     'markdown-link-check',
     'markdownlint-cli',
-    // Auto-provided by Nuxt (available globally)
-    'vue-i18n', // via @nuxtjs/i18n
-    'h3', // via Nuxt server
-    'ofetch', // via Nuxt
-    'vue3-carousel', // via nuxt-swiper / manual import
-    'uuid', // used in composables
+    'eslint-plugin-oxlint', // ESLint config plugin
+    'eslint-plugin-sonarjs', // ESLint config plugin
+
+    // ===== Type Definitions =====
+    '@types/uuid',
+
+    // ===== Runtime Dependencies =====
+    'uuid', // used via import, but may show as unused in some scans
   ],
 
-  // Ignore binaries (CLI tools)
+  // CLI tools (not npm packages to check)
   ignoreBinaries: [
     'playwright',
     'vitest',
     'eslint',
     'oxlint',
     'knip',
+    'vercel',
+    'prettier',
   ],
 
-  // Ignore specific workspaces patterns for test files
-  ignoreWorkspaces: [],
-
-  // Files where exports are allowed to be unused (type definition files)
+  // Allow unused exports in files that export types for external use
   ignoreExportsUsedInFile: true,
 
-  // Nuxt-specific plugin
+  // ===== Plugin Configuration =====
+
+  // Enable Nuxt plugin - auto-detects Nuxt project structure
   nuxt: true,
 
-  // Playwright test configuration
+  // Playwright configuration
   playwright: {
     config: ['playwright.config.ts', 'playwright.*.config.ts'],
     entry: ['tests/**/*.spec.ts', 'tests/**/*.test.ts'],
