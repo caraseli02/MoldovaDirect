@@ -45,6 +45,7 @@
     "test:visual:update": "PLAYWRIGHT_TEST=true playwright test --config=playwright.visual-regression.config.ts --update-snapshots",
     "test:visual-review": "PLAYWRIGHT_TEST=true playwright test --config=playwright.visual-regression.config.ts --ui",
     "test:visual:orders": "PLAYWRIGHT_TEST=true playwright test tests/e2e/visual/orders.spec.ts --project=chromium-es",
+    "test:visual:products": "PLAYWRIGHT_TEST=true playwright test tests/e2e/visual/products-catalog.spec.ts --project=chromium-es",
     "test:visual:all": "PLAYWRIGHT_TEST=true playwright test tests/e2e/visual/ --project=chromium-es",
     "visual:serve": "node .visual-testing/serve.mjs",
     "test:report": "playwright show-report",
