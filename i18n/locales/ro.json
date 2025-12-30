@@ -1181,6 +1181,7 @@
     },
     "faq": {
       "title": "Întrebări frecvente",
+      "subtitle": "Răspunsuri la cele mai frecvente întrebări despre produsele noastre",
       "items": {
         "delivery": {
           "question": "Cât durează livrarea?",
@@ -1188,7 +1189,7 @@
         },
         "storage": {
           "question": "Cum păstrez produsul?",
-          "answer": "Păstrează-l într-un loc răcoros și uscat, ferit de lumină. Vinurile se păstrează ideal între 12–18°C."
+          "answer": "Păstrează-l într-un loc răcoros și uscat, ferit de lumină. Consultă eticheta produsului pentru recomandări specifice de depozitare."
         },
         "allergens": {
           "question": "Conține alergeni?",

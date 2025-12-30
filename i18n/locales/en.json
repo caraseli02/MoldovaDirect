@@ -1553,6 +1553,7 @@
     },
     "faq": {
       "title": "Product FAQs",
+      "subtitle": "Answers to the most common questions about our products",
       "items": {
         "delivery": {
           "question": "How fast do you deliver?",
@@ -1560,7 +1561,7 @@
         },
         "storage": {
           "question": "How should I store it?",
-          "answer": "Keep in a cool, dry space away from direct sunlight. Wines rest best between 12–18°C."
+          "answer": "Keep in a cool, dry space away from direct sunlight. Check the product label for specific storage recommendations."
         },
         "allergens": {
           "question": "Does it contain allergens?",
