@@ -9,7 +9,7 @@
   >
     <div
       v-if="chips.length > 0"
-      class="flex flex-wrap items-center gap-2"
+      class="active-filters-container"
       role="list"
       :aria-label="t('products.filterSummary.activeFilters')"
     >
@@ -27,14 +27,14 @@
           :key="chip.id"
           type="button"
           role="listitem"
-          class="group inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 transition-all hover:bg-blue-100 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-900/40 dark:text-blue-200 dark:hover:bg-blue-900/60"
+          class="filter-chip"
           :aria-label="t('products.filterSummary.removeFilter', { filter: chip.label })"
           @click="handleRemoveChip(chip)"
         >
           <span>{{ chip.label }}</span>
           <commonIcon
             name="lucide:x"
-            class="h-3.5 w-3.5 transition-transform group-hover:scale-110"
+            class="chip-icon"
             aria-hidden="true"
           />
         </button>
@@ -44,13 +44,13 @@
           v-if="showClearAll"
           key="clear-all"
           type="button"
-          class="inline-flex items-center gap-1.5 rounded-full border-2 border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
+          class="clear-all-button"
           :aria-label="t('products.filterSummary.clearAllFilters')"
           @click="handleClearAll"
         >
           <commonIcon
             name="lucide:rotate-ccw"
-            class="h-3.5 w-3.5"
+            class="clear-icon"
             aria-hidden="true"
           />
           <span>{{ clearAllLabel || t('products.filterSummary.clear') }}</span>
@@ -97,3 +97,107 @@ const handleClearAll = () => {
   emit('clear-all')
 }
 </script>
+
+<style scoped>
+.active-filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Filter Chip */
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(201, 162, 39, 0.1);
+  color: var(--md-charcoal);
+  font-family: var(--md-font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: var(--md-radius-full);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-chip:hover {
+  background: rgba(201, 162, 39, 0.2);
+  border-color: var(--md-gold);
+  box-shadow: var(--md-shadow-sm);
+}
+
+.filter-chip:focus-visible {
+  outline: 2px solid var(--md-gold);
+  outline-offset: 2px;
+}
+
+.chip-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--md-gold);
+  transition: transform 0.2s ease;
+}
+
+.filter-chip:hover .chip-icon {
+  transform: scale(1.2);
+}
+
+/* Clear All Button */
+.clear-all-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #fff;
+  color: var(--md-charcoal);
+  font-family: var(--md-font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 2px solid rgba(10, 10, 10, 0.2);
+  border-radius: var(--md-radius-full);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clear-all-button:hover {
+  background: rgba(10, 10, 10, 0.05);
+  border-color: rgba(10, 10, 10, 0.3);
+  box-shadow: var(--md-shadow-sm);
+}
+
+.clear-all-button:focus-visible {
+  outline: 2px solid var(--md-charcoal);
+  outline-offset: 2px;
+}
+
+.clear-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Dark Mode */
+.dark .filter-chip {
+  background: rgba(201, 162, 39, 0.2);
+  color: var(--md-cream);
+  border-color: rgba(201, 162, 39, 0.4);
+}
+
+.dark .filter-chip:hover {
+  background: rgba(201, 162, 39, 0.3);
+  border-color: var(--md-gold);
+}
+
+.dark .clear-all-button {
+  background: rgba(248, 245, 238, 0.1);
+  color: var(--md-cream);
+  border-color: rgba(248, 245, 238, 0.3);
+}
+
+.dark .clear-all-button:hover {
+  background: rgba(248, 245, 238, 0.15);
+  border-color: rgba(248, 245, 238, 0.4);
+}
+</style>

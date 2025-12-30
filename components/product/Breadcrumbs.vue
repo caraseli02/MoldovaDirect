@@ -1,12 +1,12 @@
 <template>
   <nav
     aria-label="Breadcrumb"
-    class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800"
+    class="breadcrumb-nav"
   >
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="breadcrumb-container">
       <ol
         role="list"
-        class="flex items-center space-x-2 py-3 text-sm"
+        class="breadcrumb-list"
         itemscope
         itemtype="https://schema.org/BreadcrumbList"
       >
@@ -18,12 +18,12 @@
         >
           <NuxtLink
             to="/"
-            class="flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+            class="breadcrumb-link"
             itemprop="item"
           >
             <commonIcon
               name="lucide:home"
-              class="h-4 w-4"
+              class="breadcrumb-icon"
               aria-hidden="true"
             />
             <span
@@ -41,7 +41,7 @@
         <li aria-hidden="true">
           <commonIcon
             name="lucide:chevron-right"
-            class="h-4 w-4 text-gray-400"
+            class="breadcrumb-separator"
           />
         </li>
 
@@ -53,8 +53,8 @@
         >
           <NuxtLink
             to="/products"
-            class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-            :class="{ 'font-medium text-gray-900 dark:text-white': !currentCategory && !searchQuery }"
+            class="breadcrumb-link"
+            :class="{ 'breadcrumb-current': !currentCategory && !searchQuery }"
             itemprop="item"
           >
             <span itemprop="name">{{ t('products.breadcrumb') }}</span>
@@ -73,19 +73,19 @@
             <li aria-hidden="true">
               <commonIcon
                 name="lucide:chevron-right"
-                class="h-4 w-4 text-gray-400"
+                class="breadcrumb-separator"
               />
             </li>
             <li>
               <button
                 type="button"
-                class="flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                class="breadcrumb-ellipsis"
                 :aria-label="t('products.breadcrumbNav.showAll')"
                 @click="toggleExpanded"
               >
                 <commonIcon
                   name="lucide:more-horizontal"
-                  class="h-4 w-4"
+                  class="breadcrumb-icon"
                 />
               </button>
             </li>
@@ -94,7 +94,7 @@
             <li aria-hidden="true">
               <commonIcon
                 name="lucide:chevron-right"
-                class="h-4 w-4 text-gray-400"
+                class="breadcrumb-separator"
               />
             </li>
 
@@ -105,7 +105,7 @@
               itemtype="https://schema.org/ListItem"
             >
               <span
-                class="font-medium text-gray-900 dark:text-white"
+                class="breadcrumb-current"
                 itemprop="name"
               >
                 {{ breadcrumbItems[breadcrumbItems.length - 1]?.label }}
@@ -127,7 +127,7 @@
               <li aria-hidden="true">
                 <commonIcon
                   name="lucide:chevron-right"
-                  class="h-4 w-4 text-gray-400"
+                  class="breadcrumb-separator"
                 />
               </li>
 
@@ -140,11 +140,10 @@
                 <component
                   :is="index === breadcrumbItems.length - 1 && !searchQuery ? 'span' : 'NuxtLink'"
                   :to="index === breadcrumbItems.length - 1 && !searchQuery ? undefined : item.href"
-                  class="transition-colors"
                   :class="
                     index === breadcrumbItems.length - 1 && !searchQuery
-                      ? 'font-medium text-gray-900 dark:text-white'
-                      : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                      ? 'breadcrumb-current'
+                      : 'breadcrumb-link'
                   "
                   :itemprop="item.href ? 'item' : undefined"
                 >
@@ -164,7 +163,7 @@
           <li aria-hidden="true">
             <commonIcon
               name="lucide:chevron-right"
-              class="h-4 w-4 text-gray-400"
+              class="breadcrumb-separator"
             />
           </li>
           <li
@@ -173,7 +172,7 @@
             itemtype="https://schema.org/ListItem"
           >
             <span
-              class="font-medium text-gray-900 dark:text-white"
+              class="breadcrumb-current"
               itemprop="name"
             >
               {{ t('products.breadcrumbNav.searchResults', { query: searchQuery }) }}
@@ -197,24 +196,24 @@
       >
         <div
           v-if="isExpanded && isMobile && breadcrumbItems.length > 1"
-          class="overflow-hidden"
+          class="breadcrumb-expanded"
         >
           <ol
             role="list"
-            class="space-y-2 pb-3 pt-2 border-t border-gray-200 dark:border-gray-700"
+            class="breadcrumb-expanded-list"
           >
             <li
               v-for="item in breadcrumbItems.slice(0, -1)"
               :key="item.id"
-              class="pl-6"
+              class="breadcrumb-expanded-item"
             >
               <NuxtLink
                 :to="item.href"
-                class="flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                class="breadcrumb-expanded-link"
               >
                 <commonIcon
                   name="lucide:corner-down-right"
-                  class="mr-2 h-3 w-3"
+                  class="breadcrumb-expanded-icon"
                   aria-hidden="true"
                 />
                 {{ item.label }}
@@ -329,3 +328,160 @@ watch(() => props.currentCategory, () => {
   isExpanded.value = false
 })
 </script>
+
+<style scoped>
+/* Breadcrumb Navigation */
+.breadcrumb-nav {
+  background: #fff;
+  border-bottom: 1px solid rgba(10, 10, 10, 0.1);
+}
+
+.dark .breadcrumb-nav {
+  background: var(--md-charcoal);
+  border-bottom-color: rgba(248, 245, 238, 0.1);
+}
+
+.breadcrumb-container {
+  max-width: 88rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .breadcrumb-container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .breadcrumb-container {
+    padding: 0 2rem;
+  }
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  font-size: 0.875rem;
+}
+
+/* Links */
+.breadcrumb-link {
+  display: flex;
+  align-items: center;
+  color: rgba(10, 10, 10, 0.6);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+  color: var(--md-gold);
+}
+
+.dark .breadcrumb-link {
+  color: rgba(248, 245, 238, 0.6);
+}
+
+.dark .breadcrumb-link:hover {
+  color: var(--md-gold);
+}
+
+/* Current/Active Item */
+.breadcrumb-current {
+  font-weight: 500;
+  color: var(--md-charcoal);
+}
+
+.dark .breadcrumb-current {
+  color: var(--md-cream);
+}
+
+/* Icons */
+.breadcrumb-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.breadcrumb-separator {
+  width: 1rem;
+  height: 1rem;
+  color: rgba(10, 10, 10, 0.4);
+}
+
+.dark .breadcrumb-separator {
+  color: rgba(248, 245, 238, 0.4);
+}
+
+/* Ellipsis Button */
+.breadcrumb-ellipsis {
+  display: flex;
+  align-items: center;
+  color: rgba(10, 10, 10, 0.6);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-ellipsis:hover {
+  color: var(--md-gold);
+}
+
+.dark .breadcrumb-ellipsis {
+  color: rgba(248, 245, 238, 0.6);
+}
+
+.dark .breadcrumb-ellipsis:hover {
+  color: var(--md-gold);
+}
+
+/* Expanded Mobile View */
+.breadcrumb-expanded {
+  overflow: hidden;
+}
+
+.breadcrumb-expanded-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem 0 0.75rem;
+  border-top: 1px solid rgba(10, 10, 10, 0.1);
+}
+
+.dark .breadcrumb-expanded-list {
+  border-top-color: rgba(248, 245, 238, 0.1);
+}
+
+.breadcrumb-expanded-item {
+  padding-left: 1.5rem;
+}
+
+.breadcrumb-expanded-link {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: rgba(10, 10, 10, 0.6);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-expanded-link:hover {
+  color: var(--md-gold);
+}
+
+.dark .breadcrumb-expanded-link {
+  color: rgba(248, 245, 238, 0.6);
+}
+
+.dark .breadcrumb-expanded-link:hover {
+  color: var(--md-gold);
+}
+
+.breadcrumb-expanded-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-right: 0.5rem;
+}
+</style>
