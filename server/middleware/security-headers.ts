@@ -70,7 +70,7 @@ export default defineEventHandler((event) => {
 /**
  * Build Content Security Policy directives
  */
-function buildCSPDirectives(isDev: boolean, url: string): string {
+function buildCSPDirectives(isDev: boolean, _url: string): string {
   // Trusted domains
   const supabaseUrl = process.env.SUPABASE_URL || 'https://*.supabase.co'
   const supabaseDomain = supabaseUrl.replace('https://', '').replace('http://', '')
