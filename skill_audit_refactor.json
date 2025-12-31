@@ -624,8 +624,8 @@
           "id": "a11y-8",
           "description": "Add TooltipProvider to app layout",
           "file": "layouts/default.vue",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": null,
           "test_exists": false,
           "tasks": [
@@ -633,13 +633,13 @@
               "id": "a11y-8-a",
               "task": "Import TooltipProvider from reka-ui",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "a11y-8-b",
               "task": "Wrap app content with TooltipProvider",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "a11y-8-c",
