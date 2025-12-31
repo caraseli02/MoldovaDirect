@@ -733,10 +733,10 @@
           "id": "vue-3",
           "description": "Add readonly() to useProductFilters composable",
           "file": "composables/useProductFilters.ts",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": "tests/composables/__tests__/useProductFilters.test.ts",
-          "test_exists": false,
+          "test_exists": true,
           "tasks": [
             {
               "id": "vue-3-a",
