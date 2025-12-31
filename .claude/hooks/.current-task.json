@@ -1,0 +1,46 @@
+{
+  "category": "Security Critical Fixes",
+  "categoryId": "security-critical",
+  "skill": "architecture-patterns",
+  "priority": "P0-critical",
+  "priorityOrder": 0,
+  "stepId": "sec-1",
+  "description": "Fix non-timing-safe CSRF comparison in cartSecurity.ts",
+  "file": "server/utils/cartSecurity.ts",
+  "testFile": "tests/server/utils/__tests__/cartSecurity.test.ts",
+  "testExists": false,
+  "implemented": false,
+  "tested": false,
+  "subtasks": [
+    {
+      "id": "sec-1-a",
+      "task": "Create unit test for timing-safe CSRF comparison",
+      "type": "test-first",
+      "implemented": false
+    },
+    {
+      "id": "sec-1-b",
+      "task": "Replace string comparison with crypto.timingSafeEqual()",
+      "type": "implementation",
+      "implemented": false
+    },
+    {
+      "id": "sec-1-c",
+      "task": "Run unit test to validate fix",
+      "type": "validation",
+      "implemented": false
+    },
+    {
+      "id": "sec-1-d",
+      "task": "Visual test: verify cart operations still work",
+      "type": "visual-test",
+      "implemented": false
+    }
+  ],
+  "nextSubtask": {
+    "id": "sec-1-a",
+    "task": "Create unit test for timing-safe CSRF comparison",
+    "type": "test-first",
+    "implemented": false
+  }
+}
