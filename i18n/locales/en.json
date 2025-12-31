@@ -2455,6 +2455,7 @@
       "featuredProducts": "Featured Wines",
       "viewAllProducts": "View All Products",
       "closeModal": "Close",
+      "detailsDescription": "View detailed information about {name} including their story, vineyard, and award-winning wines",
       "swipeHint": "Swipe to explore more winemakers",
       "keyboardHint": "Use arrow keys to navigate",
       "loading": "Loading winemaker stories...",

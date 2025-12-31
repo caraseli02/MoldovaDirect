@@ -2763,6 +2763,7 @@
       "featuredProducts": "Vinos Destacados",
       "viewAllProducts": "Ver Todos los Productos",
       "closeModal": "Cerrar",
+      "detailsDescription": "Ver información detallada sobre {name} incluyendo su historia, viñedo y vinos premiados",
       "swipeHint": "Desliza para explorar más enólogos",
       "keyboardHint": "Usa las flechas del teclado para navegar",
       "loading": "Cargando historias de enólogos...",
