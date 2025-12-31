@@ -1,51 +1,12 @@
 {
-  "category": "Nuxt 4 Patterns Compliance",
-  "categoryId": "nuxt4-compliance",
-  "skill": "nuxt",
+  "category": "Accessibility & Reka UI Compliance",
+  "categoryId": "accessibility-reka",
+  "skill": "reka-ui",
   "priority": "P1-high",
-  "priorityOrder": 1,
-  "stepId": "nuxt-4",
-  "description": "Add Zod validation to unvalidated API routes",
-  "testFile": "tests/server/api/__tests__/validation.test.ts",
+  "stepId": "a11y-1",
+  "description": "Refactor AddressFormModal to use Reka UI Dialog",
+  "file": "components/profile/AddressFormModal.vue",
+  "testFile": "tests/components/profile/__tests__/AddressFormModal.test.ts",
   "testExists": false,
-  "implemented": false,
-  "tested": false,
-  "subtasks": [
-    {
-      "id": "nuxt-4-a",
-      "task": "Identify API routes missing Zod validation",
-      "type": "analysis",
-      "implemented": false
-    },
-    {
-      "id": "nuxt-4-b",
-      "task": "Create unit test for validation rejection",
-      "type": "test-first",
-      "implemented": false
-    },
-    {
-      "id": "nuxt-4-c",
-      "task": "Add Zod schemas to identified routes",
-      "type": "implementation",
-      "implemented": false
-    },
-    {
-      "id": "nuxt-4-d",
-      "task": "Use readValidatedBody() with schemas",
-      "type": "implementation",
-      "implemented": false
-    },
-    {
-      "id": "nuxt-4-e",
-      "task": "Run validation unit tests",
-      "type": "validation",
-      "implemented": false
-    }
-  ],
-  "nextSubtask": {
-    "id": "nuxt-4-a",
-    "task": "Identify API routes missing Zod validation",
-    "type": "analysis",
-    "implemented": false
-  }
+  "implemented": false
 }

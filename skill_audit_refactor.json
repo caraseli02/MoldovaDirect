@@ -292,40 +292,40 @@
         {
           "id": "nuxt-4",
           "description": "Add Zod validation to unvalidated API routes",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": "tests/server/api/__tests__/validation.test.ts",
-          "test_exists": false,
+          "test_exists": true,
           "tasks": [
             {
               "id": "nuxt-4-a",
               "task": "Identify API routes missing Zod validation",
               "type": "analysis",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-4-b",
               "task": "Create unit test for validation rejection",
               "type": "test-first",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-4-c",
               "task": "Add Zod schemas to identified routes",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-4-d",
-              "task": "Use readValidatedBody() with schemas",
+              "task": "Use safeParse() with schemas",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-4-e",
               "task": "Run validation unit tests",
               "type": "validation",
-              "implemented": false
+              "implemented": true
             }
           ]
         }
@@ -346,7 +346,7 @@
           "implemented": false,
           "tested": false,
           "test_file": "tests/components/profile/__tests__/AddressFormModal.test.ts",
-          "test_exists": false,
+          "test_exists": true,
           "tasks": [
             {
               "id": "a11y-1-a",
