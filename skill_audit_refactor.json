@@ -1,0 +1,1627 @@
+{
+  "audit_refactor": [
+    {
+      "id": "security-critical",
+      "name": "Security Critical Fixes",
+      "skill": "architecture-patterns",
+      "priority": "P0-critical",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "sec-1",
+          "description": "Fix non-timing-safe CSRF comparison in cartSecurity.ts",
+          "file": "server/utils/cartSecurity.ts",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/server/utils/__tests__/cartSecurity.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "sec-1-a",
+              "task": "Create unit test for timing-safe CSRF comparison",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "sec-1-b",
+              "task": "Replace string comparison with crypto.timingSafeEqual()",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "sec-1-c",
+              "task": "Run unit test to validate fix",
+              "type": "validation",
+              "implemented": false
+            },
+            {
+              "id": "sec-1-d",
+              "task": "Visual test: verify cart operations still work",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "sec-2",
+          "description": "Remove eval() usage from test fixtures",
+          "file": "tests/fixtures/*.ts",
+          "implemented": false,
+          "tested": false,
+          "test_file": null,
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "sec-2-a",
+              "task": "Search for all eval() usages in test fixtures",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "sec-2-b",
+              "task": "Replace eval() with safe JSON parsing or factory functions",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "sec-2-c",
+              "task": "Run test suite to ensure fixtures still work",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "sec-3",
+          "description": "Fix missing admin user ID in audit logs",
+          "file": "server/api/admin/**/*.ts",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/server/api/admin/__tests__/auditLogs.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "sec-3-a",
+              "task": "Create unit test asserting performed_by is never null",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "sec-3-b",
+              "task": "Identify 8+ log entries with null performed_by",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "sec-3-c",
+              "task": "Add user ID extraction from verifyAdminAuth to logs",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "sec-3-d",
+              "task": "Run unit test to validate all logs have user ID",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nuxt4-compliance",
+      "name": "Nuxt 4 Patterns Compliance",
+      "skill": "nuxt",
+      "priority": "P1-high",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "nuxt-1",
+          "description": "Replace deprecated event.context.params with getRouterParam()",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/server/api/admin/__tests__/routerParams.test.ts",
+          "test_exists": false,
+          "files": [
+            "server/api/admin/orders/[id]/notes.post.ts",
+            "server/api/admin/orders/[id]/fulfillment-tasks/index.post.ts",
+            "server/api/admin/orders/[id]/fulfillment-tasks/[taskId].patch.ts",
+            "server/api/admin/email-logs/[id]/retry.post.ts",
+            "server/api/admin/email-retries/[id].post.ts"
+          ],
+          "tasks": [
+            {
+              "id": "nuxt-1-a",
+              "task": "Create unit test verifying getRouterParam() is used",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-1-b",
+              "task": "Update notes.post.ts to use getRouterParam('id')",
+              "type": "implementation",
+              "file": "server/api/admin/orders/[id]/notes.post.ts",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-1-c",
+              "task": "Update fulfillment-tasks/index.post.ts to use getRouterParam('id')",
+              "type": "implementation",
+              "file": "server/api/admin/orders/[id]/fulfillment-tasks/index.post.ts",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-1-d",
+              "task": "Update fulfillment-tasks/[taskId].patch.ts to use getRouterParam()",
+              "type": "implementation",
+              "file": "server/api/admin/orders/[id]/fulfillment-tasks/[taskId].patch.ts",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-1-e",
+              "task": "Update email-logs/[id]/retry.post.ts to use getRouterParam('id')",
+              "type": "implementation",
+              "file": "server/api/admin/email-logs/[id]/retry.post.ts",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-1-f",
+              "task": "Update email-retries/[id].post.ts to use getRouterParam('id')",
+              "type": "implementation",
+              "file": "server/api/admin/email-retries/[id].post.ts",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-1-g",
+              "task": "Run all API tests to validate changes",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "nuxt-2",
+          "description": "Replace window.location.origin with useRequestURL().origin",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/pages/auth/__tests__/ssrCompatibility.test.ts",
+          "test_exists": false,
+          "files": [
+            "pages/auth/verification-pending.vue",
+            "pages/auth/login.vue",
+            "pages/auth/register.vue",
+            "pages/auth/verify-email.vue"
+          ],
+          "tasks": [
+            {
+              "id": "nuxt-2-a",
+              "task": "Create SSR test ensuring no window.location usage",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-2-b",
+              "task": "Update verification-pending.vue to use useRequestURL()",
+              "type": "implementation",
+              "file": "pages/auth/verification-pending.vue",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-2-c",
+              "task": "Update login.vue to use useRequestURL()",
+              "type": "implementation",
+              "file": "pages/auth/login.vue",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-2-d",
+              "task": "Update register.vue to use useRequestURL()",
+              "type": "implementation",
+              "file": "pages/auth/register.vue",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-2-e",
+              "task": "Update verify-email.vue to use useRequestURL()",
+              "type": "implementation",
+              "file": "pages/auth/verify-email.vue",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-2-f",
+              "task": "Visual test: verify auth pages render correctly",
+              "type": "visual-test",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-2-g",
+              "task": "Run SSR test to validate fix",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "nuxt-3",
+          "description": "Rename generic [id] params to descriptive names",
+          "implemented": false,
+          "tested": false,
+          "test_file": null,
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "nuxt-3-a",
+              "task": "Identify all routes with generic [id] params",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-3-b",
+              "task": "Create migration plan for each route",
+              "type": "planning",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-3-c",
+              "task": "Rename order routes [id] to [orderId]",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-3-d",
+              "task": "Rename product routes [id] to [productId]",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-3-e",
+              "task": "Update all references to renamed params",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-3-f",
+              "task": "Run full E2E test suite to validate routing",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "nuxt-4",
+          "description": "Add Zod validation to unvalidated API routes",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/server/api/__tests__/validation.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "nuxt-4-a",
+              "task": "Identify API routes missing Zod validation",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-4-b",
+              "task": "Create unit test for validation rejection",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-4-c",
+              "task": "Add Zod schemas to identified routes",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-4-d",
+              "task": "Use readValidatedBody() with schemas",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "nuxt-4-e",
+              "task": "Run validation unit tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "accessibility-reka",
+      "name": "Accessibility & Reka UI Compliance",
+      "skill": "reka-ui",
+      "priority": "P1-high",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "a11y-1",
+          "description": "Refactor AddressFormModal to use Reka UI Dialog",
+          "file": "components/profile/AddressFormModal.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/profile/__tests__/AddressFormModal.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "a11y-1-a",
+              "task": "Create accessibility test for focus trap",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "a11y-1-b",
+              "task": "Create accessibility test for ESC key close",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "a11y-1-c",
+              "task": "Create accessibility test for ARIA attributes",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "a11y-1-d",
+              "task": "Import DialogRoot, DialogContent, DialogTitle, DialogDescription",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-1-e",
+              "task": "Refactor modal structure to use Reka UI Dialog",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-1-f",
+              "task": "Add DialogDescription with meaningful description",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-1-g",
+              "task": "Run accessibility tests to validate fix",
+              "type": "validation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-1-h",
+              "task": "Visual test: verify modal appears and functions correctly",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "a11y-2",
+          "description": "Refactor DeleteAccountModal to use Reka UI AlertDialog",
+          "file": "components/profile/DeleteAccountModal.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/profile/__tests__/DeleteAccountModal.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "a11y-2-a",
+              "task": "Create accessibility test for focus trap",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "a11y-2-b",
+              "task": "Create accessibility test for destructive action confirmation",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "a11y-2-c",
+              "task": "Import AlertDialogRoot, AlertDialogContent, etc.",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-2-d",
+              "task": "Refactor to AlertDialog pattern (Cancel/Action buttons)",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-2-e",
+              "task": "Add AlertDialogDescription with warning text",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-2-f",
+              "task": "Run accessibility tests to validate fix",
+              "type": "validation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-2-g",
+              "task": "Visual test: verify modal appears and functions correctly",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "a11y-3",
+          "description": "Add DialogDescription to TemplateHistory dialog",
+          "file": "components/admin/Email/TemplateHistory.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/admin/__tests__/TemplateHistory.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "a11y-3-a",
+              "task": "Create accessibility test for DialogDescription presence",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "a11y-3-b",
+              "task": "Add DialogDescription component to template",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-3-c",
+              "task": "Add meaningful description text (or use VisuallyHidden)",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-3-d",
+              "task": "Run accessibility test to validate",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "a11y-4",
+          "description": "Add DialogDescription to LogsTable dialog",
+          "file": "components/admin/Email/LogsTable.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/admin/__tests__/LogsTable.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "a11y-4-a",
+              "task": "Create accessibility test for DialogDescription presence",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "a11y-4-b",
+              "task": "Add DialogDescription component at line 260",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-4-c",
+              "task": "Run accessibility test to validate",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "a11y-5",
+          "description": "Add DialogDescription to ProducerDetailModal",
+          "file": "components/producer/DetailModal.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/producer/__tests__/DetailModal.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "a11y-5-a",
+              "task": "Create accessibility test for DialogDescription presence",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "a11y-5-b",
+              "task": "Add DialogDescription component",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-5-c",
+              "task": "Run accessibility test to validate",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "a11y-6",
+          "description": "Fix custom Tooltip component ARIA relationships",
+          "file": "components/custom/Tooltip.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/custom/__tests__/Tooltip.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "a11y-6-a",
+              "task": "Create accessibility test for tooltip ARIA attributes",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "a11y-6-b",
+              "task": "Replace custom tooltip with Reka UI TooltipRoot",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-6-c",
+              "task": "Add TooltipProvider at app layout level",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-6-d",
+              "task": "Run accessibility test to validate ARIA",
+              "type": "validation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-6-e",
+              "task": "Visual test: verify tooltip appears on hover/focus",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "a11y-7",
+          "description": "Fix CSS-only tooltip in MediaMentions to be keyboard accessible",
+          "file": "components/home/MediaMentions.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/home/__tests__/MediaMentions.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "a11y-7-a",
+              "task": "Create accessibility test for keyboard tooltip trigger",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "a11y-7-b",
+              "task": "Replace CSS tooltip with Reka UI Tooltip at line 99",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-7-c",
+              "task": "Ensure tooltip works with keyboard focus",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-7-d",
+              "task": "Run accessibility test to validate keyboard access",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "a11y-8",
+          "description": "Add TooltipProvider to app layout",
+          "file": "layouts/default.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": null,
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "a11y-8-a",
+              "task": "Import TooltipProvider from reka-ui",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-8-b",
+              "task": "Wrap app content with TooltipProvider",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "a11y-8-c",
+              "task": "Visual test: verify all tooltips work across site",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vue3-patterns",
+      "name": "Vue 3 Patterns Compliance",
+      "skill": "vue",
+      "priority": "P2-medium",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "vue-1",
+          "description": "Fix props destructuring pattern in ProductCard",
+          "file": "components/product/Card.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/product/__tests__/Card.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "vue-1-a",
+              "task": "Create unit test for reactive props access",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "vue-1-b",
+              "task": "Replace props.product with reactive destructuring",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "vue-1-c",
+              "task": "Run unit test to validate reactivity",
+              "type": "validation",
+              "implemented": false
+            },
+            {
+              "id": "vue-1-d",
+              "task": "Visual test: verify product card renders correctly",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "vue-2",
+          "description": "Add readonly() to useCart composable exposed state",
+          "file": "composables/useCart.ts",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/composables/__tests__/useCart.test.ts",
+          "test_exists": true,
+          "tasks": [
+            {
+              "id": "vue-2-a",
+              "task": "Create unit test asserting cart state is readonly",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "vue-2-b",
+              "task": "Import readonly from vue",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "vue-2-c",
+              "task": "Wrap exported cart state with readonly()",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "vue-2-d",
+              "task": "Run unit test to validate readonly enforcement",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "vue-3",
+          "description": "Add readonly() to useProductFilters composable",
+          "file": "composables/useProductFilters.ts",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/composables/__tests__/useProductFilters.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "vue-3-a",
+              "task": "Create unit test asserting filter state is readonly",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "vue-3-b",
+              "task": "Wrap exported filter state with readonly()",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "vue-3-c",
+              "task": "Run unit test to validate readonly enforcement",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "vue-4",
+          "description": "Standardize emit type definitions across components",
+          "implemented": false,
+          "tested": false,
+          "test_file": null,
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "vue-4-a",
+              "task": "Identify all components with inconsistent emit styles",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "vue-4-b",
+              "task": "Standardize to typed defineEmits<{...}>()",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "vue-4-c",
+              "task": "Run typecheck to validate emit typing",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "vue-5",
+          "description": "Remove unnecessary Vue imports (Nuxt auto-imports)",
+          "implemented": false,
+          "tested": false,
+          "test_file": null,
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "vue-5-a",
+              "task": "Search for explicit Vue imports in components",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "vue-5-b",
+              "task": "Remove unnecessary ref, computed, watch imports",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "vue-5-c",
+              "task": "Run build to validate auto-imports work",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "design-guide",
+      "name": "Design Guide Compliance",
+      "skill": "design-guide",
+      "priority": "P2-medium",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "design-1",
+          "description": "Remove gradients from wine-story page (15 occurrences)",
+          "file": "pages/wine-story.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": null,
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "design-1-a",
+              "task": "Identify all gradient classes in wine-story.vue",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "design-1-b",
+              "task": "Replace gradients with solid brand colors",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "design-1-c",
+              "task": "Visual test: capture before/after screenshots",
+              "type": "visual-test",
+              "implemented": false
+            },
+            {
+              "id": "design-1-d",
+              "task": "Verify design consistency across breakpoints",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "design-2",
+          "description": "Remove gradients from WineStoryCta (9 occurrences)",
+          "file": "components/home/WineStoryCta.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": null,
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "design-2-a",
+              "task": "Identify all gradient classes",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "design-2-b",
+              "task": "Replace gradients with solid colors",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "design-2-c",
+              "task": "Visual test: verify component appearance",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "design-3",
+          "description": "Remove gradients from FeaturedProductsSection (8 occurrences)",
+          "file": "components/home/FeaturedProductsSection.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": null,
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "design-3-a",
+              "task": "Identify all gradient classes",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "design-3-b",
+              "task": "Replace gradients with solid colors",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "design-3-c",
+              "task": "Visual test: verify component appearance",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "design-4",
+          "description": "Remove gradient from auth pages background",
+          "file": "pages/auth/login.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": null,
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "design-4-a",
+              "task": "Identify background gradient in login.vue",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "design-4-b",
+              "task": "Replace with solid brand color",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "design-4-c",
+              "task": "Apply same change to register.vue",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "design-4-d",
+              "task": "Visual test: verify auth page appearance",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "design-5",
+          "description": "Audit and remove remaining 61 gradient occurrences",
+          "implemented": false,
+          "tested": false,
+          "test_file": null,
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "design-5-a",
+              "task": "Generate full list of files with gradients",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "design-5-b",
+              "task": "Create gradient-to-solid color mapping",
+              "type": "planning",
+              "implemented": false
+            },
+            {
+              "id": "design-5-c",
+              "task": "Replace gradients file by file",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "design-5-d",
+              "task": "Visual regression test full site",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "typescript-safety",
+      "name": "TypeScript Type Safety",
+      "skill": "typescript",
+      "priority": "P2-medium",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "ts-1",
+          "description": "Fix any types in useAnalytics composable",
+          "file": "composables/useAnalytics.ts",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/composables/__tests__/useAnalytics.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "ts-1-a",
+              "task": "Create type definitions for API responses",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "ts-1-b",
+              "task": "Replace any with proper response types",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "ts-1-c",
+              "task": "Run typecheck to validate",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "ts-2",
+          "description": "Fix any types in cart persistence (12+ occurrences)",
+          "file": "stores/cart/persistence.ts",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/stores/cart/__tests__/persistence.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "ts-2-a",
+              "task": "Create unit test for cart persistence types",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "ts-2-b",
+              "task": "Define CartPersistenceData interface",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "ts-2-c",
+              "task": "Replace any types with proper interfaces",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "ts-2-d",
+              "task": "Run typecheck and unit tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "ts-3",
+          "description": "Fix any types in useTestingDashboard (10+ occurrences)",
+          "file": "composables/useTestingDashboard.ts",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/composables/__tests__/useTestingDashboard.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "ts-3-a",
+              "task": "Define typed response interfaces",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "ts-3-b",
+              "task": "Replace any with proper types",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "ts-3-c",
+              "task": "Run typecheck to validate",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "ts-4",
+          "description": "Define ProductAttributes interface for database.ts",
+          "file": "types/database.ts",
+          "implemented": false,
+          "tested": false,
+          "test_file": null,
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "ts-4-a",
+              "task": "Analyze product attributes usage patterns",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "ts-4-b",
+              "task": "Define ProductAttributes interface",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "ts-4-c",
+              "task": "Replace Record<string, any> at line 69",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "ts-4-d",
+              "task": "Run typecheck to validate",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "ts-5",
+          "description": "Replace catch (error: any) with catch (error: unknown)",
+          "implemented": false,
+          "tested": false,
+          "test_file": null,
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "ts-5-a",
+              "task": "Search for all catch (error: any) patterns",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "ts-5-b",
+              "task": "Replace with catch (error: unknown) and type guards",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "ts-5-c",
+              "task": "Run typecheck to validate",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "i18n-completion",
+      "name": "i18n Translation Completion",
+      "skill": "code-quality",
+      "priority": "P2-medium",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "i18n-1",
+          "description": "Complete Romanian (ro) translations (700+ missing keys)",
+          "file": "i18n/locales/ro.json",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/i18n/__tests__/locales.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "i18n-1-a",
+              "task": "Create unit test comparing ro.json keys to en.json",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "i18n-1-b",
+              "task": "Generate list of missing keys",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "i18n-1-c",
+              "task": "Add missing admin translations",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "i18n-1-d",
+              "task": "Add missing checkout translations",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "i18n-1-e",
+              "task": "Add missing product translations",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "i18n-1-f",
+              "task": "Run unit test to validate all keys present",
+              "type": "validation",
+              "implemented": false
+            },
+            {
+              "id": "i18n-1-g",
+              "task": "Visual test: verify Romanian locale works",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "i18n-2",
+          "description": "Complete Russian (ru) translations (700+ missing keys)",
+          "file": "i18n/locales/ru.json",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/i18n/__tests__/locales.test.ts",
+          "test_exists": true,
+          "tasks": [
+            {
+              "id": "i18n-2-a",
+              "task": "Update unit test to check ru.json keys",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "i18n-2-b",
+              "task": "Generate list of missing keys",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "i18n-2-c",
+              "task": "Add missing admin translations",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "i18n-2-d",
+              "task": "Add missing checkout translations",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "i18n-2-e",
+              "task": "Add missing product translations",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "i18n-2-f",
+              "task": "Run unit test to validate all keys present",
+              "type": "validation",
+              "implemented": false
+            },
+            {
+              "id": "i18n-2-g",
+              "task": "Visual test: verify Russian locale works",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "component-splitting",
+      "name": "Large Component Splitting",
+      "skill": "vue",
+      "priority": "P3-low",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "split-1",
+          "description": "Split PaymentForm.vue (853 lines) into sub-components",
+          "file": "components/checkout/PaymentForm.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/checkout/__tests__/PaymentForm.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "split-1-a",
+              "task": "Create E2E test for payment flow before refactor",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "split-1-b",
+              "task": "Analyze component structure and identify logical sections",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "split-1-c",
+              "task": "Extract CardInput.vue sub-component",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "split-1-d",
+              "task": "Extract PaymentSummary.vue sub-component",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "split-1-e",
+              "task": "Extract PaymentMethods.vue sub-component",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "split-1-f",
+              "task": "Update parent component to use sub-components",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "split-1-g",
+              "task": "Run E2E test to validate payment flow unchanged",
+              "type": "validation",
+              "implemented": false
+            },
+            {
+              "id": "split-1-h",
+              "task": "Visual test: verify payment form appearance",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "split-2",
+          "description": "Split HybridCheckout.vue (993 lines) into sub-components",
+          "file": "components/checkout/HybridCheckout.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/checkout/__tests__/HybridCheckout.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "split-2-a",
+              "task": "Create E2E test for checkout flow before refactor",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "split-2-b",
+              "task": "Analyze component structure",
+              "type": "analysis",
+              "implemented": false
+            },
+            {
+              "id": "split-2-c",
+              "task": "Extract GuestCheckout.vue sub-component",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "split-2-d",
+              "task": "Extract AuthenticatedCheckout.vue sub-component",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "split-2-e",
+              "task": "Extract ExpressCheckout.vue sub-component",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "split-2-f",
+              "task": "Update parent to route to appropriate sub-component",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "split-2-g",
+              "task": "Run E2E test to validate checkout flow unchanged",
+              "type": "validation",
+              "implemented": false
+            },
+            {
+              "id": "split-2-h",
+              "task": "Visual test: verify checkout appearance",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "architecture-refactor",
+      "name": "Architecture Refactoring (Long-term)",
+      "skill": "architecture-patterns",
+      "priority": "P4-optional",
+      "status": "planned",
+      "tested": false,
+      "steps": [
+        {
+          "id": "arch-1",
+          "description": "Introduce use case layer for orders",
+          "file": "server/application/use-cases/",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/server/application/__tests__/CreateOrderUseCase.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "arch-1-a",
+              "task": "Create unit test for CreateOrderUseCase",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "arch-1-b",
+              "task": "Define CreateOrderRequest and CreateOrderResponse types",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-1-c",
+              "task": "Implement CreateOrderUseCase class",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-1-d",
+              "task": "Extract business logic from orders/create.post.ts",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-1-e",
+              "task": "Make controller thin (delegate to use case)",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-1-f",
+              "task": "Run unit and E2E tests to validate",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "arch-2",
+          "description": "Implement repository pattern for orders",
+          "file": "server/infrastructure/repositories/",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/server/infrastructure/__tests__/SupabaseOrderRepository.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "arch-2-a",
+              "task": "Create unit test for OrderRepository interface",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "arch-2-b",
+              "task": "Define IOrderRepository interface",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-2-c",
+              "task": "Implement SupabaseOrderRepository",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-2-d",
+              "task": "Inject repository into use cases",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-2-e",
+              "task": "Create mock repository for unit tests",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-2-f",
+              "task": "Run all tests to validate",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "arch-3",
+          "description": "Create domain entities with business behavior",
+          "file": "server/domain/entities/",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/server/domain/__tests__/Order.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "arch-3-a",
+              "task": "Create unit test for Order entity methods",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "arch-3-b",
+              "task": "Define Order entity with business methods",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-3-c",
+              "task": "Define OrderItem value object",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-3-d",
+              "task": "Define Money value object",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-3-e",
+              "task": "Migrate business logic from utilities to entities",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-3-f",
+              "task": "Run unit tests to validate entity behavior",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "arch-4",
+          "description": "Abstract payment gateway",
+          "file": "server/infrastructure/gateways/",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/server/infrastructure/__tests__/StripePaymentGateway.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "arch-4-a",
+              "task": "Create unit test for PaymentGateway interface",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "arch-4-b",
+              "task": "Define IPaymentGateway interface",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-4-c",
+              "task": "Implement StripePaymentGateway",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-4-d",
+              "task": "Create MockPaymentGateway for tests",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-4-e",
+              "task": "Inject gateway into use cases",
+              "type": "implementation",
+              "implemented": false
+            },
+            {
+              "id": "arch-4-f",
+              "task": "Run payment tests to validate",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-12-31",
+    "source": "docs/CODEBASE_AUDIT_REPORT.md",
+    "branch": "review/skill-based-codebase-audit",
+    "total_categories": 9,
+    "total_steps": 38,
+    "total_tasks": 168,
+    "skills_used": [
+      "architecture-patterns",
+      "nuxt",
+      "reka-ui",
+      "vue",
+      "design-guide",
+      "typescript",
+      "code-quality"
+    ],
+    "priority_levels": {
+      "P0-critical": 3,
+      "P1-high": 12,
+      "P2-medium": 15,
+      "P3-low": 4,
+      "P4-optional": 4
+    },
+    "test_first_approach": "All implementation tasks are preceded by test creation tasks",
+    "workflow": "test-first -> implement -> validate -> visual-test"
+  }
+}
