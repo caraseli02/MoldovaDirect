@@ -218,8 +218,8 @@ const handleForgotPassword = async () => {
     success.value = true
     message.value = t('auth.passwordResetSent')
   }
-  catch (err: any) {
-    error.value = err.message || t('auth.forgotPasswordError')
+  catch (err: unknown) {
+    error.value = getErrorMessage(err) || t('auth.forgotPasswordError')
   }
   finally {
     loading.value = false

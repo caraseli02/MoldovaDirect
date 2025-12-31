@@ -43,13 +43,16 @@ export default defineEventHandler(async (event) => {
       message: 'Landing section deleted successfully',
     }
   }
-  catch (error: any) {
-    console.error('Error deleting landing section:', error)
+  catch (error: unknown) {
+    console.error('Error deleting landing section:', getServerErrorMessage(error))
+
+    if (isH3Error(error)) {
+      throw error
+    }
 
     throw createError({
-      statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || 'Failed to delete landing section',
-      data: error.data || error,
+      statusCode: 500,
+      statusMessage: 'Failed to delete landing section',
     })
   }
 })

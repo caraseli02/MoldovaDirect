@@ -128,10 +128,10 @@ export default defineEventHandler(async (event) => {
       message: 'Activity tracked successfully',
     }
   }
-  catch (error: any) {
-    console.error('Activity tracking error:', error)
+  catch (error: unknown) {
+    console.error('Activity tracking error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

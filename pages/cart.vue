@@ -415,8 +415,8 @@ const formattedSubtotal = computed(() => formatPrice(subtotal.value))
 
 // Error handling
 const handleCartError = (error: Error) => {
-  console.error('Cart page error:', error)
-  toast.error(t('common.cartError'), error.message)
+  console.error('Cart page error:', getErrorMessage(error))
+  toast.error(t('common.cartError'), getErrorMessage(error))
 }
 
 // Cart operations with error handling
@@ -424,7 +424,7 @@ const safeUpdateQuantity = async (itemId: string, quantity: number) => {
   try {
     await updateQuantity(itemId, quantity)
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to update quantity for item:', itemId, 'to quantity:', quantity, error)
     toast.error(t('cart.error.updateFailed'), t('cart.error.updateFailedDetails'))
   }
@@ -456,8 +456,8 @@ const undoRemoveItem = async () => {
       t('cart.success.productRestoredDetails', { product: getLocalizedText(itemToRestore.product.name) }),
     )
   }
-  catch (error: any) {
-    console.error('Failed to restore item:', error)
+  catch (error: unknown) {
+    console.error('Failed to restore item:', getErrorMessage(error))
     // Keep lastRemovedItem so user can retry
     toast.error(t('cart.error.addFailed'), t('cart.error.addFailedDetails'))
   }
@@ -523,7 +523,7 @@ const safeRemoveItem = async (itemId: string) => {
       },
     )
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to remove item:', itemId, error)
     // Item is still in cart on error, no cleanup needed
     toast.error(t('cart.error.removeFailed'), t('cart.error.removeFailedDetails'))
@@ -537,7 +537,7 @@ const handleSwipeRemove = async (itemId: string) => {
       navigator.vibrate(50)
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to remove item via swipe:', itemId, error)
     if ('vibrate' in navigator) {
       navigator.vibrate([50, 50, 50]) // Error pattern
@@ -562,7 +562,7 @@ const handleSaveForLater = async (itemId: string) => {
     await removeItem(itemId)
     toast.success(t('cart.success.savedForLater'), t('cart.success.savedForLaterDetails', { product: item.product.name }))
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to save item for later:', itemId, error)
     toast.error(t('cart.error.saveFailed'), t('cart.error.saveFailedDetails'))
   }
@@ -578,8 +578,8 @@ const goToCheckout = async () => {
     await validateCart()
     await navigateTo(localePath('/checkout'))
   }
-  catch (error: any) {
-    console.error('Failed to proceed to checkout:', error)
+  catch (error: unknown) {
+    console.error('Failed to proceed to checkout:', getErrorMessage(error))
     toast.error(t('common.cartError'), t('cart.error.checkoutFailed'))
   }
 }
@@ -589,8 +589,8 @@ onMounted(async () => {
   try {
     await validateCart()
   }
-  catch (error: any) {
-    console.error('Failed to validate cart:', error)
+  catch (error: unknown) {
+    console.error('Failed to validate cart:', getErrorMessage(error))
     toast.error(t('common.cartValidationError'), t('cart.error.validationFailedDetails'))
   }
 })

@@ -366,7 +366,7 @@ export function logCheckoutError(
 
       localStorage.setItem('checkout_errors', JSON.stringify(errorLog))
     }
-    catch (e: any) {
+    catch (e: unknown) {
       console.error('Failed to log checkout error:', e)
     }
   }

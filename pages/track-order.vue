@@ -482,24 +482,26 @@ const trackOrder = async () => {
       trackingData.value = response.data as unknown as TrackingData
     }
   }
-  catch (err: any) {
+  catch (err: unknown) {
     // Log error for debugging
-    console.error('Order tracking error:', err)
+    console.error('Order tracking error:', getErrorMessage(err))
 
     // Handle specific error codes
-    if (err.statusCode === 404) {
+    const statusCode = getErrorStatusCode(err)
+    const errorMsg = getErrorMessage(err)
+    if (statusCode === 404) {
       error.value = t('trackOrder.errors.notFound')
     }
-    else if (err.statusCode === 400) {
+    else if (statusCode === 400) {
       error.value = t('trackOrder.errors.invalidInput')
     }
-    else if (err.statusCode === 429) {
+    else if (statusCode === 429) {
       error.value = t('trackOrder.errors.tooManyRequests')
     }
-    else if (err.statusCode >= 500) {
+    else if (statusCode && statusCode >= 500) {
       error.value = t('trackOrder.errors.serverError')
     }
-    else if (err.name === 'FetchError' || err.message?.includes('network') || err.message?.includes('Network')) {
+    else if ((isErrorWithMessage(err) && (err as { name?: string }).name === 'FetchError') || errorMsg.includes('network') || errorMsg.includes('Network')) {
       error.value = t('trackOrder.errors.networkError')
     }
     else {

@@ -262,9 +262,9 @@ const handleSubmit = async (formData: any) => {
       throw new Error('Failed to update product')
     }
   }
-  catch (error: any) {
-    console.error('Update product error:', error)
-    errorMessage.value = error instanceof Error ? error.message : 'Failed to update product'
+  catch (error: unknown) {
+    console.error('Update product error:', getErrorMessage(error))
+    errorMessage.value = error instanceof Error ? getErrorMessage(error) : 'Failed to update product'
   }
 }
 

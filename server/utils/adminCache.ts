@@ -91,9 +91,9 @@ export async function invalidateAdminCache(scope: CacheScope): Promise<CacheInva
       keysInvalidated,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : String(error)
-    console.error(`[Cache] Failed to invalidate cache for scope ${scope}:`, error)
+    console.error(`[Cache] Failed to invalidate cache for scope ${scope}:`, errorMessage)
     return {
       success: false,
       scope,

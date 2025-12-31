@@ -20,7 +20,7 @@ describe('Cart Persistence TypeScript Safety (ts-2)', () => {
     expect(hasDataAny).toBe(false)
   })
 
-  it('should NOT have "catch (error: any)" pattern', () => {
+  it('should NOT have "catch (error: unknown)" pattern', () => {
     const source = readFileSync(persistencePath, 'utf-8')
     const hasCatchAny = /catch\s*\(\s*\w+:\s*any\s*\)/.test(source)
     expect(hasCatchAny).toBe(false)

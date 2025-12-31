@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
         currentUser = data
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.warn('Auth admin API not available:', error)
     }
 
@@ -313,8 +313,8 @@ export default defineEventHandler(async (event) => {
       message: getActionSuccessMessage(body.action),
     }
   }
-  catch (error: any) {
-    console.error('Error in admin user actions API:', error)
+  catch (error: unknown) {
+    console.error('Error in admin user actions API:', getServerErrorMessage(error))
 
     // Always throw errors with proper HTTP status codes
     // Don't return success: false - use HTTP semantics instead

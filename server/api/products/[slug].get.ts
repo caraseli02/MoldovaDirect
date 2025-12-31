@@ -207,10 +207,10 @@ export default defineCachedEventHandler(async (event) => {
 
     return transformedProduct
   }
-  catch (error: any) {
-    console.error('Product detail API error:', error)
+  catch (error: unknown) {
+    console.error('Product detail API error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

@@ -292,7 +292,7 @@ async function loadRecommendations(cartItems: CartItem[]): Promise<void> {
       state.value.recommendations = []
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Handle different types of errors gracefully
     const err = error as { statusCode?: number, statusMessage?: string, message?: string }
     if (err.statusCode === 404) {
@@ -302,7 +302,7 @@ async function loadRecommendations(cartItems: CartItem[]): Promise<void> {
       console.warn('Recommendations API server error:', err.statusMessage || 'Unknown server error')
     }
     else {
-      console.warn('Failed to load recommendations:', err.message || String(error))
+      console.warn('Failed to load recommendations:', getErrorMessage(err) || String(error))
     }
 
     // Set empty recommendations on error

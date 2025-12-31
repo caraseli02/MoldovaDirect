@@ -107,22 +107,22 @@ export async function sendOrderConfirmationEmail(
       externalId: result.id,
     }
   }
-  catch (error: any) {
-    console.error(`❌ Failed to send order confirmation email for order ${orderNumber}:`, error)
+  catch (error: unknown) {
+    console.error(`❌ Failed to send order confirmation email for order ${orderNumber}:`, getServerErrorMessage(error))
 
     // Record failed attempt
     await recordEmailAttempt(
       emailLog.id,
       false,
       undefined,
-      error.message,
+      getServerErrorMessage(error),
       supabase,
     )
 
     return {
       success: false,
       emailLogId: emailLog.id,
-      error: error.message,
+      error: getServerErrorMessage(error),
     }
   }
 }
@@ -238,22 +238,22 @@ export async function sendOrderStatusEmail(
       externalId: result.id,
     }
   }
-  catch (error: any) {
-    console.error(`❌ Failed to send order ${emailType} email for order ${orderNumber}:`, error)
+  catch (error: unknown) {
+    console.error(`❌ Failed to send order ${emailType} email for order ${orderNumber}:`, getServerErrorMessage(error))
 
     // Record failed attempt
     await recordEmailAttempt(
       emailLog.id,
       false,
       undefined,
-      error.message,
+      getServerErrorMessage(error),
       supabase,
     )
 
     return {
       success: false,
       emailLogId: emailLog.id,
-      error: error.message,
+      error: getServerErrorMessage(error),
     }
   }
 }
@@ -377,22 +377,22 @@ export async function retryEmailDelivery(
       externalId: result.id,
     }
   }
-  catch (error: any) {
-    console.error(`❌ Email retry failed for log ${emailLogId}:`, error)
+  catch (error: unknown) {
+    console.error(`❌ Email retry failed for log ${emailLogId}:`, getServerErrorMessage(error))
 
     // Record failed retry
     await recordEmailAttempt(
       emailLog.id,
       false,
       undefined,
-      error.message,
+      getServerErrorMessage(error),
       supabase,
     )
 
     return {
       success: false,
       emailLogId: emailLog.id,
-      error: error.message,
+      error: getServerErrorMessage(error),
     }
   }
 }

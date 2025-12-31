@@ -109,7 +109,7 @@ export function useShippingAddress() {
         savedAddresses.value = response.addresses.map(addressFromEntity)
       }
     }
-    catch (e: any) {
+    catch (e: unknown) {
       error.value = e instanceof Error ? e.message : 'Failed to load saved addresses'
       console.error('Failed to load saved addresses:', e)
 
@@ -143,7 +143,7 @@ export function useShippingAddress() {
         savedAddresses.value.push(newAddress)
       }
     }
-    catch (e: any) {
+    catch (e: unknown) {
       error.value = e instanceof Error ? e.message : 'Failed to save address'
       console.error('Failed to save address:', e)
       throw e

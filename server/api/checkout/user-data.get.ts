@@ -69,11 +69,11 @@ export default defineEventHandler(async (event) => {
       preferences: preferencesResult.data || null,
     }
   }
-  catch (error: any) {
-    console.error('Failed to fetch user checkout data:', error)
+  catch (error: unknown) {
+    console.error('Failed to fetch user checkout data:', getServerErrorMessage(error))
 
     // Re-throw if already a createError
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

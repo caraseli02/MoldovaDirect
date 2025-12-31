@@ -127,12 +127,16 @@ export default defineEventHandler(async (event) => {
       externalId: result.externalId,
     }
   }
-  catch (error: any) {
-    console.error('Error sending order status email:', error)
+  catch (error: unknown) {
+    console.error('Error sending order status email:', getServerErrorMessage(error))
+
+    if (isH3Error(error)) {
+      throw error
+    }
 
     throw createError({
-      statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || 'Failed to send order status email',
+      statusCode: 500,
+      statusMessage: 'Failed to send order status email',
     })
   }
 })

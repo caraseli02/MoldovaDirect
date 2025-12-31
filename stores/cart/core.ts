@@ -253,7 +253,7 @@ async function withOperationLock<T>(operation: () => Promise<T>): Promise<T> {
           const result = await operation()
           resolve(result)
         }
-        catch (error: any) {
+        catch (error: unknown) {
           reject(error)
         }
       }
@@ -372,10 +372,10 @@ const actions: CartCoreActions = {
         invalidateCalculationCache()
         state.value.lastSyncAt = new Date()
       }
-      catch (error: any) {
+      catch (error: unknown) {
         const cartError = (error instanceof Error && 'type' in error && 'code' in error && 'retryable' in error && 'timestamp' in error)
           ? error as CartError
-          : createCartError('validation', 'ADD_ITEM_FAILED', error instanceof Error ? error.message : 'Failed to add item to cart')
+          : createCartError('validation', 'ADD_ITEM_FAILED', error instanceof Error ? getErrorMessage(error) : 'Failed to add item to cart')
 
         state.value.error = cartError.message
         throw cartError
@@ -414,10 +414,10 @@ const actions: CartCoreActions = {
         invalidateCalculationCache()
         state.value.lastSyncAt = new Date()
       }
-      catch (error: any) {
+      catch (error: unknown) {
         const cartError = (error instanceof Error && 'type' in error && 'code' in error && 'retryable' in error && 'timestamp' in error)
           ? error as CartError
-          : createCartError('validation', 'REMOVE_ITEM_FAILED', error instanceof Error ? error.message : 'Failed to remove item from cart')
+          : createCartError('validation', 'REMOVE_ITEM_FAILED', error instanceof Error ? getErrorMessage(error) : 'Failed to remove item from cart')
 
         state.value.error = cartError.message
         throw cartError
@@ -479,10 +479,10 @@ const actions: CartCoreActions = {
         invalidateCalculationCache()
         state.value.lastSyncAt = new Date()
       }
-      catch (error: any) {
+      catch (error: unknown) {
         const cartError = (error instanceof Error && 'type' in error && 'code' in error && 'retryable' in error && 'timestamp' in error)
           ? error as CartError
-          : createCartError('validation', 'UPDATE_QUANTITY_FAILED', error instanceof Error ? error.message : 'Failed to update item quantity')
+          : createCartError('validation', 'UPDATE_QUANTITY_FAILED', error instanceof Error ? getErrorMessage(error) : 'Failed to update item quantity')
 
         state.value.error = cartError.message
         throw cartError
@@ -510,8 +510,8 @@ const actions: CartCoreActions = {
       invalidateCalculationCache()
       state.value.lastSyncAt = new Date()
     }
-    catch (error: any) {
-      const cartError = createCartError('validation', 'CLEAR_CART_FAILED', error instanceof Error ? error.message : 'Failed to clear cart')
+    catch (error: unknown) {
+      const cartError = createCartError('validation', 'CLEAR_CART_FAILED', error instanceof Error ? getErrorMessage(error) : 'Failed to clear cart')
       state.value.error = cartError.message
       throw cartError
     }
@@ -538,8 +538,8 @@ const actions: CartCoreActions = {
 
       console.log(`Cart locked for checkout session: ${checkoutSessionId} until ${lockUntil}`)
     }
-    catch (error: any) {
-      const message = error.message || 'Failed to lock cart'
+    catch (error: unknown) {
+      const message = getErrorMessage(error) || 'Failed to lock cart'
       state.value.error = message
       throw createCartError('validation', 'LOCK_FAILED', message, true, { checkoutSessionId })
     }
@@ -575,8 +575,8 @@ const actions: CartCoreActions = {
 
       console.log('Cart unlocked')
     }
-    catch (error: any) {
-      const message = error.message || 'Failed to unlock cart'
+    catch (error: unknown) {
+      const message = getErrorMessage(error) || 'Failed to unlock cart'
       state.value.error = message
       throw createCartError('validation', 'UNLOCK_FAILED', message, true, { checkoutSessionId })
     }

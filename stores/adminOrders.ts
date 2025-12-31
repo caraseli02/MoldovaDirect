@@ -341,9 +341,9 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
           throw new Error('Failed to fetch orders')
         }
       }
-      catch (error: any) {
-        this.error = error instanceof Error ? error.message : 'Failed to fetch orders'
-        console.error('Error fetching admin orders:', error)
+      catch (error: unknown) {
+        this.error = error instanceof Error ? getErrorMessage(error) : 'Failed to fetch orders'
+        console.error('Error fetching admin orders:', getErrorMessage(error))
       }
       finally {
         this.loading = false
@@ -371,9 +371,9 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
           throw new Error('Failed to fetch order details')
         }
       }
-      catch (error: any) {
-        this.error = error instanceof Error ? error.message : 'Failed to fetch order details'
-        console.error('Error fetching order detail:', error)
+      catch (error: unknown) {
+        this.error = error instanceof Error ? getErrorMessage(error) : 'Failed to fetch order details'
+        console.error('Error fetching order detail:', getErrorMessage(error))
         throw error
       }
       finally {
@@ -640,8 +640,8 @@ export const useAdminOrdersStore = defineStore('adminOrders', {
           throw new Error('Failed to update orders')
         }
       }
-      catch (error: any) {
-        this.error = error instanceof Error ? error.message : 'Failed to update orders'
+      catch (error: unknown) {
+        this.error = error instanceof Error ? getErrorMessage(error) : 'Failed to update orders'
         const toast = useToast()
         toast.error('Error', this.error)
         throw error

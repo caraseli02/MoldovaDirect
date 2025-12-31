@@ -203,8 +203,8 @@ const handleAuthCallback = async () => {
     // No valid token found
     throw new Error('Invalid or missing authentication token')
   }
-  catch (err: any) {
-    handleAuthError(err)
+  catch (err: unknown) {
+    handleAuthError(err as Error)
   }
   finally {
     loading.value = false
@@ -229,7 +229,7 @@ const handleSuccessfulAuth = async () => {
  * Handle authentication errors with proper user messaging
  */
 const handleAuthError = (err: AuthError | Error) => {
-  const errorMessage = err.message.toLowerCase()
+  const errorMessage = getErrorMessage(err).toLowerCase()
 
   // Token expired
   if (errorMessage.includes('expired') || errorMessage.includes('token')) {
@@ -258,7 +258,7 @@ const handleAuthError = (err: AuthError | Error) => {
   // Generic error
   else {
     errorTitle.value = t('auth.confirmationFailed')
-    error.value = err.message || t('auth.confirmationError')
+    error.value = getErrorMessage(err) || t('auth.confirmationError')
     canRetry.value = true
   }
 }

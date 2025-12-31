@@ -393,7 +393,7 @@ const uploadImages = async (imagesToUpload: ImageFile[]) => {
           throw new Error('Upload failed')
         }
       }
-      catch (error: any) {
+      catch (error: unknown) {
         console.error('Upload error:', error)
         // Remove failed upload
         if (imageData?.id) {

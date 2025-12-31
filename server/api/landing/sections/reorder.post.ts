@@ -58,13 +58,16 @@ export default defineEventHandler(async (event) => {
       message: 'Landing sections reordered successfully',
     }
   }
-  catch (error: any) {
-    console.error('Error reordering landing sections:', error)
+  catch (error: unknown) {
+    console.error('Error reordering landing sections:', getServerErrorMessage(error))
+
+    if (isH3Error(error)) {
+      throw error
+    }
 
     throw createError({
-      statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || 'Failed to reorder landing sections',
-      data: error.data || error,
+      statusCode: 500,
+      statusMessage: 'Failed to reorder landing sections',
     })
   }
 })

@@ -165,7 +165,7 @@ async function saveToStorage(
 
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Storage operation failed',
+      error: error instanceof Error ? getErrorMessage(error) : 'Storage operation failed',
     }
   }
 }
@@ -243,7 +243,7 @@ async function _loadFromStorage(
 
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Storage load failed',
+      error: error instanceof Error ? getErrorMessage(error) : 'Storage load failed',
     }
   }
 }
@@ -283,7 +283,7 @@ async function _removeFromStorage(
   catch (error: unknown) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Storage removal failed',
+      error: error instanceof Error ? getErrorMessage(error) : 'Storage removal failed',
     }
   }
 }
@@ -389,7 +389,7 @@ async function saveCartData(cartData: {
   catch (error: unknown) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to save cart data',
+      error: error instanceof Error ? getErrorMessage(error) : 'Failed to save cart data',
     }
   }
   finally {
@@ -452,7 +452,7 @@ async function loadCartData(): Promise<StorageResult<{
   catch (error: unknown) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to load cart data',
+      error: error instanceof Error ? getErrorMessage(error) : 'Failed to load cart data',
     }
   }
 }
@@ -471,7 +471,7 @@ async function clearCartData(): Promise<StorageResult> {
   catch (error: unknown) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to clear cart data',
+      error: error instanceof Error ? getErrorMessage(error) : 'Failed to clear cart data',
     }
   }
 }

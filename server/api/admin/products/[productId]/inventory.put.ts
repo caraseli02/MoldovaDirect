@@ -173,10 +173,10 @@ export default defineEventHandler(async (event) => {
         : 'Inventory updated successfully',
     }
   }
-  catch (error: any) {
-    console.error('Update inventory error:', error)
+  catch (error: unknown) {
+    console.error('Update inventory error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

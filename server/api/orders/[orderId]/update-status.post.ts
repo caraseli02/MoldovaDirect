@@ -188,12 +188,16 @@ export default defineEventHandler(async (event) => {
         : null,
     }
   }
-  catch (error: any) {
-    console.error('Error updating order status:', error)
+  catch (error: unknown) {
+    console.error('Error updating order status:', getServerErrorMessage(error))
+
+    if (isH3Error(error)) {
+      throw error
+    }
 
     throw createError({
-      statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || 'Failed to update order status',
+      statusCode: 500,
+      statusMessage: 'Failed to update order status',
     })
   }
 })

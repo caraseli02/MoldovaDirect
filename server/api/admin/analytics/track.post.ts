@@ -65,7 +65,7 @@ export default defineEventHandler(async (event) => {
       .single()
 
     if (error) {
-      console.error('Failed to track activity:', error)
+      console.error('Failed to track activity:', getServerErrorMessage(error))
       throw createError({
         statusCode: 500,
         message: 'Failed to track activity',
@@ -77,14 +77,14 @@ export default defineEventHandler(async (event) => {
       activityId: data?.id,
     }
   }
-  catch (error: any) {
-    console.error('Analytics tracking error:', error)
+  catch (error: unknown) {
+    console.error('Analytics tracking error:', getServerErrorMessage(error))
 
     // Don't throw errors for tracking failures to avoid disrupting user experience
     // Return success even if tracking fails
     return {
       success: true,
-      error: error.message,
+      error: getServerErrorMessage(error),
     }
   }
 })

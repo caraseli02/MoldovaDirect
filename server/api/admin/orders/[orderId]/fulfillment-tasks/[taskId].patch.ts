@@ -102,10 +102,10 @@ export default defineEventHandler(async (event) => {
       data: updatedTask,
     }
   }
-  catch (error: any) {
-    console.error('Error in fulfillment task update endpoint:', error)
+  catch (error: unknown) {
+    console.error('Error in fulfillment task update endpoint:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 
@@ -136,7 +136,7 @@ async function updateInventoryForPickedItemsAtomic(supabase: SupabaseClient, ord
       })
 
     if (error) {
-      console.error('Error calling atomic inventory update:', error)
+      console.error('Error calling atomic inventory update:', getServerErrorMessage(error))
       throw createError({
         statusCode: 500,
         statusMessage: `Failed to update inventory: ${error.message}`,
@@ -146,8 +146,8 @@ async function updateInventoryForPickedItemsAtomic(supabase: SupabaseClient, ord
     // Data contains result of atomic operation (skipped or updated)
     return data
   }
-  catch (error: any) {
-    console.error('Error updating inventory atomically:', error)
+  catch (error: unknown) {
+    console.error('Error updating inventory atomically:', getServerErrorMessage(error))
     throw error
   }
 }
@@ -246,8 +246,8 @@ async function _updateInventoryForPickedItems_DEPRECATED(supabase: SupabaseClien
       console.error('Error setting inventory_updated flag:', flagError)
     }
   }
-  catch (error: any) {
-    console.error('Error updating inventory for picked items:', error)
+  catch (error: unknown) {
+    console.error('Error updating inventory for picked items:', getServerErrorMessage(error))
   }
 }
 
@@ -270,7 +270,7 @@ async function rollbackInventoryForPickedItemsAtomic(supabase: SupabaseClient, o
       })
 
     if (error) {
-      console.error('Error calling atomic inventory rollback:', error)
+      console.error('Error calling atomic inventory rollback:', getServerErrorMessage(error))
 
       // Check if error is about shipped orders
       if (error.message && error.message.includes('Cannot rollback inventory for')) {
@@ -289,8 +289,8 @@ async function rollbackInventoryForPickedItemsAtomic(supabase: SupabaseClient, o
     // Data contains result of atomic rollback operation (skipped or rolled back)
     return data
   }
-  catch (error: any) {
-    console.error('Error rolling back inventory atomically:', error)
+  catch (error: unknown) {
+    console.error('Error rolling back inventory atomically:', getServerErrorMessage(error))
     throw error
   }
 }
@@ -395,8 +395,8 @@ async function _rollbackInventoryForPickedItems_DEPRECATED(supabase: SupabaseCli
       console.error('Error resetting inventory_updated flag:', flagError)
     }
   }
-  catch (error: any) {
-    console.error('Error rolling back inventory for picked items:', error)
+  catch (error: unknown) {
+    console.error('Error rolling back inventory for picked items:', getServerErrorMessage(error))
     throw error
   }
 }
@@ -432,7 +432,7 @@ async function updateOrderFulfillmentProgress(supabase: SupabaseClient, orderId:
       console.error('Error updating order fulfillment progress:', updateError)
     }
   }
-  catch (error: any) {
-    console.error('Error calculating fulfillment progress:', error)
+  catch (error: unknown) {
+    console.error('Error calculating fulfillment progress:', getServerErrorMessage(error))
   }
 }

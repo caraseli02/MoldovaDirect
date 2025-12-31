@@ -120,7 +120,7 @@ const ChartComponent = defineAsyncComponent({
               // Emit chart-created event with instance
               innerEmit('chart-created', chartInstance)
             }
-            catch (error: any) {
+            catch (error: unknown) {
               console.error('Failed to initialize chart:', error)
               innerEmit('error', error instanceof Error ? error : new Error('Chart initialization failed'))
             }
@@ -144,7 +144,7 @@ const ChartComponent = defineAsyncComponent({
               // Re-render chart
               chartInstance.update()
             }
-            catch (error: any) {
+            catch (error: unknown) {
               console.error('Failed to update chart:', error)
               innerEmit('error', error instanceof Error ? error : new Error('Chart update failed'))
             }
@@ -201,7 +201,7 @@ const ChartComponent = defineAsyncComponent({
         },
       })
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.error('Failed to load Chart.js:', error)
       throw error
     }

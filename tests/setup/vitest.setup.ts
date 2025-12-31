@@ -79,6 +79,144 @@ global.useNuxtApp = vi.fn(() => ({
   },
 }))
 
+// Error utility functions (auto-imported from utils/errorUtils.ts)
+global.getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) return error.message
+  if (typeof error === 'string') return error
+  if (error && typeof error === 'object') {
+    if ('data' in error) {
+      const data = (error as { data?: { message?: string } }).data
+      if (data?.message) return data.message
+    }
+    if ('message' in error) {
+      const msg = (error as { message?: unknown }).message
+      if (typeof msg === 'string') return msg
+    }
+    if ('statusMessage' in error) {
+      const msg = (error as { statusMessage?: unknown }).statusMessage
+      if (typeof msg === 'string') return msg
+    }
+  }
+  return 'An unknown error occurred'
+}
+
+global.getErrorCode = (error: unknown): string | undefined => {
+  if (error && typeof error === 'object') {
+    if ('code' in error) {
+      const code = (error as { code?: unknown }).code
+      if (typeof code === 'string') return code
+    }
+    if ('statusCode' in error) {
+      const code = (error as { statusCode?: unknown }).statusCode
+      if (typeof code === 'number') return String(code)
+    }
+  }
+  return undefined
+}
+
+global.getErrorStatusCode = (error: unknown): number | undefined => {
+  if (error && typeof error === 'object') {
+    if ('statusCode' in error) {
+      const code = (error as { statusCode?: unknown }).statusCode
+      if (typeof code === 'number') return code
+    }
+    if ('status' in error) {
+      const code = (error as { status?: unknown }).status
+      if (typeof code === 'number') return code
+    }
+  }
+  return undefined
+}
+
+global.isErrorWithMessage = (error: unknown): boolean => {
+  return (
+    typeof error === 'object'
+    && error !== null
+    && 'message' in error
+    && typeof (error as { message: unknown }).message === 'string'
+  )
+}
+
+global.isError = (error: unknown): boolean => {
+  return error instanceof Error
+}
+
+// Server-side error utility functions (auto-imported from server/utils/errorUtils.ts)
+global.getServerErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) return error.message
+  if (typeof error === 'string') return error
+  if (error && typeof error === 'object') {
+    if ('statusMessage' in error) {
+      const msg = (error as { statusMessage?: unknown }).statusMessage
+      if (typeof msg === 'string') return msg
+    }
+    if ('message' in error) {
+      const msg = (error as { message?: unknown }).message
+      if (typeof msg === 'string') return msg
+    }
+    if ('data' in error) {
+      const data = (error as { data?: { message?: string } }).data
+      if (data?.message) return data.message
+    }
+  }
+  return 'An unknown error occurred'
+}
+
+global.getServerErrorStatusCode = (error: unknown): number => {
+  if (error && typeof error === 'object') {
+    if ('statusCode' in error) {
+      const code = (error as { statusCode?: unknown }).statusCode
+      if (typeof code === 'number') return code
+    }
+    if ('status' in error) {
+      const code = (error as { status?: unknown }).status
+      if (typeof code === 'number') return code
+    }
+  }
+  return 500
+}
+
+global.isServerError = (error: unknown): boolean => {
+  return error instanceof Error
+}
+
+global.logServerError = (context: string, error: unknown): void => {
+  const message = global.getServerErrorMessage(error)
+  console.error(`[${context}] Error:`, message)
+}
+
+global.isH3Error = (error: unknown): boolean => {
+  return (
+    typeof error === 'object'
+    && error !== null
+    && 'statusCode' in error
+    && typeof (error as { statusCode?: unknown }).statusCode === 'number'
+  )
+}
+
+global.isDatabaseError = (error: unknown): boolean => {
+  return (
+    typeof error === 'object'
+    && error !== null
+    && 'code' in error
+    && typeof (error as { code?: unknown }).code === 'string'
+  )
+}
+
+global.getDatabaseErrorCode = (error: unknown): string | undefined => {
+  if (global.isDatabaseError(error)) {
+    return (error as { code: string }).code
+  }
+  return undefined
+}
+
+global.getDatabaseErrorDetail = (error: unknown): string | undefined => {
+  if (global.isDatabaseError(error)) {
+    return (error as { detail?: string }).detail
+  }
+  return undefined
+}
+
 // Mock useCookie for testing with shared storage
 // This ensures all calls to useCookie with the same name get the same ref
 // Export this so tests can access and manipulate cookie data

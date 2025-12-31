@@ -165,10 +165,10 @@ export const validatePersona = (persona: any) => {
   try {
     return TestUserPersonaSchema.parse(persona)
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error instanceof z.ZodError) {
       console.error('Persona validation errors:', error.issues)
-      throw new Error(`Invalid persona data: ${error.issues.map((e: z.ZodIssue) => e.message).join(', ')}`)
+      throw new Error(`Invalid persona data: ${error.issues.map((e: z.ZodIssue) => e.message).join(', ')}`, { cause: error })
     }
     throw error
   }
@@ -181,10 +181,10 @@ export const validateSessionState = (state: any) => {
   try {
     return PersonaSessionStateSchema.parse(state)
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error instanceof z.ZodError) {
       console.error('Session state validation errors:', error.issues)
-      throw new Error(`Invalid session state: ${error.issues.map((e: z.ZodIssue) => e.message).join(', ')}`)
+      throw new Error(`Invalid session state: ${error.issues.map((e: z.ZodIssue) => e.message).join(', ')}`, { cause: error })
     }
     throw error
   }
@@ -197,10 +197,10 @@ export const validateProgress = (progress: any) => {
   try {
     return TestScriptProgressSchema.parse(progress)
   }
-  catch (error: any) {
+  catch (error: unknown) {
     if (error instanceof z.ZodError) {
       console.error('Progress validation errors:', error.issues)
-      throw new Error(`Invalid progress data: ${error.issues.map((e: z.ZodIssue) => e.message).join(', ')}`)
+      throw new Error(`Invalid progress data: ${error.issues.map((e: z.ZodIssue) => e.message).join(', ')}`, { cause: error })
     }
     throw error
   }

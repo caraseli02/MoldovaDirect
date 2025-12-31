@@ -204,10 +204,10 @@ export default defineEventHandler(async (event) => {
       message: 'Product created successfully',
     }
   }
-  catch (error: any) {
-    console.error('Create product error:', error)
+  catch (error: unknown) {
+    console.error('Create product error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

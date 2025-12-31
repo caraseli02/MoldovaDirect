@@ -54,12 +54,12 @@ export default defineEventHandler(async (event) => {
       data: paymentMethods || [],
     }
   }
-  catch (error: any) {
-    if (error.statusCode) {
+  catch (error: unknown) {
+    if (isH3Error(error)) {
       throw error
     }
 
-    console.error('Payment methods fetch error:', error)
+    console.error('Payment methods fetch error:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error',

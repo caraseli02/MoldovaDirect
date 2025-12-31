@@ -348,8 +348,8 @@ const fetchOrder = async () => {
       error.value = true
     }
   }
-  catch (err: any) {
-    console.error('Error fetching order:', err)
+  catch (err: unknown) {
+    console.error('Error fetching order:', getErrorMessage(err))
     error.value = true
   }
   finally {

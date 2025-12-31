@@ -173,10 +173,10 @@ export default defineEventHandler(async (event) => {
       data: createdTasks,
     }
   }
-  catch (error: any) {
-    console.error('Error in fulfillment tasks creation endpoint:', error)
+  catch (error: unknown) {
+    console.error('Error in fulfillment tasks creation endpoint:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

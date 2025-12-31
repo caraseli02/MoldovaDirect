@@ -88,7 +88,7 @@ export function useCartCoreWithFallback(): UseCartCoreReturn | null {
     // Try to use the cart core
     return useCartCore()
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.warn('Cart core not available:', error)
     return null
   }

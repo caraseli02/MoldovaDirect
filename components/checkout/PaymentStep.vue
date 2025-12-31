@@ -502,7 +502,7 @@ const proceedToReview = async () => {
       await navigateTo(localePath(stepPath))
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to proceed to review:', error)
     const toast = useToast()
     const { t } = useI18n()

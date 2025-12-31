@@ -112,13 +112,16 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
       section: data as LandingSectionRow,
     }
   }
-  catch (error: any) {
-    console.error('Error creating landing section:', error)
+  catch (error: unknown) {
+    console.error('Error creating landing section:', getServerErrorMessage(error))
+
+    if (isH3Error(error)) {
+      throw error
+    }
 
     throw createError({
-      statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || 'Failed to create landing section',
-      data: error.data || error,
+      statusCode: 500,
+      statusMessage: 'Failed to create landing section',
     })
   }
 })

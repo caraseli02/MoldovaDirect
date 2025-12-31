@@ -134,12 +134,12 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    if (error.statusCode) {
+  catch (error: unknown) {
+    if (isH3Error(error)) {
       throw error
     }
 
-    console.error('Order completion error:', error)
+    console.error('Order completion error:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error',

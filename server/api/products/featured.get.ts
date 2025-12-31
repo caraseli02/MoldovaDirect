@@ -217,10 +217,10 @@ export default defineCachedEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    console.error('Featured products API error:', error)
+  catch (error: unknown) {
+    console.error('Featured products API error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

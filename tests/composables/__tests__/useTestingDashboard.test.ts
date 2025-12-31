@@ -21,7 +21,7 @@ describe('useTestingDashboard TypeScript Safety (ts-3)', () => {
     expect(hasAsAny).toBe(false)
   })
 
-  it('should NOT have "catch (err: any)" pattern', () => {
+  it('should NOT have "catch (err: unknown)" pattern', () => {
     const source = readFileSync(composablePath, 'utf-8')
     const hasCatchAny = /catch\s*\(\s*\w+:\s*any\s*\)/.test(source)
     expect(hasCatchAny).toBe(false)

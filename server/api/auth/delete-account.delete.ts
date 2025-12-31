@@ -149,7 +149,7 @@ export default defineEventHandler(async (event) => {
       })
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     logger.error('Account deletion error', {
       error: error instanceof Error ? error.message : String(error),
     })

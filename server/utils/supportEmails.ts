@@ -100,22 +100,22 @@ export async function sendSupportTicketCustomerEmail(
       externalId: result.id,
     }
   }
-  catch (error: any) {
-    console.error(`❌ Failed to send support ticket customer email for ticket ${data.ticketNumber}:`, error)
+  catch (error: unknown) {
+    console.error(`❌ Failed to send support ticket customer email for ticket ${data.ticketNumber}:`, getServerErrorMessage(error))
 
     // Record failed attempt
     await recordEmailAttempt(
       emailLog.id,
       false,
       undefined,
-      error.message,
+      getServerErrorMessage(error),
       supabase,
     )
 
     return {
       success: false,
       emailLogId: emailLog.id,
-      error: error.message,
+      error: getServerErrorMessage(error),
     }
   }
 }
@@ -176,22 +176,22 @@ export async function sendSupportTicketStaffEmail(
       externalId: result.id,
     }
   }
-  catch (error: any) {
-    console.error(`❌ Failed to send support ticket staff email for ticket ${data.ticketNumber}:`, error)
+  catch (error: unknown) {
+    console.error(`❌ Failed to send support ticket staff email for ticket ${data.ticketNumber}:`, getServerErrorMessage(error))
 
     // Record failed attempt
     await recordEmailAttempt(
       emailLog.id,
       false,
       undefined,
-      error.message,
+      getServerErrorMessage(error),
       supabase,
     )
 
     return {
       success: false,
       emailLogId: emailLog.id,
-      error: error.message,
+      error: getServerErrorMessage(error),
     }
   }
 }

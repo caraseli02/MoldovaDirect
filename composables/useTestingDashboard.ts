@@ -31,7 +31,7 @@ interface CleanupResponse {
 
 // Helper to extract error message safely
 function getErrorMessage(error: unknown): string {
-  if (error instanceof Error) return error.message
+  if (error instanceof Error) return getErrorMessage(error)
   if (typeof error === 'string') return error
   if (error && typeof error === 'object' && 'data' in error) {
     const data = (error as { data?: { message?: string } }).data
@@ -64,7 +64,7 @@ export const useTestingDashboard = () => {
       stats.value = response.stats
     }
     catch (err: unknown) {
-      console.error('Failed to fetch stats:', err)
+      console.error('Failed to fetch stats:', getErrorMessage(err))
     }
     finally {
       loadingStats.value = false

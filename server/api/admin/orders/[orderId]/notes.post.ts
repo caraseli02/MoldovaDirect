@@ -96,10 +96,10 @@ export default defineEventHandler(async (event) => {
       message: `${body.noteType === 'internal' ? 'Internal' : 'Customer'} note added successfully`,
     }
   }
-  catch (error: any) {
-    console.error('Error in order notes creation endpoint:', error)
+  catch (error: unknown) {
+    console.error('Error in order notes creation endpoint:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

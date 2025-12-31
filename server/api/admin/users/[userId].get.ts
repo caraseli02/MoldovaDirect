@@ -91,7 +91,7 @@ export default defineEventHandler(async (event) => {
         authUser = data?.user
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.warn('Auth admin API not available:', error)
     }
 
@@ -216,10 +216,10 @@ export default defineEventHandler(async (event) => {
       data: userDetail,
     }
   }
-  catch (error: any) {
-    console.error('Error in admin user detail API:', error)
+  catch (error: unknown) {
+    console.error('Error in admin user detail API:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

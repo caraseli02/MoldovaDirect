@@ -777,9 +777,9 @@ async function handleLogin(): Promise<void> {
       await handleRedirectAfterLogin()
     }
   }
-  catch (err: any) {
+  catch (err: unknown) {
     if (!localError.value) {
-      localError.value = err?.message || t('auth.loginError')
+      localError.value = getErrorMessage(err) || t('auth.loginError')
     }
   }
   finally {
@@ -896,8 +896,8 @@ async function handleMagicLink(): Promise<void> {
     // Start cooldown timer
     startMagicLinkCooldown()
   }
-  catch (err: any) {
-    localError.value = err.message || t('auth.magicLinkError')
+  catch (err: unknown) {
+    localError.value = getErrorMessage(err) || t('auth.magicLinkError')
   }
   finally {
     loadingMagic.value = false
@@ -954,9 +954,9 @@ async function handleSocialLogin(provider: 'google' | 'apple'): Promise<void> {
       }
     }, 5000)
   }
-  catch (err: any) {
-    console.error(`${provider} login error:`, err)
-    localError.value = err.message || t('auth.socialLoginError', { provider: provider.charAt(0).toUpperCase() + provider.slice(1) })
+  catch (err: unknown) {
+    console.error(`${provider} login error:`, getErrorMessage(err))
+    localError.value = getErrorMessage(err) || t('auth.socialLoginError', { provider: provider.charAt(0).toUpperCase() + provider.slice(1) })
     loadingSocial.value = null
   }
 }

@@ -735,7 +735,7 @@ Reference: ${bankTransferReference.value}
     await navigator.clipboard.writeText(details)
     toast.success('Bank details copied to clipboard')
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to copy bank details:', error)
     toast.error('Failed to copy bank details')
   }

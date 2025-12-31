@@ -108,12 +108,12 @@ export default defineEventHandler(async (event) => {
       stats,
     }
   }
-  catch (error: any) {
-    console.error('Failed to fetch database stats:', error)
+  catch (error: unknown) {
+    console.error('Failed to fetch database stats:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to fetch database statistics',
-      data: { error: error.message },
+      data: { error: getServerErrorMessage(error) },
     })
   }
 })

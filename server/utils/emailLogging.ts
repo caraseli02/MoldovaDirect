@@ -41,7 +41,7 @@ export async function createEmailLog(
     .single()
 
   if (error) {
-    console.error('Failed to create email log:', error)
+    console.error('Failed to create email log:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to create email log',
@@ -80,7 +80,7 @@ export async function updateEmailLog(
     .single()
 
   if (error) {
-    console.error('Failed to update email log:', error)
+    console.error('Failed to update email log:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to update email log',
@@ -110,7 +110,7 @@ export async function getEmailLog(
     if (error.code === 'PGRST116') {
       return null
     }
-    console.error('Failed to get email log:', error)
+    console.error('Failed to get email log:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to get email log',
@@ -183,7 +183,7 @@ export async function getEmailLogs(
   const { data, error, count } = await query
 
   if (error) {
-    console.error('Failed to get email logs:', error)
+    console.error('Failed to get email logs:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to get email logs',
@@ -231,7 +231,7 @@ export async function getEmailDeliveryStats(
   const { data, error } = await query
 
   if (error) {
-    console.error('Failed to get email stats:', error)
+    console.error('Failed to get email stats:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to get email stats',
@@ -334,7 +334,7 @@ export async function markEmailDelivered(
     if (error.code === 'PGRST116') {
       return null
     }
-    console.error('Failed to mark email as delivered:', error)
+    console.error('Failed to mark email as delivered:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to mark email as delivered',
@@ -369,7 +369,7 @@ export async function markEmailBounced(
     if (error.code === 'PGRST116') {
       return null
     }
-    console.error('Failed to mark email as bounced:', error)
+    console.error('Failed to mark email as bounced:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to mark email as bounced',
@@ -397,7 +397,7 @@ export async function getPendingEmailsForRetry(): Promise<EmailLog[]> {
     .limit(100)
 
   if (error) {
-    console.error('Failed to get pending emails:', error)
+    console.error('Failed to get pending emails:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to get pending emails',

@@ -104,7 +104,7 @@ export const useAuthMessages = () => {
     context: AuthMessage['context'] = 'general',
     showRetry = false,
   ): AuthMessage => {
-    const errorString = error instanceof Error ? error.message : error
+    const errorString = error instanceof Error ? getErrorMessage(error) : error
 
     return {
       type: 'error',

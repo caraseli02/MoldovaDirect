@@ -266,10 +266,10 @@ export default defineCachedEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    console.error('Product recommendations API error:', error)
+  catch (error: unknown) {
+    console.error('Product recommendations API error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

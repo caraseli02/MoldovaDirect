@@ -87,13 +87,13 @@ export default defineEventHandler(async (event) => {
       results,
     }
   }
-  catch (error: any) {
-    console.error('Cleanup error:', error)
-    await logAdminAction(event, adminId, 'cleanup-failed', { action, error: error.message })
+  catch (error: unknown) {
+    console.error('Cleanup error:', getServerErrorMessage(error))
+    await logAdminAction(event, adminId, 'cleanup-failed', { action, error: getServerErrorMessage(error) })
     return {
       success: false,
       message: 'Cleanup failed',
-      error: error.message,
+      error: getServerErrorMessage(error),
       results,
     }
   }
@@ -166,8 +166,8 @@ async function clearTestUsers(supabase: SupabaseClient, results: any) {
       results.deletedCounts.testUsers = 0
     }
   }
-  catch (error: any) {
-    results.errors.push(`Error clearing test users: ${error.message}`)
+  catch (error: unknown) {
+    results.errors.push(`Error clearing test users: ${getServerErrorMessage(error)}`)
   }
 }
 
@@ -192,8 +192,8 @@ async function clearOrders(supabase: SupabaseClient, results: any) {
       results.deletedCounts.orders = orderCount || 0
     }
   }
-  catch (error: any) {
-    results.errors.push(`Error clearing orders: ${error.message}`)
+  catch (error: unknown) {
+    results.errors.push(`Error clearing orders: ${getServerErrorMessage(error)}`)
   }
 }
 
@@ -219,8 +219,8 @@ async function clearProducts(supabase: SupabaseClient, results: any) {
       results.deletedCounts.products = productCount || 0
     }
   }
-  catch (error: any) {
-    results.errors.push(`Error clearing products: ${error.message}`)
+  catch (error: unknown) {
+    results.errors.push(`Error clearing products: ${getServerErrorMessage(error)}`)
   }
 }
 
@@ -259,8 +259,8 @@ async function clearOldCarts(supabase: SupabaseClient, results: any, daysOld: nu
 
     results.deletedCounts.carts = count || 0
   }
-  catch (error: any) {
-    results.errors.push(`Error clearing old carts: ${error.message}`)
+  catch (error: unknown) {
+    results.errors.push(`Error clearing old carts: ${getServerErrorMessage(error)}`)
   }
 }
 
@@ -293,7 +293,7 @@ async function resetDatabase(supabase: SupabaseClient, results: any) {
 
     results.message = 'Database reset to empty state'
   }
-  catch (error: any) {
-    results.errors.push(`Error resetting database: ${error.message}`)
+  catch (error: unknown) {
+    results.errors.push(`Error resetting database: ${getServerErrorMessage(error)}`)
   }
 }

@@ -285,10 +285,10 @@ const handleSubmit = async () => {
       reason: reason.value || undefined,
     })
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Error confirming account deletion:', error)
-    const errorMessage = error?.message || t('profile.errors.deleteFailed')
-    $toast.error(errorMessage)
+    const errorMsg = getErrorMessage(error)
+    $toast.error(errorMsg || t('profile.errors.deleteFailed'))
   }
   finally {
     isLoading.value = false

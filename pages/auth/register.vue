@@ -731,8 +731,8 @@ const handleRegister = async () => {
 
     success.value = t('auth.registrationSuccess')
   }
-  catch (err: any) {
-    error.value = err.message || t('auth.registerError')
+  catch (err: unknown) {
+    error.value = getErrorMessage(err) || t('auth.registerError')
   }
   finally {
     loading.value = false

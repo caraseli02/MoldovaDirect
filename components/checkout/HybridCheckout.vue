@@ -654,11 +654,11 @@ const handleExpressPlaceOrder = async () => {
     // Process order
     await processOrder()
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Express checkout failed:', error)
 
     // Provide actionable guidance based on error type
-    const errorMessage = error?.message || ''
+    const errorMessage = getErrorMessage(error)
     const isNetworkError = errorMessage.includes('network') || errorMessage.includes('fetch') || errorMessage.includes('Failed to fetch')
     const isSessionError = errorMessage.includes('session') || errorMessage.includes('expired') || errorMessage.includes('unauthorized')
 
@@ -746,11 +746,11 @@ const handlePlaceOrder = async () => {
     // Process order
     await processOrder()
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to place order:', error)
 
     // Provide user-friendly error message without exposing technical details
-    const errorMessage = error?.message || ''
+    const errorMessage = getErrorMessage(error)
     const isNetworkError = errorMessage.includes('network') || errorMessage.includes('fetch') || errorMessage.includes('Failed to fetch')
     const isValidationError = errorMessage.includes('validation') || errorMessage.includes('invalid')
 

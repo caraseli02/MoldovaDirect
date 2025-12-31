@@ -156,8 +156,8 @@ const verifyEmail = async () => {
       throw new Error('Missing verification link')
     }
   }
-  catch (err: any) {
-    error.value = err.message || t('auth.verificationError')
+  catch (err: unknown) {
+    error.value = getErrorMessage(err) || t('auth.verificationError')
   }
   finally {
     loading.value = false
@@ -187,8 +187,8 @@ const resendVerification = async () => {
     message.value = t('auth.verificationResent')
     error.value = ''
   }
-  catch (err: any) {
-    error.value = err.message || t('auth.resendError')
+  catch (err: unknown) {
+    error.value = getErrorMessage(err) || t('auth.resendError')
   }
   finally {
     resendLoading.value = false

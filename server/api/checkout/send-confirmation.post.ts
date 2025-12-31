@@ -125,12 +125,12 @@ export default defineEventHandler(async (event) => {
       externalId: result.externalId,
     }
   }
-  catch (error: any) {
-    if (error.statusCode) {
+  catch (error: unknown) {
+    if (isH3Error(error)) {
       throw error
     }
 
-    console.error('Failed to send confirmation email:', error)
+    console.error('Failed to send confirmation email:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to send confirmation email',

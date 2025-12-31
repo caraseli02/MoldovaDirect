@@ -42,14 +42,14 @@ export default defineEventHandler(async (event) => {
       }
     }
   }
-  catch (error: any) {
-    console.error('❌ Error retrying email:', error)
+  catch (error: unknown) {
+    console.error('❌ Error retrying email:', getServerErrorMessage(error))
 
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to retry email',
       data: {
-        error: error.message,
+        error: getServerErrorMessage(error),
       },
     })
   }

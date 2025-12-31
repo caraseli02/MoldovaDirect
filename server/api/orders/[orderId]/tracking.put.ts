@@ -137,12 +137,12 @@ export default defineEventHandler(async (event) => {
       data: order,
     }
   }
-  catch (error: any) {
-    if (error.statusCode) {
+  catch (error: unknown) {
+    if (isH3Error(error)) {
       throw error
     }
 
-    console.error('Tracking update error:', error)
+    console.error('Tracking update error:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error',

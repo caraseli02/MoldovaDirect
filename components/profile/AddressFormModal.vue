@@ -466,11 +466,11 @@ const handleSubmit = async () => {
   try {
     emit('save', { ...form })
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Error saving address:', error)
     // CRITICAL FIX: Show toast error so user knows save failed
-    const errorMessage = error?.message || t('profile.errors.addressSaveFailed')
-    $toast.error(errorMessage)
+    const errorMsg = getErrorMessage(error)
+    $toast.error(errorMsg || t('profile.errors.addressSaveFailed'))
   }
   finally {
     isLoading.value = false

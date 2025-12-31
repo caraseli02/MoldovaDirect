@@ -18,14 +18,14 @@ export default defineEventHandler(async (event) => {
       message: `Processed ${result.processed} emails: ${result.succeeded} succeeded, ${result.failed} failed`,
     }
   }
-  catch (error: any) {
-    console.error('❌ Error processing email retries:', error)
+  catch (error: unknown) {
+    console.error('❌ Error processing email retries:', getServerErrorMessage(error))
 
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to process email retries',
       data: {
-        error: error.message,
+        error: getServerErrorMessage(error),
       },
     })
   }

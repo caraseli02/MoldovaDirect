@@ -105,10 +105,10 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    console.error('Delete product error:', error)
+  catch (error: unknown) {
+    console.error('Delete product error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

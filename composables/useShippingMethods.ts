@@ -140,7 +140,7 @@ export function useShippingMethods(address: Ref<Address>) {
         }
       }
     }
-    catch (e: any) {
+    catch (e: unknown) {
       const errorMessage = e instanceof Error ? e.message : 'Failed to load shipping methods'
       error.value = errorMessage
       console.error('Failed to load shipping methods:', e)

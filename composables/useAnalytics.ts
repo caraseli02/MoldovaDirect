@@ -23,7 +23,7 @@ interface ApiDataResponse<T> {
 
 // Helper to extract error message safely
 function getErrorMessage(error: unknown): string {
-  if (error instanceof Error) return error.message
+  if (error instanceof Error) return getErrorMessage(error)
   if (typeof error === 'string') return error
   return 'An unknown error occurred'
 }
@@ -124,7 +124,7 @@ export const useAnalytics = () => {
       })
     }
     catch (err: unknown) {
-      console.error('Failed to track activity:', err)
+      console.error('Failed to track activity:', getErrorMessage(err))
       // Don't throw error for tracking failures to avoid disrupting user experience
     }
   }

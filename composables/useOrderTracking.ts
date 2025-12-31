@@ -68,8 +68,8 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
           viewedUpdates.value = new Set(parsed.viewed || [])
         }
       }
-      catch (err: any) {
-        console.error('Error loading recent updates:', err)
+      catch (err: unknown) {
+        console.error('Error loading recent updates:', getErrorMessage(err))
       }
     }
   }
@@ -86,8 +86,8 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
           }),
         )
       }
-      catch (err: any) {
-        console.error('Error saving recent updates:', err)
+      catch (err: unknown) {
+        console.error('Error saving recent updates:', getErrorMessage(err))
       }
     }
   }
@@ -127,8 +127,8 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
       // Show notification
       showOrderUpdateNotification(update)
     }
-    catch (err: any) {
-      console.error('Error handling order update:', err)
+    catch (err: unknown) {
+      console.error('Error handling order update:', getErrorMessage(err))
     }
   }
 
@@ -271,10 +271,10 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
           }
         })
     }
-    catch (err: any) {
-      console.error('Error subscribing to order updates:', err)
+    catch (err: unknown) {
+      console.error('Error subscribing to order updates:', getErrorMessage(err))
       const error = err as { message?: string }
-      connectionError.value = error.message || 'Failed to connect'
+      connectionError.value = getErrorMessage(error) || 'Failed to connect'
       isConnected.value = false
     }
   }

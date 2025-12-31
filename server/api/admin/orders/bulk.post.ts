@@ -138,7 +138,7 @@ export default defineEventHandler(async (event) => {
 
         result.updated++
       }
-      catch (error: any) {
+      catch (error: unknown) {
         result.failed++
         result.errors.push({
           orderId: order.id,
@@ -159,8 +159,8 @@ export default defineEventHandler(async (event) => {
       message,
     }
   }
-  catch (error: any) {
-    console.error('Bulk order update error:', error)
+  catch (error: unknown) {
+    console.error('Bulk order update error:', getServerErrorMessage(error))
 
     if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error

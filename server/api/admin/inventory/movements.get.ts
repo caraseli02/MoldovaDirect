@@ -169,10 +169,10 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    console.error('Inventory movements API error:', error)
+  catch (error: unknown) {
+    console.error('Inventory movements API error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

@@ -107,10 +107,10 @@ export default defineEventHandler(async (event) => {
       product: transformedProduct,
     }
   }
-  catch (error: any) {
-    console.error('Get product error:', error)
+  catch (error: unknown) {
+    console.error('Get product error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

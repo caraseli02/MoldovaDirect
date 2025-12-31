@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
       data: reportData,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Inventory reports API error, falling back to mock data:', error)
 
     // If it's a known error, throw it

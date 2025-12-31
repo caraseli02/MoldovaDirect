@@ -342,7 +342,7 @@ const generateSku = async () => {
       skuInput.value?.focus()
     })
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to generate SKU:', error)
 
     if (isMobile.value) {

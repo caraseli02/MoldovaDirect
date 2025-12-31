@@ -113,7 +113,7 @@ describe('Cart Locking', () => {
       try {
         await cart.unlockCart(sessionId2)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -172,7 +172,7 @@ describe('Cart Locking', () => {
       try {
         await cart.addItem(mockProduct, 1)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -197,7 +197,7 @@ describe('Cart Locking', () => {
       try {
         await cart.removeItem(itemId)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -221,7 +221,7 @@ describe('Cart Locking', () => {
       try {
         await cart.updateQuantity(itemId, 2)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -244,7 +244,7 @@ describe('Cart Locking', () => {
       try {
         await cart.clearCart()
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -387,7 +387,7 @@ describe('Cart Locking', () => {
       try {
         await cart.addItem(mockProduct, 1)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 

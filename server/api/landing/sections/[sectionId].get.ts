@@ -46,13 +46,16 @@ export default defineCachedEventHandler(async (event): Promise<GetSectionRespons
       section: data as LandingSectionRow,
     }
   }
-  catch (error: any) {
-    console.error('Error fetching landing section:', error)
+  catch (error: unknown) {
+    console.error('Error fetching landing section:', getServerErrorMessage(error))
+
+    if (isH3Error(error)) {
+      throw error
+    }
 
     throw createError({
-      statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || 'Failed to fetch landing section',
-      data: error.data || error,
+      statusCode: 500,
+      statusMessage: 'Failed to fetch landing section',
     })
   }
 }, {

@@ -98,8 +98,8 @@ export async function processEmailRetries(
       results,
     }
   }
-  catch (error: any) {
-    console.error('❌ Error processing email retries:', error)
+  catch (error: unknown) {
+    console.error('❌ Error processing email retries:', getServerErrorMessage(error))
     throw error
   }
 }
@@ -168,14 +168,14 @@ async function processEmailRetry(
       }
     }
   }
-  catch (error: any) {
-    console.error(`❌ Error retrying email ${id}:`, error)
+  catch (error: unknown) {
+    console.error(`❌ Error retrying email ${id}:`, getServerErrorMessage(error))
 
     return {
       emailLogId: id,
       success: false,
       attempts: attempts + 1,
-      error: error.message,
+      error: getServerErrorMessage(error),
     }
   }
 }
@@ -221,8 +221,8 @@ async function sendAdminAlert(
       html,
     })
   }
-  catch (error: any) {
-    console.error('❌ Failed to send admin alert:', error)
+  catch (error: unknown) {
+    console.error('❌ Failed to send admin alert:', getServerErrorMessage(error))
     // Don't throw - we don't want alert failures to break the retry process
   }
 }
@@ -332,7 +332,7 @@ export async function getRetryStatistics(
   const { data, error } = await query
 
   if (error) {
-    console.error('Failed to get retry statistics:', error)
+    console.error('Failed to get retry statistics:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to get retry statistics',
@@ -374,8 +374,8 @@ export async function scheduleEmailRetries(
     try {
       await processEmailRetries()
     }
-    catch (error: any) {
-      console.error('❌ Scheduled email retry failed:', error)
+    catch (error: unknown) {
+      console.error('❌ Scheduled email retry failed:', getServerErrorMessage(error))
     }
   }, intervalMinutes * 60 * 1000)
 }

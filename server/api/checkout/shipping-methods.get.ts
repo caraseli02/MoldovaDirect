@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
       methods: shippingMethods,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Log full error details for debugging
     console.error('[shipping-methods.get] Error calculating shipping methods:', {
       error: error instanceof Error ? error.message : String(error),

@@ -191,7 +191,7 @@ const formatPrice = (price: number) => {
       maximumFractionDigits: 0,
     }).format(price)
   }
-  catch (err: any) {
+  catch (err: unknown) {
     console.warn('Error formatting price:', err)
     return `€${price.toFixed(0)}`
   }

@@ -258,7 +258,7 @@ const saveChanges = async () => {
 
     cancelEditing()
   }
-  catch (error: any) {
+  catch (error: unknown) {
     const errorMsg = error instanceof Error ? error.message : 'Failed to update inventory'
     errorMessage.value = errorMsg
     emit('error', errorMsg)
