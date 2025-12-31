@@ -8,7 +8,7 @@ import { retryEmailDelivery } from '~/server/utils/orderEmails'
 
 export default defineEventHandler(async (event) => {
   await requireAdminRole(event)
-  const id = parseInt(event.context.params?.id || '0')
+  const id = parseInt(getRouterParam(event, 'id') || '0')
 
   if (!id) {
     throw createError({

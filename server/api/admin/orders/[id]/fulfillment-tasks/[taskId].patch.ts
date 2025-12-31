@@ -22,8 +22,8 @@ export default defineEventHandler(async (event) => {
     const supabase = serverSupabaseServiceRole(event)
 
     // Get order ID and task ID from params
-    const orderId = parseInt(event.context.params?.id || '0')
-    const taskId = parseInt(event.context.params?.taskId || '0')
+    const orderId = parseInt(getRouterParam(event, 'id') || '0')
+    const taskId = parseInt(getRouterParam(event, 'taskId') || '0')
 
     if (!orderId || !taskId) {
       throw createError({

@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     const supabase = serverSupabaseServiceRole(event)
 
     // Get order ID from route params
-    const orderId = parseInt(event.context.params?.id || '0')
+    const orderId = parseInt(getRouterParam(event, 'id') || '0')
 
     if (!orderId || isNaN(orderId)) {
       throw createError({

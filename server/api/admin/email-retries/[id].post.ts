@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   try {
     await requireAdminRole(event)
 
-    const emailLogId = parseInt(event.context.params?.id || '0')
+    const emailLogId = parseInt(getRouterParam(event, 'id') || '0')
 
     if (!emailLogId || isNaN(emailLogId)) {
       throw createError({
