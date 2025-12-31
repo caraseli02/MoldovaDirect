@@ -1,45 +1,67 @@
 {
-  "category": "Security Critical Fixes",
-  "categoryId": "security-critical",
-  "skill": "architecture-patterns",
-  "priority": "P0-critical",
-  "priorityOrder": 0,
-  "stepId": "sec-1",
-  "description": "Fix non-timing-safe CSRF comparison in cartSecurity.ts",
-  "file": "server/utils/cartSecurity.ts",
-  "testFile": "tests/server/utils/__tests__/cartSecurity.test.ts",
+  "category": "Nuxt 4 Patterns Compliance",
+  "categoryId": "nuxt4-compliance",
+  "skill": "nuxt",
+  "priority": "P1-high",
+  "priorityOrder": 1,
+  "stepId": "nuxt-2",
+  "description": "Replace window.location.origin with useRequestURL().origin",
+  "file": "pages/auth/verification-pending.vue",
+  "testFile": "tests/pages/auth/__tests__/ssrCompatibility.test.ts",
   "testExists": false,
   "implemented": false,
   "tested": false,
   "subtasks": [
     {
-      "id": "sec-1-a",
-      "task": "Create unit test for timing-safe CSRF comparison",
+      "id": "nuxt-2-a",
+      "task": "Create SSR test ensuring no window.location usage",
       "type": "test-first",
       "implemented": false
     },
     {
-      "id": "sec-1-b",
-      "task": "Replace string comparison with crypto.timingSafeEqual()",
+      "id": "nuxt-2-b",
+      "task": "Update verification-pending.vue to use useRequestURL()",
       "type": "implementation",
+      "file": "pages/auth/verification-pending.vue",
       "implemented": false
     },
     {
-      "id": "sec-1-c",
-      "task": "Run unit test to validate fix",
-      "type": "validation",
+      "id": "nuxt-2-c",
+      "task": "Update login.vue to use useRequestURL()",
+      "type": "implementation",
+      "file": "pages/auth/login.vue",
       "implemented": false
     },
     {
-      "id": "sec-1-d",
-      "task": "Visual test: verify cart operations still work",
+      "id": "nuxt-2-d",
+      "task": "Update register.vue to use useRequestURL()",
+      "type": "implementation",
+      "file": "pages/auth/register.vue",
+      "implemented": false
+    },
+    {
+      "id": "nuxt-2-e",
+      "task": "Update verify-email.vue to use useRequestURL()",
+      "type": "implementation",
+      "file": "pages/auth/verify-email.vue",
+      "implemented": false
+    },
+    {
+      "id": "nuxt-2-f",
+      "task": "Visual test: verify auth pages render correctly",
       "type": "visual-test",
+      "implemented": false
+    },
+    {
+      "id": "nuxt-2-g",
+      "task": "Run SSR test to validate fix",
+      "type": "validation",
       "implemented": false
     }
   ],
   "nextSubtask": {
-    "id": "sec-1-a",
-    "task": "Create unit test for timing-safe CSRF comparison",
+    "id": "nuxt-2-a",
+    "task": "Create SSR test ensuring no window.location usage",
     "type": "test-first",
     "implemented": false
   }

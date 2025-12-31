@@ -223,6 +223,7 @@ const supabase = useSupabaseClient()
 const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
+const requestURL = useRequestURL()
 
 // Use new authentication message system
 const {
@@ -279,7 +280,7 @@ const handleResendVerification = async () => {
       type: 'signup',
       email: emailToUse,
       options: {
-        emailRedirectTo: `${window.location.origin}${localePath('/auth/verify-email')}`,
+        emailRedirectTo: `${requestURL.origin}${localePath('/auth/verify-email')}`,
       },
     })
 

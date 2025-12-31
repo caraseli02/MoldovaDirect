@@ -184,10 +184,10 @@
         {
           "id": "nuxt-2",
           "description": "Replace window.location.origin with useRequestURL().origin",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": "tests/pages/auth/__tests__/ssrCompatibility.test.ts",
-          "test_exists": false,
+          "test_exists": true,
           "files": [
             "pages/auth/verification-pending.vue",
             "pages/auth/login.vue",
@@ -199,47 +199,47 @@
               "id": "nuxt-2-a",
               "task": "Create SSR test ensuring no window.location usage",
               "type": "test-first",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-2-b",
               "task": "Update verification-pending.vue to use useRequestURL()",
               "type": "implementation",
               "file": "pages/auth/verification-pending.vue",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-2-c",
               "task": "Update login.vue to use useRequestURL()",
               "type": "implementation",
               "file": "pages/auth/login.vue",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-2-d",
               "task": "Update register.vue to use useRequestURL()",
               "type": "implementation",
               "file": "pages/auth/register.vue",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-2-e",
               "task": "Update verify-email.vue to use useRequestURL()",
               "type": "implementation",
               "file": "pages/auth/verify-email.vue",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-2-f",
               "task": "Visual test: verify auth pages render correctly",
               "type": "visual-test",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-2-g",
               "task": "Run SSR test to validate fix",
               "type": "validation",
-              "implemented": false
+              "implemented": true
             }
           ]
         },

@@ -631,6 +631,7 @@ const supabase = useSupabaseClient()
 const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
+const requestURL = useRequestURL()
 const {
   error: authError,
   isAccountLocked,
@@ -882,7 +883,7 @@ async function handleMagicLink(): Promise<void> {
     const { error: authError } = await supabase.auth.signInWithOtp({
       email: form.value.email,
       options: {
-        emailRedirectTo: `${window.location.origin}${localePath('/auth/confirm')}`,
+        emailRedirectTo: `${requestURL.origin}${localePath('/auth/confirm')}`,
       },
     })
 
@@ -921,7 +922,7 @@ async function handleSocialLogin(provider: 'google' | 'apple'): Promise<void> {
   try {
     // Preserve original redirect parameter from URL
     const originalRedirect = route.query.redirect as string
-    const confirmUrl = new URL(`${window.location.origin}${localePath('/auth/confirm')}`)
+    const confirmUrl = new URL(`${requestURL.origin}${localePath('/auth/confirm')}`)
     if (originalRedirect) {
       confirmUrl.searchParams.set('redirect', originalRedirect)
     }

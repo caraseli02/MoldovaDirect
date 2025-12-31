@@ -538,6 +538,7 @@ const supabase = useSupabaseClient()
 const _user = useSupabaseUser()
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
+const requestURL = useRequestURL()
 
 const form = ref({
   name: '',
@@ -720,7 +721,7 @@ const handleRegister = async () => {
           phone: form.value.phone || null,
           preferred_language: locale.value,
         },
-        emailRedirectTo: `${window.location.origin}${localePath('/auth/confirm')}`,
+        emailRedirectTo: `${requestURL.origin}${localePath('/auth/confirm')}`,
       },
     })
 
