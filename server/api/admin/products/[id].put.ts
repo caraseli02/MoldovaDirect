@@ -46,7 +46,7 @@ const updateProductSchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  await requireAdminRole(event)
+  const adminId = await requireAdminRole(event)
 
   try {
     const supabase = await serverSupabaseClient(event)
@@ -167,7 +167,7 @@ export default defineEventHandler(async (event) => {
         resource_id: productId,
         old_values: currentProduct,
         new_values: updateData,
-        performed_by: null, // TODO: Get current admin user ID
+        user_id: adminId,
         ip_address: getRequestIP(event),
         user_agent: getHeader(event, 'user-agent'),
       })

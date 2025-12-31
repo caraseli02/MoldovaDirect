@@ -32,7 +32,7 @@ function getClientIP(event: H3Event): string | null {
 }
 
 export default defineEventHandler(async (event) => {
-  await requireAdminRole(event)
+  const adminId = await requireAdminRole(event)
 
   try {
     const supabase = await serverSupabaseClient(event)
@@ -86,7 +86,7 @@ export default defineEventHandler(async (event) => {
           is_active: product.is_active,
         },
         new_values: null,
-        performed_by: null, // TODO: Get current admin user ID
+        user_id: adminId,
         ip_address: getClientIP(event),
         user_agent: getHeader(event, 'user-agent'),
       })

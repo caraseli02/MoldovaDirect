@@ -270,7 +270,7 @@ export default defineEventHandler(async (event) => {
       await supabase
         .from('audit_logs')
         .insert({
-          user_id: 'admin', // TODO: Get actual admin user ID
+          user_id: adminId,
           action: auditAction,
           resource_type: 'user',
           resource_id: userId,
