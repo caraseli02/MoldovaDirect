@@ -1173,28 +1173,46 @@
         {
           "id": "ts-5",
           "description": "Replace catch (error: any) with catch (error: unknown)",
-          "implemented": false,
-          "tested": false,
-          "test_file": null,
-          "test_exists": false,
+          "implemented": true,
+          "tested": true,
+          "test_file": "tests/typescript/__tests__/catchErrorAny.test.ts",
+          "test_exists": true,
           "tasks": [
             {
               "id": "ts-5-a",
-              "task": "Search for all catch (error: any) patterns",
-              "type": "analysis",
-              "implemented": false
+              "task": "Created test for detecting catch (error: any) patterns",
+              "type": "test-first",
+              "implemented": true
             },
             {
               "id": "ts-5-b",
-              "task": "Replace with catch (error: unknown) and type guards",
+              "task": "Replaced 429 catch (*: any) patterns with catch (*: unknown) via sed",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "ts-5-c",
-              "task": "Run typecheck to validate",
+              "task": "Created utils/errorUtils.ts with getErrorMessage, getErrorCode, getErrorStatusCode helpers",
+              "type": "implementation",
+              "implemented": true
+            },
+            {
+              "id": "ts-5-d",
+              "task": "Created server/utils/errorUtils.ts with isH3Error, isDatabaseError type guards",
+              "type": "implementation",
+              "implemented": true
+            },
+            {
+              "id": "ts-5-e",
+              "task": "Fixed 200+ TypeScript errors by using type guards before accessing error properties",
+              "type": "implementation",
+              "implemented": true
+            },
+            {
+              "id": "ts-5-f",
+              "task": "Run typecheck and unit tests - all pass",
               "type": "validation",
-              "implemented": false
+              "implemented": true
             }
           ]
         }
@@ -1210,12 +1228,12 @@
       "steps": [
         {
           "id": "i18n-1",
-          "description": "Complete Romanian (ro) translations (700+ missing keys)",
+          "description": "Complete Romanian (ro) translations (277 keys added)",
           "file": "i18n/locales/ro.json",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": "tests/i18n/__tests__/locales.test.ts",
-          "test_exists": false,
+          "test_exists": true,
           "tasks": [
             {
               "id": "i18n-1-a",
@@ -1263,10 +1281,10 @@
         },
         {
           "id": "i18n-2",
-          "description": "Complete Russian (ru) translations (700+ missing keys)",
+          "description": "Complete Russian (ru) translations (292 keys added)",
           "file": "i18n/locales/ru.json",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": "tests/i18n/__tests__/locales.test.ts",
           "test_exists": true,
           "tasks": [
@@ -1390,7 +1408,7 @@
           "implemented": false,
           "tested": false,
           "test_file": "tests/components/checkout/__tests__/HybridCheckout.test.ts",
-          "test_exists": false,
+          "test_exists": true,
           "tasks": [
             {
               "id": "split-2-a",
