@@ -923,35 +923,35 @@
         {
           "id": "design-4",
           "description": "Remove gradient from auth pages background",
-          "file": "pages/auth/login.vue",
-          "implemented": false,
-          "tested": false,
-          "test_file": null,
-          "test_exists": false,
+          "file": "pages/auth/*.vue",
+          "implemented": true,
+          "tested": true,
+          "test_file": "tests/pages/auth/__tests__/auth-pages.design.test.ts",
+          "test_exists": true,
           "tasks": [
             {
               "id": "design-4-a",
-              "task": "Identify background gradient in login.vue",
+              "task": "Identify background gradient in all 6 auth pages",
               "type": "analysis",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "design-4-b",
-              "task": "Replace with solid brand color",
+              "task": "Replace gradients with solid bg-gray-50 dark:bg-gray-900",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "design-4-c",
-              "task": "Apply same change to register.vue",
+              "task": "Apply to login, register, forgot-password, reset-password, confirm, verification-pending",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "design-4-d",
-              "task": "Visual test: verify auth page appearance",
-              "type": "visual-test",
-              "implemented": false
+              "task": "Created design test verifying no gradients in auth pages",
+              "type": "test",
+              "implemented": true
             }
           ]
         },
