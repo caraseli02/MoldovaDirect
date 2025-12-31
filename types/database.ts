@@ -2,6 +2,41 @@
 // These types correspond to the Supabase database schema
 
 // =============================================
+// PRODUCT ATTRIBUTES (Flexible type for database JSON storage)
+// =============================================
+
+/**
+ * ProductAttributes - General product attributes for database storage
+ *
+ * This type supports both simple form-based attributes and
+ * complex wine-specific attributes. Uses flexible types since
+ * attributes come from JSON storage and may have various formats.
+ */
+export interface ProductAttributes {
+  // Common attributes from admin forms
+  origin?: string
+  volume?: string
+  alcohol_content?: string
+  featured?: boolean
+  alcoholContent?: number
+
+  // Wine-specific attributes (can be strings, arrays, or objects depending on source)
+  vintage?: number
+  grapeVarieties?: string[]
+  tastingNotes?: string[] | string | Record<string, unknown>
+  pairings?: string[] | string | Record<string, unknown>
+  awards?: string[] | string | Array<{ name: string, year: number, organization?: string }>
+  producer?: Record<string, unknown>
+  region?: Record<string, unknown>
+  productionMethod?: string
+  agingProcess?: string
+  certifications?: Array<{ name: string, type: string }>
+
+  // Allow additional unknown properties for forward compatibility
+  [key: string]: unknown
+}
+
+// =============================================
 // CORE TRANSLATION INTERFACE
 // =============================================
 export interface Translations {
@@ -66,7 +101,7 @@ export interface Product {
   lowStockThreshold: number
   reorderPoint?: number
   images?: ProductImage[]
-  attributes?: Record<string, any>
+  attributes?: ProductAttributes
   isActive: boolean
   createdAt: string
   updatedAt: string

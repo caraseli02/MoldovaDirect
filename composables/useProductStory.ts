@@ -154,10 +154,19 @@ export function useProductStory(
   const awards = computed((): string[] => {
     const awardList = productAttributes.value?.awards
 
-    if (Array.isArray(awardList)) return awardList
+    if (Array.isArray(awardList)) {
+      // Handle array of strings
+      if (awardList.every((item): item is string => typeof item === 'string')) {
+        return awardList
+      }
+      // Handle array of award objects
+      return awardList
+        .filter((item): item is { name: string, year: number } => typeof item === 'object' && item !== null && 'name' in item)
+        .map(item => `${item.name}${item.year ? ` (${item.year})` : ''}`)
+    }
 
     if (typeof awardList === 'string') {
-      return awardList.split(',').map(award => award.trim()).filter(Boolean)
+      return awardList.split(',').map((award: string) => award.trim()).filter(Boolean)
     }
 
     return []
