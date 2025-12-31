@@ -1346,10 +1346,10 @@
           "id": "split-1",
           "description": "Split PaymentForm.vue (853 lines) into sub-components",
           "file": "components/checkout/PaymentForm.vue",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": "tests/components/checkout/__tests__/PaymentForm.test.ts",
-          "test_exists": false,
+          "test_exists": true,
           "tasks": [
             {
               "id": "split-1-a",
