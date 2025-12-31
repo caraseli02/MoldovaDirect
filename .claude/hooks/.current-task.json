@@ -4,65 +4,54 @@
   "skill": "nuxt",
   "priority": "P1-high",
   "priorityOrder": 1,
-  "stepId": "nuxt-2",
-  "description": "Replace window.location.origin with useRequestURL().origin",
-  "file": "pages/auth/verification-pending.vue",
-  "testFile": "tests/pages/auth/__tests__/ssrCompatibility.test.ts",
+  "stepId": "nuxt-3",
+  "description": "Rename generic [id] params to descriptive names",
+  "testFile": null,
   "testExists": false,
   "implemented": false,
   "tested": false,
   "subtasks": [
     {
-      "id": "nuxt-2-a",
-      "task": "Create SSR test ensuring no window.location usage",
-      "type": "test-first",
+      "id": "nuxt-3-a",
+      "task": "Identify all routes with generic [id] params",
+      "type": "analysis",
       "implemented": false
     },
     {
-      "id": "nuxt-2-b",
-      "task": "Update verification-pending.vue to use useRequestURL()",
+      "id": "nuxt-3-b",
+      "task": "Create migration plan for each route",
+      "type": "planning",
+      "implemented": false
+    },
+    {
+      "id": "nuxt-3-c",
+      "task": "Rename order routes [id] to [orderId]",
       "type": "implementation",
-      "file": "pages/auth/verification-pending.vue",
       "implemented": false
     },
     {
-      "id": "nuxt-2-c",
-      "task": "Update login.vue to use useRequestURL()",
+      "id": "nuxt-3-d",
+      "task": "Rename product routes [id] to [productId]",
       "type": "implementation",
-      "file": "pages/auth/login.vue",
       "implemented": false
     },
     {
-      "id": "nuxt-2-d",
-      "task": "Update register.vue to use useRequestURL()",
+      "id": "nuxt-3-e",
+      "task": "Update all references to renamed params",
       "type": "implementation",
-      "file": "pages/auth/register.vue",
       "implemented": false
     },
     {
-      "id": "nuxt-2-e",
-      "task": "Update verify-email.vue to use useRequestURL()",
-      "type": "implementation",
-      "file": "pages/auth/verify-email.vue",
-      "implemented": false
-    },
-    {
-      "id": "nuxt-2-f",
-      "task": "Visual test: verify auth pages render correctly",
-      "type": "visual-test",
-      "implemented": false
-    },
-    {
-      "id": "nuxt-2-g",
-      "task": "Run SSR test to validate fix",
+      "id": "nuxt-3-f",
+      "task": "Run full E2E test suite to validate routing",
       "type": "validation",
       "implemented": false
     }
   ],
   "nextSubtask": {
-    "id": "nuxt-2-a",
-    "task": "Create SSR test ensuring no window.location usage",
-    "type": "test-first",
+    "id": "nuxt-3-a",
+    "task": "Identify all routes with generic [id] params",
+    "type": "analysis",
     "implemented": false
   }
 }

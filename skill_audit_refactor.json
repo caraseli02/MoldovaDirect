@@ -246,46 +246,46 @@
         {
           "id": "nuxt-3",
           "description": "Rename generic [id] params to descriptive names",
-          "implemented": false,
-          "tested": false,
-          "test_file": null,
-          "test_exists": false,
+          "implemented": true,
+          "tested": true,
+          "test_file": "tests/routes/__tests__/routeNamingConvention.test.ts",
+          "test_exists": true,
           "tasks": [
             {
               "id": "nuxt-3-a",
               "task": "Identify all routes with generic [id] params",
               "type": "analysis",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-3-b",
               "task": "Create migration plan for each route",
               "type": "planning",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-3-c",
               "task": "Rename order routes [id] to [orderId]",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-3-d",
               "task": "Rename product routes [id] to [productId]",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-3-e",
               "task": "Update all references to renamed params",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "nuxt-3-f",
               "task": "Run full E2E test suite to validate routing",
               "type": "validation",
-              "implemented": false
+              "implemented": true
             }
           ]
         },
