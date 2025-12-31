@@ -3,7 +3,45 @@ import type {
   DatabaseStats,
   CustomDataConfig,
   ProgressState,
+  CreatedUser,
 } from '~/types/admin-testing'
+
+// API Response interfaces - aligned with TestResult types
+interface StatsResponse {
+  stats: DatabaseStats
+}
+
+interface SeedDataResponse {
+  success: boolean
+  message: string
+  users?: CreatedUser[]
+  summary?: Record<string, unknown>
+  errors?: Array<{ email?: string, error: string }>
+  results?: Record<string, unknown>
+}
+
+interface CleanupResponse {
+  success: boolean
+  message: string
+  users?: CreatedUser[]
+  summary?: Record<string, unknown>
+  errors?: Array<{ email?: string, error: string }>
+  results?: Record<string, unknown>
+}
+
+// Helper to extract error message safely
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message
+  if (typeof error === 'string') return error
+  if (error && typeof error === 'object' && 'data' in error) {
+    const data = (error as { data?: { message?: string } }).data
+    if (data?.message) return data.message
+  }
+  if (error && typeof error === 'object' && 'message' in error) {
+    return String((error as { message?: string }).message)
+  }
+  return 'An unknown error occurred'
+}
 
 export const useTestingDashboard = () => {
   // State
@@ -22,10 +60,10 @@ export const useTestingDashboard = () => {
   const refreshStats = async () => {
     loadingStats.value = true
     try {
-      const response = await $fetch('/api/admin/stats') as any
+      const response = await $fetch<StatsResponse>('/api/admin/stats')
       stats.value = response.stats
     }
-    catch (err: any) {
+    catch (err: unknown) {
       console.error('Failed to fetch stats:', err)
     }
     finally {
@@ -34,7 +72,7 @@ export const useTestingDashboard = () => {
   }
 
   // Quick Actions
-  const runQuickAction = async (preset: string, onComplete?: (response: any) => void) => {
+  const runQuickAction = async (preset: string, onComplete?: (response: SeedDataResponse) => void) => {
     loading.value = true
     result.value = null
     progress.value = {
@@ -45,10 +83,10 @@ export const useTestingDashboard = () => {
     }
 
     try {
-      const response = await $fetch('/api/admin/seed-data', {
+      const response = await $fetch<SeedDataResponse>('/api/admin/seed-data', {
         method: 'POST',
         body: { preset },
-      }) as any
+      })
 
       progress.value.percent = 100
       progress.value.message = 'Complete!'
@@ -67,13 +105,12 @@ export const useTestingDashboard = () => {
 
       await refreshStats()
     }
-    catch (err: any) {
-      const error = err as { data?: { message?: string }, message?: string }
+    catch (err: unknown) {
       result.value = {
         success: false,
-        message: error.data?.message || error.message || 'Failed to run quick action',
+        message: getErrorMessage(err) || 'Failed to run quick action',
         error: err,
-        suggestion: getErrorSuggestion(err),
+        suggestion: getSuggestionFromError(err),
       }
     }
     finally {
@@ -94,13 +131,13 @@ export const useTestingDashboard = () => {
     result.value = null
 
     try {
-      const response = await $fetch('/api/admin/cleanup', {
+      const response = await $fetch<CleanupResponse>('/api/admin/cleanup', {
         method: 'POST',
         body: {
           action,
           confirm: true,
         },
-      }) as any
+      })
 
       result.value = {
         success: response.success,
@@ -112,11 +149,10 @@ export const useTestingDashboard = () => {
       }
       await refreshStats()
     }
-    catch (err: any) {
-      const error = err as { data?: { message?: string }, message?: string }
+    catch (err: unknown) {
       result.value = {
         success: false,
-        message: error.data?.message || error.message || 'Failed to cleanup data',
+        message: getErrorMessage(err) || 'Failed to cleanup data',
         error: err,
       }
     }
@@ -132,10 +168,10 @@ export const useTestingDashboard = () => {
     result.value = null
 
     try {
-      const response = await $fetch('/api/admin/cleanup', {
+      const response = await $fetch<CleanupResponse>('/api/admin/cleanup', {
         method: 'POST',
         body: { action, confirm: true },
-      }) as any
+      })
 
       result.value = {
         success: response.success,
@@ -147,11 +183,10 @@ export const useTestingDashboard = () => {
       }
       await refreshStats()
     }
-    catch (err: any) {
-      const error = err as { data?: { message?: string }, message?: string }
+    catch (err: unknown) {
       result.value = {
         success: false,
-        message: error.data?.message || error.message || 'Failed to delete data',
+        message: getErrorMessage(err) || 'Failed to delete data',
         error: err,
       }
     }
@@ -177,10 +212,10 @@ export const useTestingDashboard = () => {
     }
 
     try {
-      const response = await $fetch('/api/admin/seed-users', {
+      const response = await $fetch<SeedDataResponse>('/api/admin/seed-users', {
         method: 'POST',
         body: config,
-      }) as any
+      })
 
       progress.value.percent = 100
       result.value = {
@@ -193,13 +228,12 @@ export const useTestingDashboard = () => {
       }
       await refreshStats()
     }
-    catch (err: any) {
-      const error = err as { data?: { message?: string }, message?: string }
+    catch (err: unknown) {
       result.value = {
         success: false,
-        message: error.data?.message || error.message || 'Failed to create users',
+        message: getErrorMessage(err) || 'Failed to create users',
         error: err,
-        suggestion: getErrorSuggestion(err),
+        suggestion: getSuggestionFromError(err),
       }
     }
     finally {
@@ -222,13 +256,13 @@ export const useTestingDashboard = () => {
     }
 
     try {
-      const response = await $fetch('/api/admin/seed-data', {
+      const response = await $fetch<SeedDataResponse>('/api/admin/seed-data', {
         method: 'POST',
         body: {
           preset: 'minimal',
           ...customData,
         },
-      }) as any
+      })
 
       progress.value.percent = 100
       result.value = {
@@ -241,11 +275,10 @@ export const useTestingDashboard = () => {
       }
       await refreshStats()
     }
-    catch (err: any) {
-      const error = err as { data?: { message?: string }, message?: string }
+    catch (err: unknown) {
       result.value = {
         success: false,
-        message: error.data?.message || error.message || 'Failed to generate data',
+        message: getErrorMessage(err) || 'Failed to generate data',
         error: err,
       }
     }
@@ -258,9 +291,8 @@ export const useTestingDashboard = () => {
   }
 
   // Error Handling
-  const getErrorSuggestion = (error: any): string | undefined => {
-    const err = error as { data?: { message?: string }, message?: string }
-    const message = err.data?.message || err.message || ''
+  const getSuggestionFromError = (error: unknown): string | undefined => {
+    const message = getErrorMessage(error)
 
     if (message.includes('rate limit') || message.includes('429')) {
       return 'Wait a minute before trying again, or reduce the number of items.'
@@ -285,7 +317,7 @@ export const useTestingDashboard = () => {
       .replace(/^./, str => str.toUpperCase())
   }
 
-  const formatValue = (value: any): string => {
+  const formatValue = (value: unknown): string => {
     if (Array.isArray(value)) return value.join(', ')
     if (typeof value === 'boolean') return value ? 'Yes' : 'No'
     return String(value)
