@@ -1,0 +1,31 @@
+{
+  "$schema": "https://claude.ai/schemas/claude-code-settings.json",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "type": "command",
+        "command": "node .claude/hooks/tdd-guard.js"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "type": "command",
+        "command": "node .claude/hooks/test-validator.js"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "/tdd-next",
+        "type": "command",
+        "command": "node .claude/hooks/task-picker.js --next"
+      },
+      {
+        "matcher": "/tdd-summary",
+        "type": "command",
+        "command": "node .claude/hooks/task-picker.js --summary"
+      }
+    ]
+  }
+}
