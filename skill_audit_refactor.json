@@ -343,8 +343,8 @@
           "id": "a11y-1",
           "description": "Refactor AddressFormModal to use Reka UI Dialog",
           "file": "components/profile/AddressFormModal.vue",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": "tests/components/profile/__tests__/AddressFormModal.test.ts",
           "test_exists": true,
           "tasks": [
