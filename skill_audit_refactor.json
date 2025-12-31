@@ -589,28 +589,28 @@
           "id": "a11y-7",
           "description": "Fix CSS-only tooltip in MediaMentions to be keyboard accessible",
           "file": "components/home/MediaMentions.vue",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": "tests/components/home/__tests__/MediaMentions.test.ts",
-          "test_exists": false,
+          "test_exists": true,
           "tasks": [
             {
               "id": "a11y-7-a",
               "task": "Create accessibility test for keyboard tooltip trigger",
               "type": "test-first",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "a11y-7-b",
-              "task": "Replace CSS tooltip with Reka UI Tooltip at line 99",
+              "task": "Add ARIA relationships (id and aria-describedby)",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "a11y-7-c",
               "task": "Ensure tooltip works with keyboard focus",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "a11y-7-d",
