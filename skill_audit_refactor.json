@@ -831,34 +831,34 @@
           "id": "design-1",
           "description": "Remove gradients from wine-story page (15 occurrences)",
           "file": "pages/wine-story.vue",
-          "implemented": false,
-          "tested": false,
-          "test_file": null,
-          "test_exists": false,
+          "implemented": true,
+          "tested": true,
+          "test_file": "tests/pages/__tests__/wine-story.design.test.ts",
+          "test_exists": true,
           "tasks": [
             {
               "id": "design-1-a",
               "task": "Identify all gradient classes in wine-story.vue",
               "type": "analysis",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "design-1-b",
               "task": "Replace gradients with solid brand colors",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "design-1-c",
               "task": "Visual test: capture before/after screenshots",
               "type": "visual-test",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "design-1-d",
               "task": "Verify design consistency across breakpoints",
               "type": "validation",
-              "implemented": false
+              "implemented": true
             }
           ]
         },
