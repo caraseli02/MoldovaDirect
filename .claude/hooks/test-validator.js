@@ -1,38 +1,46 @@
 #!/usr/bin/env node
 /**
- * Test Validator Hook for Claude Code
+ * Test Validator Hook for Claude Code (PostToolUse)
+ *
+ * Follows Anthropic best practices:
+ * https://code.claude.com/docs/en/hooks-guide
  *
  * Runs after file modifications to:
  * 1. Execute related tests
  * 2. Validate tests pass
- * 3. Trigger visual review if needed
+ * 3. Provide visual review guidance if needed
  * 4. Update task status in skill_audit_refactor.json
  *
- * Part of the TDD Guard system for enforcing test-first development.
+ * Exit codes:
+ * - 0: Success (hook completed)
  */
 
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const AUDIT_FILE = path.join(process.cwd(), 'skill_audit_refactor.json');
-const CURRENT_TASK_FILE = path.join(process.cwd(), '.claude/hooks/.current-task.json');
+const PROJECT_DIR = process.env.CLAUDE_PROJECT_DIR || process.cwd();
+const AUDIT_FILE = path.join(PROJECT_DIR, 'skill_audit_refactor.json');
+const CURRENT_TASK_FILE = path.join(PROJECT_DIR, '.claude/hooks/.current-task.json');
 
 /**
- * Read hook input from stdin
+ * Read hook input from stdin (JSON format per Anthropic docs)
  */
 async function readStdin() {
   return new Promise((resolve) => {
     let data = '';
+    process.stdin.setEncoding('utf8');
     process.stdin.on('data', chunk => data += chunk);
     process.stdin.on('end', () => {
       try {
         resolve(JSON.parse(data));
       } catch (_e) {
-        resolve({ tool_name: '', tool_input: {}, tool_result: {} });
+        resolve({ tool_input: {} });
       }
     });
-    setTimeout(() => resolve({ tool_name: '', tool_input: {}, tool_result: {} }), 100);
+    setTimeout(() => {
+      if (!data) resolve({ tool_input: {} });
+    }, 100);
   });
 }
 
@@ -51,7 +59,8 @@ function findTestFile(sourceFile) {
   ];
 
   for (const pattern of testPatterns) {
-    if (fs.existsSync(pattern)) {
+    const fullPath = path.join(PROJECT_DIR, pattern);
+    if (fs.existsSync(fullPath)) {
       return pattern;
     }
   }
@@ -67,11 +76,15 @@ function runTests(testFile) {
     const result = execSync(`pnpm test ${testFile} --run`, {
       encoding: 'utf8',
       timeout: 60000,
+      cwd: PROJECT_DIR,
       stdio: ['pipe', 'pipe', 'pipe']
     });
     return { success: true, output: result };
   } catch (error) {
-    return { success: false, output: error.stdout || error.message };
+    return {
+      success: false,
+      output: error.stdout || error.stderr || error.message
+    };
   }
 }
 
@@ -135,45 +148,32 @@ function updateTaskStatus(categoryId, stepId, updates) {
  */
 async function main() {
   const input = await readStdin();
-  const toolName = input.tool_name || '';
   const toolInput = input.tool_input || {};
-  const toolResult = input.tool_result || {};
-
-  // Only check after Edit and Write tools
-  if (!['Edit', 'Write', 'MultiEdit'].includes(toolName)) {
-    process.exit(0);
-  }
-
-  // Check if the tool succeeded
-  if (toolResult.error) {
-    process.exit(0);
-  }
-
   const filePath = toolInput.file_path || toolInput.path || '';
+
+  // Skip if no file path
+  if (!filePath) {
+    process.exit(0);
+  }
 
   // Skip non-source files
   if (!filePath.match(/\.(ts|tsx|vue|js|jsx)$/)) {
     process.exit(0);
   }
 
-  const output = {
-    messages: []
-  };
-
   // Check if this was a test file being created
   if (filePath.includes('.test.') || filePath.includes('.spec.') || filePath.includes('/tests/')) {
-    output.messages.push(`✅ Test file created: ${filePath}`);
+    console.log(`✅ Test file created: ${filePath}`);
 
     // Run the new test to verify it's properly structured
     const testResult = runTests(filePath);
     if (testResult.success) {
-      output.messages.push(`✅ Test runs successfully (should fail initially in TDD)`);
+      console.log(`✅ Test runs successfully (should fail initially in TDD)`);
     } else {
-      output.messages.push(`🔴 Test fails as expected (Red phase of TDD)`);
-      output.messages.push(`Now implement the fix to make it pass (Green phase)`);
+      console.log(`🔴 Test fails as expected (Red phase of TDD)`);
+      console.log(`Now implement the fix to make it pass (Green phase)`);
     }
 
-    console.log(JSON.stringify(output));
     process.exit(0);
   }
 
@@ -182,12 +182,12 @@ async function main() {
   const currentTask = getCurrentTask();
 
   if (testFile) {
-    output.messages.push(`🧪 Running tests: ${testFile}`);
+    console.log(`🧪 Running tests: ${testFile}`);
 
     const testResult = runTests(testFile);
 
     if (testResult.success) {
-      output.messages.push(`✅ All tests pass!`);
+      console.log(`✅ All tests pass!`);
 
       // Update task status if we have context
       if (currentTask) {
@@ -195,31 +195,30 @@ async function main() {
           implemented: true,
           tested: true
         });
-        output.messages.push(`📋 Updated task "${currentTask.stepId}" as implemented and tested`);
+        console.log(`📋 Updated task "${currentTask.stepId}" as implemented and tested`);
       }
 
       // Check if visual test is needed
       if (needsVisualTest(filePath)) {
-        output.messages.push(`\n📸 VISUAL TEST RECOMMENDED:`);
-        output.messages.push(`This component change may need visual verification.`);
-        output.messages.push(`Run: pnpm run test:visual:all`);
-        output.messages.push(`Or use Chrome DevTools MCP to verify visually.`);
+        console.log(`\n📸 VISUAL TEST RECOMMENDED:`);
+        console.log(`This component change may need visual verification.`);
+        console.log(`Run: pnpm run test:visual:all`);
+        console.log(`Or use Chrome DevTools MCP to verify visually.`);
       }
     } else {
-      output.messages.push(`❌ Tests failed!`);
-      output.messages.push(`\nTest output:\n${testResult.output.slice(0, 500)}`);
-      output.messages.push(`\n🔄 Fix the implementation and try again.`);
+      console.log(`❌ Tests failed!`);
+      console.log(`\nTest output:\n${testResult.output.slice(0, 500)}`);
+      console.log(`\n🔄 Fix the implementation and try again.`);
     }
   } else {
-    output.messages.push(`⚠️ No test file found for: ${filePath}`);
+    console.log(`⚠️ No test file found for: ${filePath}`);
 
     if (currentTask) {
-      output.messages.push(`Expected test at: ${currentTask.testFile}`);
-      output.messages.push(`Create the test first following TDD principles.`);
+      console.log(`Expected test at: ${currentTask.testFile}`);
+      console.log(`Create the test first following TDD principles.`);
     }
   }
 
-  console.log(JSON.stringify(output));
   process.exit(0);
 }
 

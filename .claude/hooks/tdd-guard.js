@@ -2,37 +2,45 @@
 /**
  * TDD Guard Hook for Claude Code
  *
+ * Follows Anthropic best practices:
+ * https://code.claude.com/docs/en/hooks-guide
+ *
  * Enforces test-first development by:
  * 1. Checking skill_audit_refactor.json for tasks with test_exists: false
  * 2. Blocking implementation until tests are created
  * 3. Providing guidance on which tests need to be written
  *
- * Based on: https://nizar.se/tdd-guard-for-claude-code/
- * Combined with Ralph Wiggum loop technique: https://github.com/anthropics/claude-code/tree/main/plugins/ralph-wiggum
+ * Exit codes:
+ * - 0: Allow the tool to proceed
+ * - 2: Block the tool (Anthropic convention for blocking)
  */
 
 const fs = require('fs');
 const path = require('path');
 
-const AUDIT_FILE = path.join(process.cwd(), 'skill_audit_refactor.json');
-const CURRENT_TASK_FILE = path.join(process.cwd(), '.claude/hooks/.current-task.json');
+const PROJECT_DIR = process.env.CLAUDE_PROJECT_DIR || process.cwd();
+const AUDIT_FILE = path.join(PROJECT_DIR, 'skill_audit_refactor.json');
+const CURRENT_TASK_FILE = path.join(PROJECT_DIR, '.claude/hooks/.current-task.json');
 
 /**
- * Read hook input from stdin
+ * Read hook input from stdin (JSON format per Anthropic docs)
  */
 async function readStdin() {
   return new Promise((resolve) => {
     let data = '';
+    process.stdin.setEncoding('utf8');
     process.stdin.on('data', chunk => data += chunk);
     process.stdin.on('end', () => {
       try {
         resolve(JSON.parse(data));
       } catch (_e) {
-        resolve({ tool_name: '', tool_input: {} });
+        resolve({ tool_input: {} });
       }
     });
     // Handle case where no stdin is provided
-    setTimeout(() => resolve({ tool_name: '', tool_input: {} }), 100);
+    setTimeout(() => {
+      if (!data) resolve({ tool_input: {} });
+    }, 100);
   });
 }
 
@@ -104,21 +112,7 @@ function checkFileAgainstTasks(filePath, tasksNeedingTests) {
 }
 
 /**
- * Get current task context
- */
-function getCurrentTask() {
-  if (fs.existsSync(CURRENT_TASK_FILE)) {
-    try {
-      return JSON.parse(fs.readFileSync(CURRENT_TASK_FILE, 'utf8'));
-    } catch (_e) {
-      return null;
-    }
-  }
-  return null;
-}
-
-/**
- * Set current task context
+ * Set current task context for post-hook
  */
 function setCurrentTask(task) {
   const dir = path.dirname(CURRENT_TASK_FILE);
@@ -133,16 +127,13 @@ function setCurrentTask(task) {
  */
 async function main() {
   const input = await readStdin();
-  const toolName = input.tool_name || '';
   const toolInput = input.tool_input || {};
+  const filePath = toolInput.file_path || toolInput.path || '';
 
-  // Only check Edit and Write tools (file modifications)
-  if (!['Edit', 'Write', 'MultiEdit'].includes(toolName)) {
-    // Allow other tools
+  // Skip if no file path provided
+  if (!filePath) {
     process.exit(0);
   }
-
-  const filePath = toolInput.file_path || toolInput.path || '';
 
   // Skip test files - always allow
   if (filePath.includes('.test.') || filePath.includes('.spec.') || filePath.includes('/tests/')) {
@@ -164,10 +155,12 @@ async function main() {
   const matchingTask = checkFileAgainstTasks(filePath, tasksNeedingTests);
 
   if (matchingTask && !matchingTask.implemented) {
-    // Block the edit and provide guidance
-    const output = {
-      decision: 'block',
-      reason: `🛑 TDD GUARD: Test must be created first!
+    // Save current task context for post-hook
+    setCurrentTask(matchingTask);
+
+    // Print blocking message (will be shown to user)
+    console.error(`
+🛑 TDD GUARD: Test must be created first!
 
 📋 Task: ${matchingTask.description}
 📁 File: ${matchingTask.file}
@@ -193,14 +186,11 @@ Before implementing changes to this file, you must:
 5. THEN implement the fix in:
    ${matchingTask.file}
 
-This follows the Red-Green-Refactor TDD cycle.`
-    };
+This follows the Red-Green-Refactor TDD cycle.
+`);
 
-    // Save current task context for post-hook
-    setCurrentTask(matchingTask);
-
-    console.log(JSON.stringify(output));
-    process.exit(0);
+    // Exit code 2 blocks the tool (Anthropic convention)
+    process.exit(2);
   }
 
   // Allow the edit
