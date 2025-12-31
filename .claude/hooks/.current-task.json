@@ -4,53 +4,47 @@
   "skill": "nuxt",
   "priority": "P1-high",
   "priorityOrder": 1,
-  "stepId": "nuxt-3",
-  "description": "Rename generic [id] params to descriptive names",
-  "testFile": null,
+  "stepId": "nuxt-4",
+  "description": "Add Zod validation to unvalidated API routes",
+  "testFile": "tests/server/api/__tests__/validation.test.ts",
   "testExists": false,
   "implemented": false,
   "tested": false,
   "subtasks": [
     {
-      "id": "nuxt-3-a",
-      "task": "Identify all routes with generic [id] params",
+      "id": "nuxt-4-a",
+      "task": "Identify API routes missing Zod validation",
       "type": "analysis",
       "implemented": false
     },
     {
-      "id": "nuxt-3-b",
-      "task": "Create migration plan for each route",
-      "type": "planning",
+      "id": "nuxt-4-b",
+      "task": "Create unit test for validation rejection",
+      "type": "test-first",
       "implemented": false
     },
     {
-      "id": "nuxt-3-c",
-      "task": "Rename order routes [id] to [orderId]",
+      "id": "nuxt-4-c",
+      "task": "Add Zod schemas to identified routes",
       "type": "implementation",
       "implemented": false
     },
     {
-      "id": "nuxt-3-d",
-      "task": "Rename product routes [id] to [productId]",
+      "id": "nuxt-4-d",
+      "task": "Use readValidatedBody() with schemas",
       "type": "implementation",
       "implemented": false
     },
     {
-      "id": "nuxt-3-e",
-      "task": "Update all references to renamed params",
-      "type": "implementation",
-      "implemented": false
-    },
-    {
-      "id": "nuxt-3-f",
-      "task": "Run full E2E test suite to validate routing",
+      "id": "nuxt-4-e",
+      "task": "Run validation unit tests",
       "type": "validation",
       "implemented": false
     }
   ],
   "nextSubtask": {
-    "id": "nuxt-3-a",
-    "task": "Identify all routes with generic [id] params",
+    "id": "nuxt-4-a",
+    "task": "Identify API routes missing Zod validation",
     "type": "analysis",
     "implemented": false
   }

@@ -10,11 +10,15 @@
 
 import { serverSupabaseServiceRole, serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { z } from 'zod'
 
-interface CreateNoteRequest {
-  noteType: 'internal' | 'customer'
-  content: string
-}
+// Zod schema for create note request validation
+const createNoteSchema = z.object({
+  noteType: z.enum(['internal', 'customer'], {
+    message: 'Invalid note type. Must be "internal" or "customer"',
+  }),
+  content: z.string().min(1, 'Note content is required').trim(),
+})
 
 export default defineEventHandler(async (event) => {
   try {
@@ -36,23 +40,19 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Parse request body
-    const body = await readBody<CreateNoteRequest>(event)
+    // Parse and validate request body with Zod
+    const rawBody = await readBody(event)
+    const validation = createNoteSchema.safeParse(rawBody)
 
-    // Validate request
-    if (!body.content || body.content.trim().length === 0) {
+    if (!validation.success) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Note content is required',
+        statusMessage: validation.error.issues[0]?.message || 'Invalid request body',
+        data: validation.error.issues,
       })
     }
 
-    if (!body.noteType || !['internal', 'customer'].includes(body.noteType)) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Invalid note type. Must be "internal" or "customer"',
-      })
-    }
+    const body = validation.data
 
     // Verify order exists
     const { data: order, error: orderError } = await supabase
