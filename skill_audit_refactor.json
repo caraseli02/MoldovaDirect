@@ -455,34 +455,34 @@
           "id": "a11y-3",
           "description": "Add DialogDescription to TemplateHistory dialog",
           "file": "components/admin/Email/TemplateHistory.vue",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": "tests/components/admin/__tests__/TemplateHistory.test.ts",
-          "test_exists": false,
+          "test_exists": true,
           "tasks": [
             {
               "id": "a11y-3-a",
               "task": "Create accessibility test for DialogDescription presence",
               "type": "test-first",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "a11y-3-b",
               "task": "Add DialogDescription component to template",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "a11y-3-c",
               "task": "Add meaningful description text (or use VisuallyHidden)",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "a11y-3-d",
               "task": "Run accessibility test to validate",
               "type": "validation",
-              "implemented": false
+              "implemented": true
             }
           ]
         },

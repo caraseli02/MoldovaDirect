@@ -94,6 +94,7 @@
     <DialogContent class="max-w-4xl max-h-[80vh] overflow-y-auto">
       <DialogHeader>
         <DialogTitle>Version {{ selectedVersion?.version }} Details</DialogTitle>
+        <DialogDescription>View details and translations for this archived email template version</DialogDescription>
       </DialogHeader>
       <div
         v-if="selectedVersion"
@@ -143,7 +144,7 @@
 import { ref, watch } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { Button } from '~/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '~/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '~/components/ui/dialog'
 
 const props = defineProps<{
   templateType: string
