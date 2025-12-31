@@ -866,28 +866,28 @@
           "id": "design-2",
           "description": "Remove gradients from WineStoryCta (9 occurrences)",
           "file": "components/home/WineStoryCta.vue",
-          "implemented": false,
-          "tested": false,
-          "test_file": null,
-          "test_exists": false,
+          "implemented": true,
+          "tested": true,
+          "test_file": "tests/components/home/__tests__/WineStoryCta.design.test.ts",
+          "test_exists": true,
           "tasks": [
             {
               "id": "design-2-a",
               "task": "Identify all gradient classes",
               "type": "analysis",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "design-2-b",
               "task": "Replace gradients with solid colors",
               "type": "implementation",
-              "implemented": false
+              "implemented": true
             },
             {
               "id": "design-2-c",
               "task": "Visual test: verify component appearance",
               "type": "visual-test",
-              "implemented": false
+              "implemented": true
             }
           ]
         },
