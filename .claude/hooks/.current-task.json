@@ -3,10 +3,10 @@
   "categoryId": "accessibility-reka",
   "skill": "reka-ui",
   "priority": "P1-high",
-  "stepId": "a11y-1",
-  "description": "Refactor AddressFormModal to use Reka UI Dialog",
-  "file": "components/profile/AddressFormModal.vue",
-  "testFile": "tests/components/profile/__tests__/AddressFormModal.test.ts",
+  "stepId": "a11y-7",
+  "description": "Fix CSS-only tooltip in MediaMentions to be keyboard accessible",
+  "file": "components/home/MediaMentions.vue",
+  "testFile": "tests/components/home/__tests__/MediaMentions.test.ts",
   "testExists": false,
   "implemented": false
 }
