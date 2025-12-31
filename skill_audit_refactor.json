@@ -663,10 +663,10 @@
           "id": "vue-1",
           "description": "Fix props destructuring pattern in ProductCard",
           "file": "components/product/Card.vue",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": "tests/components/product/__tests__/Card.test.ts",
-          "test_exists": false,
+          "test_exists": true,
           "tasks": [
             {
               "id": "vue-1-a",
