@@ -30,6 +30,7 @@
     "playwright-report/**",
     ".visual-testing/**",
     "supabase/**",
-    "public/**"
+    "public/**",
+    ".claude/skills/**"
   ]
 }
