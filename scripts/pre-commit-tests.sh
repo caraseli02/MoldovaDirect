@@ -12,8 +12,13 @@ set -e
 echo "🔍 Running pre-commit checks..."
 echo ""
 
-# Check for misplaced .md files in root
-./scripts/check-md-files.sh
+# Check for misplaced .md files in root (only allowed: README.md, CLAUDE.md, CONTRIBUTING.md, LICENSE.md)
+DISALLOWED_MD=$(find . -maxdepth 1 -name "*.md" ! -name "README.md" ! -name "CLAUDE.md" ! -name "CONTRIBUTING.md" ! -name "LICENSE.md" 2>/dev/null | head -5)
+if [ -n "$DISALLOWED_MD" ]; then
+  echo "❌ Found .md files in root that should be in docs/:"
+  echo "$DISALLOWED_MD"
+  exit 1
+fi
 
 echo ""
 
