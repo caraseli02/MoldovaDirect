@@ -761,8 +761,8 @@
         {
           "id": "vue-4",
           "description": "Standardize emit type definitions across components",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": null,
           "test_exists": false,
           "tasks": [
