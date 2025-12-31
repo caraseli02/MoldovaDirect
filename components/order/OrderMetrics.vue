@@ -2,7 +2,7 @@
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
     <!-- Active Orders -->
     <div
-      class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800"
+      class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800"
       role="region"
       :aria-label="$t('orders.metrics.activeOrders')"
     >
@@ -41,7 +41,7 @@
 
     <!-- Delivered This Month -->
     <div
-      class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg p-4 border border-green-200 dark:border-green-800"
+      class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800"
       role="region"
       :aria-label="$t('orders.metrics.deliveredThisMonth')"
     >
@@ -80,7 +80,7 @@
 
     <!-- Total Orders -->
     <div
-      class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg p-4 border border-purple-200 dark:border-purple-800"
+      class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 border border-purple-200 dark:border-purple-800"
       role="region"
       :aria-label="$t('orders.metrics.totalOrders')"
     >
@@ -119,7 +119,7 @@
 
     <!-- Total Spent This Month -->
     <div
-      class="bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 rounded-lg p-4 border border-amber-200 dark:border-amber-800"
+      class="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-4 border border-amber-200 dark:border-amber-800"
       role="region"
       :aria-label="$t('orders.metrics.spentThisMonth')"
     >

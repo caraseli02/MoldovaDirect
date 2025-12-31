@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="order && order.status === 'delivered'"
-    class="mb-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-2 border-green-200 dark:border-green-800 rounded-xl p-6 shadow-lg"
+    class="mb-6 bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 rounded-xl p-6 shadow-lg"
   >
     <div class="flex items-start space-x-4">
       <!-- Success icon with animation -->
