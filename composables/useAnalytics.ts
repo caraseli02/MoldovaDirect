@@ -13,7 +13,20 @@ import type {
   AnalyticsOverview,
   ProductAnalyticsData,
   ActivityTrackingRequest,
+  AggregationResult,
 } from '~/types/analytics'
+
+// API Response wrapper type
+interface ApiDataResponse<T> {
+  data: T
+}
+
+// Helper to extract error message safely
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message
+  if (typeof error === 'string') return error
+  return 'An unknown error occurred'
+}
 
 export const useAnalytics = () => {
   // Reactive state
@@ -33,15 +46,15 @@ export const useAnalytics = () => {
     error.value = null
 
     try {
-      const { data } = await $fetch('/api/admin/analytics/users', {
+      const { data } = await $fetch<ApiDataResponse<UserAnalyticsData>>('/api/admin/analytics/users', {
         query: params,
-      }) as any
+      })
 
       userAnalytics.value = data
       return data
     }
-    catch (err: any) {
-      error.value = (err as Error).message || 'Failed to fetch user analytics'
+    catch (err: unknown) {
+      error.value = getErrorMessage(err) || 'Failed to fetch user analytics'
       throw err
     }
     finally {
@@ -59,15 +72,15 @@ export const useAnalytics = () => {
     error.value = null
 
     try {
-      const { data } = await $fetch('/api/admin/analytics/overview', {
+      const { data } = await $fetch<ApiDataResponse<AnalyticsOverview>>('/api/admin/analytics/overview', {
         query: params,
-      }) as any
+      })
 
       analyticsOverview.value = data
       return data
     }
-    catch (err: any) {
-      error.value = (err as Error).message || 'Failed to fetch analytics overview'
+    catch (err: unknown) {
+      error.value = getErrorMessage(err) || 'Failed to fetch analytics overview'
       throw err
     }
     finally {
@@ -86,15 +99,15 @@ export const useAnalytics = () => {
     error.value = null
 
     try {
-      const { data } = await $fetch('/api/admin/analytics/products', {
+      const { data } = await $fetch<ApiDataResponse<ProductAnalyticsData>>('/api/admin/analytics/products', {
         query: params,
-      }) as any
+      })
 
       productAnalytics.value = data
       return data
     }
-    catch (err: any) {
-      error.value = (err as Error).message || 'Failed to fetch product analytics'
+    catch (err: unknown) {
+      error.value = getErrorMessage(err) || 'Failed to fetch product analytics'
       throw err
     }
     finally {
@@ -108,9 +121,9 @@ export const useAnalytics = () => {
       await $fetch('/api/admin/analytics/track', {
         method: 'POST',
         body: activity,
-      }) as any
+      })
     }
-    catch (err: any) {
+    catch (err: unknown) {
       console.error('Failed to track activity:', err)
       // Don't throw error for tracking failures to avoid disrupting user experience
     }
@@ -126,15 +139,15 @@ export const useAnalytics = () => {
     error.value = null
 
     try {
-      const { data } = await $fetch('/api/admin/analytics/aggregate', {
+      const { data } = await $fetch<ApiDataResponse<AggregationResult>>('/api/admin/analytics/aggregate', {
         method: 'POST',
         body: params,
-      }) as any
+      })
 
       return data
     }
-    catch (err: any) {
-      error.value = (err as Error).message || 'Failed to aggregate analytics'
+    catch (err: unknown) {
+      error.value = getErrorMessage(err) || 'Failed to aggregate analytics'
       throw err
     }
     finally {
@@ -143,7 +156,7 @@ export const useAnalytics = () => {
   }
 
   // Convenience methods for common tracking scenarios
-  const trackPageView = (pageUrl: string, metadata?: Record<string, any>) => {
+  const trackPageView = (pageUrl: string, metadata?: Record<string, unknown>) => {
     return trackActivity({
       activityType: 'page_view',
       pageUrl,
@@ -151,7 +164,7 @@ export const useAnalytics = () => {
     })
   }
 
-  const trackProductView = (productId: number, pageUrl?: string, metadata?: Record<string, any>) => {
+  const trackProductView = (productId: number, pageUrl?: string, metadata?: Record<string, unknown>) => {
     return trackActivity({
       activityType: 'product_view',
       productId,
@@ -160,7 +173,7 @@ export const useAnalytics = () => {
     })
   }
 
-  const trackCartAddition = (productId: number, metadata?: Record<string, any>) => {
+  const trackCartAddition = (productId: number, metadata?: Record<string, unknown>) => {
     return trackActivity({
       activityType: 'cart_add',
       productId,
@@ -168,7 +181,7 @@ export const useAnalytics = () => {
     })
   }
 
-  const trackOrderCreation = (orderId: number, metadata?: Record<string, any>) => {
+  const trackOrderCreation = (orderId: number, metadata?: Record<string, unknown>) => {
     return trackActivity({
       activityType: 'order_create',
       orderId,
@@ -176,14 +189,14 @@ export const useAnalytics = () => {
     })
   }
 
-  const trackLogin = (metadata?: Record<string, any>) => {
+  const trackLogin = (metadata?: Record<string, unknown>) => {
     return trackActivity({
       activityType: 'login',
       metadata,
     })
   }
 
-  const trackLogout = (metadata?: Record<string, any>) => {
+  const trackLogout = (metadata?: Record<string, unknown>) => {
     return trackActivity({
       activityType: 'logout',
       metadata,
