@@ -85,7 +85,7 @@
           <NuxtLink
             :to="localePath('/products')"
             :aria-label="$t('common.continueShopping')"
-            class="inline-flex items-center justify-center gap-2 bg-[var(--md-wine)] text-white px-6 py-3 rounded-xl hover:bg-[var(--md-wine-light)] transition-colors font-medium min-h-[44px] focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
+            class="inline-flex items-center justify-center gap-2 bg-[var(--md-wine-btn)] text-white px-6 py-3 rounded-xl hover:bg-[var(--md-wine-btn-hover)] shadow-[var(--md-wine-shadow)] transition-colors font-medium min-h-[44px] focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
           >
             {{ $t('common.continueShopping') }}
             <svg
@@ -185,7 +185,7 @@
               <button
                 :aria-label="$t('common.proceedToCheckout')"
                 :disabled="loading || isEmpty"
-                class="w-full py-4 bg-[var(--md-wine)] text-white text-base font-semibold rounded-xl hover:bg-[var(--md-wine-light)] active:bg-[var(--md-wine-dark)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[52px] focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
+                class="w-full py-4 bg-[var(--md-wine-btn)] text-white text-base font-semibold rounded-xl hover:bg-[var(--md-wine-btn-hover)] active:bg-[var(--md-wine-darker)] shadow-[var(--md-wine-shadow)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[52px] focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
                 @click="goToCheckout"
               >
                 <span>{{ $t('common.checkout') }}</span>
@@ -325,7 +325,7 @@
         <button
           :disabled="loading || isEmpty"
           :aria-label="$t('common.proceedToCheckout')"
-          class="w-full py-4 bg-[var(--md-wine)] text-white text-base font-semibold rounded-xl hover:bg-[var(--md-wine-light)] active:bg-[var(--md-wine-dark)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[52px] focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
+          class="w-full py-4 bg-[var(--md-wine-btn)] text-white text-base font-semibold rounded-xl hover:bg-[var(--md-wine-btn-hover)] active:bg-[var(--md-wine-darker)] shadow-[var(--md-wine-shadow)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[52px] focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
           @click="goToCheckout"
         >
           <span>{{ $t('common.checkout') }}</span>

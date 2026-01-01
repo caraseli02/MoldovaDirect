@@ -28,7 +28,7 @@
           {{ $t('checkout.errors.pleaseTryAgain') }}
         </p>
         <button
-          class="px-6 py-2 bg-[var(--md-wine)] text-white rounded-lg hover:bg-[var(--md-wine-light)] transition-colors"
+          class="px-6 py-2 bg-[var(--md-wine-btn)] text-white rounded-lg hover:bg-[var(--md-wine-btn-hover)] shadow-[var(--md-wine-shadow)] transition-colors"
           @click="retryLoad"
         >
           {{ $t('common.retry') }}

@@ -478,7 +478,7 @@
               type="submit"
               :disabled="loading || !isFormValid"
               data-testid="register-button"
-              class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg transition-all bg-[var(--md-wine)] text-white hover:bg-[var(--md-wine-light)] focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
+              class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-[var(--md-wine-shadow)] transition-all bg-[var(--md-wine-btn)] text-white hover:bg-[var(--md-wine-btn-hover)] focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
               :aria-label="loading ? $t('auth.accessibility.creatingAccount') : $t('auth.accessibility.createAccountButton')"
               :aria-describedby="loading ? 'register-status' : undefined"
             >

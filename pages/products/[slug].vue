@@ -504,7 +504,7 @@
                 :disabled="(product.stockQuantity || 0) <= 0 || cartLoading"
                 class="flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-[var(--md-gray-400)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                 :class="[
-                  isProductInCart ? 'bg-[var(--md-success)] hover:bg-emerald-700 focus-visible:ring-[var(--md-success)]' : 'bg-[var(--md-wine)] hover:bg-[var(--md-wine-light)] focus-visible:ring-[var(--md-gold)]',
+                  isProductInCart ? 'bg-[var(--md-success)] hover:bg-emerald-700 focus-visible:ring-[var(--md-success)]' : 'bg-[var(--md-wine-btn)] hover:bg-[var(--md-wine-btn-hover)] shadow-[var(--md-wine-shadow)] focus-visible:ring-[var(--md-gold)]',
                   cartLoading ? 'cursor-progress' : '',
                 ]"
                 @click="addToCart"
@@ -665,7 +665,7 @@
                 :disabled="(product.stockQuantity || 0) <= 0 || cartLoading"
                 class="flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition min-h-[48px] min-w-[140px]"
                 :class="[
-                  isProductInCart ? 'bg-[var(--md-success)] hover:bg-emerald-700' : 'bg-[var(--md-wine)] hover:bg-[var(--md-wine-light)]',
+                  isProductInCart ? 'bg-[var(--md-success)] hover:bg-emerald-700' : 'bg-[var(--md-wine-btn)] hover:bg-[var(--md-wine-btn-hover)] shadow-[var(--md-wine-shadow)]',
                   cartLoading ? 'cursor-progress' : '',
                 ]"
                 @click="addToCart"

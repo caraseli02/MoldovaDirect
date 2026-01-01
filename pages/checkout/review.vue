@@ -142,7 +142,7 @@
             <UiButton
               :disabled="!canProceed || processing"
               size="lg"
-              class="bg-[var(--md-wine)] hover:bg-[var(--md-wine-light)] h-12 px-8 text-base font-semibold"
+              class="bg-[var(--md-wine-btn)] hover:bg-[var(--md-wine-btn-hover)] shadow-[var(--md-wine-shadow)] h-12 px-8 text-base font-semibold"
               @click="handlePlaceOrder"
             >
               <commonIcon

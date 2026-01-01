@@ -685,7 +685,7 @@ onMounted(setupMobileTouch)
 .card-title {
   font-family: var(--font-serif);
   font-size: 1.25rem;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.3;
   color: var(--card-black);
   margin-bottom: 0.5rem;
@@ -748,7 +748,7 @@ onMounted(setupMobileTouch)
 .current-price {
   font-family: var(--font-serif);
   font-size: 1.375rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--card-black);
 }
 

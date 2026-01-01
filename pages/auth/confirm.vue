@@ -100,7 +100,7 @@
           <div class="flex flex-col sm:flex-row gap-3">
             <NuxtLink
               :to="localePath('/auth/login')"
-              class="flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-xl text-white bg-[var(--md-wine)] hover:bg-[var(--md-wine-light)] transition-colors"
+              class="flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-xl text-white bg-[var(--md-wine-btn)] hover:bg-[var(--md-wine-btn-hover)] shadow-[var(--md-wine-shadow)] transition-colors"
             >
               {{ $t('auth.backToLogin') }}
             </NuxtLink>

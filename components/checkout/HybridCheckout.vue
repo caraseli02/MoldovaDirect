@@ -800,6 +800,27 @@ onMounted(async () => {
   padding: 1.5rem;
 }
 
+/* Enhanced mobile spacing for touch targets */
+@media (max-width: 640px) {
+  .section-content {
+    padding: 1.25rem 1rem;
+  }
+
+  .section-content :deep(.space-y-5) {
+    gap: 1.5rem;
+  }
+
+  .section-content :deep(.space-y-4) {
+    gap: 1.25rem;
+  }
+
+  .section-content :deep(input),
+  .section-content :deep(select) {
+    min-height: 48px;
+    font-size: 16px; /* Prevents iOS zoom */
+  }
+}
+
 .fade-in {
   animation: fadeIn 0.3s ease-out;
 }

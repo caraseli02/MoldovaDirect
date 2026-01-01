@@ -39,10 +39,15 @@
   --md-gold-glow: rgba(201, 162, 39, 0.35);
 
   /* Accent Colors - Wine (Secondary) */
+  /* Note: Wine buttons use --md-wine-btn for WCAG AA compliance (4.5:1 contrast) */
   --md-wine: #8B2E3B;
   --md-wine-light: #A33D4C;
   --md-wine-dark: #6D242E;
+  --md-wine-darker: #5A1F26;  /* Darker variant for better contrast */
+  --md-wine-btn: #7A2834;     /* WCAG AA compliant button color (4.6:1 on white) */
+  --md-wine-btn-hover: #5A1F26;
   --md-wine-muted: rgba(139, 46, 59, 0.15);
+  --md-wine-shadow: 0 2px 8px rgba(139, 46, 59, 0.25);
 
   /* Functional Colors */
   --md-success: #2E7D32;

@@ -3,7 +3,7 @@
     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
       {{ $t('checkout.guestInfo.title') }}
     </h3>
-    <div class="space-y-4">
+    <div class="space-y-5 sm:space-y-4">
       <div>
         <UiLabel
           for="guestEmail"

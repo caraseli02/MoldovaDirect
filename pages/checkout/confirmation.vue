@@ -542,7 +542,7 @@
         >
           <!-- Primary: View Order Details (always visible) -->
           <button
-            class="w-full py-3 bg-[var(--md-wine)] hover:bg-[var(--md-wine-light)] text-white font-semibold rounded-lg btn-primary flex items-center justify-center gap-2 transition-colors"
+            class="w-full py-3 bg-[var(--md-wine-btn)] hover:bg-[var(--md-wine-btn-hover)] shadow-[var(--md-wine-shadow)] text-white font-semibold rounded-lg btn-primary flex items-center justify-center gap-2 transition-colors"
             @click="viewOrderDetails"
           >
             {{ $t('checkout.steps.confirmation.viewOrderDetails') }}

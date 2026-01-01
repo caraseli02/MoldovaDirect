@@ -88,7 +88,7 @@
     <!-- Address Form -->
     <div
       v-if="showForm"
-      class="space-y-5"
+      class="space-y-5 sm:space-y-5"
     >
       <!-- Full Name (Single Field) -->
       <div>
