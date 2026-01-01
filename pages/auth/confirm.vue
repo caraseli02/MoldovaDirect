@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--md-cream)] via-[var(--md-cream-light)] to-[var(--md-cream-dark)] dark:from-[var(--md-charcoal)] dark:via-[var(--md-charcoal-light)] dark:to-[var(--md-black)] py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <div class="text-center">
-        <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-primary-100 dark:bg-primary-900/30 rounded-2xl mb-4">
+        <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-[var(--md-wine-muted)] dark:bg-[var(--md-wine)]/20 rounded-2xl mb-4">
           <svg
             v-if="loading"
-            class="w-10 h-10 sm:w-12 sm:h-12 text-primary-600 dark:text-primary-400 animate-spin"
+            class="w-10 h-10 sm:w-12 sm:h-12 text-[var(--md-wine)] dark:text-[var(--md-gold)] animate-spin"
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -52,20 +52,20 @@
             />
           </svg>
         </div>
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+        <h2 class="font-[family-name:var(--md-font-serif)] text-2xl sm:text-3xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
           {{ loading ? $t('auth.confirmingAccount') : (success ? $t('auth.accountConfirmed') : $t('auth.confirmationFailed')) }}
         </h2>
       </div>
 
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-gray-700 p-6 sm:p-8">
+      <div class="bg-[var(--md-cream-light)] dark:bg-[var(--md-charcoal-light)] rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-[var(--md-gray-700)] p-6 sm:p-8">
         <div
           v-if="loading"
           class="text-center space-y-4"
         >
-          <p class="text-sm text-gray-600 dark:text-gray-400">
+          <p class="text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
             {{ $t('auth.processing') }}
           </p>
-          <div class="text-xs text-gray-500 dark:text-gray-500">
+          <div class="text-xs text-[var(--md-gray-500)]">
             {{ $t('auth.pleaseWait') }}
           </div>
         </div>
@@ -100,13 +100,13 @@
           <div class="flex flex-col sm:flex-row gap-3">
             <NuxtLink
               :to="localePath('/auth/login')"
-              class="flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 transition-colors"
+              class="flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-xl text-white bg-[var(--md-wine)] hover:bg-[var(--md-wine-light)] transition-colors"
             >
               {{ $t('auth.backToLogin') }}
             </NuxtLink>
             <button
               v-if="canRetry"
-              class="flex-1 inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+              class="flex-1 inline-flex items-center justify-center px-4 py-2 border-2 border-[var(--md-gray-300)] dark:border-[var(--md-gray-600)] text-sm font-medium rounded-xl text-[var(--md-charcoal)] dark:text-[var(--md-cream)] bg-white dark:bg-[var(--md-charcoal)] hover:bg-[var(--md-cream)] dark:hover:bg-[var(--md-charcoal-light)] transition-colors"
               @click="retryConfirmation"
             >
               {{ $t('auth.retry') }}

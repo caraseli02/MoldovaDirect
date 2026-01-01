@@ -32,21 +32,21 @@
               />
             </svg>
           </div>
-          <h1 class="text-2xl font-bold text-zinc-900 dark:text-white mb-2 slide-up stagger-1">
+          <h1 class="font-[family-name:var(--md-font-serif)] text-2xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)] mb-2 slide-up stagger-1">
             {{ $t('checkout.steps.confirmation.title') }}
           </h1>
-          <p class="text-base text-zinc-600 dark:text-zinc-400 slide-up stagger-2">
+          <p class="text-base text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)] slide-up stagger-2">
             {{ $t('checkout.steps.confirmation.subtitle') }}
           </p>
         </div>
 
-        <!-- Order Number - Prominent with Green Border -->
+        <!-- Order Number - Prominent with Wine Border -->
         <div
           v-if="orderData"
-          class="bg-white dark:bg-zinc-800 border-2 border-green-600 rounded-lg p-4 mb-6 slide-up stagger-3"
+          class="bg-white dark:bg-[var(--md-charcoal-light)] border-2 border-[var(--md-wine)] rounded-lg p-4 mb-6 slide-up stagger-3"
         >
           <div class="flex items-center justify-between mb-2">
-            <span class="text-sm text-zinc-600 dark:text-zinc-400">
+            <span class="text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
               {{ $t('checkout.confirmation.orderNumber') }}
             </span>
             <span class="flex items-center gap-2">
@@ -56,10 +56,10 @@
               </span>
             </span>
           </div>
-          <p class="text-2xl font-bold text-zinc-900 dark:text-white mb-3">
+          <p class="text-2xl font-bold text-[var(--md-charcoal)] dark:text-[var(--md-cream)] mb-3">
             {{ orderData.orderNumber || 'N/A' }}
           </p>
-          <div class="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900 rounded-lg p-3">
+          <div class="flex items-center gap-2 text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)] bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)] rounded-lg p-3">
             <svg
               class="w-4 h-4 flex-shrink-0"
               fill="currentColor"
@@ -75,22 +75,22 @@
         <!-- Mini Progress / Order Status -->
         <div
           v-if="orderData"
-          class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4 mb-6 slide-up stagger-4"
+          class="bg-white dark:bg-[var(--md-charcoal-light)] border border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] rounded-lg p-4 mb-6 slide-up stagger-4"
         >
           <div class="flex items-center justify-between mb-3">
-            <h3 class="font-semibold text-zinc-900 dark:text-white">
+            <h3 class="font-semibold text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
               {{ $t('checkout.confirmation.orderStatus') }}
             </h3>
-            <span class="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+            <span class="text-xs font-medium text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
               {{ $t('checkout.confirmation.stepIndicator', { current: 2, total: 3 }) }}
             </span>
           </div>
 
           <!-- Progress Bar with Animation -->
           <!-- Step 1 (Confirmed) complete, Step 2 (Preparing) in progress = 66% -->
-          <div class="mb-4 bg-zinc-100 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
+          <div class="mb-4 bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)] rounded-full h-2 overflow-hidden">
             <div
-              class="bg-green-600 h-2 rounded-full progress-fill"
+              class="bg-[var(--md-wine)] h-2 rounded-full progress-fill"
               :style="{ '--target-width': '66%' }"
             ></div>
           </div>
@@ -109,24 +109,24 @@
 
             <!-- Step 2: Preparing (Current) -->
             <div class="text-center flex-1">
-              <div class="w-6 h-6 bg-zinc-900 dark:bg-white rounded-full mx-auto mb-1 flex items-center justify-center">
-                <div class="w-1.5 h-1.5 bg-white dark:bg-zinc-900 rounded-full status-pulse"></div>
+              <div class="w-6 h-6 bg-[var(--md-charcoal)] dark:bg-[var(--md-cream)] rounded-full mx-auto mb-1 flex items-center justify-center">
+                <div class="w-1.5 h-1.5 bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)] rounded-full status-pulse"></div>
               </div>
-              <p class="font-medium text-zinc-900 dark:text-white">
+              <p class="font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                 {{ $t('checkout.confirmation.status.preparing') }}
               </p>
             </div>
 
             <!-- Step 3: Shipped (Pending) -->
             <div class="text-center flex-1">
-              <div class="w-6 h-6 bg-zinc-200 dark:bg-zinc-600 rounded-full mx-auto mb-1"></div>
-              <p class="text-zinc-500 dark:text-zinc-400">
+              <div class="w-6 h-6 bg-[var(--md-gray-200)] dark:bg-[var(--md-gray-600)] rounded-full mx-auto mb-1"></div>
+              <p class="text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">
                 {{ $t('checkout.confirmation.status.shipped') }}
               </p>
             </div>
           </div>
 
-          <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-4 text-center bg-zinc-50 dark:bg-zinc-900 rounded-lg p-2">
+          <p class="text-xs text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)] mt-4 text-center bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)] rounded-lg p-2">
             {{ $t('checkout.confirmation.preparingOrder', { days: '2-3' }) }}
           </p>
         </div>
@@ -138,35 +138,35 @@
         >
           <!-- Delivery Card -->
           <button
-            class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-3 text-left card-interactive bg-white dark:bg-zinc-800"
+            class="border border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] rounded-lg p-3 text-left card-interactive bg-white dark:bg-[var(--md-charcoal-light)]"
             @click="scrollToOrderDetails()"
           >
-            <p class="text-xs text-zinc-600 dark:text-zinc-400 mb-1">
+            <p class="text-xs text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)] mb-1">
               {{ $t('checkout.confirmation.delivery') }}
             </p>
             <p
               v-if="estimatedDeliveryDate"
-              class="text-sm font-semibold text-zinc-900 dark:text-white"
+              class="text-sm font-semibold text-[var(--md-charcoal)] dark:text-[var(--md-cream)]"
             >
               {{ formatShortDate(estimatedDeliveryDate) }}
             </p>
-            <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+            <p class="text-xs text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)] mt-1">
               {{ shippingInfo?.method?.description || $t('checkout.confirmation.businessDays', { days: '3-5' }) }}
             </p>
           </button>
 
           <!-- Total Paid Card -->
           <button
-            class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-3 text-left card-interactive bg-white dark:bg-zinc-800"
+            class="border border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] rounded-lg p-3 text-left card-interactive bg-white dark:bg-[var(--md-charcoal-light)]"
             @click="toggleOrderSummary"
           >
-            <p class="text-xs text-zinc-600 dark:text-zinc-400 mb-1">
+            <p class="text-xs text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)] mb-1">
               {{ $t('checkout.confirmation.totalPaid') }}
             </p>
-            <p class="text-lg font-bold text-zinc-900 dark:text-white">
+            <p class="text-lg font-bold text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
               {{ formatPrice(orderData.total || 0) }}
             </p>
-            <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+            <p class="text-xs text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)] mt-1">
               {{ $t('checkout.confirmation.viewDetails') }} →
             </p>
           </button>
@@ -177,18 +177,18 @@
           v-if="orderData"
           :class="['expandable mb-6', { expanded: isOrderSummaryExpanded }]"
         >
-          <div class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-4">
-            <h4 class="font-semibold text-zinc-900 dark:text-white mb-4">
+          <div class="bg-white dark:bg-[var(--md-charcoal-light)] border border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] rounded-lg p-4">
+            <h4 class="font-semibold text-[var(--md-charcoal)] dark:text-[var(--md-cream)] mb-4">
               {{ $t('common.orderSummary') }}
             </h4>
             <div class="space-y-3">
               <div class="flex justify-between text-sm">
-                <span class="text-zinc-600 dark:text-zinc-400">{{ $t('common.subtotal') }}</span>
-                <span class="font-medium text-zinc-900 dark:text-white">{{ formatPrice(orderData.subtotal || 0) }}</span>
+                <span class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">{{ $t('common.subtotal') }}</span>
+                <span class="font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">{{ formatPrice(orderData.subtotal || 0) }}</span>
               </div>
               <div class="flex justify-between text-sm">
-                <span class="text-zinc-600 dark:text-zinc-400">{{ $t('common.shipping') }}</span>
-                <span class="font-medium text-zinc-900 dark:text-white">
+                <span class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">{{ $t('common.shipping') }}</span>
+                <span class="font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                   {{ orderData.shippingCost === 0 ? $t('checkout.freeShipping') : formatPrice(orderData.shippingCost || 0) }}
                 </span>
               </div>
@@ -196,12 +196,12 @@
                 v-if="orderData.tax"
                 class="flex justify-between text-sm"
               >
-                <span class="text-zinc-600 dark:text-zinc-400">{{ $t('common.tax') }}</span>
-                <span class="font-medium text-zinc-900 dark:text-white">{{ formatPrice(orderData.tax || 0) }}</span>
+                <span class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">{{ $t('common.tax') }}</span>
+                <span class="font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">{{ formatPrice(orderData.tax || 0) }}</span>
               </div>
-              <div class="flex justify-between pt-3 border-t border-zinc-200 dark:border-zinc-700">
-                <span class="font-semibold text-zinc-900 dark:text-white">{{ $t('common.total') }}</span>
-                <span class="font-bold text-zinc-900 dark:text-white">{{ formatPrice(orderData.total || 0) }}</span>
+              <div class="flex justify-between pt-3 border-t border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)]">
+                <span class="font-semibold text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">{{ $t('common.total') }}</span>
+                <span class="font-bold text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">{{ formatPrice(orderData.total || 0) }}</span>
               </div>
             </div>
           </div>
@@ -217,9 +217,9 @@
             :key="trust.key"
             class="text-center"
           >
-            <div class="w-8 h-8 bg-zinc-100 dark:bg-zinc-700 rounded-full mx-auto mb-1 flex items-center justify-center">
+            <div class="w-8 h-8 bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)] rounded-full mx-auto mb-1 flex items-center justify-center">
               <svg
-                class="w-4 h-4 text-zinc-700 dark:text-zinc-300"
+                class="w-4 h-4 text-[var(--md-charcoal)] dark:text-[var(--md-cream)]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -232,7 +232,7 @@
                 />
               </svg>
             </div>
-            <p class="text-xs text-zinc-600 dark:text-zinc-400">
+            <p class="text-xs text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
               {{ $t(trust.labelKey) }}
             </p>
           </div>
@@ -245,7 +245,7 @@
           class="mb-6"
         >
           <!-- Order Items Section -->
-          <div class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden mb-4">
+          <div class="bg-white dark:bg-[var(--md-charcoal-light)] rounded-lg border border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] overflow-hidden mb-4">
             <button
               class="w-full p-4 flex items-center justify-between card-interactive"
               :aria-expanded="isOrderItemsExpanded"
@@ -254,7 +254,7 @@
             >
               <div class="flex items-center gap-3">
                 <svg
-                  class="w-5 h-5 text-zinc-700 dark:text-zinc-300"
+                  class="w-5 h-5 text-[var(--md-charcoal)] dark:text-[var(--md-cream)]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -267,16 +267,16 @@
                   />
                 </svg>
                 <div class="text-left">
-                  <h4 class="font-semibold text-zinc-900 dark:text-white">
+                  <h4 class="font-semibold text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                     {{ $t('checkout.confirmation.orderItems') }}
                   </h4>
-                  <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                  <p class="text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                     {{ orderData.items?.length || 0 }} {{ $t('common.items') }}
                   </p>
                 </div>
               </div>
               <svg
-                :class="['w-5 h-5 text-zinc-400 transition-transform', { 'rotate-180': isOrderItemsExpanded }]"
+                :class="['w-5 h-5 text-[var(--md-gray-400)] transition-transform', { 'rotate-180': isOrderItemsExpanded }]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -293,7 +293,7 @@
               id="order-items-content"
               :class="['expandable px-4 pb-4', { expanded: isOrderItemsExpanded }]"
             >
-              <div class="pt-4 border-t border-zinc-200 dark:border-zinc-700 space-y-4">
+              <div class="pt-4 border-t border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] space-y-4">
                 <div
                   v-for="item in orderData.items || []"
                   :key="item.productId"
@@ -304,23 +304,23 @@
                     <img
                       :src="getProductImage(item.productSnapshot)"
                       :alt="getLocalizedText(item.productSnapshot.name) || $t('common.product')"
-                      class="w-14 h-14 object-cover rounded-lg border border-zinc-200 dark:border-zinc-600"
+                      class="w-14 h-14 object-cover rounded-lg border border-[var(--md-gray-200)] dark:border-[var(--md-gray-600)]"
                     />
                   </div>
 
                   <!-- Product Details -->
                   <div class="flex-1 min-w-0">
-                    <h4 class="text-sm font-medium text-zinc-900 dark:text-white truncate">
+                    <h4 class="text-sm font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)] truncate">
                       {{ getLocalizedText(item.productSnapshot.name) }}
                     </h4>
-                    <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                    <p class="text-xs text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">
                       {{ $t('common.quantity') }}: {{ item.quantity }} × {{ formatPrice(item.price) }}
                     </p>
                   </div>
 
                   <!-- Item Total -->
                   <div class="text-right">
-                    <p class="text-sm font-medium text-zinc-900 dark:text-white">
+                    <p class="text-sm font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                       {{ formatPrice(item.total) }}
                     </p>
                   </div>
@@ -332,7 +332,7 @@
           <!-- Shipping Information Section -->
           <div
             v-if="shippingInfo"
-            class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden"
+            class="bg-white dark:bg-[var(--md-charcoal-light)] rounded-lg border border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] overflow-hidden"
           >
             <button
               class="w-full p-4 flex items-center justify-between card-interactive"
@@ -342,7 +342,7 @@
             >
               <div class="flex items-center gap-3">
                 <svg
-                  class="w-5 h-5 text-zinc-700 dark:text-zinc-300"
+                  class="w-5 h-5 text-[var(--md-charcoal)] dark:text-[var(--md-cream)]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -361,16 +361,16 @@
                   />
                 </svg>
                 <div class="text-left">
-                  <h4 class="font-semibold text-zinc-900 dark:text-white">
+                  <h4 class="font-semibold text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                     {{ $t('checkout.confirmation.shippingInfo') }}
                   </h4>
-                  <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                  <p class="text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                     {{ shippingInfo?.address?.city }}, {{ shippingInfo?.address?.country }}
                   </p>
                 </div>
               </div>
               <svg
-                :class="['w-5 h-5 text-zinc-400 transition-transform', { 'rotate-180': isShippingInfoExpanded }]"
+                :class="['w-5 h-5 text-[var(--md-gray-400)] transition-transform', { 'rotate-180': isShippingInfoExpanded }]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -387,13 +387,13 @@
               id="shipping-info-content"
               :class="['expandable px-4 pb-4', { expanded: isShippingInfoExpanded }]"
             >
-              <div class="pt-4 border-t border-zinc-200 dark:border-zinc-700 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="pt-4 border-t border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <!-- Shipping Address -->
                 <div>
-                  <h5 class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
+                  <h5 class="text-xs font-medium text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)] uppercase tracking-wide mb-2">
                     {{ $t('checkout.confirmation.shippingAddress') }}
                   </h5>
-                  <div class="text-sm text-zinc-700 dark:text-zinc-300 space-y-1">
+                  <div class="text-sm text-[var(--md-charcoal)] dark:text-[var(--md-cream)] space-y-1">
                     <p class="font-medium">
                       {{ shippingInfo.address.firstName }} {{ shippingInfo.address.lastName }}
                     </p>
@@ -414,14 +414,14 @@
 
                 <!-- Shipping Method -->
                 <div>
-                  <h5 class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-2">
+                  <h5 class="text-xs font-medium text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)] uppercase tracking-wide mb-2">
                     {{ $t('checkout.confirmation.shippingMethod') }}
                   </h5>
-                  <div class="text-sm text-zinc-700 dark:text-zinc-300">
+                  <div class="text-sm text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                     <p class="font-medium">
                       {{ shippingInfo.method.name }}
                     </p>
-                    <p class="text-zinc-500 dark:text-zinc-400">
+                    <p class="text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">
                       {{ shippingInfo.method.description }}
                     </p>
                   </div>
@@ -436,8 +436,8 @@
           v-if="!orderData"
           class="flex flex-col justify-center items-center py-12"
         >
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mb-3"></div>
-          <span class="text-zinc-600 dark:text-zinc-400">{{ $t('common.loading') }}</span>
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--md-wine)] dark:border-[var(--md-gold)] mb-3"></div>
+          <span class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">{{ $t('common.loading') }}</span>
         </div>
 
         <!-- Guest to Account Conversion Prompt -->
@@ -542,7 +542,7 @@
         >
           <!-- Primary: View Order Details (always visible) -->
           <button
-            class="w-full py-3 bg-green-600 text-white font-semibold rounded-lg btn-primary flex items-center justify-center gap-2"
+            class="w-full py-3 bg-[var(--md-wine)] hover:bg-[var(--md-wine-light)] text-white font-semibold rounded-lg btn-primary flex items-center justify-center gap-2 transition-colors"
             @click="viewOrderDetails"
           >
             {{ $t('checkout.steps.confirmation.viewOrderDetails') }}
@@ -551,7 +551,7 @@
           <!-- Print/Download Invoice Buttons -->
           <div class="grid grid-cols-2 gap-3">
             <button
-              class="py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-medium rounded-lg btn-secondary flex items-center justify-center gap-2"
+              class="py-3 bg-white dark:bg-[var(--md-charcoal-light)] border border-[var(--md-gray-300)] dark:border-[var(--md-gray-600)] text-[var(--md-charcoal)] dark:text-[var(--md-cream)] font-medium rounded-lg btn-secondary flex items-center justify-center gap-2"
               @click="handlePrintInvoice"
             >
               <svg
@@ -570,7 +570,7 @@
               {{ $t('invoice.print') }}
             </button>
             <button
-              class="py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-medium rounded-lg btn-secondary flex items-center justify-center gap-2"
+              class="py-3 bg-white dark:bg-[var(--md-charcoal-light)] border border-[var(--md-gray-300)] dark:border-[var(--md-gray-600)] text-[var(--md-charcoal)] dark:text-[var(--md-cream)] font-medium rounded-lg btn-secondary flex items-center justify-center gap-2"
               @click="handleDownloadInvoice"
             >
               <svg
@@ -593,7 +593,7 @@
           <!-- Secondary: Continue Shopping -->
           <NuxtLink
             :to="localePath('/products')"
-            class="w-full py-3 bg-white dark:bg-zinc-800 border-2 border-zinc-300 dark:border-zinc-600 text-zinc-900 dark:text-white font-semibold rounded-lg btn-secondary flex items-center justify-center gap-2"
+            class="w-full py-3 bg-white dark:bg-[var(--md-charcoal-light)] border-2 border-[var(--md-gray-300)] dark:border-[var(--md-gray-600)] text-[var(--md-charcoal)] dark:text-[var(--md-cream)] font-semibold rounded-lg btn-secondary flex items-center justify-center gap-2"
           >
             {{ $t('checkout.steps.confirmation.continueShopping') }}
           </NuxtLink>
@@ -606,7 +606,7 @@
         >
           <NuxtLink
             :to="localePath('/contact')"
-            class="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors inline-flex items-center gap-1"
+            class="text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)] hover:text-[var(--md-charcoal)] dark:hover:text-[var(--md-cream)] transition-colors inline-flex items-center gap-1"
           >
             {{ $t('checkout.confirmation.needHelp') || 'Need help? Contact Support' }}
             <svg

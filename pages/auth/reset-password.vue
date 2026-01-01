@@ -1,13 +1,13 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+  <div class="min-h-screen flex flex-col bg-gradient-to-br from-[var(--md-cream)] via-[var(--md-cream-light)] to-[var(--md-cream-dark)] dark:from-[var(--md-charcoal)] dark:via-[var(--md-charcoal-light)] dark:to-[var(--md-black)]">
     <!-- Mobile-optimized container -->
     <div class="flex-1 flex items-center justify-center px-6 py-8 sm:px-8 lg:px-12">
       <div class="w-full max-w-sm sm:max-w-md space-y-6 sm:space-y-8">
         <!-- Logo/Brand area -->
         <div class="text-center space-y-2">
-          <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-primary-100 dark:bg-primary-900/30 rounded-2xl mb-4">
+          <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-[var(--md-wine-muted)] dark:bg-[var(--md-wine)]/20 rounded-2xl mb-4">
             <svg
-              class="w-10 h-10 sm:w-12 sm:h-12 text-primary-600 dark:text-primary-400"
+              class="w-10 h-10 sm:w-12 sm:h-12 text-[var(--md-wine)] dark:text-[var(--md-gold)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -20,16 +20,16 @@
               />
             </svg>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+          <h2 class="font-[family-name:var(--md-font-serif)] text-2xl sm:text-3xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
             {{ $t('auth.resetPassword') }}
           </h2>
-          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4">
+          <p class="text-sm sm:text-base text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)] px-4">
             {{ $t('auth.resetPasswordInstructions') }}
           </p>
         </div>
 
         <!-- Card container -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-gray-700 p-6 sm:p-8">
+        <div class="bg-[var(--md-cream-light)] dark:bg-[var(--md-charcoal-light)] rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-[var(--md-gray-700)] p-6 sm:p-8">
           <form
             v-if="!success"
             class="space-y-5"
@@ -76,7 +76,7 @@
                   minlength="8"
                   :aria-invalid="passwordError ? 'true' : 'false'"
                   :aria-describedby="passwordError ? 'password-error' : 'password-requirements'"
-                  class="peer w-full px-4 py-3 pr-12 min-h-[44px] border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-transparent focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all bg-white dark:bg-gray-700"
+                  class="peer w-full px-4 py-3 pr-12 min-h-[44px] border-2 border-[var(--md-gray-200)] dark:border-[var(--md-gray-600)] rounded-xl text-[var(--md-charcoal)] dark:text-[var(--md-cream)] placeholder-transparent focus:border-[var(--md-gold)] dark:focus:border-[var(--md-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--md-gold)]/20 transition-all bg-white dark:bg-[var(--md-charcoal)]"
                   :class="{ 'border-red-500 dark:border-red-400': passwordError }"
                   placeholder="New Password"
                   @input="validatePasswordField"
@@ -84,7 +84,7 @@
                 />
                 <label
                   for="password"
-                  class="absolute left-3 -top-2.5 bg-gray-50 dark:bg-gray-900 px-2 text-sm text-gray-600 dark:text-gray-300 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
+                  class="absolute left-3 -top-2.5 bg-[var(--md-cream-light)] dark:bg-[var(--md-charcoal-light)] px-2 text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-300)] transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-[var(--md-gray-400)] peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-[var(--md-gold-dark)] dark:peer-focus:text-[var(--md-gold)]"
                   :class="{ 'text-red-600 dark:text-red-400': passwordError }"
                 >
                   {{ $t('auth.newPassword') }}
@@ -146,7 +146,7 @@
                   required
                   :aria-invalid="confirmPasswordError ? 'true' : 'false'"
                   :aria-describedby="confirmPasswordError ? 'confirm-password-error' : 'confirm-password-desc'"
-                  class="peer w-full px-4 py-3 pr-12 min-h-[44px] border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-transparent focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all bg-white dark:bg-gray-700"
+                  class="peer w-full px-4 py-3 pr-12 min-h-[44px] border-2 border-[var(--md-gray-200)] dark:border-[var(--md-gray-600)] rounded-xl text-[var(--md-charcoal)] dark:text-[var(--md-cream)] placeholder-transparent focus:border-[var(--md-gold)] dark:focus:border-[var(--md-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--md-gold)]/20 transition-all bg-white dark:bg-[var(--md-charcoal)]"
                   :class="{
                     'border-red-500 dark:border-red-400': confirmPasswordError,
                     'border-green-500 dark:border-green-400': form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword,
@@ -157,7 +157,7 @@
                 />
                 <label
                   for="confirmPassword"
-                  class="absolute left-3 -top-2.5 bg-gray-50 dark:bg-gray-900 px-2 text-sm text-gray-600 dark:text-gray-300 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
+                  class="absolute left-3 -top-2.5 bg-[var(--md-cream-light)] dark:bg-[var(--md-charcoal-light)] px-2 text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-300)] transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-[var(--md-gray-400)] peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-[var(--md-gold-dark)] dark:peer-focus:text-[var(--md-gold)]"
                   :class="{
                     'text-red-600 dark:text-red-400': confirmPasswordError,
                     'text-green-600 dark:text-green-400': form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword,
@@ -278,7 +278,7 @@
             <div class="text-center">
               <NuxtLink
                 :to="localePath('/auth/login')"
-                class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md"
+                class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 font-medium text-[var(--md-wine)] hover:text-[var(--md-wine-light)] dark:text-[var(--md-gold)] dark:hover:text-[var(--md-gold-light)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--md-gold)]/20 rounded-md"
               >
                 {{ $t('auth.signIn') }} →
               </NuxtLink>

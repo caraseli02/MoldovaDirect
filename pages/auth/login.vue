@@ -1,13 +1,13 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+  <div class="min-h-screen flex flex-col bg-gradient-to-br from-[var(--md-cream)] via-[var(--md-cream-light)] to-[var(--md-cream-dark)] dark:from-[var(--md-charcoal)] dark:via-[var(--md-charcoal-light)] dark:to-[var(--md-black)]">
     <!-- Mobile-optimized header -->
     <main class="flex-1 flex items-center justify-center px-6 py-8 sm:px-8 lg:px-12">
       <div class="w-full max-w-sm sm:max-w-md space-y-6 sm:space-y-8">
         <!-- Logo/Brand area with better mobile spacing -->
         <div class="text-center space-y-2">
-          <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-primary-100 dark:bg-primary-900/30 rounded-2xl mb-4">
+          <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-[var(--md-wine-muted)] dark:bg-[var(--md-wine)]/20 rounded-2xl mb-4">
             <svg
-              class="w-10 h-10 sm:w-12 sm:h-12 text-primary-600 dark:text-primary-400"
+              class="w-10 h-10 sm:w-12 sm:h-12 text-[var(--md-wine)] dark:text-[var(--md-gold)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -20,14 +20,14 @@
               />
             </svg>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+          <h2 class="font-[family-name:var(--md-font-serif)] text-2xl sm:text-3xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
             {{ $t('auth.signIn') }}
           </h2>
-          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+          <p class="text-sm sm:text-base text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
             {{ $t('auth.noAccount') }}
             <NuxtLink
               :to="localePath('/auth/register')"
-              class="font-semibold text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors"
+              class="font-semibold text-[var(--md-wine)] hover:text-[var(--md-wine-light)] dark:text-[var(--md-gold)] dark:hover:text-[var(--md-gold-light)] transition-colors"
             >
               {{ $t('auth.signUp') }}
             </NuxtLink>
@@ -35,7 +35,7 @@
         </div>
 
         <!-- Card container for form -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-gray-700 p-6 sm:p-8">
+        <div class="bg-[var(--md-cream-light)] dark:bg-[var(--md-charcoal-light)] rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-[var(--md-gray-700)] p-6 sm:p-8">
           <!-- Alert messages with improved mobile styling -->
           <Transition name="slide-fade">
             <Alert
@@ -127,7 +127,7 @@
                   <div class="space-y-2">
                     <Label
                       for="email"
-                      class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                      class="text-sm font-medium text-[var(--md-gray-700)] dark:text-[var(--md-gray-300)]"
                       :class="{ 'text-red-600 dark:text-red-400': emailError }"
                     >
                       {{ $t('auth.email') }}
@@ -147,7 +147,7 @@
                       :aria-invalid="emailError ? 'true' : 'false'"
                       :aria-describedby="emailError ? 'email-error' : undefined"
                       :placeholder="$t('auth.email')"
-                      class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
+                      class="h-11 border-2 border-[var(--md-gray-200)] bg-white text-[var(--md-charcoal)] placeholder:text-[var(--md-gray-500)] focus:border-[var(--md-gold)] focus:ring-[var(--md-gold)]/20 dark:border-[var(--md-gray-600)] dark:bg-[var(--md-charcoal)] dark:text-[var(--md-cream)] dark:placeholder:text-[var(--md-gray-400)]"
                       :class="{ 'border-red-500 dark:border-red-400': emailError }"
                       @blur="validateEmailField"
                     />
@@ -164,7 +164,7 @@
                   <div class="space-y-2">
                     <Label
                       for="password"
-                      class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                      class="text-sm font-medium text-[var(--md-gray-700)] dark:text-[var(--md-gray-300)]"
                       :class="{ 'text-red-600 dark:text-red-400': passwordError }"
                     >
                       {{ $t('auth.password') }}
@@ -185,7 +185,7 @@
                         :aria-invalid="passwordError ? 'true' : 'false'"
                         :aria-describedby="passwordError ? 'password-error' : 'password-toggle-desc'"
                         :placeholder="$t('auth.password')"
-                        class="h-11 border-2 border-gray-200 bg-white pr-12 text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
+                        class="h-11 border-2 border-[var(--md-gray-200)] bg-white pr-12 text-[var(--md-charcoal)] placeholder:text-[var(--md-gray-500)] focus:border-[var(--md-gold)] focus:ring-[var(--md-gold)]/20 dark:border-[var(--md-gray-600)] dark:bg-[var(--md-charcoal)] dark:text-[var(--md-cream)] dark:placeholder:text-[var(--md-gray-400)]"
                         :class="{ 'border-red-500 dark:border-red-400': passwordError }"
                         @input="validatePasswordField"
                         @blur="validatePasswordField"
@@ -195,7 +195,7 @@
                         variant="ghost"
                         size="icon"
                         data-testid="password-toggle"
-                        class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
+                        class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--md-gray-600)] dark:text-[var(--md-gray-300)] hover:text-[var(--md-charcoal)] dark:hover:text-[var(--md-cream)]"
                         :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                         :aria-pressed="showPassword"
                         @click="togglePasswordVisibility"
@@ -262,11 +262,11 @@
                       id="remember"
                       v-model:checked="rememberMe"
                       :aria-describedby="'remember-desc'"
-                      class="h-5 w-5"
+                      class="h-5 w-5 border-[var(--md-gray-300)] data-[state=checked]:bg-[var(--md-wine)] data-[state=checked]:border-[var(--md-wine)]"
                     />
                     <Label
                       for="remember"
-                      class="ml-3 text-sm text-gray-700 dark:text-gray-100 select-none"
+                      class="ml-3 text-sm text-[var(--md-gray-700)] dark:text-[var(--md-gray-200)] select-none"
                     >
                       {{ $t('auth.rememberMe') }}
                     </Label>
@@ -280,7 +280,7 @@
                   <NuxtLink
                     :to="localePath('/auth/forgot-password')"
                     data-testid="forgot-password"
-                    class="inline-flex items-center justify-center min-h-[44px] px-3 py-2 text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md"
+                    class="inline-flex items-center justify-center min-h-[44px] px-3 py-2 text-sm font-medium text-[var(--md-wine)] hover:text-[var(--md-wine-light)] dark:text-[var(--md-gold)] dark:hover:text-[var(--md-gold-light)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--md-gold)]/20 rounded-md"
                     :aria-label="$t('auth.accessibility.forgotPasswordLink')"
                   >
                     {{ $t('auth.forgotPassword') }}
@@ -293,7 +293,7 @@
                   :disabled="isLoginDisabled"
                   :aria-disabled="isLoginDisabled"
                   data-testid="login-button"
-                  class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg transition-opacity"
+                  class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg transition-all bg-[var(--md-wine)] text-white hover:bg-[var(--md-wine-light)] focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
                   :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isLoginDisabled }"
                   :aria-label="loading ? $t('auth.accessibility.signingIn') : $t('auth.accessibility.signInButton')"
                   :aria-describedby="loading ? 'login-status' : undefined"
@@ -342,7 +342,7 @@
                 <div class="space-y-2">
                   <Label
                     for="email-magic"
-                    class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                    class="text-sm font-medium text-[var(--md-gray-700)] dark:text-[var(--md-gray-300)]"
                     :class="{ 'text-red-600 dark:text-red-400': emailError }"
                   >
                     {{ $t('auth.email') }}
@@ -362,7 +362,7 @@
                     :aria-invalid="emailError ? 'true' : 'false'"
                     :aria-describedby="emailError ? 'email-magic-error' : undefined"
                     :placeholder="$t('auth.emailPlaceholder')"
-                    class="h-11 border-2 border-gray-200 bg-white text-gray-900 placeholder:text-gray-500 dark:border-gray-500 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-300"
+                    class="h-11 border-2 border-[var(--md-gray-200)] bg-white text-[var(--md-charcoal)] placeholder:text-[var(--md-gray-500)] focus:border-[var(--md-gold)] focus:ring-[var(--md-gold)]/20 dark:border-[var(--md-gray-600)] dark:bg-[var(--md-charcoal)] dark:text-[var(--md-cream)] dark:placeholder:text-[var(--md-gray-400)]"
                     :class="{ 'border-red-500 dark:border-red-400': emailError }"
                     @blur="validateEmailField"
                   />
@@ -377,10 +377,10 @@
                 </div>
 
                 <!-- Info message -->
-                <div class="rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-4">
+                <div class="rounded-lg bg-[var(--md-gold-muted)] dark:bg-[var(--md-gold)]/10 border border-[var(--md-gold)]/30 dark:border-[var(--md-gold)]/20 p-4">
                   <div class="flex items-start">
                     <svg
-                      class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 mr-3 flex-shrink-0"
+                      class="w-5 h-5 text-[var(--md-gold-dark)] dark:text-[var(--md-gold)] mt-0.5 mr-3 flex-shrink-0"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -392,11 +392,11 @@
                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    <div class="text-sm text-blue-800 dark:text-blue-300">
+                    <div class="text-sm text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                       <p class="font-medium">
                         {{ $t('auth.magicLinkInfo') }}
                       </p>
-                      <p class="mt-1 text-xs text-blue-700 dark:text-blue-400">
+                      <p class="mt-1 text-xs text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                         {{ $t('auth.magicLinkDescription') }}
                       </p>
                     </div>
@@ -409,7 +409,7 @@
                   :disabled="isMagicLinkDisabled"
                   :aria-disabled="isMagicLinkDisabled"
                   data-testid="magic-link-button"
-                  class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg transition-opacity"
+                  class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg transition-all bg-[var(--md-wine)] text-white hover:bg-[var(--md-wine-light)] focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
                   :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isMagicLinkDisabled }"
                   :aria-label="loadingMagic ? $t('auth.accessibility.sendingMagicLink') : $t('auth.accessibility.magicLinkButton')"
                   :aria-describedby="loadingMagic ? 'magic-link-status' : 'magic-link-desc'"
@@ -493,10 +493,10 @@
           <!-- Social Login Divider -->
           <div class="relative mt-6">
             <div class="absolute inset-0 flex items-center">
-              <div class="w-full border-t border-gray-200 dark:border-gray-600"></div>
+              <div class="w-full border-t border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)]"></div>
             </div>
             <div class="relative flex justify-center text-sm">
-              <span class="bg-white dark:bg-gray-800 px-4 text-gray-500 dark:text-gray-400">
+              <span class="bg-[var(--md-cream-light)] dark:bg-[var(--md-charcoal-light)] px-4 text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">
                 {{ $t('auth.orContinueWith') }}
               </span>
             </div>
@@ -509,7 +509,7 @@
               type="button"
               variant="outline"
               :disabled="loadingSocial === 'google'"
-              class="h-11 border-2 border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              class="h-11 border-2 border-[var(--md-gray-200)] bg-white text-[var(--md-gray-700)] hover:bg-[var(--md-cream)] hover:border-[var(--md-gold)]/50 dark:border-[var(--md-gray-600)] dark:bg-[var(--md-charcoal)] dark:text-[var(--md-gray-200)] dark:hover:bg-[var(--md-charcoal-light)] dark:hover:border-[var(--md-gold)]/50 transition-colors"
               @click="handleSocialLogin('google')"
             >
               <svg
@@ -563,7 +563,7 @@
               type="button"
               variant="outline"
               :disabled="loadingSocial === 'apple'"
-              class="h-11 border-2 border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              class="h-11 border-2 border-[var(--md-gray-200)] bg-white text-[var(--md-gray-700)] hover:bg-[var(--md-cream)] hover:border-[var(--md-gold)]/50 dark:border-[var(--md-gray-600)] dark:bg-[var(--md-charcoal)] dark:text-[var(--md-gray-200)] dark:hover:bg-[var(--md-charcoal-light)] dark:hover:border-[var(--md-gold)]/50 transition-colors"
               @click="handleSocialLogin('apple')"
             >
               <svg
@@ -600,7 +600,7 @@
           </div>
 
           <!-- Social Login Note -->
-          <p class="mt-4 text-xs text-center text-gray-500 dark:text-gray-400">
+          <p class="mt-4 text-xs text-center text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">
             {{ $t('auth.socialLoginNote') }}
           </p>
         </div>

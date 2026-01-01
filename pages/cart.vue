@@ -1,19 +1,19 @@
 <template>
-  <div class="min-h-screen bg-zinc-50 dark:bg-zinc-900 py-4 md:py-8 pb-48 md:pb-12">
+  <div class="min-h-screen bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)] py-4 md:py-8 pb-48 md:pb-12">
     <div class="container px-4 md:px-6 max-w-6xl mx-auto">
       <!-- Header -->
       <div class="flex items-center justify-between mb-6 md:mb-8">
         <div>
-          <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
+          <h1 class="font-[family-name:var(--md-font-serif)] text-2xl md:text-3xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
             {{ $t('common.cart') }}
           </h1>
-          <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+          <p class="text-sm text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)] mt-1">
             {{ $t('cart.itemCount', { count: itemCount }) }}
           </p>
         </div>
         <NuxtLink
           :to="localePath('/products')"
-          class="hidden md:flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors"
+          class="hidden md:flex items-center gap-2 text-[var(--md-wine)] dark:text-[var(--md-gold)] hover:text-[var(--md-wine-light)] dark:hover:text-[var(--md-gold-light)] font-medium transition-colors"
         >
           <svg
             class="w-5 h-5"
@@ -45,10 +45,10 @@
           :aria-label="$t('common.loading')"
         >
           <div
-            class="animate-spin rounded-full h-10 w-10 border-2 border-zinc-200 border-t-primary-600 mx-auto"
+            class="animate-spin rounded-full h-10 w-10 border-2 border-[var(--md-gray-200)] border-t-[var(--md-wine)] mx-auto"
             aria-hidden="true"
           ></div>
-          <p class="mt-4 text-zinc-500 dark:text-zinc-400">
+          <p class="mt-4 text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">
             {{ $t('common.loading') }}
           </p>
         </div>
@@ -60,9 +60,9 @@
           data-testid="empty-cart-message"
           role="status"
         >
-          <div class="w-20 h-20 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div class="w-20 h-20 bg-[var(--md-cream-dark)] dark:bg-[var(--md-charcoal-light)] rounded-full flex items-center justify-center mx-auto mb-6">
             <svg
-              class="h-10 w-10 text-zinc-400 dark:text-zinc-500"
+              class="h-10 w-10 text-[var(--md-gold)] dark:text-[var(--md-gold)]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -76,16 +76,16 @@
               />
             </svg>
           </div>
-          <h2 class="text-xl md:text-2xl font-semibold text-zinc-900 dark:text-white mb-2">
+          <h2 class="font-[family-name:var(--md-font-serif)] text-xl md:text-2xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)] mb-2">
             {{ $t('products.cartEmpty') }}
           </h2>
-          <p class="text-zinc-500 dark:text-zinc-400 mb-8 max-w-md mx-auto">
+          <p class="text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)] mb-8 max-w-md mx-auto">
             {{ $t('products.cartEmptyDescription') }}
           </p>
           <NuxtLink
             :to="localePath('/products')"
             :aria-label="$t('common.continueShopping')"
-            class="inline-flex items-center justify-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors font-medium min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            class="inline-flex items-center justify-center gap-2 bg-[var(--md-wine)] text-white px-6 py-3 rounded-xl hover:bg-[var(--md-wine-light)] transition-colors font-medium min-h-[44px] focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
           >
             {{ $t('common.continueShopping') }}
             <svg
@@ -149,24 +149,24 @@
 
           <!-- Right Column: Order Summary (Desktop) -->
           <div class="hidden lg:block lg:col-span-1">
-            <div class="bg-white dark:bg-zinc-800/60 rounded-2xl border border-zinc-200 dark:border-zinc-700/50 p-6 sticky top-24">
-              <h2 class="text-lg font-semibold text-zinc-900 dark:text-white mb-6">
+            <div class="bg-[var(--md-cream-light)] dark:bg-[var(--md-charcoal-light)] rounded-2xl border border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] p-6 sticky top-24">
+              <h2 class="font-[family-name:var(--md-font-serif)] text-xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)] mb-6">
                 {{ $t('common.orderSummary') }}
               </h2>
 
               <!-- Summary Details -->
               <div class="space-y-4 pb-4">
                 <div class="flex justify-between">
-                  <span class="text-zinc-500 dark:text-zinc-400">{{ $t('common.subtotal') }}</span>
-                  <span class="text-zinc-900 dark:text-white font-medium">{{ formattedSubtotal }}</span>
+                  <span class="text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">{{ $t('common.subtotal') }}</span>
+                  <span class="text-[var(--md-charcoal)] dark:text-[var(--md-cream)] font-medium">{{ formattedSubtotal }}</span>
                 </div>
                 <div class="flex justify-between">
-                  <span class="text-zinc-500 dark:text-zinc-400">{{ $t('common.shipping') }}</span>
-                  <span class="text-zinc-500 dark:text-zinc-400">{{ $t('cart.shippingCalculatedAtCheckout') }}</span>
+                  <span class="text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">{{ $t('common.shipping') }}</span>
+                  <span class="text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">{{ $t('cart.shippingCalculatedAtCheckout') }}</span>
                 </div>
                 <div
                   v-if="savings > 0"
-                  class="flex justify-between text-emerald-600 dark:text-emerald-400"
+                  class="flex justify-between text-[var(--md-success)] dark:text-emerald-400"
                 >
                   <span>{{ $t('cart.youSave') }}</span>
                   <span class="font-medium">-{{ formatPrice(savings) }}</span>
@@ -174,10 +174,10 @@
               </div>
 
               <!-- Total -->
-              <div class="border-t border-zinc-200 dark:border-zinc-700 pt-4 mb-6">
+              <div class="border-t border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] pt-4 mb-6">
                 <div class="flex justify-between items-center">
-                  <span class="text-lg font-semibold text-zinc-900 dark:text-white">{{ $t('common.total') }}</span>
-                  <span class="text-2xl font-bold text-zinc-900 dark:text-white">{{ formattedSubtotal }}</span>
+                  <span class="font-[family-name:var(--md-font-serif)] text-lg font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">{{ $t('common.total') }}</span>
+                  <span class="font-[family-name:var(--md-font-serif)] text-2xl font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">{{ formattedSubtotal }}</span>
                 </div>
               </div>
 
@@ -185,7 +185,7 @@
               <button
                 :aria-label="$t('common.proceedToCheckout')"
                 :disabled="loading || isEmpty"
-                class="w-full py-4 bg-primary-600 text-white text-base font-semibold rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[52px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                class="w-full py-4 bg-[var(--md-wine)] text-white text-base font-semibold rounded-xl hover:bg-[var(--md-wine-light)] active:bg-[var(--md-wine-dark)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[52px] focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
                 @click="goToCheckout"
               >
                 <span>{{ $t('common.checkout') }}</span>
@@ -207,16 +207,16 @@
               <!-- Continue Shopping -->
               <NuxtLink
                 :to="localePath('/products')"
-                class="block w-full text-center py-3 mt-3 border border-zinc-200 dark:border-zinc-700 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors text-zinc-700 dark:text-zinc-300 font-medium min-h-[48px] flex items-center justify-center"
+                class="block w-full text-center py-3 mt-3 border border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] rounded-xl hover:bg-[var(--md-cream-dark)] dark:hover:bg-[var(--md-gray-800)] transition-colors text-[var(--md-charcoal)] dark:text-[var(--md-cream)] font-medium min-h-[48px] flex items-center justify-center"
               >
                 {{ $t('common.continueShopping') }}
               </NuxtLink>
 
               <!-- Trust Signals -->
-              <div class="mt-6 pt-6 border-t border-zinc-100 dark:border-zinc-700/50 space-y-3">
-                <div class="flex items-center gap-3 text-sm text-zinc-500 dark:text-zinc-400">
+              <div class="mt-6 pt-6 border-t border-[var(--md-gray-100)] dark:border-[var(--md-gray-700)] space-y-3">
+                <div class="flex items-center gap-3 text-sm text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">
                   <svg
-                    class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                    class="w-5 h-5 text-[var(--md-success)] flex-shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -230,9 +230,9 @@
                   </svg>
                   <span>{{ $t('cart.secureCheckout') }}</span>
                 </div>
-                <div class="flex items-center gap-3 text-sm text-zinc-500 dark:text-zinc-400">
+                <div class="flex items-center gap-3 text-sm text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">
                   <svg
-                    class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                    class="w-5 h-5 text-[var(--md-gold)] flex-shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -256,7 +256,7 @@
     <!-- Mobile Sticky Bottom Bar -->
     <div
       v-if="!isEmpty && !loading"
-      class="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 shadow-lg z-50"
+      class="lg:hidden fixed bottom-0 left-0 right-0 bg-[var(--md-cream-light)] dark:bg-[var(--md-charcoal)] border-t border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] shadow-lg z-50"
     >
       <!-- Expand Handle -->
       <button
@@ -265,7 +265,7 @@
         :aria-expanded="showMobileSummary"
         @click="showMobileSummary = !showMobileSummary"
       >
-        <div class="w-8 h-1 bg-zinc-300 dark:bg-zinc-700 rounded-full"></div>
+        <div class="w-8 h-1 bg-[var(--md-gray-300)] dark:bg-[var(--md-gray-600)] rounded-full"></div>
       </button>
 
       <!-- Expandable Summary -->
@@ -273,18 +273,18 @@
         class="overflow-hidden transition-all duration-300 ease-out px-4"
         :class="showMobileSummary ? 'max-h-40 pb-4' : 'max-h-0'"
       >
-        <div class="space-y-2 border-b border-zinc-100 dark:border-zinc-800 pb-4">
+        <div class="space-y-2 border-b border-[var(--md-gray-100)] dark:border-[var(--md-gray-700)] pb-4">
           <div class="flex justify-between text-sm">
-            <span class="text-zinc-500 dark:text-zinc-400">{{ $t('common.subtotal') }}</span>
-            <span class="text-zinc-900 dark:text-white">{{ formattedSubtotal }}</span>
+            <span class="text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">{{ $t('common.subtotal') }}</span>
+            <span class="text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">{{ formattedSubtotal }}</span>
           </div>
           <div class="flex justify-between text-sm">
-            <span class="text-zinc-500 dark:text-zinc-400">{{ $t('common.shipping') }}</span>
-            <span class="text-zinc-500 dark:text-zinc-400">{{ $t('cart.shippingCalculatedAtCheckout') }}</span>
+            <span class="text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">{{ $t('common.shipping') }}</span>
+            <span class="text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">{{ $t('cart.shippingCalculatedAtCheckout') }}</span>
           </div>
           <div
             v-if="savings > 0"
-            class="flex justify-between text-sm text-emerald-600 dark:text-emerald-400"
+            class="flex justify-between text-sm text-[var(--md-success)] dark:text-emerald-400"
           >
             <span>{{ $t('cart.youSave') }}</span>
             <span class="font-medium">-{{ formatPrice(savings) }}</span>
@@ -296,14 +296,14 @@
       <div class="p-4 pt-2">
         <div class="flex items-center justify-between mb-4">
           <div>
-            <p class="text-sm text-zinc-500 dark:text-zinc-400">
+            <p class="text-sm text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">
               {{ $t('common.total') }}
             </p>
-            <p class="text-2xl font-bold text-zinc-900 dark:text-white">
+            <p class="font-[family-name:var(--md-font-serif)] text-2xl font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
               {{ formattedSubtotal }}
             </p>
           </div>
-          <div class="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/20 px-2.5 py-1.5 rounded-full">
+          <div class="flex items-center gap-1.5 text-xs text-[var(--md-success)] dark:text-emerald-400 bg-[var(--md-success)]/10 dark:bg-emerald-500/20 px-2.5 py-1.5 rounded-full">
             <svg
               class="w-3.5 h-3.5"
               fill="none"
@@ -325,7 +325,7 @@
         <button
           :disabled="loading || isEmpty"
           :aria-label="$t('common.proceedToCheckout')"
-          class="w-full py-4 bg-primary-600 text-white text-base font-semibold rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[52px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+          class="w-full py-4 bg-[var(--md-wine)] text-white text-base font-semibold rounded-xl hover:bg-[var(--md-wine-light)] active:bg-[var(--md-wine-dark)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[52px] focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
           @click="goToCheckout"
         >
           <span>{{ $t('common.checkout') }}</span>
@@ -347,7 +347,7 @@
         <!-- Continue Shopping -->
         <NuxtLink
           :to="localePath('/products')"
-          class="block w-full text-center py-3 mt-2 text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors"
+          class="block w-full text-center py-3 mt-2 text-sm text-[var(--md-wine)] dark:text-[var(--md-gold)] hover:text-[var(--md-wine-light)] dark:hover:text-[var(--md-gold-light)] transition-colors"
         >
           {{ $t('common.continueShopping') }}
         </NuxtLink>

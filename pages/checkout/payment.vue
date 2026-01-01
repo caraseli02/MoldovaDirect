@@ -7,8 +7,8 @@
         </template>
         <template #fallback>
           <div class="flex justify-center items-center py-12">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-            <span class="ml-3 text-gray-600 dark:text-gray-400">Loading payment form...</span>
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--md-wine)] dark:border-[var(--md-gold)]"></div>
+            <span class="ml-3 text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">Loading payment form...</span>
           </div>
         </template>
       </Suspense>

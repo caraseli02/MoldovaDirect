@@ -21,14 +21,14 @@
             />
           </svg>
         </div>
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+        <h2 class="text-xl font-semibold text-[var(--md-charcoal)] dark:text-[var(--md-cream)] mb-2">
           {{ $t('checkout.errors.loadFailed') }}
         </h2>
-        <p class="text-gray-600 dark:text-gray-400 mb-6">
+        <p class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)] mb-6">
           {{ $t('checkout.errors.pleaseTryAgain') }}
         </p>
         <button
-          class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          class="px-6 py-2 bg-[var(--md-wine)] text-white rounded-lg hover:bg-[var(--md-wine-light)] transition-colors"
           @click="retryLoad"
         >
           {{ $t('common.retry') }}
@@ -43,8 +43,8 @@
         <template #fallback>
           <div class="max-w-4xl mx-auto">
             <div class="flex justify-center items-center py-12">
-              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-              <span class="ml-3 text-gray-600 dark:text-gray-400">{{ $t('common.loading') }}</span>
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--md-wine)] dark:border-[var(--md-gold)]"></div>
+              <span class="ml-3 text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">{{ $t('common.loading') }}</span>
             </div>
           </div>
         </template>

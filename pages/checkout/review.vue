@@ -3,10 +3,10 @@
     <div class="p-6 md:p-8">
       <div class="max-w-4xl mx-auto">
         <header class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <h2 class="font-[family-name:var(--md-font-serif)] text-2xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)] mb-2">
             {{ $t('checkout.steps.review.title') }}
           </h2>
-          <p class="text-gray-600 dark:text-gray-400">
+          <p class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
             {{ $t('checkout.steps.review.subtitle') }}
           </p>
         </header>
@@ -15,8 +15,8 @@
           v-if="loading"
           class="flex justify-center items-center py-12"
         >
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <span class="ml-3 text-gray-600 dark:text-gray-400">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--md-wine)] dark:border-[var(--md-gold)]"></div>
+          <span class="ml-3 text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
             {{ $t('common.loading') }}
           </span>
         </div>
@@ -64,7 +64,7 @@
                 />
               </template>
               <template #fallback>
-                <div class="h-32 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+                <div class="h-32 bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)] rounded-lg animate-pulse"></div>
               </template>
             </Suspense>
 
@@ -77,7 +77,7 @@
                 />
               </template>
               <template #fallback>
-                <div class="h-32 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+                <div class="h-32 bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)] rounded-lg animate-pulse"></div>
               </template>
             </Suspense>
 
@@ -89,7 +89,7 @@
                 />
               </template>
               <template #fallback>
-                <div class="h-32 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+                <div class="h-32 bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)] rounded-lg animate-pulse"></div>
               </template>
             </Suspense>
           </div>
@@ -103,7 +103,7 @@
                 />
               </template>
               <template #fallback>
-                <div class="h-64 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse"></div>
+                <div class="h-64 bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)] rounded-lg animate-pulse"></div>
               </template>
             </Suspense>
           </div>
@@ -121,11 +121,11 @@
             />
           </template>
           <template #fallback>
-            <div class="h-24 bg-gray-100 dark:bg-gray-800 rounded-lg animate-pulse mt-8"></div>
+            <div class="h-24 bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)] rounded-lg animate-pulse mt-8"></div>
           </template>
         </Suspense>
 
-        <footer class="flex flex-col sm:flex-row justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700 space-y-3 sm:space-y-0 mt-8">
+        <footer class="flex flex-col sm:flex-row justify-between items-center pt-6 border-t border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] space-y-3 sm:space-y-0 mt-8">
           <UiButton
             :disabled="processing"
             variant="outline"
@@ -142,7 +142,7 @@
             <UiButton
               :disabled="!canProceed || processing"
               size="lg"
-              class="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 h-12 px-8 text-base font-semibold"
+              class="bg-[var(--md-wine)] hover:bg-[var(--md-wine-light)] h-12 px-8 text-base font-semibold"
               @click="handlePlaceOrder"
             >
               <commonIcon
@@ -162,7 +162,7 @@
                 class="ml-2 h-5 w-5"
               />
             </UiButton>
-            <p class="text-xs text-gray-500 dark:text-gray-400">
+            <p class="text-xs text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">
               {{ $t('checkout.notChargedYet') }}
             </p>
           </div>

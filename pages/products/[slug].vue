@@ -1,26 +1,26 @@
 <template>
   <div
     v-if="pending"
-    class="py-12"
+    class="py-12 bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)]"
   >
     <div class="container">
       <div class="animate-pulse space-y-8">
         <div class="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
           <div class="space-y-4">
-            <div class="aspect-square rounded-3xl bg-gray-200"></div>
+            <div class="aspect-square rounded-3xl bg-[var(--md-gray-200)] dark:bg-[var(--md-gray-700)]"></div>
             <div class="grid grid-cols-4 gap-3">
               <div
                 v-for="n in 4"
                 :key="n"
-                class="aspect-square rounded-xl bg-gray-200"
+                class="aspect-square rounded-xl bg-[var(--md-gray-200)] dark:bg-[var(--md-gray-700)]"
               ></div>
             </div>
           </div>
           <div class="space-y-4">
-            <div class="h-6 w-32 rounded bg-gray-200"></div>
-            <div class="h-10 w-3/4 rounded bg-gray-200"></div>
-            <div class="h-20 rounded bg-gray-200"></div>
-            <div class="h-12 rounded bg-gray-200"></div>
+            <div class="h-6 w-32 rounded bg-[var(--md-gray-200)] dark:bg-[var(--md-gray-700)]"></div>
+            <div class="h-10 w-3/4 rounded bg-[var(--md-gray-200)] dark:bg-[var(--md-gray-700)]"></div>
+            <div class="h-20 rounded bg-[var(--md-gray-200)] dark:bg-[var(--md-gray-700)]"></div>
+            <div class="h-12 rounded bg-[var(--md-gray-200)] dark:bg-[var(--md-gray-700)]"></div>
           </div>
         </div>
       </div>
@@ -29,18 +29,18 @@
 
   <div
     v-else-if="error"
-    class="py-12"
+    class="py-12 bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)]"
   >
     <div class="container text-center">
-      <h1 class="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
+      <h1 class="font-[family-name:var(--md-font-serif)] mb-4 text-4xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
         {{ $t('products.notFound') }}
       </h1>
-      <p class="mb-8 text-gray-600 dark:text-gray-400">
+      <p class="mb-8 text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
         {{ $t('products.notFoundDescription') }}
       </p>
       <nuxt-link
         to="/products"
-        class="inline-flex items-center rounded-full bg-blue-600 px-6 py-3 font-medium text-white transition hover:bg-blue-700"
+        class="inline-flex items-center rounded-full bg-[var(--md-wine)] px-6 py-3 font-medium text-white transition hover:bg-[var(--md-wine-light)]"
       >
         {{ $t('products.backToProducts') }}
       </nuxt-link>
@@ -49,39 +49,39 @@
 
   <div
     v-else-if="product"
-    class="py-8 lg:py-12 pb-32 lg:pb-12"
+    class="py-8 lg:py-12 pb-32 lg:pb-12 bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)]"
   >
     <div class="container space-y-12">
-      <nav class="flex flex-wrap items-center text-sm text-gray-600 dark:text-gray-400">
+      <nav class="flex flex-wrap items-center text-sm text-[var(--md-gray-500)] dark:text-[var(--md-gray-400)]">
         <nuxt-link
           to="/"
-          class="transition hover:text-gray-900 dark:hover:text-gray-200"
+          class="transition hover:text-[var(--md-charcoal)] dark:hover:text-[var(--md-cream)]"
         >{{ $t('common.home') }}</nuxt-link>
-        <span class="mx-2">/</span>
+        <span class="mx-2 text-[var(--md-gold)]">/</span>
         <nuxt-link
           to="/products"
-          class="transition hover:text-gray-900 dark:hover:text-gray-200"
+          class="transition hover:text-[var(--md-charcoal)] dark:hover:text-[var(--md-cream)]"
         >{{ $t('common.shop') }}</nuxt-link>
         <template v-if="product.category?.breadcrumb?.length">
-          <span class="mx-2">/</span>
+          <span class="mx-2 text-[var(--md-gold)]">/</span>
           <template
             v-for="(crumb, index) in product.category.breadcrumb"
             :key="`crumb-${crumb.id}`"
           >
             <nuxt-link
               :to="`/products?category=${crumb.slug}`"
-              class="transition hover:text-gray-900 dark:hover:text-gray-200"
+              class="transition hover:text-[var(--md-charcoal)] dark:hover:text-[var(--md-cream)]"
             >
               {{ crumb.name }}
             </nuxt-link>
             <span
               v-if="index < product.category.breadcrumb.length - 1"
-              class="mx-2"
+              class="mx-2 text-[var(--md-gold)]"
             >/</span>
           </template>
         </template>
-        <span class="mx-2">/</span>
-        <span class="text-gray-900 dark:text-white">{{ getLocalizedText(product.name as Record<string, string>) }}</span>
+        <span class="mx-2 text-[var(--md-gold)]">/</span>
+        <span class="text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">{{ getLocalizedText(product.name as Record<string, string>) }}</span>
       </nav>
 
       <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
@@ -90,7 +90,7 @@
             <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px]">
               <div>
                 <div
-                  class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"
+                  class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[var(--md-cream-light)] to-[var(--md-cream-dark)] dark:from-[var(--md-charcoal-light)] dark:to-[var(--md-charcoal)]"
                   :class="selectedImage ? 'aspect-square' : ''"
                 >
                   <template v-if="selectedImage">
@@ -117,19 +117,19 @@
                     <div class="text-center space-y-4 px-6 max-w-sm">
                       <!-- Brand Identity with subtle glow -->
                       <div class="relative inline-block">
-                        <div class="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full scale-150"></div>
+                        <div class="absolute inset-0 bg-[var(--md-gold)]/20 blur-3xl rounded-full scale-150"></div>
                         <commonIcon
                           name="wine"
-                          class="relative h-20 w-20 text-blue-500 dark:text-blue-400 mx-auto"
+                          class="relative h-20 w-20 text-[var(--md-wine)] dark:text-[var(--md-gold)] mx-auto"
                         />
                       </div>
 
                       <!-- Message -->
                       <div class="space-y-2">
-                        <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                        <h3 class="font-[family-name:var(--md-font-serif)] text-base font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                           {{ $t('products.imageFallback.title') }}
                         </h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                        <p class="text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                           {{ $t('products.imageFallback.subtitle') }}
                         </p>
                       </div>
@@ -142,7 +142,7 @@
                       v-if="product.isFeatured"
                       class="absolute left-4 top-4"
                     >
-                      <span class="rounded-full bg-yellow-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
+                      <span class="rounded-full bg-[var(--md-gold)] px-3 py-1 text-sm font-semibold text-[var(--md-charcoal)] shadow-lg">
                         {{ $t('products.featured') }}
                       </span>
                     </div>
@@ -150,7 +150,7 @@
                       v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
                       class="absolute right-4 top-4"
                     >
-                      <span class="rounded-full bg-red-500 px-3 py-1 text-sm font-semibold text-white shadow-lg">
+                      <span class="rounded-full bg-[var(--md-wine)] px-3 py-1 text-sm font-semibold text-white shadow-lg">
                         {{ $t('products.sale') }}
                       </span>
                     </div>
@@ -168,8 +168,8 @@
                     v-for="(image, index) in product.images"
                     :key="image.id || index"
                     type="button"
-                    class="flex-shrink-0 w-20 h-20 lg:w-full lg:aspect-square rounded-xl overflow-hidden border-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
-                    :class="selectedImageIndex === index ? 'border-blue-500 ring-2 ring-blue-500 ring-offset-1' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'"
+                    class="flex-shrink-0 w-20 h-20 lg:w-full lg:aspect-square rounded-xl overflow-hidden border-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--md-gold)] focus-visible:ring-offset-2"
+                    :class="selectedImageIndex === index ? 'border-[var(--md-gold)] ring-2 ring-[var(--md-gold)] ring-offset-1' : 'border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] hover:border-[var(--md-gray-300)] dark:hover:border-[var(--md-gray-600)]'"
                     :aria-label="`View image ${index + 1}`"
                     @click="selectedImageIndex = index"
                   >
@@ -204,17 +204,17 @@
                 </div>
                 <div class="flex flex-col items-start gap-2 text-right">
                   <div class="flex items-center gap-3">
-                    <span class="text-3xl font-bold text-gray-900 dark:text-white">€{{ formatPrice(product.price) }}</span>
+                    <span class="font-[family-name:var(--md-font-serif)] text-3xl font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">€{{ formatPrice(product.price) }}</span>
                     <span
                       v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
-                      class="text-lg text-gray-600 line-through"
+                      class="text-lg text-[var(--md-gray-500)] line-through"
                     >
                       €{{ formatPrice(product.comparePrice) }}
                     </span>
                   </div>
                   <span
                     v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
-                    class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-600 dark:bg-red-900/30 dark:text-red-200"
+                    class="inline-flex items-center gap-2 rounded-full bg-[var(--md-wine-muted)] px-3 py-1 text-sm font-semibold text-[var(--md-wine)] dark:bg-[var(--md-wine)]/20 dark:text-[var(--md-wine-light)]"
                   >
                     {{ Math.round((1 - Number(product.price) / Number(product.comparePrice)) * 100) }}% {{ $t('products.off') }}
                   </span>
@@ -224,31 +224,31 @@
 
             <UiCardContent class="grid gap-6 lg:grid-cols-2">
               <div class="space-y-4">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                <h2 class="font-[family-name:var(--md-font-serif)] text-lg font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                   {{ sectionTitles.story }}
                 </h2>
-                <p class="text-sm text-gray-600 dark:text-gray-400">
+                <p class="text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                   {{ storytelling.producer }}
                 </p>
                 <div v-if="tastingNotes.length">
-                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
+                  <h3 class="text-sm font-semibold uppercase tracking-wide text-[var(--md-gold)] dark:text-[var(--md-gold)]">
                     {{ $t('products.story.tastingNotes') }}
                   </h3>
                   <ul class="mt-2 flex flex-wrap gap-2">
                     <li
                       v-for="note in tastingNotes"
                       :key="`note-${note}`"
-                      class="rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-200"
+                      class="rounded-full bg-[var(--md-wine-muted)] px-3 py-1 text-sm font-medium text-[var(--md-wine)] dark:bg-[var(--md-wine)]/20 dark:text-[var(--md-wine-light)]"
                     >
                       {{ note }}
                     </li>
                   </ul>
                 </div>
                 <div v-if="pairingIdeas.length">
-                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
+                  <h3 class="text-sm font-semibold uppercase tracking-wide text-[var(--md-gold)] dark:text-[var(--md-gold)]">
                     {{ $t('products.story.pairings') }}
                   </h3>
-                  <ul class="mt-2 list-inside list-disc text-sm text-gray-600 dark:text-gray-400">
+                  <ul class="mt-2 list-inside list-disc text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                     <li
                       v-for="pairing in pairingIdeas"
                       :key="`pairing-${pairing}`"
@@ -260,10 +260,10 @@
               </div>
               <div class="space-y-6">
                 <div class="space-y-2">
-                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
+                  <h3 class="text-sm font-semibold uppercase tracking-wide text-[var(--md-gold)] dark:text-[var(--md-gold)]">
                     {{ $t('products.story.awards') }}
                   </h3>
-                  <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                  <ul class="space-y-2 text-sm text-[var(--md-gray-700)] dark:text-[var(--md-gray-300)]">
                     <li
                       v-for="award in awards"
                       :key="`award-${award}`"
@@ -276,10 +276,10 @@
                   </ul>
                 </div>
                 <div class="space-y-2">
-                  <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
+                  <h3 class="text-sm font-semibold uppercase tracking-wide text-[var(--md-gold)] dark:text-[var(--md-gold)]">
                     {{ $t('products.story.origin') }}
                   </h3>
-                  <p class="text-sm text-gray-700 dark:text-gray-300">
+                  <p class="text-sm text-[var(--md-gray-700)] dark:text-[var(--md-gray-300)]">
                     {{ originStory }}
                   </p>
                 </div>
@@ -294,14 +294,14 @@
                   <UiCardTitle>{{ $t('products.socialProof.title') }}</UiCardTitle>
                   <UiCardDescription>{{ $t('products.socialProof.subtitle') }}</UiCardDescription>
                 </div>
-                <div class="flex items-center gap-2 rounded-full bg-yellow-100 px-4 py-2 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200">
+                <div class="flex items-center gap-2 rounded-full bg-[var(--md-gold-muted)] px-4 py-2 text-[var(--md-gold-dark)] dark:bg-[var(--md-gold)]/20 dark:text-[var(--md-gold)]">
                   <span class="text-lg font-semibold">{{ reviewSummary.rating }}</span>
                   <div class="flex items-center">
                     <svg
                       v-for="star in 5"
                       :key="`star-${star}`"
                       xmlns="http://www.w3.org/2000/svg"
-                      :class="star <= Math.round(reviewSummary.rating) ? 'text-yellow-500' : 'text-yellow-300 dark:text-yellow-700'"
+                      :class="star <= Math.round(reviewSummary.rating) ? 'text-[var(--md-gold)]' : 'text-[var(--md-gold)]/30 dark:text-[var(--md-gold)]/20'"
                       class="h-4 w-4"
                       viewBox="0 0 20 20"
                       fill="currentColor"
@@ -316,11 +316,11 @@
               <div
                 v-for="highlight in reviewSummary.highlights"
                 :key="highlight"
-                class="p-4 text-sm text-gray-700 dark:text-gray-300"
+                class="p-4 text-sm text-[var(--md-gray-700)] dark:text-[var(--md-gray-300)]"
               >
                 {{ highlight }}
               </div>
-              <div class="p-4 text-sm font-medium text-blue-700 dark:text-blue-300">
+              <div class="p-4 text-sm font-medium text-[var(--md-wine)] dark:text-[var(--md-gold)]">
                 {{ $t('products.socialProof.rating', { rating: reviewSummary.rating, count: reviewSummary.count }) }}
               </div>
             </UiCardContent>
@@ -343,42 +343,42 @@
             <UiCardContent>
               <dl class="mt-4 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
                 <div v-if="product.origin">
-                  <dt class="font-medium text-gray-900 dark:text-white">
+                  <dt class="font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                     {{ $t('products.origin') }}
                   </dt>
-                  <dd class="text-gray-600 dark:text-gray-400">
+                  <dd class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                     {{ product.origin }}
                   </dd>
                 </div>
                 <div v-if="product.volume">
-                  <dt class="font-medium text-gray-900 dark:text-white">
+                  <dt class="font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                     {{ $t('products.volume') }}
                   </dt>
-                  <dd class="text-gray-600 dark:text-gray-400">
+                  <dd class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                     {{ product.volume }}ml
                   </dd>
                 </div>
                 <div v-if="product.alcoholContent">
-                  <dt class="font-medium text-gray-900 dark:text-white">
+                  <dt class="font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                     {{ $t('products.alcoholContent') }}
                   </dt>
-                  <dd class="text-gray-600 dark:text-gray-400">
+                  <dd class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                     {{ product.alcoholContent }}%
                   </dd>
                 </div>
                 <div v-if="product.weightKg">
-                  <dt class="font-medium text-gray-900 dark:text-white">
+                  <dt class="font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                     {{ $t('products.weight') }}
                   </dt>
-                  <dd class="text-gray-600 dark:text-gray-400">
+                  <dd class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                     {{ product.weightKg }}kg
                   </dd>
                 </div>
                 <div v-if="product.sku">
-                  <dt class="font-medium text-gray-900 dark:text-white">
+                  <dt class="font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                     SKU
                   </dt>
-                  <dd class="text-gray-600 dark:text-gray-400">
+                  <dd class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                     {{ product.sku }}
                   </dd>
                 </div>
@@ -391,7 +391,7 @@
                 <span
                   v-for="tag in product.tags"
                   :key="tag"
-                  class="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                  class="rounded-full bg-[var(--md-cream-dark)] px-3 py-1 text-sm font-medium text-[var(--md-charcoal)] dark:bg-[var(--md-charcoal-light)] dark:text-[var(--md-cream)]"
                 >
                   {{ tag }}
                 </span>
@@ -409,9 +409,9 @@
                 <span
                   v-for="badge in sustainabilityBadges"
                   :key="badge"
-                  class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 dark:border-blue-900/60 dark:bg-blue-900/20 dark:text-blue-200"
+                  class="inline-flex items-center gap-2 rounded-full border border-[var(--md-success)]/30 bg-[var(--md-success)]/10 px-3 py-1 text-sm font-medium text-[var(--md-success)] dark:border-[var(--md-success)]/40 dark:bg-[var(--md-success)]/15 dark:text-emerald-300"
                 >
-                  <span class="inline-block h-2 w-2 rounded-full bg-blue-500"></span>
+                  <span class="inline-block h-2 w-2 rounded-full bg-[var(--md-success)]"></span>
                   {{ $t(`products.sustainability.badges.${badge}`) }}
                 </span>
               </div>
@@ -428,14 +428,14 @@
                 <details
                   v-for="item in faqItems"
                   :key="item.id"
-                  class="group pb-4 border-b border-gray-200 dark:border-gray-800 last:border-0 last:pb-0"
+                  class="group pb-4 border-b border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] last:border-0 last:pb-0"
                   :open="item.defaultOpen"
                 >
-                  <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 transition dark:text-white">
+                  <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-[var(--md-charcoal)] transition dark:text-[var(--md-cream)]">
                     {{ item.question }}
-                    <span class="text-xl leading-none transition group-open:rotate-45">+</span>
+                    <span class="text-xl leading-none transition group-open:rotate-45 text-[var(--md-gold)]">+</span>
                   </summary>
-                  <p class="mt-3 text-sm text-gray-700 dark:text-gray-300">
+                  <p class="mt-3 text-sm text-[var(--md-gray-700)] dark:text-[var(--md-gray-300)]">
                     {{ item.answer }}
                   </p>
                 </details>
@@ -449,18 +449,18 @@
             <UiCardHeader>
               <div
                 v-if="product.category"
-                class="text-sm font-medium text-blue-700 dark:text-blue-200"
+                class="text-sm font-medium text-[var(--md-wine)] dark:text-[var(--md-gold)]"
               >
                 {{ categoryLabel }}
               </div>
-              <UiCardTitle class="mt-2">
+              <UiCardTitle class="mt-2 font-[family-name:var(--md-font-serif)]">
                 {{ getLocalizedText(product.name as Record<string, string>) }}
               </UiCardTitle>
               <div class="mt-4 flex items-center gap-3">
-                <span class="text-3xl font-bold text-gray-900 dark:text-white">€{{ formatPrice(product.price) }}</span>
+                <span class="font-[family-name:var(--md-font-serif)] text-3xl font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">€{{ formatPrice(product.price) }}</span>
                 <span
                   v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
-                  class="text-lg text-gray-600 line-through"
+                  class="text-lg text-[var(--md-gray-500)] line-through"
                 >
                   €{{ formatPrice(product.comparePrice) }}
                 </span>
@@ -472,23 +472,23 @@
                 <span class="inline-block h-2 w-2 rounded-full bg-current"></span>
                 {{ stockStatusText }}
               </span>
-              <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+              <p class="mt-2 text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                 {{ estimatedDelivery }}
               </p>
               <p
                 v-if="stockUrgencyMessage"
-                class="mt-1 text-sm font-semibold text-red-600 dark:text-red-300"
+                class="mt-1 text-sm font-semibold text-[var(--md-wine)] dark:text-[var(--md-wine-light)]"
               >
                 {{ stockUrgencyMessage }}
               </p>
             </UiCardHeader>
 
             <UiCardContent class="space-y-4">
-              <label class="block text-sm font-medium text-gray-900 dark:text-white">{{ $t('common.quantity') }}</label>
+              <label class="block text-sm font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">{{ $t('common.quantity') }}</label>
               <select
                 v-model="selectedQuantity"
                 :disabled="(product.stockQuantity || 0) <= 0"
-                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400"
+                class="w-full rounded-xl border border-[var(--md-gray-300)] px-4 py-3 text-sm font-medium text-[var(--md-charcoal)] focus:border-[var(--md-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--md-gold-muted)] disabled:cursor-not-allowed disabled:bg-[var(--md-gray-100)] dark:border-[var(--md-gray-700)] dark:bg-[var(--md-charcoal-light)] dark:text-[var(--md-cream)] dark:focus:border-[var(--md-gold)]"
               >
                 <option
                   v-for="n in Math.min(10, Math.max(1, product.stockQuantity || 1))"
@@ -502,9 +502,9 @@
               <Button
                 data-testid="add-to-cart-button"
                 :disabled="(product.stockQuantity || 0) <= 0 || cartLoading"
-                class="flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                class="flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-[var(--md-gray-400)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
                 :class="[
-                  isProductInCart ? 'bg-green-600 hover:bg-green-700 focus-visible:ring-green-600' : 'bg-blue-600 hover:bg-blue-700 focus-visible:ring-blue-600',
+                  isProductInCart ? 'bg-[var(--md-success)] hover:bg-emerald-700 focus-visible:ring-[var(--md-success)]' : 'bg-[var(--md-wine)] hover:bg-[var(--md-wine-light)] focus-visible:ring-[var(--md-gold)]',
                   cartLoading ? 'cursor-progress' : '',
                 ]"
                 @click="addToCart"
@@ -548,7 +548,7 @@
               </UiButton>
               <p
                 v-if="shareFeedback"
-                class="text-sm text-blue-700 dark:text-blue-200"
+                class="text-sm text-[var(--md-wine)] dark:text-[var(--md-gold)]"
               >
                 {{ shareFeedback }}
               </p>
@@ -557,18 +557,18 @@
 
           <UiCard>
             <UiCardHeader>
-              <UiCardTitle class="text-lg">
+              <UiCardTitle class="text-lg font-[family-name:var(--md-font-serif)]">
                 {{ $t('products.trust.title') }}
               </UiCardTitle>
             </UiCardHeader>
             <UiCardContent>
-              <ul class="space-y-3 text-sm text-gray-600 dark:text-gray-300">
+              <ul class="space-y-3 text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-300)]">
                 <li
                   v-for="promise in trustPromises"
                   :key="promise"
                   class="flex items-start gap-3"
                 >
-                  <span class="mt-1 inline-block h-2 w-2 rounded-full bg-blue-500"></span>
+                  <span class="mt-1 inline-block h-2 w-2 rounded-full bg-[var(--md-gold)]"></span>
                   <span>{{ promise }}</span>
                 </li>
               </ul>
@@ -577,7 +577,7 @@
 
           <UiCard>
             <UiCardHeader>
-              <UiCardTitle class="text-lg">
+              <UiCardTitle class="text-lg font-[family-name:var(--md-font-serif)]">
                 {{ $t('products.bundle.title') }}
               </UiCardTitle>
               <UiCardDescription>{{ $t('products.bundle.description') }}</UiCardDescription>
@@ -586,14 +586,14 @@
               <div
                 v-for="item in bundleItems"
                 :key="`bundle-${item.id}`"
-                class="flex items-center justify-between py-2 text-sm border-b border-gray-200 dark:border-gray-800 last:border-0"
+                class="flex items-center justify-between py-2 text-sm border-b border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] last:border-0"
               >
-                <span class="font-medium text-gray-800 dark:text-gray-200">{{ item.title }}</span>
-                <span class="text-gray-600 dark:text-gray-400">€{{ formatPrice(item.price) }}</span>
+                <span class="font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">{{ item.title }}</span>
+                <span class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">€{{ formatPrice(item.price) }}</span>
               </div>
             </UiCardContent>
             <UiCardFooter>
-              <Button class="w-full justify-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-900/40 dark:bg-blue-900/20 dark:text-blue-200">
+              <Button class="w-full justify-center rounded-xl border border-[var(--md-gold)]/30 bg-[var(--md-gold-muted)] px-5 py-2.5 text-sm font-semibold text-[var(--md-gold-dark)] hover:bg-[var(--md-gold)]/20 dark:border-[var(--md-gold)]/40 dark:bg-[var(--md-gold)]/15 dark:text-[var(--md-gold)]">
                 {{ $t('products.bundle.cta') }}
               </Button>
             </UiCardFooter>
@@ -607,10 +607,10 @@
       >
         <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 class="font-[family-name:var(--md-font-serif)] text-2xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
               {{ sectionTitles.related }}
             </h2>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
+            <p class="text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
               {{ sectionTitles.relatedSubtitle }}
             </p>
           </div>
@@ -626,12 +626,12 @@
 
       <section
         v-if="product.description"
-        class="space-y-6 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900"
+        class="space-y-6 rounded-3xl border border-[var(--md-gray-200)] bg-[var(--md-cream-light)] p-6 shadow-sm dark:border-[var(--md-gray-700)] dark:bg-[var(--md-charcoal-light)]"
       >
-        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">
+        <h2 class="font-[family-name:var(--md-font-serif)] text-2xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
           {{ $t('products.description') }}
         </h2>
-        <div class="prose prose-lg max-w-none text-gray-600 dark:prose-invert dark:text-gray-300">
+        <div class="prose prose-lg max-w-none text-[var(--md-gray-600)] dark:prose-invert dark:text-[var(--md-gray-300)]">
           <p
             v-for="paragraph in getLocalizedText(product.description as Record<string, string>).split('\n')"
             :key="paragraph"
@@ -645,17 +645,17 @@
       <!-- Mobile Sticky Bottom Bar (Above Bottom Navigation) -->
       <Teleport to="body">
         <div
-          class="fixed left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-2xl lg:hidden"
+          class="fixed left-0 right-0 z-50 bg-[var(--md-cream-light)] dark:bg-[var(--md-charcoal)] border-t border-[var(--md-gray-200)] dark:border-[var(--md-gray-700)] shadow-2xl lg:hidden"
           style="bottom: 64px"
         >
           <div class="container mx-auto px-4 py-3">
             <div class="flex items-center gap-3">
               <!-- Product Info (Compact) -->
               <div class="flex-1 min-w-0">
-                <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
+                <p class="text-xs text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)] truncate">
                   {{ getLocalizedText(product.name as Record<string, string>) }}
                 </p>
-                <p class="text-lg font-bold text-gray-900 dark:text-white">
+                <p class="font-[family-name:var(--md-font-serif)] text-lg font-medium text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                   €{{ formatPrice(product.price) }}
                 </p>
               </div>
@@ -665,7 +665,7 @@
                 :disabled="(product.stockQuantity || 0) <= 0 || cartLoading"
                 class="flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition min-h-[48px] min-w-[140px]"
                 :class="[
-                  isProductInCart ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700',
+                  isProductInCart ? 'bg-[var(--md-success)] hover:bg-emerald-700' : 'bg-[var(--md-wine)] hover:bg-[var(--md-wine-light)]',
                   cartLoading ? 'cursor-progress' : '',
                 ]"
                 @click="addToCart"

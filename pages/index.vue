@@ -1,5 +1,5 @@
 <template>
-  <div class="text-gray-900 dark:text-gray-100">
+  <div class="text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
     <!-- Promotional announcement bar -->
     <HomeAnnouncementBar
       v-if="isSectionEnabled('announcementBar')"

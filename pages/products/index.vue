@@ -1,16 +1,16 @@
 <template>
-  <div class="bg-gray-50 dark:bg-gray-950 min-h-screen overflow-x-hidden">
+  <div class="bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)] min-h-screen overflow-x-hidden">
     <!-- Skip Links for Accessibility -->
     <div class="sr-only focus-within:not-sr-only">
       <a
         href="#main-content"
-        class="absolute top-0 left-0 z-50 bg-primary-600 text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-white"
+        class="absolute top-0 left-0 z-50 bg-[var(--md-wine)] text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-[var(--md-gold)]"
       >
         Skip to main content
       </a>
       <a
         href="#product-filters"
-        class="absolute top-0 left-28 z-50 bg-primary-600 text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-white"
+        class="absolute top-0 left-28 z-50 bg-[var(--md-wine)] text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-[var(--md-gold)]"
       >
         Skip to filters
       </a>
@@ -76,12 +76,12 @@
                   v-model="searchQuery"
                   type="search"
                   :placeholder="t('common.search') + '...'"
-                  class="w-full rounded-lg border border-gray-300 bg-white pl-10 pr-4 py-3 text-sm text-gray-900 placeholder-gray-600 transition focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-400 dark:focus:ring-primary-400"
+                  class="w-full rounded-lg border border-[var(--md-gray-300)] bg-white pl-10 pr-4 py-3 text-sm text-[var(--md-charcoal)] placeholder-[var(--md-gray-500)] transition focus:border-[var(--md-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--md-gold-muted)] focus:ring-offset-2 dark:border-[var(--md-gray-700)] dark:bg-[var(--md-charcoal-light)] dark:text-[var(--md-cream)] dark:placeholder-[var(--md-gray-400)] dark:focus:border-[var(--md-gold)] dark:focus:ring-[var(--md-gold-muted)]"
                   @input="handleSearchInput"
                 />
                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                   <svg
-                    class="h-5 w-5 text-gray-400"
+                    class="h-5 w-5 text-[var(--md-gray-400)]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -98,7 +98,7 @@
                 <button
                   v-if="searchQuery"
                   type="button"
-                  class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  class="absolute inset-y-0 right-0 flex items-center pr-3 text-[var(--md-gray-400)] hover:text-[var(--md-gold)] dark:hover:text-[var(--md-gold-light)]"
                   :aria-label="t('common.clear')"
                   @click="searchQuery = ''; handleSearchInput()"
                 >
@@ -121,12 +121,12 @@
             </div>
 
             <!-- Clean Header Section -->
-            <div class="flex flex-col gap-4 border-b border-gray-200 pb-6 dark:border-gray-800 sm:flex-row sm:items-end sm:justify-between">
+            <div class="flex flex-col gap-4 border-b border-[var(--md-gray-200)] pb-6 dark:border-[var(--md-gray-700)] sm:flex-row sm:items-end sm:justify-between">
               <div class="min-w-0 flex-1">
-                <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl lg:text-4xl">
+                <h1 class="font-[family-name:var(--md-font-serif)] text-2xl font-normal tracking-tight text-[var(--md-charcoal)] dark:text-[var(--md-cream)] sm:text-3xl lg:text-4xl">
                   {{ t('products.discovery.title') }}
                 </h1>
-                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                <p class="mt-2 text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                   {{ t('products.showingResults', {
                     start: ((pagination.page - 1) * pagination.limit) + 1,
                     end: Math.min(pagination.page * pagination.limit, pagination.total || 0),
@@ -143,7 +143,7 @@
                   :aria-label="t('products.filters.title')"
                   :aria-expanded="showFilterPanel"
                   aria-controls="filter-panel"
-                  class="relative inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-750"
+                  class="relative inline-flex items-center gap-2 rounded-lg border border-[var(--md-gray-300)] bg-white px-4 py-2.5 text-sm font-medium text-[var(--md-charcoal)] transition hover:bg-[var(--md-cream-dark)] hover:border-[var(--md-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--md-gold)] focus:ring-offset-2 dark:border-[var(--md-gray-700)] dark:bg-[var(--md-charcoal-light)] dark:text-[var(--md-cream)] dark:hover:bg-[var(--md-gray-800)]"
                   @click="openFilterPanel"
                 >
                   <commonIcon
@@ -154,7 +154,7 @@
                   <span>{{ t('products.filters.title') }}</span>
                   <span
                     v-if="activeFilterChips.length"
-                    class="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-xs font-semibold text-white ring-2 ring-white dark:ring-gray-900"
+                    class="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--md-wine)] text-xs font-semibold text-white ring-2 ring-white dark:ring-[var(--md-charcoal)]"
                   >
                     {{ activeFilterChips.length }}
                   </span>
@@ -172,7 +172,7 @@
                     id="product-sort"
                     v-model="localSortBy"
                     :aria-label="t('products.sortLabel')"
-                    class="h-10 appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-10 text-sm font-medium text-gray-700 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                    class="h-10 appearance-none rounded-lg border border-[var(--md-gray-300)] bg-white pl-4 pr-10 text-sm font-medium text-[var(--md-charcoal)] transition focus:border-[var(--md-gold)] focus:outline-none focus:ring-2 focus:ring-[var(--md-gold-muted)] focus:ring-offset-2 dark:border-[var(--md-gray-700)] dark:bg-[var(--md-charcoal-light)] dark:text-[var(--md-cream)]"
                     @change="handleSortChange"
                   >
                     <option value="created">
@@ -193,7 +193,7 @@
                   </select>
                   <commonIcon
                     name="lucide:chevron-down"
-                    class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600"
+                    class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--md-gray-600)]"
                     aria-hidden="true"
                   />
                 </div>
@@ -212,11 +212,11 @@
 
             <div
               v-if="error"
-              class="rounded-2xl border border-red-100 bg-white p-10 text-center shadow-sm dark:border-red-900/40 dark:bg-gray-900"
+              class="rounded-2xl border border-[var(--md-wine-muted)] bg-white p-10 text-center shadow-sm dark:border-[var(--md-wine-dark)] dark:bg-[var(--md-charcoal-light)]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="mx-auto mb-4 h-16 w-16 text-red-400"
+                class="mx-auto mb-4 h-16 w-16 text-[var(--md-wine)]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -228,10 +228,10 @@
                   d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+              <h2 class="font-[family-name:var(--md-font-serif)] text-2xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)] mb-2">
                 {{ t('common.error') }}
               </h2>
-              <p class="text-gray-600 dark:text-gray-400 mb-6">
+              <p class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)] mb-6">
                 {{ error || t('common.errorGeneric') }}
               </p>
               <UiButton
@@ -289,7 +289,7 @@
                 class="space-y-4 text-center"
               >
                 <p
-                  class="text-sm text-gray-600 dark:text-gray-400"
+                  class="text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]"
                   aria-live="polite"
                 >
                   {{ t('products.pagination.pageOf', { page: pagination.page, total: pagination.totalPages }) }} ·
@@ -327,7 +327,7 @@
                     </UiButton>
                     <span
                       v-else
-                      class="px-3 py-2 text-sm text-gray-600"
+                      class="px-3 py-2 text-sm text-[var(--md-gray-600)]"
                       aria-hidden="true"
                     >…</span>
                   </template>
@@ -347,11 +347,11 @@
 
             <div
               v-else
-              class="rounded-2xl border border-dashed border-gray-300 bg-white p-12 text-center shadow-sm dark:border-gray-700 dark:bg-gray-900"
+              class="rounded-2xl border border-dashed border-[var(--md-gray-300)] bg-white p-12 text-center shadow-sm dark:border-[var(--md-gray-700)] dark:bg-[var(--md-charcoal-light)]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="mx-auto mb-4 h-16 w-16 text-gray-400"
+                class="mx-auto mb-4 h-16 w-16 text-[var(--md-gold)]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -363,10 +363,10 @@
                   d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
                 />
               </svg>
-              <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+              <h2 class="font-[family-name:var(--md-font-serif)] text-2xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)] mb-2">
                 {{ hasActiveFilters ? t('products.noResults') : t('products.noProducts') }}
               </h2>
-              <p class="text-gray-600 dark:text-gray-400">
+              <p class="text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                 {{ hasActiveFilters ? t('products.tryDifferentFilters') : t('products.comingSoon') }}
               </p>
               <UiButton
@@ -385,10 +385,10 @@
             >
               <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                  <h3 class="font-[family-name:var(--md-font-serif)] text-xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                     {{ t('products.recentlyViewed.title') }}
                   </h3>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">
+                  <p class="text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                     {{ t('products.recentlyViewed.subtitle') }}
                   </p>
                 </div>
@@ -402,13 +402,13 @@
               </div>
             </section>
 
-            <section class="space-y-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+            <section class="space-y-6 rounded-2xl border border-[var(--md-gray-200)] bg-white p-6 shadow-sm dark:border-[var(--md-gray-700)] dark:bg-[var(--md-charcoal-light)]">
               <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                  <h3 class="font-[family-name:var(--md-font-serif)] text-xl font-normal text-[var(--md-charcoal)] dark:text-[var(--md-cream)]">
                     {{ t('products.editorial.title') }}
                   </h3>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">
+                  <p class="text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                     {{ t('products.editorial.subtitle') }}
                   </p>
                 </div>
@@ -417,20 +417,20 @@
                 <article
                   v-for="story in editorialStories"
                   :key="story.id"
-                  class="group relative overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-6 transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:from-gray-900 dark:to-gray-800"
+                  class="group relative overflow-hidden rounded-2xl border border-[var(--md-gray-200)] bg-gradient-to-br from-[var(--md-cream-light)] to-white p-6 transition hover:-translate-y-1 hover:shadow-lg hover:border-[var(--md-gold-muted)] dark:border-[var(--md-gray-700)] dark:from-[var(--md-charcoal)] dark:to-[var(--md-charcoal-light)]"
                 >
-                  <span class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-800 dark:bg-blue-900/60 dark:text-blue-200">
+                  <span class="inline-flex rounded-full bg-[var(--md-gold-muted)] px-3 py-1 text-xs font-semibold uppercase tracking-widest text-[var(--md-gold-dark)] dark:bg-[var(--md-gold-muted)] dark:text-[var(--md-gold-light)]">
                     {{ story.tag }}
                   </span>
-                  <h4 class="mt-4 text-lg font-semibold text-gray-900 transition group-hover:text-blue-700 dark:text-white dark:group-hover:text-blue-200">
+                  <h4 class="mt-4 font-[family-name:var(--md-font-serif)] text-lg font-normal text-[var(--md-charcoal)] transition group-hover:text-[var(--md-wine)] dark:text-[var(--md-cream)] dark:group-hover:text-[var(--md-gold-light)]">
                     {{ story.title }}
                   </h4>
-                  <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                  <p class="mt-2 text-sm text-[var(--md-gray-600)] dark:text-[var(--md-gray-400)]">
                     {{ story.description }}
                   </p>
                   <button
                     type="button"
-                    class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-700 transition hover:text-blue-800 dark:text-blue-200 dark:hover:text-blue-100"
+                    class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[var(--md-wine)] transition hover:text-[var(--md-wine-light)] dark:text-[var(--md-gold)] dark:hover:text-[var(--md-gold-light)]"
                   >
                     {{ t('products.editorial.cta') }}
                     <span aria-hidden="true">→</span>
