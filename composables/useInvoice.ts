@@ -223,7 +223,7 @@ export function useInvoice() {
       return { success: true }
     }
     catch (error) {
-      console.error('Invoice print error:', error)
+      console.error('Invoice print error:', getErrorMessage(error))
       return {
         success: false,
         error: 'unknown_error',

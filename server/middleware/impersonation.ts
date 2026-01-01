@@ -50,15 +50,15 @@ export default defineEventHandler(async (event: H3Event) => {
       session: session.id,
     })
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Invalid or expired token - log and clear the impersonation context
-    console.warn('[IMPERSONATION] Invalid token:', error.statusMessage)
+    console.warn('[IMPERSONATION] Invalid token:', getServerErrorMessage(error))
 
     // Don't throw error, just clear impersonation context
     // This allows the request to continue as the original user
     event.context.impersonation = {
       isImpersonating: false,
-      error: error.statusMessage,
+      error: getServerErrorMessage(error),
     }
   }
 })

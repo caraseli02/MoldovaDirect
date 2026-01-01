@@ -10,7 +10,7 @@ const classifyNetworkError = (err: any): string => {
   }
 
   // Network errors
-  if (err instanceof TypeError && err.message.includes('fetch')) {
+  if (err instanceof TypeError && getErrorMessage(err).includes('fetch')) {
     return 'Network connection error. Please check your internet connection.'
   }
 
@@ -25,7 +25,7 @@ const classifyNetworkError = (err: any): string => {
   }
 
   // Generic error
-  return err instanceof Error ? err.message : 'An unexpected error occurred'
+  return err instanceof Error ? getErrorMessage(err) : 'An unexpected error occurred'
 }
 
 /**
@@ -107,11 +107,12 @@ export const useProductCatalog = () => {
         signal,
       })
 
-      products.value = response.products
-      pagination.value = response.pagination
+      // Force reactivity by creating new array/object references
+      products.value = [...response.products]
+      pagination.value = { ...response.pagination }
       filters.value = { ...productFilters }
     }
-    catch (err: any) {
+    catch (err: unknown) {
       // Check if this is an intentional cancellation (DOMException with name 'AbortError')
       const isAbortError = err instanceof DOMException && err.name === 'AbortError'
       if (isAbortError) {
@@ -122,7 +123,7 @@ export const useProductCatalog = () => {
       const errorMessage = classifyNetworkError(err)
       if (errorMessage) {
         error.value = errorMessage
-        console.error('[Product Catalog] Error fetching products:', err)
+        console.error('[Product Catalog] Error fetching products:', getErrorMessage(err))
       }
     }
     finally {
@@ -150,11 +151,11 @@ export const useProductCatalog = () => {
 
       return response.product
     }
-    catch (err: any) {
+    catch (err: unknown) {
       const errorMessage = classifyNetworkError(err)
       if (errorMessage) {
         error.value = errorMessage
-        console.error('[Product Catalog] Error fetching product:', err)
+        console.error('[Product Catalog] Error fetching product:', getErrorMessage(err))
       }
       return null
     }
@@ -173,8 +174,8 @@ export const useProductCatalog = () => {
       const response = await $fetch<{ products: ProductWithRelations[] }>(`/api/products/featured?${params.toString()}`)
       return response.products
     }
-    catch (err: any) {
-      console.error('Error fetching featured products:', err)
+    catch (err: unknown) {
+      console.error('Error fetching featured products:', getErrorMessage(err))
       return []
     }
   }
@@ -223,7 +224,7 @@ export const useProductCatalog = () => {
 
       filters.value = { ...searchFilters }
     }
-    catch (err: any) {
+    catch (err: unknown) {
       // Check if this is an intentional cancellation (DOMException with name 'AbortError')
       const isAbortError = err instanceof DOMException && err.name === 'AbortError'
       if (isAbortError) {
@@ -234,7 +235,7 @@ export const useProductCatalog = () => {
       const errorMessage = classifyNetworkError(err)
       if (errorMessage) {
         error.value = errorMessage
-        console.error('[Product Catalog] Error searching products:', err)
+        console.error('[Product Catalog] Error searching products:', getErrorMessage(err))
       }
       searchResults.value = []
     }
@@ -253,8 +254,8 @@ export const useProductCatalog = () => {
       const response = await $fetch<{ suggestions: string[] }>(`/api/search/suggestions?q=${encodeURIComponent(query)}`)
       return response.suggestions
     }
-    catch (err: any) {
-      console.error('Error fetching suggestions:', err)
+    catch (err: unknown) {
+      console.error('Error fetching suggestions:', getErrorMessage(err))
       return []
     }
   }
@@ -281,9 +282,9 @@ export const useProductCatalog = () => {
 
       categoriesTree.value = buildTree()
     }
-    catch (err: any) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch categories'
-      console.error('Error fetching categories:', err)
+    catch (err: unknown) {
+      error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to fetch categories'
+      console.error('Error fetching categories:', getErrorMessage(err))
     }
     finally {
       loading.value = false
@@ -330,12 +331,21 @@ export const useProductCatalog = () => {
   }
 
   // Filter panel UI helpers
+  // Note: Ensure showFilterPanel is explicitly set to boolean to avoid hydration issues
   const openFilterPanel = () => {
+    // Force to true even if currently undefined (SSR hydration edge case)
     showFilterPanel.value = true
   }
 
   const closeFilterPanel = () => {
     showFilterPanel.value = false
+  }
+
+  // Ensure filter panel state is initialized (fixes SSR hydration issue)
+  const ensureFilterPanelInitialized = () => {
+    if (showFilterPanel.value === undefined) {
+      showFilterPanel.value = false
+    }
   }
 
   // Sort helpers
@@ -366,6 +376,7 @@ export const useProductCatalog = () => {
     clearFilters,
     openFilterPanel,
     closeFilterPanel,
+    ensureFilterPanelInitialized,
     updateSort,
 
     // Reactive state

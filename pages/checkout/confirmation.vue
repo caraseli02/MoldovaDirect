@@ -850,8 +850,8 @@ onMounted(async () => {
         )
       }
     }
-    catch (error: any) {
-      console.error('[CRITICAL] Exception during session restore:', error)
+    catch (error: unknown) {
+      console.error('[CRITICAL] Exception during session restore:', getErrorMessage(error))
       toast.error(
         t('checkout.confirmation.errorLoadingOrder'),
         t('checkout.confirmation.contactSupport'),
@@ -893,8 +893,8 @@ onMounted(async () => {
   try {
     await cartStore.clearCart()
   }
-  catch (error: any) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+  catch (error: unknown) {
+    const errorMessage = error instanceof Error ? getErrorMessage(error) : 'Unknown error'
     console.error('[ERROR] Failed to clear cart on confirmation page:', {
       error: errorMessage,
       orderId: currentOrderData.orderId,

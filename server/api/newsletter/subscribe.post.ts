@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
     })
 
     if (error) {
-      console.error('Newsletter subscription error:', error)
+      console.error('Newsletter subscription error:', getServerErrorMessage(error))
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to subscribe to newsletter',
@@ -83,16 +83,16 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    console.error('Newsletter API error:', error)
+  catch (error: unknown) {
+    console.error('Newsletter API error:', getServerErrorMessage(error))
 
     // If it's already a createError, rethrow it
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 
     // Handle specific database errors
-    if (error.code === '23505') {
+    if (isDatabaseError(error) && error.code === '23505') {
       // Unique constraint violation (duplicate email)
       return {
         success: true,
@@ -108,7 +108,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error',
-      data: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      data: process.env.NODE_ENV === 'development' ? getServerErrorMessage(error) : undefined,
     })
   }
 })

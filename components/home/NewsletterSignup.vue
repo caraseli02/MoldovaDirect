@@ -159,7 +159,7 @@ const submitNewsletter = async () => {
       error.value = t('home.newsletter.error')
     }
   }
-  catch (e: any) {
+  catch (e: unknown) {
     console.error('Newsletter submission failed:', e)
     error.value = t('home.newsletter.error')
   }

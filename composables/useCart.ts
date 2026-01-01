@@ -1,6 +1,6 @@
 import { useCartStore } from '~/stores/cart'
 import type { Product } from '~/stores/cart/types'
-import { computed } from 'vue'
+import { computed, readonly } from 'vue'
 
 export const useCart = () => {
   // CRITICAL FIX v3: Cart store is client-only, check before accessing
@@ -82,8 +82,8 @@ export const useCart = () => {
     cartStore.initializeCart()
   }
 
-  // Store-based reactive properties
-  const items = computed(() => cartStore.items)
+  // Store-based reactive properties (wrap mutable state with readonly to prevent external mutation)
+  const items = computed(() => readonly(cartStore.items))
   const itemCount = computed(() => cartStore.itemCount)
   const subtotal = computed(() => cartStore.subtotal)
   const isEmpty = computed(() => cartStore.isEmpty)
@@ -95,17 +95,17 @@ export const useCart = () => {
   const validationInProgress = computed(() => cartStore.validationInProgress)
   const backgroundValidationEnabled = computed(() => cartStore.backgroundValidationEnabled)
   const lastBackgroundValidation = computed(() => cartStore.lastBackgroundValidation)
-  const selectedItems = computed(() => cartStore.selectedItems)
+  const selectedItems = computed(() => readonly(cartStore.selectedItems))
   const selectedItemsCount = computed(() => cartStore.selectedItemsCount)
   const selectedItemsSubtotal = computed(() => cartStore.selectedItemsSubtotal)
   const allItemsSelected = computed(() => cartStore.allItemsSelected)
   const hasSelectedItems = computed(() => cartStore.hasSelectedItems)
   const bulkOperationInProgress = computed(() => cartStore.bulkOperationInProgress)
-  const savedForLater = computed(() => cartStore.savedForLater)
+  const savedForLater = computed(() => readonly(cartStore.savedForLater))
   const savedForLaterCount = computed(() => cartStore.savedForLaterCount)
-  const recommendations = computed(() => cartStore.recommendations)
+  const recommendations = computed(() => readonly(cartStore.recommendations))
   const recommendationsLoading = computed(() => cartStore.recommendationsLoading)
-  const performanceMetrics = computed(() => cartStore.performanceMetrics)
+  const performanceMetrics = computed(() => readonly(cartStore.performanceMetrics))
 
   // Store methods - direct passthrough to store
   const isInCart = (productId: string) => cartStore.isInCart(productId)

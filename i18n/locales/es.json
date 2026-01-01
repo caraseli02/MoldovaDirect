@@ -67,7 +67,12 @@
     "showOrderSummary": "Mostrar resumen del pedido",
     "hideOrderSummary": "Ocultar resumen del pedido",
     "item": "artículo",
-    "items": "artículos"
+    "time": {
+      "days": "d",
+      "hours": "h",
+      "minutes": "m",
+      "seconds": "s"
+    }
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculado al finalizar",
@@ -841,8 +846,10 @@
     "addresses": "Direcciones",
     "addressesDescription": "Gestiona tus direcciones de envío y facturación",
     "addAddress": "Añadir Dirección",
+    "addAddressDescription": "Introduce los detalles de tu nueva dirección.",
     "addFirstAddress": "Añadir Tu Primera Dirección",
     "editAddress": "Editar Dirección",
+    "editAddressDescription": "Actualiza los detalles de esta dirección.",
     "updateAddress": "Actualizar Dirección",
     "saveAddress": "Guardar Dirección",
     "deleteAddress": "Eliminar Dirección",
@@ -1223,7 +1230,8 @@
       "success": "¡Gracias! Recibirás nuestro próximo boletín en tu bandeja.",
       "error": "Algo salió mal. Por favor, inténtalo de nuevo.",
       "disclaimer": "Enviamos uno o dos correos al mes y puedes darte de baja cuando quieras.",
-      "subscribeButton": "Suscribirse"
+      "subscribeButton": "Suscribirse",
+      "error": "¡Ups! Algo salió mal. Por favor, inténtalo de nuevo."
     },
     "faqPreview": {
       "title": "¿Dudas antes de pedir?",
@@ -1243,6 +1251,72 @@
           "answer": "Nuestro equipo de conserjería atiende por WhatsApp y correo para sugerir maridajes y cajas a medida."
         }
       }
+    },
+    "ugcGallery": {
+      "badge": "Fotos de clientes",
+      "title": "Mira lo que disfrutan nuestros clientes",
+      "subtitle": "Clientes reales compartiendo su experiencia con Moldova Direct en Instagram",
+      "verified": "Compra verificada",
+      "ctaText": "¿Quieres aparecer? Etiquétanos en Instagram",
+      "ctaButton": "Síguenos en Instagram"
+    },
+    "productQuiz": {
+      "badge": "Encuentra tu combinación perfecta",
+      "title": "¿No sabes qué pedir?",
+      "subtitle": "Haz nuestro rápido cuestionario para descubrir productos perfectos para tu gusto",
+      "progress": "Progreso",
+      "startText": "Responde 3 preguntas rápidas y te recomendaremos los productos moldavos perfectos para ti. ¡Tarda menos de 1 minuto!",
+      "startButton": "Empezar cuestionario",
+      "getResults": "Obtener mis recomendaciones",
+      "resultsTitle": "¡Perfecto! Aquí están tus coincidencias",
+      "resultsSubtitle": "Basándonos en tus respuestas, hemos seleccionado estos productos para ti",
+      "viewProducts": "Ver todas las recomendaciones",
+      "restart": "Repetir cuestionario",
+      "questions": {
+        "occasion": {
+          "question": "¿Qué te trae a Moldova Direct?",
+          "description": "Ayúdanos a entender tus necesidades",
+          "options": {
+            "gift": {
+              "label": "Regalo para alguien especial",
+              "description": "Cestas y sets de regalo curados"
+            },
+            "personal": {
+              "label": "Disfrute personal",
+              "description": "Vinos y alimentos para mí"
+            },
+            "event": {
+              "label": "Evento o celebración",
+              "description": "Fiesta, cena o reunión"
+            },
+            "subscription": {
+              "label": "Entregas regulares",
+              "description": "Suscripción mensual de vinos"
+            }
+          }
+        },
+        "preference": {
+          "question": "¿Qué tipo de vino prefieres?",
+          "options": {
+            "red": "Vinos tintos",
+            "white": "Vinos blancos",
+            "sparkling": "Vinos espumosos",
+            "mixed": "Una mezcla de todo"
+          }
+        },
+        "budget": {
+          "question": "¿Cuál es tu presupuesto por botella?",
+          "options": {
+            "under30": "Menos de 30€",
+            "mid": "30€-60€",
+            "premium": "60€+"
+          }
+        }
+      }
+    },
+    "realtimeNotification": {
+      "purchased": "acaba de comprar",
+      "verified": "Compra verificada"
     }
   },
   "products": {
@@ -1488,7 +1562,7 @@
         },
         "storage": {
           "question": "¿Cómo debo conservarlo?",
-          "answer": "Guárdalo en un lugar fresco y seco, lejos de la luz directa. Los vinos reposan mejor entre 12 y 18 °C."
+          "answer": "Guárdalo en un lugar fresco y seco, lejos de la luz directa. Consulta la etiqueta del producto para recomendaciones específicas de almacenamiento."
         },
         "allergens": {
           "question": "¿Contiene alérgenos?",
@@ -1527,6 +1601,21 @@
       "sharedSuccess": "¡Gracias por compartir este descubrimiento!",
       "shareText": "Descubre este favorito moldavo conmigo.",
       "copyFallback": "Copia este enlace y envíalo a quien quieras."
+    },
+    "onlyLeft": "Solo quedan {count}",
+    "benefits": {
+      "authentic": "Auténtico moldavo",
+      "authenticTooltip": "Obtenido directamente de productores y artesanos auténticos moldavos",
+      "fastShipping": "Entrega rápida",
+      "fastShippingTooltip": "Pedidos enviados en 48 horas en toda España",
+      "qualityGuaranteed": "Calidad garantizada",
+      "qualityGuaranteedTooltip": "Productos de calidad premium con garantía de satisfacción",
+      "securePayment": "Pago seguro",
+      "securePaymentTooltip": "Procesamiento de pagos seguro y protegido"
+    },
+    "quickFilters": {
+      "label": "Opciones de filtro rápido",
+      "toggle": "Alternar filtro {filter}"
     }
   },
   "returns": {
@@ -2074,7 +2163,24 @@
       "contactNoticeTitle": "Contacto de Entrega",
       "contactNotice": "Te contactaremos usando la información proporcionada para coordinar la entrega y el pago.",
       "comingSoon": "Próximamente",
-      "error": "Error de Pago"
+      "error": "Error de Pago",
+      "cvvHelpLabel": "Mostrar ayuda CVV",
+      "copyBankDetails": "Copiar datos bancarios al portapapeles",
+      "bankDetailsCopied": "Datos bancarios copiados al portapapeles",
+      "bankDetailsCopyFailed": "Error al copiar datos bancarios",
+      "validation": {
+        "cardNumberRequired": "El número de tarjeta es obligatorio",
+        "cardNumberInvalid": "Número de tarjeta inválido",
+        "expiryRequired": "La fecha de vencimiento es obligatoria",
+        "expiryInvalid": "Formato de fecha de vencimiento inválido",
+        "expiryExpired": "La tarjeta ha expirado",
+        "cvvRequired": "El CVV es obligatorio",
+        "cvvInvalid": "CVV inválido",
+        "cvvLength": "El CVV debe tener {length} dígitos",
+        "holderNameRequired": "El nombre del titular es obligatorio",
+        "paypalEmailRequired": "El correo de PayPal es obligatorio",
+        "paypalEmailInvalid": "Dirección de correo inválida"
+      }
     },
     "navigation": {
       "back": "Atrás",
@@ -2398,7 +2504,8 @@
         "status": "Status",
         "created": "Created",
         "actions": "Actions"
-      }
+      },
+      "select": "Seleccionar producto"
     },
     "orders": {
       "title": "Pedidos",
@@ -2771,6 +2878,7 @@
       "featuredProducts": "Vinos Destacados",
       "viewAllProducts": "Ver Todos los Productos",
       "closeModal": "Cerrar",
+      "detailsDescription": "Ver información detallada sobre {name} incluyendo su historia, viñedo y vinos premiados",
       "swipeHint": "Desliza para explorar más enólogos",
       "keyboardHint": "Usa las flechas del teclado para navegar",
       "loading": "Cargando historias de enólogos...",

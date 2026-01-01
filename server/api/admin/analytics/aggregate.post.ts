@@ -218,8 +218,8 @@ export default defineEventHandler(async (event) => {
       data: result,
     }
   }
-  catch (error: any) {
-    console.error('Analytics aggregation error:', error)
+  catch (error: unknown) {
+    console.error('Analytics aggregation error:', getServerErrorMessage(error))
 
     if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error

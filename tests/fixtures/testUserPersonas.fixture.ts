@@ -130,15 +130,6 @@ class TestUserPage {
   }
 
   /**
-   * Use console commands for persona management
-   */
-  async useConsoleCommand(command: string) {
-    return await this.page.evaluate((cmd) => {
-      return eval(cmd)
-    }, command)
-  }
-
-  /**
    * Verify persona is active
    */
   async verifyPersonaActive(expectedTitle: string) {

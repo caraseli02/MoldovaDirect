@@ -157,7 +157,7 @@ export async function cleanupTestOrders(options: CleanupOptions = {}) {
 
     console.log(`\n✅ Successfully deleted ${allTestOrders.length} test orders`)
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('❌ Error during cleanup:', error.message)
     throw error
   }
@@ -212,7 +212,7 @@ export async function cleanupOrderById(orderIdOrNumber: string) {
 
     console.log(`✅ Successfully deleted order: ${order.order_number}`)
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('❌ Error deleting order:', error.message)
     throw error
   }

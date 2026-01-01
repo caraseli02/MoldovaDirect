@@ -11,7 +11,12 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "lint:staged": "eslint --fix",
+    "lint:oxlint": "oxlint --deny-warnings",
+    "lint:fast": "oxlint --deny-warnings && eslint .",
+    "lint:all": "pnpm lint:oxlint && pnpm lint && pnpm typecheck",
+    "lint:knip": "knip",
+    "lint:knip:fix": "knip --fix",
+    "lint:staged": "lint-staged",
     "typecheck": "nuxi typecheck",
     "deploy": "vercel --prod",
     "deploy:preview": "vercel",
@@ -45,6 +50,7 @@
     "test:visual:update": "PLAYWRIGHT_TEST=true playwright test --config=playwright.visual-regression.config.ts --update-snapshots",
     "test:visual-review": "PLAYWRIGHT_TEST=true playwright test --config=playwright.visual-regression.config.ts --ui",
     "test:visual:orders": "PLAYWRIGHT_TEST=true playwright test tests/e2e/visual/orders.spec.ts --project=chromium-es",
+    "test:visual:products": "PLAYWRIGHT_TEST=true playwright test tests/e2e/visual/products-catalog.spec.ts --project=chromium-es",
     "test:visual:all": "PLAYWRIGHT_TEST=true playwright test tests/e2e/visual/ --project=chromium-es",
     "visual:serve": "node .visual-testing/serve.mjs",
     "test:report": "playwright show-report",
@@ -113,12 +119,17 @@
     "@vue/test-utils": "^2.4.6",
     "dotenv": "^17.2.1",
     "eslint": "^9.39.1",
+    "eslint-plugin-oxlint": "^1.36.0",
+    "eslint-plugin-sonarjs": "^3.0.5",
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
+    "knip": "^5.78.0",
+    "lint-staged": "^16.2.7",
     "markdown-link-check": "^3.14.2",
     "markdownlint-cli": "^0.47.0",
     "nuxt": "^4.2.2",
     "nuxt-swiper": "1.2.0",
+    "oxlint": "^1.36.0",
     "playwright": "^1.55.1",
     "terser": "^5.44.1",
     "typescript": "^5.9.3",
@@ -127,6 +138,15 @@
   "engines": {
     "node": ">=22.4.0",
     "pnpm": ">=9.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,vue}": [
+      "oxlint --deny-warnings",
+      "eslint --fix"
+    ],
+    "*.{js,mjs,cjs}": [
+      "oxlint --deny-warnings"
+    ]
   },
   "pnpm": {
     "overrides": {

@@ -45,7 +45,7 @@ export function serializeCookieData(data: any): any {
 
     return serialized
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to serialize cookie data:', error)
     return null
   }
@@ -77,7 +77,7 @@ export function deserializeCookieData<T = unknown>(
 
     return data as T
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to deserialize cookie data:', error)
     return null
   }
@@ -96,7 +96,7 @@ export function clearCookie(name: string): void {
  */
 export function hasCookie(name: string): boolean {
   const cookie = useCookie(name)
-  return cookie.value != null
+  return cookie.value !== null
 }
 
 /**
@@ -177,7 +177,7 @@ export class CookieManager<T = any> {
    * Check if cookie exists
    */
   exists(): boolean {
-    return this.cookieRef.value != null
+    return this.cookieRef.value !== null
   }
 
   /**

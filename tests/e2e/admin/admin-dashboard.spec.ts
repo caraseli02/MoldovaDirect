@@ -291,7 +291,7 @@ test.describe('Admin Dashboard - Comprehensive Testing', () => {
           })
         }
       }
-      catch (error: any) {
+      catch (error: unknown) {
         console.log(`    ✗ Error: ${error}`)
         testedLinks.push({
           text: linkInfo.text,

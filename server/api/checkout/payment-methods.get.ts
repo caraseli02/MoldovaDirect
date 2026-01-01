@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
       .order('created_at', { ascending: false })
 
     if (error) {
-      console.error('Failed to load payment methods:', error)
+      console.error('Failed to load payment methods:', getServerErrorMessage(error))
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to load payment methods',
@@ -44,10 +44,10 @@ export default defineEventHandler(async (event) => {
       paymentMethods,
     }
   }
-  catch (error: any) {
-    console.error('Load payment methods error:', error)
+  catch (error: unknown) {
+    console.error('Load payment methods error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

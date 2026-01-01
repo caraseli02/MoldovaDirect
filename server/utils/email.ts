@@ -31,14 +31,14 @@ export async function sendEmail({ to, subject, html }: EmailTemplate) {
     })
 
     if (error) {
-      console.error('❌ Email send error:', error)
+      console.error('❌ Email send error:', getServerErrorMessage(error))
       throw new Error(`Failed to send email: ${error.message}`)
     }
 
     return { success: true, id: data?.id }
   }
-  catch (error: any) {
-    console.error('❌ Email service error:', error)
+  catch (error: unknown) {
+    console.error('❌ Email service error:', getServerErrorMessage(error))
     throw error
   }
 }

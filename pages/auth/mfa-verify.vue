@@ -179,8 +179,8 @@ async function handleVerify(): Promise<void> {
 
     await handleAuthRedirect(redirect, user.value || null, supabase, localePath, navigateTo)
   }
-  catch (err: any) {
-    error.value = err instanceof Error ? err.message : 'Verification failed'
+  catch (err: unknown) {
+    error.value = err instanceof Error ? getErrorMessage(err) : 'Verification failed'
   }
 }
 

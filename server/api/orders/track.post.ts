@@ -1,10 +1,12 @@
 // POST /api/orders/track - Public endpoint to track order by order number and email
 import { serverSupabaseServiceRole } from '#supabase/server'
+import { z } from 'zod'
 
-interface TrackOrderRequest {
-  orderNumber: string
-  email: string
-}
+// Zod schema for track order request validation
+const trackOrderSchema = z.object({
+  orderNumber: z.string().min(1, 'Order number is required').trim(),
+  email: z.string().email('Invalid email address').trim().toLowerCase(),
+})
 
 // Simple in-memory rate limiting (in production, use Redis or similar)
 const rateLimitMap = new Map<string, { count: number, resetTime: number }>()
@@ -59,29 +61,21 @@ export default defineEventHandler(async (event) => {
 
     const supabase = serverSupabaseServiceRole(event)
 
-    // Parse and validate request body
-    let body: TrackOrderRequest
-    try {
-      body = await readBody<TrackOrderRequest>(event)
-    }
-    catch {
+    // Parse and validate request body with Zod
+    const rawBody = await readBody(event)
+    const validation = trackOrderSchema.safeParse(rawBody)
+
+    if (!validation.success) {
       throw createError({
         statusCode: 400,
         statusMessage: 'Invalid request body',
+        data: validation.error.issues,
       })
     }
 
-    // Validate required fields
-    if (!body.orderNumber || !body.email) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Order number and email are required',
-      })
-    }
-
-    // Normalize inputs
-    const orderNumber = body.orderNumber.trim().toUpperCase()
-    const email = body.email.trim().toLowerCase()
+    // Get validated and normalized inputs
+    const orderNumber = validation.data.orderNumber.toUpperCase()
+    const email = validation.data.email
 
     // Sanitized order number for logging (first 4 chars only)
     const sanitizedOrderNumber = orderNumber.length > 4
@@ -241,12 +235,12 @@ export default defineEventHandler(async (event) => {
       data: trackingInfo,
     }
   }
-  catch (error: any) {
-    if (error.statusCode) {
+  catch (error: unknown) {
+    if (isH3Error(error)) {
       throw error
     }
 
-    console.error('Public tracking fetch error:', error)
+    console.error('Public tracking fetch error:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error',

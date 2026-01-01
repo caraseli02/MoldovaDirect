@@ -148,10 +148,10 @@ export default defineEventHandler(async (event) => {
       data: stats,
     }
   }
-  catch (error: any) {
-    console.error('Dashboard stats error:', error)
+  catch (error: unknown) {
+    console.error('Dashboard stats error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

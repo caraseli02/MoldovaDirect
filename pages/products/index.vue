@@ -525,6 +525,7 @@ const {
   clearFilters,
   openFilterPanel,
   closeFilterPanel,
+  ensureFilterPanelInitialized,
   products,
   categoriesTree,
   currentCategory,
@@ -541,6 +542,9 @@ const {
 // During client hydration, state is restored from SSR payload
 await initialize()
 await fetchProducts({ sort: 'created', page: initialPage, limit: initialLimit })
+
+// Ensure filter panel state is properly initialized (fixes SSR hydration edge case)
+ensureFilterPanelInitialized()
 
 // Filter Management
 const {
@@ -707,8 +711,8 @@ const refreshProducts = async () => {
       await fetchProducts(currentFilters)
     }
   }
-  catch (error: any) {
-    console.error('Failed to refresh products:', error)
+  catch (error: unknown) {
+    console.error('Failed to refresh products:', getErrorMessage(error))
   }
 }
 
@@ -751,8 +755,8 @@ const loadMoreProducts = async () => {
       await fetchProducts(currentFilters)
     }
   }
-  catch (error: any) {
-    console.error('Failed to load more products:', error)
+  catch (error: unknown) {
+    console.error('Failed to load more products:', getErrorMessage(error))
   }
 }
 
@@ -881,8 +885,8 @@ onBeforeUnmount(() => {
       sessionStorage.removeItem('products-scroll-position')
       sessionStorage.removeItem('products-filter-state')
     }
-    catch (error: any) {
-      console.error('[Product Catalog] Session storage cleanup failed:', error)
+    catch (error: unknown) {
+      console.error('[Product Catalog] Session storage cleanup failed:', getErrorMessage(error))
 
       // Only ignore SecurityError (private browsing), rethrow others
       if (error instanceof Error && error.name !== 'SecurityError') {

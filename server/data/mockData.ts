@@ -160,9 +160,12 @@ export const productTemplates = [
   },
 ]
 
-// Order data
+// Order data - Reference constants for validation and documentation
+/** @public */
 export const orderStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled']
+/** @public */
 export const paymentStatuses = ['paid', 'pending', 'failed']
+/** @public */
 export const paymentMethods = ['stripe', 'paypal', 'cash_on_delivery']
 
 // Category data

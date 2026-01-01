@@ -65,8 +65,8 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    console.error('Failed to create payment intent:', error)
+  catch (error: unknown) {
+    console.error('Failed to create payment intent:', getServerErrorMessage(error))
 
     // Check if it's a createError with statusCode
     if (error && typeof error === 'object' && 'statusCode' in error) {

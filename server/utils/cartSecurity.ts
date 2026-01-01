@@ -123,7 +123,10 @@ export function generateCSRFToken(sessionId: string): string {
 }
 
 /**
- * Validate CSRF token
+ * Validate CSRF token using timing-safe comparison
+ *
+ * SECURITY: Uses crypto.timingSafeEqual to prevent timing attacks.
+ * Timing attacks can leak token characters by measuring response times.
  */
 export function validateCSRFToken(sessionId: string, token: string): boolean {
   const stored = csrfTokenStore.get(sessionId)
@@ -138,7 +141,20 @@ export function validateCSRFToken(sessionId: string, token: string): boolean {
     return false
   }
 
-  return stored.token === token
+  // Use timing-safe comparison to prevent timing attacks
+  // Both tokens must be converted to Buffers of equal length
+  const storedBuffer = Buffer.from(stored.token, 'utf8')
+  const providedBuffer = Buffer.from(token, 'utf8')
+
+  // If lengths differ, we still need to do a constant-time comparison
+  // to avoid leaking length information. Compare against stored token twice.
+  if (storedBuffer.length !== providedBuffer.length) {
+    // Perform comparison with self to maintain constant time
+    crypto.timingSafeEqual(storedBuffer, storedBuffer)
+    return false
+  }
+
+  return crypto.timingSafeEqual(storedBuffer, providedBuffer)
 }
 
 /**

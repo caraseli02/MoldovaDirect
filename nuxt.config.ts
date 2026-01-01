@@ -134,7 +134,8 @@ export default defineNuxtConfig({
     },
     optimizeDeps: {
       // Pre-bundle frequently used dependencies for faster dev startup
-      include: ['vue', 'vue-router', 'pinia', '@vueuse/core', 'zod'],
+      // Note: @supabase/supabase-js must be included to fix "exports is not defined" error
+      include: ['vue', 'vue-router', 'pinia', '@vueuse/core', 'zod', '@supabase/supabase-js'],
       // Exclude large libraries - they should be lazy-loaded
       exclude: ['chart.js', '@stripe/stripe-js', '@tanstack/vue-table', 'swiper'],
     },

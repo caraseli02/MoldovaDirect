@@ -164,7 +164,7 @@ export const useAsyncAdminComponent = (
 
     // Handle errors during loading
     onError(error, retry, fail) {
-      console.error(`Failed to load admin component: ${path}`, error)
+      console.error(`Failed to load admin component: ${path}`, getErrorMessage(error))
       // Don't retry automatically, show error component instead
       fail()
     },
@@ -216,7 +216,7 @@ export const preloadAdminComponent = async (path: string): Promise<void> => {
       await loader()
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.warn(`Failed to preload admin component: ${path}`, error)
   }
 }

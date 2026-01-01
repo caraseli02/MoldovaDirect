@@ -2,6 +2,7 @@
   <div
     ref="dropdownRef"
     class="relative"
+    data-testid="locale-switcher"
     @keydown.escape="closeDropdown"
   >
     <UiButton
@@ -9,6 +10,7 @@
       ref="triggerRef"
       type="button"
       variant="outline"
+      data-testid="locale-switcher-trigger"
       :aria-haspopup="'listbox'"
       :aria-expanded="isOpen"
       :aria-label="t('common.language')"
@@ -80,6 +82,7 @@
           :key="localeOption.code"
           ref="optionRefs"
           type="button"
+          :data-testid="`locale-${localeOption.code}`"
           class="block w-full px-4 py-2.5 text-left text-sm text-gray-700 transition-colors hover:bg-gray-100 focus:bg-gray-100 focus:outline-none dark:text-slate-200 dark:hover:bg-slate-800/70 dark:focus:bg-slate-800/70"
           :class="{
             'bg-primary-50 text-primary-600 font-medium dark:bg-primary-500/20 dark:text-primary-100': localeOption.code === currentLocale?.code,
@@ -210,7 +213,7 @@ const switchLanguage = async (code: 'es' | 'en' | 'ro' | 'ru') => {
     closeDropdown()
     await navigateTo(newPath)
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Error switching language:', error)
     closeDropdown()
   }

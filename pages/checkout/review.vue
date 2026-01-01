@@ -44,7 +44,7 @@
                 {{ $t('common.error') }}
               </h3>
               <p class="mt-1 text-sm text-red-700 dark:text-red-300">
-                {{ error.message }}
+                {{ getErrorMessage(error) }}
               </p>
             </div>
           </div>

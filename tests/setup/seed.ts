@@ -133,7 +133,7 @@ export async function seedDatabase() {
       products: productData,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('❌ Database seeding failed:', error)
     throw error
   }
@@ -148,7 +148,7 @@ export async function cleanupTestData() {
 
     console.log('✅ Test data cleanup completed')
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('❌ Test data cleanup failed:', error)
     throw error
   }

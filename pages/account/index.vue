@@ -521,9 +521,9 @@ const fetchOrderSummary = async () => {
     orderStats.value.totalOrders = countResult.count || 0
     orderStats.value.recentOrders = (ordersResult.data as OrderSummary[]) || []
   }
-  catch (error: any) {
-    console.error('Error fetching order summary:', error)
-    orderStats.value.error = error?.message || t('common.errorOccurred')
+  catch (error: unknown) {
+    console.error('Error fetching order summary:', getErrorMessage(error))
+    orderStats.value.error = getErrorMessage(error) || t('common.errorOccurred')
   }
   finally {
     orderStats.value.loading = false
@@ -537,8 +537,8 @@ const handleLogout = async () => {
 
     await navigateTo(localePath('/'))
   }
-  catch (error: any) {
-    console.error('Logout error:', error)
+  catch (error: unknown) {
+    console.error('Logout error:', getErrorMessage(error))
     // Show user-facing error message
     orderStats.value.error = t('auth.errors.logoutFailed')
   }

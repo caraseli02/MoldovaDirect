@@ -61,7 +61,7 @@ const loadError = ref<Error | null>(null)
 
 // Capture errors from child components
 onErrorCaptured((error) => {
-  console.error('Checkout component error:', error)
+  console.error('Checkout component error:', getErrorMessage(error))
   loadError.value = error
   return false // Prevent error propagation
 })

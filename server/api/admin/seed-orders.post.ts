@@ -160,8 +160,8 @@ export default defineEventHandler(async (event) => {
         total: total.toFixed(2),
       })
     }
-    catch (error: any) {
-      console.error('Error creating order:', error)
+    catch (error: unknown) {
+      console.error('Error creating order:', getServerErrorMessage(error))
     }
   }
 

@@ -134,13 +134,13 @@ export function createCartSecurityMiddleware(options: SecurityOptions = {}) {
         })
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       // Log security violations
       console.warn('Cart security violation:', {
         ip: getClientIP(event),
         url: event.node.req.url,
         method: event.node.req.method,
-        error: error.statusMessage || error.message,
+        error: isH3Error(error) ? error.statusMessage : getServerErrorMessage(error),
         timestamp: new Date().toISOString(),
       })
 
@@ -172,8 +172,8 @@ if (typeof setInterval !== 'undefined') {
     try {
       performSecurityCleanup()
     }
-    catch (error: any) {
-      console.error('Security cleanup failed:', error)
+    catch (error: unknown) {
+      console.error('Security cleanup failed:', getServerErrorMessage(error))
     }
   }, 5 * 60 * 1000)
 }

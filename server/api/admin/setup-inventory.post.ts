@@ -118,8 +118,8 @@ export default defineEventHandler(async (event) => {
       message: 'Inventory management schema created successfully',
     }
   }
-  catch (error: any) {
-    console.error('Setup inventory error:', error)
+  catch (error: unknown) {
+    console.error('Setup inventory error:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to setup inventory management',

@@ -47,7 +47,7 @@ const bulkUpdateSchema = z.object({
 
 export default defineEventHandler(async (event) => {
   try {
-    await requireAdminRole(event)
+    const adminId = await requireAdminRole(event)
     const supabase = await serverSupabaseClient(event)
     const body = await readBody(event)
 
@@ -123,7 +123,7 @@ export default defineEventHandler(async (event) => {
         category_id: product.category_id,
       },
       new_values: updateData,
-      performed_by: null, // TODO: Get current admin user ID
+      user_id: adminId,
       ip_address: getClientIP(event),
       user_agent: getHeader(event, 'user-agent'),
     }))
@@ -146,7 +146,7 @@ export default defineEventHandler(async (event) => {
             quantity: Math.abs(difference),
             reason: 'Bulk admin adjustment',
             reference_id: `bulk-admin-${Date.now()}`,
-            performed_by: null, // TODO: Get current admin user ID
+            performed_by: adminId,
           }
         }
         return null
@@ -170,10 +170,10 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    console.error('Bulk update products error:', error)
+  catch (error: unknown) {
+    console.error('Bulk update products error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

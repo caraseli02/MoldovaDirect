@@ -1,5 +1,42 @@
 import { serverSupabaseClient } from '#supabase/server'
-import type { CreateSectionRequest, GetSectionResponse, LandingSectionRow } from '~/types'
+import { z } from 'zod'
+import type { GetSectionResponse, LandingSectionRow } from '~/types'
+
+// Valid section types as per SQL schema
+const VALID_SECTION_TYPES = [
+  'announcement_bar',
+  'hero_carousel',
+  'hero_slide',
+  'category_grid',
+  'featured_products',
+  'collections_showcase',
+  'social_proof',
+  'how_it_works',
+  'services',
+  'newsletter',
+  'faq_preview',
+  'promotional_banner',
+  'flash_sale',
+] as const
+
+// Zod schema for create section request validation
+const createSectionSchema = z.object({
+  section_type: z.enum(VALID_SECTION_TYPES, {
+    message: `Invalid section_type. Must be one of: ${VALID_SECTION_TYPES.join(', ')}`,
+  }),
+  display_order: z.number().int().min(0).optional(),
+  is_active: z.boolean().optional().default(true),
+  starts_at: z.string().nullable().optional(),
+  ends_at: z.string().nullable().optional(),
+  translations: z.record(z.string(), z.unknown()).refine(
+    val => Object.keys(val).length > 0,
+    { message: 'translations are required' },
+  ),
+  config: z.record(z.string(), z.unknown()).refine(
+    val => val !== undefined && val !== null,
+    { message: 'config is required' },
+  ),
+})
 
 /**
  * POST /api/landing/sections
@@ -19,54 +56,19 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
     // Check admin role
     const { user } = await requireAdmin(event)
 
-    // Parse request body
-    const body = await readBody<CreateSectionRequest>(event)
+    // Parse and validate request body with Zod
+    const rawBody = await readBody(event)
+    const validation = createSectionSchema.safeParse(rawBody)
 
-    // Validate required fields
-    // These types must match the SQL schema and TypeScript types
-    const VALID_SECTION_TYPES = [
-      'announcement_bar',
-      'hero_carousel',
-      'hero_slide',
-      'category_grid',
-      'featured_products',
-      'collections_showcase',
-      'social_proof',
-      'how_it_works',
-      'services',
-      'newsletter',
-      'faq_preview',
-      'promotional_banner',
-      'flash_sale',
-    ] as const
-
-    if (!body.section_type) {
+    if (!validation.success) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Bad Request - section_type is required',
+        statusMessage: `Bad Request - ${validation.error.issues[0]?.message || 'Invalid request body'}`,
+        data: validation.error.issues,
       })
     }
 
-    if (!VALID_SECTION_TYPES.includes(body.section_type as typeof VALID_SECTION_TYPES[number])) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: `Bad Request - Invalid section_type. Must be one of: ${VALID_SECTION_TYPES.join(', ')}`,
-      })
-    }
-
-    if (!body.translations || Object.keys(body.translations).length === 0) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Bad Request - translations are required',
-      })
-    }
-
-    if (!body.config) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Bad Request - config is required',
-      })
-    }
+    const body = validation.data
 
     // Get the highest display_order if not provided
     let displayOrder = body.display_order
@@ -110,13 +112,16 @@ export default defineEventHandler(async (event): Promise<GetSectionResponse> => 
       section: data as LandingSectionRow,
     }
   }
-  catch (error: any) {
-    console.error('Error creating landing section:', error)
+  catch (error: unknown) {
+    console.error('Error creating landing section:', getServerErrorMessage(error))
+
+    if (isH3Error(error)) {
+      throw error
+    }
 
     throw createError({
-      statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || 'Failed to create landing section',
-      data: error.data || error,
+      statusCode: 500,
+      statusMessage: 'Failed to create landing section',
     })
   }
 })

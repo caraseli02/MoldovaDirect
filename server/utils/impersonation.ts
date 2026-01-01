@@ -99,24 +99,26 @@ export async function verifyImpersonationToken(
 
     return decoded
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Handle JWT-specific errors
-    if (error.name === 'TokenExpiredError') {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Impersonation token has expired',
-      })
-    }
+    if (error && typeof error === 'object' && 'name' in error) {
+      if (error.name === 'TokenExpiredError') {
+        throw createError({
+          statusCode: 401,
+          statusMessage: 'Impersonation token has expired',
+        })
+      }
 
-    if (error.name === 'JsonWebTokenError') {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Invalid impersonation token',
-      })
+      if (error.name === 'JsonWebTokenError') {
+        throw createError({
+          statusCode: 401,
+          statusMessage: 'Invalid impersonation token',
+        })
+      }
     }
 
     // Re-throw if already a createError
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

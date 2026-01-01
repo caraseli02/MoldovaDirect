@@ -246,7 +246,7 @@ async function handleLogout(): Promise<void> {
     closeAllMenus()
     await authStore.logout()
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('[Admin] Logout failed:', error)
 
     // Re-open menu so user can try again

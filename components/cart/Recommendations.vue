@@ -283,9 +283,9 @@ const handleLoadRecommendations = async () => {
   try {
     await loadRecommendations()
   }
-  catch (error: any) {
+  catch (error: unknown) {
     hasError.value = true
-    if (error.statusCode !== 404) {
+    if (getErrorStatusCode(error) !== 404) {
       console.error('Failed to load recommendations:', error)
       toast.error(t('common.error'), t('cart.recommendations.loadFailed'))
     }
@@ -298,7 +298,7 @@ const handleAddToCart = async (product: Product | { id: string, name: any, price
     const productName = getProductName(product.name)
     toast.success(t('cart.success.added'), t('cart.success.productAdded', { product: productName }))
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to add recommended product to cart:', product.id, error)
     toast.error(t('common.error'), t('cart.error.addFailedDetails'))
   }

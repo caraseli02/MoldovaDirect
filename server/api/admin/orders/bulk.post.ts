@@ -15,12 +15,18 @@
 
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
+import { z } from 'zod'
 
-interface BulkUpdateRequest {
-  orderIds: number[]
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
-  notes?: string
-}
+// Zod schema for bulk order update request validation
+const bulkOrderSchema = z.object({
+  orderIds: z.array(z.number().int().positive())
+    .min(1, 'Order IDs are required')
+    .max(100, 'Cannot update more than 100 orders at once'),
+  status: z.enum(['pending', 'processing', 'shipped', 'delivered', 'cancelled'], {
+    message: 'Invalid status',
+  }),
+  notes: z.string().optional(),
+})
 
 interface BulkUpdateResult {
   updated: number
@@ -45,40 +51,19 @@ export default defineEventHandler(async (event) => {
     // Use service role for database operations
     const supabase = serverSupabaseServiceRole(event)
 
-    // Parse request body
-    const body = await readBody<BulkUpdateRequest>(event)
+    // Parse and validate request body with Zod
+    const rawBody = await readBody(event)
+    const validation = bulkOrderSchema.safeParse(rawBody)
 
-    // Validate request
-    if (!body.orderIds || !Array.isArray(body.orderIds) || body.orderIds.length === 0) {
+    if (!validation.success) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Order IDs are required',
+        statusMessage: validation.error.issues[0]?.message || 'Invalid request body',
+        data: validation.error.issues,
       })
     }
 
-    if (!body.status) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Status is required',
-      })
-    }
-
-    // Validate status
-    const validStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled']
-    if (!validStatuses.includes(body.status)) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Invalid status',
-      })
-    }
-
-    // Limit bulk operations to reasonable size
-    if (body.orderIds.length > 100) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Cannot update more than 100 orders at once',
-      })
-    }
+    const body = validation.data
 
     // Fetch all orders to validate transitions
     const { data: orders, error: fetchError } = await supabase
@@ -153,7 +138,7 @@ export default defineEventHandler(async (event) => {
 
         result.updated++
       }
-      catch (error: any) {
+      catch (error: unknown) {
         result.failed++
         result.errors.push({
           orderId: order.id,
@@ -174,8 +159,8 @@ export default defineEventHandler(async (event) => {
       message,
     }
   }
-  catch (error: any) {
-    console.error('Bulk order update error:', error)
+  catch (error: unknown) {
+    console.error('Bulk order update error:', getServerErrorMessage(error))
 
     if (error && typeof error === 'object' && 'statusCode' in error) {
       throw error

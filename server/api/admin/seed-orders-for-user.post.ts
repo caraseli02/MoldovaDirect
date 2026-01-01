@@ -219,10 +219,10 @@ export default defineEventHandler(async (event): Promise<SeedOrdersResponse> => 
         total: total.toFixed(2),
       })
     }
-    catch (error: any) {
+    catch (error: unknown) {
       failedOrders.push({
         orderNumber: order.order_number,
-        error: error.message || 'Unexpected error',
+        error: getServerErrorMessage(error),
         stage: 'unknown',
       })
     }

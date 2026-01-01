@@ -154,7 +154,7 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
 
       return Object.keys(validated).length > 0 ? validated : undefined
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.warn('Failed to parse attributes query:', error)
       return undefined
     }
@@ -208,9 +208,9 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
 
   /**
    * Generate filter chips for active filters
-   * Returns array of chip objects with id, label, and type
+   * Returns readonly array of chip objects with id, label, and type
    */
-  const activeFilterChips = computed<FilterChip[]>(() => {
+  const activeFilterChips = computed(() => {
     const chips: FilterChip[] = []
 
     if (filters.value.category) {

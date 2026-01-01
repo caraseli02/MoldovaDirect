@@ -171,13 +171,13 @@ export default defineEventHandler(async (event) => {
       totalDuration: results.steps.reduce((sum, step) => sum + step.duration, 0),
     }
   }
-  catch (error: any) {
-    console.error('Seed data error:', error)
-    await logAdminAction(event, adminId, 'seed-data-failed', { preset, error: error.message })
+  catch (error: unknown) {
+    console.error('Seed data error:', getServerErrorMessage(error))
+    await logAdminAction(event, adminId, 'seed-data-failed', { preset, error: getServerErrorMessage(error) })
     return {
       success: false,
       message: 'Failed to seed data',
-      error: error.message,
+      error: getServerErrorMessage(error),
       results,
     }
   }
@@ -287,7 +287,7 @@ async function seedCategories(supabase: SupabaseClient): Promise<number> {
     .select()
 
   if (error) {
-    console.error('Failed to seed categories:', error)
+    console.error('Failed to seed categories:', getServerErrorMessage(error))
     return 0
   }
 
@@ -335,7 +335,7 @@ async function seedProducts(supabase: SupabaseClient, count: number, lowStock: b
     .select()
 
   if (error) {
-    console.error('Failed to seed products:', error)
+    console.error('Failed to seed products:', getServerErrorMessage(error))
     return 0
   }
 
@@ -374,8 +374,8 @@ async function seedUsers(supabase: SupabaseClient, count: number): Promise<strin
         })
       }
     }
-    catch (error: any) {
-      console.error(`Failed to create user ${mockUser.email}:`, error)
+    catch (error: unknown) {
+      console.error(`Failed to create user ${mockUser.email}:`, getServerErrorMessage(error))
     }
   }
 

@@ -278,16 +278,16 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Re-throw HTTP errors (including auth errors)
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 
     // Log unexpected errors
     console.error('[Admin Products] Unexpected error:', {
-      error: error.message || String(error),
-      stack: error.stack,
+      error: getServerErrorMessage(error),
+      stack: isServerError(error) ? error.stack : undefined,
       timestamp: new Date().toISOString(),
       errorId: 'ADMIN_PRODUCTS_UNEXPECTED_ERROR',
     })

@@ -805,7 +805,7 @@ const setupMobileFeatures = () => {
       },
     })
   }
-  catch (err: any) {
+  catch (err: unknown) {
     console.warn('Failed to setup mobile features:', err)
   }
 }
@@ -842,8 +842,8 @@ onMounted(async () => {
       setupMobileFeatures()
     })
   }
-  catch (err: any) {
-    console.error('Failed to initialize orders page:', err)
+  catch (err: unknown) {
+    console.error('Failed to initialize orders page:', getErrorMessage(err))
   }
 })
 

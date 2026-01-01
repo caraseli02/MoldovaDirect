@@ -53,6 +53,21 @@ pkill -9 node && rm -rf .nuxt node_modules/.vite .output && npm run dev
 
 **When:** After changing imports, adding components, or seeing import errors.
 
+### ❌ NEVER: Skip Git Hooks
+```bash
+# ❌ FORBIDDEN - Never use these flags
+git push --no-verify
+git commit --no-verify
+git push -n
+```
+
+**Why:** Git hooks ensure code quality, test coverage, and prevent regressions. If hooks fail, fix the underlying issue instead of bypassing them. Coverage thresholds exist to maintain code quality.
+
+**If coverage fails:**
+1. Add tests for new code
+2. Exclude server files from unit coverage (tested via E2E)
+3. Update thresholds only if justified and approved
+
 ---
 
 ## 📁 Project Structure

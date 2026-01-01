@@ -66,7 +66,12 @@
     "showOrderSummary": "Arată rezumatul comenzii",
     "hideOrderSummary": "Ascunde rezumatul comenzii",
     "item": "articol",
-    "items": "articole"
+    "time": {
+      "days": "z",
+      "hours": "h",
+      "minutes": "m",
+      "seconds": "s"
+    }
   },
   "auth": {
     "signIn": "Autentificare",
@@ -227,6 +232,12 @@
         "required": "Token-ul de verificare este obligatoriu",
         "invalid": "Token de verificare invalid",
         "expired": "Token-ul de verificare a expirat"
+      },
+      "mfa": {
+        "required": "Codul de verificare este obligatoriu",
+        "length": "Codul trebuie să aibă exact 6 cifre",
+        "format": "Codul trebuie să conțină doar cifre",
+        "nameLength": "Numele dispozitivului trebuie să aibă între 2 și 50 de caractere"
       }
     },
     "progress": {
@@ -308,6 +319,54 @@
       "acceptTerms": "Accept Termenii de Serviciu și Politica de Confidențialitate",
       "language": "Limba Preferată",
       "notifications": "Notificări prin Email"
+    },
+    "mfa": {
+      "verify": {
+        "title": "Autentificare cu doi factori",
+        "description": "Introduceți codul din 6 cifre din aplicația de autentificare",
+        "codeLabel": "Cod de verificare",
+        "codePlaceholder": "000000",
+        "submitButton": "Verifică",
+        "verifying": "Se verifică...",
+        "cancel": "Anulează și deconectează-te",
+        "helpTitle": "Ai nevoie de ajutor?",
+        "helpItem1": "Deschide aplicația de autentificare (Google Authenticator, Authy etc.)",
+        "helpItem2": "Găsește intrarea MoldovaDirect",
+        "helpItem3": "Introdu codul din 6 cifre afișat"
+      },
+      "settings": {
+        "title": "Autentificare cu doi factori (MFA)",
+        "description": "Adaugă un nivel suplimentar de securitate contului tău activând autentificarea cu doi factori.",
+        "statusEnabled": "MFA Activat",
+        "statusDisabled": "MFA Dezactivat",
+        "statusEnabledDescription": "Contul tău este protejat cu autentificare cu doi factori",
+        "statusDisabledDescription": "Contul tău nu este protejat cu autentificare cu doi factori",
+        "enableButton": "Activează MFA",
+        "enrollmentStep1": "Pasul 1: Scanează codul QR",
+        "enrollmentStep2": "Pasul 2: Verifică codul",
+        "showManualEntry": "Nu poți scana? Introdu codul manual",
+        "hideManualEntry": "Ascunde introducerea manuală",
+        "secretKey": "Cheie secretă",
+        "copy": "Copiază",
+        "instructions": "Cum să configurezi:",
+        "instruction1": "Descarcă o aplicație de autentificare (Google Authenticator, Authy, 1Password etc.)",
+        "instruction2": "Scanează codul QR cu aplicația sau introdu cheia secretă manual",
+        "instruction3": "Introdu codul din 6 cifre din aplicație mai jos pentru a finaliza configurarea",
+        "verificationCodeLabel": "Cod de verificare",
+        "verifyButton": "Verifică și activează MFA",
+        "verifying": "Se verifică...",
+        "cancelButton": "Anulează",
+        "activeFactors": "Metode de autentificare active",
+        "verified": "Verificat",
+        "unverified": "Neverificat",
+        "removeButton": "Elimină",
+        "disableConfirmTitle": "Dezactivezi autentificarea cu doi factori?",
+        "disableConfirmDescription": "Acest lucru va face contul tău mai puțin sigur. Vei avea nevoie doar de parolă pentru a te conecta.",
+        "disableConfirmButton": "Da, dezactivează MFA",
+        "disableCancelButton": "Anulează",
+        "securityNoticeTitle": "Recomandare de securitate",
+        "securityNoticeDescription": "Autentificarea cu doi factori crește semnificativ securitatea contului tău. Recomandăm să o păstrezi activată, mai ales pentru conturile de administrator."
+      }
     }
   },
   "account": {
@@ -581,8 +640,10 @@
     "addresses": "Adrese",
     "addressesDescription": "Gestionează adresele tale de livrare și facturare",
     "addAddress": "Adaugă Adresă",
+    "addAddressDescription": "Introduceți detaliile pentru noua adresă.",
     "addFirstAddress": "Adaugă Prima Ta Adresă",
     "editAddress": "Editează Adresa",
+    "editAddressDescription": "Actualizați detaliile pentru această adresă.",
     "updateAddress": "Actualizează Adresa",
     "saveAddress": "Salvează Adresa",
     "deleteAddress": "Șterge Adresa",
@@ -848,7 +909,8 @@
         "Cricova Cellars",
         "Moldova Wine Guild",
         "Slow Food Alliance"
-      ]
+      ],
+      "verified": "Achiziție verificată"
     },
     "mediaMentions": {
       "title": "Prezentat în",
@@ -940,7 +1002,8 @@
       "success": "Îți mulțumim! Vei primi următorul nostru newsletter în curând.",
       "error": "Ceva nu a mers bine. Te rugăm să încerci din nou.",
       "disclaimer": "Trimitem unul sau două emailuri pe lună și te poți dezabona oricând.",
-      "subscribeButton": "Abonează-te"
+      "subscribeButton": "Abonează-te",
+      "error": "Ups! Ceva nu a mers bine. Vă rugăm să încercați din nou."
     },
     "faqPreview": {
       "title": "Întrebări înainte de a comanda?",
@@ -960,6 +1023,94 @@
           "answer": "Echipa noastră de concierge răspunde pe WhatsApp și email pentru a sugera asocieri și cutii personalizate."
         }
       }
+    },
+    "certifications": {
+      "authentic": {
+        "title": "100% Autentic",
+        "subtitle": "Direct din Moldova",
+        "description": "Toate produsele sunt aprovizionate direct de la producătorii și meșterii autentici moldoveni, asigurând calitatea și patrimoniul autentic"
+      },
+      "quality": {
+        "title": "Premiate",
+        "subtitle": "Selecție Premium",
+        "description": "Colecție selectată de vinuri premiate și produse artizanale recunoscute la competiții internaționale"
+      },
+      "sustainable": {
+        "title": "Sustenabil",
+        "subtitle": "Eco-Friendly",
+        "description": "Susținem practici agricole sustenabile și ambalaje eco-friendly pentru a proteja frumosul terroir al Moldovei"
+      },
+      "secure": {
+        "title": "Plată securizată",
+        "subtitle": "Sigur și protejat",
+        "description": "Criptare de vârf și procesare securizată a plăților pentru a vă proteja informațiile personale"
+      }
+    },
+    "ugcGallery": {
+      "badge": "Fotografii clienți",
+      "title": "Vedeți ce savurează clienții noștri",
+      "subtitle": "Clienți reali împărtășind experiența lor Moldova Direct pe Instagram",
+      "verified": "Achiziție verificată",
+      "ctaText": "Vrei să apari? Etichetează-ne pe Instagram",
+      "ctaButton": "Urmărește-ne pe Instagram"
+    },
+    "productQuiz": {
+      "badge": "Găsește perechea perfectă",
+      "title": "Nu ești sigur ce să comanzi?",
+      "subtitle": "Participă la quiz-ul nostru rapid pentru a descoperi produse perfecte pentru gustul tău",
+      "progress": "Progres",
+      "startText": "Răspunde la 3 întrebări rapide și îți vom recomanda produsele moldovenești perfecte pentru tine. Durează mai puțin de 1 minut!",
+      "startButton": "Începe quiz-ul",
+      "getResults": "Obține recomandările mele",
+      "resultsTitle": "Perfect! Iată potrivirile tale",
+      "resultsSubtitle": "Pe baza răspunsurilor tale, am selectat aceste produse special pentru tine",
+      "viewProducts": "Vezi toate recomandările",
+      "restart": "Reia quiz-ul",
+      "questions": {
+        "occasion": {
+          "question": "Ce te aduce la Moldova Direct?",
+          "description": "Ajută-ne să înțelegem nevoile tale",
+          "options": {
+            "gift": {
+              "label": "Cadou pentru cineva special",
+              "description": "Coșuri și seturi de cadou curate"
+            },
+            "personal": {
+              "label": "Plăcere personală",
+              "description": "Vinuri și alimente pentru mine"
+            },
+            "event": {
+              "label": "Eveniment sau sărbătoare",
+              "description": "Petrecere, cină sau întâlnire"
+            },
+            "subscription": {
+              "label": "Livrări regulate",
+              "description": "Abonament lunar de vinuri"
+            }
+          }
+        },
+        "preference": {
+          "question": "Ce tip de vin preferi?",
+          "options": {
+            "red": "Vinuri roșii",
+            "white": "Vinuri albe",
+            "sparkling": "Vinuri spumoase",
+            "mixed": "O combinație din toate"
+          }
+        },
+        "budget": {
+          "question": "Care este bugetul tău pe sticlă?",
+          "options": {
+            "under30": "Sub 30€",
+            "mid": "30€-60€",
+            "premium": "60€+"
+          }
+        }
+      }
+    },
+    "realtimeNotification": {
+      "purchased": "tocmai a cumpărat",
+      "verified": "Achiziție verificată"
     }
   },
   "products": {
@@ -1131,7 +1282,10 @@
     },
     "pagination": {
       "pageOf": "Pagina {page} din {total}",
-      "showing": "În total {count} produse"
+      "showing": "În total {count} produse",
+      "previousPage": "Mergi la pagina anterioară",
+      "nextPage": "Mergi la pagina următoare",
+      "goToPage": "Mergi la pagina {page}"
     },
     "story": {
       "title": "Călătorie gustativă",
@@ -1191,6 +1345,7 @@
     },
     "faq": {
       "title": "Întrebări frecvente",
+      "subtitle": "Răspunsuri la cele mai frecvente întrebări despre produsele noastre",
       "items": {
         "delivery": {
           "question": "Cât durează livrarea?",
@@ -1198,7 +1353,7 @@
         },
         "storage": {
           "question": "Cum păstrez produsul?",
-          "answer": "Păstrează-l într-un loc răcoros și uscat, ferit de lumină. Vinurile se păstrează ideal între 12–18°C."
+          "answer": "Păstrează-l într-un loc răcoros și uscat, ferit de lumină. Consultă eticheta produsului pentru recomandări specifice de depozitare."
         },
         "allergens": {
           "question": "Conține alergeni?",
@@ -1237,6 +1392,24 @@
       "sharedSuccess": "Mulțumim că ai împărtășit descoperirea!",
       "shareText": "Descoperă acest favorit moldovenesc alături de mine.",
       "copyFallback": "Copiază linkul și trimite-l prietenilor."
+    },
+    "new": "Nou",
+    "bestSeller": "Cel mai vândut",
+    "quickView": "Vizualizare rapidă",
+    "onlyLeft": "Doar {count} în stoc",
+    "benefits": {
+      "authentic": "Moldovenesc autentic",
+      "authenticTooltip": "Aprovizionat direct de la producătorii și meșterii autentici moldoveni",
+      "fastShipping": "Livrare rapidă",
+      "fastShippingTooltip": "Comenzi expediate în 48 de ore în toată Spania",
+      "qualityGuaranteed": "Calitate garantată",
+      "qualityGuaranteedTooltip": "Produse de calitate premium cu garanție de satisfacție",
+      "securePayment": "Plată securizată",
+      "securePaymentTooltip": "Procesare sigură și securizată a plăților"
+    },
+    "quickFilters": {
+      "label": "Opțiuni de filtrare rapidă",
+      "toggle": "Comută filtrul {filter}"
     }
   },
   "returns": {
@@ -1641,7 +1814,7 @@
       "removeSelected": "Elimină Selectate"
     },
     "savedForLater": "Salvat pentru Mai Târziu",
-    "saveForLater": "Salvează pentru Mai Târziu",
+    "saveForLater": "Salvează pentru mai târziu",
     "moveToCart": "Mută în Coș",
     "savedOn": "Salvat pe",
     "each": "fiecare",
@@ -1653,7 +1826,6 @@
     "secureCheckout": "Plată securizată",
     "allCardsAccepted": "Toate cardurile acceptate",
     "add": "Adaugă",
-    "saveForLater": "Salvează pentru mai târziu",
     "stock": {
       "inStock": "În stoc",
       "low": "Mai sunt doar {count}!",
@@ -1990,7 +2162,24 @@
       "contactNoticeTitle": "Contact Livrare",
       "contactNotice": "Te vom contacta folosind informațiile furnizate pentru a aranja livrarea și plata.",
       "comingSoon": "În Curând",
-      "error": "Eroare de Plată"
+      "error": "Eroare de Plată",
+      "cvvHelpLabel": "Afișează ajutor CVV",
+      "copyBankDetails": "Copiază detaliile bancare în clipboard",
+      "bankDetailsCopied": "Detaliile bancare au fost copiate în clipboard",
+      "bankDetailsCopyFailed": "Nu s-au putut copia detaliile bancare",
+      "validation": {
+        "cardNumberRequired": "Numărul cardului este obligatoriu",
+        "cardNumberInvalid": "Număr de card invalid",
+        "expiryRequired": "Data de expirare este obligatorie",
+        "expiryInvalid": "Format invalid pentru data de expirare",
+        "expiryExpired": "Cardul a expirat",
+        "cvvRequired": "CVV-ul este obligatoriu",
+        "cvvInvalid": "CVV invalid",
+        "cvvLength": "CVV-ul trebuie să aibă {length} cifre",
+        "holderNameRequired": "Numele titularului este obligatoriu",
+        "paypalEmailRequired": "Email-ul PayPal este obligatoriu",
+        "paypalEmailInvalid": "Adresă de email invalidă"
+      }
     },
     "navigation": {
       "back": "Înapoi",
@@ -2402,6 +2591,240 @@
       "title": "Întrebări frecvente - Moldova Direct",
       "description": "Găsește răspunsuri rapide despre livrare, plăți, retururi și produse autentice din Moldova în Spania.",
       "imageAlt": "Client care citește întrebările frecvente Moldova Direct"
+    }
+  },
+  "wineStory": {
+    "hero": {
+      "badge": "Patrimoniul vinicol al Moldovei",
+      "title": "Descoperă povestea din spatele fiecărei sticle",
+      "subtitle": "Explorează tradițiile vinificației moldovenești, cunoaște producătorii noștri pasionați și descoperă împerecherile perfecte de vinuri"
+    },
+    "seo": {
+      "title": "Povestea vinului din Moldova | Patrimoniu și tradiție",
+      "description": "Descoperă bogatul patrimoniu vinicol al Moldovei, cunoaște producătorii noștri pasionați, explorează terorurile regionale și găsește împerecherile perfecte de vinuri"
+    },
+    "cta": {
+      "title": "Ești gata să experimentezi cele mai fine vinuri din Moldova?",
+      "subtitle": "Explorează selecția noastră atent curată de vinuri premium moldovenești",
+      "shopButton": "Cumpără vinuri",
+      "aboutButton": "Află mai multe despre noi"
+    },
+    "producers": {
+      "title": "Cunoaște-i pe vinificatorii noștri",
+      "subtitle": "Povești de la cei mai buni producători din Moldova",
+      "viewStory": "Vezi povestea completă",
+      "readMore": "Citește mai mult",
+      "establishedYear": "Înființat în {year}",
+      "generations": "{count} generații de vinificație",
+      "specialty": "Specialitate",
+      "region": "Regiune",
+      "vineyardSize": "Suprafața viei",
+      "annualProduction": "Producție anuală",
+      "philosophy": "Filosofie",
+      "awards": "Premii și recunoașteri",
+      "certifications": "Certificări",
+      "contact": "Vizitează site-ul",
+      "featuredProducts": "Vinuri recomandate",
+      "viewAllProducts": "Vezi toate produsele",
+      "closeModal": "Închide",
+      "detailsDescription": "Vezi informații detaliate despre {name} inclusiv povestea, via și vinurile premiate",
+      "swipeHint": "Glisează pentru a explora mai mulți vinificatori",
+      "keyboardHint": "Folosește tastele săgeți pentru a naviga",
+      "loading": "Se încarcă poveștile vinificatorilor...",
+      "error": "Nu s-au putut încărca poveștile vinificatorilor",
+      "noProducers": "Nu sunt disponibile povești despre vinificatori încă"
+    },
+    "regions": {
+      "title": "Descoperă regiunile vinicole ale Moldovei",
+      "subtitle": "Trei teroruri distincte, nenumărate povești",
+      "viewRegion": "Explorează regiunea",
+      "characteristics": "Caracteristici",
+      "soilType": "Tip de sol",
+      "elevation": "Altitudine",
+      "climate": "Climat",
+      "rainfall": "Precipitații anuale",
+      "averageTemp": "Temperatura medie",
+      "primaryGrapes": "Soiuri principale de struguri",
+      "producerCount": "{count} producători",
+      "filterByRegion": "Filtrează vinurile după regiune",
+      "clearFilter": "Arată toate regiunile",
+      "mapTooltip": "Click pentru a explora {region}",
+      "loading": "Se încarcă regiunile vinicole...",
+      "error": "Nu s-a putut încărca harta regiunilor vinicole",
+      "noRegions": "Nu sunt disponibile regiuni vinicole",
+      "codru": {
+        "name": "Codru",
+        "description": "Inima vinificației moldovenești"
+      },
+      "stefanVoda": {
+        "name": "Ștefan Vodă",
+        "description": "Vinuri roșii îndrăznețe și vinuri dulci"
+      },
+      "valulLuiTraian": {
+        "name": "Valul lui Traian",
+        "description": "Vinuri albe aromate și roze"
+      }
+    },
+    "pairings": {
+      "title": "Împerecheri perfecte",
+      "subtitle": "Descoperă arta împerecherii vinului cu mâncarea",
+      "viewPairing": "Vezi împerecherea completă",
+      "wine": "Vin",
+      "dish": "Fel de mâncare",
+      "whyItWorks": "De ce funcționează",
+      "servingSuggestions": "Sugestii de servire",
+      "temperature": "Temperatură",
+      "glassType": "Tip de pahar",
+      "decanting": "Decantor",
+      "garnishes": "Garnituri",
+      "alternativeWines": "Împerecheri alternative de vinuri",
+      "alternativeDishes": "Feluri de mâncare alternative",
+      "recipe": "Vezi rețeta",
+      "servings": "{count} porții",
+      "cookingTime": "Timp de gătit",
+      "difficulty": "Dificultate",
+      "ingredients": "Ingrediente",
+      "instructions": "Instrucțiuni",
+      "chefNotes": "Notele bucătarului",
+      "filters": {
+        "all": "Toate împerecherile",
+        "wineType": "Tip de vin",
+        "occasion": "Ocazie",
+        "season": "Sezon",
+        "mealType": "Tip de masă",
+        "cuisine": "Bucătărie",
+        "intensity": "Intensitate"
+      },
+      "wineTypes": {
+        "red": "Vinuri roșii",
+        "white": "Vinuri albe",
+        "rose": "Vinuri roze",
+        "sparkling": "Vinuri spumoase",
+        "dessert": "Vinuri de desert"
+      },
+      "occasions": {
+        "everyday": "Zilnic",
+        "specialOccasion": "Ocazie specială",
+        "celebration": "Sărbătoare",
+        "romantic": "Romantic",
+        "holiday": "Vacanță",
+        "casual": "Casual",
+        "formal": "Formal"
+      },
+      "seasons": {
+        "spring": "Primăvară",
+        "summer": "Vară",
+        "fall": "Toamnă",
+        "winter": "Iarnă",
+        "yearRound": "Tot anul"
+      },
+      "mealTypes": {
+        "appetizer": "Aperitiv",
+        "mainCourse": "Fel principal",
+        "dessert": "Desert",
+        "snack": "Gustare"
+      },
+      "intensity": {
+        "light": "Ușor și delicat",
+        "medium": "Corp mediu",
+        "bold": "Îndrăzneț și plin"
+      },
+      "loading": "Se încarcă ghidurile de împerechere...",
+      "error": "Nu s-au putut încărca ghidurile de împerechere",
+      "noPairings": "Nu sunt disponibile ghiduri de împerechere",
+      "noResults": "Nicio împerechere nu corespunde filtrelor tale"
+    },
+    "giftPhilosophy": {
+      "title": "Darul patrimoniului moldovenesc",
+      "subtitle": "Mai mult decât vin, o poveste de împărtășit",
+      "description": "Fiecare sticlă de la Moldova Direct poartă secole de tradiție viticolă, pasiunea producătorilor familiali și caracterul unic al terorurilor noastre. Când oferi cadou un vin Moldova Direct, împărtășești o piesă autentică de cultură moldovenească.",
+      "reasons": {
+        "title": "De ce contează cadourile Moldova Direct",
+        "authenticity": {
+          "title": "Povești autentice",
+          "description": "Fiecare sticlă vine de la producători familiali reali cu generații de expertiză"
+        },
+        "quality": {
+          "title": "Calitate premium",
+          "description": "Vinuri selectate manual care reprezintă cel mai bun din vinificația moldovenească"
+        },
+        "sustainability": {
+          "title": "Alegere sustenabilă",
+          "description": "Susține producătorii mici și practicile agricole sustenabile"
+        },
+        "unique": {
+          "title": "Unic moldovenesc",
+          "description": "Descoperă soiuri de struguri și stiluri pe care nu le vei găsi în altă parte"
+        }
+      },
+      "scenarios": {
+        "title": "Ocazii perfecte pentru cadouri",
+        "corporate": {
+          "title": "Cadouri corporative",
+          "description": "Fă o impresie de durată cu vinuri distinctive care spun o poveste"
+        },
+        "celebration": {
+          "title": "Sărbători",
+          "description": "Sărbătorește momentele speciale ale vieții cu vinuri la fel de memorabile ca ocazia"
+        },
+        "gratitude": {
+          "title": "Arată aprecierea",
+          "description": "Exprimă recunoștința cu un cadou grijuliu care demonstrează grijă și gust"
+        },
+        "exploration": {
+          "title": "Descoperire de vinuri",
+          "description": "Prezintă prietenilor bijuteria ascunsă a vinificației europene"
+        }
+      },
+      "cta": {
+        "title": "Creează cadoul tău perfect",
+        "description": "Răsfoiește seturile noastre de cadouri curate sau construiește-ți propria selecție personalizată",
+        "button": "Explorează opțiunile de cadou"
+      }
+    },
+    "production": {
+      "title": "De la vie la masa ta",
+      "subtitle": "Călătoria vinului moldovenesc",
+      "steps": {
+        "harvest": {
+          "title": "Recolta",
+          "description": "Strugurii sunt culeși manual la maturitatea optimă, de obicei în septembrie-octombrie",
+          "timing": "Septembrie - Octombrie"
+        },
+        "crushing": {
+          "title": "Zdrobire și fermentare",
+          "description": "Metode tradiționale combinate cu control modern al temperaturii",
+          "timing": "Octombrie - Noiembrie"
+        },
+        "aging": {
+          "title": "Maturare",
+          "description": "Vinurile se odihnesc în butoaie de stejar sau oțel inoxidabil, dezvoltând complexitate",
+          "timing": "6 luni - 2 ani"
+        },
+        "bottling": {
+          "title": "Îmbuteliere",
+          "description": "Fiecare sticlă este umplută și etichetată cu grijă manual",
+          "timing": "Pe tot parcursul anului"
+        },
+        "selection": {
+          "title": "Selecția calității",
+          "description": "Gustăm și selectăm doar cele mai bune sticle pentru Moldova Direct",
+          "timing": "Continuu"
+        },
+        "delivery": {
+          "title": "Direct la tine",
+          "description": "Livrare rapidă și sigură aduce cele mai bune din Moldova direct la ușa ta",
+          "timing": "3-5 zile lucrătoare"
+        }
+      },
+      "traditions": {
+        "title": "Onorând tradiția",
+        "description": "Patrimoniul viticol al Moldovei se întinde pe peste 5.000 de ani. Producătorii noștri îmbină tehnicile consacrate cu inovațiile moderne pentru a crea vinuri care onorează trecutul îmbrățișând viitorul."
+      },
+      "sustainability": {
+        "title": "Practici sustenabile",
+        "description": "Mulți dintre producătorii noștri fac tranziția către agricultura organică și biodinamică, asigurând că viile Moldovei prosperă pentru generațiile viitoare."
+      }
     }
   }
 }

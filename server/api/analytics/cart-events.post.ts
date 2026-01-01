@@ -104,7 +104,7 @@ export default defineEventHandler(async (event) => {
           results.eventsProcessed = cartEvents.length
         }
       }
-      catch (error: any) {
+      catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error'
         results.errors.push(`Events processing error: ${errorMessage}`)
       }
@@ -134,7 +134,7 @@ export default defineEventHandler(async (event) => {
           results.conversionsProcessed = conversionMetrics.length
         }
       }
-      catch (error: any) {
+      catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error'
         results.errors.push(`Conversions processing error: ${errorMessage}`)
       }
@@ -164,7 +164,7 @@ export default defineEventHandler(async (event) => {
           results.abandonmentsProcessed = abandonmentData.length
         }
       }
-      catch (error: any) {
+      catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error'
         results.errors.push(`Abandonments processing error: ${errorMessage}`)
       }
@@ -181,8 +181,8 @@ export default defineEventHandler(async (event) => {
         : 'All cart analytics data processed successfully',
     }
   }
-  catch (error: any) {
-    console.error('Cart analytics processing error:', error)
+  catch (error: unknown) {
+    console.error('Cart analytics processing error:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to process cart analytics data',
@@ -287,11 +287,11 @@ async function updateDailyCartAnalytics(
         })
 
       if (error) {
-        console.error(`Failed to update daily cart analytics for ${date}:`, error)
+        console.error(`Failed to update daily cart analytics for ${date}:`, getServerErrorMessage(error))
       }
     }
   }
-  catch (error: any) {
-    console.error('Failed to update daily cart analytics:', error)
+  catch (error: unknown) {
+    console.error('Failed to update daily cart analytics:', getServerErrorMessage(error))
   }
 }

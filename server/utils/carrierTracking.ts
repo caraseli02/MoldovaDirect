@@ -49,8 +49,8 @@ export async function fetchCarrierTracking(
         return null
     }
   }
-  catch (error: any) {
-    console.error(`Error fetching tracking for ${carrier}:`, error)
+  catch (error: unknown) {
+    console.error(`Error fetching tracking for ${carrier}:`, getServerErrorMessage(error))
     return null
   }
 }
@@ -169,8 +169,8 @@ export async function syncCarrierTracking(
 
     return true
   }
-  catch (error: any) {
-    console.error('Error syncing carrier tracking:', error)
+  catch (error: unknown) {
+    console.error('Error syncing carrier tracking:', getServerErrorMessage(error))
     return false
   }
 }

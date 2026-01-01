@@ -82,7 +82,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
       }
       const validation = validateShippingInformation(info)
       if (!validation.isValid) {
-        session.setValidationErrors('shipping', validation.errors.map(err => err.message))
+        session.setValidationErrors('shipping', validation.errors.map(err => getErrorMessage(err)))
         return false
       }
     }
@@ -95,7 +95,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
       }
       const validation = validatePaymentMethod(method)
       if (!validation.isValid) {
-        session.setValidationErrors('payment', validation.errors.map(err => err.message))
+        session.setValidationErrors('payment', validation.errors.map(err => getErrorMessage(err)))
         return false
       }
     }
@@ -216,9 +216,9 @@ export const useCheckoutStore = defineStore('checkout', () => {
         paymentMethod: sessionRefs.paymentMethod.value,
       })
     }
-    catch (error: any) {
+    catch (error: unknown) {
       const checkoutError = createSystemError(
-        error instanceof Error ? error.message : 'Failed to initialize checkout',
+        error instanceof Error ? getErrorMessage(error) : 'Failed to initialize checkout',
         CheckoutErrorCode.SYSTEM_ERROR,
       )
       session.handleError(checkoutError)
@@ -285,8 +285,8 @@ export const useCheckoutStore = defineStore('checkout', () => {
       // Reset checkout session
       session.reset()
     }
-    catch (error: any) {
-      console.error('Error canceling checkout:', error)
+    catch (error: unknown) {
+      console.error('Error canceling checkout:', getErrorMessage(error))
       // Reset anyway
       session.reset()
     }
@@ -315,8 +315,8 @@ export const useCheckoutStore = defineStore('checkout', () => {
       // Mark data as prefetched
       session.setDataPrefetched(true)
     }
-    catch (error: any) {
-      console.error('Failed to prefetch checkout data:', error)
+    catch (error: unknown) {
+      console.error('Failed to prefetch checkout data:', getErrorMessage(error))
       // Don't throw - this is a non-critical enhancement
       // Mark as prefetched anyway to avoid repeated failed attempts
       session.setDataPrefetched(true)

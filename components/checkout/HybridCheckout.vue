@@ -138,74 +138,11 @@
           </section>
 
           <!-- Payment Section -->
-          <section
+          <CheckoutPaymentSection
             v-if="isAddressValid && selectedMethod"
-            class="checkout-section fade-in"
-          >
-            <div class="section-header">
-              <div class="flex items-center">
-                <span class="section-number">{{ user ? '3' : '4' }}</span>
-                <h3 class="section-title">
-                  {{ $t('checkout.hybrid.payment') }}
-                </h3>
-              </div>
-              <span
-                v-if="isPaymentValid"
-                class="section-complete"
-              >
-                <svg
-                  class="w-4 h-4"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </span>
-            </div>
-            <div class="section-content">
-              <!-- Cash Payment (Active) -->
-              <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg">
-                <label class="flex items-center cursor-pointer">
-                  <input
-                    v-model="paymentMethod.type"
-                    type="radio"
-                    value="cash"
-                    class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
-                  />
-                  <div class="ml-3 flex items-center">
-                    <span class="text-xl mr-2">💵</span>
-                    <div>
-                      <p class="font-medium text-gray-900 dark:text-white">
-                        {{ $t('checkout.payment.cash.label') }}
-                      </p>
-                      <p class="text-sm text-gray-600 dark:text-gray-400">
-                        {{ $t('checkout.payment.cash.summary') }}
-                      </p>
-                    </div>
-                  </div>
-                </label>
-              </div>
-
-              <!-- Coming Soon Methods -->
-              <div class="mt-3 space-y-2">
-                <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">
-                  {{ $t('checkout.payment.comingSoon') }}
-                </p>
-                <div class="flex flex-wrap gap-2">
-                  <span class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 flex items-center">
-                    💳 {{ $t('checkout.payment.creditCard.label') }}
-                  </span>
-                  <span class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 flex items-center">
-                    🅿️ {{ $t('checkout.payment.paypal.label') }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </section>
+            v-model="paymentMethod"
+            :section-number="user ? '3' : '4'"
+          />
 
           <!-- Delivery Instructions (Optional) -->
           <section
@@ -226,122 +163,18 @@
           </section>
 
           <!-- Terms & Place Order Section -->
-          <section
+          <CheckoutTermsSection
             v-if="canShowPlaceOrder"
-            class="checkout-section checkout-section-highlight fade-in"
-          >
-            <div class="section-content">
-              <!-- Terms Checkboxes -->
-              <div class="space-y-3 mb-6">
-                <label class="flex items-start cursor-pointer">
-                  <input
-                    v-model="termsAccepted"
-                    type="checkbox"
-                    class="h-4 w-4 mt-0.5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                  />
-                  <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                    {{ $t('checkout.review.acceptTerms') }}
-                    <a
-                      href="/terms"
-                      target="_blank"
-                      class="text-primary-600 hover:text-primary-700 underline"
-                    >
-                      {{ $t('checkout.review.termsOfService') }}
-                    </a>
-                    <span
-                      v-if="showTermsError"
-                      class="text-red-500 text-xs ml-1"
-                    >*</span>
-                  </span>
-                </label>
-
-                <label class="flex items-start cursor-pointer">
-                  <input
-                    v-model="privacyAccepted"
-                    type="checkbox"
-                    class="h-4 w-4 mt-0.5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                  />
-                  <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                    {{ $t('checkout.review.acceptPrivacy') }}
-                    <a
-                      href="/privacy"
-                      target="_blank"
-                      class="text-primary-600 hover:text-primary-700 underline"
-                    >
-                      {{ $t('checkout.review.privacyPolicy') }}
-                    </a>
-                    <span
-                      v-if="showPrivacyError"
-                      class="text-red-500 text-xs ml-1"
-                    >*</span>
-                  </span>
-                </label>
-
-                <label class="flex items-start cursor-pointer">
-                  <input
-                    v-model="marketingConsent"
-                    type="checkbox"
-                    class="h-4 w-4 mt-0.5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                  />
-                  <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
-                    {{ $t('checkout.review.marketingConsent') }}
-                  </span>
-                </label>
-              </div>
-
-              <!-- Place Order Button (Desktop) -->
-              <button
-                :disabled="!canPlaceOrder || processingOrder"
-                class="hidden lg:flex w-full items-center justify-center px-6 py-4 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
-                @click="handlePlaceOrder"
-              >
-                <span
-                  v-if="processingOrder"
-                  class="flex items-center"
-                >
-                  <svg
-                    class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      class="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      stroke-width="4"
-                    />
-                    <path
-                      class="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  {{ $t('checkout.processing') }}
-                </span>
-                <span
-                  v-else
-                  class="flex items-center"
-                >
-                  {{ $t('checkout.placeOrder') }} - {{ formattedTotal }}
-                  <svg
-                    class="ml-2 w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </span>
-              </button>
-            </div>
-          </section>
+            v-model:terms-accepted="termsAccepted"
+            v-model:privacy-accepted="privacyAccepted"
+            v-model:marketing-consent="marketingConsent"
+            :can-place-order="canPlaceOrder"
+            :processing-order="processingOrder"
+            :formatted-total="formattedTotal"
+            :show-terms-error="showTermsError"
+            :show-privacy-error="showPrivacyError"
+            @place-order="handlePlaceOrder"
+          />
         </div>
 
         <!-- Right Column: Sticky Order Summary -->
@@ -362,47 +195,13 @@
     </div>
 
     <!-- Mobile Sticky Footer -->
-    <div
+    <CheckoutMobileFooter
       v-if="(user || showGuestForm) && canShowPlaceOrder && !showExpressCheckout"
-      class="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 z-50 shadow-lg"
-    >
-      <div class="flex items-center justify-between mb-3">
-        <span class="text-sm text-gray-600 dark:text-gray-400">{{ $t('common.total') }}</span>
-        <span class="text-lg font-bold text-gray-900 dark:text-white">{{ formattedTotal }}</span>
-      </div>
-      <button
-        :disabled="!canPlaceOrder || processingOrder"
-        class="w-full flex items-center justify-center px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
-        @click="handlePlaceOrder"
-      >
-        <span
-          v-if="processingOrder"
-          class="flex items-center"
-        >
-          <svg
-            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              class="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              stroke-width="4"
-            />
-            <path
-              class="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            />
-          </svg>
-          {{ $t('checkout.processing') }}
-        </span>
-        <span v-else>{{ $t('checkout.placeOrder') }}</span>
-      </button>
-    </div>
+      :can-place-order="canPlaceOrder"
+      :processing-order="processingOrder"
+      :formatted-total="formattedTotal"
+      @place-order="handlePlaceOrder"
+    />
 
     <!-- Back to Cart Link -->
     <div
@@ -438,27 +237,60 @@ import type { GuestInfo } from '~/composables/useGuestCheckout'
 import type { Address } from '~/types/address'
 import { useCartStore } from '~/stores/cart'
 
-// Components
-const ExpressCheckoutBannerEnhanced = defineAsyncComponent(() =>
-  import('~/components/checkout/ExpressCheckoutBannerEnhanced.vue'),
+// Components - with error handling for async loading failures
+const createAsyncComponent = (loader: () => Promise<unknown>, name: string) =>
+  defineAsyncComponent({
+    loader: loader as () => Promise<{ default: object }>,
+    onError(error, retry, fail, attempts) {
+      console.error(`[Checkout] Failed to load ${name} (attempt ${attempts}):`, error)
+      if (attempts <= 2) {
+        retry()
+      }
+      else {
+        fail()
+      }
+    },
+  })
+
+const ExpressCheckoutBannerEnhanced = createAsyncComponent(
+  () => import('~/components/checkout/ExpressCheckoutBannerEnhanced.vue'),
+  'ExpressCheckoutBanner',
 )
-const AddressForm = defineAsyncComponent(() =>
-  import('~/components/checkout/AddressForm.vue'),
+const AddressForm = createAsyncComponent(
+  () => import('~/components/checkout/AddressForm.vue'),
+  'AddressForm',
 )
-const ShippingMethodSelector = defineAsyncComponent(() =>
-  import('~/components/checkout/ShippingMethodSelector.vue'),
+const ShippingMethodSelector = createAsyncComponent(
+  () => import('~/components/checkout/ShippingMethodSelector.vue'),
+  'ShippingMethodSelector',
 )
-const GuestCheckoutPrompt = defineAsyncComponent(() =>
-  import('~/components/checkout/GuestCheckoutPrompt.vue'),
+const GuestCheckoutPrompt = createAsyncComponent(
+  () => import('~/components/checkout/GuestCheckoutPrompt.vue'),
+  'GuestCheckoutPrompt',
 )
-const GuestInfoForm = defineAsyncComponent(() =>
-  import('~/components/checkout/GuestInfoForm.vue'),
+const GuestInfoForm = createAsyncComponent(
+  () => import('~/components/checkout/GuestInfoForm.vue'),
+  'GuestInfoForm',
 )
-const ShippingInstructions = defineAsyncComponent(() =>
-  import('~/components/checkout/ShippingInstructions.vue'),
+const ShippingInstructions = createAsyncComponent(
+  () => import('~/components/checkout/ShippingInstructions.vue'),
+  'ShippingInstructions',
 )
-const OrderSummaryCard = defineAsyncComponent(() =>
-  import('~/components/checkout/OrderSummaryCard.vue'),
+const OrderSummaryCard = createAsyncComponent(
+  () => import('~/components/checkout/OrderSummaryCard.vue'),
+  'OrderSummaryCard',
+)
+const CheckoutPaymentSection = createAsyncComponent(
+  () => import('~/components/checkout/hybrid/PaymentSection.vue'),
+  'PaymentSection',
+)
+const CheckoutTermsSection = createAsyncComponent(
+  () => import('~/components/checkout/hybrid/TermsSection.vue'),
+  'TermsSection',
+)
+const CheckoutMobileFooter = createAsyncComponent(
+  () => import('~/components/checkout/hybrid/MobileFooter.vue'),
+  'MobileFooter',
 )
 
 // Composables
@@ -654,11 +486,11 @@ const handleExpressPlaceOrder = async () => {
     // Process order
     await processOrder()
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Express checkout failed:', error)
 
     // Provide actionable guidance based on error type
-    const errorMessage = error?.message || ''
+    const errorMessage = getErrorMessage(error)
     const isNetworkError = errorMessage.includes('network') || errorMessage.includes('fetch') || errorMessage.includes('Failed to fetch')
     const isSessionError = errorMessage.includes('session') || errorMessage.includes('expired') || errorMessage.includes('unauthorized')
 
@@ -746,11 +578,11 @@ const handlePlaceOrder = async () => {
     // Process order
     await processOrder()
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to place order:', error)
 
     // Provide user-friendly error message without exposing technical details
-    const errorMessage = error?.message || ''
+    const errorMessage = getErrorMessage(error)
     const isNetworkError = errorMessage.includes('network') || errorMessage.includes('fetch') || errorMessage.includes('Failed to fetch')
     const isValidationError = errorMessage.includes('validation') || errorMessage.includes('invalid')
 

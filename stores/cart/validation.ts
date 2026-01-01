@@ -173,11 +173,11 @@ async function validateSingleProduct(productId: string, cartItem?: CartItem): Pr
       warnings: [],
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.warn(`Failed to validate product ${productId}:`, error)
 
     // Handle different error scenarios
-    if (error?.statusCode === 404) {
+    if (getErrorStatusCode(error) === 404) {
       if (import.meta.dev && cartItem?.product) {
         return {
           isValid: true,
@@ -240,7 +240,7 @@ async function batchValidateProducts(
         // Remove from validation queue on success
         removeFromValidationQueue(productId)
       }).catch((error: any) => {
-        console.error(`Batch validation error for ${productId}:`, error)
+        console.error(`Batch validation error for ${productId}:`, getErrorMessage(error))
 
         // Handle retry logic
         const queueItem = state.value.validationQueue[productId]
@@ -259,8 +259,8 @@ async function batchValidateProducts(
     try {
       await Promise.allSettled(validationPromises)
     }
-    catch (error: any) {
-      console.error('Batch validation error:', error)
+    catch (error: unknown) {
+      console.error('Batch validation error:', getErrorMessage(error))
     }
   }
 }
@@ -298,8 +298,8 @@ function startBackgroundValidation(): void {
         state.value.lastBackgroundValidation = new Date()
       }
     }
-    catch (error: any) {
-      console.error('Background validation error:', error)
+    catch (error: unknown) {
+      console.error('Background validation error:', getErrorMessage(error))
     }
     finally {
       state.value.validationInProgress = false

@@ -1,7 +1,7 @@
 <template>
   <div
     data-testid="express-checkout-banner"
-    class="express-checkout-enhanced bg-gradient-to-r from-primary-500/10 to-primary-600/10 dark:from-primary-900/30 dark:to-primary-800/30 border border-primary-200 dark:border-primary-700 rounded-xl p-6 mb-6"
+    class="express-checkout-enhanced bg-primary-100/50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-700 rounded-xl p-6 mb-6"
   >
     <!-- Header -->
     <div class="flex items-center justify-between mb-4">

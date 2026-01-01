@@ -846,8 +846,10 @@
     "addresses": "Addresses",
     "addressesDescription": "Manage your shipping and billing addresses",
     "addAddress": "Add Address",
+    "addAddressDescription": "Enter the details for your new address.",
     "addFirstAddress": "Add Your First Address",
     "editAddress": "Edit Address",
+    "editAddressDescription": "Update the details for this address.",
     "updateAddress": "Update Address",
     "saveAddress": "Save Address",
     "deleteAddress": "Delete Address",
@@ -1562,6 +1564,7 @@
     },
     "faq": {
       "title": "Product FAQs",
+      "subtitle": "Answers to the most common questions about our products",
       "items": {
         "delivery": {
           "question": "How fast do you deliver?",
@@ -1569,7 +1572,7 @@
         },
         "storage": {
           "question": "How should I store it?",
-          "answer": "Keep in a cool, dry space away from direct sunlight. Wines rest best between 12–18°C."
+          "answer": "Keep in a cool, dry space away from direct sunlight. Check the product label for specific storage recommendations."
         },
         "allergens": {
           "question": "Does it contain allergens?",
@@ -2155,7 +2158,24 @@
       "contactNoticeTitle": "Delivery Contact",
       "contactNotice": "We'll contact you using the information provided to arrange delivery and payment.",
       "comingSoon": "Coming Soon",
-      "error": "Payment Error"
+      "error": "Payment Error",
+      "cvvHelpLabel": "Show CVV help",
+      "copyBankDetails": "Copy bank details to clipboard",
+      "bankDetailsCopied": "Bank details copied to clipboard",
+      "bankDetailsCopyFailed": "Failed to copy bank details",
+      "validation": {
+        "cardNumberRequired": "Card number is required",
+        "cardNumberInvalid": "Invalid card number",
+        "expiryRequired": "Expiry date is required",
+        "expiryInvalid": "Invalid expiry date format",
+        "expiryExpired": "Card has expired",
+        "cvvRequired": "CVV is required",
+        "cvvInvalid": "Invalid CVV",
+        "cvvLength": "CVV must be {length} digits",
+        "holderNameRequired": "Cardholder name is required",
+        "paypalEmailRequired": "PayPal email is required",
+        "paypalEmailInvalid": "Invalid email address"
+      }
     },
     "navigation": {
       "back": "Back",
@@ -2461,6 +2481,7 @@
       "featuredProducts": "Featured Wines",
       "viewAllProducts": "View All Products",
       "closeModal": "Close",
+      "detailsDescription": "View detailed information about {name} including their story, vineyard, and award-winning wines",
       "swipeHint": "Swipe to explore more winemakers",
       "keyboardHint": "Use arrow keys to navigate",
       "loading": "Loading winemaker stories...",

@@ -200,9 +200,9 @@ const handleUserAction = async (action: string, userId: string, _data?: unknown)
         toast.info('This action will be implemented in a future update')
     }
   }
-  catch (error: any) {
-    console.error('Error performing user action:', error)
-    toast.error(error instanceof Error ? error.message : 'Failed to perform action')
+  catch (error: unknown) {
+    console.error('Error performing user action:', getErrorMessage(error))
+    toast.error(error instanceof Error ? getErrorMessage(error) : 'Failed to perform action')
   }
 }
 
@@ -310,9 +310,9 @@ const fetchUsersData = async () => {
       adminUsersStore.setSummary(response.data.summary)
     }
   }
-  catch (err: any) {
-    console.error('[AdminUsers] Error fetching users:', err)
-    adminUsersStore.setError(err instanceof Error ? err.message : 'Failed to fetch users')
+  catch (err: unknown) {
+    console.error('[AdminUsers] Error fetching users:', getErrorMessage(err))
+    adminUsersStore.setError(err instanceof Error ? getErrorMessage(err) : 'Failed to fetch users')
   }
   finally {
     adminUsersStore.setLoading(false)
@@ -419,9 +419,9 @@ const fetchUserDetail = async (userId: string) => {
       adminUsersStore.setCurrentUser(response.data)
     }
   }
-  catch (err: any) {
-    console.error('[AdminUsers] Error fetching user detail:', err)
-    adminUsersStore.setError(err instanceof Error ? err.message : 'Failed to fetch user detail')
+  catch (err: unknown) {
+    console.error('[AdminUsers] Error fetching user detail:', getErrorMessage(err))
+    adminUsersStore.setError(err instanceof Error ? getErrorMessage(err) : 'Failed to fetch user detail')
   }
   finally {
     adminUsersStore.setUserDetailLoading(false)

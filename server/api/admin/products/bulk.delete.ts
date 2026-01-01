@@ -37,7 +37,7 @@ const bulkDeleteSchema = z.object({
 
 export default defineEventHandler(async (event) => {
   try {
-    await requireAdminRole(event)
+    const adminId = await requireAdminRole(event)
     const supabase = await serverSupabaseClient(event)
     const body = await readBody(event)
 
@@ -92,7 +92,7 @@ export default defineEventHandler(async (event) => {
         is_active: product.is_active,
       },
       new_values: null,
-      performed_by: null, // TODO: Get current admin user ID
+      user_id: adminId,
       ip_address: getClientIP(event),
       user_agent: getHeader(event, 'user-agent'),
     }))
@@ -111,10 +111,10 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    console.error('Bulk delete products error:', error)
+  catch (error: unknown) {
+    console.error('Bulk delete products error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 
