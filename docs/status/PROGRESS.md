@@ -1,5 +1,7 @@
 # Moldova Direct - Development Progress
 
+> **Note (January 2026):** This document contains some historical references to Cloudflare/D1 infrastructure from the original architecture. The current stack is **Nuxt 4 + Supabase + Vercel**. See `docs/development/tech.md` for the current technology stack.
+
 ## 🎉 COMPLETED: Feature 1 - Foundation & Static Pages
 
 ### ✅ All Tasks Completed Successfully:
