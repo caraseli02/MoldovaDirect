@@ -98,7 +98,7 @@ export const useCartAnalytics = () => {
           }
         }
       }
-      catch (error: any) {
+      catch (error: unknown) {
         console.warn('Failed to load cart analytics session data:', error)
       }
     }
@@ -118,7 +118,7 @@ export const useCartAnalytics = () => {
           }),
         )
       }
-      catch (error: any) {
+      catch (error: unknown) {
         console.warn('Failed to save cart analytics session data:', error)
       }
     }
@@ -478,7 +478,7 @@ export const useCartAnalytics = () => {
       // Try to sync with server
       await syncEventsWithServer()
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.warn('Failed to store cart analytics event:', error)
     }
   }
@@ -504,7 +504,7 @@ export const useCartAnalytics = () => {
 
       localStorage.setItem(key, JSON.stringify(conversions))
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.warn('Failed to store conversion metrics:', error)
     }
   }
@@ -530,7 +530,7 @@ export const useCartAnalytics = () => {
 
       localStorage.setItem(key, JSON.stringify(abandonments))
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.warn('Failed to store abandonment data:', error)
     }
   }
@@ -564,7 +564,7 @@ export const useCartAnalytics = () => {
         localStorage.removeItem(abandonmentKey)
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.warn('Failed to sync cart analytics with server:', error)
     }
   }

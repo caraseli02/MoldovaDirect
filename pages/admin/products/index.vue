@@ -328,8 +328,8 @@ const saveStockEdit = async () => {
     )
     closeStockEditModal()
   }
-  catch (error: any) {
-    console.error('Failed to update stock:', error)
+  catch (error: unknown) {
+    console.error('Failed to update stock:', getErrorMessage(error))
   }
   finally {
     stockEditModal.value.saving = false
@@ -413,8 +413,8 @@ const confirmDelete = async () => {
 
     deleteDialog.value.show = false
   }
-  catch (error: any) {
-    console.error('Failed to delete:', error)
+  catch (error: unknown) {
+    console.error('Failed to delete:', getErrorMessage(error))
   }
   finally {
     deleteDialog.value.loading = false
@@ -485,11 +485,11 @@ const performBulkOperation = async (
       closeBulkOperations()
     }, 3000)
   }
-  catch (error: any) {
+  catch (error: unknown) {
     bulkOperations.value.inProgress = false
     bulkOperations.value.error = true
     bulkOperations.value.success = false
-    bulkOperations.value.errorMessage = error instanceof Error ? error.message : `Failed to ${operationType} products`
+    bulkOperations.value.errorMessage = error instanceof Error ? getErrorMessage(error) : `Failed to ${operationType} products`
   }
 }
 
@@ -526,10 +526,10 @@ const retryBulkOperation = async () => {
       bulkOperations.value.success = true
       bulkOperations.value.resultMessage = 'Operation completed successfully'
     }
-    catch (error: any) {
+    catch (error: unknown) {
       bulkOperations.value.inProgress = false
       bulkOperations.value.error = true
-      bulkOperations.value.errorMessage = error instanceof Error ? error.message : 'Operation failed'
+      bulkOperations.value.errorMessage = error instanceof Error ? getErrorMessage(error) : 'Operation failed'
     }
   }
 }

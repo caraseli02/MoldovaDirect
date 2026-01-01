@@ -885,8 +885,8 @@ const loadAddresses = async () => {
       isDefault: addr.is_default,
     }))
   }
-  catch (error: any) {
-    console.error('Error loading addresses:', error)
+  catch (error: unknown) {
+    console.error('Error loading addresses:', getErrorMessage(error))
     $toast.error(t('profile.errors.loadAddressesFailed'))
   }
 }
@@ -979,13 +979,13 @@ const handleSave = async () => {
       saveStatus.value = 'idle'
     }, 2000)
   }
-  catch (error: any) {
-    console.error('Error updating profile:', error)
+  catch (error: unknown) {
+    console.error('Error updating profile:', getErrorMessage(error))
     saveStatus.value = 'error'
 
     // CRITICAL FIX: Show toast error so user knows save failed
-    const errorMessage = error?.message || t('profile.saveError')
-    $toast.error(errorMessage)
+    const errorMsg = getErrorMessage(error)
+    $toast.error(errorMsg || t('profile.saveError'))
 
     // Keep error visible longer so user can see it
     hideStatusTimeout = setTimeout(() => {
@@ -1064,10 +1064,10 @@ const uploadAvatar = async (file: File) => {
       saveStatus.value = 'idle'
     }, 2000)
   }
-  catch (error: any) {
-    console.error('Error uploading profile picture:', error)
+  catch (error: unknown) {
+    console.error('Error uploading profile picture:', getErrorMessage(error))
     saveStatus.value = 'error'
-    const errorMessage = error instanceof Error ? error.message : 'An error occurred'
+    const errorMessage = error instanceof Error ? getErrorMessage(error) : 'An error occurred'
     $toast.error(t('profile.errors.uploadFailed') + ': ' + errorMessage)
 
     setTimeout(() => {
@@ -1118,8 +1118,8 @@ const removePicture = async () => {
       saveStatus.value = 'idle'
     }, 2000)
   }
-  catch (error: any) {
-    console.error('Error removing profile picture:', error)
+  catch (error: unknown) {
+    console.error('Error removing profile picture:', getErrorMessage(error))
     saveStatus.value = 'error'
     $toast.error(t('profile.errors.removeFailed'))
 
@@ -1193,8 +1193,8 @@ const handleAddressSave = async (addressData: Address) => {
     closeAddressForm()
     $toast.success(t('profile.success.addressSaved'))
   }
-  catch (error: any) {
-    console.error('Error saving address:', error)
+  catch (error: unknown) {
+    console.error('Error saving address:', getErrorMessage(error))
     $toast.error(t('profile.errors.addressSaveFailed'))
   }
 }
@@ -1230,11 +1230,11 @@ const executeDeleteAddress = async () => {
     await loadAddresses()
     $toast.success(t('profile.success.addressDeleted'))
   }
-  catch (error: any) {
-    console.error('Error deleting address:', error)
+  catch (error: unknown) {
+    console.error('Error deleting address:', getErrorMessage(error))
 
     // Provide specific error feedback
-    if (error?.code === '42501') {
+    if (getErrorCode(error) === '42501') {
       $toast.error(t('profile.errors.permissionDenied') || 'Permission denied')
     }
     else {
@@ -1267,9 +1267,9 @@ const handleDeleteAccount = async (data: { password: string, reason?: string }) 
     $toast.success(t('profile.success.accountDeleted'))
     await navigateTo('/')
   }
-  catch (error: any) {
-    console.error('Error deleting account:', error)
-    const errorMessage = error instanceof Error ? error.message : 'An error occurred'
+  catch (error: unknown) {
+    console.error('Error deleting account:', getErrorMessage(error))
+    const errorMessage = error instanceof Error ? getErrorMessage(error) : 'An error occurred'
     $toast.error(t('profile.errors.deleteFailed') + ': ' + errorMessage)
   }
   finally {

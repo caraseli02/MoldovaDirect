@@ -125,6 +125,7 @@ const user = useSupabaseUser()
 const route = useRoute()
 const { t } = useI18n()
 const localePath = useLocalePath()
+const requestURL = useRequestURL()
 
 const loading = ref(true)
 const success = ref(false)
@@ -136,7 +137,8 @@ const email = ref('')
 const verifyEmail = async () => {
   try {
     // Check if we have verification tokens in the URL
-    const hash = window.location.hash
+    // Using route.hash for SSR compatibility (route is reactive and works on both server/client)
+    const hash = route.hash
     if (hash) {
       // Supabase will automatically handle email verification from hash
       // Check if user is now authenticated
@@ -154,8 +156,8 @@ const verifyEmail = async () => {
       throw new Error('Missing verification link')
     }
   }
-  catch (err: any) {
-    error.value = err.message || t('auth.verificationError')
+  catch (err: unknown) {
+    error.value = getErrorMessage(err) || t('auth.verificationError')
   }
   finally {
     loading.value = false
@@ -174,7 +176,7 @@ const resendVerification = async () => {
       type: 'signup',
       email: email.value,
       options: {
-        emailRedirectTo: `${window.location.origin}${localePath('/auth/verify-email')}`,
+        emailRedirectTo: `${requestURL.origin}${localePath('/auth/verify-email')}`,
       },
     })
 
@@ -185,8 +187,8 @@ const resendVerification = async () => {
     message.value = t('auth.verificationResent')
     error.value = ''
   }
-  catch (err: any) {
-    error.value = err.message || t('auth.resendError')
+  catch (err: unknown) {
+    error.value = getErrorMessage(err) || t('auth.resendError')
   }
   finally {
     resendLoading.value = false

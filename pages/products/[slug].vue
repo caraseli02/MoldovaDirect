@@ -891,8 +891,8 @@ const shareProduct = async () => {
       shareFeedback.value = null
     }, 4000)
   }
-  catch (err: any) {
-    console.error('Share failed', err)
+  catch (err: unknown) {
+    console.error('Share failed', getErrorMessage(err))
     shareFeedback.value = t('products.actions.shareError')
   }
 }
@@ -942,7 +942,7 @@ const addToCart = async () => {
   try {
     if (typeof addItem !== 'function') {
       const error = `addItem is not a function (type: ${typeof addItem})`
-      console.error('❌', error)
+      console.error('❌', getErrorMessage(error))
       throw new Error(error)
     }
 
@@ -967,8 +967,8 @@ const addToCart = async () => {
 
     // Add to cart succeeded
   }
-  catch (err: any) {
-    const errorMsg = err instanceof Error ? err.message : String(err)
+  catch (err: unknown) {
+    const errorMsg = err instanceof Error ? getErrorMessage(err) : String(err)
     console.error('Add to cart failed:', errorMsg, err)
 
     // Show error toast

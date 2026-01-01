@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="show"
-    class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-5 mb-6"
+    class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-5 mb-6"
   >
     <div class="flex items-start space-x-4">
       <!-- User Icon -->

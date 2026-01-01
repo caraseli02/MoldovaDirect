@@ -200,10 +200,10 @@ export default defineEventHandler(async (event) => {
       data: analyticsData,
     }
   }
-  catch (error: any) {
-    console.error('User analytics error:', error)
+  catch (error: unknown) {
+    console.error('User analytics error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

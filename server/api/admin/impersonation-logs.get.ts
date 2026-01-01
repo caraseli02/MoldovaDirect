@@ -177,16 +177,16 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    console.error('Impersonation logs retrieval error:', error)
+  catch (error: unknown) {
+    console.error('Impersonation logs retrieval error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: error.message || 'Failed to retrieve impersonation logs',
+      statusMessage: getServerErrorMessage(error),
     })
   }
 })

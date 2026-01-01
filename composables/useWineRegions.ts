@@ -162,9 +162,9 @@ export const useWineRegions = () => {
 
       regions.value = staticRegions
     }
-    catch (err: any) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch wine regions'
-      console.error('Error fetching wine regions:', err)
+    catch (err: unknown) {
+      error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to fetch wine regions'
+      console.error('Error fetching wine regions:', getErrorMessage(err))
     }
     finally {
       loading.value = false

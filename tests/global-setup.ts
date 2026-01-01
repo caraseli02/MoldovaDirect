@@ -316,7 +316,7 @@ async function globalSetup(config: FullConfig) {
 
       console.log(`✓ Authenticated and saved storage state for locale: ${locale}`)
     }
-    catch (error: any) {
+    catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : String(error)
 
       // Handle various error types gracefully - create empty auth state to allow tests to continue
@@ -419,7 +419,7 @@ async function globalSetup(config: FullConfig) {
         console.log(`✓ Admin authentication completed and saved`)
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.warn(`⚠️ Admin auth setup failed: ${error.message}`)
       console.warn('  Admin tests may fail. Please ensure TEST_ADMIN_EMAIL and TEST_ADMIN_PASSWORD are set.')
     }

@@ -217,7 +217,7 @@ export default defineEventHandler(async (event) => {
       // Send email asynchronously without blocking the response
       sendOrderConfirmationEmailAsync(completeOrder, user as any, supabase)
         .catch((error: any) => {
-          console.error('Failed to send order confirmation email:', error)
+          console.error('Failed to send order confirmation email:', getServerErrorMessage(error))
           // Email failure doesn't block order creation
         })
     }
@@ -232,12 +232,12 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    if (error.statusCode) {
+  catch (error: unknown) {
+    if (isH3Error(error)) {
       throw error
     }
 
-    console.error('Order creation error:', error)
+    console.error('Order creation error:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error',
@@ -297,8 +297,8 @@ async function sendOrderConfirmationEmailAsync(
       console.error(`❌ Failed to send order confirmation email for order ${order.order_number}:`, result.error)
     }
   }
-  catch (error: any) {
-    console.error('Error in sendOrderConfirmationEmailAsync:', error)
+  catch (error: unknown) {
+    console.error('Error in sendOrderConfirmationEmailAsync:', getServerErrorMessage(error))
     // Don't throw - email failure should not affect order creation
   }
 }

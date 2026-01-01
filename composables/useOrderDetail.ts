@@ -140,8 +140,8 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
         throw new Error('Failed to fetch order')
       }
     }
-    catch (err: any) {
-      console.error('Error fetching order:', err)
+    catch (err: unknown) {
+      console.error('Error fetching order:', getErrorMessage(err))
 
       const error_obj = err as { statusCode?: number, message?: string }
       if (error_obj.statusCode === 404) {
@@ -176,8 +176,8 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
         tracking.value = response.data
       }
     }
-    catch (err: any) {
-      console.error('Error fetching tracking:', err)
+    catch (err: unknown) {
+      console.error('Error fetching tracking:', getErrorMessage(err))
       // Don't set error state for tracking failures
     }
   }
@@ -222,11 +222,11 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
       // Navigate to cart
       router.push('/cart')
     }
-    catch (err: any) {
-      console.error('Error reordering:', err)
+    catch (err: unknown) {
+      console.error('Error reordering:', getErrorMessage(err))
       toast.error(
         'Reorder failed',
-        err.message || 'Failed to add items to cart',
+        getErrorMessage(err) || 'Failed to add items to cart',
       )
     }
     finally {

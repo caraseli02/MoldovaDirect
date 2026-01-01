@@ -5,6 +5,9 @@
         <UiDialogTitle class="sr-only">
           {{ producer?.name }}
         </UiDialogTitle>
+        <UiDialogDescription class="sr-only">
+          {{ t('wineStory.producers.detailsDescription', { name: producer?.name }) }}
+        </UiDialogDescription>
       </UiDialogHeader>
 
       <div

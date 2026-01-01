@@ -171,9 +171,9 @@ export const useProducers = () => {
 
       producers.value = staticProducers
     }
-    catch (err: any) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch producers'
-      console.error('Error fetching producers:', err)
+    catch (err: unknown) {
+      error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to fetch producers'
+      console.error('Error fetching producers:', getErrorMessage(err))
     }
     finally {
       loading.value = false
@@ -206,9 +206,9 @@ export const useProducers = () => {
       error.value = 'Producer not found'
       return null
     }
-    catch (err: any) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch producer'
-      console.error('Error fetching producer:', err)
+    catch (err: unknown) {
+      error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to fetch producer'
+      console.error('Error fetching producer:', getErrorMessage(err))
       return null
     }
     finally {

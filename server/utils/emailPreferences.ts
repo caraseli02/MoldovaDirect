@@ -61,7 +61,7 @@ export async function getEmailPreferences(
     if (error.code === 'PGRST116') {
       return null
     }
-    console.error('Error fetching email preferences:', error)
+    console.error('Error fetching email preferences:', getServerErrorMessage(error))
     return null
   }
 
@@ -93,7 +93,7 @@ export async function createEmailPreferences(
     .single()
 
   if (error) {
-    console.error('Error creating email preferences:', error)
+    console.error('Error creating email preferences:', getServerErrorMessage(error))
     return null
   }
 
@@ -134,7 +134,7 @@ export async function updateEmailPreferences(
   const { data, error } = await query.select().single()
 
   if (error) {
-    console.error('Error updating email preferences:', error)
+    console.error('Error updating email preferences:', getServerErrorMessage(error))
     return null
   }
 

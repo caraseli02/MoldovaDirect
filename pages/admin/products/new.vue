@@ -206,9 +206,9 @@ const handleSubmit = async (formData: any) => {
       throw new Error('Failed to create product')
     }
   }
-  catch (error: any) {
-    console.error('Create product error:', error)
-    errorMessage.value = error instanceof Error ? error.message : 'Failed to create product'
+  catch (error: unknown) {
+    console.error('Create product error:', getErrorMessage(error))
+    errorMessage.value = error instanceof Error ? getErrorMessage(error) : 'Failed to create product'
   }
 }
 

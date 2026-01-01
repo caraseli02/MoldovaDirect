@@ -105,12 +105,12 @@ export function useDashboardRefresh(
       const [statsResult, activityResult] = await Promise.all([
         $fetch<{ success: boolean, data: unknown }>('/api/admin/dashboard/stats', { headers })
           .catch((err: any) => {
-            console.error('[AdminFetch] Error fetching /api/admin/dashboard/stats:', err)
+            console.error('[AdminFetch] Error fetching /api/admin/dashboard/stats:', getErrorMessage(err))
             return null
           }),
         $fetch<{ success: boolean, data: unknown[] }>('/api/admin/dashboard/activity', { headers })
           .catch((err: any) => {
-            console.error('[AdminFetch] Error fetching /api/admin/dashboard/activity:', err)
+            console.error('[AdminFetch] Error fetching /api/admin/dashboard/activity:', getErrorMessage(err))
             return null
           }),
       ])
@@ -133,8 +133,8 @@ export function useDashboardRefresh(
         store.clearError()
       }
     }
-    catch (error: any) {
-      console.error('[AdminFetch] Error fetching dashboard data:', error)
+    catch (error: unknown) {
+      console.error('[AdminFetch] Error fetching dashboard data:', getErrorMessage(error))
 
       const err = error as { statusCode?: number, message?: string }
       // Handle authentication errors specially

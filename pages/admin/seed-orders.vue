@@ -173,9 +173,9 @@ const seedOrders = async () => {
 
     result.value = response
   }
-  catch (err: any) {
-    error.value = err.message || 'Failed to create orders'
-    console.error('Seed error:', err)
+  catch (err: unknown) {
+    error.value = getErrorMessage(err) || 'Failed to create orders'
+    console.error('Seed error:', getErrorMessage(err))
   }
   finally {
     loading.value = false

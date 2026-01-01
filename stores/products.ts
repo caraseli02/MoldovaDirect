@@ -254,9 +254,9 @@ export const useProductsStore = defineStore('products', {
           pagination: response.pagination,
         })
       }
-      catch (error: any) {
-        this.error = error instanceof Error ? error.message : 'Failed to fetch products'
-        console.error('Error fetching products:', error)
+      catch (error: unknown) {
+        this.error = error instanceof Error ? getErrorMessage(error) : 'Failed to fetch products'
+        console.error('Error fetching products:', getErrorMessage(error))
       }
       finally {
         this.loading = false
@@ -298,10 +298,10 @@ export const useProductsStore = defineStore('products', {
           relatedProducts: response.relatedProducts,
         }, 10 * 60 * 1000) // 10 minutes cache for product details
       }
-      catch (error: any) {
-        this.error = error instanceof Error ? error.message : 'Failed to fetch product'
+      catch (error: unknown) {
+        this.error = error instanceof Error ? getErrorMessage(error) : 'Failed to fetch product'
         this.currentProduct = null
-        console.error('Error fetching product:', error)
+        console.error('Error fetching product:', getErrorMessage(error))
       }
       finally {
         this.loading = false
@@ -330,8 +330,8 @@ export const useProductsStore = defineStore('products', {
         // Cache the response
         this.setCache(cacheKey, response.products, 15 * 60 * 1000) // 15 minutes cache
       }
-      catch (error: any) {
-        console.error('Error fetching featured products:', error)
+      catch (error: unknown) {
+        console.error('Error fetching featured products:', getErrorMessage(error))
       }
     },
 
@@ -372,9 +372,9 @@ export const useProductsStore = defineStore('products', {
           suggestions: response.suggestions,
         }, 2 * 60 * 1000) // 2 minutes cache for search results
       }
-      catch (error: any) {
-        this.searchError = error instanceof Error ? error.message : 'Search failed'
-        console.error('Error searching products:', error)
+      catch (error: unknown) {
+        this.searchError = error instanceof Error ? getErrorMessage(error) : 'Search failed'
+        console.error('Error searching products:', getErrorMessage(error))
       }
       finally {
         this.searchLoading = false
@@ -402,8 +402,8 @@ export const useProductsStore = defineStore('products', {
         // Cache the response
         this.setCache(cacheKey, response.categories, 30 * 60 * 1000) // 30 minutes cache
       }
-      catch (error: any) {
-        console.error('Error fetching categories:', error)
+      catch (error: unknown) {
+        console.error('Error fetching categories:', getErrorMessage(error))
       }
       finally {
         this.categoryLoading = false
@@ -449,9 +449,9 @@ export const useProductsStore = defineStore('products', {
           pagination: response.pagination,
         })
       }
-      catch (error: any) {
-        this.error = error instanceof Error ? error.message : 'Failed to fetch category'
-        console.error('Error fetching category:', error)
+      catch (error: unknown) {
+        this.error = error instanceof Error ? getErrorMessage(error) : 'Failed to fetch category'
+        console.error('Error fetching category:', getErrorMessage(error))
       }
       finally {
         this.loading = false

@@ -3,7 +3,7 @@
     <!-- Auto-Selected Free Shipping Banner -->
     <div
       v-if="autoSelected && modelValue && modelValue.price === 0 && !showAllMethods"
-      class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4"
+      class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4"
     >
       <div class="flex items-center gap-3">
         <div class="flex-shrink-0 w-10 h-10 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center">

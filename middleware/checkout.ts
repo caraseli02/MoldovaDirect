@@ -62,7 +62,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     try {
       await checkoutStore.initializeCheckout(items.value)
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.error('Failed to initialize checkout:', error)
       return navigateTo({
         path: localePath('/cart'),
@@ -78,7 +78,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     try {
       await checkoutStore.prefetchCheckoutData()
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.error('❌ [Checkout Middleware] Failed to prefetch checkout data:', error)
     }
   }

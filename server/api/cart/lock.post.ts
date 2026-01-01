@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
     })
 
     if (error) {
-      console.error('Error locking cart:', error)
+      console.error('Error locking cart:', getServerErrorMessage(error))
       throw createError({
         statusCode: 500,
         message: 'Failed to lock cart',
@@ -69,23 +69,23 @@ export default defineEventHandler(async (event) => {
       message: 'Cart locked successfully',
     }
   }
-  catch (err: any) {
+  catch (err: unknown) {
     // Handle Zod validation errors
-    if (err.name === 'ZodError') {
+    if (err && typeof err === 'object' && 'name' in err && err.name === 'ZodError' && 'errors' in err) {
       throw createError({
         statusCode: 400,
         message: 'Invalid request data',
-        data: { errors: err.errors },
+        data: { errors: (err as { errors: unknown }).errors },
       })
     }
 
     // Re-throw HTTP errors
-    if (err.statusCode) {
+    if (isH3Error(err)) {
       throw err
     }
 
     // Generic error handler
-    console.error('Unexpected error in lock cart endpoint:', err)
+    console.error('Unexpected error in lock cart endpoint:', getServerErrorMessage(err))
     throw createError({
       statusCode: 500,
       message: 'An unexpected error occurred while locking the cart',

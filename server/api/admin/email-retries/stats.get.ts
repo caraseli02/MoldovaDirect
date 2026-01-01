@@ -23,14 +23,14 @@ export default defineEventHandler(async (event) => {
       data: stats,
     }
   }
-  catch (error: any) {
-    console.error('❌ Error getting retry statistics:', error)
+  catch (error: unknown) {
+    console.error('❌ Error getting retry statistics:', getServerErrorMessage(error))
 
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to get retry statistics',
       data: {
-        error: error.message,
+        error: getServerErrorMessage(error),
       },
     })
   }

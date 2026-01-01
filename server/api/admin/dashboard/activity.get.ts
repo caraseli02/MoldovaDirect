@@ -150,10 +150,10 @@ export default defineEventHandler(async (event) => {
       data: recentActivities,
     }
   }
-  catch (error: any) {
-    console.error('Dashboard activity error:', error)
+  catch (error: unknown) {
+    console.error('Dashboard activity error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

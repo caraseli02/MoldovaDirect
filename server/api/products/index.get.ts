@@ -211,7 +211,7 @@ export default defineCachedEventHandler(async (event) => {
 
     if (error) {
       console.error('[Products API] Supabase error:', {
-        message: error.message,
+        message: getServerErrorMessage(error),
         code: error.code,
         timestamp: new Date().toISOString(),
       })
@@ -314,7 +314,7 @@ export default defineCachedEventHandler(async (event) => {
 
     return response
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('[Products API] Error:', {
       error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,

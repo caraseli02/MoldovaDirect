@@ -1,5 +1,5 @@
 <template>
-  <section class="relative overflow-hidden bg-gradient-to-br from-primary-950 via-primary-900 to-primary-700 py-20 text-white md:py-28">
+  <section class="relative overflow-hidden bg-primary-900 py-20 text-white md:py-28">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.12),_transparent_55%)]"></div>
     <div class="container relative">
       <div class="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">

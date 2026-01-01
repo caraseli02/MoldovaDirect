@@ -72,8 +72,8 @@ export function useCheckoutReview() {
       try {
         await cartStore.loadFromStorage()
       }
-      catch (error: any) {
-        console.error('Failed to load cart from storage for checkout review:', error)
+      catch (error: unknown) {
+        console.error('Failed to load cart from storage for checkout review:', getErrorMessage(error))
         toast.warning(
           t('checkout.warning.cartLoadFailed') || 'Cart Load Issue',
           t('checkout.warning.cartLoadFailedDetails') || 'Failed to load your cart. Some items may be missing.',
@@ -142,8 +142,8 @@ export function useCheckoutReview() {
         await (checkoutStore as unknown as { updateShippingCosts: () => Promise<void> }).updateShippingCosts()
         lastCartSignature.value = signature
       }
-      catch (error: any) {
-        console.error('Failed to refresh checkout totals on review page:', error)
+      catch (error: unknown) {
+        console.error('Failed to refresh checkout totals on review page:', getErrorMessage(error))
         toast.warning(
           t('checkout.warning.totalsUpdateFailed') || 'Price Update Issue',
           t('checkout.warning.totalsUpdateFailedDetails') || 'Failed to update totals. Prices shown may be outdated.',
@@ -247,11 +247,11 @@ export function useCheckoutReview() {
         success: Boolean(nextStep),
       }
     }
-    catch (error: any) {
-      console.error('Failed to process order:', error)
+    catch (error: unknown) {
+      console.error('Failed to process order:', getErrorMessage(error))
       toast.error(
         t('checkout.error.orderFailed') || 'Order Failed',
-        error.message || t('checkout.error.orderProcessingFailed') || 'Failed to process your order. Please try again.',
+        getErrorMessage(error) || t('checkout.error.orderProcessingFailed') || 'Failed to process your order. Please try again.',
       )
       return { nextStep: null, success: false }
     }

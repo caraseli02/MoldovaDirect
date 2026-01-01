@@ -77,14 +77,14 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits([
-  'go-to-page',
-  'page-change',
-  'page-changed',
-  'next-page',
-  'prev-page',
-  'update-limit',
-])
+const emit = defineEmits<{
+  (e: 'go-to-page', page: number): void
+  (e: 'page-change', page: number): void
+  (e: 'page-changed', page: number): void
+  (e: 'next-page'): void
+  (e: 'prev-page'): void
+  (e: 'update-limit', limit: number): void
+}>()
 
 const internal = computed(() => {
   const page = props.page ?? props.currentPage ?? 1

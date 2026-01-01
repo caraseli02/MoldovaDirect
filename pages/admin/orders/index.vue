@@ -457,11 +457,11 @@ const performBulkOperation = async (
       closeBulkOperations()
     }, 3000)
   }
-  catch (error: any) {
+  catch (error: unknown) {
     bulkOperations.value.inProgress = false
     bulkOperations.value.error = true
     bulkOperations.value.success = false
-    bulkOperations.value.errorMessage = error instanceof Error ? error.message : `Failed to ${operationType} orders`
+    bulkOperations.value.errorMessage = error instanceof Error ? getErrorMessage(error) : `Failed to ${operationType} orders`
   }
 }
 
@@ -498,10 +498,10 @@ const retryBulkOperation = async () => {
       bulkOperations.value.success = true
       bulkOperations.value.resultMessage = 'Operation completed successfully'
     }
-    catch (error: any) {
+    catch (error: unknown) {
       bulkOperations.value.inProgress = false
       bulkOperations.value.error = true
-      bulkOperations.value.errorMessage = error instanceof Error ? error.message : 'Operation failed'
+      bulkOperations.value.errorMessage = error instanceof Error ? getErrorMessage(error) : 'Operation failed'
     }
   }
 }

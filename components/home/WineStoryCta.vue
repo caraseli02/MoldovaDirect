@@ -1,13 +1,9 @@
 <template>
-  <section class="relative overflow-hidden bg-gradient-to-br from-primary/8 via-gold-50/40 to-terracotta/8 py-16 md:py-24">
+  <section class="relative overflow-hidden bg-gold-50 py-16 md:py-24">
     <!-- Decorative Background -->
     <div class="absolute inset-0 overflow-hidden opacity-25">
-      <div class="absolute -right-40 top-0 h-96 w-96 rounded-full bg-gradient-to-bl from-gold-500/40 to-transparent blur-3xl"></div>
-      <div class="absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-gradient-to-tr from-primary/40 to-transparent blur-3xl"></div>
-      <div
-        class="absolute inset-0"
-        style="background-image: radial-gradient(circle at 2px 2px, rgba(198, 141, 37, 0.06) 1px, transparent 0); background-size: 32px 32px;"
-      ></div>
+      <div class="absolute -right-40 top-0 h-96 w-96 rounded-full bg-gold-500/30 blur-3xl"></div>
+      <div class="absolute -left-40 bottom-0 h-96 w-96 rounded-full bg-primary/30 blur-3xl"></div>
     </div>
 
     <div class="container relative z-10">
@@ -20,7 +16,7 @@
             scale: 1,
             transition: { duration: 600 },
           }"
-          class="mb-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-gold-500/20 to-gold-600/20 px-4 py-2 text-xs font-bold text-gold-700 shadow-lg backdrop-blur-sm ring-1 ring-gold-500/30 md:mb-6 md:px-6 md:py-3 md:text-sm"
+          class="mb-4 inline-flex items-center gap-2 rounded-full bg-gold-100 px-4 py-2 text-xs font-bold text-gold-700 shadow-lg backdrop-blur-sm ring-1 ring-gold-500/30 md:mb-6 md:px-6 md:py-3 md:text-sm"
         >
           <commonIcon
             name="lucide:wine"
@@ -36,7 +32,7 @@
             y: 0,
             transition: { duration: 800, delay: 100 },
           }"
-          class="bg-gradient-to-br from-primary via-slate-900 to-primary/80 bg-clip-text text-3xl font-extrabold tracking-tight text-transparent sm:text-4xl md:text-5xl lg:text-6xl"
+          class="text-3xl font-extrabold tracking-tight text-primary sm:text-4xl md:text-5xl lg:text-6xl"
         >
           The Story Behind Every Bottle
         </h2>
@@ -63,7 +59,7 @@
         >
           <NuxtLink
             :to="localePath('/wine-story')"
-            class="group mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary via-primary to-primary/90 px-6 py-3 font-bold text-white shadow-2xl transition-all hover:scale-105 hover:shadow-2xl hover:shadow-primary/30 md:mt-10 md:px-10 md:py-5"
+            class="group mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-bold text-white shadow-2xl transition-all hover:scale-105 hover:shadow-2xl hover:shadow-primary/30 hover:bg-primary/90 md:mt-10 md:px-10 md:py-5"
           >
             Explore Wine Heritage
             <commonIcon
@@ -87,12 +83,12 @@
             name="lucide:wine"
             class="h-4 w-4 md:h-5 md:w-5"
           />
-          <div class="h-px w-12 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent md:w-16"></div>
+          <div class="h-px w-12 bg-gold-500/30 md:w-16"></div>
           <commonIcon
             name="lucide:grape"
             class="h-4 w-4 md:h-5 md:w-5"
           />
-          <div class="h-px w-12 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent md:w-16"></div>
+          <div class="h-px w-12 bg-gold-500/30 md:w-16"></div>
           <commonIcon
             name="lucide:wine"
             class="h-4 w-4 md:h-5 md:w-5"

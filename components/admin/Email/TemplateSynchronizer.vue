@@ -154,7 +154,7 @@ async function previewSync() {
       syncPreview.value = data.value
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to preview sync:', error)
     useToast().error('Failed to preview synchronization')
   }
@@ -184,7 +184,7 @@ async function synchronizeTemplates() {
     targetLocales.value = []
     emit('synchronized')
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Failed to synchronize templates:', error)
     useToast().error('Failed to synchronize templates')
   }

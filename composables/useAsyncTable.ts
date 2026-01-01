@@ -90,9 +90,9 @@ export function useAsyncTable() {
 
       return tableModule.value
     }
-    catch (err: any) {
+    catch (err: unknown) {
       error.value = err instanceof Error ? err : new Error('Failed to load table module')
-      console.error('Failed to load TanStack Table:', err)
+      console.error('Failed to load TanStack Table:', getErrorMessage(err))
       return null
     }
     finally {

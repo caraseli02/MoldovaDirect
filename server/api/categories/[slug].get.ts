@@ -274,10 +274,10 @@ export default defineCachedEventHandler(async (event) => {
       locale,
     }
   }
-  catch (error: any) {
-    console.error('Category products API error:', error)
+  catch (error: unknown) {
+    console.error('Category products API error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

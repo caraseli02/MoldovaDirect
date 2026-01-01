@@ -148,7 +148,9 @@ if (!dashboardStore) {
 }
 
 // Emit event to parent to trigger refresh
-const emit = defineEmits(['refresh'])
+const emit = defineEmits<{
+  (e: 'refresh'): void
+}>()
 
 // Computed properties - ensure safe access during SSR
 const recentActivity = computed(() => {

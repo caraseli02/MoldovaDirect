@@ -57,9 +57,9 @@ export const useStripe = (): StripeComposable => {
       stripe.value = stripeInstance
       elements.value = stripeInstance.elements()
     }
-    catch (err: any) {
-      error.value = err instanceof Error ? err.message : 'Failed to initialize Stripe'
-      console.error('Stripe initialization error:', err)
+    catch (err: unknown) {
+      error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to initialize Stripe'
+      console.error('Stripe initialization error:', getErrorMessage(err))
     }
     finally {
       loading.value = false
@@ -111,9 +111,9 @@ export const useStripe = (): StripeComposable => {
         }
       })
     }
-    catch (err: any) {
-      error.value = err instanceof Error ? err.message : 'Failed to create card element'
-      console.error('Card element creation error:', err)
+    catch (err: unknown) {
+      error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to create card element'
+      console.error('Card element creation error:', getErrorMessage(err))
     }
     finally {
       loading.value = false
@@ -144,9 +144,9 @@ export const useStripe = (): StripeComposable => {
 
       return { success: true, paymentIntent: result.paymentIntent }
     }
-    catch (err: any) {
-      error.value = err instanceof Error ? err.message : 'Payment confirmation failed'
-      console.error('Payment confirmation error:', err)
+    catch (err: unknown) {
+      error.value = err instanceof Error ? getErrorMessage(err) : 'Payment confirmation failed'
+      console.error('Payment confirmation error:', getErrorMessage(err))
       return { success: false, error: err }
     }
     finally {
@@ -176,9 +176,9 @@ export const useStripe = (): StripeComposable => {
 
       return { success: true, paymentMethod: result.paymentMethod }
     }
-    catch (err: any) {
-      error.value = err instanceof Error ? err.message : 'Failed to create payment method'
-      console.error('Payment method creation error:', err)
+    catch (err: unknown) {
+      error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to create payment method'
+      console.error('Payment method creation error:', getErrorMessage(err))
       return { success: false, error: err }
     }
     finally {
@@ -227,7 +227,10 @@ export const formatStripeError = (error: any): string => {
       return 'Your card\'s expiration year is invalid.'
     case 'invalid_cvc':
       return 'Your card\'s security code is invalid.'
-    default:
-      return err.message || 'An error occurred while processing your payment.'
+    default: {
+      // Check for explicit message before falling back
+      if (err.message) return err.message
+      return 'An error occurred while processing your payment.'
+    }
   }
 }

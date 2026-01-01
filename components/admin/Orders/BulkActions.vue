@@ -206,7 +206,7 @@ const confirmBulkUpdate = async () => {
       }
     }, 500)
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Bulk update failed:', error)
     confirmDialog.value.loading = false
   }

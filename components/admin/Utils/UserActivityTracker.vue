@@ -411,7 +411,7 @@ const fetchActivity = async () => {
       throw new Error('Failed to fetch activity')
     }
   }
-  catch (err: any) {
+  catch (err: unknown) {
     error.value = err instanceof Error ? err.message : 'Failed to fetch activity'
     console.error('Error fetching user activity:', err)
   }

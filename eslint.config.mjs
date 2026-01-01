@@ -214,6 +214,9 @@ export default withNuxt(
       '.env.*.local',
       // Visual testing
       '.visual-testing/**',
+      // Claude Code skills and hooks (standalone utilities)
+      '.claude/skills/**',
+      '.claude/hooks/**',
     ],
   },
 

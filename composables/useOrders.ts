@@ -129,9 +129,9 @@ export const useOrders = (): UseOrdersReturn => {
         throw new Error('Failed to fetch orders')
       }
     }
-    catch (err: any) {
-      console.error('Error fetching orders:', err)
-      error.value = err.message || 'Failed to load orders'
+    catch (err: unknown) {
+      console.error('Error fetching orders:', getErrorMessage(err))
+      error.value = getErrorMessage(err) || 'Failed to load orders'
       orders.value = []
     }
     finally {

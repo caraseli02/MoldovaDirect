@@ -212,7 +212,7 @@ export const useCartStore = defineStore('cart', () => {
       devLog('✅ Deserialization complete')
     }
     catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : String(error)
+      const errorMessage = error instanceof Error ? getErrorMessage(error) : String(error)
       console.error('[Cart] Failed to deserialize cart items:', errorMessage)
       // Ensure watch is resumed even if deserialization fails
       if (!stopWatcher) {
@@ -260,7 +260,7 @@ export const useCartStore = defineStore('cart', () => {
       return { success: true }
     }
     catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Save failed'
+      const errorMessage = error instanceof Error ? getErrorMessage(error) : 'Save failed'
       console.error('[Cart] Failed to save cart to storage:', errorMessage)
       return { success: false, error: errorMessage }
     }
@@ -345,7 +345,7 @@ export const useCartStore = defineStore('cart', () => {
       return { success: true, data: null }
     }
     catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Load failed'
+      const errorMessage = error instanceof Error ? getErrorMessage(error) : 'Load failed'
       console.error('[Cart] Failed to load cart from storage:', errorMessage)
       return { success: false, error: errorMessage }
     }
@@ -371,11 +371,11 @@ export const useCartStore = defineStore('cart', () => {
 
       return { success: true }
     }
-    catch (error: any) {
-      console.error('Failed to clear cart storage:', error)
+    catch (error: unknown) {
+      console.error('Failed to clear cart storage:', getErrorMessage(error))
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Clear failed',
+        error: error instanceof Error ? getErrorMessage(error) : 'Clear failed',
       }
     }
   }
@@ -405,7 +405,7 @@ export const useCartStore = defineStore('cart', () => {
     // Load from storage - use async but don't block
     if (import.meta.client) {
       loadFromStorage().catch((error: unknown) => {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : String(error)
         console.error('[Cart] Failed to load cart from storage:', errorMessage)
       })
     }
@@ -453,7 +453,7 @@ export const useCartStore = defineStore('cart', () => {
         await saveToStorage()
       }
       catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : String(error)
         console.error('[Cart] Debounced save failed:', errorMessage)
       }
     }, 300) // 300ms debounce - fast enough for UX, slow enough to batch rapid changes
@@ -687,8 +687,8 @@ export const useCartStore = defineStore('cart', () => {
       await saveAndCacheCartData()
       return true
     }
-    catch (error: any) {
-      console.error('Cart validation failed:', error)
+    catch (error: unknown) {
+      console.error('Cart validation failed:', getErrorMessage(error))
       return false
     }
   }
@@ -699,7 +699,7 @@ export const useCartStore = defineStore('cart', () => {
         const success = await validateCart()
         if (success) return true
       }
-      catch (error: any) {
+      catch (error: unknown) {
         if (i === maxRetries - 1) throw error
         await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)))
       }
@@ -719,8 +719,8 @@ export const useCartStore = defineStore('cart', () => {
       const result = await loadFromStorage()
       return result.success
     }
-    catch (error: any) {
-      console.error('Cart recovery failed:', error)
+    catch (error: unknown) {
+      console.error('Cart recovery failed:', getErrorMessage(error))
       return false
     }
   }
@@ -755,11 +755,11 @@ export const useCartStore = defineStore('cart', () => {
       }
       return result
     }
-    catch (error: any) {
-      console.error('❌ Force immediate save threw error:', error)
+    catch (error: unknown) {
+      console.error('❌ Force immediate save threw error:', getErrorMessage(error))
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? getErrorMessage(error) : 'Unknown error',
       }
     }
   }

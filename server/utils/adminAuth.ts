@@ -107,7 +107,7 @@ export async function requireAdminRole(event: H3Event): Promise<UserId> {
     if (data.user && isValidAuthUser(data.user)) {
       currentUser = data.user as AuthUser
     }
-    userError = error ? { message: error.message, code: error.code } : null
+    userError = error ? { message: getServerErrorMessage(error), code: error.code } : null
 
     if (userError) {
       console.error(`[AdminAuth] Bearer token validation failed for ${method} ${path}:`, {
@@ -126,7 +126,7 @@ export async function requireAdminRole(event: H3Event): Promise<UserId> {
     if (data.user && isValidAuthUser(data.user)) {
       currentUser = data.user as AuthUser
     }
-    userError = error ? { message: error.message, code: error.code } : null
+    userError = error ? { message: getServerErrorMessage(error), code: error.code } : null
 
     if (userError) {
       console.error(`[AdminAuth] Cookie auth failed for ${method} ${path}:`, userError.message)
@@ -267,7 +267,7 @@ export async function logAdminAction(
 
     return { success: true }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Use fallback logging - this is critical for compliance
     logAuditToConsole(logEntry, errorId, error)
     return {

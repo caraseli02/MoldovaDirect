@@ -66,11 +66,11 @@
               class="flex-shrink-0 w-[85%] sm:w-[60%]"
             >
               <div class="rounded-3xl bg-gray-100/80 p-6 dark:bg-gray-900">
-                <div class="h-40 rounded-xl bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
+                <div class="h-40 rounded-xl bg-gray-200 animate-pulse dark:bg-gray-800"></div>
                 <div class="mt-4 space-y-3">
-                  <div class="h-4 rounded bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
-                  <div class="h-4 w-2/3 rounded bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
-                  <div class="h-10 rounded bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
+                  <div class="h-4 rounded bg-gray-200 animate-pulse dark:bg-gray-800"></div>
+                  <div class="h-4 w-2/3 rounded bg-gray-200 animate-pulse dark:bg-gray-800"></div>
+                  <div class="h-10 rounded bg-gray-200 animate-pulse dark:bg-gray-800"></div>
                 </div>
               </div>
             </div>
@@ -83,11 +83,11 @@
             :key="i"
             class="rounded-3xl bg-gray-100/80 p-6 dark:bg-gray-900"
           >
-            <div class="h-40 rounded-xl bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
+            <div class="h-40 rounded-xl bg-gray-200 animate-pulse dark:bg-gray-800"></div>
             <div class="mt-4 space-y-3">
-              <div class="h-4 rounded bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
-              <div class="h-4 w-2/3 rounded bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
-              <div class="h-10 rounded bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse dark:from-gray-800 dark:via-gray-750 dark:to-gray-800 bg-[length:200%_100%]"></div>
+              <div class="h-4 rounded bg-gray-200 animate-pulse dark:bg-gray-800"></div>
+              <div class="h-4 w-2/3 rounded bg-gray-200 animate-pulse dark:bg-gray-800"></div>
+              <div class="h-10 rounded bg-gray-200 animate-pulse dark:bg-gray-800"></div>
             </div>
           </div>
         </div>

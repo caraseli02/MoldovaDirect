@@ -45,8 +45,8 @@ export async function enrollMFA(
   })
 
   if (error) {
-    toastStore.error('MFA Enrollment Error', error.message)
-    throw new Error(error.message)
+    toastStore.error('MFA Enrollment Error', getErrorMessage(error))
+    throw new Error(getErrorMessage(error))
   }
 
   if (!data) {
@@ -86,7 +86,7 @@ export async function verifyMFAEnrollment(
       'Invalid Code',
       'The code you entered is invalid or has expired. Please try again.',
     )
-    throw new Error(error.message)
+    throw new Error(getErrorMessage(error))
   }
 
   toastStore.success(
@@ -107,7 +107,7 @@ export async function challengeMFA(
   })
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(getErrorMessage(error))
   }
 
   if (!data) {
@@ -141,7 +141,7 @@ export async function verifyMFA(
       'Invalid Code',
       'The code you entered is invalid or has expired',
     )
-    throw new Error(error.message)
+    throw new Error(getErrorMessage(error))
   }
 
   toastStore.success('Verified', 'MFA verification successful')
@@ -161,8 +161,8 @@ export async function unenrollMFA(
   })
 
   if (error) {
-    toastStore.error('Error', error.message)
-    throw new Error(error.message)
+    toastStore.error('Error', getErrorMessage(error))
+    throw new Error(getErrorMessage(error))
   }
 
   toastStore.success(
@@ -191,7 +191,7 @@ export async function fetchMFAFactors(
       friendlyName: factor.friendly_name,
     })) || []
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.warn('Failed to fetch MFA factors:', error)
     return []
   }
@@ -212,7 +212,7 @@ export async function checkAAL(supabase: SupabaseClient) {
 
     return data
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.warn('AAL check error:', error)
     return null
   }

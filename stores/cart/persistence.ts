@@ -72,7 +72,7 @@ const memoryStorage = new Map<string, string>()
 /**
  * Compress data for storage (simple JSON stringification for now)
  */
-function compressData(data: any): string {
+function compressData(data: unknown): string {
   return JSON.stringify(data)
 }
 
@@ -106,7 +106,7 @@ function getBestStorageType(): StorageType {
  */
 async function saveToStorage(
   key: string,
-  data: any,
+  data: unknown,
   options: Partial<StorageOptions> = {},
 ): Promise<StorageResult> {
   const storageType = options.type || state.value.storageType
@@ -130,7 +130,7 @@ async function saveToStorage(
       fallbackUsed: true,
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Try fallback storage types
     const fallbackTypes: StorageType[] = ['sessionStorage', 'memory']
 
@@ -165,7 +165,7 @@ async function saveToStorage(
 
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Storage operation failed',
+      error: error instanceof Error ? getErrorMessage(error) : 'Storage operation failed',
     }
   }
 }
@@ -204,7 +204,7 @@ async function _loadFromStorage(
 
     return { success: true, data: null }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Try fallback storage types
     const fallbackTypes: StorageType[] = ['localStorage', 'sessionStorage', 'memory']
 
@@ -243,7 +243,7 @@ async function _loadFromStorage(
 
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Storage load failed',
+      error: error instanceof Error ? getErrorMessage(error) : 'Storage load failed',
     }
   }
 }
@@ -280,10 +280,10 @@ async function _removeFromStorage(
 
     return { success: true }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Storage removal failed',
+      error: error instanceof Error ? getErrorMessage(error) : 'Storage removal failed',
     }
   }
 }
@@ -293,7 +293,7 @@ async function _removeFromStorage(
 // =============================================
 
 let debouncedSaveTimeout: NodeJS.Timeout | null = null
-let pendingSaveData: { key: string, data: any, options?: Partial<StorageOptions> } | null = null
+let pendingSaveData: { key: string, data: unknown, options?: Partial<StorageOptions> } | null = null
 
 /**
  * Create debounced save function
@@ -301,7 +301,7 @@ let pendingSaveData: { key: string, data: any, options?: Partial<StorageOptions>
 function createDebouncedSave(delay: number = 1000) {
   return function debouncedSave(
     key: string,
-    data: any,
+    data: unknown,
     options: Partial<StorageOptions> = {},
   ): Promise<StorageResult> {
     return new Promise((resolve, reject) => {
@@ -325,7 +325,7 @@ function createDebouncedSave(delay: number = 1000) {
             state.value.lastSaveAt = new Date()
             resolve(result)
           }
-          catch (error: any) {
+          catch (error: unknown) {
             reject(error)
           }
           finally {
@@ -386,10 +386,10 @@ async function saveCartData(cartData: {
 
     return { success: true }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to save cart data',
+      error: error instanceof Error ? getErrorMessage(error) : 'Failed to save cart data',
     }
   }
   finally {
@@ -449,10 +449,10 @@ async function loadCartData(): Promise<StorageResult<{
       data: loadedData as { items: CartItem[], sessionId: string | null, lastSyncAt: Date | null },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to load cart data',
+      error: error instanceof Error ? getErrorMessage(error) : 'Failed to load cart data',
     }
   }
 }
@@ -468,10 +468,10 @@ async function clearCartData(): Promise<StorageResult> {
 
     return { success: true }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to clear cart data',
+      error: error instanceof Error ? getErrorMessage(error) : 'Failed to clear cart data',
     }
   }
 }
