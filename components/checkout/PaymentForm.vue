@@ -118,7 +118,7 @@ const onBankTransferUpdate = (data: { reference: string }) => {
 // LIFECYCLE
 // =============================================
 
-// Initialize cash or bank transfer on mount
+// Initialize cash payment state on mount
 onMounted(() => {
   if (props.modelValue.type === 'cash') {
     emit('update:modelValue', {

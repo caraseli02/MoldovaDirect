@@ -2153,7 +2153,24 @@
       "contactNoticeTitle": "Contacto de Entrega",
       "contactNotice": "Te contactaremos usando la información proporcionada para coordinar la entrega y el pago.",
       "comingSoon": "Próximamente",
-      "error": "Error de Pago"
+      "error": "Error de Pago",
+      "cvvHelpLabel": "Mostrar ayuda CVV",
+      "copyBankDetails": "Copiar datos bancarios al portapapeles",
+      "bankDetailsCopied": "Datos bancarios copiados al portapapeles",
+      "bankDetailsCopyFailed": "Error al copiar datos bancarios",
+      "validation": {
+        "cardNumberRequired": "El número de tarjeta es obligatorio",
+        "cardNumberInvalid": "Número de tarjeta inválido",
+        "expiryRequired": "La fecha de vencimiento es obligatoria",
+        "expiryInvalid": "Formato de fecha de vencimiento inválido",
+        "expiryExpired": "La tarjeta ha expirado",
+        "cvvRequired": "El CVV es obligatorio",
+        "cvvInvalid": "CVV inválido",
+        "cvvLength": "El CVV debe tener {length} dígitos",
+        "holderNameRequired": "El nombre del titular es obligatorio",
+        "paypalEmailRequired": "El correo de PayPal es obligatorio",
+        "paypalEmailInvalid": "Dirección de correo inválida"
+      }
     },
     "navigation": {
       "back": "Atrás",

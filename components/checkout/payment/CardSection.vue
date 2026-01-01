@@ -190,6 +190,8 @@ import { ref, watch } from 'vue'
 import { Button } from '@/components/ui/button'
 import { useCardValidation } from '~/composables/checkout/useCardValidation'
 
+const { t } = useI18n()
+
 interface CardFormData {
   number: string
   expiryMonth: string
@@ -230,7 +232,7 @@ const {
   validateHolderName,
   getCardBrandIcon,
   initializeFromData,
-} = useCardValidation()
+} = useCardValidation(t)
 
 // Error helpers that combine external and internal errors
 const hasError = (field: string): boolean => {

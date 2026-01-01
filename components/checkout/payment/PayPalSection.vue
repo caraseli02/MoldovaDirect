@@ -70,6 +70,8 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 
+const { t } = useI18n()
+
 interface Props {
   modelValue: {
     email: string
@@ -103,10 +105,10 @@ const validateEmail = () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
   if (!value) {
-    validationError.value = 'PayPal email is required'
+    validationError.value = t('checkout.payment.validation.paypalEmailRequired')
   }
   else if (!emailRegex.test(value)) {
-    validationError.value = 'Invalid email address'
+    validationError.value = t('checkout.payment.validation.paypalEmailInvalid')
   }
   else {
     validationError.value = ''

@@ -190,7 +190,7 @@ export class Order {
   // Static factory methods
   static generateOrderNumber(): string {
     const timestamp = Date.now()
-    const random = Math.random().toString(36).substr(2, 6).toUpperCase()
+    const random = Math.random().toString(36).substring(2, 8).toUpperCase()
     return `ORD-${timestamp}-${random}`
   }
 

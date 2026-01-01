@@ -78,21 +78,23 @@ export class InMemoryOrderRepository implements IOrderRepository {
 
   async updateStatus(id: string, status: OrderStatus): Promise<void> {
     const order = this.orders.get(id)
-    if (order) {
-      order.status = status
-      order.updatedAt = new Date()
+    if (!order) {
+      throw new Error(`Order not found: ${id}`)
     }
+    order.status = status
+    order.updatedAt = new Date()
   }
 
   async updatePaymentStatus(id: string, status: PaymentStatus, transactionId?: string): Promise<void> {
     const order = this.orders.get(id)
-    if (order) {
-      order.paymentStatus = status
-      if (transactionId) {
-        order.paymentIntentId = transactionId
-      }
-      order.updatedAt = new Date()
+    if (!order) {
+      throw new Error(`Order not found: ${id}`)
     }
+    order.paymentStatus = status
+    if (transactionId) {
+      order.paymentIntentId = transactionId
+    }
+    order.updatedAt = new Date()
   }
 
   async countByUserId(userId: string): Promise<number> {

@@ -107,4 +107,17 @@ export class Address {
   static fromJSON(json: AddressProps): Address {
     return new Address(json)
   }
+
+  /**
+   * Factory method that validates the address and throws if invalid.
+   * Use this when creating addresses from user input.
+   */
+  static createValidated(props: AddressProps): Address {
+    const address = new Address(props)
+    const errors = address.getValidationErrors()
+    if (errors.length > 0) {
+      throw new Error(`Invalid address: ${errors.join(', ')}`)
+    }
+    return address
+  }
 }

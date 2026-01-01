@@ -2149,7 +2149,24 @@
       "contactNoticeTitle": "Delivery Contact",
       "contactNotice": "We'll contact you using the information provided to arrange delivery and payment.",
       "comingSoon": "Coming Soon",
-      "error": "Payment Error"
+      "error": "Payment Error",
+      "cvvHelpLabel": "Show CVV help",
+      "copyBankDetails": "Copy bank details to clipboard",
+      "bankDetailsCopied": "Bank details copied to clipboard",
+      "bankDetailsCopyFailed": "Failed to copy bank details",
+      "validation": {
+        "cardNumberRequired": "Card number is required",
+        "cardNumberInvalid": "Invalid card number",
+        "expiryRequired": "Expiry date is required",
+        "expiryInvalid": "Invalid expiry date format",
+        "expiryExpired": "Card has expired",
+        "cvvRequired": "CVV is required",
+        "cvvInvalid": "Invalid CVV",
+        "cvvLength": "CVV must be {length} digits",
+        "holderNameRequired": "Cardholder name is required",
+        "paypalEmailRequired": "PayPal email is required",
+        "paypalEmailInvalid": "Invalid email address"
+      }
     },
     "navigation": {
       "back": "Back",

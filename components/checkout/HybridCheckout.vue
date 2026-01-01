@@ -237,36 +237,60 @@ import type { GuestInfo } from '~/composables/useGuestCheckout'
 import type { Address } from '~/types/address'
 import { useCartStore } from '~/stores/cart'
 
-// Components
-const ExpressCheckoutBannerEnhanced = defineAsyncComponent(() =>
-  import('~/components/checkout/ExpressCheckoutBannerEnhanced.vue'),
+// Components - with error handling for async loading failures
+const createAsyncComponent = (loader: () => Promise<unknown>, name: string) =>
+  defineAsyncComponent({
+    loader: loader as () => Promise<{ default: object }>,
+    onError(error, retry, fail, attempts) {
+      console.error(`[Checkout] Failed to load ${name} (attempt ${attempts}):`, error)
+      if (attempts <= 2) {
+        retry()
+      }
+      else {
+        fail()
+      }
+    },
+  })
+
+const ExpressCheckoutBannerEnhanced = createAsyncComponent(
+  () => import('~/components/checkout/ExpressCheckoutBannerEnhanced.vue'),
+  'ExpressCheckoutBanner',
 )
-const AddressForm = defineAsyncComponent(() =>
-  import('~/components/checkout/AddressForm.vue'),
+const AddressForm = createAsyncComponent(
+  () => import('~/components/checkout/AddressForm.vue'),
+  'AddressForm',
 )
-const ShippingMethodSelector = defineAsyncComponent(() =>
-  import('~/components/checkout/ShippingMethodSelector.vue'),
+const ShippingMethodSelector = createAsyncComponent(
+  () => import('~/components/checkout/ShippingMethodSelector.vue'),
+  'ShippingMethodSelector',
 )
-const GuestCheckoutPrompt = defineAsyncComponent(() =>
-  import('~/components/checkout/GuestCheckoutPrompt.vue'),
+const GuestCheckoutPrompt = createAsyncComponent(
+  () => import('~/components/checkout/GuestCheckoutPrompt.vue'),
+  'GuestCheckoutPrompt',
 )
-const GuestInfoForm = defineAsyncComponent(() =>
-  import('~/components/checkout/GuestInfoForm.vue'),
+const GuestInfoForm = createAsyncComponent(
+  () => import('~/components/checkout/GuestInfoForm.vue'),
+  'GuestInfoForm',
 )
-const ShippingInstructions = defineAsyncComponent(() =>
-  import('~/components/checkout/ShippingInstructions.vue'),
+const ShippingInstructions = createAsyncComponent(
+  () => import('~/components/checkout/ShippingInstructions.vue'),
+  'ShippingInstructions',
 )
-const OrderSummaryCard = defineAsyncComponent(() =>
-  import('~/components/checkout/OrderSummaryCard.vue'),
+const OrderSummaryCard = createAsyncComponent(
+  () => import('~/components/checkout/OrderSummaryCard.vue'),
+  'OrderSummaryCard',
 )
-const CheckoutPaymentSection = defineAsyncComponent(() =>
-  import('~/components/checkout/hybrid/PaymentSection.vue'),
+const CheckoutPaymentSection = createAsyncComponent(
+  () => import('~/components/checkout/hybrid/PaymentSection.vue'),
+  'PaymentSection',
 )
-const CheckoutTermsSection = defineAsyncComponent(() =>
-  import('~/components/checkout/hybrid/TermsSection.vue'),
+const CheckoutTermsSection = createAsyncComponent(
+  () => import('~/components/checkout/hybrid/TermsSection.vue'),
+  'TermsSection',
 )
-const CheckoutMobileFooter = defineAsyncComponent(() =>
-  import('~/components/checkout/hybrid/MobileFooter.vue'),
+const CheckoutMobileFooter = createAsyncComponent(
+  () => import('~/components/checkout/hybrid/MobileFooter.vue'),
+  'MobileFooter',
 )
 
 // Composables

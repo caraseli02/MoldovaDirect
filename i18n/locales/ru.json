@@ -2145,7 +2145,24 @@
       "contactNoticeTitle": "Контакт для доставки",
       "contactNotice": "Мы свяжемся с вами по указанным контактным данным для организации доставки и оплаты.",
       "comingSoon": "Скоро",
-      "error": "Ошибка Оплаты"
+      "error": "Ошибка Оплаты",
+      "cvvHelpLabel": "Показать справку по CVV",
+      "copyBankDetails": "Скопировать банковские реквизиты в буфер обмена",
+      "bankDetailsCopied": "Банковские реквизиты скопированы в буфер обмена",
+      "bankDetailsCopyFailed": "Не удалось скопировать банковские реквизиты",
+      "validation": {
+        "cardNumberRequired": "Номер карты обязателен",
+        "cardNumberInvalid": "Неверный номер карты",
+        "expiryRequired": "Дата истечения срока обязательна",
+        "expiryInvalid": "Неверный формат даты истечения срока",
+        "expiryExpired": "Срок действия карты истёк",
+        "cvvRequired": "CVV обязателен",
+        "cvvInvalid": "Неверный CVV",
+        "cvvLength": "CVV должен содержать {length} цифр",
+        "holderNameRequired": "Имя владельца карты обязательно",
+        "paypalEmailRequired": "Email PayPal обязателен",
+        "paypalEmailInvalid": "Неверный адрес электронной почты"
+      }
     },
     "navigation": {
       "back": "Назад",

@@ -114,9 +114,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { Button } from '@/components/ui/button'
 import { useToast } from '~/composables/useToast'
+
+const { t } = useI18n()
 
 interface Props {
   modelValue?: {
@@ -132,6 +134,8 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const toast = useToast()
+const showCopyFallback = ref(false)
+const fallbackText = ref('')
 
 const reference = computed(() => {
   return props.modelValue?.reference || `ORDER-${Date.now().toString().slice(-8)}`
@@ -146,16 +150,30 @@ SWIFT: BTRLRO22
 Reference: ${reference.value}
   `.trim()
 
-  try {
-    await navigator.clipboard.writeText(details)
-    toast.success('Bank details copied to clipboard')
+  // Check if clipboard API is available
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    try {
+      await navigator.clipboard.writeText(details)
+      toast.success(t('checkout.payment.bankDetailsCopied'))
+    }
+    catch (error: unknown) {
+      console.error('Failed to copy bank details:', error)
+      // Fallback: show text in a selectable field
+      fallbackText.value = details
+      showCopyFallback.value = true
+      toast.info(t('checkout.payment.bankDetailsCopyFailed'))
+    }
   }
-  catch (error: unknown) {
-    console.error('Failed to copy bank details:', error)
-    toast.error('Failed to copy bank details')
+  else {
+    // Clipboard API not available - show fallback
+    fallbackText.value = details
+    showCopyFallback.value = true
+    toast.info(t('checkout.payment.bankDetailsCopyFailed'))
   }
 }
 
 // Emit the reference when component mounts
-emit('update:modelValue', { reference: reference.value })
+onMounted(() => {
+  emit('update:modelValue', { reference: reference.value })
+})
 </script>

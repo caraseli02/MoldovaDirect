@@ -266,7 +266,15 @@ describe('useCardValidation Composable', () => {
   it('should reject invalid card number', async () => {
     const { useCardValidation } = await import('~/composables/checkout/useCardValidation')
 
-    const validation = useCardValidation()
+    // Mock translation function
+    const mockT = (key: string) => {
+      const translations: Record<string, string> = {
+        'checkout.payment.validation.cardNumberInvalid': 'Invalid card number',
+      }
+      return translations[key] || key
+    }
+
+    const validation = useCardValidation(mockT)
 
     // Invalid number (fails Luhn)
     const invalidEvent = {

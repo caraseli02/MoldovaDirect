@@ -1,5 +1,8 @@
 import { ref, computed } from 'vue'
 
+// Translation function type for i18n
+type TranslateFunction = (key: string, params?: Record<string, unknown>) => string
+
 export interface CreditCardData {
   number: string
   expiryMonth: string | undefined
@@ -8,7 +11,10 @@ export interface CreditCardData {
   holderName: string
 }
 
-export function useCardValidation() {
+export function useCardValidation(t?: TranslateFunction) {
+  // Use provided translation function or fallback to identity
+  const translate = t || ((key: string) => key.split('.').pop() || key)
+
   const cardBrand = ref<string>('')
   const validationErrors = ref<Record<string, string>>({})
   const expiryDisplay = ref('')
@@ -118,13 +124,13 @@ export function useCardValidation() {
     const number = creditCardData.value.number.replace(/\s/g, '')
 
     if (!number) {
-      validationErrors.value.cardNumber = 'Card number is required'
+      validationErrors.value.cardNumber = translate('checkout.payment.validation.cardNumberRequired')
     }
     else if (!/^\d{13,19}$/.test(number)) {
-      validationErrors.value.cardNumber = 'Invalid card number'
+      validationErrors.value.cardNumber = translate('checkout.payment.validation.cardNumberInvalid')
     }
     else if (!luhnCheck(number)) {
-      validationErrors.value.cardNumber = 'Invalid card number'
+      validationErrors.value.cardNumber = translate('checkout.payment.validation.cardNumberInvalid')
     }
     else {
       delete validationErrors.value.cardNumber
@@ -139,10 +145,10 @@ export function useCardValidation() {
     const year = parseInt(creditCardData.value.expiryYear || '')
 
     if (!month || !year) {
-      validationErrors.value.expiry = 'Expiry date is required'
+      validationErrors.value.expiry = translate('checkout.payment.validation.expiryRequired')
     }
     else if (month < 1 || month > 12) {
-      validationErrors.value.expiry = 'Invalid month'
+      validationErrors.value.expiry = translate('checkout.payment.validation.expiryInvalid')
     }
     else {
       const currentDate = new Date()
@@ -150,7 +156,7 @@ export function useCardValidation() {
       const currentMonth = currentDate.getMonth() + 1
 
       if (year < currentYear || (year === currentYear && month < currentMonth)) {
-        validationErrors.value.expiry = 'Card has expired'
+        validationErrors.value.expiry = translate('checkout.payment.validation.expiryExpired')
       }
       else {
         delete validationErrors.value.expiry
@@ -166,13 +172,13 @@ export function useCardValidation() {
     const expectedLength = cardBrand.value === 'amex' ? 4 : 3
 
     if (!cvv) {
-      validationErrors.value.cvv = 'CVV is required'
+      validationErrors.value.cvv = translate('checkout.payment.validation.cvvRequired')
     }
     else if (!/^\d+$/.test(cvv)) {
-      validationErrors.value.cvv = 'CVV must be numeric'
+      validationErrors.value.cvv = translate('checkout.payment.validation.cvvInvalid')
     }
     else if (cvv.length !== expectedLength) {
-      validationErrors.value.cvv = `CVV must be ${expectedLength} digits`
+      validationErrors.value.cvv = translate('checkout.payment.validation.cvvLength', { length: expectedLength })
     }
     else {
       delete validationErrors.value.cvv
@@ -186,10 +192,10 @@ export function useCardValidation() {
     const name = creditCardData.value.holderName.trim()
 
     if (!name) {
-      validationErrors.value.holderName = 'Cardholder name is required'
+      validationErrors.value.holderName = translate('checkout.payment.validation.holderNameRequired')
     }
     else if (name.length < 2) {
-      validationErrors.value.holderName = 'Name is too short'
+      validationErrors.value.holderName = translate('checkout.payment.validation.holderNameRequired')
     }
     else {
       delete validationErrors.value.holderName

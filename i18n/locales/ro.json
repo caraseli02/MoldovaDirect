@@ -2152,7 +2152,24 @@
       "contactNoticeTitle": "Contact Livrare",
       "contactNotice": "Te vom contacta folosind informațiile furnizate pentru a aranja livrarea și plata.",
       "comingSoon": "În Curând",
-      "error": "Eroare de Plată"
+      "error": "Eroare de Plată",
+      "cvvHelpLabel": "Afișează ajutor CVV",
+      "copyBankDetails": "Copiază detaliile bancare în clipboard",
+      "bankDetailsCopied": "Detaliile bancare au fost copiate în clipboard",
+      "bankDetailsCopyFailed": "Nu s-au putut copia detaliile bancare",
+      "validation": {
+        "cardNumberRequired": "Numărul cardului este obligatoriu",
+        "cardNumberInvalid": "Număr de card invalid",
+        "expiryRequired": "Data de expirare este obligatorie",
+        "expiryInvalid": "Format invalid pentru data de expirare",
+        "expiryExpired": "Cardul a expirat",
+        "cvvRequired": "CVV-ul este obligatoriu",
+        "cvvInvalid": "CVV invalid",
+        "cvvLength": "CVV-ul trebuie să aibă {length} cifre",
+        "holderNameRequired": "Numele titularului este obligatoriu",
+        "paypalEmailRequired": "Email-ul PayPal este obligatoriu",
+        "paypalEmailInvalid": "Adresă de email invalidă"
+      }
     },
     "navigation": {
       "back": "Înapoi",

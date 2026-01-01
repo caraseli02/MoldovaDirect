@@ -113,8 +113,8 @@ export class CreateOrderUseCase {
       serverSubtotal,
     )
 
-    const TAX_RATE = 0 // No tax in current configuration
-    const serverTax = serverSubtotal * TAX_RATE
+    const TAX_RATE = 0.21 // 21% VAT for Spain
+    const serverTax = Math.round(serverSubtotal * TAX_RATE * 100) / 100
     const serverTotal = Math.round((serverSubtotal + serverShippingCost + serverTax) * 100) / 100
 
     // Determine payment and order status
@@ -152,20 +152,34 @@ export class CreateOrderUseCase {
     }
 
     // Create order via repository
-    const order = await this.orderRepository.create(orderData)
+    try {
+      const order = await this.orderRepository.create(orderData)
 
-    return {
-      success: true,
-      order: {
-        id: order.id,
-        orderNumber: order.orderNumber,
-        total: order.totalEur,
-        status: order.status,
-        paymentStatus: order.paymentStatus,
-        createdAt: order.createdAt,
-        userId: order.userId || undefined,
-      },
-      priceDiscrepancyDetected: priceVerification.discrepancyDetected,
+      return {
+        success: true,
+        order: {
+          id: order.id,
+          orderNumber: order.orderNumber,
+          total: order.totalEur,
+          status: order.status,
+          paymentStatus: order.paymentStatus,
+          createdAt: order.createdAt,
+          userId: order.userId || undefined,
+        },
+        priceDiscrepancyDetected: priceVerification.discrepancyDetected,
+      }
+    }
+    catch (error) {
+      console.error('[CreateOrderUseCase] Failed to create order:', {
+        orderNumber: orderData.orderNumber,
+        userId: orderData.userId,
+        guestEmail: orderData.guestEmail,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      })
+      return {
+        success: false,
+        error: 'Failed to save order. Please try again.',
+      }
     }
   }
 

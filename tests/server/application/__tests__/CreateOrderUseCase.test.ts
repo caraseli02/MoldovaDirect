@@ -134,9 +134,9 @@ describe('CreateOrderUseCase', () => {
       const response = await useCase.execute(request)
 
       expect(response.success).toBe(true)
-      // Total should be calculated from server prices, not client prices
-      // 2*25 + 1*30 + 5.99 shipping = 85.99
-      expect(response.order?.total).toBe(85.99)
+      // Total should be calculated from server prices with 21% VAT, not client prices
+      // 2*25 + 1*30 = 80 subtotal + 16.80 tax (80 * 0.21) + 5.99 shipping = 102.79
+      expect(response.order?.total).toBe(102.79)
     })
 
     it('should set correct status for cash payment', async () => {
@@ -179,9 +179,9 @@ describe('CreateOrderUseCase', () => {
       const response = await useCase.execute(request)
 
       expect(response.success).toBe(true)
-      // Express shipping is 12.99
-      // 80 subtotal + 12.99 shipping = 92.99
-      expect(response.order?.total).toBe(92.99)
+      // Express shipping is 12.99, tax is 21%
+      // 80 subtotal + 16.80 tax (80 * 0.21) + 12.99 shipping = 109.79
+      expect(response.order?.total).toBe(109.79)
     })
 
     it('should apply free shipping for orders over 50', async () => {
@@ -192,8 +192,9 @@ describe('CreateOrderUseCase', () => {
       const response = await useCase.execute(request)
 
       expect(response.success).toBe(true)
-      // No shipping cost
-      expect(response.order?.total).toBe(80)
+      // No shipping cost, tax is 21%
+      // 80 subtotal + 16.80 tax = 96.80
+      expect(response.order?.total).toBe(96.8)
     })
   })
 
@@ -280,8 +281,9 @@ describe('CreateOrderUseCase', () => {
       const response = await useCase.execute(request)
 
       expect(response.success).toBe(true)
-      // Should use server-calculated total: 2*25 + 1*30 + 5.99 = 85.99
-      expect(response.order?.total).toBe(85.99)
+      // Should use server-calculated total with 21% VAT:
+      // 2*25 + 1*30 = 80 subtotal + 16.80 tax (80 * 0.21) + 5.99 shipping = 102.79
+      expect(response.order?.total).toBe(102.79)
     })
   })
 })
