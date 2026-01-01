@@ -100,9 +100,8 @@ Testing documentation and coverage reports:
 Code quality and review reports:
 - [Code Quality Analysis (2025-11-01)](./analysis/CODE_QUALITY_ANALYSIS_2025-11-01.md)
 - [Code Review 2025](./analysis/CODE_REVIEW_2025.md)
-- [GitHub Issues Deduplication Audit](./analysis/GITHUB_ISSUES_DEDUPLICATION_AUDIT_FINAL.md)
-- [GitHub Issues Deduplication (Corrected)](./analysis/GITHUB_ISSUES_DEDUPLICATION_FINAL_CORRECTED.md)
-- [Deduplication Complete](./analysis/DEDUPLICATION_COMPLETE.md)
+- [Documentation Review 2025-11-27](./analysis/DOCUMENTATION_REVIEW_2025-11-27.md)
+- [SSR Safety Verification](./analysis/SSR-SAFETY-VERIFICATION.md)
 
 ### 📋 Meta
 Documentation about documentation:
@@ -160,5 +159,6 @@ See [CHANGELOG.md](./CHANGELOG.md) for detailed recent changes.
 
 ---
 
-**Last Updated**: November 5, 2025
+**Last Updated**: January 1, 2026
 **Reorganization**: Docs restructured for improved discoverability
+**Cleanup**: Removed outdated Cloudflare docs, fixed broken references, archived completed specs
