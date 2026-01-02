@@ -41,13 +41,13 @@
 - [x] Run all tests, fix any failures
 
 ### 1.3 Guest Checkout Complete Flow
-- [ ] Write test: Guest can add items to cart
-- [ ] Write test: Guest can proceed to checkout without login
-- [ ] Write test: Guest must provide email for order tracking
-- [ ] Write test: Guest receives order confirmation (email field captured)
-- [ ] Write test: Guest can track order via email link
-- [ ] Verify existing guest checkout implementation
-- [ ] Run all tests, fix any failures
+- [x] Write test: Guest can add items to cart
+- [x] Write test: Guest can proceed to checkout without login
+- [x] Write test: Guest must provide email for order tracking
+- [x] Write test: Guest receives order confirmation (email field captured)
+- [x] Write test: Guest can track order via email link
+- [x] Verify existing guest checkout implementation
+- [x] Run all tests, fix any failures
 
 **After Phase 1:** Output `<promise>PHASE_1_COMPLETE</promise>`
 
@@ -265,7 +265,7 @@ After all phases complete, verify:
 
 | Phase | Description | Status | Tests Added |
 |-------|-------------|--------|-------------|
-| 1 | Payment & Orders | [x] In Progress | 18 (Order Cancellation: 9, Order Return: 9) |
+| 1 | Payment & Orders | [x] Complete | 24 (Order Cancellation: 9, Order Return: 9, Guest Checkout: 6) |
 | 2 | Account Management | [ ] Pending | 0 |
 | 3 | Multi-Language | [ ] Pending | 0 |
 | 4 | Error Handling | [ ] Pending | 0 |
