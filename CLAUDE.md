@@ -236,6 +236,41 @@ npx supabase status      # Check Supabase connection
 
 ## 📚 Detailed Documentation
 
+### Documentation Structure (Updated January 2026)
+
+The `docs/` folder uses **role-based navigation**. Start with the right path:
+
+| If you are... | Start here |
+|---------------|------------|
+| 🆕 New to project | [Quick Start](docs/getting-started/QUICK_START_GUIDE.md) → [Tech Stack](docs/development/tech.md) → [Code Conventions](docs/development/code-conventions.md) |
+| 🔄 Returning | [CHANGELOG](docs/CHANGELOG.md) → [Project Status](docs/status/PROJECT_STATUS.md) |
+| 🐛 Debugging | [Troubleshooting](docs/development/troubleshooting-components.md) → [Testing Strategy](docs/guides/TESTING_STRATEGY.md) |
+| 🛠️ Building feature | [Patterns](docs/development/PATTERNS_TO_PRESERVE.md) → [Components](docs/development/component-inventory.md) → [i18n](docs/features/I18N_CONFIGURATION.md) |
+
+### Documentation Guidelines
+
+When creating or updating documentation:
+
+1. **Follow the structure** - Place docs in the appropriate folder:
+   - `getting-started/` - Setup guides
+   - `architecture/` - System design
+   - `features/` - Feature-specific docs
+   - `guides/` - How-to guides
+   - `development/` - Patterns and standards
+   - `testing/` - Test documentation
+   - `status/` - Project progress
+   - `archive/` - Historical/completed work
+
+2. **Archive completed work** - Move finished specs to `docs/archive/completed-specs/`
+
+3. **Consolidate research** - Keep one authoritative guide per topic, archive detailed research
+
+4. **Update the README** - When adding important docs, update `docs/README.md`
+
+5. **No stale references** - Current stack is Supabase + Vercel (not Cloudflare)
+
+### Key Documentation Files
+
 **Progress Tracking:**
 - Feature list: `feature_list.json` - Comprehensive feature tracking with testing status
 - Progress tracking: `claude-progress.md` - Overall project completeness and metrics
@@ -246,8 +281,7 @@ npx supabase status      # Check Supabase connection
 - Code review: `docs/fixes/admin-fixes/CLEAN-CODE-REVIEW.md`
 
 **Project Documentation:**
-- Doc index: `docs/README.md`
-- Documentation index: `docs/meta/DOCUMENTATION_INDEX.md`
+- Doc index: `docs/README.md` - Role-based navigation hub
 - Main README: `README.md`
 
 **Project Status:**
@@ -323,6 +357,6 @@ Screenshots follow: `[name]-[viewport].png`
 
 ---
 
-**Last Updated:** 2025-12-28
+**Last Updated:** 2026-01-02
 **Admin Status:** All 5 pages working ✅
-**New Files:** `feature_list.json`, `claude-progress.md`, `init.sh`
+**Docs Structure:** Role-based navigation (January 2026 cleanup)
