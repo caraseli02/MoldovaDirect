@@ -116,28 +116,28 @@
 ## Phase 4: Error Handling & Edge Cases
 
 ### 4.1 Network Error Handling
-- [ ] Write test: Checkout shows error on network failure
-- [ ] Write test: User can retry after network error
-- [ ] Write test: Cart persists after network error
-- [ ] Write test: Partial form data preserved on error
-- [ ] Implement network error handling in checkout
-- [ ] Run all tests, fix any failures
+- [x] Write test: Checkout shows error on network failure
+- [x] Write test: User can retry after network error
+- [x] Write test: Cart persists after network error
+- [x] Write test: Partial form data preserved on error
+- [x] Implement network error handling in checkout
+- [x] Run all tests, fix any failures
 
 ### 4.2 Inventory Edge Cases
-- [ ] Write test: Item removed from cart if out of stock
-- [ ] Write test: User notified when item becomes unavailable
-- [ ] Write test: Quantity reduced if stock insufficient
-- [ ] Write test: Checkout blocked if cart has unavailable items
-- [ ] Implement inventory validation in checkout
-- [ ] Run all tests, fix any failures
+- [x] Write test: Item removed from cart if out of stock
+- [x] Write test: User notified when item becomes unavailable
+- [x] Write test: Quantity reduced if stock insufficient
+- [x] Write test: Checkout blocked if cart has unavailable items
+- [x] Implement inventory validation in checkout
+- [x] Run all tests, fix any failures
 
 ### 4.3 Session & Timeout Handling
-- [ ] Write test: Cart preserved on session timeout
-- [ ] Write test: User prompted to re-login if session expires
-- [ ] Write test: Checkout data preserved after re-login
-- [ ] Write test: No duplicate orders on timeout retry
-- [ ] Implement session handling in checkout
-- [ ] Run all tests, fix any failures
+- [x] Write test: Cart preserved on session timeout
+- [x] Write test: User prompted to re-login if session expires
+- [x] Write test: Checkout data preserved after re-login
+- [x] Write test: No duplicate orders on timeout retry
+- [x] Implement session handling in checkout
+- [x] Run all tests, fix any failures
 
 **After Phase 4:** Output `<promise>PHASE_4_COMPLETE</promise>`
 
@@ -268,7 +268,7 @@ After all phases complete, verify:
 | 1 | Payment & Orders | [x] Complete | 24 (Order Cancellation: 9, Order Return: 9, Guest Checkout: 6) |
 | 2 | Account Management | [x] Complete | 36 (Address Book: 15, Profile Update: 12, Password Change: 9) |
 | 3 | Multi-Language | [x] Complete | 12 (EN: 3, RO: 3, RU: 3, Locale Switch: 2, ES: 1) |
-| 4 | Error Handling | [ ] Pending | 0 |
+| 4 | Error Handling | [x] Complete | 14 (Network: 3, Cart: 2, Inventory: 3, Session: 3, Form: 3) |
 | 5 | Product Filtering | [ ] Pending | 0 |
 | 6 | Mobile Testing | [ ] Pending | 0 |
 | 7 | Email Verification | [ ] Pending | 0 |
