@@ -71,13 +71,20 @@ let stopUserWatcher: WatchStopHandle | null = null
 
 const getSafeRoute = () => {
   const nuxtApp = useNuxtApp()
-  return nuxtApp?._route ?? { path: '', fullPath: '', query: {} }
+  const route = nuxtApp?._route
+  if (!route && import.meta.dev) {
+    console.debug('[auth-store] Route not available during SSR, using fallback')
+  }
+  return route ?? { path: '', fullPath: '', query: {}, params: {}, name: undefined, hash: '' }
 }
 
 const getSafeLocalePath = () => {
   const nuxtApp = useNuxtApp()
   const localePath = (nuxtApp as any)?.$localePath as ((input: any) => string) | undefined
   if (localePath) return localePath
+  if (import.meta.dev) {
+    console.debug('[auth-store] $localePath not available, using fallback path resolution')
+  }
   return (input: any) => (typeof input === 'string' ? input : input?.path || '/')
 }
 
