@@ -83,8 +83,33 @@
               </p>
             </div>
             <div class="flex-shrink-0">
-              <OrderStatus :status="orderValue.status" />
+              <OrderStatus
+                :status="orderValue.status"
+                data-testid="order-status-badge"
+              />
             </div>
+          </div>
+
+          <!-- Cancellation info for cancelled orders -->
+          <div
+            v-if="orderValue.status === 'cancelled' && orderValue.cancelledAt"
+            class="mt-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg"
+          >
+            <p class="text-sm text-red-700 dark:text-red-300">
+              <span class="font-medium">{{ $t('orders.cancelledOn', 'Cancelled on') }}:</span>
+              <span data-testid="cancellation-date">{{ formatDate(orderValue.cancelledAt) }}</span>
+            </p>
+          </div>
+
+          <!-- Cancel success message -->
+          <div
+            v-if="showCancelSuccess"
+            data-testid="cancel-success-message"
+            class="mt-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg"
+          >
+            <p class="text-sm text-green-700 dark:text-green-300">
+              {{ $t('orders.cancelSuccess', 'Your order has been cancelled successfully.') }}
+            </p>
           </div>
         </div>
 
@@ -147,9 +172,11 @@
               :order="orderValue"
               :can-reorder="canReorder"
               :can-return="canReturn"
+              :can-cancel="canCancel"
               @reorder="handleReorder"
               @return="handleReturn"
               @support="handleSupport"
+              @cancel="openCancelModal"
             />
           </div>
 
@@ -190,13 +217,111 @@
               :order="orderValue"
               :can-reorder="canReorder"
               :can-return="canReturn"
+              :can-cancel="canCancel"
               @reorder="handleReorder"
               @return="handleReturn"
               @support="handleSupport"
+              @cancel="openCancelModal"
             />
           </div>
         </div>
       </div>
+
+      <!-- Cancel Confirmation Modal -->
+      <Teleport to="body">
+        <div
+          v-if="showCancelModal"
+          data-testid="cancel-confirmation-modal"
+          class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+          @click.self="closeCancelModal"
+        >
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6">
+            <div class="text-center">
+              <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                <svg
+                  class="h-6 w-6 text-red-600 dark:text-red-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+              </div>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                {{ $t('orders.cancelConfirmTitle', 'Cancel Order?') }}
+              </h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                {{ $t('orders.cancelConfirmMessage', 'Are you sure you want to cancel this order? This action cannot be undone.') }}
+              </p>
+
+              <!-- Reason input (optional) -->
+              <div class="mb-4">
+                <label
+                  for="cancel-reason"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 text-left mb-1"
+                >
+                  {{ $t('orders.cancelReason', 'Reason (optional)') }}
+                </label>
+                <textarea
+                  id="cancel-reason"
+                  v-model="cancelReason"
+                  rows="2"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white text-sm"
+                  :placeholder="$t('orders.cancelReasonPlaceholder', 'Why are you cancelling this order?')"
+                ></textarea>
+              </div>
+
+              <div class="flex gap-3">
+                <button
+                  data-testid="dismiss-cancel-button"
+                  class="flex-1 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                  @click="closeCancelModal"
+                >
+                  {{ $t('common.cancel', 'Keep Order') }}
+                </button>
+                <button
+                  data-testid="confirm-cancel-button"
+                  class="flex-1 px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  :disabled="isCancelling"
+                  @click="confirmCancel"
+                >
+                  <span
+                    v-if="isCancelling"
+                    class="flex items-center justify-center"
+                  >
+                    <svg
+                      class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="4"
+                      />
+                      <path
+                        class="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    {{ $t('common.processing', 'Processing...') }}
+                  </span>
+                  <span v-else>{{ $t('orders.confirmCancel', 'Yes, Cancel Order') }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Teleport>
     </div>
   </div>
 </template>
@@ -228,10 +353,18 @@ const {
   refreshTracking,
   reorder,
   initiateReturn,
+  cancelOrder,
   canReorder,
   canReturn,
+  canCancel,
   isDelivered: _isDelivered,
 } = useOrderDetail()
+
+// Cancel modal state
+const showCancelModal = ref(false)
+const showCancelSuccess = ref(false)
+const cancelReason = ref('')
+const isCancelling = ref(false)
 
 // Use order tracking composable for real-time updates
 const {
@@ -304,6 +437,33 @@ const handleSupport = () => {
       subject: `Order ${order.value.orderNumber}`,
     },
   })
+}
+
+// Cancel modal handlers
+const openCancelModal = () => {
+  showCancelModal.value = true
+  cancelReason.value = ''
+}
+
+const closeCancelModal = () => {
+  showCancelModal.value = false
+  cancelReason.value = ''
+}
+
+const confirmCancel = async () => {
+  isCancelling.value = true
+  const success = await cancelOrder(cancelReason.value || undefined)
+  isCancelling.value = false
+
+  if (success) {
+    showCancelModal.value = false
+    showCancelSuccess.value = true
+
+    // Hide success message after 5 seconds
+    setTimeout(() => {
+      showCancelSuccess.value = false
+    }, 5000)
+  }
 }
 
 // Setup mobile swipe navigation

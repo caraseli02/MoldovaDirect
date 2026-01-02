@@ -646,8 +646,16 @@
       "confirmReturn": "Confirm Return",
       "confirmReturnMessage": "Are you sure you want to initiate a return for this order?",
       "initiateReturn": "Initiate Return",
-      "printInvoice": "Print Invoice"
+      "printInvoice": "Print Invoice",
+      "cancel": "Cancel Order"
     },
+    "cancelConfirmTitle": "Cancel Order?",
+    "cancelConfirmMessage": "Are you sure you want to cancel this order? This action cannot be undone.",
+    "cancelReason": "Reason (optional)",
+    "cancelReasonPlaceholder": "Why are you cancelling this order?",
+    "confirmCancel": "Yes, Cancel Order",
+    "cancelledOn": "Cancelled on",
+    "cancelSuccess": "Your order has been cancelled successfully.",
     "needHelp": "Need help with your order?",
     "contactUs": "Contact us",
     "swipeHint": "Swipe left or right to navigate sections",

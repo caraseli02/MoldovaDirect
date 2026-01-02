@@ -440,8 +440,16 @@
       "confirmReturn": "Confirmă Returnarea",
       "confirmReturnMessage": "Ești sigur că vrei să inițiezi o returnare pentru această comandă?",
       "initiateReturn": "Inițiază Returnarea",
-      "printInvoice": "Tipărește Factura"
+      "printInvoice": "Tipărește Factura",
+      "cancel": "Anulează Comanda"
     },
+    "cancelConfirmTitle": "Anulezi Comanda?",
+    "cancelConfirmMessage": "Ești sigur că vrei să anulezi această comandă? Această acțiune nu poate fi anulată.",
+    "cancelReason": "Motiv (opțional)",
+    "cancelReasonPlaceholder": "De ce anulezi această comandă?",
+    "confirmCancel": "Da, Anulează Comanda",
+    "cancelledOn": "Anulată pe",
+    "cancelSuccess": "Comanda ta a fost anulată cu succes.",
     "needHelp": "Ai nevoie de ajutor cu comanda ta?",
     "contactUs": "Contactează-ne",
     "swipeHint": "Glisează la stânga sau la dreapta pentru a naviga prin secțiuni",

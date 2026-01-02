@@ -646,8 +646,16 @@
       "confirmReturn": "Confirmar Devolución",
       "confirmReturnMessage": "¿Estás seguro de que quieres iniciar una devolución para este pedido?",
       "initiateReturn": "Iniciar Devolución",
-      "printInvoice": "Imprimir Factura"
+      "printInvoice": "Imprimir Factura",
+      "cancel": "Cancelar Pedido"
     },
+    "cancelConfirmTitle": "¿Cancelar Pedido?",
+    "cancelConfirmMessage": "¿Estás seguro de que quieres cancelar este pedido? Esta acción no se puede deshacer.",
+    "cancelReason": "Motivo (opcional)",
+    "cancelReasonPlaceholder": "¿Por qué estás cancelando este pedido?",
+    "confirmCancel": "Sí, Cancelar Pedido",
+    "cancelledOn": "Cancelado el",
+    "cancelSuccess": "Tu pedido ha sido cancelado exitosamente.",
     "needHelp": "¿Necesitas ayuda con tu pedido?",
     "contactUs": "Contáctanos",
     "swipeHint": "Desliza a la izquierda o derecha para navegar por las secciones",
