@@ -1,41 +1,39 @@
-# Show Next TDD Task
+# Show Next Component
 
-Show the next component testing task without starting the TDD loop.
+Preview the next component test without starting the Ralph Wiggum loop.
 
-## Your Task
+## Task
 
-1. Read `skill_audit_refactor.json`
-2. Find tasks in the "component-testing-coverage" section
-3. Filter to tasks where `test_exists: false` OR `implemented: false`
-4. Show the highest priority untested component
+1. Read `skill_audit_refactor.json` → "component-testing-coverage"
+2. Find first component where `test_exists: false`
+3. Show details without starting loop
 
 ## Output Format
 
-Show a summary like this:
-
 ```
-📋 Next Component Test: CartDrawer.vue
+📋 NEXT COMPONENT TEST
 
 Component: components/cart/CartDrawer.vue
 Test File: tests/components/cart/__tests__/CartDrawer.test.ts
-Status: ❌ No tests exist
+Task ID:   comp-test-1
+Status:    ⚪ Not started
 
-Planned Tests:
-  1. Cart drawer open/close behavior
-  2. Rendering cart items
-  3. Empty cart state
-  4. Visual verification
+Test Coverage:
+  • Cart drawer open/close behavior
+  • Rendering cart items
+  • Empty cart state
+  • Visual verification
 
-Priority: P1-high
-Task ID: comp-test-1
+Component Lines: [show file size]
+Complexity: [low/medium/high based on file size]
 
-To start working on this task, run: /tdd-loop
+To start the Ralph Wiggum loop: /tdd-loop
+To just test this one component: Create the test manually
 ```
 
-Also show overall progress:
-- Total components to test: 10
-- Tests created: X/10
-- Tests passing: Y/10
-- Completion: Z%
+**Progress Bar:**
+```
+Components: ⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪ 0/10
+```
 
-Do NOT start the TDD loop automatically.
+Do NOT start loop. Do NOT create any tests. Just show the preview.
