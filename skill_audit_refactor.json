@@ -1659,16 +1659,389 @@
           ]
         }
       ]
+    },
+    {
+      "id": "component-testing-coverage",
+      "name": "Component Testing Coverage",
+      "skill": "vue",
+      "priority": "P1-high",
+      "status": "in-progress",
+      "tested": false,
+      "steps": [
+        {
+          "id": "comp-test-1",
+          "description": "Add unit tests for CartDrawer component",
+          "file": "components/cart/CartDrawer.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/cart/__tests__/CartDrawer.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "comp-test-1-a",
+              "task": "Create unit test for cart drawer open/close behavior",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-1-b",
+              "task": "Create test for rendering cart items",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-1-c",
+              "task": "Create test for empty cart state",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-1-d",
+              "task": "Run unit tests to validate component behavior",
+              "type": "validation",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-1-e",
+              "task": "Visual test: verify drawer appears correctly",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "comp-test-2",
+          "description": "Add unit tests for CartSummary component",
+          "file": "components/cart/CartSummary.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/cart/__tests__/CartSummary.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "comp-test-2-a",
+              "task": "Create unit test for total calculation display",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-2-b",
+              "task": "Create test for tax and shipping display",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-2-c",
+              "task": "Create test for discount application",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-2-d",
+              "task": "Run unit tests to validate calculations",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "comp-test-3",
+          "description": "Add unit tests for CartItem component",
+          "file": "components/cart/CartItem.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/cart/__tests__/CartItem.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "comp-test-3-a",
+              "task": "Create unit test for quantity update",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-3-b",
+              "task": "Create test for item removal",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-3-c",
+              "task": "Create test for item data rendering (name, price, image)",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-3-d",
+              "task": "Run unit tests to validate behavior",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "comp-test-4",
+          "description": "Add unit tests for ProductFilters component",
+          "file": "components/product/ProductFilters.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/product/__tests__/ProductFilters.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "comp-test-4-a",
+              "task": "Create unit test for filter state management",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-4-b",
+              "task": "Create test for filter apply/reset actions",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-4-c",
+              "task": "Create test for filter options rendering",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-4-d",
+              "task": "Run unit tests to validate filters",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "comp-test-5",
+          "description": "Add unit tests for ProductGallery component",
+          "file": "components/product/ProductGallery.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/product/__tests__/ProductGallery.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "comp-test-5-a",
+              "task": "Create unit test for image navigation",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-5-b",
+              "task": "Create test for thumbnail selection",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-5-c",
+              "task": "Create test for zoom functionality",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-5-d",
+              "task": "Run unit tests to validate gallery",
+              "type": "validation",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-5-e",
+              "task": "Visual test: verify gallery appearance",
+              "type": "visual-test",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "comp-test-6",
+          "description": "Add unit tests for ProductDetails component",
+          "file": "components/product/ProductDetails.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/product/__tests__/ProductDetails.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "comp-test-6-a",
+              "task": "Create unit test for product info rendering",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-6-b",
+              "task": "Create test for add to cart button",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-6-c",
+              "task": "Create test for out of stock state",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-6-d",
+              "task": "Run unit tests to validate details",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "comp-test-7",
+          "description": "Add unit tests for admin Dashboard/Overview component",
+          "file": "components/admin/Dashboard/Overview.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/admin/Dashboard/__tests__/Overview.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "comp-test-7-a",
+              "task": "Create unit test for metrics display",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-7-b",
+              "task": "Create test for data fetching and loading state",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-7-c",
+              "task": "Create test for error state handling",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-7-d",
+              "task": "Run unit tests to validate dashboard",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "comp-test-8",
+          "description": "Add unit tests for admin Products/ProductList component",
+          "file": "components/admin/Products/ProductList.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/admin/Products/__tests__/ProductList.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "comp-test-8-a",
+              "task": "Create unit test for product list rendering",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-8-b",
+              "task": "Create test for sorting and filtering",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-8-c",
+              "task": "Create test for edit/delete actions",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-8-d",
+              "task": "Run unit tests to validate list",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "comp-test-9",
+          "description": "Add unit tests for admin Orders/OrdersTable component",
+          "file": "components/admin/Orders/OrdersTable.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/admin/Orders/__tests__/OrdersTable.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "comp-test-9-a",
+              "task": "Create unit test for orders table rendering",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-9-b",
+              "task": "Create test for status filtering",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-9-c",
+              "task": "Create test for order actions (view, update status)",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-9-d",
+              "task": "Run unit tests to validate table",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        },
+        {
+          "id": "comp-test-10",
+          "description": "Add unit tests for checkout AddressForm component",
+          "file": "components/checkout/AddressForm.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/checkout/__tests__/AddressForm.test.ts",
+          "test_exists": false,
+          "tasks": [
+            {
+              "id": "comp-test-10-a",
+              "task": "Create unit test for form validation",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-10-b",
+              "task": "Create test for field errors",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-10-c",
+              "task": "Create test for form submission",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-10-d",
+              "task": "Run unit tests to validate form",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
+        }
+      ]
     }
   ],
   "metadata": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "created": "2025-12-31",
-    "source": "docs/CODEBASE_AUDIT_REPORT.md",
-    "branch": "review/skill-based-codebase-audit",
-    "total_categories": 9,
-    "total_steps": 38,
-    "total_tasks": 168,
+    "updated": "2026-01-02",
+    "source": "docs/CODEBASE_AUDIT_REPORT.md + Testing Coverage Review",
+    "branch": "claude/review-testing-coverage-J9nvG",
+    "total_categories": 10,
+    "total_steps": 48,
+    "total_tasks": 211,
     "skills_used": [
       "architecture-patterns",
       "nuxt",
