@@ -1,5 +1,5 @@
 <template>
-  <div class="wine-story">
+  <div class="wine-story bg-white">
     <!-- Hero Section - Luxury Editorial -->
     <section class="hero-section">
       <!-- Decorative Background -->
@@ -204,7 +204,7 @@ useHead({
 .hero-section {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--md-cream) 0%, var(--md-cream-light) 100%);
+  background: var(--md-cream);
   padding: 8rem 0 10rem;
 }
 
@@ -228,7 +228,7 @@ useHead({
   top: -8rem;
   width: 24rem;
   height: 24rem;
-  background: radial-gradient(circle, var(--md-wine-muted) 0%, transparent 70%);
+  background: var(--md-wine-muted);
   filter: blur(60px);
 }
 
@@ -238,14 +238,14 @@ useHead({
   bottom: -8rem;
   width: 24rem;
   height: 24rem;
-  background: radial-gradient(circle, var(--md-gold-muted) 0%, transparent 70%);
+  background: var(--md-gold-muted);
   filter: blur(60px);
 }
 
 .grain-pattern {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle at 2px 2px, rgba(139, 46, 59, 0.05) 1px, transparent 0);
+  background-image: none;
   background-size: 40px 40px;
 }
 
@@ -278,7 +278,7 @@ useHead({
 .badge-line {
   width: 32px;
   height: 1px;
-  background: var(--md-gradient-gold-line);
+  background: var(--md-gold);
 }
 
 .badge-icon {
@@ -324,7 +324,7 @@ useHead({
 .divider-line {
   width: 4rem;
   height: 1px;
-  background: var(--md-gradient-gold-line);
+  background: var(--md-gold);
 }
 
 /* ============================================
@@ -334,7 +334,7 @@ useHead({
 .cta-section {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--md-cream-light) 0%, var(--md-cream) 100%);
+  background: var(--md-cream-light);
   padding: 6rem 0 8rem;
 }
 
@@ -358,7 +358,7 @@ useHead({
   top: 0;
   width: 20rem;
   height: 20rem;
-  background: radial-gradient(circle, var(--md-gold-muted) 0%, transparent 70%);
+  background: var(--md-gold-muted);
   filter: blur(50px);
 }
 
@@ -368,7 +368,7 @@ useHead({
   bottom: 0;
   width: 20rem;
   height: 20rem;
-  background: radial-gradient(circle, var(--md-wine-muted) 0%, transparent 70%);
+  background: var(--md-wine-muted);
   filter: blur(50px);
 }
 
@@ -453,7 +453,7 @@ useHead({
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--md-gradient-gold);
+  background: var(--md-gold);
   opacity: 0;
   transition: opacity var(--md-duration-normal) var(--md-ease-smooth);
 }

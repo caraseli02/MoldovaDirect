@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gradient-to-br from-[var(--md-cream)] via-[var(--md-cream-light)] to-[var(--md-cream-dark)] dark:from-[var(--md-charcoal)] dark:via-[var(--md-charcoal-light)] dark:to-[var(--md-black)]">
+  <div class="min-h-screen flex flex-col bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)]">
     <!-- Mobile-optimized container -->
     <div class="flex-1 flex items-center justify-center px-6 py-8 sm:px-8 lg:px-12">
       <div class="w-full max-w-sm sm:max-w-md space-y-6 sm:space-y-8">
@@ -223,6 +223,7 @@ const supabase = useSupabaseClient()
 const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
+const requestURL = useRequestURL()
 
 // Use new authentication message system
 const {
@@ -279,7 +280,7 @@ const handleResendVerification = async () => {
       type: 'signup',
       email: emailToUse,
       options: {
-        emailRedirectTo: `${window.location.origin}${localePath('/auth/verify-email')}`,
+        emailRedirectTo: `${requestURL.origin}${localePath('/auth/verify-email')}`,
       },
     })
 

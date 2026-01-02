@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gradient-to-br from-[var(--md-cream)] via-[var(--md-cream-light)] to-[var(--md-cream-dark)] dark:from-[var(--md-charcoal)] dark:via-[var(--md-charcoal-light)] dark:to-[var(--md-black)]">
+  <div class="min-h-screen flex flex-col bg-[var(--md-cream)] dark:bg-[var(--md-charcoal)]">
     <!-- Mobile-optimized header -->
     <main class="flex-1 flex items-center justify-center px-6 py-8 sm:px-8 lg:px-12">
       <div class="w-full max-w-sm sm:max-w-md space-y-6 sm:space-y-8">
@@ -631,6 +631,7 @@ const supabase = useSupabaseClient()
 const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
+const requestURL = useRequestURL()
 const {
   error: authError,
   isAccountLocked,
@@ -882,7 +883,7 @@ async function handleMagicLink(): Promise<void> {
     const { error: authError } = await supabase.auth.signInWithOtp({
       email: form.value.email,
       options: {
-        emailRedirectTo: `${window.location.origin}${localePath('/auth/confirm')}`,
+        emailRedirectTo: `${requestURL.origin}${localePath('/auth/confirm')}`,
       },
     })
 
@@ -921,7 +922,7 @@ async function handleSocialLogin(provider: 'google' | 'apple'): Promise<void> {
   try {
     // Preserve original redirect parameter from URL
     const originalRedirect = route.query.redirect as string
-    const confirmUrl = new URL(`${window.location.origin}${localePath('/auth/confirm')}`)
+    const confirmUrl = new URL(`${requestURL.origin}${localePath('/auth/confirm')}`)
     if (originalRedirect) {
       confirmUrl.searchParams.set('redirect', originalRedirect)
     }

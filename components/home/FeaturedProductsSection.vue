@@ -73,18 +73,18 @@
           <div
             v-for="i in 8"
             :key="i"
-            class="loading-card"
+            class="loading-card animate-pulse"
             :style="{ animationDelay: `${i * 100}ms` }"
           >
-            <div class="loading-image">
+            <div class="loading-image bg-gray-200">
               <div class="loading-shimmer"></div>
-              <div class="loading-badge"></div>
+              <div class="loading-badge bg-gray-300"></div>
             </div>
             <div class="loading-content">
-              <div class="loading-line loading-category"></div>
-              <div class="loading-line loading-title"></div>
-              <div class="loading-line loading-price"></div>
-              <div class="loading-button"></div>
+              <div class="loading-line loading-category bg-gray-200"></div>
+              <div class="loading-line loading-title bg-gray-200"></div>
+              <div class="loading-line loading-price bg-gray-200"></div>
+              <div class="loading-button bg-gray-100"></div>
             </div>
           </div>
         </div>
@@ -362,10 +362,8 @@ const filteredProducts = computed(() => {
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse at 20% 0%, var(--md-gold-glow) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, var(--md-gold-glow) 0%, transparent 50%);
-  opacity: 0.3;
+  background: var(--md-gold-glow);
+  opacity: 0.1;
   pointer-events: none;
 }
 
@@ -406,7 +404,7 @@ const filteredProducts = computed(() => {
 .eyebrow-line {
   width: 40px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--md-gold), transparent);
+  background: var(--md-gold);
   position: relative;
 }
 
@@ -541,7 +539,7 @@ const filteredProducts = computed(() => {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--md-gold), var(--md-gold-light), var(--md-gold));
+  background: var(--md-gold);
   z-index: 2;
 }
 
@@ -626,16 +624,7 @@ const filteredProducts = computed(() => {
 .loading-shimmer {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    110deg,
-    transparent 0%,
-    transparent 40%,
-    rgba(201, 162, 39, 0.08) 50%,
-    transparent 60%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2s ease-in-out infinite;
+  background: rgba(201, 162, 39, 0.08);
 }
 
 .loading-badge {
@@ -667,14 +656,7 @@ const filteredProducts = computed(() => {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(201, 162, 39, 0.1) 50%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2s ease-in-out infinite;
+  background: rgba(201, 162, 39, 0.1);
 }
 
 .loading-category {
@@ -706,14 +688,7 @@ const filteredProducts = computed(() => {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(201, 162, 39, 0.08) 50%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2s ease-in-out infinite;
+  background: rgba(201, 162, 39, 0.08);
 }
 
 @keyframes shimmer {
@@ -728,7 +703,7 @@ const filteredProducts = computed(() => {
 .empty-state {
   text-align: center;
   padding: 5rem 2rem;
-  background: linear-gradient(135deg, rgba(248, 245, 238, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+  background: rgba(248, 245, 238, 0.5);
   border: 1px solid rgba(10, 10, 10, 0.04);
 }
 
@@ -773,7 +748,7 @@ const filteredProducts = computed(() => {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--md-gold) 0%, var(--md-gold-light) 100%);
+  background: var(--md-gold);
   transform: translateX(-100%);
   transition: transform 0.4s var(--transition-smooth);
 }
@@ -807,7 +782,7 @@ const filteredProducts = computed(() => {
 .error-state {
   text-align: center;
   padding: 3rem 2rem;
-  background: linear-gradient(135deg, rgba(139, 46, 59, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+  background: rgba(139, 46, 59, 0.03);
   border: 1px solid rgba(139, 46, 59, 0.1);
 }
 
@@ -935,7 +910,7 @@ const filteredProducts = computed(() => {
 }
 
 .dark .empty-state {
-  background: linear-gradient(135deg, rgba(201, 162, 39, 0.03) 0%, rgba(21, 21, 21, 0) 100%);
+  background: rgba(201, 162, 39, 0.03);
   border-color: rgba(248, 245, 238, 0.06);
 }
 
@@ -948,7 +923,7 @@ const filteredProducts = computed(() => {
 }
 
 .dark .error-state {
-  background: linear-gradient(135deg, rgba(139, 46, 59, 0.05) 0%, rgba(21, 21, 21, 0) 100%);
+  background: rgba(139, 46, 59, 0.05);
   border-color: rgba(139, 46, 59, 0.15);
 }
 
