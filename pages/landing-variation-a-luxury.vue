@@ -372,7 +372,7 @@ onMounted(() => {
   --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   font-family: var(--font-sans);
-  background-color: var(--color-cream);
+  background-color: var(--md-cream);
   color: var(--color-black);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -394,7 +394,7 @@ onMounted(() => {
 }
 
 .nav.scrolled {
-  background: var(--color-cream);
+  background: var(--md-cream);
   padding: 1rem 4rem;
   box-shadow: 0 1px 0 rgba(0,0,0,0.08);
 }
@@ -404,7 +404,7 @@ onMounted(() => {
   font-size: 1.75rem;
   font-weight: 600;
   letter-spacing: -0.02em;
-  color: var(--color-cream);
+  color: var(--md-cream);
   text-decoration: none;
   transition: color 0.4s ease;
 }
@@ -432,7 +432,7 @@ onMounted(() => {
 }
 
 .nav.scrolled .nav-links a {
-  color: var(--color-charcoal);
+  color: var(--md-charcoal);
 }
 
 .nav-links a::after {
@@ -442,7 +442,7 @@ onMounted(() => {
   left: 50%;
   width: 0;
   height: 1px;
-  background: var(--color-gold);
+  background: var(--md-gold);
   transition: width 0.4s var(--transition-smooth), left 0.4s var(--transition-smooth);
 }
 
@@ -451,7 +451,7 @@ onMounted(() => {
 }
 
 .nav.scrolled .nav-links a:hover {
-  color: var(--color-gold);
+  color: var(--md-gold);
 }
 
 .nav-links a:hover::after {
@@ -467,7 +467,7 @@ onMounted(() => {
 
 .nav-cart {
   position: relative;
-  color: var(--color-cream);
+  color: var(--md-cream);
   text-decoration: none;
   transition: color 0.4s ease;
 }
@@ -482,7 +482,7 @@ onMounted(() => {
   right: -8px;
   width: 18px;
   height: 18px;
-  background: var(--color-wine);
+  background: var(--md-wine);
   color: white;
   font-size: 0.625rem;
   font-weight: 600;
@@ -504,7 +504,7 @@ onMounted(() => {
   display: block;
   width: 24px;
   height: 2px;
-  background: var(--color-cream);
+  background: var(--md-cream);
   margin: 5px 0;
 }
 
@@ -588,7 +588,7 @@ onMounted(() => {
   content: '';
   width: 48px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--md-gold), transparent);
 }
 
 .hero-title {
@@ -597,14 +597,14 @@ onMounted(() => {
   font-weight: 400;
   line-height: 1.02;
   letter-spacing: -0.025em;
-  color: var(--color-cream);
+  color: var(--md-cream);
   margin-bottom: 2.25rem;
   text-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
 .hero-title em {
   font-style: italic;
-  color: var(--color-gold);
+  color: var(--md-gold);
   text-shadow: 0 4px 20px rgba(201,162,39,0.3);
 }
 
@@ -628,7 +628,7 @@ onMounted(() => {
   align-items: center;
   gap: 0.875rem;
   padding: 1.125rem 2.25rem;
-  background: var(--color-cream);
+  background: var(--md-cream);
   color: var(--color-black);
   font-size: 0.8125rem;
   font-weight: 600;
@@ -645,7 +645,7 @@ onMounted(() => {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 100%);
+  background: linear-gradient(135deg, var(--md-gold) 0%, var(--color-gold-light) 100%);
   opacity: 0;
   transition: opacity 0.4s var(--transition-smooth);
 }
@@ -680,7 +680,7 @@ onMounted(() => {
   letter-spacing: 0.04em;
   color: rgba(248,245,238,0.9);
   text-decoration: none;
-  border-bottom: 1px solid var(--color-gold);
+  border-bottom: 1px solid var(--md-gold);
   padding-bottom: 4px;
   transition: all 0.3s var(--transition-smooth);
   text-shadow: 0 2px 8px rgba(0,0,0,0.4);
@@ -724,7 +724,7 @@ onMounted(() => {
   font-family: var(--font-serif);
   font-size: 2.75rem;
   font-weight: 500;
-  color: var(--color-cream);
+  color: var(--md-cream);
   text-shadow: 0 3px 12px rgba(0,0,0,0.35);
   line-height: 1;
 }
@@ -795,7 +795,7 @@ onMounted(() => {
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--color-gold);
+  color: var(--md-gold);
   margin-bottom: 1.5rem;
 }
 
@@ -890,8 +890,8 @@ onMounted(() => {
 /* Footer */
 .footer {
   padding: 6rem 4rem 3rem;
-  background: var(--color-charcoal);
-  color: var(--color-cream);
+  background: var(--md-charcoal);
+  color: var(--md-cream);
 }
 
 .footer-grid {
@@ -942,7 +942,7 @@ onMounted(() => {
 }
 
 .footer-links a:hover {
-  color: var(--color-cream);
+  color: var(--md-cream);
 }
 
 .footer-bottom {

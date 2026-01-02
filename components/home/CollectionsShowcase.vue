@@ -145,7 +145,7 @@ const cards = computed<Card[]>(() => [
   --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   padding: 8rem 4rem;
-  background: var(--coll-charcoal);
+  background: var(--md-charcoal);
 }
 
 .collections-container {
@@ -164,12 +164,12 @@ const cards = computed<Card[]>(() => [
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--coll-gold);
+  color: var(--md-gold);
   margin-bottom: 1rem;
 }
 
@@ -178,21 +178,21 @@ const cards = computed<Card[]>(() => [
   content: '';
   width: 32px;
   height: 1px;
-  background: var(--coll-gold);
+  background: var(--md-gold);
 }
 
 .section-title {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: clamp(2.5rem, 4vw, 3.5rem);
   font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.025em;
-  color: var(--coll-cream);
+  color: var(--md-cream);
   margin-bottom: 1rem;
 }
 
 .section-subtitle {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 1rem;
   color: rgba(248, 245, 238, 0.6);
   line-height: 1.7;
@@ -282,19 +282,19 @@ const cards = computed<Card[]>(() => [
 }
 
 .card-tag {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.625rem;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   padding: 0.5rem 1rem;
-  background: var(--coll-cream);
+  background: var(--md-cream);
   color: var(--coll-black);
   transition: all 0.4s var(--transition-smooth);
 }
 
 .collection-card:hover .card-tag {
-  background: var(--coll-gold);
+  background: var(--md-gold);
 }
 
 /* Content Bottom */
@@ -303,7 +303,7 @@ const cards = computed<Card[]>(() => [
 }
 
 .card-title {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: 1.75rem;
   font-weight: 500;
   line-height: 1.2;
@@ -316,7 +316,7 @@ const cards = computed<Card[]>(() => [
 }
 
 .card-description {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.875rem;
   color: rgba(248, 245, 238, 0.75);
   line-height: 1.6;
@@ -327,12 +327,12 @@ const cards = computed<Card[]>(() => [
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--coll-gold);
+  color: var(--md-gold);
   transition: all 0.3s ease;
 }
 

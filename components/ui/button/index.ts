@@ -9,16 +9,16 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 dark:bg-primary-600 dark:hover:bg-primary-700 dark:text-white',
+          'bg-[var(--md-wine-btn)] text-white shadow-[var(--md-wine-shadow)] hover:bg-[var(--md-wine-btn-hover)] focus-visible:ring-[var(--md-gold)]/30 dark:bg-[var(--md-wine)] dark:hover:bg-[var(--md-wine-light)]',
         destructive:
-          'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
+          'bg-[var(--md-wine-darker)] text-white shadow-[var(--md-wine-shadow)] hover:bg-[var(--md-wine-dark)] focus-visible:ring-[var(--md-wine)]/20 dark:bg-[var(--md-wine-dark)]',
         outline:
-          'border-2 border-gray-300 bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-gray-600 dark:bg-gray-700/50 dark:hover:bg-gray-700 dark:text-gray-100',
+          'border-2 border-[var(--md-gray-300)] bg-white shadow-xs hover:bg-[var(--md-cream)] hover:border-[var(--md-gold)] dark:border-[var(--md-gray-600)] dark:bg-[var(--md-charcoal)] dark:text-[var(--md-cream)] dark:hover:bg-[var(--md-charcoal-light)]',
         secondary:
-          'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
+          'bg-[var(--md-gold)] text-[var(--md-charcoal)] shadow-md hover:bg-[var(--md-gold-light)] focus-visible:ring-[var(--md-gold)]/30',
         ghost:
-          'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-        link: 'text-primary underline-offset-4 hover:underline',
+          'hover:bg-[var(--md-cream-dark)] hover:text-[var(--md-wine)] dark:hover:bg-[var(--md-charcoal-light)] dark:hover:text-[var(--md-gold)]',
+        link: 'text-[var(--md-wine)] underline-offset-4 hover:underline hover:text-[var(--md-wine-light)] dark:text-[var(--md-gold)]',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

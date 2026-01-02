@@ -228,7 +228,7 @@ const goToSearch = () => {
 }
 
 .header-transparent .nav-logo {
-  color: var(--header-cream);
+  color: var(--md-cream);
 }
 
 .header-transparent .nav-link {
@@ -241,12 +241,12 @@ const goToSearch = () => {
 
 .header-transparent .nav-icon-btn,
 .header-transparent .nav-cart {
-  color: var(--header-cream);
+  color: var(--md-cream);
 }
 
 /* Scrolled state (solid background) */
 .header-scrolled {
-  background: var(--header-cream);
+  background: var(--md-cream);
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
 }
 
@@ -259,11 +259,11 @@ const goToSearch = () => {
 }
 
 .header-scrolled .nav-link {
-  color: var(--header-charcoal);
+  color: var(--md-charcoal);
 }
 
 .header-scrolled .nav-link:hover {
-  color: var(--header-gold);
+  color: var(--md-gold);
 }
 
 .header-scrolled .nav-icon-btn,
@@ -273,7 +273,7 @@ const goToSearch = () => {
 
 /* Logo */
 .nav-logo {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: 1.75rem;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -289,7 +289,7 @@ const goToSearch = () => {
 }
 
 .nav-link {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.12em;
@@ -307,7 +307,7 @@ const goToSearch = () => {
   left: 50%;
   width: 0;
   height: 1px;
-  background: var(--header-gold);
+  background: var(--md-gold);
   transition: width 0.4s var(--transition-smooth), left 0.4s var(--transition-smooth);
 }
 
@@ -335,7 +335,7 @@ const goToSearch = () => {
 }
 
 .nav-icon-btn:hover {
-  color: var(--header-gold);
+  color: var(--md-gold);
   transform: translateY(-1px);
 }
 
@@ -351,7 +351,7 @@ const goToSearch = () => {
 }
 
 .nav-cart:hover {
-  color: var(--header-gold);
+  color: var(--md-gold);
 }
 
 .cart-count {
@@ -360,9 +360,9 @@ const goToSearch = () => {
   right: -4px;
   width: 18px;
   height: 18px;
-  background: var(--header-wine);
+  background: var(--md-wine);
   color: white;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.625rem;
   font-weight: 600;
   display: flex;
@@ -373,14 +373,14 @@ const goToSearch = () => {
 
 /* Dark mode adjustments */
 .dark .header-scrolled {
-  background: var(--header-charcoal);
+  background: var(--md-charcoal);
 }
 
 .dark .header-scrolled .nav-logo,
 .dark .header-scrolled .nav-link,
 .dark .header-scrolled .nav-icon-btn,
 .dark .header-scrolled .nav-cart {
-  color: var(--header-cream);
+  color: var(--md-cream);
 }
 
 .dark .header-scrolled .nav-link:hover,

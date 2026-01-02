@@ -782,12 +782,14 @@ const handleReorder = async (_order: OrderWithItems) => {
 const setupMobileFeatures = () => {
   if (!scrollContainer.value) return
 
+  const container = scrollContainer.value as HTMLElement
+
   try {
     // Setup pull to refresh
-    setupPullToRefresh(scrollContainer.value)
+    setupPullToRefresh(container)
 
     // Setup swipe gestures for pagination
-    setupSwipeListeners(scrollContainer.value)
+    setupSwipeListeners(container)
     setSwipeHandlers({
       onLeft: () => {
         // Swipe left to go to next page

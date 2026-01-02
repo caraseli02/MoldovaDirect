@@ -244,7 +244,7 @@ const animatedStats = computed(() => {
   --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   padding: 8rem 4rem;
-  background: var(--proof-wine);
+  background: var(--md-wine);
 }
 
 .proof-container {
@@ -258,7 +258,7 @@ const animatedStats = computed(() => {
 
 /* Left Column */
 .proof-content {
-  color: var(--proof-cream);
+  color: var(--md-cream);
 }
 
 .content-header {
@@ -269,12 +269,12 @@ const animatedStats = computed(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--proof-gold);
+  color: var(--md-gold);
   margin-bottom: 1rem;
 }
 
@@ -282,21 +282,21 @@ const animatedStats = computed(() => {
   content: '';
   width: 32px;
   height: 1px;
-  background: var(--proof-gold);
+  background: var(--md-gold);
 }
 
 .section-title {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: clamp(2rem, 3.5vw, 2.75rem);
   font-weight: 400;
   line-height: 1.15;
   letter-spacing: -0.025em;
-  color: var(--proof-cream);
+  color: var(--md-cream);
   margin-bottom: 1rem;
 }
 
 .section-subtitle {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 1rem;
   color: rgba(248, 245, 238, 0.7);
   line-height: 1.7;
@@ -318,16 +318,16 @@ const animatedStats = computed(() => {
 
 .stat-value {
   display: block;
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: 2.5rem;
   font-weight: 500;
-  color: var(--proof-gold);
+  color: var(--md-gold);
   line-height: 1;
   margin-bottom: 0.5rem;
 }
 
 .stat-label {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.8125rem;
   color: rgba(248, 245, 238, 0.7);
 }
@@ -348,14 +348,14 @@ const animatedStats = computed(() => {
 
 .partner-logo:hover {
   background: rgba(248, 245, 238, 0.1);
-  border-color: var(--proof-gold);
+  border-color: var(--md-gold);
 }
 
 .logo-text {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.8125rem;
   font-weight: 500;
-  color: var(--proof-cream);
+  color: var(--md-cream);
 }
 
 /* Testimonials Column */
@@ -367,7 +367,7 @@ const animatedStats = computed(() => {
 
 .testimonial-card {
   padding: 2rem;
-  background: var(--proof-cream);
+  background: var(--md-cream);
   color: var(--proof-black);
 }
 
@@ -381,14 +381,14 @@ const animatedStats = computed(() => {
 .star-rating {
   display: flex;
   gap: 0.25rem;
-  color: var(--proof-gold);
+  color: var(--md-gold);
 }
 
 .verified-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -399,11 +399,11 @@ const animatedStats = computed(() => {
 }
 
 .testimonial-quote {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: 1.125rem;
   font-style: italic;
   line-height: 1.6;
-  color: var(--proof-charcoal);
+  color: var(--md-charcoal);
   margin-bottom: 1.5rem;
 }
 
@@ -416,14 +416,14 @@ const animatedStats = computed(() => {
 }
 
 .author-name {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--proof-black);
 }
 
 .author-location {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.75rem;
   color: #5E5E5E;
 }

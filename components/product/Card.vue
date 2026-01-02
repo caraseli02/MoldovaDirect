@@ -527,7 +527,7 @@ onMounted(setupMobileTouch)
   position: relative;
   overflow: hidden;
   aspect-ratio: 3/4;
-  background: var(--card-cream);
+  background: var(--md-cream);
 }
 
 .card-image-link {
@@ -559,7 +559,7 @@ onMounted(setupMobileTouch)
 .placeholder-icon {
   width: 3rem;
   height: 3rem;
-  color: var(--card-gold);
+  color: var(--md-gold);
   opacity: 0.5;
 }
 
@@ -598,7 +598,7 @@ onMounted(setupMobileTouch)
 }
 
 .card-badge {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.625rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -607,22 +607,22 @@ onMounted(setupMobileTouch)
 }
 
 .badge-new {
-  background: var(--card-black);
-  color: var(--card-cream);
+  background: var(--md-black);
+  color: var(--md-cream);
 }
 
 .badge-featured {
-  background: var(--card-gold);
-  color: var(--card-black);
+  background: var(--md-gold);
+  color: var(--md-black);
 }
 
 .badge-low-stock {
-  background: var(--card-wine);
+  background: var(--md-wine);
   color: white;
 }
 
 .badge-sale {
-  background: var(--card-wine);
+  background: var(--md-wine);
   color: white;
 }
 
@@ -652,8 +652,8 @@ onMounted(setupMobileTouch)
   width: 100%;
   padding: 0.875rem;
   background: white;
-  color: var(--card-black);
-  font-family: var(--font-sans);
+  color: var(--md-black);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -663,7 +663,7 @@ onMounted(setupMobileTouch)
 }
 
 .quick-view-btn:hover {
-  background: var(--card-black);
+  background: var(--md-black);
   color: white;
 }
 
@@ -673,21 +673,21 @@ onMounted(setupMobileTouch)
 }
 
 .card-category {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--card-gold);
+  color: var(--md-gold);
   margin-bottom: 0.5rem;
 }
 
 .card-title {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: 1.25rem;
   font-weight: 600;
   line-height: 1.3;
-  color: var(--card-black);
+  color: var(--md-black);
   margin-bottom: 0.5rem;
 }
 
@@ -698,11 +698,11 @@ onMounted(setupMobileTouch)
 }
 
 .card-title-link:hover {
-  color: var(--card-gold);
+  color: var(--md-gold);
 }
 
 .card-description {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.8125rem;
   color: #5E5E5E;
   line-height: 1.6;
@@ -724,7 +724,7 @@ onMounted(setupMobileTouch)
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.75rem;
   color: #5E5E5E;
 }
@@ -746,21 +746,21 @@ onMounted(setupMobileTouch)
 }
 
 .current-price {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: 1.375rem;
   font-weight: 700;
-  color: var(--card-black);
+  color: var(--md-black);
 }
 
 .compare-price {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.8125rem;
   color: #999;
   text-decoration: line-through;
 }
 
 .stock-status {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.05em;
@@ -771,7 +771,7 @@ onMounted(setupMobileTouch)
 }
 
 .stock-status.low-stock {
-  color: var(--card-wine);
+  color: var(--md-wine);
 }
 
 .stock-status.out-of-stock {
@@ -786,9 +786,9 @@ onMounted(setupMobileTouch)
   justify-content: center;
   gap: 0.5rem;
   padding: 1rem;
-  background: var(--card-black);
-  color: var(--card-cream);
-  font-family: var(--font-sans);
+  background: var(--md-black);
+  color: var(--md-cream);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -799,13 +799,13 @@ onMounted(setupMobileTouch)
 }
 
 .add-to-cart-btn:hover:not(:disabled) {
-  background: var(--card-gold);
-  color: var(--card-black);
+  background: var(--md-gold);
+  color: var(--md-black);
 }
 
 .add-to-cart-btn.in-cart {
-  background: var(--card-gold);
-  color: var(--card-black);
+  background: var(--md-gold);
+  color: var(--md-black);
 }
 
 .add-to-cart-btn:disabled {
@@ -816,11 +816,11 @@ onMounted(setupMobileTouch)
 
 /* Dark Mode */
 .dark .luxury-product-card {
-  background: var(--card-charcoal);
+  background: var(--md-charcoal);
 }
 
 .dark .card-title {
-  color: var(--card-cream);
+  color: var(--md-cream);
 }
 
 .dark .card-description {
@@ -836,16 +836,16 @@ onMounted(setupMobileTouch)
 }
 
 .dark .current-price {
-  color: var(--card-cream);
+  color: var(--md-cream);
 }
 
 .dark .add-to-cart-btn {
-  background: var(--card-cream);
-  color: var(--card-black);
+  background: var(--md-cream);
+  color: var(--md-black);
 }
 
 .dark .add-to-cart-btn:hover:not(:disabled) {
-  background: var(--card-gold);
+  background: var(--md-gold);
 }
 
 /* Mobile Responsive */

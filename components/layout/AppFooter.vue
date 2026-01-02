@@ -345,7 +345,7 @@ const subscribeNewsletter = async () => {
 }
 
 .footer-main {
-  background: var(--footer-charcoal);
+  background: var(--md-charcoal);
   padding: 5rem 4rem 4rem;
   position: relative;
 }
@@ -380,10 +380,10 @@ const subscribeNewsletter = async () => {
 }
 
 .brand-logo {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: 1.75rem;
   font-weight: 600;
-  color: var(--footer-cream);
+  color: var(--md-cream);
   text-decoration: none;
   letter-spacing: -0.02em;
   display: block;
@@ -391,7 +391,7 @@ const subscribeNewsletter = async () => {
 }
 
 .brand-tagline {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.875rem;
   color: var(--footer-cream-muted);
   line-height: 1.7;
@@ -416,8 +416,8 @@ const subscribeNewsletter = async () => {
 }
 
 .social-link:hover {
-  color: var(--footer-gold);
-  border-color: var(--footer-gold);
+  color: var(--md-gold);
+  border-color: var(--md-gold);
 }
 
 /* Footer Columns with subtle dividers */
@@ -448,12 +448,12 @@ const subscribeNewsletter = async () => {
 
 /* Column Titles */
 .column-title {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--footer-gold);
+  color: var(--md-gold);
   margin-bottom: 1.75rem;
   text-shadow: 0 0 20px rgba(201, 162, 39, 0.25);
   position: relative;
@@ -467,7 +467,7 @@ const subscribeNewsletter = async () => {
   bottom: -0.5rem;
   width: 20px;
   height: 1px;
-  background: var(--footer-gold);
+  background: var(--md-gold);
   opacity: 0.5;
 }
 
@@ -483,7 +483,7 @@ const subscribeNewsletter = async () => {
 }
 
 .footer-links a {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.875rem;
   color: var(--footer-cream-muted);
   text-decoration: none;
@@ -499,12 +499,12 @@ const subscribeNewsletter = async () => {
   bottom: -2px;
   width: 0;
   height: 1px;
-  background: var(--footer-gold);
+  background: var(--md-gold);
   transition: width 0.3s var(--transition-smooth);
 }
 
 .footer-links a:hover {
-  color: var(--footer-gold);
+  color: var(--md-gold);
 }
 
 .footer-links a:hover::after {
@@ -513,7 +513,7 @@ const subscribeNewsletter = async () => {
 
 /* Newsletter */
 .newsletter-text {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.875rem;
   color: var(--footer-cream-muted);
   line-height: 1.6;
@@ -531,8 +531,8 @@ const subscribeNewsletter = async () => {
   background: rgba(248, 245, 238, 0.05);
   border: 1px solid rgba(248, 245, 238, 0.15);
   border-right: none;
-  color: var(--footer-cream);
-  font-family: var(--font-sans);
+  color: var(--md-cream);
+  font-family: var(--md-font-sans);
   font-size: 0.875rem;
   outline: none;
   transition: all 0.4s var(--transition-smooth);
@@ -549,7 +549,7 @@ const subscribeNewsletter = async () => {
 }
 
 .newsletter-input:focus {
-  border-color: var(--footer-gold);
+  border-color: var(--md-gold);
   background: rgba(248, 245, 238, 0.1);
   box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.15);
 }
@@ -560,8 +560,8 @@ const subscribeNewsletter = async () => {
 
 .newsletter-btn {
   padding: 0.875rem 1.25rem;
-  background: var(--footer-gold);
-  border: 1px solid var(--footer-gold);
+  background: var(--md-gold);
+  border: 1px solid var(--md-gold);
   color: var(--footer-black);
   cursor: pointer;
   transition: all 0.4s var(--transition-smooth);
@@ -629,7 +629,7 @@ const subscribeNewsletter = async () => {
 }
 
 .copyright {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.75rem;
   color: rgba(248, 245, 238, 0.4);
 }
@@ -642,7 +642,7 @@ const subscribeNewsletter = async () => {
 }
 
 .payment-label {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   color: rgba(248, 245, 238, 0.4);
   text-transform: uppercase;

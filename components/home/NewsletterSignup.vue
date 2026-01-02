@@ -207,12 +207,12 @@ const submitNewsletter = async () => {
   display: inline-flex;
   align-items: center;
   gap: 1rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--nl-gold);
+  color: var(--md-gold);
   margin-bottom: 1.25rem;
   text-shadow: 0 0 20px rgba(201, 162, 39, 0.3);
 }
@@ -222,21 +222,21 @@ const submitNewsletter = async () => {
   content: '';
   width: 40px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--nl-gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--md-gold), transparent);
 }
 
 .section-title {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.025em;
-  color: var(--nl-cream);
+  color: var(--md-cream);
   margin-bottom: 1rem;
 }
 
 .section-subtitle {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 1rem;
   color: rgba(248, 245, 238, 0.6);
   line-height: 1.7;
@@ -259,9 +259,9 @@ const submitNewsletter = async () => {
 .email-input {
   flex: 1;
   padding: 1rem 1.5rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.875rem;
-  color: var(--nl-cream);
+  color: var(--md-cream);
   background: rgba(248, 245, 238, 0.05);
   border: 1px solid rgba(248, 245, 238, 0.15);
   border-right: none;
@@ -281,7 +281,7 @@ const submitNewsletter = async () => {
 
 .email-input:focus {
   background: rgba(248, 245, 238, 0.1);
-  border-color: var(--nl-gold);
+  border-color: var(--md-gold);
   box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.15);
 }
 
@@ -295,14 +295,14 @@ const submitNewsletter = async () => {
   justify-content: center;
   gap: 0.5rem;
   padding: 1rem 2rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  background: var(--nl-gold);
+  background: var(--md-gold);
   color: var(--nl-black);
-  border: 1px solid var(--nl-gold);
+  border: 1px solid var(--md-gold);
   cursor: pointer;
   transition: all 0.4s var(--transition-smooth);
   white-space: nowrap;
@@ -359,7 +359,7 @@ const submitNewsletter = async () => {
 }
 
 .success-message {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.875rem;
   color: #4ADE80;
   display: flex;
@@ -379,7 +379,7 @@ const submitNewsletter = async () => {
 }
 
 .error-message {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.875rem;
   color: #F87171;
   display: flex;
@@ -429,7 +429,7 @@ const submitNewsletter = async () => {
 
 /* Disclaimer */
 .disclaimer {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.75rem;
   color: rgba(248, 245, 238, 0.4);
   max-width: 400px;

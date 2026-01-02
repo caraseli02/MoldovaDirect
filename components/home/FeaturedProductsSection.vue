@@ -350,18 +350,7 @@ const filteredProducts = computed(() => {
  * ============================================ */
 
 .luxury-featured {
-  --feat-cream: #F8F5EE;
-  --feat-black: #0A0A0A;
-  --feat-charcoal: #151515;
-  --feat-gold: #C9A227;
-  --feat-gold-light: #DDB93D;
-  --feat-gold-glow: rgba(201, 162, 39, 0.15);
-  --feat-wine: #8B2E3B;
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'Inter', -apple-system, sans-serif;
-  --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-
+  /* Uses global design tokens from design-tokens.css */
   padding: 8rem 4rem;
   background: white;
   position: relative;
@@ -374,8 +363,8 @@ const filteredProducts = computed(() => {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 20% 0%, var(--feat-gold-glow) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, var(--feat-gold-glow) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 0%, var(--md-gold-glow) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, var(--md-gold-glow) 0%, transparent 50%);
   opacity: 0.3;
   pointer-events: none;
 }
@@ -405,19 +394,19 @@ const filteredProducts = computed(() => {
 }
 
 .eyebrow-text {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--feat-gold);
+  color: var(--md-gold);
   position: relative;
 }
 
 .eyebrow-line {
   width: 40px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--feat-gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--md-gold), transparent);
   position: relative;
 }
 
@@ -428,7 +417,7 @@ const filteredProducts = computed(() => {
   transform: translateY(-50%);
   width: 4px;
   height: 4px;
-  background: var(--feat-gold);
+  background: var(--md-gold);
   border-radius: 50%;
 }
 
@@ -441,17 +430,17 @@ const filteredProducts = computed(() => {
 }
 
 .section-title {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: clamp(2.5rem, 4vw, 3.5rem);
   font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.025em;
-  color: var(--feat-black);
+  color: var(--md-black);
   margin-bottom: 1rem;
 }
 
 .section-subtitle {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 1rem;
   color: #5E5E5E;
   line-height: 1.7;
@@ -482,7 +471,7 @@ const filteredProducts = computed(() => {
 
 .filter-tab {
   position: relative;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -509,7 +498,7 @@ const filteredProducts = computed(() => {
   transform: translateX(-50%) scaleX(0);
   width: 24px;
   height: 2px;
-  background: var(--feat-gold);
+  background: var(--md-gold);
   transition: transform 0.4s var(--transition-smooth);
 }
 
@@ -517,14 +506,14 @@ const filteredProducts = computed(() => {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--feat-black);
+  background: var(--md-black);
   transform: scaleY(0);
   transform-origin: bottom;
   transition: transform 0.4s var(--transition-smooth);
 }
 
 .filter-tab:hover:not(.filter-tab-active) {
-  color: var(--feat-gold);
+  color: var(--md-gold);
 }
 
 .filter-tab:hover:not(.filter-tab-active) .filter-tab-underline {
@@ -532,13 +521,13 @@ const filteredProducts = computed(() => {
 }
 
 .filter-tab:focus-visible {
-  outline: 2px solid var(--feat-gold);
+  outline: 2px solid var(--md-gold);
   outline-offset: 2px;
 }
 
 /* Active filter state with gold accent */
 .filter-tab-active {
-  color: var(--feat-cream);
+  color: var(--md-cream);
 }
 
 .filter-tab-active::before {
@@ -552,12 +541,12 @@ const filteredProducts = computed(() => {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--feat-gold), var(--feat-gold-light), var(--feat-gold));
+  background: linear-gradient(90deg, var(--md-gold), var(--md-gold-light), var(--md-gold));
   z-index: 2;
 }
 
 .filter-tab-active .filter-tab-text {
-  color: var(--feat-cream);
+  color: var(--md-cream);
 }
 
 .filter-tab-active .filter-tab-underline {
@@ -630,7 +619,7 @@ const filteredProducts = computed(() => {
 .loading-image {
   position: relative;
   aspect-ratio: 3/4;
-  background: var(--feat-cream);
+  background: var(--md-cream);
   overflow: hidden;
 }
 
@@ -749,13 +738,13 @@ const filteredProducts = computed(() => {
   justify-content: center;
   width: 80px;
   height: 80px;
-  background: var(--feat-cream);
-  color: var(--feat-gold);
+  background: var(--md-cream);
+  color: var(--md-gold);
   margin-bottom: 1.5rem;
 }
 
 .empty-text {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 1rem;
   color: #5E5E5E;
   margin-bottom: 2rem;
@@ -766,14 +755,14 @@ const filteredProducts = computed(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   padding: 1.125rem 2.5rem;
-  background: var(--feat-black);
-  color: var(--feat-cream);
+  background: var(--md-black);
+  color: var(--md-cream);
   text-decoration: none;
   transition: all 0.4s var(--transition-smooth);
   position: relative;
@@ -784,13 +773,13 @@ const filteredProducts = computed(() => {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--feat-gold) 0%, var(--feat-gold-light) 100%);
+  background: linear-gradient(135deg, var(--md-gold) 0%, var(--md-gold-light) 100%);
   transform: translateX(-100%);
   transition: transform 0.4s var(--transition-smooth);
 }
 
 .view-all-btn:hover {
-  color: var(--feat-black);
+  color: var(--md-black);
 }
 
 .view-all-btn:hover::before {
@@ -829,14 +818,14 @@ const filteredProducts = computed(() => {
   width: 64px;
   height: 64px;
   background: rgba(139, 46, 59, 0.08);
-  color: var(--feat-wine);
+  color: var(--md-wine);
   margin-bottom: 1rem;
 }
 
 .error-text {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 1rem;
-  color: var(--feat-wine);
+  color: var(--md-wine);
   margin-bottom: 1.5rem;
   line-height: 1.6;
 }
@@ -845,21 +834,21 @@ const filteredProducts = computed(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.625rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: 1rem 2rem;
   background: transparent;
-  border: 1px solid var(--feat-wine);
-  color: var(--feat-wine);
+  border: 1px solid var(--md-wine);
+  color: var(--md-wine);
   cursor: pointer;
   transition: all 0.4s var(--transition-smooth);
 }
 
 .retry-btn:hover {
-  background: var(--feat-wine);
+  background: var(--md-wine);
   color: white;
 }
 
@@ -895,7 +884,7 @@ const filteredProducts = computed(() => {
  * ============================================ */
 
 .dark .luxury-featured {
-  background: var(--feat-charcoal);
+  background: var(--md-charcoal);
 }
 
 .dark .luxury-featured::before {
@@ -903,7 +892,7 @@ const filteredProducts = computed(() => {
 }
 
 .dark .section-title {
-  color: var(--feat-cream);
+  color: var(--md-cream);
 }
 
 .dark .section-subtitle {
@@ -920,15 +909,15 @@ const filteredProducts = computed(() => {
 }
 
 .dark .filter-tab:hover:not(.filter-tab-active) {
-  color: var(--feat-gold);
+  color: var(--md-gold);
 }
 
 .dark .filter-tab::before {
-  background: var(--feat-cream);
+  background: var(--md-cream);
 }
 
 .dark .filter-tab-active .filter-tab-text {
-  color: var(--feat-black);
+  color: var(--md-black);
 }
 
 .dark .loading-card {

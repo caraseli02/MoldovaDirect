@@ -119,7 +119,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, nextTick } from 'vue'
+import { computed, ref, nextTick, type Ref } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { cn } from '~/lib/utils'
 
@@ -146,7 +146,7 @@ const currentLocale = computed(() => {
 })
 
 // Close dropdown when clicking outside
-onClickOutside(dropdownRef, () => {
+onClickOutside(dropdownRef as Ref<HTMLElement | null>, () => {
   if (isOpen.value) {
     closeDropdown()
   }

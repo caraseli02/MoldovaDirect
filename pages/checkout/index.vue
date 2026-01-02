@@ -8,7 +8,7 @@
       >
         <div class="mb-4">
           <svg
-            class="w-16 h-16 mx-auto text-red-500"
+            class="w-16 h-16 mx-auto text-[var(--md-wine)]"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

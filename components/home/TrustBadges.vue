@@ -224,7 +224,7 @@ const localePath = useLocalePath()
   --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   padding: 5rem 4rem;
-  background: var(--trust-cream);
+  background: var(--md-cream);
 }
 
 .trust-container {
@@ -252,7 +252,7 @@ const localePath = useLocalePath()
 }
 
 .badge-card:hover {
-  border-color: var(--trust-gold);
+  border-color: var(--md-gold);
   box-shadow: 0 8px 24px -8px rgba(10, 10, 10, 0.08);
 }
 
@@ -263,12 +263,12 @@ const localePath = useLocalePath()
   width: 56px;
   height: 56px;
   background: rgba(201, 162, 39, 0.1);
-  color: var(--trust-gold);
+  color: var(--md-gold);
   margin-bottom: 1.25rem;
 }
 
 .badge-title {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: 1.125rem;
   font-weight: 500;
   color: var(--trust-black);
@@ -276,7 +276,7 @@ const localePath = useLocalePath()
 }
 
 .badge-description {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.8125rem;
   color: #5E5E5E;
 }
@@ -289,7 +289,7 @@ const localePath = useLocalePath()
 }
 
 .section-label {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.15em;
@@ -312,13 +312,13 @@ const localePath = useLocalePath()
   justify-content: center;
   width: 56px;
   height: 40px;
-  background: var(--trust-cream);
-  color: var(--trust-charcoal);
+  background: var(--md-cream);
+  color: var(--md-charcoal);
   transition: all 0.3s ease;
 }
 
 .method-item:hover {
-  background: var(--trust-gold);
+  background: var(--md-gold);
   color: var(--trust-black);
 }
 
@@ -340,7 +340,7 @@ const localePath = useLocalePath()
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.8125rem;
   font-weight: 500;
   color: #2D6A4F;
@@ -353,7 +353,7 @@ const localePath = useLocalePath()
 }
 
 .support-text {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.875rem;
   color: #5E5E5E;
   margin-bottom: 0.75rem;
@@ -363,18 +363,18 @@ const localePath = useLocalePath()
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--trust-gold);
+  color: var(--md-gold);
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
 .support-link:hover {
-  color: var(--trust-wine);
+  color: var(--md-wine);
 }
 
 .support-link svg {
@@ -387,7 +387,7 @@ const localePath = useLocalePath()
 
 /* Dark Mode */
 .dark .luxury-trust-badges {
-  background: var(--trust-charcoal);
+  background: var(--md-charcoal);
 }
 
 .dark .badge-card {
@@ -396,7 +396,7 @@ const localePath = useLocalePath()
 }
 
 .dark .badge-title {
-  color: var(--trust-cream);
+  color: var(--md-cream);
 }
 
 .dark .badge-description {
@@ -414,7 +414,7 @@ const localePath = useLocalePath()
 
 .dark .method-item {
   background: rgba(248, 245, 238, 0.05);
-  color: var(--trust-cream);
+  color: var(--md-cream);
 }
 
 .dark .section-divider {

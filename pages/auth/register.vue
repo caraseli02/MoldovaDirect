@@ -45,14 +45,14 @@
               <Alert
                 v-if="error"
                 variant="destructive"
-                class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
+                class="border-[var(--md-wine)]/20 bg-[var(--md-wine)]/10 dark:border-[var(--md-wine)]/40 dark:bg-[var(--md-wine)]/15"
                 data-testid="auth-error"
               >
                 <AlertCircle
-                  class="h-5 w-5 text-red-500 dark:text-red-400"
+                  class="h-5 w-5 text-[var(--md-wine)] dark:text-[var(--md-wine-light)]"
                   aria-hidden="true"
                 />
-                <AlertDescription class="text-sm text-red-800 dark:text-red-300">
+                <AlertDescription class="text-sm text-[var(--md-wine-dark)] dark:text-white">
                   {{ error }}
                 </AlertDescription>
               </Alert>
@@ -61,14 +61,14 @@
             <Transition name="slide-fade">
               <Alert
                 v-if="success"
-                class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
+                class="border-[var(--md-success)]/20 bg-[var(--md-success)]/10 dark:border-[var(--md-success)]/40 dark:bg-[var(--md-success)]/15"
                 data-testid="auth-success"
               >
                 <CheckCircle2
-                  class="h-5 w-5 text-green-500 dark:text-green-400"
+                  class="h-5 w-5 text-[var(--md-success)] dark:text-emerald-400"
                   aria-hidden="true"
                 />
-                <AlertDescription class="text-sm text-green-800 dark:text-green-300">
+                <AlertDescription class="text-sm text-[var(--md-success)] dark:text-emerald-300">
                   {{ success }}
                 </AlertDescription>
               </Alert>

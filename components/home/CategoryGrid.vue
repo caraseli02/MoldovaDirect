@@ -163,7 +163,7 @@ const localePath = useLocalePath()
   --transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   padding: 8rem 4rem;
-  background: linear-gradient(180deg, var(--cat-cream) 0%, var(--cat-cream-dark) 100%);
+  background: linear-gradient(180deg, var(--md-cream) 0%, var(--cat-cream-dark) 100%);
   position: relative;
   overflow: hidden;
 }
@@ -200,12 +200,12 @@ const localePath = useLocalePath()
   display: inline-flex;
   align-items: center;
   gap: 1rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--cat-gold);
+  color: var(--md-gold);
   margin-bottom: 1.25rem;
   text-shadow: 0 1px 2px rgba(201, 162, 39, 0.15);
 }
@@ -214,16 +214,16 @@ const localePath = useLocalePath()
   display: block;
   width: 40px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--cat-gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--md-gold), transparent);
   position: relative;
 }
 
 .eyebrow-line--left {
-  background: linear-gradient(90deg, transparent, var(--cat-gold));
+  background: linear-gradient(90deg, transparent, var(--md-gold));
 }
 
 .eyebrow-line--right {
-  background: linear-gradient(90deg, var(--cat-gold), transparent);
+  background: linear-gradient(90deg, var(--md-gold), transparent);
 }
 
 /* Optional: add subtle gold dots at line ends */
@@ -233,7 +233,7 @@ const localePath = useLocalePath()
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: var(--cat-gold);
+  background: var(--md-gold);
   top: 50%;
   transform: translateY(-50%);
 }
@@ -247,7 +247,7 @@ const localePath = useLocalePath()
 }
 
 .section-title {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: clamp(2.5rem, 4vw, 3.5rem);
   font-weight: 400;
   line-height: 1.1;
@@ -257,7 +257,7 @@ const localePath = useLocalePath()
 }
 
 .section-subtitle {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 1rem;
   color: #5E5E5E;
   line-height: 1.7;
@@ -268,13 +268,13 @@ const localePath = useLocalePath()
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--cat-black);
   text-decoration: none;
-  border-bottom: 1px solid var(--cat-gold);
+  border-bottom: 1px solid var(--md-gold);
   padding-bottom: 4px;
   transition: all 0.3s var(--transition-smooth);
   position: relative;
@@ -287,7 +287,7 @@ const localePath = useLocalePath()
   bottom: -1px;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--cat-gold), var(--cat-gold-light));
+  background: linear-gradient(90deg, var(--md-gold), var(--cat-gold-light));
   transition: width 0.4s var(--transition-smooth);
 }
 
@@ -296,7 +296,7 @@ const localePath = useLocalePath()
 }
 
 .view-all-link:hover {
-  color: var(--cat-gold);
+  color: var(--md-gold);
 }
 
 .view-all-arrow {
@@ -351,7 +351,7 @@ const localePath = useLocalePath()
 }
 
 .card-link:hover .card-border {
-  border-color: var(--cat-gold);
+  border-color: var(--md-gold);
   box-shadow: inset 0 0 20px var(--cat-gold-glow),
               0 0 30px var(--cat-gold-glow);
 }
@@ -444,15 +444,15 @@ const localePath = useLocalePath()
   justify-content: center;
   width: 52px;
   height: 52px;
-  background: var(--cat-cream);
-  color: var(--cat-charcoal);
+  background: var(--md-cream);
+  color: var(--md-charcoal);
   border-radius: 1px;
   transition: all 0.4s var(--transition-spring);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .card-link:hover .card-icon {
-  background: linear-gradient(135deg, var(--cat-gold) 0%, var(--cat-gold-light) 100%);
+  background: linear-gradient(135deg, var(--md-gold) 0%, var(--cat-gold-light) 100%);
   color: var(--cat-black);
   transform: translateY(-6px) rotate(-2deg);
   box-shadow: 0 8px 20px rgba(201, 162, 39, 0.4);
@@ -470,7 +470,7 @@ const localePath = useLocalePath()
 }
 
 .card-title {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: 1.75rem;
   font-weight: 500;
   line-height: 1.2;
@@ -480,11 +480,11 @@ const localePath = useLocalePath()
 }
 
 .card-link:hover .card-title {
-  color: var(--cat-cream);
+  color: var(--md-cream);
 }
 
 .card-description {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.875rem;
   color: rgba(248, 245, 238, 0.7);
   line-height: 1.6;
@@ -500,12 +500,12 @@ const localePath = useLocalePath()
   display: inline-flex;
   align-items: center;
   gap: 0.625rem;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--cat-gold);
+  color: var(--md-gold);
   transition: all 0.3s var(--transition-smooth);
   position: relative;
 }
@@ -539,7 +539,7 @@ const localePath = useLocalePath()
 
 /* Dark Mode */
 .dark .luxury-categories {
-  background: linear-gradient(180deg, var(--cat-charcoal) 0%, #0d0d0d 100%);
+  background: linear-gradient(180deg, var(--md-charcoal) 0%, #0d0d0d 100%);
 }
 
 .dark .luxury-categories::before {
@@ -547,7 +547,7 @@ const localePath = useLocalePath()
 }
 
 .dark .section-title {
-  color: var(--cat-cream);
+  color: var(--md-cream);
 }
 
 .dark .section-subtitle {
@@ -555,7 +555,7 @@ const localePath = useLocalePath()
 }
 
 .dark .view-all-link {
-  color: var(--cat-cream);
+  color: var(--md-cream);
 }
 
 /* Mobile Responsive */

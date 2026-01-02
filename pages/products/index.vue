@@ -318,7 +318,7 @@
                       size="sm"
                       :variant="page === pagination.page ? 'default' : 'ghost'"
                       class="rounded-full"
-                      :class="page === pagination.page ? 'shadow-lg shadow-blue-500/30' : ''"
+                      :class="page === pagination.page ? 'shadow-lg shadow-[var(--md-wine)]/30' : ''"
                       :aria-label="t('products.pagination.goToPage', { page })"
                       :aria-current="page === pagination.page ? 'page' : undefined"
                       @click="goToPage(page as number)"

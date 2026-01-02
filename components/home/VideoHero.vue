@@ -426,7 +426,7 @@ video {
 
 /* Luxury Badge */
 .hero-badge {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.18em;
@@ -438,29 +438,29 @@ video {
 .badge-line {
   width: 48px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--md-gold), transparent);
 }
 
 /* Luxury Hero Title - Editorial Serif */
 .hero-title {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: clamp(2.5rem, 6.5vw, 6rem);
   font-weight: 400;
   line-height: 1.02;
   letter-spacing: -0.025em;
-  color: var(--color-cream);
+  color: var(--md-cream);
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .hero-title :deep(em) {
   font-style: italic;
-  color: var(--color-gold);
+  color: var(--md-gold);
   text-shadow: 0 4px 20px rgba(201, 162, 39, 0.3);
 }
 
 /* Luxury Subtitle */
 .hero-subtitle {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 1.125rem;
   color: rgba(245, 242, 235, 0.85);
   line-height: 1.8;
@@ -473,9 +473,9 @@ video {
   align-items: center;
   gap: 0.875rem;
   padding: 1.125rem 2.25rem;
-  background: var(--color-cream);
+  background: var(--md-cream);
   color: #0A0A0A;
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -491,7 +491,7 @@ video {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 100%);
+  background: linear-gradient(135deg, var(--md-gold) 0%, var(--color-gold-light) 100%);
   opacity: 0;
   transition: opacity 0.4s var(--transition-smooth);
 }
@@ -514,13 +514,13 @@ video {
 
 /* Luxury Secondary Button */
 .btn-secondary {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.8125rem;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: rgba(248, 245, 238, 0.9);
   text-decoration: none;
-  border-bottom: 1px solid var(--color-gold);
+  border-bottom: 1px solid var(--md-gold);
   padding-bottom: 4px;
   transition: all 0.3s var(--transition-smooth);
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
@@ -574,10 +574,10 @@ video {
 
 /* Stat value with hover color transition */
 .stat-value {
-  font-family: var(--font-serif);
+  font-family: var(--md-font-serif);
   font-size: 2.25rem;
   font-weight: 500;
-  color: var(--color-cream);
+  color: var(--md-cream);
   text-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
   line-height: 1;
   transition: color 0.3s var(--transition-smooth), text-shadow 0.3s var(--transition-smooth);
@@ -602,7 +602,7 @@ video {
 }
 
 .stat-label {
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -674,7 +674,7 @@ video {
   align-items: center;
   gap: 0.75rem;
   color: rgba(248, 245, 238, 0.6);
-  font-family: var(--font-sans);
+  font-family: var(--md-font-sans);
   font-size: 0.625rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
