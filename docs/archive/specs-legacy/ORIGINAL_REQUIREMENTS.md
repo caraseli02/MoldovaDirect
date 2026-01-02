@@ -1,5 +1,13 @@
 # Moldova Direct - E-Commerce Platform Documentation
 
+> **ARCHIVED - HISTORICAL REFERENCE ONLY**
+>
+> This document reflects the original project requirements. The technology stack has changed significantly:
+> - **Original Stack:** Cloudflare Pages, D1, KV, R2
+> - **Current Stack:** Nuxt 4 + Supabase + Vercel
+>
+> See `CLAUDE.md` and `docs/development/tech.md` for current architecture.
+
 ## Project Overview
 
 E-commerce platform enabling international customers (primarily from Spain) to purchase Moldovan food and wine products with home delivery.

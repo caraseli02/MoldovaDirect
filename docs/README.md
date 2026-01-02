@@ -201,6 +201,32 @@ i18n/locales/        # Translations (es, en, ro, ru)
 </details>
 
 <details>
+<summary><strong>📋 Specs</strong> - Feature specifications</summary>
+
+Active feature specifications in `specs/`:
+- `user-authentication/` - Authentication system design
+- `customer-order-history/` - Order history feature
+- `shipping-step-refactor/` - Checkout shipping improvements
+
+</details>
+
+<details>
+<summary><strong>🔧 Fixes</strong> - Bug fixes and solutions</summary>
+
+- [Admin Fixes](./fixes/admin-fixes/) - Admin panel issues and solutions
+- Error handling guides
+
+</details>
+
+<details>
+<summary><strong>🔒 Security</strong> - Security documentation</summary>
+
+- GDPR compliance documentation
+- Security logging guides
+
+</details>
+
+<details>
 <summary><strong>📦 Archive</strong> - Historical docs</summary>
 
 See [archive/README.md](./archive/README.md) for archived documentation.
@@ -217,4 +243,4 @@ See [archive/README.md](./archive/README.md) for archived documentation.
 
 ---
 
-**Last Updated:** January 1, 2026
+**Last Updated:** January 2, 2026

@@ -188,8 +188,8 @@ To use the poster until ready:
    - Upload videos directly to server/CDN
 
 2. **Consider CDN** for better performance
-   - Cloudflare R2
-   - AWS S3 + CloudFront
+   - Supabase Storage
+   - Vercel Blob Storage
    - Update paths in `useHeroVideos.ts`
 
 3. **Monitor performance**
