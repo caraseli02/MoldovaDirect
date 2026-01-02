@@ -460,24 +460,27 @@ const trackOrder = async () => {
       trackingData.value = response.data as unknown as TrackingData
     }
   }
-  catch (err: any) {
+  catch (err: unknown) {
     // Log error for debugging
     console.error('Order tracking error:', err)
 
+    // Type guard for API errors with statusCode
+    const apiError = err as { statusCode?: number, name?: string, message?: string }
+
     // Handle specific error codes
-    if (err.statusCode === 404) {
+    if (apiError.statusCode === 404) {
       error.value = t('trackOrder.errors.notFound', 'Order not found. Please check your order number and email.')
     }
-    else if (err.statusCode === 400) {
+    else if (apiError.statusCode === 400) {
       error.value = t('trackOrder.errors.invalidInput', 'Invalid order number or email.')
     }
-    else if (err.statusCode === 429) {
+    else if (apiError.statusCode === 429) {
       error.value = t('trackOrder.errors.tooManyRequests', 'Too many requests. Please try again later.')
     }
-    else if (err.statusCode >= 500) {
+    else if (apiError.statusCode && apiError.statusCode >= 500) {
       error.value = t('trackOrder.errors.serverError', 'Server error. Please try again later.')
     }
-    else if (err.name === 'FetchError' || err.message?.includes('network') || err.message?.includes('Network')) {
+    else if (apiError.name === 'FetchError' || apiError.message?.includes('network') || apiError.message?.includes('Network')) {
       error.value = t('trackOrder.errors.networkError', 'Network error. Please check your connection.')
     }
     else {

@@ -203,8 +203,8 @@ const handleAuthCallback = async () => {
     // No valid token found
     throw new Error('Invalid or missing authentication token')
   }
-  catch (err: any) {
-    handleAuthError(err)
+  catch (err: unknown) {
+    handleAuthError(err as Error)
   }
   finally {
     loading.value = false
