@@ -10,7 +10,7 @@ Moldova Direct is an e-commerce platform specializing in authentic Moldovan food
 ## 🏗️ Architecture Overview
 
 ### Technology Stack
-- **Frontend**: Nuxt 3.17+ + Vue 3.5 Composition API + TypeScript
+- **Frontend**: Nuxt 4.2.2 + Vue 3.5 Composition API + TypeScript
 - **UI Components**: shadcn-vue component library (migrated Aug 31, 2025)
 - **Styling**: Tailwind CSS v4 with CSS variables and dark mode
 - **State Management**: Pinia stores with TypeScript
@@ -253,7 +253,7 @@ NODE_ENV=production
 ### Technical Goals
 - Edge-first architecture for global performance
 - <2 second page load times
-- 100% uptime with Cloudflare infrastructure
+- 100% uptime with Vercel infrastructure
 - Comprehensive test coverage
 - Clean, maintainable codebase
 
