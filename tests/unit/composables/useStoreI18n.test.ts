@@ -60,14 +60,17 @@ describe('useStoreI18n', () => {
   })
 
   describe('Without i18n Available', () => {
-    it('should return fallback t function', () => {
+    it('should return fallback t function that converts keys to readable format', () => {
       // Override mock to simulate missing i18n
       vi.mocked(useNuxtApp).mockReturnValueOnce({} as unknown)
 
       const { t, available } = useStoreI18n()
 
       expect(available).toBe(false)
-      expect(t('some.key')).toBe('some.key')
+      // Fallback converts "some.key" -> "Key" (extracts last segment, capitalizes)
+      expect(t('some.key')).toBe('Key')
+      // camelCase keys get spaces: "concurrentCheckout" -> "Concurrent Checkout"
+      expect(t('checkout.warnings.concurrentCheckout')).toBe('Concurrent Checkout')
     })
 
     it('should return default locale', () => {
@@ -86,7 +89,8 @@ describe('useStoreI18n', () => {
 
       expect(available).toBe(false)
       expect(typeof t).toBe('function')
-      expect(t('test')).toBe('test')
+      // Fallback capitalizes: "test" -> "Test"
+      expect(t('test')).toBe('Test')
     })
   })
 

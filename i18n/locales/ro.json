@@ -214,6 +214,7 @@
       "name": {
         "required": "Numele complet este obligatoriu",
         "minLength": "Numele trebuie să aibă cel puțin 2 caractere",
+        "maxLength": "Numele nu poate depăși 100 de caractere",
         "invalid": "Te rugăm să introduci un nume valid"
       },
       "phone": {
