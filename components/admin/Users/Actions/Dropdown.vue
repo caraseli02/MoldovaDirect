@@ -13,147 +13,129 @@
 -->
 
 <template>
-  <div
-    ref="dropdownRef"
-    class="relative"
-  >
-    <!-- Dropdown Trigger -->
-    <UiButton
-      variant="ghost"
-      size="icon"
-      class="h-8 w-8"
-      :aria-label="$t('admin.users.actions.menu')"
-      @click="toggleDropdown"
-    >
-      <commonIcon
-        name="lucide:more-vertical"
-        class="h-4 w-4"
-      />
-    </UiButton>
-
-    <!-- Dropdown Menu -->
-    <div
-      v-if="isOpen"
-      class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-50"
-      @click.stop
-    >
-      <div class="py-1">
-        <!-- View Details -->
-        <button
-          class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
-          @click="handleAction('view')"
+  <div>
+    <DropdownMenu>
+      <DropdownMenuTrigger as-child>
+        <UiButton
+          variant="ghost"
+          size="icon"
+          class="h-8 w-8"
+          :aria-label="$t('admin.users.actions.menu')"
         >
+          <commonIcon
+            name="lucide:more-vertical"
+            class="h-4 w-4"
+          />
+        </UiButton>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent
+        align="end"
+        class="w-48"
+      >
+        <!-- View Details -->
+        <DropdownMenuItem @click="handleAction('view')">
           <commonIcon
             name="lucide:eye"
             class="w-4 h-4"
           />
-          View Details
-        </button>
+          <span>View Details</span>
+        </DropdownMenuItem>
 
         <!-- Edit Profile -->
-        <button
-          class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
-          @click="handleAction('edit')"
-        >
+        <DropdownMenuItem @click="handleAction('edit')">
           <commonIcon
             name="lucide:pencil"
             class="w-4 h-4"
           />
-          Edit Profile
-        </button>
+          <span>Edit Profile</span>
+        </DropdownMenuItem>
 
-        <div class="border-t border-gray-100 dark:border-gray-600"></div>
+        <DropdownMenuSeparator />
 
         <!-- Email Actions -->
-        <button
+        <DropdownMenuItem
           v-if="!user.email_confirmed_at"
-          class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
           @click="handleAction('verify_email')"
         >
           <commonIcon
             name="lucide:badge-check"
             class="w-4 h-4"
           />
-          Verify Email
-        </button>
+          <span>Verify Email</span>
+        </DropdownMenuItem>
 
-        <button
-          class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
-          @click="handleAction('reset_password')"
-        >
+        <DropdownMenuItem @click="handleAction('reset_password')">
           <commonIcon
             name="lucide:key"
             class="w-4 h-4"
           />
-          Reset Password
-        </button>
+          <span>Reset Password</span>
+        </DropdownMenuItem>
 
-        <div class="border-t border-gray-100 dark:border-gray-600"></div>
+        <DropdownMenuSeparator />
 
         <!-- Role Management -->
-        <button
-          class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
-          @click="handleAction('update_role')"
-        >
+        <DropdownMenuItem @click="handleAction('update_role')">
           <commonIcon
             name="lucide:shield-check"
             class="w-4 h-4"
           />
-          Manage Role
-        </button>
+          <span>Manage Role</span>
+        </DropdownMenuItem>
 
-        <div class="border-t border-gray-100 dark:border-gray-600"></div>
+        <DropdownMenuSeparator />
 
         <!-- Account Status Actions -->
-        <button
+        <DropdownMenuItem
           v-if="!isSuspended"
-          class="w-full text-left px-4 py-2 text-sm text-yellow-700 dark:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 flex items-center gap-2"
+          class="text-yellow-700 dark:text-yellow-400 focus:text-yellow-700 dark:focus:text-yellow-400 focus:bg-yellow-50 dark:focus:bg-yellow-900/20"
           @click="handleAction('suspend')"
         >
           <commonIcon
             name="lucide:pause"
             class="w-4 h-4"
           />
-          Suspend Account
-        </button>
+          <span>Suspend Account</span>
+        </DropdownMenuItem>
 
-        <button
+        <DropdownMenuItem
           v-if="isSuspended"
-          class="w-full text-left px-4 py-2 text-sm text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 flex items-center gap-2"
+          class="text-green-700 dark:text-green-400 focus:text-green-700 dark:focus:text-green-400 focus:bg-green-50 dark:focus:bg-green-900/20"
           @click="handleAction('unsuspend')"
         >
           <commonIcon
             name="lucide:play"
             class="w-4 h-4"
           />
-          Unsuspend Account
-        </button>
+          <span>Unsuspend Account</span>
+        </DropdownMenuItem>
 
-        <button
+        <DropdownMenuItem
           v-if="!isBanned"
-          class="w-full text-left px-4 py-2 text-sm text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2"
+          class="text-red-700 dark:text-red-400 focus:text-red-700 dark:focus:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"
           @click="handleAction('ban')"
         >
           <commonIcon
             name="lucide:ban"
             class="w-4 h-4"
           />
-          Ban Account
-        </button>
+          <span>Ban Account</span>
+        </DropdownMenuItem>
 
-        <button
+        <DropdownMenuItem
           v-if="isBanned"
-          class="w-full text-left px-4 py-2 text-sm text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 flex items-center gap-2"
+          class="text-green-700 dark:text-green-400 focus:text-green-700 dark:focus:text-green-400 focus:bg-green-50 dark:focus:bg-green-900/20"
           @click="handleAction('unban')"
         >
           <commonIcon
             name="lucide:check-circle-2"
             class="w-4 h-4"
           />
-          Unban Account
-        </button>
-      </div>
-    </div>
+          <span>Unban Account</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
 
     <!-- Confirmation Modals -->
     <AdminUsersActionsModal
@@ -167,6 +149,14 @@
 </template>
 
 <script setup lang="ts">
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+
 interface Props {
   user: {
     id: string
@@ -192,7 +182,6 @@ const emit = defineEmits<{
 }>()
 
 // State
-const isOpen = ref(false)
 const showActionModal = ref(false)
 const selectedAction = ref('')
 
@@ -206,13 +195,7 @@ const isBanned = computed(() => {
 })
 
 // Methods
-const toggleDropdown = () => {
-  isOpen.value = !isOpen.value
-}
-
 const handleAction = (action: string) => {
-  isOpen.value = false
-
   // Actions that need confirmation
   const confirmationActions = ['suspend', 'ban', 'reset_password', 'verify_email', 'update_role']
 
@@ -236,23 +219,4 @@ const cancelAction = () => {
   showActionModal.value = false
   selectedAction.value = ''
 }
-
-// Close dropdown when clicking outside
-const dropdownRef = ref()
-
-const setupClickOutsideHandler = () => {
-  const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
-      isOpen.value = false
-    }
-  }
-
-  document.addEventListener('click', handleClickOutside)
-
-  onUnmounted(() => {
-    document.removeEventListener('click', handleClickOutside)
-  })
-}
-
-onMounted(setupClickOutsideHandler)
 </script>

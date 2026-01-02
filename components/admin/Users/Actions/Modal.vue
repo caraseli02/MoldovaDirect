@@ -14,26 +14,24 @@
 -->
 
 <template>
-  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
-      <!-- Header -->
-      <div class="px-6 py-4 border-b border-gray-200">
-        <h3 class="text-lg font-medium text-gray-900">
-          {{ getActionTitle() }}
-        </h3>
-        <p class="text-sm text-gray-500 mt-1">
-          {{ getActionDescription() }}
-        </p>
-      </div>
+  <Dialog
+    :open="true"
+    @update:open="handleClose"
+  >
+    <DialogContent class="sm:max-w-md">
+      <DialogHeader>
+        <DialogTitle>{{ getActionTitle() }}</DialogTitle>
+        <DialogDescription>{{ getActionDescription() }}</DialogDescription>
+      </DialogHeader>
 
       <!-- Content -->
-      <div class="px-6 py-4">
+      <div class="space-y-4">
         <!-- User Info -->
-        <div class="mb-4 p-3 bg-gray-50 rounded-lg">
-          <div class="text-sm font-medium text-gray-900">
+        <div class="p-3 bg-gray-50 rounded-lg dark:bg-gray-800">
+          <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
             {{ user.profile?.name || 'No name' }}
           </div>
-          <div class="text-sm text-gray-500">
+          <div class="text-sm text-gray-500 dark:text-gray-400">
             {{ user.email }}
           </div>
         </div>
@@ -42,119 +40,105 @@
         <div class="space-y-4">
           <!-- Suspend Action -->
           <div v-if="action === 'suspend'">
-            <label class="block text-sm font-medium text-gray-700 mb-2">
+            <UiLabel class="mb-2">
               Suspension Duration
-            </label>
-            <select
-              v-model="formData.duration"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option :value="undefined">
-                Indefinite
-              </option>
-              <option :value="1">
-                1 day
-              </option>
-              <option :value="3">
-                3 days
-              </option>
-              <option :value="7">
-                1 week
-              </option>
-              <option :value="30">
-                1 month
-              </option>
-            </select>
+            </UiLabel>
+            <UiSelect v-model="formData.duration">
+              <SelectTrigger>
+                <SelectValue placeholder="Select duration" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0">
+                  Indefinite
+                </SelectItem>
+                <SelectItem value="1">
+                  1 day
+                </SelectItem>
+                <SelectItem value="3">
+                  3 days
+                </SelectItem>
+                <SelectItem value="7">
+                  1 week
+                </SelectItem>
+                <SelectItem value="30">
+                  1 month
+                </SelectItem>
+              </SelectContent>
+            </UiSelect>
           </div>
 
           <!-- Role Update Action -->
           <div v-if="action === 'update_role'">
-            <label class="block text-sm font-medium text-gray-700 mb-2">
+            <UiLabel class="mb-2">
               New Role
-            </label>
-            <select
-              v-model="formData.role"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            >
-              <option value="">
-                Select a role
-              </option>
-              <option value="user">
-                User
-              </option>
-              <option value="moderator">
-                Moderator
-              </option>
-              <option value="admin">
-                Admin
-              </option>
-            </select>
+            </UiLabel>
+            <UiSelect v-model="formData.role">
+              <SelectTrigger>
+                <SelectValue placeholder="Select a role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="user">
+                  User
+                </SelectItem>
+                <SelectItem value="moderator">
+                  Moderator
+                </SelectItem>
+                <SelectItem value="admin">
+                  Admin
+                </SelectItem>
+              </SelectContent>
+            </UiSelect>
           </div>
 
           <!-- Reason (for all actions) -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
+            <UiLabel class="mb-2">
               Reason {{ isReasonRequired() ? '(Required)' : '(Optional)' }}
-            </label>
-            <textarea
+            </UiLabel>
+            <UiTextarea
               v-model="formData.reason"
               :required="isReasonRequired()"
               rows="3"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               :placeholder="getReasonPlaceholder()"
-            ></textarea>
+            />
           </div>
 
           <!-- Additional Notes -->
           <div v-if="showNotesField()">
-            <label class="block text-sm font-medium text-gray-700 mb-2">
+            <UiLabel class="mb-2">
               Additional Notes (Optional)
-            </label>
-            <textarea
+            </UiLabel>
+            <UiTextarea
               v-model="formData.notes"
               rows="2"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Any additional information..."
-            ></textarea>
+            />
           </div>
 
           <!-- Warning Messages -->
-          <div
-            v-if="getWarningMessage()"
-            class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg"
-          >
-            <div class="flex">
-              <commonIcon
-                name="lucide:alert-triangle"
-                class="w-5 h-5 text-yellow-400 mr-2 mt-0.5"
-              />
-              <div class="text-sm text-yellow-800">
-                {{ getWarningMessage() }}
-              </div>
-            </div>
-          </div>
+          <UiAlert v-if="getWarningMessage()">
+            <commonIcon
+              name="lucide:alert-triangle"
+              class="h-4 w-4"
+            />
+            <AlertDescription>{{ getWarningMessage() }}</AlertDescription>
+          </UiAlert>
 
           <!-- Danger Messages -->
-          <div
+          <UiAlert
             v-if="getDangerMessage()"
-            class="p-3 bg-red-50 border border-red-200 rounded-lg"
+            variant="destructive"
           >
-            <div class="flex">
-              <commonIcon
-                name="lucide:alert-triangle"
-                class="w-5 h-5 text-red-400 mr-2 mt-0.5"
-              />
-              <div class="text-sm text-red-800">
-                {{ getDangerMessage() }}
-              </div>
-            </div>
-          </div>
+            <commonIcon
+              name="lucide:alert-triangle"
+              class="h-4 w-4"
+            />
+            <AlertDescription>{{ getDangerMessage() }}</AlertDescription>
+          </UiAlert>
         </div>
       </div>
 
-      <!-- Footer -->
-      <div class="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
+      <DialogFooter>
         <UiButton
           variant="outline"
           @click="$emit('cancel')"
@@ -163,17 +147,36 @@
         </UiButton>
         <UiButton
           :disabled="!isFormValid()"
-          :class="getActionButtonClass()"
+          :variant="getActionButtonVariant()"
           @click="confirm"
         >
           {{ getActionButtonText() }}
         </UiButton>
-      </div>
-    </div>
-  </div>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
+  Select as UiSelect,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Label as UiLabel } from '@/components/ui/label'
+import { Textarea as UiTextarea } from '@/components/ui/textarea'
+import { Alert as UiAlert, AlertDescription } from '@/components/ui/alert'
+
 interface Props {
   action: string
   user: {
@@ -195,12 +198,18 @@ const emit = defineEmits<{
 // Form data
 const formData = reactive({
   reason: '',
-  duration: undefined as number | undefined,
+  duration: undefined as string | undefined,
   role: '',
   notes: '',
 })
 
 // Methods
+const handleClose = (open: boolean) => {
+  if (!open) {
+    emit('cancel')
+  }
+}
+
 const getActionTitle = () => {
   switch (props.action) {
     case 'suspend':
@@ -282,17 +291,14 @@ const getDangerMessage = () => {
   }
 }
 
-const getActionButtonClass = () => {
+const getActionButtonVariant = () => {
   switch (props.action) {
     case 'ban':
-      return 'bg-red-600 text-white hover:bg-red-700'
+      return 'destructive'
     case 'suspend':
-      return 'bg-yellow-600 text-white hover:bg-yellow-700'
-    case 'verify_email':
-    case 'update_role':
-      return 'bg-green-600 text-white hover:bg-green-700'
+      return 'destructive'
     default:
-      return 'bg-blue-600 text-white hover:bg-blue-700'
+      return 'default'
   }
 }
 
@@ -335,7 +341,10 @@ const confirm = () => {
   }
 
   if (formData.duration !== undefined) {
-    data.duration = formData.duration
+    const durationNum = Number(formData.duration)
+    if (durationNum > 0) {
+      data.duration = durationNum
+    }
   }
 
   if (formData.role) {
