@@ -69,6 +69,18 @@ type Subscription = { unsubscribe: () => void }
 let authSubscription: Subscription | null = null
 let stopUserWatcher: WatchStopHandle | null = null
 
+const getSafeRoute = () => {
+  const nuxtApp = useNuxtApp()
+  return nuxtApp?._route ?? { path: '', fullPath: '', query: {} }
+}
+
+const getSafeLocalePath = () => {
+  const nuxtApp = useNuxtApp()
+  const localePath = (nuxtApp as any)?.$localePath as ((input: any) => string) | undefined
+  if (localePath) return localePath
+  return (input: any) => (typeof input === 'string' ? input : input?.path || '/')
+}
+
 export interface AuthState extends TestUserState {
   user: AuthUser | null
   loading: boolean
@@ -368,16 +380,16 @@ export const useAuthStore = defineStore('auth', {
 
         // Redirect to login page when session expires or user logs out
         if (import.meta.client) {
-          const route = useRoute()
-          const localePath = useLocalePath()
+          const route = getSafeRoute()
+          const localePath = getSafeLocalePath()
 
           // Only redirect if not already on auth pages
-          if (!route.path.startsWith('/auth')) {
+          if (!route?.path?.startsWith('/auth')) {
             navigateTo({
               path: localePath('/auth/login'),
               query: {
                 message: 'session-expired',
-                redirect: route.fullPath,
+                redirect: route?.fullPath,
               },
             })
           }
@@ -474,8 +486,8 @@ export const useAuthStore = defineStore('auth', {
             }
             await this.challengeMFA(firstFactor.id)
 
-            const route = useRoute()
-            const redirect = route.query.redirect as string
+            const route = getSafeRoute()
+            const redirect = route?.query?.redirect as string
             await navigateTo({
               path: '/auth/mfa-verify',
               query: { redirect: redirect || '/account' },
@@ -489,8 +501,8 @@ export const useAuthStore = defineStore('auth', {
           )
 
           // Handle redirect after successful login
-          const route = useRoute()
-          const redirect = route.query.redirect as string
+          const route = getSafeRoute()
+          const redirect = route?.query?.redirect as string
           // Prevent open redirect attacks - only allow relative paths, not protocol-relative URLs
           if (redirect && redirect.startsWith('/') && !redirect.startsWith('//')) {
             await navigateTo(redirect)
