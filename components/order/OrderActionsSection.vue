@@ -54,6 +54,7 @@
       <!-- Return Button -->
       <Button
         v-if="canReturn"
+        data-testid="return-order-button"
         variant="outline"
         class="w-full inline-flex items-center justify-center px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
         @click="$emit('return')"

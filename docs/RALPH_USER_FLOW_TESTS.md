@@ -32,13 +32,13 @@
 - [x] Run all tests, fix any failures
 
 ### 1.2 Order Return/Refund Request Flow
-- [ ] Write test: User can request return on delivered order
-- [ ] Write test: Return reason selection is required
-- [ ] Write test: Return request is created with pending status
-- [ ] Write test: User sees return request in order details
-- [ ] Implement return request API endpoint
-- [ ] Implement return request UI component
-- [ ] Run all tests, fix any failures
+- [x] Write test: User can request return on delivered order
+- [x] Write test: Return reason selection is required
+- [x] Write test: Return request is created with pending status
+- [x] Write test: User sees return request in order details
+- [x] Implement return request API endpoint
+- [x] Implement return request UI component
+- [x] Run all tests, fix any failures
 
 ### 1.3 Guest Checkout Complete Flow
 - [ ] Write test: Guest can add items to cart
@@ -265,7 +265,7 @@ After all phases complete, verify:
 
 | Phase | Description | Status | Tests Added |
 |-------|-------------|--------|-------------|
-| 1 | Payment & Orders | [ ] In Progress | 9 (Order Cancellation) |
+| 1 | Payment & Orders | [x] In Progress | 18 (Order Cancellation: 9, Order Return: 9) |
 | 2 | Account Management | [ ] Pending | 0 |
 | 3 | Multi-Language | [ ] Pending | 0 |
 | 4 | Error Handling | [ ] Pending | 0 |
