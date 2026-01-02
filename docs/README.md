@@ -206,8 +206,8 @@ i18n/locales/        # Translations (es, en, ro, ru)
 <summary><strong>🔬 Research</strong> - Research and exploration</summary>
 
 - [Hero Section Quick Reference](./research/hero-section-quick-reference.md)
-- [Filter Documentation](./research/filter-documentation.md)
-- [Landing Page Analysis](./research/landing-page-analysis.md)
+- [Filter Documentation](./research/FILTER_DOCUMENTATION_RESEARCH.md)
+- [Landing Page Analysis](./research/LANDING_PAGE_SECTION_ANALYSIS.md)
 - See also: `archive/research/` for completed research
 
 </details>
@@ -216,7 +216,7 @@ i18n/locales/        # Translations (es, en, ro, ru)
 <summary><strong>📝 Meta</strong> - Documentation guidelines</summary>
 
 - [Archival Policy](./meta/ARCHIVAL_POLICY.md)
-- [Documentation Conventions](./meta/CONVENTIONS.md)
+- [Documentation Conventions](./meta/DOCUMENTATION_CONVENTIONS.md)
 - [Consolidation Plan](./meta/DOCUMENTATION_CONSOLIDATION_PLAN.md)
 
 </details>
@@ -235,8 +235,10 @@ i18n/locales/        # Translations (es, en, ro, ru)
 
 Active feature specifications in `specs/`:
 - `user-authentication/` - Authentication system design
-- `customer-order-history/` - Order history feature
-- `shipping-step-refactor/` - Checkout shipping improvements
+- `admin-order-management/` - Order management for admins
+- `order-confirmation-emails/` - Email notification system
+- `product-catalog/` - Product display and filtering
+- See folder for full list (12+ active specs)
 
 </details>
 
