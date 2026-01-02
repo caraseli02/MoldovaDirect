@@ -1,6 +1,6 @@
 # Moldova Direct - Development Progress
 
-> **Note (January 2026):** This document contains some historical references to Cloudflare/D1 infrastructure from the original architecture. The current stack is **Nuxt 4 + Supabase + Vercel**. See `docs/development/tech.md` for the current technology stack.
+> **Note (January 2026):** This document is a historical progress log. References to Cloudflare D1, KV, Pages, and Workers infrastructure reflect the original architecture. The project has since migrated to **Nuxt 4 + Supabase + Vercel**. See `docs/development/tech.md` for the current technology stack. Historical infrastructure sections (deployment IDs, environment variables) are preserved for reference.
 
 ## 🎉 COMPLETED: Feature 1 - Foundation & Static Pages
 

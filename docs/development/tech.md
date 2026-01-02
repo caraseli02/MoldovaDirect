@@ -6,7 +6,7 @@ weight: 30
 # Technology Stack
 
 ## Core Framework
-- **Nuxt 3** with TypeScript - Full-stack Vue.js framework
+- **Nuxt 4** with TypeScript - Full-stack Vue.js framework
 - **Vue 3** Composition API - Component framework
 - **Nitro** - Server engine with Vercel preset
 

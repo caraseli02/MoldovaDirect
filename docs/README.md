@@ -188,6 +188,36 @@ i18n/locales/        # Translations (es, en, ro, ru)
 - [Test Coverage Analysis](./testing/TEST_COVERAGE_ANALYSIS.md)
 - [Playwright Best Practices](./testing/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md)
 - [E2E Checkout Best Practices](./testing/E2E_CHECKOUT_BEST_PRACTICES.md)
+- [Visual Regression Issues](./visual-regression/VISUAL_REGRESSION_ISSUES_AND_FIXES.md)
+
+</details>
+
+<details>
+<summary><strong>🔍 Analysis</strong> - Code reviews and analysis</summary>
+
+- [Code Quality Analysis](./analysis/CODE_QUALITY_ANALYSIS_2025-11-01.md)
+- [Code Review 2025](./analysis/CODE_REVIEW_2025.md)
+- [SSR Safety Verification](./analysis/SSR-SAFETY-VERIFICATION.md)
+- [LocalStorage Verification](./analysis/LOCALSTORAGE-VERIFICATION-COMPLETE.md)
+
+</details>
+
+<details>
+<summary><strong>🔬 Research</strong> - Research and exploration</summary>
+
+- [Hero Section Quick Reference](./research/hero-section-quick-reference.md)
+- [Filter Documentation](./research/filter-documentation.md)
+- [Landing Page Analysis](./research/landing-page-analysis.md)
+- See also: `archive/research/` for completed research
+
+</details>
+
+<details>
+<summary><strong>📝 Meta</strong> - Documentation guidelines</summary>
+
+- [Archival Policy](./meta/ARCHIVAL_POLICY.md)
+- [Documentation Conventions](./meta/CONVENTIONS.md)
+- [Consolidation Plan](./meta/DOCUMENTATION_CONSOLIDATION_PLAN.md)
 
 </details>
 

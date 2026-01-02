@@ -178,5 +178,5 @@ Moldova Direct is an e-commerce platform for authentic Moldovan food and wine pr
 - THE SYSTEM SHALL integrate with payment gateways (Stripe, PayPal)
 - THE SYSTEM SHALL integrate with shipping providers (Correos, DHL)
 - THE SYSTEM SHALL integrate with email service (SendGrid/Resend)
-- THE SYSTEM SHALL integrate with analytics (Google Analytics, Cloudflare)
+- THE SYSTEM SHALL integrate with analytics (Google Analytics, Vercel Analytics)
 - THE SYSTEM SHALL integrate with customer support (WhatsApp Business)

@@ -1,7 +1,7 @@
 # Moldova Direct - Claude Code Instructions
 
 **Project:** E-commerce platform (Nuxt 4 + Supabase + Vue 3)
-**Stack:** Nuxt 4.1.3, Vite 7, Vue 3.5, Supabase, TailwindCSS
+**Stack:** Nuxt 4.2.2, Vite 7, Vue 3.5, Supabase, TailwindCSS
 
 ---
 
@@ -170,7 +170,7 @@ After implementing any feature, you MUST follow this workflow:
    - **Strictly do not remove or modify anything in `feature_list.json`**
    - **ONLY update the `implemented` and `tested` fields to `true`**
    - Do not change feature descriptions, IDs, or structure
-   - Update `claude-progress.md` to reflect progress
+   - Update `docs/status/PROJECT_STATUS.md` to reflect progress
 
 ### Example Workflow
 ```bash
@@ -192,7 +192,7 @@ npm run build && npm run test
 - [ ] Feature fully implemented and working
 - [ ] Tested using Chrome DevTools MCP
 - [ ] `feature_list.json` updated (implemented: true, tested: true)
-- [ ] `claude-progress.md` updated with progress
+- [ ] `docs/status/PROJECT_STATUS.md` updated if needed
 - [ ] Project left in ready-to-merge state
 
 ### Admin Changes
@@ -273,7 +273,7 @@ When creating or updating documentation:
 
 **Progress Tracking:**
 - Feature list: `feature_list.json` - Comprehensive feature tracking with testing status
-- Progress tracking: `claude-progress.md` - Overall project completeness and metrics
+- Project status: `docs/status/PROJECT_STATUS.md` - Overall project completeness and current phase
 - Initialization script: `init.sh` - Automated setup and testing guide
 
 **Admin Panel Issues & Solutions:**
