@@ -56,31 +56,31 @@
 ## Phase 2: Account Management Flows
 
 ### 2.1 Address Book Management
-- [ ] Write test: User can view saved addresses
-- [ ] Write test: User can add new address with validation
-- [ ] Write test: User can edit existing address
-- [ ] Write test: User can delete address (with confirmation)
-- [ ] Write test: User can set default shipping address
-- [ ] Write test: Default address pre-selected in checkout
-- [ ] Implement address CRUD in account settings
-- [ ] Run all tests, fix any failures
+- [x] Write test: User can view saved addresses
+- [x] Write test: User can add new address with validation
+- [x] Write test: User can edit existing address
+- [x] Write test: User can delete address (with confirmation)
+- [x] Write test: User can set default shipping address
+- [x] Write test: Default address pre-selected in checkout
+- [x] Implement address CRUD in account settings
+- [x] Run all tests, fix any failures
 
 ### 2.2 Profile Information Update
-- [ ] Write test: User can update display name
-- [ ] Write test: User can update phone number
-- [ ] Write test: Email change requires verification
-- [ ] Write test: Profile updates persist after refresh
-- [ ] Implement profile update API and UI
-- [ ] Run all tests, fix any failures
+- [x] Write test: User can update display name
+- [x] Write test: User can update phone number
+- [x] Write test: Email change requires verification
+- [x] Write test: Profile updates persist after refresh
+- [x] Implement profile update API and UI
+- [x] Run all tests, fix any failures
 
 ### 2.3 Password Change (Authenticated)
-- [ ] Write test: User must enter current password
-- [ ] Write test: New password must meet requirements
-- [ ] Write test: Password confirmation must match
-- [ ] Write test: Success message shown after change
-- [ ] Write test: User can login with new password
-- [ ] Implement password change flow
-- [ ] Run all tests, fix any failures
+- [x] Write test: User must enter current password
+- [x] Write test: New password must meet requirements
+- [x] Write test: Password confirmation must match
+- [x] Write test: Success message shown after change
+- [x] Write test: User can login with new password
+- [x] Implement password change flow
+- [x] Run all tests, fix any failures
 
 **After Phase 2:** Output `<promise>PHASE_2_COMPLETE</promise>`
 
@@ -266,7 +266,7 @@ After all phases complete, verify:
 | Phase | Description | Status | Tests Added |
 |-------|-------------|--------|-------------|
 | 1 | Payment & Orders | [x] Complete | 24 (Order Cancellation: 9, Order Return: 9, Guest Checkout: 6) |
-| 2 | Account Management | [ ] Pending | 0 |
+| 2 | Account Management | [x] Complete | 36 (Address Book: 15, Profile Update: 12, Password Change: 9) |
 | 3 | Multi-Language | [ ] Pending | 0 |
 | 4 | Error Handling | [ ] Pending | 0 |
 | 5 | Product Filtering | [ ] Pending | 0 |
