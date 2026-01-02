@@ -14,18 +14,24 @@ Documentation archival ensures that:
 
 ## Archive Structure
 
+> **Note (January 2026):** The archive uses a categorical structure rather than year-based directories. This provides easier navigation by topic.
+
 ```
-docs/archive/YYYY/
-├── code-reviews/          # Annual code review reports
-├── analysis-reports/      # Quality and coverage analyses
-└── update-summaries/      # Documentation update summaries
-
-.kiro/archive/YYYY/
-├── completed-features/    # Finished feature specifications
-└── deprecated-specs/      # Obsolete specifications
-
-todos/archive/
-└── completed/            # Resolved issues (if not deleted)
+docs/archive/
+├── completed-specs/       # Finished feature specifications
+│   ├── customer-order-history/
+│   ├── order-status-updates/
+│   └── shipping-step-refactor/
+├── research/              # Research and analysis documents
+│   └── hero-section/      # Hero section research
+├── specs-legacy/          # Original/deprecated specifications
+├── cart-fixes/            # Cart-related fixes
+├── checkout-fixes/        # Checkout-related fixes
+├── checkout-reviews/      # Checkout code reviews
+├── phase-docs/            # Phase-based documentation
+├── test-reports/          # Historical test reports
+├── vercel-debug/          # Vercel debugging logs
+└── meta-old/              # Old meta documentation
 ```
 
 ## Archival Decision Matrix

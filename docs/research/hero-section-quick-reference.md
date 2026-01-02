@@ -1,5 +1,7 @@
 # Hero Section Quick Reference Guide
 
+> **Note:** This is the consolidated guide for hero section implementation. Detailed research files are archived in `docs/archive/research/hero-section/`.
+
 ## Already Installed Dependencies
 
 ```json
@@ -390,13 +392,21 @@ npx lighthouse https://localhost:3000 --view
 
 ## Next Steps
 
-1. Review full documentation: `/docs/research/hero-section-technical-implementation.md`
-2. Install additional dependencies if needed
-3. Create composables for reusable functionality
-4. Set up plugins for global libraries
-5. Implement hero section following accessibility guidelines
-6. Test performance with Lighthouse
-7. Validate accessibility with axe DevTools
-8. Test with screen readers
-9. Optimize based on metrics
-10. Deploy and monitor Core Web Vitals
+1. Install additional dependencies if needed
+2. Create composables for reusable functionality
+3. Set up plugins for global libraries
+4. Implement hero section following accessibility guidelines
+5. Test performance with Lighthouse
+6. Validate accessibility with axe DevTools
+7. Test with screen readers
+8. Optimize based on metrics
+9. Deploy and monitor Core Web Vitals
+
+## Archived Research
+
+Detailed research documents are available in `docs/archive/research/hero-section/`:
+- `hero-section-best-practices-2025.md` - Industry best practices
+- `hero-section-technical-implementation.md` - Detailed technical guide
+- `hero-section-implementation-guide.md` - Code patterns
+- `hero-image-requirements.md` - Image specifications
+- `hero-demo-images.md` - Demo placeholder assets
