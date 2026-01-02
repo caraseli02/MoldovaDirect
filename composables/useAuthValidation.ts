@@ -23,7 +23,7 @@ export interface AuthValidationResult {
 }
 
 export const useAuthValidation = () => {
-  const { t } = useI18n()
+  const { t } = useStoreI18n()
 
   /**
    * Email validation schema

@@ -17,15 +17,16 @@ export interface AuthMessage {
 }
 
 export const useAuthMessages = () => {
-  const { t } = useI18n()
-  const route = useRoute()
+  const { t } = useStoreI18n()
+  const nuxtApp = useNuxtApp()
+  const route = nuxtApp._route
 
   /**
    * Parse URL query parameters for authentication messages
    * Handles redirect messages from middleware and auth flows
    */
   const getMessageFromQuery = (): AuthMessage | null => {
-    const messageParam = route.query.message as string
+    const messageParam = route?.query?.message as string | undefined
     if (!messageParam) return null
 
     const messageMappings: Record<string, AuthMessage> = {

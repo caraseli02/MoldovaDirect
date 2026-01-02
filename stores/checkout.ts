@@ -5,6 +5,7 @@ import { useCheckoutShippingStore } from './checkout/shipping'
 import { useCheckoutPaymentStore } from './checkout/payment'
 import { useAuthStore } from '~/stores/auth'
 import { useCartStore } from '~/stores/cart'
+import { useStoreI18n } from '~/composables/useStoreI18n'
 import type { CheckoutStep, ShippingInformation, PaymentMethod, SavedPaymentMethod, Address, GuestInfo } from '~/types/checkout'
 import type { CartItem } from '~/stores/cart/types'
 import { validateShippingInformation, validatePaymentMethod } from '~/utils/checkout-validation'
@@ -177,7 +178,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
 
           // Warn user about potential duplicate order risk
           const toast = useToast()
-          const { t } = useI18n()
+          const { t } = useStoreI18n()
           toast.warning(
             t('checkout.warnings.concurrentCheckout'),
             t('checkout.warnings.concurrentCheckoutDetails'),
