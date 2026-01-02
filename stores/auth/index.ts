@@ -69,23 +69,39 @@ type Subscription = { unsubscribe: () => void }
 let authSubscription: Subscription | null = null
 let stopUserWatcher: WatchStopHandle | null = null
 
+// Returns null when route is unavailable (SSR) - callers must handle null case
 const getSafeRoute = () => {
   const nuxtApp = useNuxtApp()
   const route = nuxtApp?._route
-  if (!route && import.meta.dev) {
-    console.debug('[auth-store] Route not available during SSR, using fallback')
+  if (!route) {
+    if (import.meta.dev) {
+      console.debug('[auth-store] Route not available during SSR')
+    }
+    return null
   }
-  return route ?? { path: '', fullPath: '', query: {}, params: {}, name: undefined, hash: '' }
+  return route
 }
 
 const getSafeLocalePath = () => {
   const nuxtApp = useNuxtApp()
   const localePath = (nuxtApp as any)?.$localePath as ((input: any) => string) | undefined
   if (localePath) return localePath
+
   if (import.meta.dev) {
     console.debug('[auth-store] $localePath not available, using fallback path resolution')
   }
-  return (input: any) => (typeof input === 'string' ? input : input?.path || '/')
+
+  // Fallback: try to preserve current locale from route params
+  const currentLocale = nuxtApp?._route?.params?.locale || 'es'
+
+  return (input: any) => {
+    const path = typeof input === 'string' ? input : input?.path || '/'
+    // Prepend locale if path doesn't already have one
+    if (path.startsWith('/') && !path.match(/^\/(es|en|ro|ru)(\/|$)/)) {
+      return `/${currentLocale}${path}`
+    }
+    return path
+  }
 }
 
 export interface AuthState extends TestUserState {
@@ -390,13 +406,19 @@ export const useAuthStore = defineStore('auth', {
           const route = getSafeRoute()
           const localePath = getSafeLocalePath()
 
+          // Skip redirect if route not available (shouldn't happen on client)
+          if (!route) {
+            console.warn('[auth-store] Cannot redirect: route not available')
+            return
+          }
+
           // Only redirect if not already on auth pages
-          if (!route?.path?.startsWith('/auth')) {
+          if (!route.path?.startsWith('/auth')) {
             navigateTo({
               path: localePath('/auth/login'),
               query: {
                 message: 'session-expired',
-                redirect: route?.fullPath,
+                redirect: route.fullPath,
               },
             })
           }

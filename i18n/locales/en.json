@@ -420,6 +420,7 @@
       "name": {
         "required": "Full name is required",
         "minLength": "Name must be at least 2 characters",
+        "maxLength": "Name cannot exceed 100 characters",
         "invalid": "Please enter a valid name"
       },
       "phone": {

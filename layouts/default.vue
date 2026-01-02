@@ -2,7 +2,7 @@
   <!-- TooltipProvider wrapped conditionally to avoid CE crash on SSR while preserving SSR for content -->
   <component
     :is="tooltipWrapper"
-    :delay-duration="300"
+    v-bind="tooltipProps"
   >
     <div class="min-h-screen flex flex-col">
       <LayoutAppHeader />
@@ -37,6 +37,8 @@ const router = useRouter()
 
 // Use TooltipProvider on client, plain div on server to avoid CE crash during SSR
 const tooltipWrapper = import.meta.client ? TooltipProvider : 'div'
+// Only pass TooltipProvider props when using the actual component (not plain div)
+const tooltipProps = import.meta.client ? { delayDuration: 300 } : {}
 
 // Register global search shortcut (Ctrl/Cmd + K)
 registerShortcut('k', () => {
