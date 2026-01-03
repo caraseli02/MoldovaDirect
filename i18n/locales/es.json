@@ -421,6 +421,7 @@
       "name": {
         "required": "El nombre completo es obligatorio",
         "minLength": "El nombre debe tener al menos 2 caracteres",
+        "maxLength": "El nombre no puede tener más de 100 caracteres",
         "invalid": "Por favor ingresa un nombre válido"
       },
       "phone": {

@@ -228,7 +228,7 @@ Before adding videos to production:
 ### Considerations
 - **Video rotation**: Could change video every 30-60s
 - **Analytics**: Track which videos drive more conversions
-- **CDN**: Move videos to Cloudflare/AWS S3 for better global delivery
+- **CDN**: Move videos to Vercel Blob Storage or Supabase Storage for better global delivery
 
 ## Related Files
 

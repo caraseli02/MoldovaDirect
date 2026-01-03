@@ -22,7 +22,7 @@
    - Ready for video files
    - Includes complete README with specs
 
-4. **Documentation**: `.docs/landing-videos/`
+4. **Documentation**: `docs/features/landing-videos/`
    - Implementation details
    - Best practices research
    - Setup instructions
@@ -167,7 +167,7 @@ pkill -9 node && rm -rf .nuxt node_modules/.vite && npm run dev
 ## 📚 Additional Resources
 
 - **Full specs**: `/public/videos/hero/README.md`
-- **Implementation**: `.docs/landing-videos/IMPLEMENTATION.md`
+- **Implementation**: `docs/features/landing-videos/IMPLEMENTATION.md`
 - **FFmpeg guide**: https://ffmpeg.org/documentation.html
 - **Online converter**: https://cloudconvert.com/
 
@@ -188,8 +188,8 @@ To use the poster until ready:
    - Upload videos directly to server/CDN
 
 2. **Consider CDN** for better performance
-   - Cloudflare R2
-   - AWS S3 + CloudFront
+   - Supabase Storage
+   - Vercel Blob Storage
    - Update paths in `useHeroVideos.ts`
 
 3. **Monitor performance**
@@ -200,7 +200,7 @@ To use the poster until ready:
 ## 📞 Need Help?
 
 - **Video specs**: See `/public/videos/hero/README.md`
-- **Code details**: See `.docs/landing-videos/IMPLEMENTATION.md`
+- **Code details**: See `docs/features/landing-videos/IMPLEMENTATION.md`
 - **FFmpeg help**: https://ffmpeg.org/ffmpeg.html
 
 ---

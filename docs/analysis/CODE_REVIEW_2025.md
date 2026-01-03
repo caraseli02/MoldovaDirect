@@ -87,7 +87,7 @@ Moldova Direct is a **mature, production-ready** Nuxt 3 e-commerce platform for 
    }
    ```
    **Risk:** Brute force attacks, credential stuffing
-   **Recommendation:** Implement rate limiting with Redis or Upstash
+   **Recommendation:** Implement rate limiting with Supabase or server-side middleware
 
 2. **Client-Side Price Calculations** (stores/cart/core.ts)
    ```typescript
@@ -425,7 +425,7 @@ Moldova Direct is a **mature, production-ready** Nuxt 3 e-commerce platform for 
    ```
    - Auth endpoints: 5 attempts/15 min
    - API endpoints: 100 requests/min
-   - Use Upstash Redis or Cloudflare KV
+   - Use Supabase or server-side rate limiting
 
 3. **Server-Side Price Verification**
    ```typescript
