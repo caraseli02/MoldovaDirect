@@ -1354,6 +1354,18 @@
         "returns": {
           "question": "Ce fac dacă ajunge deteriorat?",
           "answer": "Anunță-ne în primele 7 zile și organizăm imediat înlocuire sau rambursare."
+        },
+        "care": {
+          "question": "Cum ar trebui să îngrijesc acest articol?",
+          "answer": "Urmează instrucțiunile de îngrijire de pe eticheta produsului. Pentru textile, recomandăm spălare delicată și uscare la aer pentru a păstra calitatea."
+        },
+        "materials": {
+          "question": "Din ce materiale este făcut?",
+          "answer": "Toate materialele sunt listate pe pagina produsului. Produsele noastre artizanale folosesc materiale tradiționale de înaltă calitate, provenite local din Moldova."
+        },
+        "origin": {
+          "question": "De unde provine acest produs?",
+          "answer": "Acest produs este confecționat manual de meșteri pricepuți din Moldova, urmând tehnici tradiționale transmise din generație în generație."
         }
       }
     },
