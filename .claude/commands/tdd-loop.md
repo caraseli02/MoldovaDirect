@@ -49,7 +49,7 @@ describe('ComponentName', () => {
 ```
 
 Output this phrase ONLY when:
-- All 10 components have tests created (test_exists: true)
+- All 30 components have tests created (test_exists: true)
 - All tests pass
 - All changes committed and pushed
 - audit file fully updated
@@ -72,10 +72,10 @@ If a test fails to run:
 
 ## Max Iterations
 
-- Maximum: 15 iterations (10 components + 5 buffer for fixes)
-- After 15 iterations, output completion signal even if incomplete
+- Maximum: 40 iterations (30 components + 10 buffer for fixes)
+- After 40 iterations, output completion signal even if incomplete
 - Show final summary with completed/remaining counts
 
 ---
 
-**Start the loop by outputting:** `🚀 Starting Ralph Wiggum TDD Loop for 10 components`
+**Start the loop by outputting:** `🚀 Starting Ralph Wiggum TDD Loop for 30 components`

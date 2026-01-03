@@ -2029,19 +2029,219 @@
               "implemented": false
             }
           ]
+        },
+        {
+          "id": "comp-test-11",
+          "description": "Add unit tests for cart Item component",
+          "file": "components/cart/Item.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/cart/__tests__/Item.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-11-a", "task": "Create unit test for cart item rendering", "type": "test-first", "implemented": false}, {"id": "comp-test-11-b", "task": "Create test for quantity controls", "type": "test-first", "implemented": false}, {"id": "comp-test-11-c", "task": "Run unit tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-12",
+          "description": "Add unit tests for Product Card component",
+          "file": "components/product/Card.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/product/__tests__/Card.enhanced.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-12-a", "task": "Expand existing tests for product card", "type": "test-first", "implemented": false}, {"id": "comp-test-12-b", "task": "Add hover state tests", "type": "test-first", "implemented": false}, {"id": "comp-test-12-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-13",
+          "description": "Add unit tests for Product SearchBar",
+          "file": "components/product/SearchBar.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/product/__tests__/SearchBar.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-13-a", "task": "Create test for search input", "type": "test-first", "implemented": false}, {"id": "comp-test-13-b", "task": "Create test for search submission", "type": "test-first", "implemented": false}, {"id": "comp-test-13-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-14",
+          "description": "Add unit tests for Product CategoryNavigation",
+          "file": "components/product/CategoryNavigation.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/product/__tests__/CategoryNavigation.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-14-a", "task": "Create test for category list rendering", "type": "test-first", "implemented": false}, {"id": "comp-test-14-b", "task": "Create test for category selection", "type": "test-first", "implemented": false}, {"id": "comp-test-14-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-15",
+          "description": "Add unit tests for Product ActiveFilters",
+          "file": "components/product/ActiveFilters.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/product/__tests__/ActiveFilters.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-15-a", "task": "Create test for active filters display", "type": "test-first", "implemented": false}, {"id": "comp-test-15-b", "task": "Create test for filter removal", "type": "test-first", "implemented": false}, {"id": "comp-test-15-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-16",
+          "description": "Add unit tests for checkout PaymentStep",
+          "file": "components/checkout/PaymentStep.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/checkout/__tests__/PaymentStep.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-16-a", "task": "Create test for payment method selection", "type": "test-first", "implemented": false}, {"id": "comp-test-16-b", "task": "Create test for validation", "type": "test-first", "implemented": false}, {"id": "comp-test-16-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-17",
+          "description": "Add unit tests for checkout OrderSummaryCard",
+          "file": "components/checkout/OrderSummaryCard.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/checkout/__tests__/OrderSummaryCard.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-17-a", "task": "Create test for order summary display", "type": "test-first", "implemented": false}, {"id": "comp-test-17-b", "task": "Create test for total calculations", "type": "test-first", "implemented": false}, {"id": "comp-test-17-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-18",
+          "description": "Add unit tests for checkout ShippingMethodSelector",
+          "file": "components/checkout/ShippingMethodSelector.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/checkout/__tests__/ShippingMethodSelector.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-18-a", "task": "Create test for shipping options display", "type": "test-first", "implemented": false}, {"id": "comp-test-18-b", "task": "Create test for method selection", "type": "test-first", "implemented": false}, {"id": "comp-test-18-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-19",
+          "description": "Add unit tests for checkout CheckoutProgressIndicator",
+          "file": "components/checkout/CheckoutProgressIndicator.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/checkout/__tests__/CheckoutProgressIndicator.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-19-a", "task": "Create test for progress steps display", "type": "test-first", "implemented": false}, {"id": "comp-test-19-b", "task": "Create test for current step highlighting", "type": "test-first", "implemented": false}, {"id": "comp-test-19-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-20",
+          "description": "Add unit tests for layout AppHeader",
+          "file": "components/layout/AppHeader.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/layout/__tests__/AppHeader.enhanced.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-20-a", "task": "Expand existing AppHeader tests", "type": "test-first", "implemented": false}, {"id": "comp-test-20-b", "task": "Test mobile menu toggle", "type": "test-first", "implemented": false}, {"id": "comp-test-20-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-21",
+          "description": "Add unit tests for layout AppFooter",
+          "file": "components/layout/AppFooter.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/layout/__tests__/AppFooter.enhanced.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-21-a", "task": "Expand existing AppFooter tests", "type": "test-first", "implemented": false}, {"id": "comp-test-21-b", "task": "Test footer links", "type": "test-first", "implemented": false}, {"id": "comp-test-21-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-22",
+          "description": "Add unit tests for layout LanguageSwitcher",
+          "file": "components/layout/LanguageSwitcher.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/layout/__tests__/LanguageSwitcher.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-22-a", "task": "Create test for language options", "type": "test-first", "implemented": false}, {"id": "comp-test-22-b", "task": "Create test for language switching", "type": "test-first", "implemented": false}, {"id": "comp-test-22-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-23",
+          "description": "Add unit tests for admin Analytics Dashboard",
+          "file": "components/admin/Analytics/Dashboard.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/admin/Analytics/__tests__/Dashboard.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-23-a", "task": "Create test for analytics display", "type": "test-first", "implemented": false}, {"id": "comp-test-23-b", "task": "Create test for data fetching", "type": "test-first", "implemented": false}, {"id": "comp-test-23-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-24",
+          "description": "Add unit tests for admin Users UserList",
+          "file": "components/admin/Users/UserList.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/admin/Users/__tests__/UserList.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-24-a", "task": "Create test for user list rendering", "type": "test-first", "implemented": false}, {"id": "comp-test-24-b", "task": "Create test for user actions", "type": "test-first", "implemented": false}, {"id": "comp-test-24-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-25",
+          "description": "Add unit tests for admin Categories CategoryForm",
+          "file": "components/admin/Categories/CategoryForm.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/admin/Categories/__tests__/CategoryForm.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-25-a", "task": "Create test for category form validation", "type": "test-first", "implemented": false}, {"id": "comp-test-25-b", "task": "Create test for form submission", "type": "test-first", "implemented": false}, {"id": "comp-test-25-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-26",
+          "description": "Add unit tests for admin Inventory InventoryTable",
+          "file": "components/admin/Inventory/InventoryTable.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/admin/Inventory/__tests__/InventoryTable.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-26-a", "task": "Create test for inventory display", "type": "test-first", "implemented": false}, {"id": "comp-test-26-b", "task": "Create test for stock updates", "type": "test-first", "implemented": false}, {"id": "comp-test-26-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-27",
+          "description": "Add unit tests for order OrderMetrics",
+          "file": "components/order/OrderMetrics.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/order/__tests__/OrderMetrics.enhanced.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-27-a", "task": "Expand existing OrderMetrics tests", "type": "test-first", "implemented": false}, {"id": "comp-test-27-b", "task": "Test metrics calculations", "type": "test-first", "implemented": false}, {"id": "comp-test-27-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-28",
+          "description": "Add unit tests for order OrderCardEnhanced",
+          "file": "components/order/OrderCardEnhanced.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/order/__tests__/OrderCardEnhanced.enhanced.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-28-a", "task": "Expand existing tests", "type": "test-first", "implemented": false}, {"id": "comp-test-28-b", "task": "Test order status display", "type": "test-first", "implemented": false}, {"id": "comp-test-28-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-29",
+          "description": "Add unit tests for order SmartFilters",
+          "file": "components/order/SmartFilters.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/order/__tests__/SmartFilters.enhanced.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-29-a", "task": "Expand existing tests", "type": "test-first", "implemented": false}, {"id": "comp-test-29-b", "task": "Test filter logic", "type": "test-first", "implemented": false}, {"id": "comp-test-29-c", "task": "Run tests", "type": "validation", "implemented": false}]
+        },
+        {
+          "id": "comp-test-30",
+          "description": "Add unit tests for home VideoHero",
+          "file": "components/home/VideoHero.vue",
+          "implemented": false,
+          "tested": false,
+          "test_file": "tests/components/home/__tests__/VideoHero.enhanced.test.ts",
+          "test_exists": false,
+          "tasks": [{"id": "comp-test-30-a", "task": "Expand existing tests", "type": "test-first", "implemented": false}, {"id": "comp-test-30-b", "task": "Test video playback controls", "type": "test-first", "implemented": false}, {"id": "comp-test-30-c", "task": "Run tests", "type": "validation", "implemented": false}]
         }
       ]
     }
   ],
   "metadata": {
-    "version": "1.1.0",
+    "version": "1.2.0",
     "created": "2025-12-31",
     "updated": "2026-01-02",
     "source": "docs/CODEBASE_AUDIT_REPORT.md + Testing Coverage Review",
     "branch": "claude/review-testing-coverage-J9nvG",
     "total_categories": 10,
-    "total_steps": 48,
-    "total_tasks": 211,
+    "total_steps": 68,
+    "total_tasks": 271,
     "skills_used": [
       "architecture-patterns",
       "nuxt",
