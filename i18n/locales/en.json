@@ -35,6 +35,7 @@
     "orderSummary": "Order Summary",
     "retry": "Retry",
     "cancel": "Cancel",
+    "save": "Save",
     "undo": "Undo",
     "showMore": "Show More",
     "showLess": "Show Less",
@@ -2318,6 +2319,90 @@
         "registered": "Registered",
         "lastLogin": "Last Login",
         "actions": "Actions"
+      },
+      "actions": {
+        "menu": "User actions menu",
+        "viewDetails": "View Details",
+        "editProfile": "Edit Profile",
+        "verifyEmail": "Verify Email",
+        "resetPassword": "Reset Password",
+        "manageRole": "Manage Role",
+        "suspendAccount": "Suspend Account",
+        "unsuspendAccount": "Unsuspend Account",
+        "banAccount": "Ban Account",
+        "unbanAccount": "Unban Account"
+      },
+      "modal": {
+        "noName": "No name",
+        "suspensionDuration": "Suspension Duration",
+        "selectDuration": "Select duration",
+        "newRole": "New Role",
+        "selectRole": "Select a role",
+        "reason": "Reason",
+        "required": "(Required)",
+        "optional": "(Optional)",
+        "additionalNotes": "Additional Notes (Optional)",
+        "additionalNotesPlaceholder": "Any additional information...",
+        "durations": {
+          "indefinite": "Indefinite",
+          "oneDay": "1 day",
+          "threeDays": "3 days",
+          "oneWeek": "1 week",
+          "oneMonth": "1 month"
+        },
+        "roles": {
+          "user": "User",
+          "moderator": "Moderator",
+          "admin": "Admin"
+        },
+        "titles": {
+          "suspend": "Suspend User Account",
+          "ban": "Ban User Account",
+          "verifyEmail": "Verify User Email",
+          "resetPassword": "Reset User Password",
+          "updateRole": "Update User Role",
+          "confirm": "Confirm Action"
+        },
+        "descriptions": {
+          "suspend": "Temporarily restrict user access to their account.",
+          "ban": "Permanently disable user access to their account.",
+          "verifyEmail": "Mark the user's email address as verified.",
+          "resetPassword": "Generate a password reset link for the user.",
+          "updateRole": "Change the user's role and permissions.",
+          "confirm": "Please confirm this action."
+        },
+        "placeholders": {
+          "suspend": "Why is this account being suspended?",
+          "ban": "Why is this account being banned?",
+          "verifyEmail": "Why is the email being verified manually?",
+          "resetPassword": "Why is the password being reset?",
+          "updateRole": "Why is the role being changed?",
+          "default": "Reason for this action..."
+        },
+        "warnings": {
+          "suspend": "The user will not be able to log in until the suspension is lifted.",
+          "resetPassword": "The user will receive a password reset email and their current session will be invalidated.",
+          "updateRole": "Changing the user role will affect their permissions immediately."
+        },
+        "dangers": {
+          "ban": "This action will permanently disable the user account. This cannot be easily undone."
+        },
+        "buttons": {
+          "suspend": "Suspend Account",
+          "ban": "Ban Account",
+          "verifyEmail": "Verify Email",
+          "resetPassword": "Reset Password",
+          "updateRole": "Update Role",
+          "confirm": "Confirm"
+        }
+      }
+    },
+    "imageUpload": {
+      "altTextModal": {
+        "title": "Edit Alt Text",
+        "description": "Add or edit the alternative text for this image (for accessibility).",
+        "label": "Alt Text (for accessibility)",
+        "placeholder": "Describe this image..."
       }
     }
   },

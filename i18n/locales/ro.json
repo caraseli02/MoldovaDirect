@@ -35,6 +35,7 @@
     "orderSummary": "Rezumat Comandă",
     "retry": "Reîncearcă",
     "cancel": "Anulează",
+    "save": "Salvează",
     "undo": "Anulează acțiunea",
     "showMore": "Arată Mai Mult",
     "showLess": "Arată Mai Puțin",
@@ -2325,6 +2326,90 @@
         "registered": "Înregistrat",
         "lastLogin": "Ultima Autentificare",
         "actions": "Acțiuni"
+      },
+      "actions": {
+        "menu": "Meniu acțiuni utilizator",
+        "viewDetails": "Vezi Detalii",
+        "editProfile": "Editează Profil",
+        "verifyEmail": "Verifică Email",
+        "resetPassword": "Resetează Parola",
+        "manageRole": "Gestionează Rol",
+        "suspendAccount": "Suspendă Cont",
+        "unsuspendAccount": "Reactivează Cont",
+        "banAccount": "Interzice Cont",
+        "unbanAccount": "Ridică Interdicția"
+      },
+      "modal": {
+        "noName": "Fără nume",
+        "suspensionDuration": "Durata Suspendării",
+        "selectDuration": "Selectează durata",
+        "newRole": "Rol Nou",
+        "selectRole": "Selectează un rol",
+        "reason": "Motiv",
+        "required": "(Obligatoriu)",
+        "optional": "(Opțional)",
+        "additionalNotes": "Note Adiționale (Opțional)",
+        "additionalNotesPlaceholder": "Orice informații suplimentare...",
+        "durations": {
+          "indefinite": "Nedeterminat",
+          "oneDay": "1 zi",
+          "threeDays": "3 zile",
+          "oneWeek": "1 săptămână",
+          "oneMonth": "1 lună"
+        },
+        "roles": {
+          "user": "Utilizator",
+          "moderator": "Moderator",
+          "admin": "Administrator"
+        },
+        "titles": {
+          "suspend": "Suspendă Contul Utilizatorului",
+          "ban": "Interzice Contul Utilizatorului",
+          "verifyEmail": "Verifică Email-ul Utilizatorului",
+          "resetPassword": "Resetează Parola Utilizatorului",
+          "updateRole": "Actualizează Rolul Utilizatorului",
+          "confirm": "Confirmă Acțiunea"
+        },
+        "descriptions": {
+          "suspend": "Restricționează temporar accesul utilizatorului la contul său.",
+          "ban": "Dezactivează permanent accesul utilizatorului la contul său.",
+          "verifyEmail": "Marchează adresa de email a utilizatorului ca verificată.",
+          "resetPassword": "Generează un link de resetare a parolei pentru utilizator.",
+          "updateRole": "Schimbă rolul și permisiunile utilizatorului.",
+          "confirm": "Te rugăm să confirmi această acțiune."
+        },
+        "placeholders": {
+          "suspend": "De ce este suspendat acest cont?",
+          "ban": "De ce este interzis acest cont?",
+          "verifyEmail": "De ce este verificat manual email-ul?",
+          "resetPassword": "De ce este resetată parola?",
+          "updateRole": "De ce este schimbat rolul?",
+          "default": "Motivul acestei acțiuni..."
+        },
+        "warnings": {
+          "suspend": "Utilizatorul nu va putea să se autentifice până când suspendarea nu este ridicată.",
+          "resetPassword": "Utilizatorul va primi un email de resetare a parolei și sesiunea curentă va fi invalidată.",
+          "updateRole": "Schimbarea rolului utilizatorului va afecta permisiunile imediat."
+        },
+        "dangers": {
+          "ban": "Această acțiune va dezactiva permanent contul utilizatorului. Nu poate fi anulată ușor."
+        },
+        "buttons": {
+          "suspend": "Suspendă Cont",
+          "ban": "Interzice Cont",
+          "verifyEmail": "Verifică Email",
+          "resetPassword": "Resetează Parola",
+          "updateRole": "Actualizează Rol",
+          "confirm": "Confirmă"
+        }
+      }
+    },
+    "imageUpload": {
+      "altTextModal": {
+        "title": "Editează Text Alternativ",
+        "description": "Adaugă sau editează textul alternativ pentru această imagine (pentru accesibilitate).",
+        "label": "Text Alternativ (pentru accesibilitate)",
+        "placeholder": "Descrie această imagine..."
       }
     }
   },
