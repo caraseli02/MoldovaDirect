@@ -29,7 +29,7 @@
         <!-- User Info -->
         <div class="p-3 bg-gray-50 rounded-lg dark:bg-gray-800">
           <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-            {{ user.profile?.name || 'No name' }}
+            {{ user.profile?.name || $t('admin.users.modal.noName') }}
           </div>
           <div class="text-sm text-gray-500 dark:text-gray-400">
             {{ user.email }}
@@ -41,27 +41,27 @@
           <!-- Suspend Action -->
           <div v-if="action === 'suspend'">
             <UiLabel class="mb-2">
-              Suspension Duration
+              {{ $t('admin.users.modal.suspensionDuration') }}
             </UiLabel>
             <UiSelect v-model="formData.duration">
               <SelectTrigger>
-                <SelectValue placeholder="Select duration" />
+                <SelectValue :placeholder="$t('admin.users.modal.selectDuration')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="0">
-                  Indefinite
+                  {{ $t('admin.users.modal.durations.indefinite') }}
                 </SelectItem>
                 <SelectItem value="1">
-                  1 day
+                  {{ $t('admin.users.modal.durations.oneDay') }}
                 </SelectItem>
                 <SelectItem value="3">
-                  3 days
+                  {{ $t('admin.users.modal.durations.threeDays') }}
                 </SelectItem>
                 <SelectItem value="7">
-                  1 week
+                  {{ $t('admin.users.modal.durations.oneWeek') }}
                 </SelectItem>
                 <SelectItem value="30">
-                  1 month
+                  {{ $t('admin.users.modal.durations.oneMonth') }}
                 </SelectItem>
               </SelectContent>
             </UiSelect>
@@ -70,21 +70,21 @@
           <!-- Role Update Action -->
           <div v-if="action === 'update_role'">
             <UiLabel class="mb-2">
-              New Role
+              {{ $t('admin.users.modal.newRole') }}
             </UiLabel>
             <UiSelect v-model="formData.role">
               <SelectTrigger>
-                <SelectValue placeholder="Select a role" />
+                <SelectValue :placeholder="$t('admin.users.modal.selectRole')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="user">
-                  User
+                  {{ $t('admin.users.modal.roles.user') }}
                 </SelectItem>
                 <SelectItem value="moderator">
-                  Moderator
+                  {{ $t('admin.users.modal.roles.moderator') }}
                 </SelectItem>
                 <SelectItem value="admin">
-                  Admin
+                  {{ $t('admin.users.modal.roles.admin') }}
                 </SelectItem>
               </SelectContent>
             </UiSelect>
@@ -93,7 +93,7 @@
           <!-- Reason (for all actions) -->
           <div>
             <UiLabel class="mb-2">
-              Reason {{ isReasonRequired() ? '(Required)' : '(Optional)' }}
+              {{ $t('admin.users.modal.reason') }} {{ isReasonRequired() ? $t('admin.users.modal.required') : $t('admin.users.modal.optional') }}
             </UiLabel>
             <UiTextarea
               v-model="formData.reason"
@@ -106,12 +106,12 @@
           <!-- Additional Notes -->
           <div v-if="showNotesField()">
             <UiLabel class="mb-2">
-              Additional Notes (Optional)
+              {{ $t('admin.users.modal.additionalNotes') }}
             </UiLabel>
             <UiTextarea
               v-model="formData.notes"
               rows="2"
-              placeholder="Any additional information..."
+              :placeholder="$t('admin.users.modal.additionalNotesPlaceholder')"
             />
           </div>
 
@@ -143,7 +143,7 @@
           variant="outline"
           @click="$emit('cancel')"
         >
-          Cancel
+          {{ $t('common.cancel') }}
         </UiButton>
         <UiButton
           :disabled="!isFormValid()"
@@ -176,6 +176,8 @@ import {
 import { Label as UiLabel } from '@/components/ui/label'
 import { Textarea as UiTextarea } from '@/components/ui/textarea'
 import { Alert as UiAlert, AlertDescription } from '@/components/ui/alert'
+
+const { t } = useI18n()
 
 interface Props {
   action: string
@@ -213,51 +215,51 @@ const handleClose = (open: boolean) => {
 const getActionTitle = () => {
   switch (props.action) {
     case 'suspend':
-      return 'Suspend User Account'
+      return t('admin.users.modal.titles.suspend')
     case 'ban':
-      return 'Ban User Account'
+      return t('admin.users.modal.titles.ban')
     case 'verify_email':
-      return 'Verify User Email'
+      return t('admin.users.modal.titles.verifyEmail')
     case 'reset_password':
-      return 'Reset User Password'
+      return t('admin.users.modal.titles.resetPassword')
     case 'update_role':
-      return 'Update User Role'
+      return t('admin.users.modal.titles.updateRole')
     default:
-      return 'Confirm Action'
+      return t('admin.users.modal.titles.confirm')
   }
 }
 
 const getActionDescription = () => {
   switch (props.action) {
     case 'suspend':
-      return 'Temporarily restrict user access to their account.'
+      return t('admin.users.modal.descriptions.suspend')
     case 'ban':
-      return 'Permanently disable user access to their account.'
+      return t('admin.users.modal.descriptions.ban')
     case 'verify_email':
-      return 'Mark the user\'s email address as verified.'
+      return t('admin.users.modal.descriptions.verifyEmail')
     case 'reset_password':
-      return 'Generate a password reset link for the user.'
+      return t('admin.users.modal.descriptions.resetPassword')
     case 'update_role':
-      return 'Change the user\'s role and permissions.'
+      return t('admin.users.modal.descriptions.updateRole')
     default:
-      return 'Please confirm this action.'
+      return t('admin.users.modal.descriptions.confirm')
   }
 }
 
 const getReasonPlaceholder = () => {
   switch (props.action) {
     case 'suspend':
-      return 'Why is this account being suspended?'
+      return t('admin.users.modal.placeholders.suspend')
     case 'ban':
-      return 'Why is this account being banned?'
+      return t('admin.users.modal.placeholders.ban')
     case 'verify_email':
-      return 'Why is the email being verified manually?'
+      return t('admin.users.modal.placeholders.verifyEmail')
     case 'reset_password':
-      return 'Why is the password being reset?'
+      return t('admin.users.modal.placeholders.resetPassword')
     case 'update_role':
-      return 'Why is the role being changed?'
+      return t('admin.users.modal.placeholders.updateRole')
     default:
-      return 'Reason for this action...'
+      return t('admin.users.modal.placeholders.default')
   }
 }
 
@@ -272,11 +274,11 @@ const showNotesField = () => {
 const getWarningMessage = () => {
   switch (props.action) {
     case 'suspend':
-      return 'The user will not be able to log in until the suspension is lifted.'
+      return t('admin.users.modal.warnings.suspend')
     case 'reset_password':
-      return 'The user will receive a password reset email and their current session will be invalidated.'
+      return t('admin.users.modal.warnings.resetPassword')
     case 'update_role':
-      return 'Changing the user role will affect their permissions immediately.'
+      return t('admin.users.modal.warnings.updateRole')
     default:
       return null
   }
@@ -285,7 +287,7 @@ const getWarningMessage = () => {
 const getDangerMessage = () => {
   switch (props.action) {
     case 'ban':
-      return 'This action will permanently disable the user account. This cannot be easily undone.'
+      return t('admin.users.modal.dangers.ban')
     default:
       return null
   }
@@ -305,17 +307,17 @@ const getActionButtonVariant = () => {
 const getActionButtonText = () => {
   switch (props.action) {
     case 'suspend':
-      return 'Suspend Account'
+      return t('admin.users.modal.buttons.suspend')
     case 'ban':
-      return 'Ban Account'
+      return t('admin.users.modal.buttons.ban')
     case 'verify_email':
-      return 'Verify Email'
+      return t('admin.users.modal.buttons.verifyEmail')
     case 'reset_password':
-      return 'Reset Password'
+      return t('admin.users.modal.buttons.resetPassword')
     case 'update_role':
-      return 'Update Role'
+      return t('admin.users.modal.buttons.updateRole')
     default:
-      return 'Confirm'
+      return t('admin.users.modal.buttons.confirm')
   }
 }
 

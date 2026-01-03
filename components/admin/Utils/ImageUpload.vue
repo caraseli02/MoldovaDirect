@@ -180,9 +180,9 @@
     >
       <DialogContent class="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Edit Alt Text</DialogTitle>
+          <DialogTitle>{{ $t('admin.imageUpload.altTextModal.title') }}</DialogTitle>
           <DialogDescription>
-            Add or edit the alternative text for this image (for accessibility).
+            {{ $t('admin.imageUpload.altTextModal.description') }}
           </DialogDescription>
         </DialogHeader>
 
@@ -194,12 +194,12 @@
           />
           <div>
             <UiLabel class="mb-2">
-              Alt Text (for accessibility)
+              {{ $t('admin.imageUpload.altTextModal.label') }}
             </UiLabel>
             <UiInput
               v-model="altTextModal.altText"
               type="text"
-              placeholder="Describe this image..."
+              :placeholder="$t('admin.imageUpload.altTextModal.placeholder')"
             />
           </div>
         </div>
@@ -209,10 +209,10 @@
             variant="outline"
             @click="closeAltTextModal"
           >
-            Cancel
+            {{ $t('common.cancel') }}
           </Button>
           <Button @click="saveAltText">
-            Save
+            {{ $t('common.save') }}
           </Button>
         </DialogFooter>
       </DialogContent>

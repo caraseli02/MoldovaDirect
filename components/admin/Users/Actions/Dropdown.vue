@@ -39,7 +39,7 @@
             name="lucide:eye"
             class="w-4 h-4"
           />
-          <span>View Details</span>
+          <span>{{ $t('admin.users.actions.viewDetails') }}</span>
         </DropdownMenuItem>
 
         <!-- Edit Profile -->
@@ -48,7 +48,7 @@
             name="lucide:pencil"
             class="w-4 h-4"
           />
-          <span>Edit Profile</span>
+          <span>{{ $t('admin.users.actions.editProfile') }}</span>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
@@ -62,7 +62,7 @@
             name="lucide:badge-check"
             class="w-4 h-4"
           />
-          <span>Verify Email</span>
+          <span>{{ $t('admin.users.actions.verifyEmail') }}</span>
         </DropdownMenuItem>
 
         <DropdownMenuItem @click="handleAction('reset_password')">
@@ -70,7 +70,7 @@
             name="lucide:key"
             class="w-4 h-4"
           />
-          <span>Reset Password</span>
+          <span>{{ $t('admin.users.actions.resetPassword') }}</span>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
@@ -81,7 +81,7 @@
             name="lucide:shield-check"
             class="w-4 h-4"
           />
-          <span>Manage Role</span>
+          <span>{{ $t('admin.users.actions.manageRole') }}</span>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
@@ -96,7 +96,7 @@
             name="lucide:pause"
             class="w-4 h-4"
           />
-          <span>Suspend Account</span>
+          <span>{{ $t('admin.users.actions.suspendAccount') }}</span>
         </DropdownMenuItem>
 
         <DropdownMenuItem
@@ -108,7 +108,7 @@
             name="lucide:play"
             class="w-4 h-4"
           />
-          <span>Unsuspend Account</span>
+          <span>{{ $t('admin.users.actions.unsuspendAccount') }}</span>
         </DropdownMenuItem>
 
         <DropdownMenuItem
@@ -120,7 +120,7 @@
             name="lucide:ban"
             class="w-4 h-4"
           />
-          <span>Ban Account</span>
+          <span>{{ $t('admin.users.actions.banAccount') }}</span>
         </DropdownMenuItem>
 
         <DropdownMenuItem
@@ -132,7 +132,7 @@
             name="lucide:check-circle-2"
             class="w-4 h-4"
           />
-          <span>Unban Account</span>
+          <span>{{ $t('admin.users.actions.unbanAccount') }}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

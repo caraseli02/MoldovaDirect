@@ -35,6 +35,7 @@
     "orderSummary": "Resumen del Pedido",
     "retry": "Reintentar",
     "cancel": "Cancelar",
+    "save": "Guardar",
     "undo": "Deshacer",
     "showMore": "Mostrar Más",
     "showLess": "Mostrar Menos",
@@ -2541,7 +2542,17 @@
         "edit": "Editar usuario",
         "clearFilters": "Limpiar Filtros",
         "refresh": "Actualizar",
-        "invite": "Invitar Usuario"
+        "invite": "Invitar Usuario",
+        "menu": "Menú de acciones de usuario",
+        "viewDetails": "Ver Detalles",
+        "editProfile": "Editar Perfil",
+        "verifyEmail": "Verificar Email",
+        "resetPassword": "Restablecer Contraseña",
+        "manageRole": "Gestionar Rol",
+        "suspendAccount": "Suspender Cuenta",
+        "unsuspendAccount": "Reactivar Cuenta",
+        "banAccount": "Prohibir Cuenta",
+        "unbanAccount": "Quitar Prohibición"
       },
       "loading": "Cargando usuarios...",
       "retry": "Reintentar",
@@ -2591,6 +2602,78 @@
         "helpTip2": "Filtra por estado para enfocarte en grupos específicos de usuarios",
         "helpTip3": "Haz clic en cualquier usuario para ver información detallada",
         "swipeHint": "Desliza hacia la izquierda en móvil para acciones rápidas"
+      },
+      "modal": {
+        "noName": "Sin nombre",
+        "suspensionDuration": "Duración de la Suspensión",
+        "selectDuration": "Seleccionar duración",
+        "newRole": "Nuevo Rol",
+        "selectRole": "Seleccionar un rol",
+        "reason": "Motivo",
+        "required": "(Requerido)",
+        "optional": "(Opcional)",
+        "additionalNotes": "Notas Adicionales (Opcional)",
+        "additionalNotesPlaceholder": "Cualquier información adicional...",
+        "durations": {
+          "indefinite": "Indefinido",
+          "oneDay": "1 día",
+          "threeDays": "3 días",
+          "oneWeek": "1 semana",
+          "oneMonth": "1 mes"
+        },
+        "roles": {
+          "user": "Usuario",
+          "moderator": "Moderador",
+          "admin": "Administrador"
+        },
+        "titles": {
+          "suspend": "Suspender Cuenta de Usuario",
+          "ban": "Prohibir Cuenta de Usuario",
+          "verifyEmail": "Verificar Email del Usuario",
+          "resetPassword": "Restablecer Contraseña del Usuario",
+          "updateRole": "Actualizar Rol del Usuario",
+          "confirm": "Confirmar Acción"
+        },
+        "descriptions": {
+          "suspend": "Restringir temporalmente el acceso del usuario a su cuenta.",
+          "ban": "Deshabilitar permanentemente el acceso del usuario a su cuenta.",
+          "verifyEmail": "Marcar la dirección de email del usuario como verificada.",
+          "resetPassword": "Generar un enlace de restablecimiento de contraseña para el usuario.",
+          "updateRole": "Cambiar el rol y los permisos del usuario.",
+          "confirm": "Por favor, confirma esta acción."
+        },
+        "placeholders": {
+          "suspend": "¿Por qué se está suspendiendo esta cuenta?",
+          "ban": "¿Por qué se está prohibiendo esta cuenta?",
+          "verifyEmail": "¿Por qué se está verificando el email manualmente?",
+          "resetPassword": "¿Por qué se está restableciendo la contraseña?",
+          "updateRole": "¿Por qué se está cambiando el rol?",
+          "default": "Motivo de esta acción..."
+        },
+        "warnings": {
+          "suspend": "El usuario no podrá iniciar sesión hasta que se levante la suspensión.",
+          "resetPassword": "El usuario recibirá un email de restablecimiento de contraseña y su sesión actual será invalidada.",
+          "updateRole": "Cambiar el rol del usuario afectará sus permisos inmediatamente."
+        },
+        "dangers": {
+          "ban": "Esta acción deshabilitará permanentemente la cuenta del usuario. Esto no se puede deshacer fácilmente."
+        },
+        "buttons": {
+          "suspend": "Suspender Cuenta",
+          "ban": "Prohibir Cuenta",
+          "verifyEmail": "Verificar Email",
+          "resetPassword": "Restablecer Contraseña",
+          "updateRole": "Actualizar Rol",
+          "confirm": "Confirmar"
+        }
+      }
+    },
+    "imageUpload": {
+      "altTextModal": {
+        "title": "Editar Texto Alternativo",
+        "description": "Añade o edita el texto alternativo para esta imagen (para accesibilidad).",
+        "label": "Texto Alternativo (para accesibilidad)",
+        "placeholder": "Describe esta imagen..."
       }
     },
     "analytics": {
