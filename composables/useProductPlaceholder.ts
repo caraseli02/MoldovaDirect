@@ -29,9 +29,9 @@ export function useProductPlaceholder() {
 
     // Wine & Beverages
     if (
-      slug.includes('wine') || slug.includes('vino') || slug.includes('vin') ||
-      slug.includes('beverage') || slug.includes('drink') ||
-      name.includes('wine') || name.includes('vino') || name.includes('vin')
+      slug.includes('wine') || slug.includes('vino') || slug.includes('vin')
+      || slug.includes('beverage') || slug.includes('drink')
+      || name.includes('wine') || name.includes('vino') || name.includes('vin')
     ) {
       return {
         icon: 'wine',
@@ -43,9 +43,9 @@ export function useProductPlaceholder() {
 
     // Textiles & Fabrics
     if (
-      slug.includes('textile') || slug.includes('fabric') || slug.includes('cloth') ||
-      slug.includes('tejido') || slug.includes('textil') ||
-      name.includes('textile') || name.includes('fabric') || name.includes('tejido')
+      slug.includes('textile') || slug.includes('fabric') || slug.includes('cloth')
+      || slug.includes('tejido') || slug.includes('textil')
+      || name.includes('textile') || name.includes('fabric') || name.includes('tejido')
     ) {
       return {
         icon: 'lucide:shirt',
@@ -57,9 +57,9 @@ export function useProductPlaceholder() {
 
     // Crafts & Handmade
     if (
-      slug.includes('craft') || slug.includes('handmade') || slug.includes('artisan') ||
-      slug.includes('artesania') || slug.includes('artesanal') ||
-      name.includes('craft') || name.includes('handmade') || name.includes('artisan')
+      slug.includes('craft') || slug.includes('handmade') || slug.includes('artisan')
+      || slug.includes('artesania') || slug.includes('artesanal')
+      || name.includes('craft') || name.includes('handmade') || name.includes('artisan')
     ) {
       return {
         icon: 'lucide:palette',
@@ -71,9 +71,9 @@ export function useProductPlaceholder() {
 
     // Food & Culinary
     if (
-      slug.includes('food') || slug.includes('cuisine') || slug.includes('culinary') ||
-      slug.includes('comida') || slug.includes('alimento') || slug.includes('gastronomia') ||
-      name.includes('food') || name.includes('comida') || name.includes('alimento')
+      slug.includes('food') || slug.includes('cuisine') || slug.includes('culinary')
+      || slug.includes('comida') || slug.includes('alimento') || slug.includes('gastronomia')
+      || name.includes('food') || name.includes('comida') || name.includes('alimento')
     ) {
       return {
         icon: 'lucide:utensils',
@@ -85,9 +85,9 @@ export function useProductPlaceholder() {
 
     // Jewelry & Accessories
     if (
-      slug.includes('jewelry') || slug.includes('jewellery') || slug.includes('accessory') ||
-      slug.includes('joyeria') || slug.includes('accesorio') ||
-      name.includes('jewelry') || name.includes('joyeria')
+      slug.includes('jewelry') || slug.includes('jewellery') || slug.includes('accessory')
+      || slug.includes('joyeria') || slug.includes('accesorio')
+      || name.includes('jewelry') || name.includes('joyeria')
     ) {
       return {
         icon: 'lucide:gem',
@@ -99,9 +99,9 @@ export function useProductPlaceholder() {
 
     // Home & Decor
     if (
-      slug.includes('home') || slug.includes('decor') || slug.includes('decoration') ||
-      slug.includes('hogar') || slug.includes('decoracion') ||
-      name.includes('home') || name.includes('decor') || name.includes('hogar')
+      slug.includes('home') || slug.includes('decor') || slug.includes('decoration')
+      || slug.includes('hogar') || slug.includes('decoracion')
+      || name.includes('home') || name.includes('decor') || name.includes('hogar')
     ) {
       return {
         icon: 'lucide:home',
