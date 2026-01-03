@@ -46,15 +46,17 @@
         />
         <div
           v-else
-          class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900"
+          class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br"
+          :class="placeholderConfig.bgGradient"
           role="img"
           :aria-label="$t('products.noImageAvailable')"
         >
           <div class="relative">
-            <div class="absolute inset-0 bg-blue-500/10 blur-2xl rounded-full"></div>
+            <div class="absolute inset-0 blur-2xl rounded-full" :class="placeholderConfig.blurColor"></div>
             <commonIcon
-              name="wine"
-              class="relative h-12 w-12 text-blue-400 dark:text-blue-500"
+              :name="placeholderConfig.icon"
+              class="relative h-12 w-12"
+              :class="placeholderConfig.iconColor"
               aria-hidden="true"
             />
           </div>
@@ -352,6 +354,7 @@ import { useDevice } from '~/composables/useDevice'
 import { useHapticFeedback } from '~/composables/useHapticFeedback'
 import { useTouchEvents } from '~/composables/useTouchEvents'
 import { useToast } from '~/composables/useToast'
+import { useProductPlaceholder } from '~/composables/useProductPlaceholder'
 import { useRouter, useI18n, useLocalePath } from '#imports'
 import { PRODUCTS } from '~/constants/products'
 
@@ -372,6 +375,7 @@ const touchEvents = useTouchEvents()
 const toast = useToast()
 const { addItem, loading: cartLoading, isInCart } = useCart()
 const localePath = useLocalePath()
+const { getPlaceholderConfig } = useProductPlaceholder()
 
 // Template refs
 const cardRef = ref<HTMLElement>()
@@ -381,6 +385,14 @@ const cardRef = ref<HTMLElement>()
 // Computed properties
 const primaryImage = computed(() => {
   return props.product.images?.find(img => img.isPrimary) || props.product.images?.[0]
+})
+
+const placeholderConfig = computed(() => {
+  const categorySlug = props.product.category?.slug
+  const categoryName = props.product.category?.name
+    ? getLocalizedText(props.product.category.name)
+    : null
+  return getPlaceholderConfig(categorySlug, categoryName)
 })
 
 const stockStatusClass = computed(() => {
