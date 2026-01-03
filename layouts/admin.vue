@@ -192,11 +192,20 @@
       class="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
       @click="sidebarOpen = false"
     ></div>
+
+    <ClientOnly>
+      <!-- Sonner toaster for admin panel -->
+      <Sonner
+        position="top-right"
+        :rich-colors="true"
+      />
+    </ClientOnly>
   </div>
 </template>
 
 <script setup lang="ts">
 import { toast } from 'vue-sonner'
+import { Sonner } from '@/components/ui/sonner'
 
 const { t } = useI18n()
 const route = useRoute()
