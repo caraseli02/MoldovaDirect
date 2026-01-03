@@ -89,7 +89,7 @@
             },
             {
               "id": "sec-3-b",
-              "task": "Fixed wrong column name (performed_by → user_id) in product endpoints",
+              "task": "Fixed wrong column name (performed_by \u2192 user_id) in product endpoints",
               "type": "implementation",
               "implemented": true
             },
@@ -2038,27 +2038,84 @@
           "tested": true,
           "test_file": "tests/components/cart/__tests__/Item.test.ts",
           "test_exists": true,
-          "tasks": [{"id": "comp-test-11-a", "task": "Create unit test for cart item rendering", "type": "test-first", "implemented": false}, {"id": "comp-test-11-b", "task": "Create test for quantity controls", "type": "test-first", "implemented": false}, {"id": "comp-test-11-c", "task": "Run unit tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-11-a",
+              "task": "Create unit test for cart item rendering",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-11-b",
+              "task": "Create test for quantity controls",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-11-c",
+              "task": "Run unit tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-12",
           "description": "Add unit tests for Product Card component",
           "file": "components/product/Card.vue",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": "tests/components/product/__tests__/Card.enhanced.test.ts",
-          "test_exists": false,
-          "tasks": [{"id": "comp-test-12-a", "task": "Expand existing tests for product card", "type": "test-first", "implemented": false}, {"id": "comp-test-12-b", "task": "Add hover state tests", "type": "test-first", "implemented": false}, {"id": "comp-test-12-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "test_exists": true,
+          "tasks": [
+            {
+              "id": "comp-test-12-a",
+              "task": "Expand existing tests for product card",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-12-b",
+              "task": "Add hover state tests",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-12-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-13",
           "description": "Add unit tests for Product SearchBar",
           "file": "components/product/SearchBar.vue",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": "tests/components/product/__tests__/SearchBar.test.ts",
-          "test_exists": false,
-          "tasks": [{"id": "comp-test-13-a", "task": "Create test for search input", "type": "test-first", "implemented": false}, {"id": "comp-test-13-b", "task": "Create test for search submission", "type": "test-first", "implemented": false}, {"id": "comp-test-13-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "test_exists": true,
+          "tasks": [
+            {
+              "id": "comp-test-13-a",
+              "task": "Create test for search input",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-13-b",
+              "task": "Create test for search submission",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-13-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-14",
@@ -2068,7 +2125,26 @@
           "tested": false,
           "test_file": "tests/components/product/__tests__/CategoryNavigation.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-14-a", "task": "Create test for category list rendering", "type": "test-first", "implemented": false}, {"id": "comp-test-14-b", "task": "Create test for category selection", "type": "test-first", "implemented": false}, {"id": "comp-test-14-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-14-a",
+              "task": "Create test for category list rendering",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-14-b",
+              "task": "Create test for category selection",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-14-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-15",
@@ -2078,7 +2154,26 @@
           "tested": false,
           "test_file": "tests/components/product/__tests__/ActiveFilters.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-15-a", "task": "Create test for active filters display", "type": "test-first", "implemented": false}, {"id": "comp-test-15-b", "task": "Create test for filter removal", "type": "test-first", "implemented": false}, {"id": "comp-test-15-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-15-a",
+              "task": "Create test for active filters display",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-15-b",
+              "task": "Create test for filter removal",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-15-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-16",
@@ -2088,7 +2183,26 @@
           "tested": false,
           "test_file": "tests/components/checkout/__tests__/PaymentStep.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-16-a", "task": "Create test for payment method selection", "type": "test-first", "implemented": false}, {"id": "comp-test-16-b", "task": "Create test for validation", "type": "test-first", "implemented": false}, {"id": "comp-test-16-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-16-a",
+              "task": "Create test for payment method selection",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-16-b",
+              "task": "Create test for validation",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-16-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-17",
@@ -2098,7 +2212,26 @@
           "tested": false,
           "test_file": "tests/components/checkout/__tests__/OrderSummaryCard.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-17-a", "task": "Create test for order summary display", "type": "test-first", "implemented": false}, {"id": "comp-test-17-b", "task": "Create test for total calculations", "type": "test-first", "implemented": false}, {"id": "comp-test-17-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-17-a",
+              "task": "Create test for order summary display",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-17-b",
+              "task": "Create test for total calculations",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-17-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-18",
@@ -2108,7 +2241,26 @@
           "tested": false,
           "test_file": "tests/components/checkout/__tests__/ShippingMethodSelector.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-18-a", "task": "Create test for shipping options display", "type": "test-first", "implemented": false}, {"id": "comp-test-18-b", "task": "Create test for method selection", "type": "test-first", "implemented": false}, {"id": "comp-test-18-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-18-a",
+              "task": "Create test for shipping options display",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-18-b",
+              "task": "Create test for method selection",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-18-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-19",
@@ -2118,7 +2270,26 @@
           "tested": false,
           "test_file": "tests/components/checkout/__tests__/CheckoutProgressIndicator.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-19-a", "task": "Create test for progress steps display", "type": "test-first", "implemented": false}, {"id": "comp-test-19-b", "task": "Create test for current step highlighting", "type": "test-first", "implemented": false}, {"id": "comp-test-19-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-19-a",
+              "task": "Create test for progress steps display",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-19-b",
+              "task": "Create test for current step highlighting",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-19-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-20",
@@ -2128,7 +2299,26 @@
           "tested": false,
           "test_file": "tests/components/layout/__tests__/AppHeader.enhanced.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-20-a", "task": "Expand existing AppHeader tests", "type": "test-first", "implemented": false}, {"id": "comp-test-20-b", "task": "Test mobile menu toggle", "type": "test-first", "implemented": false}, {"id": "comp-test-20-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-20-a",
+              "task": "Expand existing AppHeader tests",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-20-b",
+              "task": "Test mobile menu toggle",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-20-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-21",
@@ -2138,7 +2328,26 @@
           "tested": false,
           "test_file": "tests/components/layout/__tests__/AppFooter.enhanced.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-21-a", "task": "Expand existing AppFooter tests", "type": "test-first", "implemented": false}, {"id": "comp-test-21-b", "task": "Test footer links", "type": "test-first", "implemented": false}, {"id": "comp-test-21-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-21-a",
+              "task": "Expand existing AppFooter tests",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-21-b",
+              "task": "Test footer links",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-21-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-22",
@@ -2148,7 +2357,26 @@
           "tested": false,
           "test_file": "tests/components/layout/__tests__/LanguageSwitcher.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-22-a", "task": "Create test for language options", "type": "test-first", "implemented": false}, {"id": "comp-test-22-b", "task": "Create test for language switching", "type": "test-first", "implemented": false}, {"id": "comp-test-22-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-22-a",
+              "task": "Create test for language options",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-22-b",
+              "task": "Create test for language switching",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-22-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-23",
@@ -2158,7 +2386,26 @@
           "tested": false,
           "test_file": "tests/components/admin/Analytics/__tests__/Dashboard.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-23-a", "task": "Create test for analytics display", "type": "test-first", "implemented": false}, {"id": "comp-test-23-b", "task": "Create test for data fetching", "type": "test-first", "implemented": false}, {"id": "comp-test-23-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-23-a",
+              "task": "Create test for analytics display",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-23-b",
+              "task": "Create test for data fetching",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-23-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-24",
@@ -2168,7 +2415,26 @@
           "tested": false,
           "test_file": "tests/components/admin/Users/__tests__/UserList.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-24-a", "task": "Create test for user list rendering", "type": "test-first", "implemented": false}, {"id": "comp-test-24-b", "task": "Create test for user actions", "type": "test-first", "implemented": false}, {"id": "comp-test-24-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-24-a",
+              "task": "Create test for user list rendering",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-24-b",
+              "task": "Create test for user actions",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-24-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-25",
@@ -2178,7 +2444,26 @@
           "tested": false,
           "test_file": "tests/components/admin/Categories/__tests__/CategoryForm.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-25-a", "task": "Create test for category form validation", "type": "test-first", "implemented": false}, {"id": "comp-test-25-b", "task": "Create test for form submission", "type": "test-first", "implemented": false}, {"id": "comp-test-25-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-25-a",
+              "task": "Create test for category form validation",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-25-b",
+              "task": "Create test for form submission",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-25-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-26",
@@ -2188,7 +2473,26 @@
           "tested": false,
           "test_file": "tests/components/admin/Inventory/__tests__/InventoryTable.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-26-a", "task": "Create test for inventory display", "type": "test-first", "implemented": false}, {"id": "comp-test-26-b", "task": "Create test for stock updates", "type": "test-first", "implemented": false}, {"id": "comp-test-26-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-26-a",
+              "task": "Create test for inventory display",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-26-b",
+              "task": "Create test for stock updates",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-26-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-27",
@@ -2198,7 +2502,26 @@
           "tested": false,
           "test_file": "tests/components/order/__tests__/OrderMetrics.enhanced.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-27-a", "task": "Expand existing OrderMetrics tests", "type": "test-first", "implemented": false}, {"id": "comp-test-27-b", "task": "Test metrics calculations", "type": "test-first", "implemented": false}, {"id": "comp-test-27-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-27-a",
+              "task": "Expand existing OrderMetrics tests",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-27-b",
+              "task": "Test metrics calculations",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-27-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-28",
@@ -2208,7 +2531,26 @@
           "tested": false,
           "test_file": "tests/components/order/__tests__/OrderCardEnhanced.enhanced.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-28-a", "task": "Expand existing tests", "type": "test-first", "implemented": false}, {"id": "comp-test-28-b", "task": "Test order status display", "type": "test-first", "implemented": false}, {"id": "comp-test-28-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-28-a",
+              "task": "Expand existing tests",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-28-b",
+              "task": "Test order status display",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-28-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-29",
@@ -2218,7 +2560,26 @@
           "tested": false,
           "test_file": "tests/components/order/__tests__/SmartFilters.enhanced.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-29-a", "task": "Expand existing tests", "type": "test-first", "implemented": false}, {"id": "comp-test-29-b", "task": "Test filter logic", "type": "test-first", "implemented": false}, {"id": "comp-test-29-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-29-a",
+              "task": "Expand existing tests",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-29-b",
+              "task": "Test filter logic",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-29-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         },
         {
           "id": "comp-test-30",
@@ -2228,7 +2589,26 @@
           "tested": false,
           "test_file": "tests/components/home/__tests__/VideoHero.enhanced.test.ts",
           "test_exists": false,
-          "tasks": [{"id": "comp-test-30-a", "task": "Expand existing tests", "type": "test-first", "implemented": false}, {"id": "comp-test-30-b", "task": "Test video playback controls", "type": "test-first", "implemented": false}, {"id": "comp-test-30-c", "task": "Run tests", "type": "validation", "implemented": false}]
+          "tasks": [
+            {
+              "id": "comp-test-30-a",
+              "task": "Expand existing tests",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-30-b",
+              "task": "Test video playback controls",
+              "type": "test-first",
+              "implemented": false
+            },
+            {
+              "id": "comp-test-30-c",
+              "task": "Run tests",
+              "type": "validation",
+              "implemented": false
+            }
+          ]
         }
       ]
     }
