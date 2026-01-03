@@ -1562,6 +1562,18 @@
         "returns": {
           "question": "¿Qué pasa si llega dañado?",
           "answer": "Avísanos en los primeros 7 días y gestionaremos un reemplazo o reembolso inmediato."
+        },
+        "care": {
+          "question": "¿Cómo debo cuidar este artículo?",
+          "answer": "Sigue las instrucciones de cuidado en la etiqueta del producto. Para textiles, recomendamos lavado suave y secado al aire para preservar la calidad."
+        },
+        "materials": {
+          "question": "¿De qué materiales está hecho?",
+          "answer": "Todos los materiales están indicados en la página del producto. Nuestros productos artesanales utilizan materiales tradicionales de alta calidad de origen local en Moldavia."
+        },
+        "origin": {
+          "question": "¿De dónde viene este producto?",
+          "answer": "Este producto está hecho a mano por artesanos expertos en Moldavia, siguiendo técnicas tradicionales transmitidas de generación en generación."
         }
       }
     },

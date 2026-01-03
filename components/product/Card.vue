@@ -52,7 +52,10 @@
           :aria-label="$t('products.noImageAvailable')"
         >
           <div class="relative">
-            <div class="absolute inset-0 blur-2xl rounded-full" :class="placeholderConfig.blurColor"></div>
+            <div
+              class="absolute inset-0 blur-2xl rounded-full"
+              :class="placeholderConfig.blurColor"
+            ></div>
             <commonIcon
               :name="placeholderConfig.icon"
               class="relative h-12 w-12"
@@ -389,8 +392,8 @@ const primaryImage = computed(() => {
 
 const placeholderConfig = computed(() => {
   const categorySlug = props.product.category?.slug
-  const categoryName = props.product.category?.name
-    ? getLocalizedText(props.product.category.name)
+  const categoryName = props.product.category?.nameTranslations
+    ? getLocalizedText(props.product.category.nameTranslations)
     : null
   return getPlaceholderConfig(categorySlug, categoryName)
 })

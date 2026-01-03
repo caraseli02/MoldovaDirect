@@ -200,15 +200,6 @@ export const useProductCatalog = () => {
       if (searchFilters.page) params.append('page', searchFilters.page?.toString() || '1')
       if (searchFilters.limit) params.append('limit', searchFilters.limit?.toString() || '12')
 
-      // Add attribute filters
-      if (searchFilters.attributes) {
-        Object.entries(searchFilters.attributes).forEach(([key, values]) => {
-          values.forEach((value) => {
-            params.append(`attributes[${key}]`, value)
-          })
-        })
-      }
-
       const response = await $fetch<{
         products: ProductWithRelations[]
         pagination: {

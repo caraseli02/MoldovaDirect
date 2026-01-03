@@ -20,9 +20,11 @@ export default defineCachedEventHandler(async (event) => {
     const category = query.category as string
     const sort = (query.sort as string) || 'created'
 
-    // Parse numeric and boolean filter parameters
-    const priceMin = query.priceMin ? Number(query.priceMin) : undefined
-    const priceMax = query.priceMax ? Number(query.priceMax) : undefined
+    // Parse numeric and boolean filter parameters with validation
+    const priceMinRaw = query.priceMin ? Number(query.priceMin) : undefined
+    const priceMaxRaw = query.priceMax ? Number(query.priceMax) : undefined
+    const priceMin = priceMinRaw !== undefined && !isNaN(priceMinRaw) && priceMinRaw >= 0 ? priceMinRaw : undefined
+    const priceMax = priceMaxRaw !== undefined && !isNaN(priceMaxRaw) && priceMaxRaw >= 0 ? priceMaxRaw : undefined
     const inStock = String(query.inStock) === 'true'
     const featured = String(query.featured) === 'true'
 
@@ -150,10 +152,12 @@ export default defineCachedEventHandler(async (event) => {
       })
     }
 
+    // Prepare lowercase search term for relevance calculations
+    const searchTermLower = searchTerm.toLowerCase().trim()
+
     // Sort by relevance (exact matches first, then partial matches)
     // Only apply relevance sorting when no specific sort is requested
     if (!sort || sort === 'created' || sort === 'newest') {
-      const searchTermLower = searchTerm.toLowerCase().trim()
       ;(matchingProducts || []).sort((a, b) => {
         const aName = getLocalizedContent(a.name_translations, locale).toLowerCase()
         const bName = getLocalizedContent(b.name_translations, locale).toLowerCase()
@@ -180,8 +184,8 @@ export default defineCachedEventHandler(async (event) => {
     const offset = (page - 1) * limit
     const total = matchingProducts?.length || 0
 
-    // Slice results for current page
-    const limitedResults = matchingProducts.slice(offset, offset + limit)
+    // Slice results for current page (with null safety)
+    const limitedResults = (matchingProducts || []).slice(offset, offset + limit)
 
     // Transform products to match expected format
     const transformedProducts = limitedResults.map(product => ({

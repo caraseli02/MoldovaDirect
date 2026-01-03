@@ -1572,7 +1572,19 @@
         },
         "returns": {
           "question": "What if something arrives damaged?",
-          "answer": "Let us know within 7 days and we’ll organise a replacement or full refund immediately."
+          "answer": "Let us know within 7 days and we'll organise a replacement or full refund immediately."
+        },
+        "care": {
+          "question": "How should I care for this item?",
+          "answer": "Follow the care instructions on the product label. For textiles, we recommend gentle washing and air drying to preserve quality."
+        },
+        "materials": {
+          "question": "What materials is this made from?",
+          "answer": "All materials are listed on the product page. Our artisan products use traditional, high-quality materials sourced locally in Moldova."
+        },
+        "origin": {
+          "question": "Where does this product come from?",
+          "answer": "This product is handcrafted by skilled artisans in Moldova, following traditional techniques passed down through generations."
         }
       }
     },
