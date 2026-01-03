@@ -2034,10 +2034,10 @@
           "id": "comp-test-11",
           "description": "Add unit tests for cart Item component",
           "file": "components/cart/Item.vue",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "test_file": "tests/components/cart/__tests__/Item.test.ts",
-          "test_exists": false,
+          "test_exists": true,
           "tasks": [{"id": "comp-test-11-a", "task": "Create unit test for cart item rendering", "type": "test-first", "implemented": false}, {"id": "comp-test-11-b", "task": "Create test for quantity controls", "type": "test-first", "implemented": false}, {"id": "comp-test-11-c", "task": "Run unit tests", "type": "validation", "implemented": false}]
         },
         {
