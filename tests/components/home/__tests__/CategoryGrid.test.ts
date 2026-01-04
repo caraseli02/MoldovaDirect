@@ -7,6 +7,19 @@ vi.mock('#imports', () => ({
   useLocalePath: vi.fn(() => (path: string) => path),
 }))
 
+const mockI18n = {
+  install(app: any) {
+    app.config.globalProperties.$t = (key: string) => key
+    app.config.globalProperties.$i18n = { locale: 'es' }
+  },
+}
+
+const defaultStubs = {
+  NuxtLink: { template: '<a :href="to"><slot /></a>', props: ['to'] },
+  NuxtImg: { template: '<img :src="src" :alt="alt" />', props: ['src', 'alt'] },
+  commonIcon: { template: '<span :data-icon="name"></span>', props: ['name'] },
+}
+
 describe('Home CategoryGrid', () => {
   const mockCategories = [
     {
@@ -33,8 +46,19 @@ describe('Home CategoryGrid', () => {
     },
   ]
 
+  const mountOptions = {
+    global: {
+      plugins: [mockI18n],
+      stubs: defaultStubs,
+      directives: {
+        motion: {},
+      },
+    },
+  }
+
   it('should render category grid', () => {
     const wrapper = mount(CategoryGrid, {
+      ...mountOptions,
       props: { categories: mockCategories },
     })
     expect(wrapper.exists()).toBe(true)
@@ -42,6 +66,7 @@ describe('Home CategoryGrid', () => {
 
   it('should display all categories', () => {
     const wrapper = mount(CategoryGrid, {
+      ...mountOptions,
       props: { categories: mockCategories },
     })
     expect(wrapper.text()).toContain('Premium Wines')
@@ -50,6 +75,7 @@ describe('Home CategoryGrid', () => {
 
   it('should render category images', () => {
     const wrapper = mount(CategoryGrid, {
+      ...mountOptions,
       props: { categories: mockCategories },
     })
     const images = wrapper.findAll('img')
@@ -58,6 +84,7 @@ describe('Home CategoryGrid', () => {
 
   it('should show category descriptions', () => {
     const wrapper = mount(CategoryGrid, {
+      ...mountOptions,
       props: { categories: mockCategories },
     })
     expect(wrapper.text()).toContain('Discover our selection')
@@ -66,6 +93,7 @@ describe('Home CategoryGrid', () => {
 
   it('should render view all link', () => {
     const wrapper = mount(CategoryGrid, {
+      ...mountOptions,
       props: { categories: mockCategories },
     })
     const links = wrapper.findAll('a')
@@ -74,6 +102,7 @@ describe('Home CategoryGrid', () => {
 
   it('should display category icons', () => {
     const wrapper = mount(CategoryGrid, {
+      ...mountOptions,
       props: { categories: mockCategories },
     })
     expect(wrapper.html()).toContain('lucide:wine')

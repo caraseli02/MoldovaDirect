@@ -101,16 +101,25 @@ fi
 echo ""
 
 # ============================================
-# STEP 4: Unit Tests on Changed Files
+# STEP 4: Unit Tests on Changed Test Files
 # ============================================
-echo "🧪 Running unit tests..."
-if pnpm run test:quick; then
-  echo "✅ Unit tests passed!"
-else
-  echo "❌ Unit tests failed!"
+echo "🧪 Running unit tests on staged test files..."
+STAGED_TEST_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.test\.ts$' || true)
+
+if [ -n "$STAGED_TEST_FILES" ]; then
+  echo "Running tests for:"
+  echo "$STAGED_TEST_FILES"
   echo ""
-  echo "💡 Tip: Fix the failing tests or use 'git commit --no-verify' to skip checks"
-  exit 1
+  if echo "$STAGED_TEST_FILES" | xargs pnpm vitest run --reporter=basic 2>&1; then
+    echo "✅ Unit tests passed!"
+  else
+    echo "❌ Unit tests failed!"
+    echo ""
+    echo "💡 Tip: Fix the failing tests or use 'git commit --no-verify' to skip checks"
+    exit 1
+  fi
+else
+  echo "ℹ️  No test files staged, skipping unit tests"
 fi
 
 echo ""

@@ -1,8 +1,229 @@
 import { vi } from 'vitest'
-import { computed, readonly, watch, onMounted, onUnmounted } from 'vue'
+import { config } from '@vue/test-utils'
+import {
+  computed,
+  reactive,
+  readonly,
+  ref,
+  shallowRef,
+  toRef,
+  toRefs,
+  watch,
+  watchEffect,
+  onMounted,
+  onUnmounted,
+  onBeforeMount,
+  onBeforeUnmount,
+  nextTick,
+  defineComponent,
+  h,
+  markRaw,
+  toRaw,
+  isRef,
+  unref,
+  triggerRef,
+  customRef,
+  shallowReactive,
+  shallowReadonly,
+  isReactive,
+  isReadonly,
+  isProxy,
+  provide,
+  inject,
+  useTemplateRef,
+} from 'vue'
 
 // Mock import.meta.client to true for client-side code paths
 Object.defineProperty(import.meta, 'client', { value: true, writable: true })
+
+// Mock Chart.js to prevent "Chart.register is not a function" errors
+vi.mock('chart.js', () => ({
+  Chart: class MockChart {
+    static readonly register = vi.fn()
+    data: unknown
+    options: unknown
+    constructor(ctx: unknown, config: { data?: unknown, options?: unknown } = {}) {
+      this.data = config.data
+      this.options = config.options
+    }
+
+    destroy = vi.fn()
+    update = vi.fn()
+  },
+  registerables: [],
+  CategoryScale: {},
+  LinearScale: {},
+  PointElement: {},
+  LineElement: {},
+  BarElement: {},
+  ArcElement: {},
+  Title: {},
+  Tooltip: {},
+  Legend: {},
+  Filler: {},
+}))
+
+// Mock chartjs-adapter-date-fns
+vi.mock('chartjs-adapter-date-fns', () => ({}))
+
+// Mock #imports module for Nuxt auto-imports
+// Note: vi.mock is hoisted, so we define the mock inline rather than importing it
+vi.mock('#imports', async () => {
+  const vue = await import('vue')
+  return {
+    // i18n
+    useI18n: vi.fn(() => ({
+      t: (key: string, params?: Record<string, unknown>) => {
+        if (params) {
+          let result = key
+          Object.entries(params).forEach(([param, value]) => {
+            result = result.replace(`{${param}}`, String(value))
+          })
+          return result
+        }
+        return key
+      },
+      locale: { value: 'en' },
+      locales: { value: ['en', 'es', 'ro', 'ru'] },
+      setLocale: vi.fn(),
+    })),
+    useLocalePath: vi.fn(() => (path: string | { name: string, params?: Record<string, unknown> }) => {
+      if (typeof path === 'string') return path
+      if (path?.name === 'products-slug') return `/products/${path.params?.slug || ''}`
+      return '/'
+    }),
+    useSwitchLocalePath: vi.fn(() => (_locale: string) => '/'),
+
+    // Router
+    useRoute: vi.fn(() => ({
+      path: '/',
+      params: {},
+      query: {},
+      fullPath: '/',
+      name: 'index',
+      meta: {},
+    })),
+    useRouter: vi.fn(() => ({
+      push: vi.fn(),
+      replace: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      go: vi.fn(),
+      currentRoute: { value: { path: '/', query: {} } },
+    })),
+    navigateTo: vi.fn(),
+
+    // Nuxt app
+    useNuxtApp: vi.fn(() => ({
+      $i18n: {
+        t: vi.fn((key: string) => key),
+        locale: { value: 'en' },
+      },
+    })),
+    useRuntimeConfig: vi.fn(() => ({
+      public: {
+        siteUrl: 'http://localhost:3000',
+        supabaseUrl: 'http://localhost:54321',
+      },
+    })),
+
+    // Head
+    useHead: vi.fn(),
+    useSeoMeta: vi.fn(),
+
+    // Async data
+    useAsyncData: vi.fn(() => ({
+      data: vue.ref(null),
+      pending: vue.ref(false),
+      error: vue.ref(null),
+      refresh: vi.fn(),
+    })),
+    useFetch: vi.fn(() => ({
+      data: vue.ref(null),
+      pending: vue.ref(false),
+      error: vue.ref(null),
+      refresh: vi.fn(),
+    })),
+    useLazyFetch: vi.fn(() => ({
+      data: vue.ref(null),
+      pending: vue.ref(false),
+      error: vue.ref(null),
+      refresh: vi.fn(),
+    })),
+
+    // Cookie
+    useCookie: vi.fn((_name: string) => vue.ref(null)),
+
+    // Supabase
+    useSupabaseClient: vi.fn(() => ({
+      from: vi.fn(() => ({
+        select: vi.fn().mockReturnThis(),
+        insert: vi.fn().mockReturnThis(),
+        update: vi.fn().mockReturnThis(),
+        delete: vi.fn().mockReturnThis(),
+        eq: vi.fn().mockReturnThis(),
+        single: vi.fn(),
+      })),
+      auth: {
+        getUser: vi.fn(() => Promise.resolve({ data: { user: null }, error: null })),
+        signInWithPassword: vi.fn(),
+        signOut: vi.fn(),
+      },
+    })),
+    useSupabaseUser: vi.fn(() => vue.ref(null)),
+
+    // Custom composables
+    useCart: vi.fn(() => ({
+      items: vue.ref([]),
+      totalItems: vue.computed(() => 0),
+      totalPrice: vue.computed(() => 0),
+      addItem: vi.fn(),
+      removeItem: vi.fn(),
+      updateQuantity: vi.fn(),
+      clearCart: vi.fn(),
+      isItemSelected: vi.fn(() => false),
+      toggleItemSelection: vi.fn(),
+      selectedItems: vue.computed(() => []),
+    })),
+    useTheme: vi.fn(() => ({
+      theme: vue.ref('light'),
+      toggleTheme: vi.fn(),
+      isDark: vue.computed(() => false),
+    })),
+
+    // Vue utilities
+    ref: vue.ref,
+    computed: vue.computed,
+    reactive: vue.reactive,
+    readonly: vue.readonly,
+    shallowRef: vue.shallowRef,
+    toRef: vue.toRef,
+    toRefs: vue.toRefs,
+    watch: vue.watch,
+    watchEffect: vue.watchEffect,
+    onMounted: vue.onMounted,
+    onUnmounted: vue.onUnmounted,
+    onBeforeMount: vue.onBeforeMount,
+    onBeforeUnmount: vue.onBeforeUnmount,
+    nextTick: vue.nextTick,
+    defineComponent: vue.defineComponent,
+    h: vue.h,
+    markRaw: vue.markRaw,
+    toRaw: vue.toRaw,
+    isRef: vue.isRef,
+    unref: vue.unref,
+    triggerRef: vue.triggerRef,
+    customRef: vue.customRef,
+    shallowReactive: vue.shallowReactive,
+    shallowReadonly: vue.shallowReadonly,
+    isReactive: vue.isReactive,
+    isReadonly: vue.isReadonly,
+    isProxy: vue.isProxy,
+    provide: vue.provide,
+    inject: vue.inject,
+    useTemplateRef: vue.useTemplateRef,
+  }
+})
 
 // Mock h3 module
 vi.mock('h3', () => ({
@@ -11,19 +232,44 @@ vi.mock('h3', () => ({
   getHeader: vi.fn(),
   getRequestIP: vi.fn(() => '127.0.0.1'),
   createError: vi.fn((error: any) => {
-    const err = new Error(error.statusMessage || error.message) as unknown
+    const err = new Error(error.statusMessage || error.message) as any
     err.statusCode = error.statusCode
     err.statusMessage = error.statusMessage
     return err
   }),
 }))
 
-// Make Vue reactivity functions available globally
+// Make Vue reactivity functions available globally (for Nuxt auto-import compatibility)
+global.ref = ref
+global.reactive = reactive
 global.computed = computed
 global.readonly = readonly
+global.shallowRef = shallowRef
+global.toRef = toRef
+global.toRefs = toRefs
 global.watch = watch
+global.watchEffect = watchEffect
 global.onMounted = onMounted
 global.onUnmounted = onUnmounted
+global.onBeforeMount = onBeforeMount
+global.onBeforeUnmount = onBeforeUnmount
+global.nextTick = nextTick
+global.defineComponent = defineComponent
+global.h = h
+global.markRaw = markRaw
+global.toRaw = toRaw
+global.isRef = isRef
+global.unref = unref
+global.triggerRef = triggerRef
+global.customRef = customRef
+global.shallowReactive = shallowReactive
+global.shallowReadonly = shallowReadonly
+global.isReactive = isReactive
+global.isReadonly = isReadonly
+global.isProxy = isProxy
+global.provide = provide
+global.inject = inject
+global.useTemplateRef = useTemplateRef
 
 // Mock Nuxt composables
 global.useI18n = vi.fn(() => ({
@@ -78,6 +324,106 @@ global.useNuxtApp = vi.fn(() => ({
     locale: { value: 'en' },
   },
 }))
+
+// Mock useCart composable (custom composable for cart functionality)
+global.useCart = vi.fn(() => ({
+  items: ref([]),
+  totalItems: computed(() => 0),
+  totalPrice: computed(() => 0),
+  addItem: vi.fn(),
+  removeItem: vi.fn(),
+  updateQuantity: vi.fn(),
+  clearCart: vi.fn(),
+  isItemSelected: vi.fn(() => false),
+  toggleItemSelection: vi.fn(),
+  selectedItems: computed(() => []),
+}))
+
+// Mock useTheme composable
+global.useTheme = vi.fn(() => ({
+  theme: ref('light'),
+  toggleTheme: vi.fn(),
+  isDark: computed(() => false),
+}))
+
+// Mock useSwitchLocalePath
+global.useSwitchLocalePath = vi.fn(() => (_locale: string) => '/')
+
+// Mock useHead and useSeoMeta
+global.useHead = vi.fn()
+global.useSeoMeta = vi.fn()
+
+// Mock useAsyncData and useFetch
+global.useAsyncData = vi.fn(() => ({
+  data: ref(null),
+  pending: ref(false),
+  error: ref(null),
+  refresh: vi.fn(),
+}))
+
+global.useFetch = vi.fn(() => ({
+  data: ref(null),
+  pending: ref(false),
+  error: ref(null),
+  refresh: vi.fn(),
+}))
+
+// Mock useRuntimeConfig
+global.useRuntimeConfig = vi.fn(() => ({
+  public: {
+    siteUrl: 'http://localhost:3000',
+    supabaseUrl: 'http://localhost:54321',
+  },
+}))
+
+// Mock admin stores
+global.useAdminUsersStore = vi.fn(() => ({
+  users: [],
+  currentUser: null,
+  loading: false,
+  userDetailLoading: false,
+  error: null,
+  totalUsers: 0,
+  fetchUsers: vi.fn(),
+  fetchUserDetail: vi.fn(),
+  updateUser: vi.fn(),
+  deleteUser: vi.fn(),
+}))
+
+global.useAdminOrdersStore = vi.fn(() => ({
+  orders: [],
+  currentOrder: null,
+  loading: false,
+  error: null,
+  totalOrders: 0,
+  fetchOrders: vi.fn(),
+  fetchOrderDetail: vi.fn(),
+  updateOrderStatus: vi.fn(),
+}))
+
+global.useAdminProductsStore = vi.fn(() => ({
+  products: [],
+  currentProduct: null,
+  loading: false,
+  error: null,
+  totalProducts: 0,
+  fetchProducts: vi.fn(),
+  fetchProductDetail: vi.fn(),
+  createProduct: vi.fn(),
+  updateProduct: vi.fn(),
+  deleteProduct: vi.fn(),
+}))
+
+// Mock storeToRefs
+global.storeToRefs = vi.fn((store: Record<string, unknown>) => {
+  const refs: Record<string, unknown> = {}
+  for (const key in store) {
+    if (typeof store[key] !== 'function') {
+      refs[key] = ref(store[key])
+    }
+  }
+  return refs
+})
 
 // Error utility functions (auto-imported from utils/errorUtils.ts)
 global.getErrorMessage = (error: unknown): string => {
@@ -246,3 +592,150 @@ global.useCookie = vi.fn((name: string, _options?: unknown) => {
     },
   }
 })
+
+// Global i18n mock for @vue/test-utils
+// This ensures $t is available in all mounted components
+config.global.mocks = {
+  $t: (key: string, params?: Record<string, unknown>) => {
+    if (params) {
+      let result = key
+      Object.entries(params).forEach(([param, value]) => {
+        result = result.replace(`{${param}}`, String(value))
+      })
+      return result
+    }
+    return key
+  },
+  $i18n: { locale: 'en' },
+}
+
+// Global stubs for common Nuxt components
+config.global.stubs = {
+  NuxtLink: { template: '<a :href="to"><slot /></a>', props: ['to'] },
+  NuxtImg: { template: '<img :src="src" :alt="alt" />', props: ['src', 'alt', 'width', 'height', 'densities', 'loading', 'sizes', 'preset', 'fetchpriority'] },
+  commonIcon: { template: '<span :class="name" data-testid="icon"></span>', props: ['name', 'size'] },
+  ClientOnly: { template: '<slot />' },
+}
+
+// Global directives
+config.global.directives = {
+  motion: {},
+}
+
+// Mock auth store for admin components
+global.useAuthStore = vi.fn(() => ({
+  user: null,
+  isAuthenticated: false,
+  isAdmin: false,
+  login: vi.fn(),
+  logout: vi.fn(),
+  checkAuth: vi.fn(),
+}))
+
+// Mock useInventory composable
+global.useInventory = vi.fn(() => ({
+  stockLevel: ref(50),
+  stockStatus: computed(() => 'in-stock'),
+  isLowStock: computed(() => false),
+  isOutOfStock: computed(() => false),
+  getStockLevelColor: vi.fn(() => 'text-green-600'),
+  getStockLevelBgColor: vi.fn(() => 'bg-green-100'),
+  getStockLevelPercentage: vi.fn(() => 100),
+  needsReorder: computed(() => false),
+  checkNeedsReorder: vi.fn(() => false),
+  getStockStatus: vi.fn(() => 'in-stock'),
+  getLowStockThreshold: vi.fn(() => 10),
+  getReorderPoint: vi.fn(() => 20),
+}))
+
+// Mock useDashboardRefresh composable
+global.useDashboardRefresh = vi.fn(() => ({
+  refreshing: ref(false),
+  autoRefreshEnabled: ref(true),
+  refresh: vi.fn(),
+  startAutoRefresh: vi.fn(),
+  stopAutoRefresh: vi.fn(),
+}))
+
+// Mock useAdminDashboardStore
+global.useAdminDashboardStore = vi.fn(() => ({
+  stats: {
+    totalProducts: 150,
+    activeProducts: 140,
+    lowStockProducts: 5,
+    totalUsers: 1200,
+    activeUsers: 850,
+    newUsersToday: 12,
+    totalOrders: 320,
+    conversionRate: 2.5,
+    revenue: 45000,
+    revenueToday: 1200,
+  },
+  isLoading: false,
+  timeSinceRefresh: '5 min ago',
+  fetchStats: vi.fn(),
+}))
+
+// Mock checkout-related composables
+global.useCheckout = vi.fn(() => ({
+  step: ref(1),
+  isLoading: ref(false),
+  error: ref(null),
+  shippingAddress: ref(null),
+  billingAddress: ref(null),
+  paymentMethod: ref(null),
+  orderSummary: computed(() => ({
+    subtotal: 100,
+    shipping: 10,
+    tax: 8,
+    total: 118,
+    items: [],
+  })),
+  nextStep: vi.fn(),
+  previousStep: vi.fn(),
+  submitOrder: vi.fn(),
+}))
+
+global.useGuestCheckout = vi.fn(() => ({
+  guestEmail: ref(''),
+  isGuest: ref(true),
+  validateEmail: vi.fn(() => true),
+}))
+
+global.useOrderConfirmation = vi.fn(() => ({
+  order: ref(null),
+  isLoading: ref(false),
+  error: ref(null),
+}))
+
+// Mock useProductAnalytics composable
+global.useProductAnalytics = vi.fn(() => ({
+  trackProductView: vi.fn(),
+  trackAddToCart: vi.fn(),
+  trackPurchase: vi.fn(),
+}))
+
+// Mock useSearchFilters composable
+global.useSearchFilters = vi.fn(() => ({
+  filters: ref({}),
+  activeFilters: computed(() => []),
+  applyFilter: vi.fn(),
+  removeFilter: vi.fn(),
+  clearFilters: vi.fn(),
+}))
+
+// Mock useMediaQuery composable
+global.useMediaQuery = vi.fn(() => ({
+  isMobile: computed(() => false),
+  isTablet: computed(() => false),
+  isDesktop: computed(() => true),
+}))
+
+// Mock useDropzone composable (for file uploads)
+global.useDropzone = vi.fn(() => ({
+  isDragging: ref(false),
+  files: ref([]),
+  handleDrop: vi.fn(),
+  handleFileSelect: vi.fn(),
+  removeFile: vi.fn(),
+}))

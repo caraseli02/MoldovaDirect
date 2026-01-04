@@ -4,19 +4,28 @@ import ShippingProgress from '~/components/cart/ShippingProgress.vue'
 
 vi.mock('#imports', () => ({
   useI18n: vi.fn(() => ({
-    t: (k: string, params?: any) => {
-      if (k === 'cart.shipping.addMore') {
-        return `Add ${params?.amount} for free shipping`
-      }
-      return k
-    },
+    t: (k: string, _params?: any) => k,
     locale: { value: 'en' },
   })),
 }))
 
+const mockI18n = {
+  install(app: any) {
+    app.config.globalProperties.$t = (key: string) => key
+    app.config.globalProperties.$i18n = { locale: 'en' }
+  },
+}
+
 describe('Cart ShippingProgress', () => {
+  const mountOptions = {
+    global: {
+      plugins: [mockI18n],
+    },
+  }
+
   it('should render shipping progress', () => {
     const wrapper = mount(ShippingProgress, {
+      ...mountOptions,
       props: {
         subtotal: 30,
         freeShippingThreshold: 50,
@@ -27,6 +36,7 @@ describe('Cart ShippingProgress', () => {
 
   it('should show progress bar at correct percentage', () => {
     const wrapper = mount(ShippingProgress, {
+      ...mountOptions,
       props: {
         subtotal: 25,
         freeShippingThreshold: 50,
@@ -38,6 +48,7 @@ describe('Cart ShippingProgress', () => {
 
   it('should show qualified message when threshold met', () => {
     const wrapper = mount(ShippingProgress, {
+      ...mountOptions,
       props: {
         subtotal: 60,
         freeShippingThreshold: 50,
@@ -48,16 +59,18 @@ describe('Cart ShippingProgress', () => {
 
   it('should show amount remaining when below threshold', () => {
     const wrapper = mount(ShippingProgress, {
+      ...mountOptions,
       props: {
         subtotal: 30,
         freeShippingThreshold: 50,
       },
     })
-    expect(wrapper.text()).toContain('Add')
+    expect(wrapper.text()).toContain('cart.shipping.addMore')
   })
 
   it('should hide when subtotal is zero', () => {
     const wrapper = mount(ShippingProgress, {
+      ...mountOptions,
       props: {
         subtotal: 0,
         freeShippingThreshold: 50,
@@ -68,6 +81,7 @@ describe('Cart ShippingProgress', () => {
 
   it('should use emerald color when qualified', () => {
     const wrapper = mount(ShippingProgress, {
+      ...mountOptions,
       props: {
         subtotal: 60,
         freeShippingThreshold: 50,
@@ -79,6 +93,7 @@ describe('Cart ShippingProgress', () => {
 
   it('should cap progress at 100%', () => {
     const wrapper = mount(ShippingProgress, {
+      ...mountOptions,
       props: {
         subtotal: 150,
         freeShippingThreshold: 50,

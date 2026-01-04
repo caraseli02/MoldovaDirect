@@ -126,8 +126,8 @@ import { cn } from '~/lib/utils'
 const { t, locale, locales } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 
-// Refs
-const dropdownRef = ref<HTMLElement | null>(null)
+// Refs - using useTemplateRef for better type inference with VueUse
+const dropdownRef = useTemplateRef<HTMLElement>('dropdownRef')
 const triggerRef = ref<HTMLElement | null>(null)
 const menuRef = ref<HTMLElement | null>(null)
 const optionRefs = ref<HTMLElement[]>([])
