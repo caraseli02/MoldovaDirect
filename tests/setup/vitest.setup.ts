@@ -173,6 +173,65 @@ vi.mock('#imports', async () => {
     useSupabaseUser: vi.fn(() => vue.ref(null)),
 
     // Custom composables
+    useAuthValidation: vi.fn(() => ({
+      calculatePasswordStrength: (password: string) => {
+        if (!password) return 0
+        let strength = 0
+        if (password.length >= 8) strength++
+        if (password.length >= 12) strength++
+        if (/[a-z]/.test(password)) strength++
+        if (/[A-Z]/.test(password)) strength++
+        if (/[0-9]/.test(password)) strength++
+        if (/[^a-zA-Z0-9]/.test(password)) strength++
+        if (password.length >= 16) strength++
+        return Math.min(strength, 4)
+      },
+      getPasswordStrengthLabel: (strength: number) => {
+        const labels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong']
+        return labels[strength] ?? 'Very Weak'
+      },
+      getPasswordStrengthColor: (strength: number) => {
+        const colors = ['red', 'orange', 'yellow', 'blue', 'green']
+        return colors[strength] ?? 'red'
+      },
+      validateEmail: vi.fn(() => ({ isValid: true, errors: [], fieldErrors: {} })),
+      validatePassword: vi.fn(() => ({ isValid: true, errors: [], fieldErrors: {} })),
+      validateRegistration: vi.fn(() => ({ isValid: true, errors: [], fieldErrors: {} })),
+      validateLogin: vi.fn(() => ({ isValid: true, errors: [], fieldErrors: {} })),
+      validatePasswordMatch: vi.fn((p1: string, p2: string) => p1 === p2),
+    })),
+    useToast: vi.fn(() => ({
+      success: vi.fn(),
+      error: vi.fn(),
+      info: vi.fn(),
+      warning: vi.fn(),
+      dismiss: vi.fn(),
+      toast: vi.fn(),
+    })),
+    useCardValidation: vi.fn(() => {
+      return {
+        creditCardData: ref({
+          number: '',
+          expiryMonth: '',
+          expiryYear: '',
+          cvv: '',
+          holderName: '',
+        }),
+        cardBrand: ref(''),
+        validationErrors: ref({}),
+        expiryDisplay: computed(() => ''),
+        cvvMaxLength: computed(() => 3),
+        formatCardNumber: vi.fn(),
+        formatExpiry: vi.fn(),
+        formatCVV: vi.fn(),
+        validateCardNumber: vi.fn(),
+        validateExpiry: vi.fn(),
+        validateCVV: vi.fn(),
+        validateHolderName: vi.fn(),
+        getCardBrandIcon: vi.fn((brand: string) => `card-${brand}`),
+        initializeFromData: vi.fn(),
+      }
+    }),
     useCart: vi.fn(() => ({
       items: vue.ref([]),
       totalItems: vue.computed(() => 0),
@@ -348,6 +407,79 @@ global.useTheme = vi.fn(() => ({
 
 // Mock useSwitchLocalePath
 global.useSwitchLocalePath = vi.fn(() => (_locale: string) => '/')
+
+// Mock useAuthValidation composable
+global.useAuthValidation = vi.fn(() => ({
+  calculatePasswordStrength: (password: string) => {
+    if (!password) return 0
+    let strength = 0
+    if (password.length >= 8) strength++
+    if (password.length >= 12) strength++
+    if (/[a-z]/.test(password)) strength++
+    if (/[A-Z]/.test(password)) strength++
+    if (/[0-9]/.test(password)) strength++
+    if (/[^a-zA-Z0-9]/.test(password)) strength++
+    if (password.length >= 16) strength++
+    return Math.min(strength, 4)
+  },
+  getPasswordStrengthLabel: (strength: number) => {
+    const labels = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong']
+    return labels[strength] ?? 'Very Weak'
+  },
+  getPasswordStrengthColor: (strength: number) => {
+    const colors = ['red', 'orange', 'yellow', 'blue', 'green']
+    return colors[strength] ?? 'red'
+  },
+  validateEmail: vi.fn(() => ({ isValid: true, errors: [], fieldErrors: {} })),
+  validatePassword: vi.fn(() => ({ isValid: true, errors: [], fieldErrors: {} })),
+  validateRegistration: vi.fn(() => ({ isValid: true, errors: [], fieldErrors: {} })),
+  validateLogin: vi.fn(() => ({ isValid: true, errors: [], fieldErrors: {} })),
+  validateForgotPassword: vi.fn(() => ({ isValid: true, errors: [], fieldErrors: {} })),
+  validateResetPassword: vi.fn(() => ({ isValid: true, errors: [], fieldErrors: {} })),
+  validateEmailVerification: vi.fn(() => ({ isValid: true, errors: [], fieldErrors: {} })),
+  validatePasswordMatch: vi.fn((p1: string, p2: string) => p1 === p2),
+  validateTermsAcceptance: vi.fn((accepted: boolean) => ({
+    isValid: accepted,
+    errors: accepted ? [] : [{ field: 'acceptTerms', message: 'Required', code: 'required' }],
+    fieldErrors: accepted ? {} : { acceptTerms: 'Required' },
+  })),
+  validateMFACode: vi.fn(() => ({ isValid: true, errors: [], fieldErrors: {} })),
+  validateMFAFriendlyName: vi.fn(() => ({ isValid: true, errors: [], fieldErrors: {} })),
+}))
+
+// Mock useToast composable
+global.useToast = vi.fn(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+  info: vi.fn(),
+  warning: vi.fn(),
+  dismiss: vi.fn(),
+  toast: vi.fn(),
+}))
+
+// Mock useCardValidation composable
+global.useCardValidation = vi.fn(() => ({
+  creditCardData: ref({
+    number: '',
+    expiryMonth: '',
+    expiryYear: '',
+    cvv: '',
+    holderName: '',
+  }),
+  cardBrand: ref(''),
+  validationErrors: ref({}),
+  expiryDisplay: computed(() => ''),
+  cvvMaxLength: computed(() => 3),
+  formatCardNumber: vi.fn(),
+  formatExpiry: vi.fn(),
+  formatCVV: vi.fn(),
+  validateCardNumber: vi.fn(),
+  validateExpiry: vi.fn(),
+  validateCVV: vi.fn(),
+  validateHolderName: vi.fn(),
+  getCardBrandIcon: vi.fn((brand: string) => `card-${brand}`),
+  initializeFromData: vi.fn(),
+}))
 
 // Mock useHead and useSeoMeta
 global.useHead = vi.fn()
