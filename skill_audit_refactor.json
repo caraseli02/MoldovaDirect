@@ -2356,7 +2356,7 @@
           "implemented": false,
           "tested": false,
           "test_file": "tests/components/layout/__tests__/LanguageSwitcher.test.ts",
-          "test_exists": false,
+          "test_exists": true,
           "tasks": [
             {
               "id": "comp-test-22-a",
