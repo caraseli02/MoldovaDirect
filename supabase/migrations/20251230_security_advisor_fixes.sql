@@ -170,13 +170,13 @@ CREATE POLICY "Admins can view cart analytics events" ON cart_analytics_events
     )
   );
 
--- System insert access (for tracking events)
+-- System insert access (for tracking events) - restricted to service role only
 CREATE POLICY "System can insert cart analytics events" ON cart_analytics_events
-  FOR INSERT WITH CHECK (true);
+  FOR INSERT TO service_role WITH CHECK (true);
 
--- System update access
+-- System update access - restricted to service role only
 CREATE POLICY "System can update cart analytics events" ON cart_analytics_events
-  FOR UPDATE USING (true);
+  FOR UPDATE TO service_role USING (true);
 
 -- 2.2 Enable RLS on cart_conversion_metrics
 ALTER TABLE cart_conversion_metrics ENABLE ROW LEVEL SECURITY;
@@ -195,10 +195,10 @@ CREATE POLICY "Admins can view cart conversion metrics" ON cart_conversion_metri
   );
 
 CREATE POLICY "System can insert cart conversion metrics" ON cart_conversion_metrics
-  FOR INSERT WITH CHECK (true);
+  FOR INSERT TO service_role WITH CHECK (true);
 
 CREATE POLICY "System can update cart conversion metrics" ON cart_conversion_metrics
-  FOR UPDATE USING (true);
+  FOR UPDATE TO service_role USING (true);
 
 -- 2.3 Enable RLS on cart_abandonment_data
 ALTER TABLE cart_abandonment_data ENABLE ROW LEVEL SECURITY;
@@ -217,10 +217,10 @@ CREATE POLICY "Admins can view cart abandonment data" ON cart_abandonment_data
   );
 
 CREATE POLICY "System can insert cart abandonment data" ON cart_abandonment_data
-  FOR INSERT WITH CHECK (true);
+  FOR INSERT TO service_role WITH CHECK (true);
 
 CREATE POLICY "System can update cart abandonment data" ON cart_abandonment_data
-  FOR UPDATE USING (true);
+  FOR UPDATE TO service_role USING (true);
 
 -- 2.4 Enable RLS on daily_cart_analytics
 ALTER TABLE daily_cart_analytics ENABLE ROW LEVEL SECURITY;
@@ -239,10 +239,10 @@ CREATE POLICY "Admins can view daily cart analytics" ON daily_cart_analytics
   );
 
 CREATE POLICY "System can insert daily cart analytics" ON daily_cart_analytics
-  FOR INSERT WITH CHECK (true);
+  FOR INSERT TO service_role WITH CHECK (true);
 
 CREATE POLICY "System can update daily cart analytics" ON daily_cart_analytics
-  FOR UPDATE USING (true);
+  FOR UPDATE TO service_role USING (true);
 
 -- =============================================
 -- PART 3: FIX FUNCTION SEARCH PATH WARNINGS (27 warnings)
@@ -307,6 +307,7 @@ $$ LANGUAGE plpgsql
 SET search_path = '';
 
 -- 3.5 Fix update_inventory_on_order function
+-- SECURITY DEFINER needed to bypass RLS when updating products/inventory_logs
 CREATE OR REPLACE FUNCTION update_inventory_on_order(order_id_param INTEGER)
 RETURNS VOID AS $$
 DECLARE
@@ -339,7 +340,7 @@ BEGIN
     WHERE id = item.product_id;
   END LOOP;
 END;
-$$ LANGUAGE plpgsql
+$$ LANGUAGE plpgsql SECURITY DEFINER
 SET search_path = '';
 
 -- 3.6 Fix validate_cart_for_checkout function
