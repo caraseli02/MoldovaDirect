@@ -1,5 +1,5 @@
 import { vi } from 'vitest'
-import { config } from '@vue/test-utils'
+import { config, flushPromises } from '@vue/test-utils'
 import {
   computed,
   reactive,
@@ -32,6 +32,9 @@ import {
   inject,
   useTemplateRef,
 } from 'vue'
+
+// Re-export flushPromises for convenience in tests
+export { flushPromises }
 
 // Mock import.meta.client to true for client-side code paths
 Object.defineProperty(import.meta, 'client', { value: true, writable: true })
@@ -304,13 +307,24 @@ vi.mock('#imports', async () => {
 })
 
 // Mock h3 module
+interface H3ErrorInput {
+  statusCode?: number
+  statusMessage?: string
+  message?: string
+}
+
+interface H3Error extends Error {
+  statusCode?: number
+  statusMessage?: string
+}
+
 vi.mock('h3', () => ({
   getQuery: vi.fn(() => ({})),
   getCookie: vi.fn(),
   getHeader: vi.fn(),
   getRequestIP: vi.fn(() => '127.0.0.1'),
-  createError: vi.fn((error: any) => {
-    const err = new Error(error.statusMessage || error.message) as any
+  createError: vi.fn((error: H3ErrorInput): H3Error => {
+    const err = new Error(error.statusMessage || error.message) as H3Error
     err.statusCode = error.statusCode
     err.statusMessage = error.statusMessage
     return err
@@ -384,7 +398,7 @@ global.useRouter = vi.fn(() => ({
   currentRoute: { value: { query: {} } },
 }))
 
-global.useLocalePath = vi.fn(() => (path: any) => {
+global.useLocalePath = vi.fn(() => (path: string | { name?: string, path?: string, params?: Record<string, string> }) => {
   if (typeof path === 'string') return path
   if (path?.name === 'products-slug') return `/products/${path.params?.slug || ''}`
   return path?.path || '/'
@@ -396,9 +410,9 @@ global.navigateTo = vi.fn()
 global.defineNuxtRouteMiddleware = vi.fn(middleware => middleware)
 global.useSupabaseClient = vi.fn()
 global.useSupabaseUser = vi.fn()
-global.createError = vi.fn((error: any) => {
-  const err = new Error(error.statusMessage)
-  ;(err as unknown).statusCode = error.statusCode
+global.createError = vi.fn((error: H3ErrorInput) => {
+  const err = new Error(error.statusMessage) as H3Error
+  err.statusCode = error.statusCode
   throw err
 })
 
@@ -742,7 +756,7 @@ global.getDatabaseErrorDetail = (error: unknown): string | undefined => {
 // Mock useCookie for testing with shared storage
 // This ensures all calls to useCookie with the same name get the same ref
 // Export this so tests can access and manipulate cookie data
-export const cookieStorage = new Map<string, any>()
+export const cookieStorage = new Map<string, unknown>()
 
 // Track cookie saves for testing
 let _cookieSaveCount = 0
@@ -757,7 +771,7 @@ global.useCookie = vi.fn((name: string, _options?: unknown) => {
     get value() {
       return cookieStorage.get(name)
     },
-    set value(val: any) {
+    set value(val: unknown) {
       _cookieSaveCount++
       if (val === null || val === undefined) {
         cookieStorage.delete(name)
