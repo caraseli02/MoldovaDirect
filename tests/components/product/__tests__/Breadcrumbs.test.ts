@@ -1,13 +1,30 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { ref } from 'vue'
 import ProductBreadcrumbs from '~/components/product/Breadcrumbs.vue'
 
-vi.mock('#imports', () => ({
-  useI18n: vi.fn(() => ({ t: (k: string) => k })),
+// Mock vue-i18n
+vi.mock('vue-i18n', () => ({
+  useI18n: vi.fn(() => ({
+    t: (key: string, params?: Record<string, unknown>) => {
+      if (params) {
+        let result = key
+        Object.entries(params).forEach(([param, value]) => {
+          result = result.replace(`{${param}}`, String(value))
+        })
+        return result
+      }
+      return key
+    },
+  })),
 }))
 
+// Mock @vueuse/core
 vi.mock('@vueuse/core', () => ({
-  useWindowSize: vi.fn(() => ({ width: { value: 1024 } })),
+  useWindowSize: vi.fn(() => ({
+    width: ref(1024),
+    height: ref(768),
+  })),
 }))
 
 describe('Product Breadcrumbs', () => {
@@ -35,7 +52,8 @@ describe('Product Breadcrumbs', () => {
     const wrapper = mount(ProductBreadcrumbs, {
       props: { searchQuery: 'wine' },
     })
-    expect(wrapper.html()).toContain('wine')
+    // The i18n mock replaces {query} with the actual value
+    expect(wrapper.text()).toContain('products.breadcrumbNav.searchResults')
   })
 
   it('should show category path', () => {

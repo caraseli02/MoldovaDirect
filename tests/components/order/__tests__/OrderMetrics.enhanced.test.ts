@@ -2,15 +2,15 @@ import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import OrderMetrics from '~/components/order/OrderMetrics.vue'
 
-vi.mock('#imports', () => ({ useI18n: vi.fn(() => ({ t: (k: string) => k })) }))
+vi.mock('#imports', () => ({ useI18n: vi.fn(() => ({ t: (k: string) => k, locale: { value: 'en' } })) }))
 
 describe('OrderMetrics - Enhanced', () => {
+  // Mock metrics matching the OrderMetrics interface (activeOrders, deliveredThisMonth, totalOrders, totalSpentThisMonth)
   const mockMetrics = {
-    total: 145,
-    pending: 12,
-    processing: 25,
-    completed: 100,
-    cancelled: 8,
+    activeOrders: 12,
+    deliveredThisMonth: 25,
+    totalOrders: 145,
+    totalSpentThisMonth: 2500,
   }
 
   it('should render order metrics', () => {
@@ -27,25 +27,25 @@ describe('OrderMetrics - Enhanced', () => {
     expect(wrapper.text()).toContain('145')
   })
 
-  it('should show pending orders count', () => {
+  it('should show active orders count', () => {
     const wrapper = mount(OrderMetrics, {
       props: { metrics: mockMetrics },
     })
     expect(wrapper.text()).toContain('12')
   })
 
-  it('should display metrics by status', () => {
+  it('should display delivered this month count', () => {
     const wrapper = mount(OrderMetrics, {
       props: { metrics: mockMetrics },
     })
     expect(wrapper.text()).toContain('25')
-    expect(wrapper.text()).toContain('100')
   })
 
-  it('should calculate percentages correctly', () => {
+  it('should display total spent this month formatted as currency', () => {
     const wrapper = mount(OrderMetrics, {
       props: { metrics: mockMetrics },
     })
-    expect(wrapper.html()).toBeTruthy()
+    // Total spent is formatted as EUR currency (€2,500 or 2.500 € depending on locale)
+    expect(wrapper.text()).toMatch(/2[,.]?500/)
   })
 })

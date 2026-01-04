@@ -105,7 +105,18 @@ describe('Order OrderTrackingSection', () => {
         tracking: mockTrackingWithInfo,
         order: mockOrder,
       },
+      global: {
+        stubs: {
+          // Stub OrderStatus to show timeline events
+          OrderStatus: {
+            template: '<div class="order-status-timeline"><div v-for="event in timeline" :key="event.label">{{ event.label }} - {{ event.description }}</div></div>',
+            props: ['status', 'timeline', 'showTimeline', 'estimatedDelivery'],
+          },
+          Button: { template: '<button :aria-label="ariaLabel" @click="$emit(\'click\')"><slot /></button>', props: ['variant', 'size', 'ariaLabel'] },
+        },
+      },
     })
+    // The timeline events are passed to OrderStatus, which we've stubbed to display them
     expect(wrapper.text()).toContain('Shipped')
     expect(wrapper.text()).toContain('Chisinau')
   })

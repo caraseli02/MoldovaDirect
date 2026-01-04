@@ -83,8 +83,13 @@ vi.mock('#imports', async () => {
         }
         return key
       },
-      locale: { value: 'en' },
-      locales: { value: ['en', 'es', 'ro', 'ru'] },
+      locale: vue.ref('en'),
+      locales: vue.ref([
+        { code: 'en', name: 'English' },
+        { code: 'es', name: 'Español' },
+        { code: 'ro', name: 'Română' },
+        { code: 'ru', name: 'Русский' },
+      ]),
       setLocale: vi.fn(),
     })),
     useLocalePath: vi.fn(() => (path: string | { name: string, params?: Record<string, unknown> }) => {
@@ -234,6 +239,7 @@ vi.mock('#imports', async () => {
     }),
     useCart: vi.fn(() => ({
       items: vue.ref([]),
+      itemCount: vue.ref(0),
       totalItems: vue.computed(() => 0),
       totalPrice: vue.computed(() => 0),
       addItem: vi.fn(),
@@ -248,6 +254,19 @@ vi.mock('#imports', async () => {
       theme: vue.ref('light'),
       toggleTheme: vi.fn(),
       isDark: vue.computed(() => false),
+    })),
+    useKeyboardShortcuts: vi.fn(() => ({
+      getShortcutDisplay: vi.fn((_key: string, _options?: unknown) => 'Ctrl+K'),
+      registerShortcut: vi.fn(),
+      unregisterShortcut: vi.fn(),
+    })),
+    useDevice: vi.fn(() => ({
+      isMobile: vue.ref(false),
+      isTablet: vue.ref(false),
+      isDesktop: vue.ref(true),
+      windowWidth: vue.ref(1024),
+      windowHeight: vue.ref(768),
+      deviceType: vue.ref('desktop'),
     })),
 
     // Vue utilities
@@ -336,14 +355,21 @@ global.useI18n = vi.fn(() => ({
     // Simple mock that returns the key for testing
     if (params) {
       let result = key
-      Object.entries(params).forEach(([param, value]) => {
+      Object.entries(params as Record<string, unknown>).forEach(([param, value]) => {
         result = result.replace(`{${param}}`, String(value))
       })
       return result
     }
     return key
   }),
-  locale: { value: 'en' },
+  locale: ref('en'),
+  locales: ref([
+    { code: 'en', name: 'English' },
+    { code: 'es', name: 'Español' },
+    { code: 'ro', name: 'Română' },
+    { code: 'ru', name: 'Русский' },
+  ]),
+  setLocale: vi.fn(),
 }))
 
 global.useRoute = vi.fn(() => ({
@@ -387,6 +413,7 @@ global.useNuxtApp = vi.fn(() => ({
 // Mock useCart composable (custom composable for cart functionality)
 global.useCart = vi.fn(() => ({
   items: ref([]),
+  itemCount: ref(0),
   totalItems: computed(() => 0),
   totalPrice: computed(() => 0),
   addItem: vi.fn(),
@@ -403,6 +430,23 @@ global.useTheme = vi.fn(() => ({
   theme: ref('light'),
   toggleTheme: vi.fn(),
   isDark: computed(() => false),
+}))
+
+// Mock useKeyboardShortcuts composable
+global.useKeyboardShortcuts = vi.fn(() => ({
+  getShortcutDisplay: vi.fn((_key: string, _options?: unknown) => 'Ctrl+K'),
+  registerShortcut: vi.fn(),
+  unregisterShortcut: vi.fn(),
+}))
+
+// Mock useDevice composable
+global.useDevice = vi.fn(() => ({
+  isMobile: ref(false),
+  isTablet: ref(false),
+  isDesktop: ref(true),
+  windowWidth: ref(1024),
+  windowHeight: ref(768),
+  deviceType: ref('desktop'),
 }))
 
 // Mock useSwitchLocalePath
@@ -747,6 +791,69 @@ config.global.stubs = {
   NuxtImg: { template: '<img :src="src" :alt="alt" />', props: ['src', 'alt', 'width', 'height', 'densities', 'loading', 'sizes', 'preset', 'fetchpriority'] },
   commonIcon: { template: '<span :class="name" data-testid="icon"></span>', props: ['name', 'size'] },
   ClientOnly: { template: '<slot />' },
+  // UI components
+  UiInput: { template: '<input :type="type || \'text\'" :value="modelValue" :placeholder="placeholder" :disabled="disabled" @input="$emit(\'update:modelValue\', $event.target.value)" @blur="$emit(\'blur\')" />', props: ['modelValue', 'type', 'placeholder', 'disabled', 'id', 'name', 'required', 'autocomplete'] },
+  UiLabel: { template: '<label :for="htmlFor"><slot /></label>', props: ['htmlFor'] },
+  UiButton: { template: '<button :type="type || \'button\'" :disabled="disabled" :class="[variant, size]" @click="$emit(\'click\')"><slot /></button>', props: ['type', 'disabled', 'variant', 'size', 'loading'] },
+  UiCheckbox: { template: '<input type="checkbox" :checked="modelValue" :disabled="disabled" @change="$emit(\'update:modelValue\', $event.target.checked)" />', props: ['modelValue', 'disabled', 'id'] },
+  UiBadge: { template: '<span :class="variant"><slot /></span>', props: ['variant'] },
+  UiCard: { template: '<div class="card"><slot /></div>' },
+  UiCardHeader: { template: '<div class="card-header"><slot /></div>' },
+  UiCardTitle: { template: '<h3 class="card-title"><slot /></h3>' },
+  UiCardDescription: { template: '<p class="card-description"><slot /></p>' },
+  UiCardContent: { template: '<div class="card-content"><slot /></div>' },
+  UiCardFooter: { template: '<div class="card-footer"><slot /></div>' },
+  UiSheet: { template: '<div class="sheet" v-if="modelValue"><slot /></div>', props: ['modelValue'] },
+  UiSheetContent: { template: '<div class="sheet-content"><slot /></div>', props: ['side'] },
+  UiSheetHeader: { template: '<div class="sheet-header"><slot /></div>' },
+  UiSheetTitle: { template: '<h2 class="sheet-title"><slot /></h2>' },
+  UiSheetDescription: { template: '<p class="sheet-description"><slot /></p>' },
+  UiSheetFooter: { template: '<div class="sheet-footer"><slot /></div>' },
+  UiSheetClose: { template: '<button class="sheet-close" @click="$emit(\'close\')"><slot /></button>' },
+  UiSelect: { template: '<select :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><slot /></select>', props: ['modelValue', 'disabled'] },
+  UiSelectTrigger: { template: '<button class="select-trigger"><slot /></button>' },
+  UiSelectValue: { template: '<span class="select-value"><slot /></span>', props: ['placeholder'] },
+  UiSelectContent: { template: '<div class="select-content"><slot /></div>' },
+  UiSelectItem: { template: '<option :value="value"><slot /></option>', props: ['value'] },
+  UiTextarea: { template: '<textarea :value="modelValue" :placeholder="placeholder" :disabled="disabled" @input="$emit(\'update:modelValue\', $event.target.value)"></textarea>', props: ['modelValue', 'placeholder', 'disabled', 'rows'] },
+  UiSkeleton: { template: '<div class="skeleton animate-pulse"></div>', props: ['class'] },
+  UiTooltip: { template: '<div class="tooltip"><slot /></div>' },
+  UiTooltipTrigger: { template: '<span class="tooltip-trigger"><slot /></span>' },
+  UiTooltipContent: { template: '<div class="tooltip-content"><slot /></div>' },
+  UiDialog: { template: '<div class="dialog" v-if="open"><slot /></div>', props: ['open'] },
+  UiDialogContent: { template: '<div class="dialog-content"><slot /></div>' },
+  UiDialogHeader: { template: '<div class="dialog-header"><slot /></div>' },
+  UiDialogTitle: { template: '<h2 class="dialog-title"><slot /></h2>' },
+  UiDialogDescription: { template: '<p class="dialog-description"><slot /></p>' },
+  UiDialogFooter: { template: '<div class="dialog-footer"><slot /></div>' },
+  UiDialogClose: { template: '<button class="dialog-close"><slot /></button>' },
+  UiTabs: { template: '<div class="tabs"><slot /></div>', props: ['modelValue', 'defaultValue'] },
+  UiTabsList: { template: '<div class="tabs-list"><slot /></div>' },
+  UiTabsTrigger: { template: '<button class="tabs-trigger" :data-value="value"><slot /></button>', props: ['value'] },
+  UiTabsContent: { template: '<div class="tabs-content" :data-value="value"><slot /></div>', props: ['value'] },
+  UiAccordion: { template: '<div class="accordion"><slot /></div>' },
+  UiAccordionItem: { template: '<div class="accordion-item"><slot /></div>', props: ['value'] },
+  UiAccordionTrigger: { template: '<button class="accordion-trigger"><slot /></button>' },
+  UiAccordionContent: { template: '<div class="accordion-content"><slot /></div>' },
+  UiDropdownMenu: { template: '<div class="dropdown"><slot /></div>' },
+  UiDropdownMenuTrigger: { template: '<button class="dropdown-trigger"><slot /></button>' },
+  UiDropdownMenuContent: { template: '<div class="dropdown-content"><slot /></div>' },
+  UiDropdownMenuItem: { template: '<div class="dropdown-item" @click="$emit(\'click\')"><slot /></div>' },
+  UiDropdownMenuSeparator: { template: '<hr class="dropdown-separator" />' },
+  UiRadioGroup: { template: '<div class="radio-group" role="radiogroup"><slot /></div>', props: ['modelValue'] },
+  UiRadioGroupItem: { template: '<input type="radio" :value="value" :checked="$parent.modelValue === value" />', props: ['value', 'id'] },
+  UiSwitch: { template: '<button type="button" role="switch" :aria-checked="modelValue" @click="$emit(\'update:modelValue\', !modelValue)"></button>', props: ['modelValue', 'disabled'] },
+  UiScrollArea: { template: '<div class="scroll-area"><slot /></div>' },
+  UiSeparator: { template: '<hr class="separator" />' },
+  UiAvatar: { template: '<div class="avatar"><slot /></div>' },
+  UiAvatarImage: { template: '<img :src="src" :alt="alt" />', props: ['src', 'alt'] },
+  UiAvatarFallback: { template: '<span class="avatar-fallback"><slot /></span>' },
+  UiProgress: { template: '<div class="progress" role="progressbar" :aria-valuenow="value"><div :style="{width: value + \'%\'}"></div></div>', props: ['value'] },
+  UiPopover: { template: '<div class="popover"><slot /></div>' },
+  UiPopoverTrigger: { template: '<button class="popover-trigger"><slot /></button>' },
+  UiPopoverContent: { template: '<div class="popover-content"><slot /></div>' },
+  Transition: { template: '<div><slot /></div>' },
+  TransitionGroup: { template: '<div><slot /></div>' },
 }
 
 // Global directives
@@ -767,15 +874,37 @@ global.useAuthStore = vi.fn(() => ({
 // Mock useInventory composable
 global.useInventory = vi.fn(() => ({
   stockLevel: ref(50),
-  stockStatus: computed(() => 'in-stock'),
+  stockStatus: computed(() => ({ label: 'In Stock', color: 'green', icon: 'M5 13l4 4L19 7' })),
   isLowStock: computed(() => false),
   isOutOfStock: computed(() => false),
   getStockLevelColor: vi.fn(() => 'text-green-600'),
   getStockLevelBgColor: vi.fn(() => 'bg-green-100'),
-  getStockLevelPercentage: vi.fn(() => 100),
-  needsReorder: computed(() => false),
-  checkNeedsReorder: vi.fn(() => false),
-  getStockStatus: vi.fn(() => 'in-stock'),
+  getStockLevelPercentage: vi.fn((quantity: number, max: number) => Math.min(100, (quantity / max) * 100)),
+  needsReorder: vi.fn((quantity: number, reorderPoint: number) => quantity <= reorderPoint),
+  getStockStatus: vi.fn((quantity: number, lowThreshold: number = 10) => {
+    if (quantity <= 0) return { label: 'Out of Stock', color: 'red', icon: 'M6 18L18 6M6 6l12 12' }
+    if (quantity <= lowThreshold) return { label: 'Low Stock', color: 'yellow', icon: 'M12 9v2m0 4h.01' }
+    return { label: 'In Stock', color: 'green', icon: 'M5 13l4 4L19 7' }
+  }),
+  getStockStatusClasses: vi.fn((status: { color: string }) => {
+    const colorMap: Record<string, string> = {
+      green: 'bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium',
+      yellow: 'bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium',
+      red: 'bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium',
+      orange: 'bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium',
+    }
+    return colorMap[status?.color] || colorMap.green
+  }),
+  getStockIndicatorClasses: vi.fn((status: { color: string }) => {
+    const colorMap: Record<string, string> = {
+      green: 'w-2 h-2 rounded-full bg-green-500 mr-1.5',
+      yellow: 'w-2 h-2 rounded-full bg-yellow-500 mr-1.5',
+      red: 'w-2 h-2 rounded-full bg-red-500 mr-1.5',
+      orange: 'w-2 h-2 rounded-full bg-orange-500 mr-1.5',
+    }
+    return colorMap[status?.color] || colorMap.green
+  }),
+  formatStockQuantity: vi.fn((quantity: number) => quantity.toLocaleString()),
   getLowStockThreshold: vi.fn(() => 10),
   getReorderPoint: vi.fn(() => 20),
 }))
