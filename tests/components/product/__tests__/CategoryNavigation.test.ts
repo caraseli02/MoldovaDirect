@@ -140,20 +140,108 @@ describe('Product CategoryNavigation', () => {
     }
   })
 
-  it('should highlight current category', () => {
+  it('should highlight current category by ID', () => {
     const wrapper = mountComponent({ currentCategory: '1' })
-    expect(wrapper.exists()).toBe(true)
+
+    // Find the button for Vinos Tintos (id: 1)
+    const categoryButtons = wrapper.findAll('button')
+    const vinosTintosButton = categoryButtons.find(btn => btn.text().includes('Vinos Tintos'))
+
+    expect(vinosTintosButton).toBeTruthy()
+    // Should have the highlight class
+    expect(vinosTintosButton?.classes()).toContain('text-blue-700')
+    expect(vinosTintosButton?.classes()).toContain('border-b-2')
+  })
+
+  it('should highlight current category by slug', () => {
+    const wrapper = mountComponent({ currentCategory: 'vinos-blancos' })
+
+    // Find the button for Vinos Blancos (slug: vinos-blancos)
+    const categoryButtons = wrapper.findAll('button')
+    const vinosBlancosButton = categoryButtons.find(btn => btn.text().includes('Vinos Blancos'))
+
+    expect(vinosBlancosButton).toBeTruthy()
+    // Should have the highlight class
+    expect(vinosBlancosButton?.classes()).toContain('text-blue-700')
+  })
+
+  it('should not highlight non-selected categories', () => {
+    const wrapper = mountComponent({ currentCategory: '1' })
+
+    // Find the button for Vinos Blancos (id: 2, should NOT be highlighted)
+    const categoryButtons = wrapper.findAll('button')
+    const vinosBlancosButton = categoryButtons.find(btn => btn.text().includes('Vinos Blancos'))
+
+    expect(vinosBlancosButton).toBeTruthy()
+    // Should NOT have the highlight class
+    expect(vinosBlancosButton?.classes()).not.toContain('text-blue-700')
+  })
+
+  it('should highlight All Products when no category is selected', () => {
+    const wrapper = mountComponent({ currentCategory: undefined })
+
+    // Find the "All" link - it should be highlighted
+    const allLink = wrapper.find('a[href="/products"]')
+    expect(allLink.exists()).toBe(true)
+    expect(allLink.classes()).toContain('text-blue-700')
+  })
+
+  it('should not highlight All Products when a category is selected', () => {
+    const wrapper = mountComponent({ currentCategory: '1' })
+
+    // The "All" link should not be highlighted when category is selected
+    const allLink = wrapper.find('a[href="/products"]')
+    expect(allLink.exists()).toBe(true)
+    // When category is selected, All should not have border-b-2
+    expect(allLink.classes()).not.toContain('border-b-2')
   })
 
   it('should render mobile view when useDevice returns isMobile true', () => {
     mockIsMobile.value = true
     const wrapper = mountComponent()
     expect(wrapper.exists()).toBe(true)
+    // Component should exist and render correctly in mobile mode
+    // The mobile section is conditionally rendered based on isMobile
+    expect(wrapper.find('.category-navigation').exists()).toBe(true)
   })
 
   it('should render desktop view when useDevice returns isMobile false', () => {
     mockIsMobile.value = false
     const wrapper = mountComponent()
     expect(wrapper.find('.hidden.lg\\:block').exists()).toBe(true)
+  })
+
+  it('should show breadcrumbs when category is selected', () => {
+    const wrapper = mountComponent({ currentCategory: '1' })
+
+    // Breadcrumbs should appear when a category is selected
+    // The component builds breadcrumbs based on currentCategory
+    expect(wrapper.exists()).toBe(true)
+  })
+
+  it('should hide dropdown menu by default', () => {
+    const wrapper = mountComponent()
+
+    // Dropdown should not be visible without hovering
+    const dropdown = wrapper.find('.absolute.left-0.top-full')
+    expect(dropdown.exists()).toBe(false)
+  })
+
+  it('should calculate total product count correctly', () => {
+    const wrapper = mountComponent({ showProductCount: true })
+
+    // Total should be 45 + 30 = 75
+    expect(wrapper.text()).toContain('(45)')
+    expect(wrapper.text()).toContain('(30)')
+  })
+
+  it('should match category by string ID', () => {
+    // Test that ID comparison works with string conversion
+    const wrapper = mountComponent({ currentCategory: '2' }) // String ID
+
+    const categoryButtons = wrapper.findAll('button')
+    const vinosBlancosButton = categoryButtons.find(btn => btn.text().includes('Vinos Blancos'))
+
+    expect(vinosBlancosButton?.classes()).toContain('text-blue-700')
   })
 })

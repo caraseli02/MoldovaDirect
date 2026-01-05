@@ -85,12 +85,177 @@ describe('Admin Users DetailView', () => {
     expect(wrapper.text()).toContain('Days Active')
   })
 
-  it('should emit edit event when edit button clicked', async () => {
+  it('should emit edit event with correct userId when edit button clicked', async () => {
     const wrapper = mount(UserDetailView, mountOptions)
     const editButton = wrapper.find('button')
-    if (editButton.exists()) {
+    expect(editButton.exists()).toBe(true)
+    await editButton.trigger('click')
+    const emitted = wrapper.emitted('edit')
+    expect(emitted).toBeTruthy()
+    expect(emitted![0]).toEqual(['user-1'])
+  })
+
+  // Event emission tests with payload validation
+  describe('event emissions with payloads', () => {
+    it('should emit edit event with userId matching props', async () => {
+      const wrapper = mount(UserDetailView, {
+        ...mountOptions,
+        props: { userId: 'user-custom-123' },
+      })
+      const editButton = wrapper.find('button')
+      expect(editButton.exists()).toBe(true)
       await editButton.trigger('click')
-      expect(wrapper.emitted('edit')).toBeTruthy()
-    }
+      const emitted = wrapper.emitted('edit')
+      expect(emitted).toBeTruthy()
+      expect(emitted!.length).toBe(1)
+      expect(emitted![0]).toEqual(['user-custom-123'])
+    })
+  })
+
+  // Statistics display tests
+  describe('statistics display', () => {
+    it('should display correct totalOrders value', () => {
+      const wrapper = mount(UserDetailView, mountOptions)
+      expect(wrapper.text()).toContain('10')
+    })
+
+    it('should display correct accountAge value', () => {
+      const wrapper = mount(UserDetailView, mountOptions)
+      expect(wrapper.text()).toContain('365')
+    })
+
+    it('should format totalSpent as currency', () => {
+      const wrapper = mount(UserDetailView, mountOptions)
+      // The formatCurrency function formats as EUR
+      expect(wrapper.text()).toMatch(/500|EUR/)
+    })
+  })
+
+  // User status display tests
+  describe('user status display', () => {
+    it('should apply green styling for active status', () => {
+      const wrapper = mount(UserDetailView, mountOptions)
+      const statusBadge = wrapper.find('.bg-green-100')
+      expect(statusBadge.exists()).toBe(true)
+      expect(statusBadge.text()).toBe('active')
+    })
+
+    it('should apply yellow styling for inactive status', () => {
+      ;(global as any).useAdminUsersStore = vi.fn(() => ({
+        currentUser: { ...mockUserData, status: 'inactive' },
+        userDetailLoading: false,
+        error: null,
+        clearCurrentUser: vi.fn(),
+      }))
+      const wrapper = mount(UserDetailView, mountOptions)
+      const statusBadge = wrapper.find('.bg-yellow-100')
+      expect(statusBadge.exists()).toBe(true)
+      expect(statusBadge.text()).toBe('inactive')
+    })
+  })
+
+  // Email verification display tests
+  describe('email verification display', () => {
+    it('should not show unverified warning when email is confirmed', () => {
+      const wrapper = mount(UserDetailView, mountOptions)
+      expect(wrapper.text()).not.toContain('Email not verified')
+    })
+
+    it('should show unverified warning when email is not confirmed', () => {
+      ;(global as any).useAdminUsersStore = vi.fn(() => ({
+        currentUser: { ...mockUserData, email_confirmed_at: null },
+        userDetailLoading: false,
+        error: null,
+        clearCurrentUser: vi.fn(),
+      }))
+      const wrapper = mount(UserDetailView, mountOptions)
+      expect(wrapper.text()).toContain('Email not verified')
+    })
+  })
+
+  // Tab navigation tests
+  describe('tab navigation', () => {
+    it('should display all tab options', () => {
+      const wrapper = mount(UserDetailView, mountOptions)
+      expect(wrapper.text()).toContain('Profile')
+      expect(wrapper.text()).toContain('Orders')
+      expect(wrapper.text()).toContain('Activity')
+      expect(wrapper.text()).toContain('Permissions')
+    })
+
+    it('should show Profile tab as active by default', () => {
+      const wrapper = mount(UserDetailView, mountOptions)
+      const activeTab = wrapper.find('.border-blue-500')
+      expect(activeTab.exists()).toBe(true)
+      expect(activeTab.text()).toContain('Profile')
+    })
+  })
+
+  // Profile tab content tests
+  describe('profile tab content', () => {
+    it('should display user phone number', () => {
+      const wrapper = mount(UserDetailView, mountOptions)
+      expect(wrapper.text()).toContain('+1234567890')
+    })
+
+    it('should display preferred language', () => {
+      const wrapper = mount(UserDetailView, mountOptions)
+      expect(wrapper.text()).toContain('en')
+    })
+
+    it('should show "Not provided" when phone is missing', () => {
+      ;(global as any).useAdminUsersStore = vi.fn(() => ({
+        currentUser: { ...mockUserData, profile: { ...mockUserData.profile, phone: null } },
+        userDetailLoading: false,
+        error: null,
+        clearCurrentUser: vi.fn(),
+      }))
+      const wrapper = mount(UserDetailView, mountOptions)
+      expect(wrapper.text()).toContain('Not provided')
+    })
+  })
+
+  // Loading state tests
+  describe('loading state', () => {
+    it('should show loading message when loading', () => {
+      ;(global as any).useAdminUsersStore = vi.fn(() => ({
+        currentUser: null,
+        userDetailLoading: true,
+        error: null,
+        clearCurrentUser: vi.fn(),
+      }))
+      const wrapper = mount(UserDetailView, mountOptions)
+      expect(wrapper.text()).toContain('Loading user details')
+    })
+  })
+
+  // Error state tests
+  describe('error state', () => {
+    it('should show error message when error occurs', () => {
+      ;(global as any).useAdminUsersStore = vi.fn(() => ({
+        currentUser: null,
+        userDetailLoading: false,
+        error: 'Failed to load user',
+        clearCurrentUser: vi.fn(),
+      }))
+      const wrapper = mount(UserDetailView, mountOptions)
+      expect(wrapper.text()).toContain('Failed to load user')
+    })
+
+    it('should emit action event with retry when retry button clicked', async () => {
+      ;(global as any).useAdminUsersStore = vi.fn(() => ({
+        currentUser: null,
+        userDetailLoading: false,
+        error: 'Failed to load user',
+        clearCurrentUser: vi.fn(),
+      }))
+      const wrapper = mount(UserDetailView, mountOptions)
+      const retryButton = wrapper.find('button')
+      expect(retryButton.exists()).toBe(true)
+      await retryButton.trigger('click')
+      const emitted = wrapper.emitted('action')
+      expect(emitted).toBeTruthy()
+      expect(emitted![0]).toEqual(['retry', 'user-1'])
+    })
   })
 })

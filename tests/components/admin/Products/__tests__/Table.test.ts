@@ -59,7 +59,7 @@ describe('Admin Products Table', () => {
     global: {
       plugins: [mockI18n],
       stubs: {
-        'Button': { template: '<button :disabled="disabled"><slot /></button>', props: ['disabled', 'variant', 'size'] },
+        'Button': { template: '<button :disabled="disabled" :title="title"><slot /></button>', props: ['disabled', 'variant', 'size', 'title'] },
         'Table': { template: '<table><slot /></table>' },
         'TableHeader': { template: '<thead><slot /></thead>' },
         'TableRow': { template: '<tr><slot /></tr>' },
@@ -97,15 +97,28 @@ describe('Admin Products Table', () => {
     expect(wrapper.text()).toContain('50')
   })
 
-  it('should emit delete-product action', async () => {
+  it('should emit delete-product with correct product id for first product', async () => {
     const wrapper = mount(ProductsTable, mountOptions)
     // Find delete buttons (they have the delete icon)
     const buttons = wrapper.findAll('button')
     const deleteButton = buttons.find(btn => btn.attributes('title') === 'Delete Product')
-    if (deleteButton) {
-      await deleteButton.trigger('click')
-      expect(wrapper.emitted('delete-product')).toBeTruthy()
-    }
+    expect(deleteButton).toBeDefined()
+    await deleteButton!.trigger('click')
+    const emitted = wrapper.emitted('delete-product')
+    expect(emitted).toBeTruthy()
+    expect(emitted![0]).toEqual([1]) // First product id is 1
+  })
+
+  it('should emit delete-product with correct product id for second product', async () => {
+    const wrapper = mount(ProductsTable, mountOptions)
+    // Find all delete buttons
+    const buttons = wrapper.findAll('button')
+    const deleteButtons = buttons.filter(btn => btn.attributes('title') === 'Delete Product')
+    expect(deleteButtons.length).toBeGreaterThan(1)
+    await deleteButtons[1].trigger('click')
+    const emitted = wrapper.emitted('delete-product')
+    expect(emitted).toBeTruthy()
+    expect(emitted![0]).toEqual([2]) // Second product id is 2
   })
 
   it('should handle empty product list', () => {
@@ -131,5 +144,147 @@ describe('Admin Products Table', () => {
       props: { ...defaultProps, hasSelectedProducts: true, selectedCount: 2 },
     })
     expect(wrapper.text()).toContain('2 products selected')
+  })
+
+  // Event emission tests with payload validation
+  describe('event emissions with payloads', () => {
+    it('should emit bulk-activate when bulk activate button clicked', async () => {
+      const wrapper = mount(ProductsTable, {
+        ...mountOptions,
+        props: { ...defaultProps, hasSelectedProducts: true, selectedCount: 2 },
+      })
+      const activateButton = wrapper.findAll('button').find(b => b.text().includes('Activate'))
+      expect(activateButton).toBeDefined()
+      await activateButton!.trigger('click')
+      const emitted = wrapper.emitted('bulk-activate')
+      expect(emitted).toBeTruthy()
+      expect(emitted!.length).toBe(1)
+      expect(emitted![0]).toEqual([]) // No payload expected
+    })
+
+    it('should emit bulk-deactivate when bulk deactivate button clicked', async () => {
+      const wrapper = mount(ProductsTable, {
+        ...mountOptions,
+        props: { ...defaultProps, hasSelectedProducts: true, selectedCount: 2 },
+      })
+      const deactivateButton = wrapper.findAll('button').find(b => b.text().includes('Deactivate'))
+      expect(deactivateButton).toBeDefined()
+      await deactivateButton!.trigger('click')
+      const emitted = wrapper.emitted('bulk-deactivate')
+      expect(emitted).toBeTruthy()
+      expect(emitted!.length).toBe(1)
+      expect(emitted![0]).toEqual([]) // No payload expected
+    })
+
+    it('should emit bulk-delete when bulk delete button clicked', async () => {
+      const wrapper = mount(ProductsTable, {
+        ...mountOptions,
+        props: { ...defaultProps, hasSelectedProducts: true, selectedCount: 2 },
+      })
+      const deleteButton = wrapper.findAll('button').find(b => b.text().includes('Delete'))
+      expect(deleteButton).toBeDefined()
+      await deleteButton!.trigger('click')
+      const emitted = wrapper.emitted('bulk-delete')
+      expect(emitted).toBeTruthy()
+      expect(emitted!.length).toBe(1)
+      expect(emitted![0]).toEqual([]) // No payload expected
+    })
+
+    it('should emit clear-selection when clear selection link clicked', async () => {
+      const wrapper = mount(ProductsTable, {
+        ...mountOptions,
+        props: { ...defaultProps, hasSelectedProducts: true, selectedCount: 2 },
+      })
+      const clearButton = wrapper.findAll('button').find(b => b.text().includes('Clear selection'))
+      expect(clearButton).toBeDefined()
+      await clearButton!.trigger('click')
+      const emitted = wrapper.emitted('clear-selection')
+      expect(emitted).toBeTruthy()
+      expect(emitted!.length).toBe(1)
+      expect(emitted![0]).toEqual([]) // No payload expected
+    })
+  })
+
+  // Product count display tests
+  describe('product count display', () => {
+    it('should display singular "product" when selectedCount is 1', () => {
+      const wrapper = mount(ProductsTable, {
+        ...mountOptions,
+        props: { ...defaultProps, hasSelectedProducts: true, selectedCount: 1 },
+      })
+      expect(wrapper.text()).toContain('1 product selected')
+      expect(wrapper.text()).not.toContain('1 products selected')
+    })
+
+    it('should display plural "products" when selectedCount is greater than 1', () => {
+      const wrapper = mount(ProductsTable, {
+        ...mountOptions,
+        props: { ...defaultProps, hasSelectedProducts: true, selectedCount: 5 },
+      })
+      expect(wrapper.text()).toContain('5 products selected')
+    })
+  })
+
+  // Status display tests
+  describe('product status display', () => {
+    it('should display Active status for active product', () => {
+      const wrapper = mount(ProductsTable, mountOptions)
+      expect(wrapper.text()).toContain('Active')
+    })
+
+    it('should display Inactive status for inactive product', () => {
+      const wrapper = mount(ProductsTable, mountOptions)
+      expect(wrapper.text()).toContain('Inactive')
+    })
+  })
+
+  // Empty state tests
+  describe('empty state variations', () => {
+    it('should show "Try adjusting your filters" when hasActiveFilters is true', () => {
+      const wrapper = mount(ProductsTable, {
+        ...mountOptions,
+        props: { ...defaultProps, products: [], hasActiveFilters: true },
+      })
+      expect(wrapper.text()).toContain('Try adjusting your filters')
+    })
+
+    it('should show "Get started by creating" when hasActiveFilters is false', () => {
+      const wrapper = mount(ProductsTable, {
+        ...mountOptions,
+        props: { ...defaultProps, products: [], hasActiveFilters: false },
+      })
+      expect(wrapper.text()).toContain('Get started by creating your first product')
+    })
+  })
+
+  // Bulk action button state tests
+  describe('bulk action buttons', () => {
+    it('should disable bulk action buttons when bulkOperationInProgress is true', () => {
+      const wrapper = mount(ProductsTable, {
+        ...mountOptions,
+        props: { ...defaultProps, hasSelectedProducts: true, selectedCount: 2, bulkOperationInProgress: true },
+      })
+      const activateButton = wrapper.findAll('button').find(b => b.text().includes('Activate'))
+      const deactivateButton = wrapper.findAll('button').find(b => b.text().includes('Deactivate'))
+      const deleteButton = wrapper.findAll('button').find(b => b.text().includes('Delete'))
+
+      expect(activateButton!.attributes('disabled')).toBeDefined()
+      expect(deactivateButton!.attributes('disabled')).toBeDefined()
+      expect(deleteButton!.attributes('disabled')).toBeDefined()
+    })
+
+    it('should enable bulk action buttons when bulkOperationInProgress is false', () => {
+      const wrapper = mount(ProductsTable, {
+        ...mountOptions,
+        props: { ...defaultProps, hasSelectedProducts: true, selectedCount: 2, bulkOperationInProgress: false },
+      })
+      const activateButton = wrapper.findAll('button').find(b => b.text().includes('Activate'))
+      const deactivateButton = wrapper.findAll('button').find(b => b.text().includes('Deactivate'))
+      const deleteButton = wrapper.findAll('button').find(b => b.text().includes('Delete'))
+
+      expect(activateButton!.attributes('disabled')).toBeUndefined()
+      expect(deactivateButton!.attributes('disabled')).toBeUndefined()
+      expect(deleteButton!.attributes('disabled')).toBeUndefined()
+    })
   })
 })

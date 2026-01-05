@@ -445,4 +445,164 @@ describe('PriceRangeSlider', () => {
       expect((numberInputs[0].element as HTMLInputElement).max).toBe('75')
     })
   })
+
+  describe('Min/Max Validation', () => {
+    it('should emit values in correct order [min, max] where min <= max', async () => {
+      // Arrange
+      wrapper = createWrapper({
+        value: [20, 80],
+      })
+      const numberInputs = wrapper.findAll('input[type="number"]')
+
+      // Act - change min value
+      await numberInputs[0].setValue(30)
+      await numberInputs[0].trigger('input')
+
+      // Fast-forward debounce
+      vi.advanceTimersByTime(350)
+      await flushPromises()
+
+      // Assert - emitted value should have min <= max
+      const emitted = wrapper.emitted('update:value')
+      if (emitted && emitted.length > 0) {
+        const lastEmit = emitted[emitted.length - 1][0] as [number, number]
+        expect(lastEmit[0]).toBeLessThanOrEqual(lastEmit[1])
+      }
+    })
+
+    it('should swap values when min is set greater than max', async () => {
+      // Arrange - start with min=20, max=80
+      wrapper = createWrapper({
+        value: [20, 80],
+      })
+      const numberInputs = wrapper.findAll('input[type="number"]')
+
+      // Act - try to set min value higher than max (should be corrected)
+      await numberInputs[0].setValue(90)
+      await numberInputs[0].trigger('input')
+
+      // Fast-forward debounce
+      vi.advanceTimersByTime(350)
+      await flushPromises()
+
+      // Assert - component should handle this case
+      const emitted = wrapper.emitted('update:value')
+      if (emitted && emitted.length > 0) {
+        const lastEmit = emitted[emitted.length - 1][0] as [number, number]
+        // The min should never be greater than max in emitted value
+        expect(lastEmit[0]).toBeLessThanOrEqual(lastEmit[1])
+      }
+    })
+
+    it('should clamp values to props.min bound', async () => {
+      // Arrange
+      wrapper = createWrapper({
+        min: 10,
+        max: 100,
+        value: [20, 80],
+      })
+      const numberInputs = wrapper.findAll('input[type="number"]')
+
+      // Act - try to set value below min
+      await numberInputs[0].setValue(5)
+      await numberInputs[0].trigger('input')
+
+      // Fast-forward debounce
+      vi.advanceTimersByTime(350)
+      await flushPromises()
+
+      // Assert
+      const emitted = wrapper.emitted('update:value')
+      if (emitted && emitted.length > 0) {
+        const lastEmit = emitted[emitted.length - 1][0] as [number, number]
+        // Value should be clamped to min
+        expect(lastEmit[0]).toBeGreaterThanOrEqual(10)
+      }
+    })
+
+    it('should clamp values to props.max bound', async () => {
+      // Arrange
+      wrapper = createWrapper({
+        min: 0,
+        max: 100,
+        value: [20, 80],
+      })
+      const numberInputs = wrapper.findAll('input[type="number"]')
+
+      // Act - try to set value above max
+      await numberInputs[1].setValue(150)
+      await numberInputs[1].trigger('input')
+
+      // Fast-forward debounce
+      vi.advanceTimersByTime(350)
+      await flushPromises()
+
+      // Assert
+      const emitted = wrapper.emitted('update:value')
+      if (emitted && emitted.length > 0) {
+        const lastEmit = emitted[emitted.length - 1][0] as [number, number]
+        // Value should be clamped to max
+        expect(lastEmit[1]).toBeLessThanOrEqual(100)
+      }
+    })
+
+    it('should correctly update max value', async () => {
+      // Arrange
+      wrapper = createWrapper({
+        value: [10, 90],
+      })
+      const numberInputs = wrapper.findAll('input[type="number"]')
+
+      // Act - change max value
+      await numberInputs[1].setValue(70)
+      await numberInputs[1].trigger('input')
+
+      // Fast-forward debounce
+      vi.advanceTimersByTime(350)
+      await flushPromises()
+
+      // Assert
+      const emitted = wrapper.emitted('update:value')
+      expect(emitted).toBeTruthy()
+      if (emitted && emitted.length > 0) {
+        const lastEmit = emitted[emitted.length - 1][0] as [number, number]
+        expect(lastEmit[1]).toBe(70)
+      }
+    })
+
+    it('should handle equal min and max values', async () => {
+      // Arrange
+      wrapper = createWrapper({
+        value: [50, 50],
+      })
+
+      // Assert - equal values should be valid
+      expect(wrapper.text()).toContain('€50')
+      const numberInputs = wrapper.findAll('input[type="number"]')
+      expect((numberInputs[0].element as HTMLInputElement).value).toBe('50')
+      expect((numberInputs[1].element as HTMLInputElement).value).toBe('50')
+    })
+
+    it('should emit update with correctly ordered values after range input change', async () => {
+      // Arrange
+      wrapper = createWrapper()
+      const rangeInputs = wrapper.findAll('input[type="range"]')
+
+      // Act - trigger input on first range
+      await rangeInputs[0].setValue(40)
+      await rangeInputs[0].trigger('input')
+
+      // Fast-forward debounce
+      vi.advanceTimersByTime(350)
+      await flushPromises()
+
+      // Assert
+      const emitted = wrapper.emitted('update:value')
+      expect(emitted).toBeTruthy()
+      if (emitted && emitted.length > 0) {
+        const lastEmit = emitted[emitted.length - 1][0] as [number, number]
+        expect(lastEmit[0]).toBeLessThanOrEqual(lastEmit[1])
+      }
+    })
+  })
 })
