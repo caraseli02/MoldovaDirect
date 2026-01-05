@@ -3,10 +3,14 @@ import { mount } from '@vue/test-utils'
 import { ref, computed, nextTick, watch, onMounted, onUnmounted, onBeforeMount } from 'vue'
 import LanguageSwitcher from '~/components/layout/LanguageSwitcher.vue'
 
-// Mock @vueuse/core
-vi.mock('@vueuse/core', () => ({
-  onClickOutside: vi.fn(),
-}))
+// Mock @vueuse/core with all required exports
+vi.mock('@vueuse/core', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@vueuse/core')>()
+  return {
+    ...actual,
+    onClickOutside: vi.fn(),
+  }
+})
 
 // Mock cn utility
 vi.mock('~/lib/utils', () => ({
