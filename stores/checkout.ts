@@ -5,6 +5,7 @@ import { useCheckoutShippingStore } from './checkout/shipping'
 import { useCheckoutPaymentStore } from './checkout/payment'
 import { useAuthStore } from '~/stores/auth'
 import { useCartStore } from '~/stores/cart'
+import { useStoreI18n } from '~/composables/useStoreI18n'
 import type { CheckoutStep, ShippingInformation, PaymentMethod, SavedPaymentMethod, Address, GuestInfo } from '~/types/checkout'
 import type { CartItem } from '~/stores/cart/types'
 import { validateShippingInformation, validatePaymentMethod } from '~/utils/checkout-validation'
@@ -175,14 +176,23 @@ export const useCheckoutStore = defineStore('checkout', () => {
           // Critical: Cart may be in use in another tab/session
           console.error('Cart locked by another session - potential concurrent checkout')
 
-          // Warn user about potential duplicate order risk
-          const toast = useToast()
-          const { t } = useI18n()
-          toast.warning(
-            t('checkout.warnings.concurrentCheckout'),
-            t('checkout.warnings.concurrentCheckoutDetails'),
-            { duration: 10000 },
-          )
+          // Warn user about potential duplicate order risk (only on client-side)
+          if (import.meta.client) {
+            try {
+              const toast = useToast()
+              const { t, available } = useStoreI18n()
+              if (available) {
+                toast.warning(
+                  t('checkout.warnings.concurrentCheckout'),
+                  t('checkout.warnings.concurrentCheckoutDetails'),
+                  { duration: 10000 },
+                )
+              }
+            }
+            catch (toastError) {
+              console.warn('Failed to show concurrent checkout warning:', toastError)
+            }
+          }
         }
 
         // Continue with checkout even if locking fails (degraded mode)

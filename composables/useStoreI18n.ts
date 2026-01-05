@@ -19,8 +19,24 @@ export const useStoreI18n = () => {
   }
 
   // Fallback for server-side or when i18n is not available
+  // This is expected during SSR, but log a warning to help debug if it happens unexpectedly on client
+  if (import.meta.client) {
+    console.warn('[useStoreI18n] i18n not available on client - translations will show as keys')
+  }
+  else if (import.meta.dev) {
+    console.debug('[useStoreI18n] i18n not available during SSR (expected)')
+  }
+
   return {
-    t: (key: string, _params?: unknown) => key,
+    // Fallback t() converts "checkout.warnings.concurrentCheckout" to "Concurrent Checkout"
+    // This provides a more readable fallback than raw keys
+    t: (key: string, _params?: unknown) => {
+      const lastSegment = key.split('.').pop() || key
+      return lastSegment
+        .replace(/([A-Z])/g, ' $1')
+        .replace(/^./, s => s.toUpperCase())
+        .trim()
+    },
     locale: ref('es'),
     available: false,
   }

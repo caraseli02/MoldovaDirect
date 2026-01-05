@@ -111,7 +111,7 @@
 - [x] 6. Optimize images and implement responsive delivery
 - [x] 6.1 Set up image optimization pipeline
 
-  - Configure Nuxt Image with Cloudflare Image Resizing
+  - Configure Nuxt Image module with optimization
   - Add WebP format support with JPEG fallbacks
   - Implement responsive image sizing for different screen sizes
   - _Requirements: 6.1, 6.2, 10.1_

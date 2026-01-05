@@ -1,5 +1,13 @@
 # Design Specification - Moldova Direct E-Commerce Platform
 
+> **ARCHIVED - HISTORICAL REFERENCE ONLY**
+>
+> This document describes the original Cloudflare-based architecture. The project has migrated to a different stack:
+> - **Original:** Cloudflare D1, KV, R2, Pages with Drizzle ORM
+> - **Current:** Nuxt 4 + Supabase + Vercel
+>
+> See `docs/development/tech.md` for the current technology stack.
+
 ## Architecture Overview
 
 ### Technology Stack

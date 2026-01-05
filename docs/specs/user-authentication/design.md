@@ -2,7 +2,7 @@
 
 ## Architecture Overview
 
-The authentication system follows a modern JWT-based approach with refresh token rotation, designed for edge deployment on Cloudflare Workers. The system is mandatory for all transactions as Moldova Direct does not support guest checkout. The architecture prioritizes security, scalability, and seamless user experience while maintaining consistency across all supported languages (Spanish, English, Romanian, Russian).
+The authentication system follows a modern JWT-based approach with refresh token rotation, designed for edge deployment on Vercel. The system is mandatory for all transactions as Moldova Direct does not support guest checkout. The architecture prioritizes security, scalability, and seamless user experience while maintaining consistency across all supported languages (Spanish, English, Romanian, Russian).
 
 ## System Architecture
 
@@ -179,7 +179,7 @@ interface ErrorResponse {
 - **Registration**: 3 attempts per hour per IP address to prevent spam
 - **Password reset**: 3 requests per hour per email address with cooldown periods (Requirement 7.4)
 - **Email verification**: Rate limited to prevent abuse and email flooding
-- **Implementation**: Cloudflare KV for distributed rate limit tracking across edge locations
+- **Implementation**: Supabase for distributed rate limit tracking
 - **Lockout notification**: Clear messaging showing remaining lockout time with countdown (Requirement 3.11)
 
 #### Token Security and Session Management
@@ -1011,7 +1011,7 @@ export default defineNuxtRouteMiddleware((to) => {
 
 ### Email Service
 
-- **Provider**: Cloudflare Email Workers or external SMTP service
+- **Provider**: External SMTP service (e.g., Resend, SendGrid)
 - **Templates**: HTML and text versions for all email types in 4 languages
 - **Delivery tracking**: Monitor email delivery success rates and bounces
 - **Security headers**: SPF, DKIM, and DMARC configuration for email authenticity
@@ -1020,7 +1020,7 @@ export default defineNuxtRouteMiddleware((to) => {
 ### Session Storage
 
 - **Client-side**: Pinia store for access tokens with tab synchronization
-- **Server-side**: Cloudflare KV for rate limiting and temporary data
+- **Server-side**: Supabase for rate limiting and temporary data
 - **Database**: Refresh tokens with automatic cleanup of expired tokens
 - **Cookie management**: Secure HTTP-only cookies with proper SameSite settings
 - **Cross-tab sync**: Authentication state synchronized across browser tabs
