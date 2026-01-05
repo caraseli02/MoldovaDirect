@@ -3,16 +3,19 @@ import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import CartItem from '~/components/cart/Item.vue'
 
+import type { App } from 'vue'
+import type { MountingOptions } from '@vue/test-utils'
+
 // i18n plugin that provides $t to components
 const mockI18n = {
-  install(app: any) {
+  install(app: App) {
     app.config.globalProperties.$t = (key: string) => key
     app.config.globalProperties.$i18n = { locale: 'es' }
   },
 }
 
 // Helper to mount with i18n and stubs
-const mountWithConfig = (options: any = {}) => {
+const mountWithConfig = (options: MountingOptions<typeof CartItem> = {}) => {
   return mount(CartItem, {
     ...options,
     global: {

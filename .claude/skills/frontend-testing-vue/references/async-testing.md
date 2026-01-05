@@ -503,20 +503,6 @@ export async function waitForUpdates() {
   await nextTick()
 }
 
-/**
- * Wait for a condition to be true (legacy pattern - prefer vi.waitFor)
- */
-export async function waitFor(
-  condition: () => boolean,
-  timeout = 1000,
-  interval = 50
-) {
-  const start = Date.now()
-  while (!condition()) {
-    if (Date.now() - start > timeout) {
-      throw new Error('waitFor timeout')
-    }
-    await new Promise(resolve => setTimeout(resolve, interval))
-  }
-}
+// Note: For waiting on conditions, use the built-in vi.waitFor() instead:
+// await vi.waitFor(() => expect(element).toBeVisible())
 ```

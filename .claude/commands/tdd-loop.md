@@ -49,7 +49,7 @@ describe('ComponentName', () => {
 ```
 
 Output this phrase ONLY when:
-- All 30 components have tests created (test_exists: true)
+- All components in the audit file have tests created (test_exists: true)
 - All tests pass
 - All changes committed and pushed
 - audit file fully updated
@@ -78,4 +78,4 @@ If a test fails to run:
 
 ---
 
-**Start the loop by outputting:** `🚀 Starting Ralph Wiggum TDD Loop for 30 components`
+**Start the loop by outputting:** `🚀 Starting Ralph Wiggum TDD Loop for components in audit file`

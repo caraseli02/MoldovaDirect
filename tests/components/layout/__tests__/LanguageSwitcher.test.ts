@@ -70,7 +70,8 @@ describe('LanguageSwitcher', () => {
   it('should display available languages', () => {
     const wrapper = mountComponent()
     const html = wrapper.html()
-    expect(html).toBeTruthy()
+    // Verify language content is rendered (either full name or code)
+    expect(html).toMatch(/Español|English|Română|Русский|ES|EN|RO|RU/i)
   })
 
   it('should highlight current language', () => {
@@ -90,9 +91,9 @@ describe('LanguageSwitcher', () => {
       await nextTick()
 
       // After click, the dropdown should be open
-      // Check for any language option elements (may have different structure)
+      // Verify dropdown content contains language options
       const html = wrapper.html()
-      expect(html).toBeTruthy()
+      expect(html).toMatch(/Español|English|Română|Русский|ES|EN|RO|RU/i)
     }
     else {
       // If no button found, just verify component renders

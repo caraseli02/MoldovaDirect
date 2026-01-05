@@ -17,6 +17,10 @@ describe('OrderAddressesSection', () => {
     consoleWarnSpy.mockClear()
   })
 
+  afterAll(() => {
+    consoleWarnSpy.mockRestore()
+  })
+
   const createMockAddress = (type: 'billing' | 'shipping', overrides: Partial<Address> = {}): Address => ({
     type,
     street: '123 Main Street',

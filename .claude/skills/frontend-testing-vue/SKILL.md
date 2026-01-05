@@ -276,11 +276,13 @@ it('should disable input when isReadOnly is true')
 
 ## Coverage Goals
 
-Current project thresholds:
+Current project thresholds (from `vitest.config.ts`):
 
-- ✅ **>70%** branch coverage
-- ✅ **>55%** function coverage
-- ✅ Lines/statements: Incremental improvement
+- ✅ **≥70%** branch coverage (currently ~75%)
+- ✅ **≥55%** function coverage (currently ~60%)
+- ✅ Lines/statements: Uses negative threshold (-145000 uncovered max) to prevent regression
+
+Note: Negative thresholds mean "maximum uncovered lines allowed" - this prevents regressions while allowing incremental improvement.
 
 ## Detailed Guides
 
@@ -299,13 +301,20 @@ For more detailed information, refer to:
 
 ### Alias Resolution
 
-Tests use these path aliases:
+Tests use these path aliases (from `vitest.config.ts`):
 
 ```typescript
-'~': './'
-'@': './'
-'#imports': './tests/setup/nuxt-imports-mock.ts'
-'#app': './.nuxt'
+'~': './'                                              // Nuxt alias
+'@': './'                                              // Alternative root alias
+'~~': './'                                             // Nuxt double-tilde alias
+'@@': './'                                             // Alternative double alias
+'#app': './.nuxt'                                      // Nuxt app directory
+'#imports': './tests/setup/nuxt-imports-mock.ts'       // Auto-imports mock
+'vue-i18n': './tests/setup/vue-i18n-mock.ts'           // i18n mock
+'pinia': './node_modules/pinia'                        // Real Pinia
+'#supabase/server': './tests/server/utils/mocks/...'   // Server Supabase mock
+'#nitro': './tests/server/utils/mocks/nitro.mock.ts'   // Nitro mock
+'h3': './tests/server/utils/mocks/h3.mock.ts'          // H3 utilities mock
 ```
 
 ### Global Mocks (Auto-loaded)
