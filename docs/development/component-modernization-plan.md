@@ -1,63 +1,57 @@
-# shadcn-vue Component Modernization Plan
+# Component Modernization Plan
+
+> **IMPORTANT UPDATE (January 2026 - PR #346)**: The project direction changed from shadcn-vue/Reka UI to a custom component system. This reduces bundle size, dependency complexity, and maintenance overhead while maintaining accessibility and consistent design. The migration work described below is now ARCHIVED. See `docs/archive/migrations/` for historical shadcn-vue migration docs.
 
 ## Executive Summary
 
-This document outlines a comprehensive plan to modernize component usage across the MoldovaDirect application by better utilizing shadcn-vue components. The migration will improve consistency, accessibility, mobile experience, and development velocity. All shadcn-vue libraries were scaffolded with the CLI on 2025-10-05; the actual migration of product surfaces to those components is still in progress.
+~~This document outlines a comprehensive plan to modernize component usage across the MoldovaDirect application by better utilizing shadcn-vue components.~~
 
-## Current State Analysis
+**Current Status**: The project now uses a lightweight custom component system. The shadcn-vue libraries were removed in PR #346 in favor of custom components that provide the same functionality with less complexity.
 
-### Imported Component Libraries (October 5, 2025)
-- **Button** - Fully implemented with variants (default, destructive, outline, secondary, ghost, link)
-- **Card** - Complete card system (Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription, CardAction)
-- **Dialog** - Full dialog system with accessibility features
-- **Input** - Text input component with validation states
-- **Sonner** - Toast notification system
-- **Select** - Complete dropdown system with search, multi-select support (12 files)
-- **Label** - Form accessibility component (2 files)
-- **Alert** - Success/error messaging with variants (4 files)
-- **Badge** - Status indicators with variants (2 files)
-- **Checkbox** - Form selection with accessibility (2 files)
-- **Tooltip** - Contextual help system (5 files)
-- **Tabs** - Content organization with keyboard navigation (5 files)
-- **Switch** - Modern toggle controls (2 files)
-- **Textarea** - Multi-line input with auto-resize (2 files)
-- **RadioGroup** - Single choice selections (3 files)
-- **Table** - Complete table system with sorting/filtering (11 files)
-- **Skeleton** - Loading placeholders (2 files)
-- **Pagination** - Navigation controls (9 files)
-- **Avatar** - User representations with fallbacks (4 files)
+## Historical Context (ARCHIVED)
 
-**Total**: 19 complete shadcn-vue component libraries (77 individual files)
+### Previously Imported shadcn-vue Libraries (October 2025 - Removed January 2026)
 
-> **Status (February 2026)**  
-> All shadcn-vue component libraries listed above are installed, and buttons have been migrated to the new API. Remaining UI still uses bespoke components—this document now tracks the ongoing replacement work. Up-to-date blockers live in `.kiro/PROJECT_STATUS.md`; update both locations when work completes.
+The following libraries were scaffolded but later removed in favor of custom components:
 
-### Current Migration Status (February 2026)
+- Button, Card, Dialog, Input, Sonner, Select, Label, Alert, Badge, Checkbox
+- Tooltip, Tabs, Switch, Textarea, RadioGroup, Table, Skeleton, Pagination, Avatar
 
-| Surface / Flow | Status | Outstanding Work | Owner | Source of Truth |
-| --- | --- | --- | --- | --- |
-| Authentication (login/register, error banners) | ✅ Completed | Migrated to shadcn inputs/labels/alerts; retired legacy auth message components | Unassigned | `.kiro/PROJECT_STATUS.md` |
-| Checkout (shipping, payment, confirmation) | 🔄 In progress | Swap selects, inputs, alerts; adopt Dialog for modals | Unassigned | `.kiro/PROJECT_STATUS.md` |
-| Cart (drawer, line items, bulk actions) | ⏳ Not started | Replace quantity buttons, checkboxes, toasts with shadcn-vue | Unassigned | `.kiro/PROJECT_STATUS.md` |
-| Admin tables & filters | 🔄 In progress | Users/Products/Inventory tables wrapped; Email Logs migrated; Badges applied | Unassigned | `.kiro/PROJECT_STATUS.md` |
-| Mobile navigation & sheets | ⏳ Not started | Migrate menus to Dialog/Sheet patterns, fix touch targets | Unassigned | `.kiro/PROJECT_STATUS.md` |
-| Toast/Notification system | ⏳ Not started | Remove legacy `components/common/Toast*.vue`, consolidate on Sonner | Unassigned | `.kiro/PROJECT_STATUS.md` |
+**Total**: 19 shadcn-vue component libraries (77 individual files) - **REMOVED in PR #346**
 
-### Adoption Progress
-- ✅ Buttons and primary dialogs migrated to shadcn-vue
-- 🔄 Forms: replace custom `<input>`, `<select>`, `<textarea>` usage across checkout, auth, and admin screens
-- 🔄 Tables: migrate admin tables to shadcn table components with consistent pagination + sorting UI (Users, Products, Inventory, Email Logs completed)
-- ✅ Alerts/Toasts: phase out legacy `components/common/Toast*.vue` (Sonner wired; legacy store removal follow-up)
-- 🔄 Mobile patterns: adopt shadcn dialogs/sheets for mobile menu, cart, and profile flows
-- 📌 Capture migration status in `.kiro/PROJECT_STATUS.md` when blocking issues emerge
+### Why the Change?
+1. **Bundle size** - Custom components are smaller and more focused
+2. **Dependency complexity** - Removed Reka UI and shadcn-vue dependencies
+3. **Maintenance** - Custom components are easier to maintain and customize
+4. **Performance** - Lighter runtime footprint
 
-### Component Usage Statistics
+### Current Component Status (January 2026)
+
+All components now use a custom implementation. The migration tracking tables above are ARCHIVED.
+
+**Custom Components in Use:**
+- Buttons with variants (primary, secondary, outline, ghost, destructive)
+- Form inputs with validation states
+- Cards and dialogs
+- Toasts and notifications
+- Tables with sorting and pagination
+- Responsive navigation components
+
+---
+
+## ARCHIVED CONTENT BELOW
+
+> The following sections document the original shadcn-vue migration plan. This work was superseded by PR #346 which moved to custom components. Kept for historical reference.
+
+---
+
+### Component Usage Statistics (Historical - October 2025)
 - **78 files** contain custom `<button>` elements
 - **41 files** contain custom `<input>` elements
 - **20 files** contain custom `<select>` or `<textarea>` elements
 - **Multiple custom modal/alert implementations** throughout the application
 
-### Critical Issues Identified
+### Issues Identified (Historical)
 1. **Inconsistent Design Language** - Mixed custom and shadcn-vue styling
 2. **Accessibility Gaps** - Custom components lack proper ARIA support
 3. **Mobile UX Issues** - Touch targets below 44px minimum, inconsistent responsive patterns
