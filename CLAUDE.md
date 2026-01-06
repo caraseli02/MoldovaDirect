@@ -167,9 +167,9 @@ After implementing any feature, you MUST follow this workflow:
    - No broken functionality
 
 4. **Feature List Management**
-   - **Strictly do not remove or modify anything in `feature_list.json`**
-   - **ONLY update the `implemented` and `tested` fields to `true`**
-   - Do not change feature descriptions, IDs, or structure
+   - When implementing features: **ONLY update `implemented` and `tested` fields to `true`**
+   - Do not change feature descriptions, IDs, or structure during feature implementation
+   - Maintenance operations (syncing with GitHub issues, renaming to reflect architectural changes) are allowed during dedicated cleanup PRs
    - Update `docs/status/PROJECT_STATUS.md` to reflect progress
 
 ### Example Workflow
@@ -277,8 +277,8 @@ When creating or updating documentation:
 - Initialization script: `init.sh` - Automated setup and testing guide
 
 **Admin Panel Issues & Solutions:**
-- Full details: `docs/fixes/admin-fixes/ISSUES-AND-SOLUTIONS.md`
-- Code review: `docs/fixes/admin-fixes/CLEAN-CODE-REVIEW.md`
+- Full details: `docs/archive/fixes/admin-fixes/ISSUES-AND-SOLUTIONS.md`
+- Code review: `docs/archive/fixes/admin-fixes/CLEAN-CODE-REVIEW.md`
 
 **Project Documentation:**
 - Doc index: `docs/README.md` - Role-based navigation hub
@@ -357,6 +357,6 @@ Screenshots follow: `[name]-[viewport].png`
 
 ---
 
-**Last Updated:** 2026-01-02
+**Last Updated:** 2026-01-06
 **Admin Status:** All 5 pages working ✅
 **Docs Structure:** Role-based navigation (January 2026 cleanup)

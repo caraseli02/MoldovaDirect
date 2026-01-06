@@ -1,25 +1,25 @@
 # Testing Documentation
 
-This directory contains testing strategies, guides, and test documentation.
+This directory contains authoritative testing guides and strategies for the Moldova Direct project.
 
-## Test Strategy
+## Authoritative Guides
 
-- [TESTING_STRATEGY.md](../guides/TESTING_STRATEGY.md) - Overall testing approach and coverage
-- [TEST_COVERAGE_ANALYSIS.md](/TEST_COVERAGE_ANALYSIS.md) - Test coverage analysis (Oct 2025)
-- [TEST_COVERAGE_IMPLEMENTATION.md](/TEST_COVERAGE_IMPLEMENTATION.md) - Visual test implementation
+### Strategy & Coverage
+- [TESTING_AUDIT_AND_STRATEGY.md](./TESTING_AUDIT_AND_STRATEGY.md) - Testing audit and strategy overview
+- [PRODUCTION_TESTING_STRATEGY.md](./PRODUCTION_TESTING_STRATEGY.md) - Production testing approach
+- [TEST_COVERAGE_ANALYSIS.md](./TEST_COVERAGE_ANALYSIS.md) - Current test coverage analysis
+- [TEST_COVERAGE_SUMMARY.md](./TEST_COVERAGE_SUMMARY.md) - Coverage summary report
+- [TESTING_REVIEW.md](./TESTING_REVIEW.md) - Testing review and recommendations
 
-## Test Guides by Feature
-
-### Authentication Testing
-- [AUTH_TESTING_GUIDE.md](/tests/AUTH_TESTING_GUIDE.md) - Authentication E2E test guide
-- **Coverage:** Login, register, password reset, MFA, i18n (2,100+ lines of tests)
-
-### Cart & Checkout Testing
+### Feature-Specific Testing
+- [COMPREHENSIVE_CHECKOUT_REVIEW.md](./COMPREHENSIVE_CHECKOUT_REVIEW.md) - Checkout flow testing guide
 - [E2E_CART_TESTS.md](./E2E_CART_TESTS.md) - Cart E2E test documentation
+- [ADMIN_PAGES_COMPREHENSIVE_REPORT.md](./ADMIN_PAGES_COMPREHENSIVE_REPORT.md) - Admin pages testing
 
-### Admin Testing
-- [ADMIN_TESTING.md](../guides/ADMIN_TESTING.md) - Admin testing dashboard guide
-- [TEST_USER_SIMULATION.md](../guides/TEST_USER_SIMULATION.md) - Test user personas
+### Specialized Testing
+- [MUTATION_TESTING_FINAL_REPORT.md](./MUTATION_TESTING_FINAL_REPORT.md) - Mutation testing results
+- [VISUAL-REGRESSION-SETUP.md](./VISUAL-REGRESSION-SETUP.md) - Visual regression test setup
+- [VISUAL-REGRESSION-SUMMARY.md](./VISUAL-REGRESSION-SUMMARY.md) - Visual regression summary
 
 ## Test Types
 
@@ -28,19 +28,18 @@ This directory contains testing strategies, guides, and test documentation.
 - **Coverage:** Authentication, cart, checkout, visual regression
 - **Run:** `npm run test:e2e`
 
-### Unit Tests
+### Unit Tests (Vitest)
 - **Location:** `/tests/unit/`
 - **Coverage:** Utilities, composables, stores
 - **Run:** `npm run test:unit`
 
 ### Visual Regression Tests
-- **Location:** `/tests/e2e/visual-regression.spec.ts`
-- **Coverage:** 40 pages (85% of site)
-- **Run:** `npm run test:visual`
+- **Location:** `/tests/e2e/visual/`
+- **Baselines:** `/.visual-testing/baselines/`
+- **Run:** `npm run test:visual:all`
 
 ## Quick Reference
 
-**Running Tests:**
 ```bash
 # All tests
 npm run test
@@ -52,24 +51,27 @@ npm run test:e2e
 npm run test:unit
 
 # Visual regression
-npm run test:visual
+npm run test:visual:all
 
 # Specific auth tests
 npm run test:auth
 ```
 
-**Test Data Setup:**
-```bash
-# Create E2E test user
-node scripts/create-e2e-test-user.mjs
-```
-
 ## Related Documentation
 
-- [Test Scripts](/scripts/README.md)
-- [Authentication Architecture](/docs/architecture/AUTHENTICATION_ARCHITECTURE.md)
-- [Cart System Architecture](/docs/architecture/CART_SYSTEM_ARCHITECTURE.md)
+- [Testing Strategy](../guides/TESTING_STRATEGY.md) - Overall testing approach
+- [Authentication Testing](/tests/AUTH_TESTING_GUIDE.md) - Auth E2E test guide
+- [Admin Testing](../guides/ADMIN_TESTING.md) - Admin testing dashboard
+- [Test User Simulation](../guides/TEST_USER_SIMULATION.md) - Test user personas
+
+## Archived Documentation
+
+Historical testing docs, implementation reports, and superseded guides are archived in:
+- `docs/archive/testing/` - General archived testing docs
+- `docs/archive/testing/mutation/` - Mutation testing historical reports
+- `docs/archive/testing/checkout/` - Checkout testing historical docs
+- `docs/archive/testing/playwright/` - Playwright best practices archives
 
 ---
 
-**Last Updated:** November 16, 2025
+**Last Updated:** January 2026
