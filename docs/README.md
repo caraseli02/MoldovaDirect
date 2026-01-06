@@ -72,15 +72,15 @@ How to test the application:
 
 ```bash
 # Development
-npm run dev              # Start dev server (port 3000)
-npm run build            # Production build
+pnpm dev              # Start dev server (port 3000)
+pnpm build            # Production build
 
 # Testing
-npm test                 # Run all tests
-npm run test:e2e         # E2E tests only
+pnpm test             # Run all tests
+pnpm test:e2e         # E2E tests only
 
 # Clean restart (if imports fail)
-pkill -9 node && rm -rf .nuxt node_modules/.vite && npm run dev
+pkill -9 node && rm -rf .nuxt node_modules/.vite && pnpm dev
 ```
 
 ### Project Structure

@@ -48,7 +48,7 @@ export default defineNuxtPlugin(() => {
 
 ### ✅ Clear Cache After Structural Changes
 ```bash
-pkill -9 node && rm -rf .nuxt node_modules/.vite .output && npm run dev
+pkill -9 node && rm -rf .nuxt node_modules/.vite .output && pnpm dev
 ```
 
 **When:** After changing imports, adding components, or seeing import errors.
@@ -77,7 +77,7 @@ components/
 ├── admin/           # Admin panel components (auth required)
 ├── layout/          # Site layout components
 ├── product/         # Product display components
-└── ui/              # Shadcn UI components
+└── ui/              # Custom UI components
 
 pages/
 ├── admin/           # Admin pages (middleware: auth + admin)
@@ -181,7 +181,7 @@ After implementing any feature, you MUST follow this workflow:
 git add .
 git commit -m "feat: implement [feature name] - tested and verified"
 # 5. Verify project is ready to merge
-npm run build && npm run test
+pnpm build && pnpm test
 ```
 
 ---
@@ -215,21 +215,21 @@ npm run build && npm run test
 
 ```bash
 # Development
-npm run dev              # Start dev server (port 3000)
+pnpm dev              # Start dev server (port 3000)
 
 # Clean restart
-pkill -9 node && rm -rf .nuxt node_modules/.vite && npm run dev
+pkill -9 node && rm -rf .nuxt node_modules/.vite && pnpm dev
 
 # Testing
-npm run test             # Run tests
-npm run type-check       # TypeScript check
+pnpm test             # Run tests
+pnpm type-check       # TypeScript check
 
 # Build
-npm run build            # Production build
-npm run preview          # Preview build
+pnpm build            # Production build
+pnpm preview          # Preview build
 
 # Database
-npx supabase status      # Check Supabase connection
+npx supabase status   # Check Supabase connection
 ```
 
 ---
