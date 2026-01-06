@@ -57,8 +57,8 @@ export const useUserAddresses = () => {
 
       addresses.value = data || []
     }
-    catch (err: any) {
-      console.error('Failed to load addresses:', err)
+    catch (err: unknown) {
+      console.error('Failed to load addresses:', getErrorMessage(err))
       error.value = t('checkout.errors.failedToLoadAddresses')
       addresses.value = []
     }
@@ -126,8 +126,8 @@ export const useUserAddresses = () => {
 
       return newAddress
     }
-    catch (err: any) {
-      console.error('Failed to save address:', err)
+    catch (err: unknown) {
+      console.error('Failed to save address:', getErrorMessage(err))
       error.value = t('checkout.errors.failedToSaveAddress')
       throw err
     }
@@ -199,8 +199,8 @@ export const useUserAddresses = () => {
 
       return updatedAddress
     }
-    catch (err: any) {
-      console.error('Failed to update address:', err)
+    catch (err: unknown) {
+      console.error('Failed to update address:', getErrorMessage(err))
       error.value = t('checkout.errors.failedToUpdateAddress')
       throw err
     }
@@ -229,8 +229,8 @@ export const useUserAddresses = () => {
       // Reload to get updated state from database
       await loadAddresses()
     }
-    catch (err: any) {
-      console.error('Failed to set default address:', err)
+    catch (err: unknown) {
+      console.error('Failed to set default address:', getErrorMessage(err))
       error.value = t('checkout.errors.failedToSetDefaultAddress')
       throw err
     }
@@ -262,8 +262,8 @@ export const useUserAddresses = () => {
       // Optimistically update local state
       addresses.value = addresses.value.filter(addr => addr.id !== addressId)
     }
-    catch (err: any) {
-      console.error('Failed to delete address:', err)
+    catch (err: unknown) {
+      console.error('Failed to delete address:', getErrorMessage(err))
       error.value = t('checkout.errors.failedToDeleteAddress')
       throw err
     }

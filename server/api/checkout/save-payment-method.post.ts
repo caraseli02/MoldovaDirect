@@ -49,7 +49,7 @@ export default defineEventHandler(async (event) => {
       .single()
 
     if (error) {
-      console.error('Failed to save payment method:', error)
+      console.error('Failed to save payment method:', getServerErrorMessage(error))
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to save payment method',
@@ -69,10 +69,10 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    console.error('Save payment method error:', error)
+  catch (error: unknown) {
+    console.error('Save payment method error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

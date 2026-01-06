@@ -23,7 +23,7 @@ export interface AuthValidationResult {
 }
 
 export const useAuthValidation = () => {
-  const { t } = useI18n()
+  const { t } = useStoreI18n()
 
   /**
    * Email validation schema
@@ -161,14 +161,14 @@ export const useAuthValidation = () => {
         fieldErrors: {},
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       if (error instanceof z.ZodError) {
         const errors: AuthValidationError[] = []
         const fieldErrors: Record<string, string> = {}
 
         error.issues.forEach((err: z.ZodIssue) => {
           const field = err.path.join('.')
-          const translationKey = err.message
+          const translationKey = getErrorMessage(err)
           const message = t(translationKey)
 
           const validationError: AuthValidationError = {

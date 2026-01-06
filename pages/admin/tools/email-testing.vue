@@ -194,8 +194,8 @@ async function handleSubmit() {
 
     successMessage.value = `✔ Test email queued successfully. Check ${email.value} for “${response.subject}”.`
   }
-  catch (error: any) {
-    errorMessage.value = error?.data?.statusMessage || error.message || 'Failed to send test email.'
+  catch (error: unknown) {
+    errorMessage.value = getErrorMessage(error) || 'Failed to send test email.'
   }
   finally {
     loading.value = false

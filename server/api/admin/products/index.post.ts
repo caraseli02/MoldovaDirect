@@ -45,7 +45,7 @@ const createProductSchema = z.object({
 })
 
 export default defineEventHandler(async (event) => {
-  await requireAdminRole(event)
+  const adminId = await requireAdminRole(event)
 
   try {
     const supabase = await serverSupabaseClient(event)
@@ -148,7 +148,7 @@ export default defineEventHandler(async (event) => {
         resource_id: newProduct.id.toString(),
         old_values: null,
         new_values: productData,
-        performed_by: null, // TODO: Get current admin user ID
+        user_id: adminId,
         ip_address: getRequestIP(event),
         user_agent: getHeader(event, 'user-agent'),
       })
@@ -204,10 +204,10 @@ export default defineEventHandler(async (event) => {
       message: 'Product created successfully',
     }
   }
-  catch (error: any) {
-    console.error('Create product error:', error)
+  catch (error: unknown) {
+    console.error('Create product error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

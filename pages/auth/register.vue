@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+  <div class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
     <!-- Mobile-optimized container -->
     <main class="flex-1 flex items-center justify-center px-6 py-8 sm:px-8 lg:px-12">
       <div class="w-full max-w-sm sm:max-w-md space-y-6 sm:space-y-8">
@@ -538,6 +538,7 @@ const supabase = useSupabaseClient()
 const _user = useSupabaseUser()
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
+const requestURL = useRequestURL()
 
 const form = ref({
   name: '',
@@ -720,7 +721,7 @@ const handleRegister = async () => {
           phone: form.value.phone || null,
           preferred_language: locale.value,
         },
-        emailRedirectTo: `${window.location.origin}${localePath('/auth/confirm')}`,
+        emailRedirectTo: `${requestURL.origin}${localePath('/auth/confirm')}`,
       },
     })
 
@@ -730,8 +731,8 @@ const handleRegister = async () => {
 
     success.value = t('auth.registrationSuccess')
   }
-  catch (err: any) {
-    error.value = err.message || t('auth.registerError')
+  catch (err: unknown) {
+    error.value = getErrorMessage(err) || t('auth.registerError')
   }
   finally {
     loading.value = false

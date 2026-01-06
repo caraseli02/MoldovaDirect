@@ -112,18 +112,21 @@ export default defineCachedEventHandler(async (event) => {
       .neq('id', product.id)
       .limit(4)
 
-    // Build category breadcrumb
-    const buildBreadcrumb = async (categoryId: number): Promise<Array<{ id: number, slug: string, name: string }>> => {
-      const breadcrumb = []
-      let currentCategoryId = categoryId
+    // Build category breadcrumb - fetch all categories in a single query to avoid N+1
+    // This fixes the N+1 query pattern where we previously made one query per category
+    // in the hierarchy chain (GitHub issue #227)
+    const { data: allCategories } = await supabase
+      .from('categories')
+      .select('id, slug, name_translations, parent_id')
+
+    // Build breadcrumb in memory using the pre-fetched categories
+    const buildBreadcrumb = (categoryId: number): Array<{ id: number, slug: string, name: string }> => {
+      const breadcrumb: Array<{ id: number, slug: string, name: string }> = []
+      const categoryMap = new Map(allCategories?.map(cat => [cat.id, cat]) || [])
+      let currentCategoryId: number | null = categoryId
 
       while (currentCategoryId) {
-        const { data: category } = await supabase
-          .from('categories')
-          .select('id, slug, name_translations, parent_id')
-          .eq('id', currentCategoryId)
-          .single()
-
+        const category = categoryMap.get(currentCategoryId)
         if (category) {
           breadcrumb.unshift({
             id: category.id,
@@ -140,7 +143,7 @@ export default defineCachedEventHandler(async (event) => {
       return breadcrumb
     }
 
-    const breadcrumb = await buildBreadcrumb(product.categories.id)
+    const breadcrumb = buildBreadcrumb(product.categories.id)
 
     // Transform product data to match products list API format
     const descriptionTranslations = product.description_translations || {}
@@ -204,10 +207,10 @@ export default defineCachedEventHandler(async (event) => {
 
     return transformedProduct
   }
-  catch (error: any) {
-    console.error('Product detail API error:', error)
+  catch (error: unknown) {
+    console.error('Product detail API error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

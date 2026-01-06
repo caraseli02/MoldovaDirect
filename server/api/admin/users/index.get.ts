@@ -17,17 +17,6 @@ import { serverSupabaseServiceRole } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { prepareSearchPattern } from '~/server/utils/searchSanitization'
 
-interface UserFilters {
-  search?: string
-  registrationDateFrom?: string
-  registrationDateTo?: string
-  status?: 'active' | 'inactive'
-  sortBy?: 'name' | 'email' | 'created_at' | 'last_login'
-  sortOrder?: 'asc' | 'desc'
-  page?: number
-  limit?: number
-}
-
 interface UserWithProfile {
   id: string
   email: string
@@ -162,9 +151,9 @@ export default defineEventHandler(async (event) => {
         authUsers = data as any
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.error('[Admin Users] Auth admin API error:', {
-        error: error.message || String(error),
+        error: getServerErrorMessage(error),
         timestamp: new Date().toISOString(),
         errorId: 'ADMIN_USERS_AUTH_API_ERROR',
       })
@@ -217,9 +206,9 @@ export default defineEventHandler(async (event) => {
         })
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.error('[Admin Users] Unexpected error fetching orders:', {
-        error: error.message || String(error),
+        error: getServerErrorMessage(error),
         timestamp: new Date().toISOString(),
         errorId: 'ADMIN_USERS_ORDERS_ERROR',
       })
@@ -301,16 +290,16 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Re-throw HTTP errors (including auth errors)
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 
     // Log unexpected errors
     console.error('[Admin Users] Unexpected error:', {
-      error: error.message || String(error),
-      stack: error.stack,
+      error: getServerErrorMessage(error),
+      stack: isServerError(error) ? error.stack : undefined,
       timestamp: new Date().toISOString(),
       errorId: 'ADMIN_USERS_UNEXPECTED_ERROR',
     })

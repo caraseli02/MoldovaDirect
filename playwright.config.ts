@@ -7,7 +7,7 @@ dotenv.config()
 
 export default defineConfig({
   testDir: './tests',
-  testMatch: ['**/e2e/**/*.spec.ts', '**/pre-commit/**/*.spec.ts', '**/critical/**/*.spec.ts'],
+  testMatch: ['**/e2e/**/*.spec.ts', '**/pre-commit/**/*.spec.ts', '**/critical/**/*.spec.ts', '**/visual-regression/**/*.spec.ts'],
   testIgnore: [
     '**/node_modules/**',
     '**/*.test.ts',

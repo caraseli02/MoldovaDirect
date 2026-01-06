@@ -54,7 +54,7 @@
                 </span>
               </div>
               <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                {{ formatAddressLine(address) }}
+                {{ address.street }}
               </p>
               <p class="text-sm text-gray-600 dark:text-gray-400">
                 {{ address.city }}, {{ address.postalCode }} {{ address.country }}
@@ -88,86 +88,40 @@
     <!-- Address Form -->
     <div
       v-if="showForm"
-      class="space-y-6"
+      class="space-y-5"
     >
-      <!-- Name Fields -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label
-            for="firstName"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-          >
-            {{ $t('checkout.addressForm.firstName') }}
-            <span class="text-red-500">*</span>
-          </label>
-          <input
-            id="firstName"
-            :value="localAddress.firstName"
-            type="text"
-            :placeholder="$t('checkout.addressForm.firstNamePlaceholder')"
-            class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
-            :class="getFieldClasses('firstName')"
-            @input="updateField('firstName', ($event.target as HTMLInputElement).value)"
-            @blur="validateField('firstName')"
-            @focus="clearFieldError('firstName')"
-          />
-          <p
-            v-if="fieldErrors.firstName"
-            class="mt-1 text-sm text-red-600 dark:text-red-400"
-          >
-            {{ fieldErrors.firstName }}
-          </p>
-        </div>
-
-        <div>
-          <label
-            for="lastName"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-          >
-            {{ $t('checkout.addressForm.lastName') }}
-            <span class="text-red-500">*</span>
-          </label>
-          <input
-            id="lastName"
-            :value="localAddress.lastName"
-            type="text"
-            :placeholder="$t('checkout.addressForm.lastNamePlaceholder')"
-            class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
-            :class="getFieldClasses('lastName')"
-            @input="updateField('lastName', ($event.target as HTMLInputElement).value)"
-            @blur="validateField('lastName')"
-            @focus="clearFieldError('lastName')"
-          />
-          <p
-            v-if="fieldErrors.lastName"
-            class="mt-1 text-sm text-red-600 dark:text-red-400"
-          >
-            {{ fieldErrors.lastName }}
-          </p>
-        </div>
-      </div>
-
-      <!-- Company (Optional) -->
+      <!-- Full Name (Single Field) -->
       <div>
         <label
-          for="company"
+          for="fullName"
           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
         >
-          {{ $t('checkout.addressForm.company') }}
-          <span class="text-gray-500 text-xs">({{ $t('common.optional') }})</span>
+          {{ $t('checkout.addressForm.fullName') }}
+          <span class="text-red-500">*</span>
         </label>
         <input
-          id="company"
-          :value="localAddress.company"
+          id="fullName"
+          :value="fullName"
           type="text"
-          :placeholder="$t('checkout.addressForm.companyPlaceholder')"
-          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
-          @input="updateField('company', ($event.target as HTMLInputElement).value)"
+          name="name"
+          autocomplete="name"
+          :placeholder="$t('checkout.addressForm.fullNamePlaceholder')"
+          class="w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
+          :class="getFieldClasses('fullName')"
+          @input="handleFullNameInput(($event.target as HTMLInputElement).value)"
+          @blur="validateField('fullName')"
+          @focus="clearFieldError('fullName')"
         />
+        <p
+          v-if="fieldErrors.fullName"
+          class="mt-1 text-sm text-red-600 dark:text-red-400"
+        >
+          {{ fieldErrors.fullName }}
+        </p>
       </div>
 
-      <!-- Street Address -->
-      <div>
+      <!-- Street Address with Autocomplete -->
+      <div class="relative">
         <label
           for="street"
           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
@@ -175,27 +129,67 @@
           {{ $t('checkout.addressForm.street') }}
           <span class="text-red-500">*</span>
         </label>
-        <input
-          id="street"
-          :value="localAddress.street"
-          type="text"
-          :placeholder="$t('checkout.addressForm.streetPlaceholder')"
-          class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
-          :class="getFieldClasses('street')"
-          @input="updateField('street', ($event.target as HTMLInputElement).value)"
-          @blur="validateField('street')"
-          @focus="clearFieldError('street')"
-        />
+        <div class="relative">
+          <input
+            id="street"
+            ref="streetInputRef"
+            :value="localAddress.street"
+            type="text"
+            name="street-address"
+            autocomplete="street-address"
+            :placeholder="$t('checkout.addressForm.streetPlaceholder')"
+            class="w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
+            :class="getFieldClasses('street')"
+            @input="handleStreetInput(($event.target as HTMLInputElement).value)"
+            @blur="validateField('street')"
+            @focus="handleStreetFocus"
+          />
+          <!-- Loading indicator for autocomplete -->
+          <div
+            v-if="isLoadingAutocomplete"
+            class="absolute right-3 top-1/2 -translate-y-1/2"
+          >
+            <div class="w-5 h-5 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        </div>
+
+        <!-- Autocomplete Suggestions Dropdown -->
+        <div
+          v-if="showSuggestions && addressSuggestions.length > 0"
+          class="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+        >
+          <button
+            v-for="(suggestion, index) in addressSuggestions"
+            :key="index"
+            type="button"
+            class="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 focus:bg-gray-50 dark:focus:bg-gray-700 border-b border-gray-100 dark:border-gray-700 last:border-0 transition-colors"
+            @click="selectAddressSuggestion(suggestion)"
+          >
+            <p class="text-sm font-medium text-gray-900 dark:text-white">
+              {{ suggestion.street }}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              {{ suggestion.city }}, {{ suggestion.postalCode }} {{ suggestion.country }}
+            </p>
+          </button>
+        </div>
+
         <p
           v-if="fieldErrors.street"
           class="mt-1 text-sm text-red-600 dark:text-red-400"
         >
           {{ fieldErrors.street }}
         </p>
+        <p
+          v-if="!fieldErrors.street && !showSuggestions"
+          class="mt-1 text-xs text-gray-500 dark:text-gray-400"
+        >
+          {{ $t('checkout.addressForm.autocompleteHint') }}
+        </p>
       </div>
 
-      <!-- City, Postal Code, Province -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- City & Postal Code (Side by Side) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label
             for="city"
@@ -208,8 +202,10 @@
             id="city"
             :value="localAddress.city"
             type="text"
+            name="address-level2"
+            autocomplete="address-level2"
             :placeholder="$t('checkout.addressForm.cityPlaceholder')"
-            class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            class="w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
             :class="getFieldClasses('city')"
             @input="updateField('city', ($event.target as HTMLInputElement).value)"
             @blur="validateField('city')"
@@ -235,8 +231,10 @@
             id="postalCode"
             :value="localAddress.postalCode"
             type="text"
+            name="postal-code"
+            autocomplete="postal-code"
             :placeholder="$t('checkout.addressForm.postalCodePlaceholder')"
-            class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
+            class="w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
             :class="getFieldClasses('postalCode')"
             @input="updateField('postalCode', ($event.target as HTMLInputElement).value)"
             @blur="validateField('postalCode')"
@@ -248,24 +246,6 @@
           >
             {{ fieldErrors.postalCode }}
           </p>
-        </div>
-
-        <div>
-          <label
-            for="province"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-          >
-            {{ $t('checkout.addressForm.province') }}
-            <span class="text-gray-500 text-xs">({{ $t('common.optional') }})</span>
-          </label>
-          <input
-            id="province"
-            :value="localAddress.province"
-            type="text"
-            :placeholder="$t('checkout.addressForm.provincePlaceholder')"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
-            @input="updateField('province', ($event.target as HTMLInputElement).value)"
-          />
         </div>
       </div>
 
@@ -281,7 +261,9 @@
         <select
           id="country"
           :value="localAddress.country"
-          class="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors"
+          name="country"
+          autocomplete="country"
+          class="country-select w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base appearance-none bg-no-repeat"
           :class="getFieldClasses('country')"
           @change="updateField('country', ($event.target as HTMLSelectElement).value); clearFieldError('country')"
           @blur="validateField('country')"
@@ -294,7 +276,7 @@
             :key="country.code"
             :value="country.code"
           >
-            {{ country.name }}
+            {{ country.flag }} {{ country.name }}
           </option>
         </select>
         <p
@@ -305,29 +287,35 @@
         </p>
       </div>
 
-      <!-- Phone (Optional) -->
+      <!-- Phone (Optional but Recommended) -->
       <div>
         <label
           for="phone"
           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
         >
           {{ $t('checkout.addressForm.phone') }}
-          <span class="text-gray-500 text-xs">({{ $t('common.optional') }})</span>
+          <span class="text-gray-500 text-xs ml-1">({{ $t('checkout.addressForm.phoneHelper') }})</span>
         </label>
         <input
           id="phone"
           :value="localAddress.phone"
           type="tel"
+          name="tel"
+          autocomplete="tel"
+          inputmode="tel"
           :placeholder="$t('checkout.addressForm.phonePlaceholder')"
-          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors"
+          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors text-base"
           @input="updateField('phone', ($event.target as HTMLInputElement).value)"
         />
+        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          {{ $t('checkout.addressForm.phoneDescription') }}
+        </p>
       </div>
 
       <!-- Save Address Option (for authenticated users) -->
       <div
         v-if="showSaveOption && user"
-        class="flex items-center space-x-2"
+        class="flex items-center space-x-2 pt-2"
       >
         <input
           id="saveAddress"
@@ -355,13 +343,22 @@ interface CheckoutAddress extends Address {
   saveForFuture?: boolean
 }
 
+// Address suggestion from autocomplete
+interface AddressSuggestion {
+  street: string
+  city: string
+  postalCode: string
+  province?: string
+  country: string
+}
+
 interface Props {
   modelValue: CheckoutAddress
   type: 'shipping' | 'billing'
   savedAddresses?: Address[]
   showSaveOption?: boolean
   showHeader?: boolean
-  availableCountries?: Array<{ code: string, name: string }>
+  availableCountries?: Array<{ code: string, name: string, flag: string }>
 }
 
 interface Emits {
@@ -375,12 +372,13 @@ const props = withDefaults(defineProps<Props>(), {
   showSaveOption: true,
   showHeader: true,
   availableCountries: () => [
-    { code: 'ES', name: 'Spain' },
-    { code: 'RO', name: 'Romania' },
-    { code: 'MD', name: 'Moldova' },
-    { code: 'FR', name: 'France' },
-    { code: 'DE', name: 'Germany' },
-    { code: 'IT', name: 'Italy' },
+    { code: 'ES', name: 'España', flag: '🇪🇸' },
+    { code: 'RO', name: 'România', flag: '🇷🇴' },
+    { code: 'MD', name: 'Moldova', flag: '🇲🇩' },
+    { code: 'FR', name: 'France', flag: '🇫🇷' },
+    { code: 'DE', name: 'Deutschland', flag: '🇩🇪' },
+    { code: 'IT', name: 'Italia', flag: '🇮🇹' },
+    { code: 'PT', name: 'Portugal', flag: '🇵🇹' },
   ],
 })
 
@@ -393,6 +391,20 @@ const { t } = useI18n()
 // Local state
 const selectedSavedAddressId = ref<number | null>(null)
 const fieldErrors = ref<Record<string, string>>({})
+const streetInputRef = ref<HTMLInputElement | null>(null)
+
+// Autocomplete state
+const addressSuggestions = ref<AddressSuggestion[]>([])
+const showSuggestions = ref(false)
+const isLoadingAutocomplete = ref(false)
+const autocompleteDebounceTimer = ref<NodeJS.Timeout | null>(null)
+
+// Computed for the combined full name
+const fullName = computed(() => {
+  const first = props.modelValue.firstName || ''
+  const last = props.modelValue.lastName || ''
+  return `${first} ${last}`.trim()
+})
 
 // Use computed property with getter/setter to avoid circular watchers
 const localAddress = computed({
@@ -408,6 +420,192 @@ const showForm = computed(() => {
 })
 
 // Methods
+
+/**
+ * Splits a full name input into firstName and lastName fields.
+ *
+ * Business Logic:
+ * - Single word (e.g., "Madonna"): Treated as firstName only, lastName empty
+ * - Two words (e.g., "John Smith"): First word → firstName, second → lastName
+ * - Three+ words (e.g., "Mary Jane Watson"): First word → firstName, rest joined → lastName
+ *
+ * Note: This is a Western-centric simplification. Some cultures have different naming
+ * conventions (e.g., family name first in East Asian cultures, patronymics in Icelandic
+ * names). For a more international approach, consider using a single "fullName" field
+ * in the database or integrating a name parsing library.
+ *
+ * @param value - The full name entered by the user
+ */
+const handleFullNameInput = (value: string) => {
+  const parts = value.trim().split(/\s+/).filter(Boolean)
+  let firstName = ''
+  let lastName = ''
+
+  if (parts.length === 1) {
+    // Single name (e.g., mononymous individuals like "Cher", "Madonna")
+    firstName = parts[0] ?? ''
+  }
+  else if (parts.length === 2) {
+    // Standard "First Last" format
+    firstName = parts[0] ?? ''
+    lastName = parts[1] ?? ''
+  }
+  else if (parts.length > 2) {
+    // Multiple words: assume first word is given name, rest is family name
+    // Handles compound surnames like "García Márquez" or middle names
+    firstName = parts[0] ?? ''
+    lastName = parts.slice(1).join(' ')
+  }
+
+  emit('update:modelValue', {
+    ...localAddress.value,
+    firstName,
+    lastName,
+  })
+}
+
+const handleStreetInput = (value: string) => {
+  updateField('street', value)
+  clearFieldError('street')
+
+  // Trigger autocomplete search after debounce
+  if (autocompleteDebounceTimer.value) {
+    clearTimeout(autocompleteDebounceTimer.value)
+  }
+
+  if (value.length >= 3) {
+    autocompleteDebounceTimer.value = setTimeout(() => {
+      searchAddresses(value)
+    }, 300)
+  }
+  else {
+    addressSuggestions.value = []
+    showSuggestions.value = false
+  }
+}
+
+const handleStreetFocus = () => {
+  clearFieldError('street')
+  if (addressSuggestions.value.length > 0) {
+    showSuggestions.value = true
+  }
+}
+
+/**
+ * Address autocomplete search using OpenStreetMap Nominatim API
+ *
+ * Uses the free Nominatim geocoding service which doesn't require API keys.
+ * Rate-limited to 1 request per second by Nominatim's usage policy.
+ *
+ * @param query - The address search query
+ */
+const searchAddresses = async (query: string) => {
+  isLoadingAutocomplete.value = true
+
+  try {
+    // Build country code filter if country is selected
+    const countryCode = localAddress.value.country?.toLowerCase() || ''
+
+    // Use Nominatim API for geocoding (free, no API key needed)
+    const params = new URLSearchParams({
+      q: query,
+      format: 'json',
+      addressdetails: '1',
+      limit: '5',
+      ...(countryCode && { countrycodes: countryCode }),
+    })
+
+    const response = await $fetch<NominatimResult[]>(
+      `https://nominatim.openstreetmap.org/search?${params}`,
+      {
+        headers: {
+          'Accept-Language': 'en',
+          // Nominatim requires a valid User-Agent for API usage policy
+          'User-Agent': 'MoldovaDirectCheckout/1.0',
+        },
+      },
+    )
+
+    // Transform Nominatim results to our format
+    const suggestions: AddressSuggestion[] = response
+      .filter(result => result.address)
+      .map((result) => {
+        const addr = result.address
+        // Build street address from available components
+        const streetParts = [
+          addr.house_number,
+          addr.road || addr.street || addr.pedestrian || addr.footway,
+        ].filter(Boolean)
+
+        const street = streetParts.join(' ') || result.display_name.split(',')[0]
+
+        return {
+          street: street || '',
+          city: addr.city || addr.town || addr.village || addr.municipality || addr.county || '',
+          postalCode: addr.postcode || '',
+          province: addr.state || addr.region || '',
+          country: addr.country_code?.toUpperCase() || '',
+        }
+      })
+      .filter(s => s.street && s.city) // Filter out incomplete addresses
+
+    addressSuggestions.value = suggestions
+    showSuggestions.value = suggestions.length > 0
+  }
+  catch (error) {
+    // Log error for debugging - autocomplete failure is non-blocking
+    // Users can still manually enter their address
+    console.error('Address autocomplete error:', error)
+    addressSuggestions.value = []
+    showSuggestions.value = false
+  }
+  finally {
+    isLoadingAutocomplete.value = false
+  }
+}
+
+// Nominatim API response type
+interface NominatimResult {
+  display_name: string
+  address: {
+    house_number?: string
+    road?: string
+    street?: string
+    pedestrian?: string
+    footway?: string
+    city?: string
+    town?: string
+    village?: string
+    municipality?: string
+    county?: string
+    state?: string
+    region?: string
+    postcode?: string
+    country?: string
+    country_code?: string
+  }
+}
+
+const selectAddressSuggestion = (suggestion: AddressSuggestion) => {
+  emit('update:modelValue', {
+    ...localAddress.value,
+    street: suggestion.street,
+    city: suggestion.city,
+    postalCode: suggestion.postalCode,
+    province: suggestion.province,
+    country: suggestion.country,
+  })
+
+  showSuggestions.value = false
+  addressSuggestions.value = []
+
+  // Clear related errors
+  clearFieldError('street')
+  clearFieldError('city')
+  clearFieldError('postalCode')
+  clearFieldError('country')
+}
+
 const selectSavedAddress = (address: Address) => {
   emit('update:modelValue', { ...address })
   clearAllErrors()
@@ -419,7 +617,6 @@ const useNewAddress = () => {
     type: props.type,
     firstName: '',
     lastName: '',
-    company: '',
     street: '',
     city: '',
     postalCode: '',
@@ -440,24 +637,25 @@ const updateField = <K extends keyof CheckoutAddress>(field: K, value: CheckoutA
 }
 
 const validateField = (fieldName: string) => {
-  const value = localAddress.value[fieldName as keyof Address]
+  const value = fieldName === 'fullName'
+    ? fullName.value
+    : localAddress.value[fieldName as keyof Address]
 
   // Type guard to check if value is a string
-  const getStringValue = (val: any): string => {
+  const getStringValue = (val: unknown): string => {
     if (typeof val === 'string') return val
     if (val != null && typeof val !== 'boolean' && typeof val !== 'number') return String(val)
     return ''
   }
 
   switch (fieldName) {
-    case 'firstName':
+    case 'fullName':
       if (!getStringValue(value).trim()) {
-        fieldErrors.value.firstName = t('checkout.validation.firstNameRequired', 'First name is required')
+        fieldErrors.value.fullName = t('checkout.validation.fullNameRequired', 'Full name is required')
       }
-      break
-    case 'lastName':
-      if (!getStringValue(value).trim()) {
-        fieldErrors.value.lastName = t('checkout.validation.lastNameRequired', 'Last name is required')
+      else if (getStringValue(value).trim().split(/\s+/).length < 2) {
+        // Encourage but don't require last name
+        // fieldErrors.value.fullName = t('checkout.validation.fullNameComplete', 'Please enter your first and last name')
       }
       break
     case 'street':
@@ -503,16 +701,8 @@ const getFieldClasses = (fieldName: string) => {
   }
 }
 
-const formatAddressLine = (address: Address): string => {
-  const parts = [address.street]
-  if (address.company) {
-    parts.unshift(address.company)
-  }
-  return parts.join(', ')
-}
-
 const validateForm = (): boolean => {
-  const requiredFields = ['firstName', 'lastName', 'street', 'city', 'postalCode', 'country']
+  const requiredFields = ['fullName', 'street', 'city', 'postalCode', 'country']
   let isValid = true
 
   requiredFields.forEach((field) => {
@@ -523,6 +713,13 @@ const validateForm = (): boolean => {
   })
 
   return isValid
+}
+
+// Close suggestions when clicking outside
+const handleClickOutside = (event: MouseEvent) => {
+  if (streetInputRef.value && !streetInputRef.value.contains(event.target as Node)) {
+    showSuggestions.value = false
+  }
 }
 
 // Initialize selectedSavedAddressId when component mounts or saved addresses change
@@ -567,6 +764,18 @@ watch(
   { immediate: true },
 )
 
+// Lifecycle
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+  if (autocompleteDebounceTimer.value) {
+    clearTimeout(autocompleteDebounceTimer.value)
+  }
+})
+
 // Expose validation method for parent components
 defineExpose({
   validateForm,
@@ -606,5 +815,17 @@ defineExpose({
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Custom select arrow */
+.address-form select {
+  padding-right: 40px;
+}
+
+/* Country select dropdown arrow */
+.country-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-size: 20px;
 }
 </style>

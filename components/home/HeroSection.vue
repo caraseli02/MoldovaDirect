@@ -4,7 +4,7 @@
     <HomeHeroCarousel />
 
     <!-- Hero content below carousel -->
-    <div class="relative bg-gradient-to-b from-slate-950/95 to-slate-950">
+    <div class="relative bg-slate-950">
       <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.12),_rgba(15,23,42,0.05)_65%)]"></div>
       <div class="absolute inset-y-0 right-[-10%] hidden w-[45%] rounded-full bg-primary-500/30 blur-3xl lg:block"></div>
       <div class="container relative py-16 md:py-20">

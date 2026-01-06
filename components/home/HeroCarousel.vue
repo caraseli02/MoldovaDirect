@@ -80,8 +80,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-// @ts-expect-error - vue3-carousel types not available
 import { Carousel, Slide } from 'vue3-carousel'
+import type { CarouselExposed } from 'vue3-carousel'
 import 'vue3-carousel/dist/carousel.css'
 
 // Types
@@ -99,7 +99,7 @@ const localePath = useLocalePath()
 const { t } = useI18n()
 
 // State
-const carouselRef = ref<InstanceType<typeof Carousel> | null>(null)
+const carouselRef = ref<(InstanceType<typeof Carousel> & CarouselExposed) | null>(null)
 const currentSlide = ref(0)
 
 // Amazon-style horizontal scrolling cards with vibrant backgrounds

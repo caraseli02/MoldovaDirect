@@ -248,9 +248,9 @@ export const useAdminProductsStore = defineStore('adminProducts', {
         this.products = response.products
         this.pagination = response.pagination
       }
-      catch (error: any) {
-        this.error = error instanceof Error ? error.message : 'Failed to fetch products'
-        console.error('Error fetching admin products:', error)
+      catch (error: unknown) {
+        this.error = error instanceof Error ? getErrorMessage(error) : 'Failed to fetch products'
+        console.error('Error fetching admin products:', getErrorMessage(error))
       }
       finally {
         this.loading = false
@@ -433,7 +433,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
 
         return response
       }
-      catch (error: any) {
+      catch (error: unknown) {
         const toast = useToast()
         toast.error('Failed to update inventory')
         throw error
@@ -461,7 +461,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
         const toast = useToast()
         toast.success('Product deleted successfully')
       }
-      catch (error: any) {
+      catch (error: unknown) {
         const toast = useToast()
         toast.error('Failed to delete product')
         throw error
@@ -498,7 +498,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
         const toast = useToast()
         toast.success(`${this.selectedProducts.length} products deleted successfully`)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         const toast = useToast()
         toast.error('Failed to delete products')
         throw error
@@ -537,7 +537,7 @@ export const useAdminProductsStore = defineStore('adminProducts', {
         const action = isActive ? 'activated' : 'deactivated'
         toast.success(`${this.selectedProducts.length} products ${action} successfully`)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         const toast = useToast()
         toast.error('Failed to update products')
         throw error

@@ -95,7 +95,9 @@ if (!dashboardStore || Object.keys(dashboardStore).length === 0) {
 }
 
 // Emit event to parent to trigger refresh
-const emit = defineEmits(['refresh'])
+const emit = defineEmits<{
+  (e: 'refresh'): void
+}>()
 
 const stats = computed(() => dashboardStore.stats)
 const isLoading = computed(() => dashboardStore.isLoading)

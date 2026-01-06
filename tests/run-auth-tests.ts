@@ -161,7 +161,7 @@ class AuthTestRunner {
 
       console.log(`     ✅ ${result.passed} passed, ${result.failed} failed, ${result.skipped} skipped (${duration}ms)`)
     }
-    catch (error: any) {
+    catch (error: unknown) {
       const duration = Date.now() - startTime
       const result: TestResult = {
         suite: name,
@@ -305,8 +305,11 @@ if (require.main === module) {
     .then((report) => {
       process.exit(report.totalFailed > 0 ? 1 : 0)
     })
-    .catch((error: any) => {
-      console.error('Test runner failed:', error)
+    .catch((error: unknown) => {
+      const message = error instanceof Error ? error.message : String(error)
+      const stack = error instanceof Error ? error.stack : undefined
+      console.error('Test runner failed:', message)
+      if (stack) console.error(stack)
       process.exit(1)
     })
 }

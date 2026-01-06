@@ -142,7 +142,7 @@ const handleInstall = async () => {
       vibrate('error')
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('Installation failed:', error)
     vibrate('error')
   }

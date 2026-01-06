@@ -1,40 +1,117 @@
 <template>
   <div
     v-if="show"
-    class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6"
+    class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-5 mb-6"
   >
-    <div class="flex items-start space-x-3">
-      <svg
-        class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-          clip-rule="evenodd"
-        />
-      </svg>
+    <div class="flex items-start space-x-4">
+      <!-- User Icon -->
+      <div class="flex-shrink-0 w-10 h-10 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center">
+        <svg
+          class="w-5 h-5 text-blue-600 dark:text-blue-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+          />
+        </svg>
+      </div>
+
       <div class="flex-1">
-        <h3 class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
+        <h3 class="text-base font-semibold text-blue-900 dark:text-blue-100 mb-2">
           {{ $t('checkout.guestCheckout.title') }}
         </h3>
-        <p class="text-sm text-blue-700 dark:text-blue-300 mb-3">
-          {{ $t('checkout.guestCheckout.description') }}
-        </p>
-        <div class="flex flex-col sm:flex-row gap-2">
+
+        <!-- Benefits List -->
+        <ul class="space-y-1.5 mb-4">
+          <li class="flex items-center gap-2 text-sm text-blue-700 dark:text-blue-300">
+            <svg
+              class="w-4 h-4 text-green-500 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            {{ $t('checkout.guestCheckout.benefits.savedAddresses') }}
+          </li>
+          <li class="flex items-center gap-2 text-sm text-blue-700 dark:text-blue-300">
+            <svg
+              class="w-4 h-4 text-green-500 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            {{ $t('checkout.guestCheckout.benefits.fasterCheckout') }}
+          </li>
+          <li class="flex items-center gap-2 text-sm text-blue-700 dark:text-blue-300">
+            <svg
+              class="w-4 h-4 text-green-500 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            {{ $t('checkout.guestCheckout.benefits.orderHistory') }}
+          </li>
+        </ul>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-3">
           <NuxtLink
-            :to="localePath('/auth/login')"
-            class="inline-flex items-center px-3 py-2 border border-blue-300 dark:border-blue-600 text-sm font-medium rounded-md text-blue-700 dark:text-blue-300 bg-white dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+            :to="localePath('/auth/login?redirect=/checkout')"
+            class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
           >
-            {{ $t('auth.login') }}
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+              />
+            </svg>
+            {{ $t('checkout.guestCheckout.loginButton') }}
           </NuxtLink>
           <Button
-            variant="link"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md text-blue-700 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 transition-colors justify-start p-0 h-auto"
+            variant="outline"
+            class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
             @click="$emit('continue-as-guest')"
           >
-            {{ $t('checkout.continueAsGuest') }}
+            {{ $t('checkout.guestCheckout.guestButton') }}
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
           </Button>
         </div>
       </div>

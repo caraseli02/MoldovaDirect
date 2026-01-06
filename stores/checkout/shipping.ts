@@ -82,8 +82,8 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
     try {
       session.setOrderData(applyShippingMethod(orderData.value, shippingInfo.value.method))
     }
-    catch (error: any) {
-      console.error('Failed to update shipping costs:', error)
+    catch (error: unknown) {
+      console.error('Failed to update shipping costs:', getErrorMessage(error))
     }
   }
 
@@ -101,8 +101,8 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
       })
       session.setAvailableShippingMethods(methods)
     }
-    catch (error: any) {
-      console.error('Failed to load shipping methods:', error)
+    catch (error: unknown) {
+      console.error('Failed to load shipping methods:', getErrorMessage(error))
       session.setAvailableShippingMethods([
         {
           id: 'standard',
@@ -122,8 +122,8 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
     try {
       const validation = validateShippingInformation(info)
       if (!validation.isValid) {
-        session.setValidationErrors('shipping', validation.errors.map(err => err.message))
-        throw new Error(validation.errors.map(err => err.message).join(', '))
+        session.setValidationErrors('shipping', validation.errors.map(err => getErrorMessage(err)))
+        throw new Error(validation.errors.map(err => getErrorMessage(err)).join(', '))
       }
 
       session.setShippingInfo(info)
@@ -138,8 +138,8 @@ export const useCheckoutShippingStore = defineStore('checkout-shipping', () => {
         paymentMethod: paymentMethod.value,
       })
     }
-    catch (error: any) {
-      const message = error instanceof Error ? error.message : 'Failed to update shipping information'
+    catch (error: unknown) {
+      const message = error instanceof Error ? getErrorMessage(error) : 'Failed to update shipping information'
       const checkoutError = createValidationError('shipping', message, CheckoutErrorCode.SHIPPING_ADDRESS_INVALID)
       session.handleError(checkoutError)
       throw error

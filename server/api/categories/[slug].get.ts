@@ -83,27 +83,35 @@ export default defineCachedEventHandler(async (event) => {
       })
     }
 
-    // Get all subcategory IDs (including the category itself)
-    const getAllSubcategoryIds = async (categoryId: number): Promise<number[]> => {
-      const ids = [categoryId]
+    // Fetch all active categories in a single query to avoid N+1 pattern
+    // This fixes the recursive N+1 query pattern (GitHub issue #227)
+    const { data: allCategories } = await supabase
+      .from('categories')
+      .select('id, parent_id, slug, name_translations')
+      .eq('is_active', true)
 
-      const { data: subcategories } = await supabase
-        .from('categories')
-        .select('id')
-        .eq('parent_id', categoryId)
-        .eq('is_active', true)
-
-      if (subcategories && subcategories.length > 0) {
-        for (const subcat of subcategories) {
-          const subIds = await getAllSubcategoryIds(subcat.id)
-          ids.push(...subIds)
-        }
+    // Build category lookup map for efficient traversal
+    const categoryMap = new Map(allCategories?.map(cat => [cat.id, cat]) || [])
+    const childrenMap = new Map<number, number[]>()
+    allCategories?.forEach((cat) => {
+      if (cat.parent_id) {
+        const children = childrenMap.get(cat.parent_id) || []
+        children.push(cat.id)
+        childrenMap.set(cat.parent_id, children)
       }
+    })
 
+    // Get all subcategory IDs (including the category itself) using in-memory traversal
+    const getAllSubcategoryIds = (categoryId: number): number[] => {
+      const ids = [categoryId]
+      const childIds = childrenMap.get(categoryId) || []
+      for (const childId of childIds) {
+        ids.push(...getAllSubcategoryIds(childId))
+      }
       return ids
     }
 
-    const categoryIds = await getAllSubcategoryIds(category.id)
+    const categoryIds = getAllSubcategoryIds(category.id)
 
     // Build products query
     let productsQuery = supabase
@@ -180,18 +188,13 @@ export default defineCachedEventHandler(async (event) => {
       .eq('is_active', true)
       .order('sort_order', { ascending: true })
 
-    // Build breadcrumb
-    const buildBreadcrumb = async (categoryId: number): Promise<CategoryBreadcrumb[]> => {
-      const breadcrumb = []
-      let currentCategoryId = categoryId
+    // Build breadcrumb using pre-fetched categories (avoids N+1 pattern - GitHub issue #227)
+    const buildBreadcrumb = (categoryId: number): CategoryBreadcrumb[] => {
+      const breadcrumb: CategoryBreadcrumb[] = []
+      let currentCategoryId: number | null = categoryId
 
       while (currentCategoryId) {
-        const { data: cat } = await supabase
-          .from('categories')
-          .select('id, slug, name_translations, parent_id')
-          .eq('id', currentCategoryId)
-          .single()
-
+        const cat = categoryMap.get(currentCategoryId)
         if (cat) {
           breadcrumb.unshift({
             id: cat.id,
@@ -208,7 +211,7 @@ export default defineCachedEventHandler(async (event) => {
       return breadcrumb
     }
 
-    const breadcrumb = await buildBreadcrumb(category.id)
+    const breadcrumb = buildBreadcrumb(category.id)
 
     // Transform the data
     const transformedProducts = products?.map((product: ProductFromDB) => ({
@@ -271,10 +274,10 @@ export default defineCachedEventHandler(async (event) => {
       locale,
     }
   }
-  catch (error: any) {
-    console.error('Category products API error:', error)
+  catch (error: unknown) {
+    console.error('Category products API error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 

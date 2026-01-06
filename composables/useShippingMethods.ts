@@ -26,6 +26,7 @@ export function useShippingMethods(address: Ref<Address>) {
   const selectedMethod = ref<ShippingMethod | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const autoSelected = ref(false) // Track if method was auto-selected
 
   // Track last loaded address to prevent duplicate calls
   const lastLoadedAddress = ref<string>('')
@@ -111,11 +112,45 @@ export function useShippingMethods(address: Ref<Address>) {
 
       availableMethods.value = localizeShippingMethods(methods)
       lastLoadedAddress.value = addressHash
+
+      // Auto-select shipping method in these cases:
+      // 1. Only one method available
+      // 2. Only free shipping available
+      // 3. All methods are free (select the fastest one)
+      autoSelected.value = false
+      if (availableMethods.value.length === 1) {
+        // Only one method - auto select it
+        selectedMethod.value = availableMethods.value[0] ?? null
+        autoSelected.value = true
+      }
+      else if (availableMethods.value.length > 0) {
+        const freeMethods = availableMethods.value.filter(m => m.price === 0)
+        if (freeMethods.length === availableMethods.value.length && freeMethods.length > 0) {
+          // All methods are free - select the fastest one
+          const fastest = freeMethods.reduce((prev, curr) =>
+            prev.estimatedDays < curr.estimatedDays ? prev : curr,
+          )
+          selectedMethod.value = fastest ?? null
+          autoSelected.value = true
+        }
+        else if (freeMethods.length === 1 && availableMethods.value.length <= 2) {
+          // Only one free option and few total options - auto-select free
+          selectedMethod.value = freeMethods[0] ?? null
+          autoSelected.value = true
+        }
+      }
     }
-    catch (e: any) {
-      error.value = e instanceof Error ? e.message : 'Failed to load shipping methods'
-      availableMethods.value = getFallbackMethods()
+    catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : 'Failed to load shipping methods'
+      error.value = errorMessage
       console.error('Failed to load shipping methods:', e)
+
+      // Set fallback methods but notify user they are seeing estimated rates
+      availableMethods.value = getFallbackMethods()
+
+      // Note: Toast notification should be handled by the component that uses this composable
+      // to avoid duplicate toasts and allow for proper i18n. The error.value being set
+      // indicates a fallback scenario that the UI can detect and communicate to users.
     }
     finally {
       loading.value = false
@@ -146,6 +181,7 @@ export function useShippingMethods(address: Ref<Address>) {
     selectedMethod,
     loading: readonly(loading),
     error: readonly(error),
+    autoSelected: readonly(autoSelected),
     loadShippingMethods,
     retry,
     reset,

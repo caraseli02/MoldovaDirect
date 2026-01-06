@@ -198,19 +198,19 @@
           "id": "phase-5-1",
           "description": "Multi-step checkout flow",
           "implemented": true,
-          "tested": false
+          "tested": true
         },
         {
           "id": "phase-5-2",
           "description": "Shipping address management",
           "implemented": true,
-          "tested": false
+          "tested": true
         },
         {
           "id": "phase-5-3",
           "description": "Delivery options and costs calculation",
           "implemented": true,
-          "tested": false
+          "tested": true
         },
         {
           "id": "phase-5-4",
@@ -221,8 +221,8 @@
         {
           "id": "phase-5-5",
           "description": "Order confirmation system",
-          "implemented": false,
-          "tested": false
+          "implemented": true,
+          "tested": true
         },
         {
           "id": "phase-5-6",
@@ -235,32 +235,32 @@
     {
       "id": "phase-6",
       "name": "Phase 6: Order Management",
-      "status": "planned",
+      "status": "in-progress",
       "tested": false,
       "steps": [
         {
           "id": "phase-6-1",
           "description": "Order history in user account",
-          "implemented": false,
-          "tested": false
+          "implemented": true,
+          "tested": true
         },
         {
           "id": "phase-6-2",
           "description": "Order status tracking",
-          "implemented": false,
-          "tested": false
+          "implemented": true,
+          "tested": true
         },
         {
           "id": "phase-6-3",
           "description": "Invoice generation",
-          "implemented": false,
-          "tested": false
+          "implemented": true,
+          "tested": true
         },
         {
           "id": "phase-6-4",
           "description": "Admin order management",
-          "implemented": false,
-          "tested": false
+          "implemented": true,
+          "tested": true
         },
         {
           "id": "phase-6-5",
@@ -336,13 +336,15 @@
           "id": "phase-8-2",
           "description": "Wishlist functionality",
           "implemented": false,
-          "tested": false
+          "tested": false,
+          "github_issue": 183
         },
         {
           "id": "phase-8-3",
           "description": "Recently viewed products",
           "implemented": false,
-          "tested": false
+          "tested": false,
+          "github_issue": 122
         },
         {
           "id": "phase-8-4",
@@ -354,39 +356,55 @@
           "id": "phase-8-5",
           "description": "Advanced search with filters",
           "implemented": false,
-          "tested": false
+          "tested": false,
+          "github_issue": 178
         },
         {
           "id": "phase-8-6",
           "description": "Quick view modal for products",
           "implemented": false,
-          "tested": false
+          "tested": false,
+          "github_issue": 182
         }
       ]
     },
     {
       "id": "critical-security",
       "name": "Critical Security Items",
-      "status": "pending",
+      "status": "in-progress",
       "tested": false,
       "steps": [
         {
           "id": "security-1",
           "description": "Re-enable Admin Middleware",
-          "implemented": false,
-          "tested": false
+          "implemented": true,
+          "tested": true
         },
         {
           "id": "security-2",
           "description": "Implement Rate Limiting for authentication endpoints",
-          "implemented": false,
+          "implemented": true,
           "tested": false
         },
         {
           "id": "security-3",
           "description": "Server-Side Price Verification in checkout",
-          "implemented": false,
-          "tested": false
+          "implemented": true,
+          "tested": true
+        },
+        {
+          "id": "security-4",
+          "description": "Implement Content Security Policy Headers",
+          "implemented": true,
+          "tested": true,
+          "github_issue": 234
+        },
+        {
+          "id": "security-5",
+          "description": "Extend CSRF Protection Beyond Cart Endpoints",
+          "implemented": true,
+          "tested": true,
+          "github_issue": 233
         }
       ]
     },
@@ -430,50 +448,810 @@
     },
     {
       "id": "ui-modernization",
-      "name": "shadcn-vue UI Modernization",
+      "name": "Custom Component System",
       "status": "in-progress",
       "tested": false,
       "steps": [
         {
           "id": "ui-1",
-          "description": "shadcn-vue component libraries scaffolded",
+          "description": "Custom UI component system (Dialog, DropdownMenu, Popover)",
           "implemented": true,
           "tested": false
         },
         {
           "id": "ui-2",
-          "description": "Migrate primary buttons to shadcn-vue",
+          "description": "Standardized Button component with variants",
           "implemented": true,
           "tested": false
         },
         {
           "id": "ui-3",
-          "description": "Migrate toast system to vue-sonner",
-          "implemented": false,
-          "tested": false
+          "description": "Toast system using Sonner",
+          "implemented": true,
+          "tested": true
         },
         {
           "id": "ui-4",
-          "description": "Complete checkout component migration",
+          "description": "Checkout components using custom UI system",
           "implemented": false,
           "tested": false
         },
         {
           "id": "ui-5",
-          "description": "Enhance mobile navigation with shadcn patterns",
+          "description": "Enhanced mobile navigation with custom components",
           "implemented": false,
           "tested": false
+        },
+        {
+          "id": "ui-6",
+          "description": "Complete custom component coverage validation",
+          "implemented": false,
+          "tested": false
+        }
+      ]
+    },
+    {
+      "id": "security-dependencies",
+      "name": "Security & Dependency Management",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "deps-1",
+          "description": "Fix glob security vulnerability (markdownlint-cli update)",
+          "implemented": false,
+          "tested": false,
+          "priority": "critical"
+        },
+        {
+          "id": "deps-2",
+          "description": "Update Stripe packages (v18 to v20, stripe-js v7 to v8)",
+          "implemented": false,
+          "tested": false,
+          "priority": "high"
+        },
+        {
+          "id": "deps-3",
+          "description": "Update @nuxtjs/supabase to v2.x",
+          "implemented": false,
+          "tested": false,
+          "priority": "high"
+        },
+        {
+          "id": "deps-4",
+          "description": "Update Vitest ecosystem to v4.x",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "deps-5",
+          "description": "Update @vueuse/core to v14.x",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "deps-6",
+          "description": "Update @nuxt/image to v2.x",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "deps-7",
+          "description": "Update minor/patch dependencies (nuxt, vue, zod, tailwindcss)",
+          "implemented": false,
+          "tested": false,
+          "priority": "low"
+        },
+        {
+          "id": "deps-8",
+          "description": "Verify and remove potentially unused dependencies (@vueuse/motion, uuid)",
+          "implemented": false,
+          "tested": false,
+          "priority": "low"
+        },
+        {
+          "id": "deps-9",
+          "description": "Create .env.example file with all required variables",
+          "implemented": false,
+          "tested": false,
+          "priority": "high",
+          "github_issue": 282
+        }
+      ]
+    },
+    {
+      "id": "technical-debt-files",
+      "name": "Technical Debt: Large File Refactoring",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "td-files-1",
+          "description": "Split pages/account/profile.vue (1,359 lines) into sub-components",
+          "implemented": false,
+          "tested": false,
+          "priority": "high"
+        },
+        {
+          "id": "td-files-2",
+          "description": "Split components/checkout/HybridCheckout.vue (990 lines) into Guest/Auth/Express",
+          "implemented": false,
+          "tested": false,
+          "priority": "high"
+        },
+        {
+          "id": "td-files-3",
+          "description": "Split pages/products/[slug].vue (1,033 lines) into sub-components",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "td-files-4",
+          "description": "Split pages/products/index.vue (905 lines) into sub-components",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "td-files-5",
+          "description": "Split components/checkout/PaymentForm.vue (852 lines)",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "td-files-6",
+          "description": "Split pages/checkout/confirmation.vue (901 lines)",
+          "implemented": false,
+          "tested": false,
+          "priority": "low"
+        },
+        {
+          "id": "td-files-7",
+          "description": "Split pages/account/orders/index.vue (870 lines)",
+          "implemented": false,
+          "tested": false,
+          "priority": "low"
+        },
+        {
+          "id": "td-files-8",
+          "description": "Split admin components (594+ lines)",
+          "implemented": false,
+          "tested": false,
+          "priority": "low"
+        }
+      ]
+    },
+    {
+      "id": "technical-debt-code",
+      "name": "Technical Debt: Code Quality",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "td-code-1",
+          "description": "Extract magic numbers to named constants file",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "td-code-2",
+          "description": "Replace console.log statements with proper logging (Consola)",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "td-code-3",
+          "description": "Consolidate validation logic into centralized Zod schemas",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "td-code-4",
+          "description": "Fix admin audit log performed_by: null issue",
+          "implemented": false,
+          "tested": false,
+          "priority": "high"
+        },
+        {
+          "id": "td-code-5",
+          "description": "Address critical TODO comments (carrier tracking APIs)",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "td-code-6",
+          "description": "Centralize currency formatting",
+          "implemented": false,
+          "tested": false,
+          "priority": "low",
+          "github_issue": 129
+        },
+        {
+          "id": "td-code-7",
+          "description": "Standardize error handling across cart module",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium",
+          "github_issue": 127
+        },
+        {
+          "id": "td-code-8",
+          "description": "Establish consistent error handling pattern",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "td-code-9",
+          "description": "Extract duplicated authentication logic to shared utilities",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium",
+          "github_issue": 280
+        },
+        {
+          "id": "td-code-10",
+          "description": "Remove 2,550 lines of unnecessary code",
+          "implemented": true,
+          "tested": true,
+          "priority": "high",
+          "github_issue": 231
+        },
+        {
+          "id": "td-code-11",
+          "description": "Remove mock data from production cart store code",
+          "implemented": false,
+          "tested": false,
+          "priority": "low",
+          "github_issue": 134
+        }
+      ]
+    },
+    {
+      "id": "testing-infrastructure",
+      "name": "Testing Infrastructure & Coverage",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "test-1",
+          "description": "Enable CI/CD E2E tests in GitHub Actions",
+          "implemented": false,
+          "tested": false,
+          "priority": "critical"
+        },
+        {
+          "id": "test-2",
+          "description": "Add API integration tests for checkout flow",
+          "implemented": false,
+          "tested": false,
+          "priority": "critical",
+          "github_issue": 120
+        },
+        {
+          "id": "test-3",
+          "description": "Add API integration tests for authentication",
+          "implemented": false,
+          "tested": false,
+          "priority": "high"
+        },
+        {
+          "id": "test-4",
+          "description": "Add comprehensive test coverage for cart module",
+          "implemented": false,
+          "tested": false,
+          "priority": "high",
+          "github_issue": 119
+        },
+        {
+          "id": "test-5",
+          "description": "Add component tests for checkout components",
+          "implemented": false,
+          "tested": false,
+          "priority": "high"
+        },
+        {
+          "id": "test-6",
+          "description": "Add data-testid attributes to critical components",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "test-7",
+          "description": "Create test data factories with faker-js",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "test-8",
+          "description": "Add comprehensive test coverage for product pages",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "test-9",
+          "description": "Add E2E tests for admin workflows",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "test-10",
+          "description": "Fix flaky E2E auth tests (8 known issues)",
+          "implemented": false,
+          "tested": false,
+          "priority": "high"
+        },
+        {
+          "id": "test-11",
+          "description": "Add missing edge case coverage for cache and auth",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium",
+          "github_issue": 281
+        },
+        {
+          "id": "test-12",
+          "description": "Eliminate waitForTimeout anti-pattern from test infrastructure",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "test-13",
+          "description": "Remove hardcoded Spanish text from test helpers",
+          "implemented": false,
+          "tested": false,
+          "priority": "low"
+        }
+      ]
+    },
+    {
+      "id": "performance-optimization",
+      "name": "Performance Optimization",
+      "status": "in-progress",
+      "tested": false,
+      "steps": [
+        {
+          "id": "perf-1",
+          "description": "Fix suboptimal bundle splitting (180KB unnecessary)",
+          "implemented": true,
+          "tested": true,
+          "priority": "high",
+          "github_issue": 229
+        },
+        {
+          "id": "perf-2",
+          "description": "Fix N+1 query pattern in product breadcrumbs",
+          "implemented": true,
+          "tested": true,
+          "priority": "high",
+          "github_issue": 227
+        },
+        {
+          "id": "perf-3",
+          "description": "Deploy 20+ missing database indexes",
+          "implemented": true,
+          "tested": false,
+          "priority": "high",
+          "github_issue": 175
+        },
+        {
+          "id": "perf-4",
+          "description": "Cart store re-render optimization",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium",
+          "github_issue": 237
+        },
+        {
+          "id": "perf-5",
+          "description": "Self-host hero image to re-enable prerendering",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium",
+          "github_issue": 238
+        },
+        {
+          "id": "perf-6",
+          "description": "Fix N+1 query problem in inventory updates",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "perf-7",
+          "description": "Optimize cart performance - remove unnecessary object creation",
+          "implemented": false,
+          "tested": false,
+          "priority": "low",
+          "github_issue": 128
+        },
+        {
+          "id": "perf-8",
+          "description": "Optimize search performance with database full-text search",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "perf-9",
+          "description": "Debounce price range API calls",
+          "implemented": false,
+          "tested": false,
+          "priority": "low"
+        }
+      ]
+    },
+    {
+      "id": "documentation-debt",
+      "name": "Documentation Improvements",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "docs-1",
+          "description": "Audit and update JSDoc comments in admin auth",
+          "implemented": false,
+          "tested": false,
+          "priority": "low",
+          "github_issue": 279
+        },
+        {
+          "id": "docs-2",
+          "description": "Add comprehensive API documentation",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "docs-3",
+          "description": "Update deployment documentation with security hardening",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "docs-4",
+          "description": "Document payment integration and PCI compliance",
+          "implemented": false,
+          "tested": false,
+          "priority": "high"
+        },
+        {
+          "id": "docs-5",
+          "description": "Audit translation key coverage across all locales",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "docs-6",
+          "description": "Establish documentation cleanup and archival strategy",
+          "implemented": false,
+          "tested": false,
+          "priority": "low",
+          "github_issue": 138
+        }
+      ]
+    },
+    {
+      "id": "accessibility",
+      "name": "Accessibility (a11y) Improvements",
+      "status": "pending",
+      "tested": false,
+      "steps": [
+        {
+          "id": "a11y-1",
+          "description": "Implement comprehensive ARIA labels and keyboard navigation in admin",
+          "implemented": false,
+          "tested": false,
+          "priority": "high",
+          "github_issue": 176
+        },
+        {
+          "id": "a11y-2",
+          "description": "Add accessibility features to checkout flow",
+          "implemented": false,
+          "tested": false,
+          "priority": "high",
+          "github_issue": 126
+        },
+        {
+          "id": "a11y-3",
+          "description": "Fix cart accessibility issues",
+          "implemented": false,
+          "tested": false,
+          "priority": "high",
+          "github_issue": 123
+        },
+        {
+          "id": "a11y-4",
+          "description": "Fix accessibility issues on product detail page",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "a11y-5",
+          "description": "Fix accessibility issues on products listing page",
+          "implemented": false,
+          "tested": false,
+          "priority": "medium"
+        },
+        {
+          "id": "a11y-6",
+          "description": "Audit and fix dark/light mode contrast",
+          "implemented": false,
+          "tested": false,
+          "priority": "low",
+          "github_issue": 153
+        }
+      ]
+    },
+    {
+      "id": "checkout-enhancements",
+      "name": "Checkout & Cart Enhancements",
+      "status": "planned",
+      "tested": false,
+      "steps": [
+        {
+          "id": "checkout-enh-1",
+          "description": "Streamline checkout to 3 steps and enhance cart UX",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 288
+        },
+        {
+          "id": "checkout-enh-2",
+          "description": "Add delivery date estimates to cart and checkout",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 189
+        },
+        {
+          "id": "checkout-enh-3",
+          "description": "Add trust badges and security indicators to payment page",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 185
+        },
+        {
+          "id": "checkout-enh-4",
+          "description": "Implement dynamic shipping cost calculation and display",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 152
+        },
+        {
+          "id": "checkout-enh-5",
+          "description": "Add order summary snapshot system",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 137
+        },
+        {
+          "id": "checkout-enh-6",
+          "description": "Improve checkout error display with dedicated component",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 130
+        },
+        {
+          "id": "checkout-enh-7",
+          "description": "Add cart clearing retry mechanism for checkout",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 131
+        },
+        {
+          "id": "checkout-enh-8",
+          "description": "Fix cart-checkout state synchronization race conditions",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 124
+        },
+        {
+          "id": "checkout-enh-9",
+          "description": "Fix type safety issues in checkout module",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 125
+        },
+        {
+          "id": "checkout-enh-10",
+          "description": "Fix inventory race condition in checkout",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 235
+        }
+      ]
+    },
+    {
+      "id": "admin-enhancements",
+      "name": "Admin Panel Enhancements",
+      "status": "planned",
+      "tested": false,
+      "steps": [
+        {
+          "id": "admin-enh-1",
+          "description": "Create responsive mobile layouts for admin tables",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 177
+        },
+        {
+          "id": "admin-enh-2",
+          "description": "Add breadcrumb navigation to admin detail pages",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 180
+        },
+        {
+          "id": "admin-enh-3",
+          "description": "Replace email template JSON textarea with visual form builder",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 179
+        },
+        {
+          "id": "admin-enh-4",
+          "description": "Implement column visibility toggle for admin tables",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 186
+        },
+        {
+          "id": "admin-enh-5",
+          "description": "Standardize admin API error message format and constants",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 283
+        }
+      ]
+    },
+    {
+      "id": "product-enhancements",
+      "name": "Product & Shop Enhancements",
+      "status": "planned",
+      "tested": false,
+      "steps": [
+        {
+          "id": "product-enh-1",
+          "description": "Add search autocomplete with product suggestions and search history",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 178
+        },
+        {
+          "id": "product-enh-2",
+          "description": "Implement product comparison feature with side-by-side view",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 181
+        },
+        {
+          "id": "product-enh-3",
+          "description": "Add mobile filter bottom sheet with live results preview",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 188
+        },
+        {
+          "id": "product-enh-4",
+          "description": "Enhance shop filters with categories, price range, ratings, and sort options",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 149
+        },
+        {
+          "id": "product-enh-5",
+          "description": "Enable review submission and add review sorting options",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 150
+        },
+        {
+          "id": "product-enh-6",
+          "description": "Add pagination total pages and jump-to-page functionality",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 187
+        },
+        {
+          "id": "product-enh-7",
+          "description": "Combine duplicate watchers on product detail page",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 118
+        }
+      ]
+    },
+    {
+      "id": "ux-improvements",
+      "name": "UX & Content Improvements",
+      "status": "planned",
+      "tested": false,
+      "steps": [
+        {
+          "id": "ux-1",
+          "description": "Implement skeleton loaders for improved perceived performance",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 148
+        },
+        {
+          "id": "ux-2",
+          "description": "Populate FAQ, Shipping & Returns, and Track Order pages with content",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 147
+        },
+        {
+          "id": "ux-3",
+          "description": "Add address management page in user account area",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 151
+        },
+        {
+          "id": "ux-4",
+          "description": "Verify and add missing translation keys",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 133
+        },
+        {
+          "id": "ux-5",
+          "description": "Separate journal/blog section from shop page",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 154
+        },
+        {
+          "id": "ux-6",
+          "description": "Add virtual scrolling for large carts",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 136
+        },
+        {
+          "id": "ux-7",
+          "description": "Standardize button components in cart",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 135
+        },
+        {
+          "id": "ux-8",
+          "description": "Fix component coupling in Save For Later",
+          "implemented": false,
+          "tested": false,
+          "github_issue": 132
         }
       ]
     }
   ],
   "metadata": {
-    "version": "1.0.0",
-    "last_updated": "2025-12-08",
+    "version": "1.5.0",
+    "last_updated": "2026-01-05",
     "project": "Moldova Direct E-commerce Platform",
-    "total_features": 11,
+    "total_features": 22,
     "completed_features": 4,
-    "in_progress_features": 3,
-    "planned_features": 4
+    "in_progress_features": 4,
+    "planned_features": 14,
+    "notes": "PR #336: Performance cleanup - N+1 queries fixed (#227), bundle splitting (#229), dead code removal (#231), database indexes migration (#175). PR #346: Replaced shadcn-vue/Reka UI with custom components. Added checkout-enhancements, admin-enhancements, product-enhancements, and ux-improvements feature groups from open GitHub issues."
   }
 }

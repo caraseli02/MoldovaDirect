@@ -31,7 +31,7 @@ async function waitForServer(baseURL: string, timeout = 120000) {
         return
       }
     }
-    catch (_error: any) {
+    catch {
       // Server not ready yet, continue waiting
     }
     await new Promise(resolve => setTimeout(resolve, 500))
@@ -93,7 +93,8 @@ async function globalSetup(config: FullConfig) {
 
     try {
       // ACTUALLY LOGIN - Get credentials from environment variables
-      const testEmail = process.env.TEST_USER_EMAIL || `test-${locale}@example.test`
+      // Use Resend's test address for reliable E2E email testing
+      const testEmail = process.env.TEST_USER_EMAIL || 'delivered@resend.dev'
       const testPassword = process.env.TEST_USER_PASSWORD
 
       if (!testPassword) {
@@ -137,16 +138,22 @@ async function globalSetup(config: FullConfig) {
         emailInput = page.locator('input[type="email"]').first()
       }
 
-      // Fill in credentials
+      // Fill in credentials using keyboard to trigger Vue v-model properly
       await emailInput.click()
-      await emailInput.fill(testEmail)
+      // Select all and delete to clear
+      await page.keyboard.press('Meta+a')
+      await page.keyboard.press('Backspace')
+      // Type character by character to trigger Vue reactivity
+      await page.keyboard.type(testEmail, { delay: 5 })
+      await page.waitForTimeout(100)
+      // Tab to password to trigger blur validation
+      await page.keyboard.press('Tab')
 
       // Verify email was filled correctly
       const filledEmail = await emailInput.inputValue()
       console.log(`  Filled email: "${filledEmail}"`)
-      await page.waitForTimeout(100)
 
-      // Password input - try data-testid first, fallback to type=password
+      // Password should now be focused after Tab
       let passwordInput = page.locator('[data-testid="password-input"]')
       const hasPasswordTestId = await passwordInput.count() > 0
       if (!hasPasswordTestId) {
@@ -154,14 +161,18 @@ async function globalSetup(config: FullConfig) {
         passwordInput = page.locator('input[type="password"]').first()
       }
 
-      await passwordInput.click()
-      await passwordInput.fill(testPassword)
+      // Type password
+      await page.keyboard.type(testPassword, { delay: 5 })
+      await page.waitForTimeout(100)
+      // Tab away to trigger blur validation
+      await page.keyboard.press('Tab')
 
       // Verify password was filled correctly (length check for security)
       const filledPassword = await passwordInput.inputValue()
       console.log(`  Password filled: ${filledPassword.length} characters (expected: ${testPassword.length})`)
       console.log(`  Password matches: ${filledPassword === testPassword}`)
 
+      // Wait for Vue reactivity to enable the button
       await page.waitForTimeout(500)
 
       // Login button - try data-testid first, fallback to button text
@@ -174,9 +185,97 @@ async function globalSetup(config: FullConfig) {
 
       await loginButton.waitFor({ state: 'visible' })
 
-      // Submit login form (force click to bypass validation for global setup)
-      console.log(`  Submitting login form...`)
-      await loginButton.click({ force: true })
+      // Check if button is enabled
+      const isDisabled = await loginButton.isDisabled()
+      console.log(`  Login button disabled: ${isDisabled}`)
+
+      if (isDisabled) {
+        console.log(`  ⚠️  Button disabled - using Supabase REST API directly`)
+
+        // Get Supabase URL and key from environment
+        const supabaseUrl = process.env.SUPABASE_URL || process.env.NUXT_PUBLIC_SUPABASE_URL
+        const supabaseKey = process.env.SUPABASE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NUXT_PUBLIC_SUPABASE_KEY
+
+        if (!supabaseUrl || !supabaseKey) {
+          console.log(`  ⚠️  Supabase credentials not found in env`)
+        }
+        else {
+          console.log(`  Calling Supabase auth API...`)
+          try {
+            const authResponse = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'apikey': supabaseKey,
+              },
+              body: JSON.stringify({
+                email: testEmail,
+                password: testPassword,
+              }),
+            })
+
+            const authData = await authResponse.json()
+
+            if (authResponse.ok && authData.access_token) {
+              console.log(`  ✅ Supabase auth successful: ${authData.user?.email}`)
+
+              // Extract project ref from Supabase URL (e.g., khvzbjemydddnryreytu from https://khvzbjemydddnryreytu.supabase.co)
+              const projectRef = new URL(supabaseUrl).hostname.split('.')[0]
+              console.log(`  Setting auth for project: ${projectRef}`)
+
+              // Set the auth cookies in the browser (matching @nuxtjs/supabase format)
+              await context.addCookies([
+                {
+                  name: `sb-${projectRef}-auth-token`,
+                  value: JSON.stringify({
+                    access_token: authData.access_token,
+                    refresh_token: authData.refresh_token,
+                    token_type: 'bearer',
+                    expires_in: authData.expires_in,
+                    expires_at: authData.expires_at,
+                    user: authData.user,
+                  }),
+                  domain: new URL(baseURL).hostname,
+                  path: '/',
+                  httpOnly: false,
+                },
+              ])
+
+              // Also set localStorage via page.evaluate
+              await page.evaluate((data) => {
+                const storageKey = `sb-${data.projectRef}-auth-token`
+                localStorage.setItem(storageKey, JSON.stringify({
+                  access_token: data.tokens.access_token,
+                  refresh_token: data.tokens.refresh_token,
+                  token_type: 'bearer',
+                  expires_in: data.tokens.expires_in,
+                  expires_at: data.tokens.expires_at,
+                  user: data.tokens.user,
+                }))
+                console.log(`Set localStorage key: ${storageKey}`)
+              }, { projectRef, tokens: authData })
+
+              // Reload to apply auth
+              await page.goto(`${baseURL}/account`, { waitUntil: 'networkidle' })
+              await page.waitForTimeout(2000)
+
+              const finalUrl = page.url()
+              console.log(`  Final URL after auth: ${finalUrl}`)
+            }
+            else {
+              console.log(`  ❌ Supabase auth failed:`, authData.error || authData.msg || 'Unknown error')
+            }
+          }
+          catch (fetchError: any) {
+            console.log(`  ❌ Fetch error:`, fetchError.message)
+          }
+        }
+      }
+      else {
+        // Submit login form normally
+        console.log(`  Submitting login form...`)
+        await loginButton.click({ timeout: 5000 })
+      }
 
       // Wait a bit for navigation
       await page.waitForTimeout(3000)
@@ -217,7 +316,7 @@ async function globalSetup(config: FullConfig) {
 
       console.log(`✓ Authenticated and saved storage state for locale: ${locale}`)
     }
-    catch (error: any) {
+    catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : String(error)
 
       // Handle various error types gracefully - create empty auth state to allow tests to continue
@@ -242,14 +341,14 @@ async function globalSetup(config: FullConfig) {
       else {
         await context.close()
         await browser.close()
-        throw new Error(`Global setup failed for locale ${locale}: ${errorMessage}`)
+        throw new Error(`Global setup failed for locale ${locale}: ${errorMessage}`, { cause: error })
       }
     }
     finally {
       try {
         await context.close()
       }
-      catch (_e: any) {
+      catch {
         // Already closed in catch block
       }
     }
@@ -280,10 +379,15 @@ async function globalSetup(config: FullConfig) {
       const loginButton = adminPage.locator('[data-testid="login-button"]')
 
       await emailInput.click()
-      await emailInput.fill(adminEmail)
+      await emailInput.clear()
+      await emailInput.pressSequentially(adminEmail, { delay: 10 })
+      await emailInput.blur()
       await passwordInput.click()
-      await passwordInput.fill(adminPassword)
-      await loginButton.click({ force: true })
+      await passwordInput.clear()
+      await passwordInput.pressSequentially(adminPassword, { delay: 10 })
+      await passwordInput.blur()
+      await adminPage.waitForTimeout(500)
+      await loginButton.click({ timeout: 5000 })
 
       await adminPage.waitForTimeout(3000)
 
@@ -315,7 +419,7 @@ async function globalSetup(config: FullConfig) {
         console.log(`✓ Admin authentication completed and saved`)
       }
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.warn(`⚠️ Admin auth setup failed: ${error.message}`)
       console.warn('  Admin tests may fail. Please ensure TEST_ADMIN_EMAIL and TEST_ADMIN_PASSWORD are set.')
     }

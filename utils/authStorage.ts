@@ -54,7 +54,7 @@ export function updateSupabaseSessionCookies(remember: boolean): void {
     // Store the preference so it can be used by the auth system
     setRememberMePreference(remember)
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.warn('Failed to update Supabase session cookies:', error)
   }
 }
@@ -87,7 +87,7 @@ export function clearAuthCookies(): void {
         }
       })
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.warn('Failed to clear auth cookies:', error)
     }
   }
@@ -111,7 +111,7 @@ export function adjustSessionCookieDuration(remember: boolean): void {
     // If we need more control, we can implement a custom storage adapter
     // that checks this preference cookie
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.warn('Failed to adjust session cookie duration:', error)
   }
 }

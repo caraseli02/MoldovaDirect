@@ -18,7 +18,7 @@ async function globalTeardown(_config: FullConfig) {
       await fs.rm(testDataPath, { recursive: true, force: true })
       console.log('✓ Cleaned up auth data')
     }
-    catch (error: any) {
+    catch (error: unknown) {
       console.error('✗ Failed to cleanup auth data:', error)
     }
   }

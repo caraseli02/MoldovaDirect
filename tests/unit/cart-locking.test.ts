@@ -113,7 +113,7 @@ describe('Cart Locking', () => {
       try {
         await cart.unlockCart(sessionId2)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -172,7 +172,7 @@ describe('Cart Locking', () => {
       try {
         await cart.addItem(mockProduct, 1)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -197,7 +197,7 @@ describe('Cart Locking', () => {
       try {
         await cart.removeItem(itemId)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -221,7 +221,7 @@ describe('Cart Locking', () => {
       try {
         await cart.updateQuantity(itemId, 2)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -244,7 +244,7 @@ describe('Cart Locking', () => {
       try {
         await cart.clearCart()
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 
@@ -358,18 +358,8 @@ describe('Cart Locking', () => {
       await cart.lockCart(sessionId, 30)
 
       // Multiple failed operations shouldn't change lock state
-      try {
-        await cart.addItem(mockProduct, 1)
-      }
-      catch {
-        // Expected to fail while locked
-      }
-      try {
-        await cart.clearCart()
-      }
-      catch {
-        // Expected to fail while locked
-      }
+      await expect(cart.addItem(mockProduct, 1)).rejects.toThrow()
+      await expect(cart.clearCart()).rejects.toThrow()
 
       expect(cart.isLocked).toBe(true)
       expect(cart.lockedByCheckoutSessionId).toBe(sessionId)
@@ -387,7 +377,7 @@ describe('Cart Locking', () => {
       try {
         await cart.addItem(mockProduct, 1)
       }
-      catch (error: any) {
+      catch (error: unknown) {
         caughtError = error
       }
 

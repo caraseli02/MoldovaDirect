@@ -8,7 +8,6 @@ import * as orderConfirmation from './orderConfirmation'
 import * as orderStatus from './orderStatusTemplates'
 import * as translations from './translations'
 import * as formatters from './formatters'
-import * as dataTransformer from './dataTransformer'
 import * as validator from './validator'
 
 export {
@@ -16,7 +15,6 @@ export {
   orderStatus,
   translations,
   formatters,
-  dataTransformer,
   validator,
 }
 
@@ -25,7 +23,6 @@ export const emailTemplates = {
   orderStatus,
   translations,
   formatters,
-  dataTransformer,
   validator,
 }
 

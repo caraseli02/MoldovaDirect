@@ -3,6 +3,7 @@
     <!-- Trigger Element -->
     <div
       ref="triggerRef"
+      :aria-describedby="tooltipId"
       @mouseenter="show"
       @mouseleave="hide"
       @focus="show"
@@ -35,6 +36,7 @@
       >
         <div
           v-if="isVisible"
+          :id="tooltipId"
           ref="tooltipRef"
           class="absolute z-50 max-w-xs rounded-lg bg-gray-900 px-3 py-2 text-sm text-white shadow-elevated-lg dark:bg-gray-800"
           :style="tooltipStyle"
@@ -78,6 +80,9 @@ const props = withDefaults(defineProps<Props>(), {
 const triggerRef = ref<HTMLElement>()
 const tooltipRef = ref<HTMLElement>()
 const isVisible = ref(false)
+
+// Generate unique ID for ARIA relationships
+const tooltipId = useId()
 const tooltipPosition = ref({ top: 0, left: 0 })
 
 let showTimeout: ReturnType<typeof setTimeout> | null = null

@@ -44,10 +44,19 @@ export default defineEventHandler(async (event) => {
       methods: shippingMethods,
     }
   }
-  catch {
+  catch (error: unknown) {
+    // Log full error details for debugging
+    console.error('[shipping-methods.get] Error calculating shipping methods:', {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      query: getQuery(event),
+      timestamp: new Date().toISOString(),
+    })
+
     throw createError({
       statusCode: 500,
       statusMessage: 'Failed to calculate shipping methods',
+      message: error instanceof Error ? error.message : 'Unknown error occurred',
     })
   }
 })

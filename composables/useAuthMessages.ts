@@ -17,15 +17,25 @@ export interface AuthMessage {
 }
 
 export const useAuthMessages = () => {
-  const { t } = useI18n()
-  const route = useRoute()
+  const { t } = useStoreI18n()
+
+  // SSR-safe route access - route may not be available during server-side rendering
+  const getSafeRoute = () => {
+    const nuxtApp = useNuxtApp()
+    const route = nuxtApp?._route
+    if (!route && import.meta.dev) {
+      console.debug('[useAuthMessages] Route not available during SSR, using fallback')
+    }
+    return route ?? { path: '', fullPath: '', query: {}, params: {}, name: undefined, hash: '' }
+  }
 
   /**
    * Parse URL query parameters for authentication messages
    * Handles redirect messages from middleware and auth flows
    */
   const getMessageFromQuery = (): AuthMessage | null => {
-    const messageParam = route.query.message as string
+    const route = getSafeRoute()
+    const messageParam = route?.query?.message as string | undefined
     if (!messageParam) return null
 
     const messageMappings: Record<string, AuthMessage> = {
@@ -104,7 +114,7 @@ export const useAuthMessages = () => {
     context: AuthMessage['context'] = 'general',
     showRetry = false,
   ): AuthMessage => {
-    const errorString = error instanceof Error ? error.message : error
+    const errorString = error instanceof Error ? getErrorMessage(error) : error
 
     return {
       type: 'error',

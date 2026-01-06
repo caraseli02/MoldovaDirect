@@ -139,9 +139,9 @@ export default defineEventHandler(async (event) => {
         phone: mockUser.phone,
       })
     }
-    catch (error: any) {
-      console.error('Error creating user:', error)
-      errors.push({ email: mockUser.email, error: error.message })
+    catch (error: unknown) {
+      console.error('Error creating user:', getServerErrorMessage(error))
+      errors.push({ email: mockUser.email, error: getServerErrorMessage(error) })
     }
   }
 

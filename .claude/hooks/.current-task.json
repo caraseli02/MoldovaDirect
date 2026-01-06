@@ -1,0 +1,12 @@
+{
+  "category": "Component Testing Coverage",
+  "categoryId": "component-testing-coverage",
+  "skill": "vue",
+  "priority": "P1-high",
+  "stepId": "comp-test-22",
+  "description": "Add unit tests for layout LanguageSwitcher",
+  "file": "components/layout/LanguageSwitcher.vue",
+  "testFile": "tests/components/layout/__tests__/LanguageSwitcher.test.ts",
+  "testExists": false,
+  "implemented": false
+}

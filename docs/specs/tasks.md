@@ -256,7 +256,7 @@
 ## Phase 9: Performance & SEO
 
 ### Task 9.1: Image Optimization
-**Description**: Implement Cloudflare Image optimization  
+**Description**: Implement image optimization pipeline  
 **Outcome**: Fast loading product images  
 **Status**: PENDING  
 **Dependencies**: None  

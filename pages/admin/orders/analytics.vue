@@ -429,8 +429,8 @@ const fetchAnalytics = async () => {
       error.value = 'Failed to fetch analytics data'
     }
   }
-  catch (err: any) {
-    console.error('Error fetching analytics:', err)
+  catch (err: unknown) {
+    console.error('Error fetching analytics:', getErrorMessage(err))
     error.value = 'An error occurred while fetching analytics'
   }
   finally {
@@ -482,8 +482,8 @@ const exportToCSV = async () => {
     const { success } = useToast()
     success('Success', 'Analytics exported successfully')
   }
-  catch (err: any) {
-    console.error('Error exporting CSV:', err)
+  catch (err: unknown) {
+    console.error('Error exporting CSV:', getErrorMessage(err))
     const { error: showError } = useToast()
     showError('Error', 'Failed to export analytics')
   }

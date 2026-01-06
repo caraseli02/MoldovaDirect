@@ -44,7 +44,8 @@
             <button
               v-if="mention.quote"
               type="button"
-              :aria-label="`${mention.name}: ${mention.quote}`"
+              :aria-label="mention.name"
+              :aria-describedby="`tooltip-${index}`"
               :title="mention.quote"
               class="flex h-16 w-full items-center justify-center rounded-lg px-6 transition-all duration-300 hover:bg-brand-light/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 dark:hover:bg-brand-dark/30"
             >
@@ -98,6 +99,7 @@
             <!-- Luxury quote tooltip with refined styling -->
             <div
               v-if="mention.quote"
+              :id="`tooltip-${index}`"
               class="pointer-events-none absolute -bottom-2 left-1/2 z-10 w-64 -translate-x-1/2 translate-y-full rounded-lg border border-brand-light/10 bg-brand-dark p-4 text-sm text-brand-light opacity-0 shadow-elevated-lg backdrop-blur-md transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 dark:border-brand-dark/20 dark:bg-brand-light dark:text-brand-dark"
               role="tooltip"
             >

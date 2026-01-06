@@ -81,8 +81,8 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    console.error('Recommendations API error:', error)
+  catch (error: unknown) {
+    console.error('Recommendations API error:', getServerErrorMessage(error))
 
     return {
       success: false,

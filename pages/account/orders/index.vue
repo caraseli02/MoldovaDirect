@@ -76,7 +76,7 @@
                 <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
               </span>
               <span class="text-sm font-medium text-blue-700 dark:text-blue-300">
-                {{ unviewedCount }} {{ unviewedCount === 1 ? 'update' : 'updates' }}
+                {{ $t('orders.updateCount', { count: unviewedCount }, unviewedCount) }}
               </span>
             </div>
 
@@ -90,18 +90,81 @@
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
-              <span class="hidden sm:inline">Live</span>
+              <span class="hidden sm:inline">{{ $t('orders.liveStatus') }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Search and Filters -->
+      <!-- Order Metrics Dashboard -->
       <div class="mb-6">
-        <OrderSearch
-          v-model="searchFilters"
-          @search="handleSearch"
+        <OrderMetrics
+          :metrics="orderMetrics"
+          :loading="loading"
         />
+      </div>
+
+      <!-- Smart Filters -->
+      <div class="mb-6">
+        <OrderSmartFilters
+          v-model="smartFilter"
+          :counts="filterCounts"
+          @filter="handleSmartFilter"
+        />
+      </div>
+
+      <!-- Simple Search -->
+      <div class="mb-6">
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg
+              class="h-5 w-5 text-gray-400 dark:text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+          <input
+            v-model="searchQuery"
+            type="search"
+            :placeholder="$t('orders.search.placeholder')"
+            class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            @input="handleSearchInput"
+          />
+          <div
+            v-if="searchQuery"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center"
+          >
+            <button
+              type="button"
+              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none"
+              :aria-label="$t('orders.accessibility.clearSearch')"
+              @click="clearSearch"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- View Toggle (Grid/List) - Hidden on mobile -->
@@ -268,11 +331,12 @@
               : 'space-y-4',
           ]"
         >
-          <OrderCard
+          <OrderCardEnhanced
             v-for="order in ordersValue"
             :key="order.id"
             :order="order"
             :compact="viewMode === 'list'"
+            :show-progress="true"
             @click="handleOrderClick(order)"
             @reorder="handleReorder(order)"
             @view-details="handleViewDetails(order)"
@@ -281,11 +345,12 @@
 
         <!-- Mobile view (always list) -->
         <div class="md:hidden space-y-4">
-          <OrderCard
+          <OrderCardEnhanced
             v-for="order in ordersValue"
             :key="order.id"
             :order="order"
             :compact="true"
+            :show-progress="true"
             @click="handleOrderClick(order)"
             @reorder="handleReorder(order)"
             @view-details="handleViewDetails(order)"
@@ -348,6 +413,7 @@
               <span
                 v-else
                 class="px-2 text-gray-500"
+                aria-hidden="true"
               >...</span>
             </template>
 
@@ -440,22 +506,76 @@ const {
 
 // Local state
 const viewMode = ref<'grid' | 'list'>('grid')
+const searchQuery = ref('')
+const scrollContainer = useTemplateRef<HTMLElement>('scrollContainer')
+const smartFilter = ref<'in-transit' | 'delivered-month' | 'last-3-months' | null>(null)
+
+// For compatibility with URL params
 const searchFilters = ref<{
   search?: string
   status?: OrderStatus | ''
   dateFrom?: string
   dateTo?: string
 }>({})
-const scrollContainer = ref<HTMLElement | null>(null)
 
 // Convert readonly refs to writable for template usage
 const ordersValue = computed(() => unref(orders) as OrderWithItems[])
 const paginationValue = computed(() => unref(pagination))
 const errorValue = computed(() => unref(error))
 
+// Computed properties for metrics and filters
+// Note: These metrics are computed from currently loaded orders on the page.
+// For accurate totals across all orders, server-side aggregation would be needed.
+const orderMetrics = computed(() => {
+  const currentPageOrders = unref(orders) as OrderWithItems[]
+  const pag = unref(pagination)
+
+  const activeOrders = currentPageOrders.filter(o => ['pending', 'processing', 'shipped'].includes(o.status)).length
+
+  const now = new Date()
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+
+  const deliveredThisMonth = currentPageOrders.filter(o =>
+    o.status === 'delivered' && new Date(o.createdAt) >= firstDayOfMonth,
+  ).length
+
+  const totalSpentThisMonth = currentPageOrders
+    .filter(o => new Date(o.createdAt) >= firstDayOfMonth)
+    .reduce((sum, o) => sum + (o.totalEur || 0), 0)
+
+  return {
+    activeOrders,
+    deliveredThisMonth,
+    // Use pagination total for accurate count across all pages
+    totalOrders: pag?.total || currentPageOrders.length,
+    totalSpentThisMonth,
+  }
+})
+
+const filterCounts = computed(() => {
+  const currentPageOrders = unref(orders) as OrderWithItems[]
+
+  // Count only 'shipped' orders to match the in-transit filter behavior
+  const inTransit = currentPageOrders.filter(o => o.status === 'shipped').length
+
+  const now = new Date()
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+  const deliveredMonth = currentPageOrders.filter(o =>
+    o.status === 'delivered' && new Date(o.createdAt) >= firstDayOfMonth,
+  ).length
+
+  return {
+    inTransit,
+    deliveredMonth,
+  }
+})
+
 // Initialize filters from URL query params
 const initializeFromUrl = (): Record<string, any> => {
   const query = route.query
+
+  // Initialize search query from URL
+  searchQuery.value = (query.search as string) || ''
 
   searchFilters.value = {
     search: (query.search as string) || undefined,
@@ -531,12 +651,83 @@ const visiblePages = computed(() => {
 })
 
 // Methods
-const handleSearch = async (filters: typeof searchFilters.value) => {
+const handleSmartFilter = async (filter: typeof smartFilter.value) => {
+  const now = new Date()
+  let params: Record<string, any> = {
+    page: 1,
+  }
+
+  if (filter === 'in-transit') {
+    // Filter for processing and shipped orders
+    searchFilters.value = { status: 'shipped' }
+    params.status = 'shipped'
+  }
+  else if (filter === 'delivered-month') {
+    // Filter for delivered orders this month
+    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+    const formattedDate = firstDayOfMonth.toISOString().split('T')[0]
+    searchFilters.value = {
+      status: 'delivered',
+      dateFrom: formattedDate,
+    }
+    params = {
+      status: 'delivered',
+      dateFrom: formattedDate,
+      page: 1,
+    }
+  }
+  else if (filter === 'last-3-months') {
+    // Filter for last 3 months
+    const threeMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 3, now.getDate())
+    const formattedDate = threeMonthsAgo.toISOString().split('T')[0]
+    searchFilters.value = {
+      dateFrom: formattedDate,
+    }
+    params = {
+      dateFrom: formattedDate,
+      page: 1,
+    }
+  }
+  else {
+    // Clear all filters
+    searchFilters.value = {}
+    params = { page: 1 }
+  }
+
+  // Update URL
+  updateUrl(params)
+
+  // Fetch orders
+  await fetchOrders(params)
+}
+
+// Debounced search
+let searchTimeout: NodeJS.Timeout | null = null
+const DEBOUNCE_DELAY = 500
+
+const handleSearchInput = () => {
+  if (searchTimeout) {
+    clearTimeout(searchTimeout)
+  }
+  searchTimeout = setTimeout(() => {
+    handleSearch()
+  }, DEBOUNCE_DELAY)
+}
+
+const handleSearch = async () => {
+  // Clear smart filter when using manual search
+  if (searchQuery.value) {
+    smartFilter.value = null
+  }
+
+  // Sync searchQuery to searchFilters so pagination preserves the search
+  searchFilters.value.search = searchQuery.value || undefined
+
   const params = {
-    search: filters.search,
-    status: filters.status as OrderStatus | undefined,
-    dateFrom: filters.dateFrom,
-    dateTo: filters.dateTo,
+    search: searchQuery.value || undefined,
+    status: searchFilters.value.status as OrderStatus | undefined,
+    dateFrom: searchFilters.value.dateFrom,
+    dateTo: searchFilters.value.dateTo,
     page: 1,
   }
 
@@ -547,20 +738,28 @@ const handleSearch = async (filters: typeof searchFilters.value) => {
   await fetchOrders(params)
 }
 
+const clearSearch = () => {
+  searchQuery.value = ''
+  handleSearch()
+}
+
 const goToPage = async (page: number) => {
   const pag = unref(pagination)
   if (page < 1 || page > pag.totalPages) return
 
   const params = {
-    ...searchFilters.value,
+    search: searchFilters.value.search || undefined,
+    status: (searchFilters.value.status || undefined) as OrderStatus | undefined,
+    dateFrom: searchFilters.value.dateFrom,
+    dateTo: searchFilters.value.dateTo,
     page,
   }
 
   // Update URL
   updateUrl(params)
 
-  // Fetch orders
-  await fetchOrders({ page })
+  // Fetch orders with all current filters including search
+  await fetchOrders(params)
 
   // Scroll to top
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -606,7 +805,7 @@ const setupMobileFeatures = () => {
       },
     })
   }
-  catch (err: any) {
+  catch (err: unknown) {
     console.warn('Failed to setup mobile features:', err)
   }
 }
@@ -643,13 +842,17 @@ onMounted(async () => {
       setupMobileFeatures()
     })
   }
-  catch (err: any) {
-    console.error('Failed to initialize orders page:', err)
+  catch (err: unknown) {
+    console.error('Failed to initialize orders page:', getErrorMessage(err))
   }
 })
 
 // Cleanup on unmount
 onUnmounted(() => {
+  // Clear search debounce timeout
+  if (searchTimeout) {
+    clearTimeout(searchTimeout)
+  }
   cleanupMobileFeatures()
   unsubscribeFromOrderUpdates()
 })

@@ -285,7 +285,7 @@ test.describe('Admin Products List Page - Comprehensive Testing', () => {
       await page.goto('/admin/products', { waitUntil: 'networkidle' })
       console.log('✓ Page loaded successfully')
     }
-    catch (error: any) {
+    catch (error: unknown) {
       issues.push(`Failed to load page: ${error}`)
       return
     }

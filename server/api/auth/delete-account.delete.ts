@@ -14,6 +14,7 @@
 import { getRequestIP } from 'h3'
 import { serverSupabaseClient, serverSupabaseServiceRole } from '#supabase/server'
 import { createLogger } from '~/server/utils/secureLogger'
+import { requireAuthRateLimit, recordFailedLogin } from '~/server/utils/authRateLimit'
 
 const logger = createLogger('delete-account')
 
@@ -21,6 +22,9 @@ export default defineEventHandler(async (event) => {
   try {
     // Ensure this is a DELETE request
     assertMethod(event, 'DELETE')
+
+    // Apply rate limiting to prevent brute force attacks on account deletion
+    requireAuthRateLimit(event, 'login') // Use login config (5 attempts per 15 min)
 
     // Get the authenticated user (regular client for authentication)
     const supabase = await serverSupabaseClient(event)
@@ -51,6 +55,10 @@ export default defineEventHandler(async (event) => {
     })
 
     if (passwordError) {
+      // Record failed attempt for rate limiting
+      if (user.email) {
+        recordFailedLogin(user.email)
+      }
       throw createError({
         statusCode: 400,
         statusMessage: 'Invalid password',
@@ -141,7 +149,7 @@ export default defineEventHandler(async (event) => {
       })
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     logger.error('Account deletion error', {
       error: error instanceof Error ? error.message : String(error),
     })

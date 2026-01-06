@@ -118,16 +118,16 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    console.error('Audit logs retrieval error:', error)
+  catch (error: unknown) {
+    console.error('Audit logs retrieval error:', getServerErrorMessage(error))
 
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 
     throw createError({
       statusCode: 500,
-      statusMessage: error.message || 'Failed to retrieve audit logs',
+      statusMessage: getServerErrorMessage(error),
     })
   }
 })

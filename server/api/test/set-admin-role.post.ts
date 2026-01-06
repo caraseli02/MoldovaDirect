@@ -142,11 +142,15 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
-    console.error('Set admin role error:', error)
+  catch (error: unknown) {
+    console.error('Set admin role error:', getServerErrorMessage(error))
+    if (isH3Error(error)) {
+      throw error
+    }
+
     throw createError({
-      statusCode: error.statusCode || 500,
-      statusMessage: error.statusMessage || 'Internal server error',
+      statusCode: 500,
+      statusMessage: 'Internal server error',
     })
   }
 })

@@ -1,7 +1,7 @@
 # Moldova Direct - Claude Code Instructions
 
 **Project:** E-commerce platform (Nuxt 4 + Supabase + Vue 3)
-**Stack:** Nuxt 4.1.3, Vite 7, Vue 3.5, Supabase, TailwindCSS
+**Stack:** Nuxt 4.2.2, Vite 7, Vue 3.5, Supabase, TailwindCSS
 
 ---
 
@@ -48,10 +48,25 @@ export default defineNuxtPlugin(() => {
 
 ### ✅ Clear Cache After Structural Changes
 ```bash
-pkill -9 node && rm -rf .nuxt node_modules/.vite .output && npm run dev
+pkill -9 node && rm -rf .nuxt node_modules/.vite .output && pnpm dev
 ```
 
 **When:** After changing imports, adding components, or seeing import errors.
+
+### ❌ NEVER: Skip Git Hooks
+```bash
+# ❌ FORBIDDEN - Never use these flags
+git push --no-verify
+git commit --no-verify
+git push -n
+```
+
+**Why:** Git hooks ensure code quality, test coverage, and prevent regressions. If hooks fail, fix the underlying issue instead of bypassing them. Coverage thresholds exist to maintain code quality.
+
+**If coverage fails:**
+1. Add tests for new code
+2. Exclude server files from unit coverage (tested via E2E)
+3. Update thresholds only if justified and approved
 
 ---
 
@@ -62,7 +77,7 @@ components/
 ├── admin/           # Admin panel components (auth required)
 ├── layout/          # Site layout components
 ├── product/         # Product display components
-└── ui/              # Shadcn UI components
+└── ui/              # Custom UI components
 
 pages/
 ├── admin/           # Admin pages (middleware: auth + admin)
@@ -152,10 +167,10 @@ After implementing any feature, you MUST follow this workflow:
    - No broken functionality
 
 4. **Feature List Management**
-   - **Strictly do not remove or modify anything in `feature_list.json`**
-   - **ONLY update the `implemented` and `tested` fields to `true`**
-   - Do not change feature descriptions, IDs, or structure
-   - Update `claude-progress.md` to reflect progress
+   - When implementing features: **ONLY update `implemented` and `tested` fields to `true`**
+   - Do not change feature descriptions, IDs, or structure during feature implementation
+   - Maintenance operations (syncing with GitHub issues, renaming to reflect architectural changes) are allowed during dedicated cleanup PRs
+   - Update `docs/status/PROJECT_STATUS.md` to reflect progress
 
 ### Example Workflow
 ```bash
@@ -166,7 +181,7 @@ After implementing any feature, you MUST follow this workflow:
 git add .
 git commit -m "feat: implement [feature name] - tested and verified"
 # 5. Verify project is ready to merge
-npm run build && npm run test
+pnpm build && pnpm test
 ```
 
 ---
@@ -177,7 +192,7 @@ npm run build && npm run test
 - [ ] Feature fully implemented and working
 - [ ] Tested using Chrome DevTools MCP
 - [ ] `feature_list.json` updated (implemented: true, tested: true)
-- [ ] `claude-progress.md` updated with progress
+- [ ] `docs/status/PROJECT_STATUS.md` updated if needed
 - [ ] Project left in ready-to-merge state
 
 ### Admin Changes
@@ -200,39 +215,73 @@ npm run build && npm run test
 
 ```bash
 # Development
-npm run dev              # Start dev server (port 3000)
+pnpm dev              # Start dev server (port 3000)
 
 # Clean restart
-pkill -9 node && rm -rf .nuxt node_modules/.vite && npm run dev
+pkill -9 node && rm -rf .nuxt node_modules/.vite && pnpm dev
 
 # Testing
-npm run test             # Run tests
-npm run type-check       # TypeScript check
+pnpm test             # Run tests
+pnpm type-check       # TypeScript check
 
 # Build
-npm run build            # Production build
-npm run preview          # Preview build
+pnpm build            # Production build
+pnpm preview          # Preview build
 
 # Database
-npx supabase status      # Check Supabase connection
+npx supabase status   # Check Supabase connection
 ```
 
 ---
 
 ## 📚 Detailed Documentation
 
+### Documentation Structure (Updated January 2026)
+
+The `docs/` folder uses **role-based navigation**. Start with the right path:
+
+| If you are... | Start here |
+|---------------|------------|
+| 🆕 New to project | [Quick Start](docs/getting-started/QUICK_START_GUIDE.md) → [Tech Stack](docs/development/tech.md) → [Code Conventions](docs/development/code-conventions.md) |
+| 🔄 Returning | [CHANGELOG](docs/CHANGELOG.md) → [Project Status](docs/status/PROJECT_STATUS.md) |
+| 🐛 Debugging | [Troubleshooting](docs/development/troubleshooting-components.md) → [Testing Strategy](docs/guides/TESTING_STRATEGY.md) |
+| 🛠️ Building feature | [Patterns](docs/development/PATTERNS_TO_PRESERVE.md) → [Components](docs/development/component-inventory.md) → [i18n](docs/features/I18N_CONFIGURATION.md) |
+
+### Documentation Guidelines
+
+When creating or updating documentation:
+
+1. **Follow the structure** - Place docs in the appropriate folder:
+   - `getting-started/` - Setup guides
+   - `architecture/` - System design
+   - `features/` - Feature-specific docs
+   - `guides/` - How-to guides
+   - `development/` - Patterns and standards
+   - `testing/` - Test documentation
+   - `status/` - Project progress
+   - `archive/` - Historical/completed work
+
+2. **Archive completed work** - Move finished specs to `docs/archive/completed-specs/`
+
+3. **Consolidate research** - Keep one authoritative guide per topic, archive detailed research
+
+4. **Update the README** - When adding important docs, update `docs/README.md`
+
+5. **No stale references** - Current stack is Supabase + Vercel (not Cloudflare)
+
+### Key Documentation Files
+
 **Progress Tracking:**
 - Feature list: `feature_list.json` - Comprehensive feature tracking with testing status
-- Progress tracking: `claude-progress.md` - Overall project completeness and metrics
+- Project status: `docs/status/PROJECT_STATUS.md` - Overall project completeness and current phase
 - Initialization script: `init.sh` - Automated setup and testing guide
 
 **Admin Panel Issues & Solutions:**
-- Full details: `docs/fixes/admin-fixes/ISSUES-AND-SOLUTIONS.md`
-- Code review: `docs/fixes/admin-fixes/CLEAN-CODE-REVIEW.md`
+- Full details: `docs/archive/fixes/admin-fixes/ISSUES-AND-SOLUTIONS.md`
+- Code review: `docs/archive/fixes/admin-fixes/CLEAN-CODE-REVIEW.md`
 
 **Project Documentation:**
-- Doc index: `docs/README.md`
-- Documentation index: `docs/meta/DOCUMENTATION_INDEX.md`
+- Doc index: `docs/README.md` - Role-based navigation hub
 - Main README: `README.md`
 
 **Project Status:**
@@ -252,6 +301,62 @@ npx supabase status      # Check Supabase connection
 
 ---
 
-**Last Updated:** 2025-12-08
+## 📸 Visual Testing
+
+Visual regression testing captures screenshots for review. All visual testing assets are organized in `.visual-testing/`.
+
+### Directory Structure
+
+```
+.visual-testing/
+├── baselines/          # Reference screenshots (git tracked)
+│   └── [feature]/      # e.g., orders, products, checkout
+│       └── [name]-[viewport].png
+├── snapshots/          # Current test run (gitignored)
+│   └── [timestamp]/
+│       └── [feature]/
+├── reports/            # HTML review reports (gitignored)
+│   └── index.html
+├── utils.ts            # Shared utilities
+└── README.md           # Detailed documentation
+```
+
+### Commands
+
+```bash
+# Run visual tests for orders page
+pnpm run test:visual:orders
+
+# Run all visual tests
+pnpm run test:visual:all
+
+# Serve visual review report (starts local server)
+pnpm run visual:serve
+# Then open http://localhost:3333
+```
+
+### Naming Convention
+
+Screenshots follow: `[name]-[viewport].png`
+
+- **name**: Descriptive (kebab-case) - `full-page`, `metrics-section`, `filter-active`
+- **viewport**: `mobile` (375px), `tablet` (768px), `desktop` (1440px)
+
+### Adding Visual Tests
+
+1. Create test in `tests/e2e/visual/[feature].spec.ts`
+2. Import utilities from `.visual-testing/utils.ts`
+3. Use `captureScreenshot()` or `captureResponsiveScreenshots()`
+4. Run tests and review `.visual-testing/reports/index.html`
+
+### Git Policy
+
+- **baselines/** - Committed (reference images)
+- **snapshots/** - Ignored (runtime)
+- **reports/** - Ignored (generated)
+
+---
+
+**Last Updated:** 2026-01-06
 **Admin Status:** All 5 pages working ✅
-**New Files:** `feature_list.json`, `claude-progress.md`, `init.sh`
+**Docs Structure:** Role-based navigation (January 2026 cleanup)

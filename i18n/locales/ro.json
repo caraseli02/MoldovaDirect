@@ -35,12 +35,15 @@
     "orderSummary": "Rezumat Comandă",
     "retry": "Reîncearcă",
     "cancel": "Anulează",
+    "save": "Salvează",
+    "undo": "Anulează acțiunea",
     "showMore": "Arată Mai Mult",
     "showLess": "Arată Mai Puțin",
     "swipe_to_remove": "Glisează pentru a elimina",
     "release_to_remove": "Eliberează pentru a elimina",
     "help": "Ajutor",
     "each": "fiecare",
+    "items": "articole",
     "refresh": "Reîmprospătează",
     "tryAgain": "Încearcă Din Nou",
     "error": "Eroare",
@@ -54,7 +57,16 @@
     "selectAll": "Selectează Tot",
     "deselectAll": "Deselectează Tot",
     "cartError": "Eroare Coș",
-    "cartValidationError": "Eroare de Validare"
+    "cartValidationError": "Eroare de Validare",
+    "showOrderSummary": "Arată rezumatul comenzii",
+    "hideOrderSummary": "Ascunde rezumatul comenzii",
+    "item": "articol",
+    "time": {
+      "days": "z",
+      "hours": "h",
+      "minutes": "m",
+      "seconds": "s"
+    }
   },
   "auth": {
     "signIn": "Autentificare",
@@ -89,6 +101,11 @@
     "sendMagicLink": "Trimite Link Magic",
     "magicLinkSent": "Link magic trimis! Verifică emailul pentru a te autentifica.",
     "magicLinkError": "Eroare la trimiterea link-ului magic. Te rugăm să încerci din nou.",
+    "continueWithGoogle": "Google",
+    "continueWithApple": "Apple",
+    "socialLoginNote": "Continuând, ești de acord cu Termenii și Condițiile și Politica de Confidențialitate",
+    "socialLoginError": "Eroare la autentificarea cu {provider}. Te rugăm să încerci din nou.",
+    "socialLoginRedirectFailed": "Nu s-a putut redirecționa către furnizorul de autentificare. Te rugăm să încerci din nou.",
     "resendIn": "Retrimite în",
     "emailRequired": "Te rugăm să introduci adresa de email",
     "emailVerification": "Verificare Email",
@@ -159,6 +176,7 @@
       "passwordMismatch": "Parolele nu se potrivesc",
       "termsRequired": "Trebuie să accepți termenii și condițiile",
       "sessionExpired": "Sesiunea ta a expirat. Te rugăm să te autentifici din nou",
+      "logoutFailed": "Eroare la deconectare. Te rugăm să încerci din nou.",
       "rateLimitExceeded": "Prea multe încercări. Încearcă din nou în {minutes} minute",
       "tokenExpired": "Link-ul de verificare a expirat",
       "tokenInvalid": "Link de verificare invalid",
@@ -197,6 +215,7 @@
       "name": {
         "required": "Numele complet este obligatoriu",
         "minLength": "Numele trebuie să aibă cel puțin 2 caractere",
+        "maxLength": "Numele nu poate depăși 100 de caractere",
         "invalid": "Te rugăm să introduci un nume valid"
       },
       "phone": {
@@ -209,6 +228,12 @@
         "required": "Token-ul de verificare este obligatoriu",
         "invalid": "Token de verificare invalid",
         "expired": "Token-ul de verificare a expirat"
+      },
+      "mfa": {
+        "required": "Codul de verificare este obligatoriu",
+        "length": "Codul trebuie să aibă exact 6 cifre",
+        "format": "Codul trebuie să conțină doar cifre",
+        "nameLength": "Numele dispozitivului trebuie să aibă între 2 și 50 de caractere"
       }
     },
     "progress": {
@@ -290,6 +315,54 @@
       "acceptTerms": "Accept Termenii de Serviciu și Politica de Confidențialitate",
       "language": "Limba Preferată",
       "notifications": "Notificări prin Email"
+    },
+    "mfa": {
+      "verify": {
+        "title": "Autentificare cu doi factori",
+        "description": "Introduceți codul din 6 cifre din aplicația de autentificare",
+        "codeLabel": "Cod de verificare",
+        "codePlaceholder": "000000",
+        "submitButton": "Verifică",
+        "verifying": "Se verifică...",
+        "cancel": "Anulează și deconectează-te",
+        "helpTitle": "Ai nevoie de ajutor?",
+        "helpItem1": "Deschide aplicația de autentificare (Google Authenticator, Authy etc.)",
+        "helpItem2": "Găsește intrarea MoldovaDirect",
+        "helpItem3": "Introdu codul din 6 cifre afișat"
+      },
+      "settings": {
+        "title": "Autentificare cu doi factori (MFA)",
+        "description": "Adaugă un nivel suplimentar de securitate contului tău activând autentificarea cu doi factori.",
+        "statusEnabled": "MFA Activat",
+        "statusDisabled": "MFA Dezactivat",
+        "statusEnabledDescription": "Contul tău este protejat cu autentificare cu doi factori",
+        "statusDisabledDescription": "Contul tău nu este protejat cu autentificare cu doi factori",
+        "enableButton": "Activează MFA",
+        "enrollmentStep1": "Pasul 1: Scanează codul QR",
+        "enrollmentStep2": "Pasul 2: Verifică codul",
+        "showManualEntry": "Nu poți scana? Introdu codul manual",
+        "hideManualEntry": "Ascunde introducerea manuală",
+        "secretKey": "Cheie secretă",
+        "copy": "Copiază",
+        "instructions": "Cum să configurezi:",
+        "instruction1": "Descarcă o aplicație de autentificare (Google Authenticator, Authy, 1Password etc.)",
+        "instruction2": "Scanează codul QR cu aplicația sau introdu cheia secretă manual",
+        "instruction3": "Introdu codul din 6 cifre din aplicație mai jos pentru a finaliza configurarea",
+        "verificationCodeLabel": "Cod de verificare",
+        "verifyButton": "Verifică și activează MFA",
+        "verifying": "Se verifică...",
+        "cancelButton": "Anulează",
+        "activeFactors": "Metode de autentificare active",
+        "verified": "Verificat",
+        "unverified": "Neverificat",
+        "removeButton": "Elimină",
+        "disableConfirmTitle": "Dezactivezi autentificarea cu doi factori?",
+        "disableConfirmDescription": "Acest lucru va face contul tău mai puțin sigur. Vei avea nevoie doar de parolă pentru a te conecta.",
+        "disableConfirmButton": "Da, dezactivează MFA",
+        "disableCancelButton": "Anulează",
+        "securityNoticeTitle": "Recomandare de securitate",
+        "securityNoticeDescription": "Autentificarea cu doi factori crește semnificativ securitatea contului tău. Recomandăm să o păstrezi activată, mai ales pentru conturile de administrator."
+      }
     }
   },
   "account": {
@@ -303,6 +376,11 @@
     "wishlistItems": "Articole din Lista de Dorințe",
     "recentOrders": "Comenzi Recente",
     "noOrdersYet": "Nu ai încă comenzi",
+    "viewProfile": "Vezi profilul",
+    "quickAccess": "Acces Rapid",
+    "myProfile": "Profilul Meu",
+    "paymentMethods": "Metode de Plată",
+    "returns": "Retururi",
     "sections": {
       "admin": "Administrator",
       "adminUser": "Utilizator Administrator",
@@ -323,6 +401,7 @@
     "reorder": "Comandă Din Nou",
     "estimatedDelivery": "Livrare Estimată",
     "viewAndManage": "Vezi și gestionează istoricul comenzilor tale",
+    "viewAllOrders": "Vezi Toate Comenzile",
     "showing": "Se afișează {start}-{end} din {total} comenzi",
     "orders": "comenzi",
     "gridView": "Vizualizare grilă",
@@ -387,6 +466,31 @@
       "to": "Până la",
       "clearAll": "Șterge Toate Filtrele"
     },
+    "metrics": {
+      "active": "Active",
+      "delivered": "Livrate",
+      "total": "Total",
+      "thisMonth": "Luna Aceasta",
+      "activeOrders": "Comenzi Active",
+      "deliveredThisMonth": "Livrate Luna Aceasta",
+      "totalOrders": "Total Comenzi",
+      "spentThisMonth": "Cheltuit Luna Aceasta"
+    },
+    "filters": {
+      "quickFilters": "Filtre Rapide",
+      "inTransit": "În Tranzit",
+      "deliveredThisMonth": "Livrate Luna Aceasta",
+      "last3Months": "Ultimele 3 Luni",
+      "allOrders": "Toate Comenzile"
+    },
+    "progress": {
+      "deliveryProgress": "Progres livrare",
+      "estimatedArrival": "Sosire estimată",
+      "deliveredSuccessfully": "Livrat cu succes"
+    },
+    "track": "Urmărește",
+    "liveStatus": "Live",
+    "updateCount": "1 actualizare | {count} actualizări",
     "notifications": {
       "title": "Actualizări Comenzi",
       "delivered": {
@@ -432,6 +536,8 @@
       "statusBadge": "Status comandă: {status}",
       "reorderButton": "Comandă din nou toate articolele din această comandă",
       "viewDetailsButton": "Vezi informații detaliate pentru această comandă",
+      "trackButton": "Urmărește această comandă",
+      "orderActions": "Acțiuni comandă",
       "searchInput": "Caută comenzi după număr de comandă sau nume produs",
       "clearSearch": "Șterge căutarea",
       "statusFilter": "Filtrează comenzile după status",
@@ -491,20 +597,49 @@
     }
   },
   "profile": {
-    "title": "Setări Profil",
+    "title": "Profilul Meu",
     "description": "Gestionează informațiile tale personale și preferințele contului",
+    "autoSaveDescription": "Modificările se salvează automat",
     "profilePicture": "Fotografie de Profil",
     "profilePictureDescription": "Încarcă o fotografie de profil pentru a-ți personaliza contul",
+    "dragDropHint": "Atinge fotografia sau trage pentru a schimba",
     "changePicture": "Schimbă Fotografia",
     "uploadPicture": "Încarcă Fotografie",
     "removePicture": "Elimină Fotografia",
     "emailCannotBeChanged": "Adresa de email nu poate fi schimbată",
     "saveChanges": "Salvează Modificările",
+    "saving": "Se salvează...",
+    "saved": "Salvat",
+    "saveError": "Eroare la salvare",
+    "completion": "Completare Profil",
+    "unsavedChangesWarning": "Ai modificări nesalvate. Ești sigur că vrei să pleci?",
+    "addressSingular": "adresă salvată",
+    "addressPlural": "adrese salvate",
+    "sections": {
+      "personalInfo": "Informații Personale",
+      "personalInfoSubtitle": "Nume, email, telefon",
+      "preferences": "Preferințe",
+      "preferencesSubtitle": "Limbă, monedă",
+      "currency": "Monedă",
+      "security": "Securitate",
+      "securitySubtitle": "Parolă și autentificare",
+      "password": "Parolă",
+      "change": "Schimbă",
+      "twoFactor": "Autentificare 2FA",
+      "twoFactorDisabled": "Neactivată",
+      "enable": "Activează",
+      "changePassword": "Schimbă Parola",
+      "changePasswordDescription": "În curând vei putea să-ți schimbi parola de aici.",
+      "enable2FA": "Activează 2FA",
+      "enable2FADescription": "Autentificarea în doi pași va fi disponibilă în curând."
+    },
     "addresses": "Adrese",
     "addressesDescription": "Gestionează adresele tale de livrare și facturare",
     "addAddress": "Adaugă Adresă",
+    "addAddressDescription": "Introduceți detaliile pentru noua adresă.",
     "addFirstAddress": "Adaugă Prima Ta Adresă",
     "editAddress": "Editează Adresa",
+    "editAddressDescription": "Actualizați detaliile pentru această adresă.",
     "updateAddress": "Actualizează Adresa",
     "saveAddress": "Salvează Adresa",
     "deleteAddress": "Șterge Adresa",
@@ -586,7 +721,10 @@
       "loadAddressesFailed": "Încărcarea adreselor a eșuat",
       "addressSaveFailed": "Salvarea adresei a eșuat. Te rugăm să încerci din nou.",
       "addressDeleteFailed": "Ștergerea adresei a eșuat. Te rugăm să încerci din nou.",
-      "deleteFailed": "Ștergerea contului a eșuat. Te rugăm să încerci din nou."
+      "deleteFailed": "Ștergerea contului a eșuat. Te rugăm să încerci din nou.",
+      "sessionExpired": "Sesiunea ta a expirat. Te rugăm să te autentifici din nou.",
+      "permissionDenied": "Permisiune refuzată. Nu poți efectua această acțiune.",
+      "notAuthenticated": "Te rugăm să te autentifici pentru a continua."
     }
   },
   "home": {
@@ -766,7 +904,8 @@
         "Cricova Cellars",
         "Moldova Wine Guild",
         "Slow Food Alliance"
-      ]
+      ],
+      "verified": "Achiziție verificată"
     },
     "mediaMentions": {
       "title": "Prezentat în",
@@ -854,7 +993,9 @@
       "placeholder": "Introdu adresa de email",
       "cta": "Mă abonez",
       "success": "Îți mulțumim! Vei primi următorul nostru newsletter în curând.",
-      "disclaimer": "Trimitem unul sau două emailuri pe lună și te poți dezabona oricând."
+      "disclaimer": "Trimitem unul sau două emailuri pe lună și te poți dezabona oricând.",
+      "subscribeButton": "Abonează-te",
+      "error": "Ups! Ceva nu a mers bine. Vă rugăm să încercați din nou."
     },
     "faqPreview": {
       "title": "Întrebări înainte de a comanda?",
@@ -874,10 +1015,98 @@
           "answer": "Echipa noastră de concierge răspunde pe WhatsApp și email pentru a sugera asocieri și cutii personalizate."
         }
       }
+    },
+    "certifications": {
+      "authentic": {
+        "title": "100% Autentic",
+        "subtitle": "Direct din Moldova",
+        "description": "Toate produsele sunt aprovizionate direct de la producătorii și meșterii autentici moldoveni, asigurând calitatea și patrimoniul autentic"
+      },
+      "quality": {
+        "title": "Premiate",
+        "subtitle": "Selecție Premium",
+        "description": "Colecție selectată de vinuri premiate și produse artizanale recunoscute la competiții internaționale"
+      },
+      "sustainable": {
+        "title": "Sustenabil",
+        "subtitle": "Eco-Friendly",
+        "description": "Susținem practici agricole sustenabile și ambalaje eco-friendly pentru a proteja frumosul terroir al Moldovei"
+      },
+      "secure": {
+        "title": "Plată securizată",
+        "subtitle": "Sigur și protejat",
+        "description": "Criptare de vârf și procesare securizată a plăților pentru a vă proteja informațiile personale"
+      }
+    },
+    "ugcGallery": {
+      "badge": "Fotografii clienți",
+      "title": "Vedeți ce savurează clienții noștri",
+      "subtitle": "Clienți reali împărtășind experiența lor Moldova Direct pe Instagram",
+      "verified": "Achiziție verificată",
+      "ctaText": "Vrei să apari? Etichetează-ne pe Instagram",
+      "ctaButton": "Urmărește-ne pe Instagram"
+    },
+    "productQuiz": {
+      "badge": "Găsește perechea perfectă",
+      "title": "Nu ești sigur ce să comanzi?",
+      "subtitle": "Participă la quiz-ul nostru rapid pentru a descoperi produse perfecte pentru gustul tău",
+      "progress": "Progres",
+      "startText": "Răspunde la 3 întrebări rapide și îți vom recomanda produsele moldovenești perfecte pentru tine. Durează mai puțin de 1 minut!",
+      "startButton": "Începe quiz-ul",
+      "getResults": "Obține recomandările mele",
+      "resultsTitle": "Perfect! Iată potrivirile tale",
+      "resultsSubtitle": "Pe baza răspunsurilor tale, am selectat aceste produse special pentru tine",
+      "viewProducts": "Vezi toate recomandările",
+      "restart": "Reia quiz-ul",
+      "questions": {
+        "occasion": {
+          "question": "Ce te aduce la Moldova Direct?",
+          "description": "Ajută-ne să înțelegem nevoile tale",
+          "options": {
+            "gift": {
+              "label": "Cadou pentru cineva special",
+              "description": "Coșuri și seturi de cadou curate"
+            },
+            "personal": {
+              "label": "Plăcere personală",
+              "description": "Vinuri și alimente pentru mine"
+            },
+            "event": {
+              "label": "Eveniment sau sărbătoare",
+              "description": "Petrecere, cină sau întâlnire"
+            },
+            "subscription": {
+              "label": "Livrări regulate",
+              "description": "Abonament lunar de vinuri"
+            }
+          }
+        },
+        "preference": {
+          "question": "Ce tip de vin preferi?",
+          "options": {
+            "red": "Vinuri roșii",
+            "white": "Vinuri albe",
+            "sparkling": "Vinuri spumoase",
+            "mixed": "O combinație din toate"
+          }
+        },
+        "budget": {
+          "question": "Care este bugetul tău pe sticlă?",
+          "options": {
+            "under30": "Sub 30€",
+            "mid": "30€-60€",
+            "premium": "60€+"
+          }
+        }
+      }
+    },
+    "realtimeNotification": {
+      "purchased": "tocmai a cumpărat",
+      "verified": "Achiziție verificată"
     }
   },
   "products": {
-    "commonProduct": "Produs",
+    "commonProduct": "acest produs",
     "viewDetails": "Vezi Detalii",
     "featured": "Recomandat",
     "sale": "Ofertă",
@@ -897,8 +1126,13 @@
     },
     "addToCart": "Adaugă în Coș",
     "outOfStock": "Stoc Epuizat",
+    "productOutOfStock": "Produs epuizat",
     "inCart": "În Coș",
     "adding": "Se adaugă...",
+    "addingToCart": "Se adaugă {name}...",
+    "productInCart": "{name} este deja în coș",
+    "addProductToCart": "Adaugă {name} în coș",
+    "quickViewProduct": "Vizualizare Rapidă",
     "cartEmpty": "Coșul tău este gol",
     "cartEmptyDescription": "Începe să cumperi pentru a adăuga articole în coș",
     "itemsInCart": "articole în coș",
@@ -953,13 +1187,16 @@
       "clear": "Șterge filtrele",
       "clearAllFilters": "Șterge toate filtrele active",
       "swipeToClose": "Glisează în jos sau apasă butonul închide pentru a renunța",
-      "apply": "Aplică Filtrele",
+      "apply": "Arată {count} produse | Arată {count} produs | Arată {count} produse",
+      "showingCount": "Se afișează {count} produse | Se afișează {count} produs | Se afișează {count} produse",
       "openFilters": "Deschide panoul de filtre",
       "activeCount": "{count} filtre active",
       "minPrice": "Preț Minim",
       "maxPrice": "Preț Maxim",
       "removeFilter": "Elimină filtrul {filter}",
-      "unknownCategory": "Categorie Necunoscută"
+      "unknownCategory": "Categorie Necunoscută",
+      "description": "Filtrează produsele după preț, disponibilitate și categorii",
+      "applyFilters": "Aplică filtre"
     },
     "hero": {
       "seasonal": "Recomandări de sezon",
@@ -1039,7 +1276,10 @@
     },
     "pagination": {
       "pageOf": "Pagina {page} din {total}",
-      "showing": "În total {count} produse"
+      "showing": "În total {count} produse",
+      "previousPage": "Mergi la pagina anterioară",
+      "nextPage": "Mergi la pagina următoare",
+      "goToPage": "Mergi la pagina {page}"
     },
     "story": {
       "title": "Călătorie gustativă",
@@ -1103,6 +1343,7 @@
     },
     "faq": {
       "title": "Întrebări frecvente",
+      "subtitle": "Răspunsuri la cele mai frecvente întrebări despre produsele noastre",
       "items": {
         "delivery": {
           "question": "Cât durează livrarea?",
@@ -1110,7 +1351,7 @@
         },
         "storage": {
           "question": "Cum păstrez produsul?",
-          "answer": "Păstrează-l într-un loc răcoros și uscat, ferit de lumină. Vinurile se păstrează ideal între 12–18°C."
+          "answer": "Păstrează-l într-un loc răcoros și uscat, ferit de lumină. Consultă eticheta produsului pentru recomandări specifice de depozitare."
         },
         "allergens": {
           "question": "Conține alergeni?",
@@ -1119,6 +1360,18 @@
         "returns": {
           "question": "Ce fac dacă ajunge deteriorat?",
           "answer": "Anunță-ne în primele 7 zile și organizăm imediat înlocuire sau rambursare."
+        },
+        "care": {
+          "question": "Cum ar trebui să îngrijesc acest articol?",
+          "answer": "Urmează instrucțiunile de îngrijire de pe eticheta produsului. Pentru textile, recomandăm spălare delicată și uscare la aer pentru a păstra calitatea."
+        },
+        "materials": {
+          "question": "Din ce materiale este făcut?",
+          "answer": "Toate materialele sunt listate pe pagina produsului. Produsele noastre artizanale folosesc materiale tradiționale de înaltă calitate, provenite local din Moldova."
+        },
+        "origin": {
+          "question": "De unde provine acest produs?",
+          "answer": "Acest produs este confecționat manual de meșteri pricepuți din Moldova, urmând tehnici tradiționale transmise din generație în generație."
         }
       }
     },
@@ -1150,7 +1403,24 @@
       "shareText": "Descoperă acest favorit moldovenesc alături de mine.",
       "copyFallback": "Copiază linkul și trimite-l prietenilor."
     },
-    "commonProduct": "acest produs"
+    "new": "Nou",
+    "bestSeller": "Cel mai vândut",
+    "quickView": "Vizualizare rapidă",
+    "onlyLeft": "Doar {count} în stoc",
+    "benefits": {
+      "authentic": "Moldovenesc autentic",
+      "authenticTooltip": "Aprovizionat direct de la producătorii și meșterii autentici moldoveni",
+      "fastShipping": "Livrare rapidă",
+      "fastShippingTooltip": "Comenzi expediate în 48 de ore în toată Spania",
+      "qualityGuaranteed": "Calitate garantată",
+      "qualityGuaranteedTooltip": "Produse de calitate premium cu garanție de satisfacție",
+      "securePayment": "Plată securizată",
+      "securePaymentTooltip": "Procesare sigură și securizată a plăților"
+    },
+    "quickFilters": {
+      "label": "Opțiuni de filtrare rapidă",
+      "toggle": "Comută filtrul {filter}"
+    }
   },
   "returns": {
     "badge": "Gata pentru MVP",
@@ -1280,6 +1550,67 @@
       "responseTime": "Răspundem în 48 de ore lucrătoare (de obicei mai repede).",
       "emailSubject": "Solicitare retur"
     }
+  },
+  "trackOrder": {
+    "title": "Urmărește Comanda Ta",
+    "subtitle": "Introdu numărul comenzii și emailul pentru a urmări statusul comenzii",
+    "pageTitle": "Urmărire Comandă",
+    "pageDescription": "Urmărește statusul comenzii și informațiile de livrare Moldova Direct",
+    "orderNumber": "Număr Comandă",
+    "orderNumberPlaceholder": "ex., MD-2024-XXXXX",
+    "email": "Adresă Email",
+    "emailPlaceholder": "Introdu adresa ta de email",
+    "trackButton": "Urmărește Comanda",
+    "trackAnother": "Urmărește altă comandă",
+    "trackingNumber": "Număr de Urmărire",
+    "estimatedDelivery": "Livrare Estimată",
+    "orderItems": "Articole Comandă",
+    "trackingHistory": "Istoric Urmărire",
+    "shippingTo": "Livrare Către",
+    "needHelp": "Ai nevoie de ajutor cu comanda ta?",
+    "contactSupport": "Contactează Suportul",
+    "description": "Urmărește statusul comenzii și informațiile de livrare",
+    "status": {
+      "pending": "În Așteptare",
+      "confirmed": "Confirmat",
+      "processing": "În Procesare",
+      "shipped": "Expediat",
+      "delivered": "Livrat",
+      "cancelled": "Anulat"
+    },
+    "steps": {
+      "confirmed": "Confirmat",
+      "processing": "Procesare",
+      "shipped": "Expediat",
+      "delivered": "Livrat"
+    },
+    "errors": {
+      "notFound": "Comanda nu a fost găsită. Te rugăm să verifici numărul comenzii și adresa de email.",
+      "generic": "Ceva nu a mers bine. Te rugăm să încerci din nou mai târziu.",
+      "invalidInput": "Te rugăm să introduci un număr de comandă și email valide.",
+      "tooManyRequests": "Prea multe încercări. Te rugăm să aștepți puțin înainte de a încerca din nou.",
+      "serverError": "Eroare de server. Echipa noastră a fost notificată.",
+      "networkError": "Eroare de rețea. Te rugăm să verifici conexiunea și să încerci din nou."
+    }
+  },
+  "invoice": {
+    "title": "Factură",
+    "tagline": "Sursa ta de încredere pentru produse moldovenești",
+    "orderNumber": "Număr Comandă",
+    "date": "Data",
+    "billTo": "Facturare către",
+    "shippingAddress": "Adresa de Livrare",
+    "product": "Produs",
+    "quantity": "Cant.",
+    "unitPrice": "Preț Unitar",
+    "total": "Total",
+    "thankYou": "Mulțumim că ai cumpărat de la Moldova Direct!",
+    "questions": "Întrebări despre comanda ta?",
+    "print": "Tipărește Factura",
+    "download": "Salvează ca PDF",
+    "error": "Eroare Factură",
+    "errorNoData": "Nu se poate genera factura. Datele comenzii nu sunt disponibile.",
+    "errorPopupBlocked": "Blocatorul de ferestre pop-up a împiedicat deschiderea facturii. Te rugăm să permiți ferestrele pop-up și să încerci din nou."
   },
   "footer": {
     "terms": "Termeni și Condiții",
@@ -1493,17 +1824,56 @@
       "removeSelected": "Elimină Selectate"
     },
     "savedForLater": "Salvat pentru Mai Târziu",
-    "saveForLater": "Salvează pentru Mai Târziu",
+    "saveForLater": "Salvează pentru mai târziu",
     "moveToCart": "Mută în Coș",
     "savedOn": "Salvat pe",
     "each": "fiecare",
     "addToCart": "Adaugă în Coș",
     "inCart": "În Coș",
-    "recommendedProducts": "Produse Recomandate"
+    "recommendedProducts": "Produse Recomandate",
+    "itemCount": "{count} articole",
+    "youSave": "Economisești",
+    "secureCheckout": "Plată securizată",
+    "allCardsAccepted": "Toate cardurile acceptate",
+    "add": "Adaugă",
+    "stock": {
+      "inStock": "În stoc",
+      "low": "Mai sunt doar {count}!",
+      "outOfStock": "Stoc epuizat"
+    },
+    "shipping": {
+      "progress": "Progres transport gratuit",
+      "freeShipping": "Transport gratuit",
+      "qualified": "Comanda ta beneficiază de transport gratuit!",
+      "addMore": "Adaugă încă {amount} pentru transport gratuit"
+    },
+    "recommendations": {
+      "boughtTogether": "Cumpărate împreună",
+      "similar": "Similar",
+      "priceDrop": "Preț redus",
+      "backInStock": "Disponibil din nou",
+      "recommended": "Recomandat",
+      "noRecommendations": "Nu există recomandări disponibile",
+      "loadFailed": "Nu s-au putut încărca recomandările"
+    },
+    "decreaseQuantity": "Scade cantitatea",
+    "increaseQuantity": "Crește cantitatea",
+    "removeItem": "Elimină articolul",
+    "quantity": "{count} articole"
   },
   "checkout": {
     "title": "Finalizare Comandă",
     "secureCheckout": "Finalizare Securizată",
+    "trust": {
+      "secureCheckout": "Comandă 100% Securizată",
+      "sslEncrypted": "Criptare SSL 256-bit",
+      "dataProtected": "Datele tale sunt protejate",
+      "moneyBackGuarantee": "Garanția banilor înapoi",
+      "needHelp": "Ai nevoie de ajutor? Contactează-ne la",
+      "secure": "Sigur",
+      "easyReturns": "Returnări Ușoare",
+      "support247": "Suport 24/7"
+    },
     "steps": {
       "shipping": {
         "name": "Livrare",
@@ -1532,20 +1902,33 @@
         "orderDetails": "Detalii Comandă",
         "orderDetailsPlaceholder": "Detaliile comenzii tale vor fi afișate aici",
         "viewOrders": "Vezi Comenzile Mele",
-        "continueShopping": "Continuă Cumpărăturile"
+        "viewOrderDetails": "Vezi Detaliile Comenzii",
+        "continueShopping": "Continuă Cumpărăturile",
+        "pageTitle": "Confirmare Comandă - Checkout",
+        "pageDescription": "Comanda ta a fost plasată cu succes"
       }
     },
     "guestCheckout": {
-      "title": "Opțiuni de Finalizare",
-      "description": "Poți crea un cont pentru finalizare mai rapidă sau continua ca vizitator."
+      "title": "Conectează-te pentru finalizare rapidă",
+      "description": "Poți crea un cont pentru finalizare mai rapidă sau continua ca vizitator.",
+      "benefits": {
+        "savedAddresses": "Folosește adrese salvate pentru finalizare rapidă",
+        "fasterCheckout": "Sari peste completarea datelor data viitoare",
+        "orderHistory": "Urmărește comenzile și vezi istoricul achizițiilor"
+      },
+      "loginButton": "Conectează-te la contul tău",
+      "guestButton": "Continuă ca vizitator"
     },
     "continueAsGuest": "Continuă ca Vizitator",
     "backToCart": "Înapoi la Coș",
     "continueToPayment": "Continuă la Plată",
+    "continueToReview": "Revizuiește Comanda Ta",
     "backToShipping": "Înapoi la Livrare",
     "reviewOrder": "Revizuiește Comanda",
     "backToPayment": "Înapoi la Plată",
     "placeOrder": "Plasează Comanda",
+    "placeOrderSecure": "Plasează Comanda Securizată",
+    "notChargedYet": "Nu vei fi taxat încă",
     "shippingForm": {
       "title": "Informații de Livrare",
       "placeholder": "Formularul de livrare va fi implementat în următoarea sarcină"
@@ -1568,7 +1951,12 @@
       "shippingMethod": "Metodă de Livrare",
       "deliveryInstructions": "Instrucțiuni de Livrare",
       "paymentMethod": "Metodă de Plată",
-      "editPayment": "Editează Plata"
+      "editPayment": "Editează Plata",
+      "acceptTerms": "Accept",
+      "termsOfService": "Termenii și Condițiile",
+      "acceptPrivacy": "Consimț la procesarea datelor mele personale conform",
+      "privacyPolicy": "Politicii de Confidențialitate",
+      "marketingConsent": "Doresc să primesc comunicări de marketing și oferte speciale"
     },
     "freeShipping": "Gratuit",
     "processing": "Se procesează...",
@@ -1592,8 +1980,27 @@
       "orderCompleted": "Comandă Finalizată",
       "orderConfirmation": "Comanda ta a fost plasată cu succes"
     },
+    "error": {
+      "title": "Eroare",
+      "proceedToPayment": "Nu s-a putut continua la plată. Te rugăm să încerci din nou.",
+      "proceedToReview": "Nu s-a putut continua la verificare. Te rugăm să încerci din nou.",
+      "orderFailed": "Comandă eșuată",
+      "orderProcessingFailed": "Nu s-a putut procesa comanda. Te rugăm să încerci din nou."
+    },
+    "warning": {
+      "cartLoadFailed": "Problemă la Încărcarea Coșului",
+      "cartLoadFailedDetails": "Nu s-a putut încărca coșul. Unele articole pot lipsi.",
+      "totalsUpdateFailed": "Problemă la Actualizarea Prețurilor",
+      "totalsUpdateFailedDetails": "Nu s-au putut actualiza totalurile. Prețurile afișate pot fi depășite."
+    },
     "validation": {
+      "fullNameRequired": "Numele complet este obligatoriu",
       "firstNameRequired": "Prenumele este obligatoriu",
+      "orderDataMissing": "Lipsesc datele comenzii. Te rugăm să reîncepi procesul de plată.",
+      "shippingInfoMissing": "Lipsesc informațiile de livrare. Te rugăm să completezi detaliile de livrare.",
+      "paymentMethodMissing": "Lipsește metoda de plată. Te rugăm să selectezi o metodă de plată.",
+      "cartEmpty": "Coșul tău este gol. Te rugăm să adaugi produse înainte de plată.",
+      "invalidTotal": "Total comandă invalid. Te rugăm să încerci din nou.",
       "lastNameRequired": "Numele de familie este obligatoriu",
       "streetRequired": "Adresa stradală este obligatorie",
       "cityRequired": "Orașul este obligatoriu",
@@ -1610,6 +2017,10 @@
       "emailRequired": "Email-ul este obligatoriu",
       "emailInvalid": "Te rugăm să introduci o adresă de email validă"
     },
+    "warnings": {
+      "concurrentCheckout": "Sesiuni Multiple de Plată Detectate",
+      "concurrentCheckoutDetails": "Se pare că ai această pagină de plată deschisă într-o altă filă sau fereastră. Te rugăm să finalizezi achiziția într-o singură locație pentru a evita crearea de comenzi duplicate."
+    },
     "addressForm": {
       "shipping": {
         "title": "Adresă de Livrare",
@@ -1622,25 +2033,28 @@
       "savedAddresses": "Adrese Salvate",
       "useNewAddress": "Folosește o adresă nouă",
       "default": "Implicită",
+      "fullName": "Nume Complet",
+      "fullNamePlaceholder": "ex. Ion Popescu",
       "firstName": "Prenume",
       "firstNamePlaceholder": "Introdu prenumele tău",
       "lastName": "Nume de Familie",
       "lastNamePlaceholder": "Introdu numele tău de familie",
-      "company": "Companie",
-      "companyPlaceholder": "Numele companiei (opțional)",
       "street": "Adresa Stradală",
-      "streetPlaceholder": "Introdu adresa ta stradală",
+      "streetPlaceholder": "Strada, număr, apartament...",
       "city": "Oraș",
       "cityPlaceholder": "Introdu orașul tău",
       "postalCode": "Cod Poștal",
-      "postalCodePlaceholder": "Introdu codul poștal",
+      "postalCodePlaceholder": "ex. 012345",
       "province": "Provincie/Județ",
       "provincePlaceholder": "Provincie sau județ (opțional)",
       "country": "Țară",
       "selectCountry": "Selectează o țară",
-      "phone": "Număr de Telefon",
-      "phonePlaceholder": "Introdu numărul tău de telefon (opțional)",
-      "saveAddress": "Salvează această adresă pentru comenzi viitoare"
+      "phone": "Telefon",
+      "phoneHelper": "pentru notificări de livrare",
+      "phonePlaceholder": "+40 700 000 000",
+      "phoneDescription": "Te vom contacta despre livrare",
+      "saveAddress": "Salvează această adresă pentru comenzi viitoare",
+      "autocompleteHint": "Începe să tastezi pentru sugestii de adrese"
     },
     "shippingMethod": {
       "title": "Metodă de Livrare",
@@ -1658,6 +2072,13 @@
       "noMethods": "Nu sunt disponibile metode de livrare",
       "noMethodsDescription": "Te rugăm să verifici adresa sau să contactezi suportul",
       "error": "Eroare la încărcarea metodelor de livrare",
+      "loadError": "Metode de Livrare",
+      "usingDefaultOptions": "Se folosesc opțiuni de livrare implicite. Tarifele reale pot varia.",
+      "fallbackWarning": {
+        "title": "Tarife de Livrare Estimate",
+        "description": "Nu am putut încărca tarifele în timp real de la transportatori. Arătăm tarife estimate mai jos. Tarifele reale vor fi calculate înainte de confirmarea finală.",
+        "retry": "Reîncercați încărcarea tarifelor reale"
+      },
       "standard": {
         "name": "Livrare Standard",
         "description": "Livrare în 3-5 zile lucrătoare"
@@ -1669,7 +2090,10 @@
       "freeShipping": {
         "name": "Livrare Gratuită",
         "description": "Livrare în 5-7 zile lucrătoare (comenzi peste €50)"
-      }
+      },
+      "autoApplied": "Aplicat automat",
+      "changeMethod": "Schimbă",
+      "estimatedDelivery": "Est. {days} zile lucrătoare"
     },
     "guestInfo": {
       "title": "Informații de Contact",
@@ -1748,7 +2172,24 @@
       "contactNoticeTitle": "Contact Livrare",
       "contactNotice": "Te vom contacta folosind informațiile furnizate pentru a aranja livrarea și plata.",
       "comingSoon": "În Curând",
-      "error": "Eroare de Plată"
+      "error": "Eroare de Plată",
+      "cvvHelpLabel": "Afișează ajutor CVV",
+      "copyBankDetails": "Copiază detaliile bancare în clipboard",
+      "bankDetailsCopied": "Detaliile bancare au fost copiate în clipboard",
+      "bankDetailsCopyFailed": "Nu s-au putut copia detaliile bancare",
+      "validation": {
+        "cardNumberRequired": "Numărul cardului este obligatoriu",
+        "cardNumberInvalid": "Număr de card invalid",
+        "expiryRequired": "Data de expirare este obligatorie",
+        "expiryInvalid": "Format invalid pentru data de expirare",
+        "expiryExpired": "Cardul a expirat",
+        "cvvRequired": "CVV-ul este obligatoriu",
+        "cvvInvalid": "CVV invalid",
+        "cvvLength": "CVV-ul trebuie să aibă {length} cifre",
+        "holderNameRequired": "Numele titularului este obligatoriu",
+        "paypalEmailRequired": "Email-ul PayPal este obligatoriu",
+        "paypalEmailInvalid": "Adresă de email invalidă"
+      }
     },
     "navigation": {
       "back": "Înapoi",
@@ -1757,6 +2198,8 @@
     },
     "confirmation": {
       "orderNumber": "Număr Comandă",
+      "orderStatus": "Stare Comandă",
+      "stepIndicator": "Pasul {current} din {total}",
       "orderItems": "Articole Comandă",
       "shippingInfo": "Informații de Livrare",
       "shippingAddress": "Adresă de Livrare",
@@ -1773,7 +2216,33 @@
       "orderDataMissing": "Datele comenzii nu sunt disponibile",
       "checkYourEmail": "Comanda dvs. a fost finalizată cu succes. Verificați emailul pentru detalii",
       "cartClearFailed": "Nu s-a putut goli coșul",
-      "cartClearFailedDetails": "Comanda dvs. a fost finalizată cu succes, dar coșul nu a fost golit automat"
+      "cartClearFailedDetails": "Comanda dvs. a fost finalizată cu succes, dar coșul nu a fost golit automat",
+      "needHelp": "Aveți nevoie de ajutor? Contactați Suportul",
+      "createAccount": {
+        "title": "Salvează datele pentru data viitoare",
+        "description": "Creează un cont pentru a urmări comanda și a te bucura de finalizare mai rapidă la achizițiile viitoare.",
+        "benefits": {
+          "trackOrders": "Urmărește această comandă și vezi istoricul comenzilor",
+          "fasterCheckout": "Finalizează mai rapid cu adrese salvate",
+          "exclusiveOffers": "Primește oferte exclusive și noutăți"
+        },
+        "button": "Creează contul meu"
+      },
+      "preparingOrder": "Pregătim comanda dvs. ({days} zile)",
+      "delivery": "Livrare",
+      "totalPaid": "Total Plătit",
+      "viewDetails": "Vezi detalii",
+      "businessDays": "{days} zile lucrătoare",
+      "status": {
+        "placed": "Comandă Plasată",
+        "confirmed": "Confirmat",
+        "processing": "În Procesare",
+        "preparing": "În Pregătire",
+        "shipped": "Expediat",
+        "delivered": "Livrat",
+        "inProgress": "În Curs",
+        "pending": "În Așteptare"
+      }
     },
     "errors": {
       "failedToLoadAddresses": "Nu s-au putut încărca adresele salvate",
@@ -1782,7 +2251,10 @@
       "failedToSetDefaultAddress": "Nu s-a putut seta adresa implicită",
       "failedToDeleteAddress": "Nu s-a putut șterge adresa",
       "expressCheckoutFailed": "Plată express eșuată",
-      "pleaseTryAgain": "Vă rugăm să încercați din nou sau să editați manual detaliile"
+      "pleaseTryAgain": "Vă rugăm să încercați din nou sau să editați manual detaliile",
+      "orderFailed": "Procesarea comenzii a eșuat",
+      "initFailed": "Inițializarea checkout-ului a eșuat",
+      "loadFailed": "Încărcarea checkout-ului a eșuat"
     },
     "expressCheckout": {
       "title": "Plată Express Disponibilă",
@@ -1798,8 +2270,35 @@
       "countdownMessage": "Redirecționare către plată în {seconds} secunde...",
       "cancelButton": "Așteaptă, vreau să revizuiesc",
       "countdownCancelled": "Numărătoare inversă anulată",
-      "countdownCancelledDetails": "Ia-ți timp să revizuiești comanda"
-    }
+      "countdownCancelledDetails": "Ia-ți timp să revizuiești comanda",
+      "oneClickDescription": "Finalizează comanda cu un singur clic",
+      "shippingTo": "Livrare la",
+      "paymentMethod": "Plată",
+      "shipping": "Livrare",
+      "placeOrderNow": "Plasează Comanda Acum",
+      "editDetails": "Editează Detalii"
+    },
+    "hybrid": {
+      "contact": "Contact",
+      "shippingAddress": "Adresa de Livrare",
+      "shippingMethod": "Metoda de Livrare",
+      "payment": "Plată",
+      "reviewAndPay": "Revizuiește și Plătește"
+    },
+    "trustBadges": {
+      "secure": "Securizat",
+      "guaranteed": "Garantat",
+      "fastDelivery": "Livrare Rapidă"
+    },
+    "showItems": "Arată articole",
+    "hideItems": "Ascunde articole",
+    "estimatedDelivery": "Livrare estimată",
+    "calculatedAtNextStep": "Calculat",
+    "securePayment": "Plată Securizată",
+    "moneyBackGuarantee": "Garanție de Returnare",
+    "needHelp": "Ai Nevoie de Ajutor?",
+    "secure": "Securizat",
+    "guaranteed": "Garantat"
   },
   "admin": {
     "navigation": {
@@ -1833,6 +2332,90 @@
         "registered": "Înregistrat",
         "lastLogin": "Ultima Autentificare",
         "actions": "Acțiuni"
+      },
+      "actions": {
+        "menu": "Meniu acțiuni utilizator",
+        "viewDetails": "Vezi Detalii",
+        "editProfile": "Editează Profil",
+        "verifyEmail": "Verifică Email",
+        "resetPassword": "Resetează Parola",
+        "manageRole": "Gestionează Rol",
+        "suspendAccount": "Suspendă Cont",
+        "unsuspendAccount": "Reactivează Cont",
+        "banAccount": "Interzice Cont",
+        "unbanAccount": "Ridică Interdicția"
+      },
+      "modal": {
+        "noName": "Fără nume",
+        "suspensionDuration": "Durata Suspendării",
+        "selectDuration": "Selectează durata",
+        "newRole": "Rol Nou",
+        "selectRole": "Selectează un rol",
+        "reason": "Motiv",
+        "required": "(Obligatoriu)",
+        "optional": "(Opțional)",
+        "additionalNotes": "Note Adiționale (Opțional)",
+        "additionalNotesPlaceholder": "Orice informații suplimentare...",
+        "durations": {
+          "indefinite": "Nedeterminat",
+          "oneDay": "1 zi",
+          "threeDays": "3 zile",
+          "oneWeek": "1 săptămână",
+          "oneMonth": "1 lună"
+        },
+        "roles": {
+          "user": "Utilizator",
+          "moderator": "Moderator",
+          "admin": "Administrator"
+        },
+        "titles": {
+          "suspend": "Suspendă Contul Utilizatorului",
+          "ban": "Interzice Contul Utilizatorului",
+          "verifyEmail": "Verifică Email-ul Utilizatorului",
+          "resetPassword": "Resetează Parola Utilizatorului",
+          "updateRole": "Actualizează Rolul Utilizatorului",
+          "confirm": "Confirmă Acțiunea"
+        },
+        "descriptions": {
+          "suspend": "Restricționează temporar accesul utilizatorului la contul său.",
+          "ban": "Dezactivează permanent accesul utilizatorului la contul său.",
+          "verifyEmail": "Marchează adresa de email a utilizatorului ca verificată.",
+          "resetPassword": "Generează un link de resetare a parolei pentru utilizator.",
+          "updateRole": "Schimbă rolul și permisiunile utilizatorului.",
+          "confirm": "Te rugăm să confirmi această acțiune."
+        },
+        "placeholders": {
+          "suspend": "De ce este suspendat acest cont?",
+          "ban": "De ce este interzis acest cont?",
+          "verifyEmail": "De ce este verificat manual email-ul?",
+          "resetPassword": "De ce este resetată parola?",
+          "updateRole": "De ce este schimbat rolul?",
+          "default": "Motivul acestei acțiuni..."
+        },
+        "warnings": {
+          "suspend": "Utilizatorul nu va putea să se autentifice până când suspendarea nu este ridicată.",
+          "resetPassword": "Utilizatorul va primi un email de resetare a parolei și sesiunea curentă va fi invalidată.",
+          "updateRole": "Schimbarea rolului utilizatorului va afecta permisiunile imediat."
+        },
+        "dangers": {
+          "ban": "Această acțiune va dezactiva permanent contul utilizatorului. Nu poate fi anulată ușor."
+        },
+        "buttons": {
+          "suspend": "Suspendă Cont",
+          "ban": "Interzice Cont",
+          "verifyEmail": "Verifică Email",
+          "resetPassword": "Resetează Parola",
+          "updateRole": "Actualizează Rol",
+          "confirm": "Confirmă"
+        }
+      }
+    },
+    "imageUpload": {
+      "altTextModal": {
+        "title": "Editează Text Alternativ",
+        "description": "Adaugă sau editează textul alternativ pentru această imagine (pentru accesibilitate).",
+        "label": "Text Alternativ (pentru accesibilitate)",
+        "placeholder": "Descrie această imagine..."
       }
     }
   },
@@ -1991,6 +2574,351 @@
       "secondary": "Vezi FAQ",
       "noteTitle": "Program de Lucru",
       "noteDescription": "Luni până vineri, 9:00 - 18:00 CET"
+    }
+  },
+  "faqPage": {
+    "badge": "Centru de ajutor",
+    "title": "Întrebări frecvente",
+    "description": "Răspunsuri rapide despre comenzi, livrare, retururi și produse autentice din Moldova în Spania.",
+    "updated": "Actualizat săptămânal cu cele mai noi detalii despre livrare și produse.",
+    "ctaPrimary": "Vorbește cu suportul",
+    "ctaSecondary": "Urmărește comanda",
+    "responseTime": "Timp de răspuns: sub 1 oră lucrătoare",
+    "languages": "Suport în RO / EN / ES / RU",
+    "highlights": {
+      "title": "Cele mai frecvente întrebări",
+      "items": {
+        "dispatch": "Comenzile plasate înainte de 16:00 pleacă în aceeași zi din Madrid.",
+        "packaging": "Ambalaj rezistent la șocuri pentru vinuri și produse delicate.",
+        "support": "Echipă umană pregătită să rezolve rapid orice incident."
+      },
+      "turnaround": {
+        "title": "Prioritate la rezolvare",
+        "description": "Articolele deteriorate sau lipsă sunt înlocuite imediat după verificare."
+      }
+    },
+    "sections": {
+      "orders": {
+        "title": "Comenzi și livrare",
+        "items": {
+          "delivery": {
+            "question": "Cât de repede livrați?",
+            "answer": "Comenzile plasate înainte de 16:00 se trimit în aceeași zi și ajung în 48–72 de ore în Spania continentală. Opțiunile expres apar la checkout când sunt disponibile."
+          },
+          "shippingCosts": {
+            "question": "Care sunt costurile de livrare?",
+            "answer": "Livrarea standard se calculează la checkout în funcție de greutate și cod poștal. Oferim livrare gratuită pentru coșuri peste 69 € în Spania continentală."
+          },
+          "updates": {
+            "question": "Cum îmi urmăresc comanda?",
+            "answer": "Primești tracking prin e-mail și SMS după expediere. Poți verifica oricând progresul pe pagina Urmărește comanda cu e-mailul și numărul tău de comandă."
+          }
+        }
+      },
+      "payments": {
+        "title": "Plăți și facturi",
+        "items": {
+          "methods": {
+            "question": "Ce metode de plată acceptați?",
+            "answer": "Acceptăm principalele carduri, Bizum și transfer bancar securizat. Toate plățile sunt criptate și conforme PSD2."
+          },
+          "invoices": {
+            "question": "Pot primi factură pentru firmă?",
+            "answer": "Da. Adaugă datele companiei și codul fiscal la checkout, iar factura se emite automat după plată."
+          },
+          "addresses": {
+            "question": "Pot livra la o altă adresă?",
+            "answer": "Da, introdu o adresă de livrare diferită la checkout. Păstrăm datele de facturare pentru evidența ta."
+          }
+        }
+      },
+      "returns": {
+        "title": "Retururi și probleme",
+        "items": {
+          "policy": {
+            "question": "Care este politica de retur?",
+            "answer": "Ai 30 de zile pentru a returna produse sigilate în stare originală. Oferim etichetă preplătită sau ridicare prin curier unde este posibil."
+          },
+          "damaged": {
+            "question": "Ce fac dacă o sticlă ajunge deteriorată?",
+            "answer": "Fă o fotografie coletului și produsului deteriorat, apoi contactează suportul. Trimitem un înlocuitor sau rambursăm imediat."
+          },
+          "process": {
+            "question": "Cum încep un retur sau schimb?",
+            "answer": "Mergi la pagina de Retururi sau contactează suportul cu numărul comenzii. Confirmăm eligibilitatea și următorii pași în maximum o zi lucrătoare."
+          }
+        }
+      },
+      "products": {
+        "title": "Produse și autenticitate",
+        "items": {
+          "authenticity": {
+            "question": "Produsele sunt autentice din Moldova?",
+            "answer": "Da. Lucrăm direct cu producători moldoveni și certificăm originea pe fiecare etichetă. Centrul nostru din Madrid asigură depozitare controlată."
+          },
+          "storage": {
+            "question": "Cum păstrez vinurile și delicatesele?",
+            "answer": "Păstrează vinurile între 12–18°C ferite de lumină directă. Produsele de cămară trebuie într-un loc răcoros și uscat; refrigerează după deschidere dacă este indicat."
+          },
+          "allergens": {
+            "question": "Unde găsesc informații despre alergeni?",
+            "answer": "Detaliile despre alergeni sunt pe pagina fiecărui produs și pe etichetă. Contactează-ne pentru clarificări specifice înainte de comandă."
+          }
+        }
+      }
+    },
+    "quickLinks": {
+      "shipping": "Informații despre livrare",
+      "returns": "Politica de retur",
+      "tracking": "Urmărește comanda",
+      "contact": "Contactează suportul"
+    },
+    "needMore": {
+      "title": "Ai nevoie de ajutor suplimentar?",
+      "description": "Trimite numărul comenzii și o scurtă descriere — răspundem în mai puțin de o oră lucrătoare.",
+      "commitment": {
+        "title": "Promisiunea noastră",
+        "description": "Oameni reali, răspunsuri rapide și soluții proactive pentru probleme de livrare."
+      }
+    },
+    "seo": {
+      "title": "Întrebări frecvente - Moldova Direct",
+      "description": "Găsește răspunsuri rapide despre livrare, plăți, retururi și produse autentice din Moldova în Spania.",
+      "imageAlt": "Client care citește întrebările frecvente Moldova Direct"
+    }
+  },
+  "wineStory": {
+    "hero": {
+      "badge": "Patrimoniul vinicol al Moldovei",
+      "title": "Descoperă povestea din spatele fiecărei sticle",
+      "subtitle": "Explorează tradițiile vinificației moldovenești, cunoaște producătorii noștri pasionați și descoperă împerecherile perfecte de vinuri"
+    },
+    "seo": {
+      "title": "Povestea vinului din Moldova | Patrimoniu și tradiție",
+      "description": "Descoperă bogatul patrimoniu vinicol al Moldovei, cunoaște producătorii noștri pasionați, explorează terorurile regionale și găsește împerecherile perfecte de vinuri"
+    },
+    "cta": {
+      "title": "Ești gata să experimentezi cele mai fine vinuri din Moldova?",
+      "subtitle": "Explorează selecția noastră atent curată de vinuri premium moldovenești",
+      "shopButton": "Cumpără vinuri",
+      "aboutButton": "Află mai multe despre noi"
+    },
+    "producers": {
+      "title": "Cunoaște-i pe vinificatorii noștri",
+      "subtitle": "Povești de la cei mai buni producători din Moldova",
+      "viewStory": "Vezi povestea completă",
+      "readMore": "Citește mai mult",
+      "establishedYear": "Înființat în {year}",
+      "generations": "{count} generații de vinificație",
+      "specialty": "Specialitate",
+      "region": "Regiune",
+      "vineyardSize": "Suprafața viei",
+      "annualProduction": "Producție anuală",
+      "philosophy": "Filosofie",
+      "awards": "Premii și recunoașteri",
+      "certifications": "Certificări",
+      "contact": "Vizitează site-ul",
+      "featuredProducts": "Vinuri recomandate",
+      "viewAllProducts": "Vezi toate produsele",
+      "closeModal": "Închide",
+      "detailsDescription": "Vezi informații detaliate despre {name} inclusiv povestea, via și vinurile premiate",
+      "swipeHint": "Glisează pentru a explora mai mulți vinificatori",
+      "keyboardHint": "Folosește tastele săgeți pentru a naviga",
+      "loading": "Se încarcă poveștile vinificatorilor...",
+      "error": "Nu s-au putut încărca poveștile vinificatorilor",
+      "noProducers": "Nu sunt disponibile povești despre vinificatori încă"
+    },
+    "regions": {
+      "title": "Descoperă regiunile vinicole ale Moldovei",
+      "subtitle": "Trei teroruri distincte, nenumărate povești",
+      "viewRegion": "Explorează regiunea",
+      "characteristics": "Caracteristici",
+      "soilType": "Tip de sol",
+      "elevation": "Altitudine",
+      "climate": "Climat",
+      "rainfall": "Precipitații anuale",
+      "averageTemp": "Temperatura medie",
+      "primaryGrapes": "Soiuri principale de struguri",
+      "producerCount": "{count} producători",
+      "filterByRegion": "Filtrează vinurile după regiune",
+      "clearFilter": "Arată toate regiunile",
+      "mapTooltip": "Click pentru a explora {region}",
+      "loading": "Se încarcă regiunile vinicole...",
+      "error": "Nu s-a putut încărca harta regiunilor vinicole",
+      "noRegions": "Nu sunt disponibile regiuni vinicole",
+      "codru": {
+        "name": "Codru",
+        "description": "Inima vinificației moldovenești"
+      },
+      "stefanVoda": {
+        "name": "Ștefan Vodă",
+        "description": "Vinuri roșii îndrăznețe și vinuri dulci"
+      },
+      "valulLuiTraian": {
+        "name": "Valul lui Traian",
+        "description": "Vinuri albe aromate și roze"
+      }
+    },
+    "pairings": {
+      "title": "Împerecheri perfecte",
+      "subtitle": "Descoperă arta împerecherii vinului cu mâncarea",
+      "viewPairing": "Vezi împerecherea completă",
+      "wine": "Vin",
+      "dish": "Fel de mâncare",
+      "whyItWorks": "De ce funcționează",
+      "servingSuggestions": "Sugestii de servire",
+      "temperature": "Temperatură",
+      "glassType": "Tip de pahar",
+      "decanting": "Decantor",
+      "garnishes": "Garnituri",
+      "alternativeWines": "Împerecheri alternative de vinuri",
+      "alternativeDishes": "Feluri de mâncare alternative",
+      "recipe": "Vezi rețeta",
+      "servings": "{count} porții",
+      "cookingTime": "Timp de gătit",
+      "difficulty": "Dificultate",
+      "ingredients": "Ingrediente",
+      "instructions": "Instrucțiuni",
+      "chefNotes": "Notele bucătarului",
+      "filters": {
+        "all": "Toate împerecherile",
+        "wineType": "Tip de vin",
+        "occasion": "Ocazie",
+        "season": "Sezon",
+        "mealType": "Tip de masă",
+        "cuisine": "Bucătărie",
+        "intensity": "Intensitate"
+      },
+      "wineTypes": {
+        "red": "Vinuri roșii",
+        "white": "Vinuri albe",
+        "rose": "Vinuri roze",
+        "sparkling": "Vinuri spumoase",
+        "dessert": "Vinuri de desert"
+      },
+      "occasions": {
+        "everyday": "Zilnic",
+        "specialOccasion": "Ocazie specială",
+        "celebration": "Sărbătoare",
+        "romantic": "Romantic",
+        "holiday": "Vacanță",
+        "casual": "Casual",
+        "formal": "Formal"
+      },
+      "seasons": {
+        "spring": "Primăvară",
+        "summer": "Vară",
+        "fall": "Toamnă",
+        "winter": "Iarnă",
+        "yearRound": "Tot anul"
+      },
+      "mealTypes": {
+        "appetizer": "Aperitiv",
+        "mainCourse": "Fel principal",
+        "dessert": "Desert",
+        "snack": "Gustare"
+      },
+      "intensity": {
+        "light": "Ușor și delicat",
+        "medium": "Corp mediu",
+        "bold": "Îndrăzneț și plin"
+      },
+      "loading": "Se încarcă ghidurile de împerechere...",
+      "error": "Nu s-au putut încărca ghidurile de împerechere",
+      "noPairings": "Nu sunt disponibile ghiduri de împerechere",
+      "noResults": "Nicio împerechere nu corespunde filtrelor tale"
+    },
+    "giftPhilosophy": {
+      "title": "Darul patrimoniului moldovenesc",
+      "subtitle": "Mai mult decât vin, o poveste de împărtășit",
+      "description": "Fiecare sticlă de la Moldova Direct poartă secole de tradiție viticolă, pasiunea producătorilor familiali și caracterul unic al terorurilor noastre. Când oferi cadou un vin Moldova Direct, împărtășești o piesă autentică de cultură moldovenească.",
+      "reasons": {
+        "title": "De ce contează cadourile Moldova Direct",
+        "authenticity": {
+          "title": "Povești autentice",
+          "description": "Fiecare sticlă vine de la producători familiali reali cu generații de expertiză"
+        },
+        "quality": {
+          "title": "Calitate premium",
+          "description": "Vinuri selectate manual care reprezintă cel mai bun din vinificația moldovenească"
+        },
+        "sustainability": {
+          "title": "Alegere sustenabilă",
+          "description": "Susține producătorii mici și practicile agricole sustenabile"
+        },
+        "unique": {
+          "title": "Unic moldovenesc",
+          "description": "Descoperă soiuri de struguri și stiluri pe care nu le vei găsi în altă parte"
+        }
+      },
+      "scenarios": {
+        "title": "Ocazii perfecte pentru cadouri",
+        "corporate": {
+          "title": "Cadouri corporative",
+          "description": "Fă o impresie de durată cu vinuri distinctive care spun o poveste"
+        },
+        "celebration": {
+          "title": "Sărbători",
+          "description": "Sărbătorește momentele speciale ale vieții cu vinuri la fel de memorabile ca ocazia"
+        },
+        "gratitude": {
+          "title": "Arată aprecierea",
+          "description": "Exprimă recunoștința cu un cadou grijuliu care demonstrează grijă și gust"
+        },
+        "exploration": {
+          "title": "Descoperire de vinuri",
+          "description": "Prezintă prietenilor bijuteria ascunsă a vinificației europene"
+        }
+      },
+      "cta": {
+        "title": "Creează cadoul tău perfect",
+        "description": "Răsfoiește seturile noastre de cadouri curate sau construiește-ți propria selecție personalizată",
+        "button": "Explorează opțiunile de cadou"
+      }
+    },
+    "production": {
+      "title": "De la vie la masa ta",
+      "subtitle": "Călătoria vinului moldovenesc",
+      "steps": {
+        "harvest": {
+          "title": "Recolta",
+          "description": "Strugurii sunt culeși manual la maturitatea optimă, de obicei în septembrie-octombrie",
+          "timing": "Septembrie - Octombrie"
+        },
+        "crushing": {
+          "title": "Zdrobire și fermentare",
+          "description": "Metode tradiționale combinate cu control modern al temperaturii",
+          "timing": "Octombrie - Noiembrie"
+        },
+        "aging": {
+          "title": "Maturare",
+          "description": "Vinurile se odihnesc în butoaie de stejar sau oțel inoxidabil, dezvoltând complexitate",
+          "timing": "6 luni - 2 ani"
+        },
+        "bottling": {
+          "title": "Îmbuteliere",
+          "description": "Fiecare sticlă este umplută și etichetată cu grijă manual",
+          "timing": "Pe tot parcursul anului"
+        },
+        "selection": {
+          "title": "Selecția calității",
+          "description": "Gustăm și selectăm doar cele mai bune sticle pentru Moldova Direct",
+          "timing": "Continuu"
+        },
+        "delivery": {
+          "title": "Direct la tine",
+          "description": "Livrare rapidă și sigură aduce cele mai bune din Moldova direct la ușa ta",
+          "timing": "3-5 zile lucrătoare"
+        }
+      },
+      "traditions": {
+        "title": "Onorând tradiția",
+        "description": "Patrimoniul viticol al Moldovei se întinde pe peste 5.000 de ani. Producătorii noștri îmbină tehnicile consacrate cu inovațiile moderne pentru a crea vinuri care onorează trecutul îmbrățișând viitorul."
+      },
+      "sustainability": {
+        "title": "Practici sustenabile",
+        "description": "Mulți dintre producătorii noștri fac tranziția către agricultura organică și biodinamică, asigurând că viile Moldovei prosperă pentru generațiile viitoare."
+      }
     }
   }
 }

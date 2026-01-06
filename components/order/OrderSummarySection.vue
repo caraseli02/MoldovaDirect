@@ -113,7 +113,7 @@ const formatPrice = (price: number) => {
       currency: 'EUR',
     }).format(price)
   }
-  catch (err: any) {
+  catch (err: unknown) {
     console.warn('Error formatting price:', err)
     return `€${price.toFixed(2)}`
   }

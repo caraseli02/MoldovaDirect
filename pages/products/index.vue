@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-50 dark:bg-gray-950 min-h-screen">
+  <div class="bg-gray-50 dark:bg-gray-950 min-h-screen overflow-x-hidden">
     <!-- Skip Links for Accessibility -->
     <div class="sr-only focus-within:not-sr-only">
       <a
@@ -31,7 +31,7 @@
         v-model="showFilterPanel"
         :title="t('products.filters.title')"
         :active-filter-count="activeFilterChips.length"
-        :filtered-count="products?.length || 0"
+        :filtered-count="pagination.total || 0"
         :show-clear-button="hasActiveFilters"
         @apply="handleApplyFilters(true)"
         @clear="clearAllFilters"
@@ -39,7 +39,7 @@
         <productFilterMain
           :filters="filters"
           :available-filters="availableFilters as unknown as { categories: CategoryFilter[]; priceRange: PriceRange; attributes: AttributeFilter[] }"
-          :filtered-product-count="products?.length || 0"
+          :filtered-product-count="pagination.total || 0"
           :show-title="false"
           @update:filters="handleFiltersUpdate"
           @apply-filters="handleApplyFilters(true)"
@@ -121,9 +121,9 @@
             </div>
 
             <!-- Clean Header Section -->
-            <div class="flex items-end justify-between border-b border-gray-200 pb-6 dark:border-gray-800">
-              <div class="flex-1">
-                <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white lg:text-4xl">
+            <div class="flex flex-col gap-4 border-b border-gray-200 pb-6 dark:border-gray-800 sm:flex-row sm:items-end sm:justify-between">
+              <div class="min-w-0 flex-1">
+                <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl lg:text-4xl">
                   {{ t('products.discovery.title') }}
                 </h1>
                 <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
@@ -136,7 +136,7 @@
               </div>
 
               <!-- Right Side Controls -->
-              <div class="flex items-center gap-4">
+              <div class="flex items-center gap-3 sm:gap-4">
                 <!-- Filter Button -->
                 <button
                   type="button"
@@ -525,6 +525,7 @@ const {
   clearFilters,
   openFilterPanel,
   closeFilterPanel,
+  ensureFilterPanelInitialized,
   products,
   categoriesTree,
   currentCategory,
@@ -541,6 +542,9 @@ const {
 // During client hydration, state is restored from SSR payload
 await initialize()
 await fetchProducts({ sort: 'created', page: initialPage, limit: initialLimit })
+
+// Ensure filter panel state is properly initialized (fixes SSR hydration edge case)
+ensureFilterPanelInitialized()
 
 // Filter Management
 const {
@@ -582,8 +586,6 @@ const hasActiveFilters = computed(() => {
     || filters.value.featured
   )
 })
-
-const _totalProducts = computed(() => pagination.value?.total || products.value?.length || 0)
 
 // Debounced search handler to prevent excessive API calls
 const handleSearchInput = debounce(() => {
@@ -709,8 +711,8 @@ const refreshProducts = async () => {
       await fetchProducts(currentFilters)
     }
   }
-  catch (error: any) {
-    console.error('Failed to refresh products:', error)
+  catch (error: unknown) {
+    console.error('Failed to refresh products:', getErrorMessage(error))
   }
 }
 
@@ -753,8 +755,8 @@ const loadMoreProducts = async () => {
       await fetchProducts(currentFilters)
     }
   }
-  catch (error: any) {
-    console.error('Failed to load more products:', error)
+  catch (error: unknown) {
+    console.error('Failed to load more products:', getErrorMessage(error))
   }
 }
 
@@ -883,8 +885,8 @@ onBeforeUnmount(() => {
       sessionStorage.removeItem('products-scroll-position')
       sessionStorage.removeItem('products-filter-state')
     }
-    catch (error: any) {
-      console.error('[Product Catalog] Session storage cleanup failed:', error)
+    catch (error: unknown) {
+      console.error('[Product Catalog] Session storage cleanup failed:', getErrorMessage(error))
 
       // Only ignore SecurityError (private browsing), rethrow others
       if (error instanceof Error && error.name !== 'SecurityError') {

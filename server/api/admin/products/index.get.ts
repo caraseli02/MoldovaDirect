@@ -21,19 +21,6 @@ import { serverSupabaseClient } from '#supabase/server'
 import { requireAdminRole } from '~/server/utils/adminAuth'
 import { prepareSearchPattern, MAX_SEARCH_LENGTH } from '~/server/utils/searchSanitization'
 
-interface AdminProductFilters {
-  search?: string
-  categoryId?: number
-  active?: boolean
-  inStock?: boolean
-  outOfStock?: boolean
-  lowStock?: boolean
-  sortBy?: 'name' | 'price' | 'stock' | 'created_at'
-  sortOrder?: 'asc' | 'desc'
-  page?: number
-  limit?: number
-}
-
 // NOTE: Caching disabled for admin endpoints to ensure proper header-based authentication
 export default defineEventHandler(async (event) => {
   // Authentication MUST happen first, never caught
@@ -291,16 +278,16 @@ export default defineEventHandler(async (event) => {
       },
     }
   }
-  catch (error: any) {
+  catch (error: unknown) {
     // Re-throw HTTP errors (including auth errors)
-    if (error.statusCode) {
+    if (isH3Error(error)) {
       throw error
     }
 
     // Log unexpected errors
     console.error('[Admin Products] Unexpected error:', {
-      error: error.message || String(error),
-      stack: error.stack,
+      error: getServerErrorMessage(error),
+      stack: isServerError(error) ? error.stack : undefined,
       timestamp: new Date().toISOString(),
       errorId: 'ADMIN_PRODUCTS_UNEXPECTED_ERROR',
     })

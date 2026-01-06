@@ -90,12 +90,12 @@ export default defineEventHandler(async (event) => {
       message: 'Cart cleared successfully',
     }
   }
-  catch (error: any) {
-    if (error.statusCode) {
+  catch (error: unknown) {
+    if (isH3Error(error)) {
       throw error
     }
 
-    console.error('Cart clear error:', error)
+    console.error('Cart clear error:', getServerErrorMessage(error))
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error',

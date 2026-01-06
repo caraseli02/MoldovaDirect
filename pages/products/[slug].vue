@@ -825,29 +825,84 @@ const selectedImage = computed(() => {
 })
 
 // FAQ and trust promises
-const faqItems = computed(() => [
-  {
-    id: 'delivery',
-    question: t('products.faq.items.delivery.question'),
-    answer: t('products.faq.items.delivery.answer'),
-    defaultOpen: true,
-  },
-  {
-    id: 'storage',
-    question: t('products.faq.items.storage.question'),
-    answer: t('products.faq.items.storage.answer'),
-  },
-  {
-    id: 'allergens',
-    question: t('products.faq.items.allergens.question'),
-    answer: t('products.faq.items.allergens.answer'),
-  },
-  {
-    id: 'returns',
-    question: t('products.faq.items.returns.question'),
-    answer: t('products.faq.items.returns.answer'),
-  },
-])
+// Conditional FAQs based on product category (P1-4 fix)
+const faqItems = computed(() => {
+  const categorySlug = product.value?.category?.slug?.toLowerCase() || ''
+  const categoryName = categoryLabel.value?.toLowerCase() || ''
+
+  // Base FAQs shown for all products
+  const baseFaqs = [
+    {
+      id: 'delivery',
+      question: t('products.faq.items.delivery.question'),
+      answer: t('products.faq.items.delivery.answer'),
+      defaultOpen: true,
+    },
+    {
+      id: 'returns',
+      question: t('products.faq.items.returns.question'),
+      answer: t('products.faq.items.returns.answer'),
+    },
+  ]
+
+  // Category-specific FAQs
+  const isWineOrBeverage = categorySlug.includes('wine') || categorySlug.includes('vino') || categorySlug.includes('vin') || categorySlug.includes('beverage')
+  const isFoodOrCulinary = categorySlug.includes('food') || categorySlug.includes('comida') || categorySlug.includes('cuisine') || categoryName.includes('food')
+  const isTextile = categorySlug.includes('textile') || categorySlug.includes('fabric') || categorySlug.includes('tejido') || categoryName.includes('textile')
+  const isCraft = categorySlug.includes('craft') || categorySlug.includes('artisan') || categorySlug.includes('artesania') || categoryName.includes('craft')
+
+  // Add category-appropriate FAQs
+  if (isWineOrBeverage) {
+    baseFaqs.push({
+      id: 'storage',
+      question: t('products.faq.items.storage.question'),
+      answer: t('products.faq.items.storage.answer'),
+    })
+    baseFaqs.push({
+      id: 'allergens',
+      question: t('products.faq.items.allergens.question'),
+      answer: t('products.faq.items.allergens.answer'),
+    })
+  }
+  else if (isFoodOrCulinary) {
+    baseFaqs.push({
+      id: 'allergens',
+      question: t('products.faq.items.allergens.question'),
+      answer: t('products.faq.items.allergens.answer'),
+    })
+    baseFaqs.push({
+      id: 'storage',
+      question: t('products.faq.items.storage.question'),
+      answer: t('products.faq.items.storage.answer'),
+    })
+  }
+  else if (isTextile) {
+    baseFaqs.push({
+      id: 'care',
+      question: t('products.faq.items.care.question'),
+      answer: t('products.faq.items.care.answer'),
+    })
+    baseFaqs.push({
+      id: 'materials',
+      question: t('products.faq.items.materials.question'),
+      answer: t('products.faq.items.materials.answer'),
+    })
+  }
+  else if (isCraft) {
+    baseFaqs.push({
+      id: 'materials',
+      question: t('products.faq.items.materials.question'),
+      answer: t('products.faq.items.materials.answer'),
+    })
+    baseFaqs.push({
+      id: 'origin',
+      question: t('products.faq.items.origin.question'),
+      answer: t('products.faq.items.origin.answer'),
+    })
+  }
+
+  return baseFaqs
+})
 
 const trustPromises = computed(() => [
   t('products.trust.shipping'),
@@ -891,8 +946,8 @@ const shareProduct = async () => {
       shareFeedback.value = null
     }, 4000)
   }
-  catch (err: any) {
-    console.error('Share failed', err)
+  catch (err: unknown) {
+    console.error('Share failed', getErrorMessage(err))
     shareFeedback.value = t('products.actions.shareError')
   }
 }
@@ -900,18 +955,6 @@ const shareProduct = async () => {
 // Image zoom modal handlers
 const openZoomModal = () => {
   showZoomModal.value = true
-}
-
-const handlePreviousImage = () => {
-  if (selectedImageIndex.value > 0) {
-    selectedImageIndex.value--
-  }
-}
-
-const handleNextImage = () => {
-  if (product.value?.images && selectedImageIndex.value < product.value.images.length - 1) {
-    selectedImageIndex.value++
-  }
 }
 
 const addToCart = async () => {
@@ -954,7 +997,7 @@ const addToCart = async () => {
   try {
     if (typeof addItem !== 'function') {
       const error = `addItem is not a function (type: ${typeof addItem})`
-      console.error('❌', error)
+      console.error('❌', getErrorMessage(error))
       throw new Error(error)
     }
 
@@ -979,8 +1022,8 @@ const addToCart = async () => {
 
     // Add to cart succeeded
   }
-  catch (err: any) {
-    const errorMsg = err instanceof Error ? err.message : String(err)
+  catch (err: unknown) {
+    const errorMsg = err instanceof Error ? getErrorMessage(err) : String(err)
     console.error('Add to cart failed:', errorMsg, err)
 
     // Show error toast

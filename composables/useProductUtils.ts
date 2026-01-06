@@ -73,6 +73,19 @@ export function useProductUtils() {
     }).format(baseDate)
   }
 
+  /**
+   * Get product image URL from snapshot or product data
+   * Handles both array of strings and array of image objects
+   */
+  const getProductImage = (snapshot: Record<string, any> | null | undefined): string => {
+    if (!snapshot) return '/placeholder-product.svg'
+    const images = snapshot.images
+    if (!images || !images.length) return '/placeholder-product.svg'
+    const firstImage = images[0]
+    if (typeof firstImage === 'string') return firstImage
+    return firstImage?.url ?? '/placeholder-product.svg'
+  }
+
   return {
     getLocalizedText,
     formatPrice,
@@ -80,5 +93,6 @@ export function useProductUtils() {
     calculateDiscountPercentage,
     hasActiveDiscount,
     getEstimatedDelivery,
+    getProductImage,
   }
 }

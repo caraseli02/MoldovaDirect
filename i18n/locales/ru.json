@@ -35,6 +35,7 @@
     "orderSummary": "Итог заказа",
     "retry": "Повторить",
     "cancel": "Отменить",
+    "undo": "Отменить",
     "showMore": "Показать больше",
     "showLess": "Показать меньше",
     "swipe_to_remove": "Проведите для удаления",
@@ -54,7 +55,18 @@
     "selectAll": "Выбрать все",
     "deselectAll": "Снять выделение",
     "cartError": "Ошибка корзины",
-    "cartValidationError": "Ошибка проверки"
+    "cartValidationError": "Ошибка проверки",
+    "showOrderSummary": "Показать итог заказа",
+    "hideOrderSummary": "Скрыть итог заказа",
+    "item": "товар",
+    "items": "товаров",
+    "save": "Сохранить",
+    "time": {
+      "days": "д",
+      "hours": "ч",
+      "minutes": "м",
+      "seconds": "с"
+    }
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Рассчитывается при оформлении",
@@ -224,13 +236,42 @@
       "removeSelected": "Remove Selected"
     },
     "savedForLater": "Saved for Later",
-    "saveForLater": "Save for Later",
+    "saveForLater": "Сохранить на потом",
     "moveToCart": "Move to Cart",
     "savedOn": "Saved on",
     "each": "each",
-    "addToCart": "Add to Cart",
-    "inCart": "In Cart",
-    "recommendedProducts": "Recommended Products"
+    "addToCart": "Добавить в корзину",
+    "inCart": "В корзине",
+    "recommendedProducts": "Рекомендуемые товары",
+    "itemCount": "{count} товаров",
+    "youSave": "Вы экономите",
+    "secureCheckout": "Безопасная оплата",
+    "allCardsAccepted": "Принимаются все карты",
+    "add": "Добавить",
+    "stock": {
+      "inStock": "В наличии",
+      "low": "Осталось только {count}!",
+      "outOfStock": "Нет в наличии"
+    },
+    "shipping": {
+      "progress": "До бесплатной доставки",
+      "freeShipping": "Бесплатная доставка",
+      "qualified": "Ваш заказ получает бесплатную доставку!",
+      "addMore": "Добавьте еще на {amount} для бесплатной доставки"
+    },
+    "recommendations": {
+      "boughtTogether": "Покупают вместе",
+      "similar": "Похожие",
+      "priceDrop": "Снижение цены",
+      "backInStock": "Снова в наличии",
+      "recommended": "Рекомендуется",
+      "noRecommendations": "Нет доступных рекомендаций",
+      "loadFailed": "Не удалось загрузить рекомендации"
+    },
+    "decreaseQuantity": "Уменьшить количество",
+    "increaseQuantity": "Увеличить количество",
+    "removeItem": "Удалить товар",
+    "quantity": "{count} товаров"
   },
   "auth": {
     "signIn": "Войти",
@@ -265,6 +306,11 @@
     "sendMagicLink": "Отправить волшебную ссылку",
     "magicLinkSent": "Волшебная ссылка отправлена! Проверьте вашу почту для входа.",
     "magicLinkError": "Ошибка отправки волшебной ссылки. Попробуйте снова.",
+    "continueWithGoogle": "Google",
+    "continueWithApple": "Apple",
+    "socialLoginNote": "Продолжая, вы соглашаетесь с Условиями использования и Политикой конфиденциальности",
+    "socialLoginError": "Ошибка входа через {provider}. Попробуйте снова.",
+    "socialLoginRedirectFailed": "Не удалось перенаправить на провайдера авторизации. Пожалуйста, попробуйте снова.",
     "resendIn": "Отправить повторно через",
     "emailRequired": "Пожалуйста, введите ваш адрес электронной почты",
     "emailVerification": "Подтверждение Email",
@@ -335,6 +381,7 @@
       "passwordMismatch": "Пароли не совпадают",
       "termsRequired": "Вы должны принять условия использования",
       "sessionExpired": "Ваша сессия истекла. Пожалуйста, войдите снова",
+      "logoutFailed": "Ошибка выхода. Пожалуйста, попробуйте снова.",
       "rateLimitExceeded": "Слишком много попыток. Попробуйте снова через {minutes} минут",
       "tokenExpired": "Ссылка для подтверждения истекла",
       "tokenInvalid": "Недействительная ссылка для подтверждения",
@@ -373,6 +420,7 @@
       "name": {
         "required": "Полное имя обязательно",
         "minLength": "Имя должно содержать минимум 2 символа",
+        "maxLength": "Имя не может превышать 100 символов",
         "invalid": "Пожалуйста, введите действительное имя"
       },
       "phone": {
@@ -385,6 +433,12 @@
         "required": "Токен подтверждения обязателен",
         "invalid": "Недействительный токен подтверждения",
         "expired": "Токен подтверждения истек"
+      },
+      "mfa": {
+        "required": "Код подтверждения обязателен",
+        "length": "Код должен состоять ровно из 6 цифр",
+        "format": "Код должен содержать только цифры",
+        "nameLength": "Название устройства должно быть от 2 до 50 символов"
       }
     },
     "progress": {
@@ -466,6 +520,54 @@
       "acceptTerms": "Я принимаю Условия Использования и Политику Конфиденциальности",
       "language": "Предпочитаемый Язык",
       "notifications": "Уведомления по Email"
+    },
+    "mfa": {
+      "verify": {
+        "title": "Двухфакторная аутентификация",
+        "description": "Введите 6-значный код из приложения-аутентификатора",
+        "codeLabel": "Код подтверждения",
+        "codePlaceholder": "000000",
+        "submitButton": "Подтвердить",
+        "verifying": "Проверка...",
+        "cancel": "Отмена и выход",
+        "helpTitle": "Нужна помощь?",
+        "helpItem1": "Откройте приложение-аутентификатор (Google Authenticator, Authy и др.)",
+        "helpItem2": "Найдите запись MoldovaDirect",
+        "helpItem3": "Введите показанный 6-значный код"
+      },
+      "settings": {
+        "title": "Двухфакторная аутентификация (MFA)",
+        "description": "Добавьте дополнительный уровень безопасности к вашей учетной записи, включив двухфакторную аутентификацию.",
+        "statusEnabled": "MFA включена",
+        "statusDisabled": "MFA отключена",
+        "statusEnabledDescription": "Ваша учетная запись защищена двухфакторной аутентификацией",
+        "statusDisabledDescription": "Ваша учетная запись не защищена двухфакторной аутентификацией",
+        "enableButton": "Включить MFA",
+        "enrollmentStep1": "Шаг 1: Отсканируйте QR-код",
+        "enrollmentStep2": "Шаг 2: Подтвердите код",
+        "showManualEntry": "Не можете отсканировать? Введите код вручную",
+        "hideManualEntry": "Скрыть ручной ввод",
+        "secretKey": "Секретный ключ",
+        "copy": "Копировать",
+        "instructions": "Как настроить:",
+        "instruction1": "Скачайте приложение-аутентификатор (Google Authenticator, Authy, 1Password и др.)",
+        "instruction2": "Отсканируйте QR-код приложением или введите секретный ключ вручную",
+        "instruction3": "Введите 6-значный код из приложения ниже для завершения настройки",
+        "verificationCodeLabel": "Код подтверждения",
+        "verifyButton": "Подтвердить и включить MFA",
+        "verifying": "Проверка...",
+        "cancelButton": "Отмена",
+        "activeFactors": "Активные методы аутентификации",
+        "verified": "Подтверждено",
+        "unverified": "Не подтверждено",
+        "removeButton": "Удалить",
+        "disableConfirmTitle": "Отключить двухфакторную аутентификацию?",
+        "disableConfirmDescription": "Это сделает вашу учетную запись менее защищенной. Для входа потребуется только пароль.",
+        "disableConfirmButton": "Да, отключить MFA",
+        "disableCancelButton": "Отмена",
+        "securityNoticeTitle": "Рекомендация по безопасности",
+        "securityNoticeDescription": "Двухфакторная аутентификация значительно повышает безопасность учетной записи. Настоятельно рекомендуем держать ее включенной, особенно для учетных записей администраторов."
+      }
     }
   },
   "account": {
@@ -479,6 +581,11 @@
     "wishlistItems": "Товары в избранном",
     "recentOrders": "Последние заказы",
     "noOrdersYet": "У вас еще нет заказов",
+    "viewProfile": "Посмотреть профиль",
+    "quickAccess": "Быстрый доступ",
+    "myProfile": "Мой профиль",
+    "paymentMethods": "Способы оплаты",
+    "returns": "Возвраты",
     "sections": {
       "admin": "Администратор",
       "adminUser": "Пользователь-администратор",
@@ -499,6 +606,7 @@
     "reorder": "Заказать Снова",
     "estimatedDelivery": "Ожидаемая Доставка",
     "viewAndManage": "Просмотр и управление историей заказов",
+    "viewAllOrders": "Посмотреть Все Заказы",
     "showing": "Показано {start}-{end} из {total} заказов",
     "orders": "заказов",
     "gridView": "Вид сетки",
@@ -563,6 +671,31 @@
       "to": "До",
       "clearAll": "Очистить Все Фильтры"
     },
+    "metrics": {
+      "active": "Активные",
+      "delivered": "Доставлено",
+      "total": "Всего",
+      "thisMonth": "За Месяц",
+      "activeOrders": "Активные Заказы",
+      "deliveredThisMonth": "Доставлено в Этом Месяце",
+      "totalOrders": "Всего Заказов",
+      "spentThisMonth": "Потрачено в Этом Месяце"
+    },
+    "filters": {
+      "quickFilters": "Быстрые Фильтры",
+      "inTransit": "В Пути",
+      "deliveredThisMonth": "Доставлено в Этом Месяце",
+      "last3Months": "Последние 3 Месяца",
+      "allOrders": "Все Заказы"
+    },
+    "progress": {
+      "deliveryProgress": "Прогресс доставки",
+      "estimatedArrival": "Ожидаемая доставка",
+      "deliveredSuccessfully": "Успешно доставлено"
+    },
+    "track": "Отследить",
+    "liveStatus": "Live",
+    "updateCount": "{count} обновление | {count} обновления | {count} обновлений",
     "notifications": {
       "title": "Обновления Заказов",
       "delivered": {
@@ -608,6 +741,8 @@
       "statusBadge": "Статус заказа: {status}",
       "reorderButton": "Заказать снова все товары из этого заказа",
       "viewDetailsButton": "Посмотреть подробную информацию об этом заказе",
+      "trackButton": "Отследить этот заказ",
+      "orderActions": "Действия с заказом",
       "searchInput": "Поиск заказов по номеру заказа или названию товара",
       "clearSearch": "Очистить поиск",
       "statusFilter": "Фильтровать заказы по статусу",
@@ -667,21 +802,50 @@
     }
   },
   "profile": {
-    "title": "Profile Settings",
-    "description": "Manage your personal information and account preferences",
-    "profilePicture": "Profile Picture",
-    "profilePictureDescription": "Upload a profile picture to personalize your account",
-    "changePicture": "Change Picture",
-    "uploadPicture": "Upload Picture",
-    "removePicture": "Remove Picture",
-    "emailCannotBeChanged": "Email address cannot be changed",
-    "saveChanges": "Save Changes",
-    "addresses": "Addresses",
+    "title": "Мой Профиль",
+    "description": "Управляйте личной информацией и настройками аккаунта",
+    "autoSaveDescription": "Изменения сохраняются автоматически",
+    "profilePicture": "Фото Профиля",
+    "profilePictureDescription": "Загрузите фото профиля для персонализации аккаунта",
+    "dragDropHint": "Нажмите на фото или перетащите для изменения",
+    "changePicture": "Изменить Фото",
+    "uploadPicture": "Загрузить Фото",
+    "removePicture": "Удалить Фото",
+    "emailCannotBeChanged": "Email адрес не может быть изменён",
+    "saveChanges": "Сохранить Изменения",
+    "saving": "Сохранение...",
+    "saved": "Сохранено",
+    "saveError": "Ошибка сохранения",
+    "completion": "Заполнение профиля",
+    "unsavedChangesWarning": "У вас есть несохранённые изменения. Вы уверены, что хотите уйти?",
+    "addressSingular": "адрес сохранён",
+    "addressPlural": "адресов сохранено",
+    "sections": {
+      "personalInfo": "Личная Информация",
+      "personalInfoSubtitle": "Имя, email, телефон",
+      "preferences": "Предпочтения",
+      "preferencesSubtitle": "Язык, валюта",
+      "currency": "Валюта",
+      "security": "Безопасность",
+      "securitySubtitle": "Пароль и аутентификация",
+      "password": "Пароль",
+      "change": "Изменить",
+      "twoFactor": "Двухфакторная аутентификация",
+      "twoFactorDisabled": "Не активирована",
+      "enable": "Включить",
+      "changePassword": "Изменить Пароль",
+      "changePasswordDescription": "Скоро вы сможете изменить пароль здесь.",
+      "enable2FA": "Включить 2FA",
+      "enable2FADescription": "Двухфакторная аутентификация будет доступна в ближайшее время."
+    },
+    "addresses": "Адреса",
     "addressesDescription": "Manage your shipping and billing addresses",
     "addAddress": "Добавить Адрес",
+    "addAddressDescription": "Введите данные для нового адреса.",
     "addFirstAddress": "Добавьте Ваш Первый Адрес",
-    "editAddress": "Edit Address",
-    "updateAddress": "Update Address",
+    "editAddress": "Редактировать Адрес",
+    "editAddressDescription": "Обновите данные для этого адреса.",
+    "updateAddress": "Обновить Адрес",
     "saveAddress": "Save Address",
     "deleteAddress": "Delete Address",
     "confirmDeleteAddress": "Are you sure you want to delete this address?",
@@ -754,15 +918,18 @@
       "accountDeleted": "Account deleted successfully"
     },
     "errors": {
-      "updateFailed": "Failed to update profile. Please try again.",
-      "invalidFileType": "Please select a valid image file",
-      "fileTooLarge": "File size must be less than 5MB",
-      "uploadFailed": "Failed to upload profile picture. Please try again.",
-      "removeFailed": "Failed to remove profile picture. Please try again.",
-      "loadAddressesFailed": "Failed to load addresses",
-      "addressSaveFailed": "Failed to save address. Please try again.",
-      "addressDeleteFailed": "Failed to delete address. Please try again.",
-      "deleteFailed": "Failed to delete account. Please try again."
+      "updateFailed": "Не удалось обновить профиль. Пожалуйста, попробуйте снова.",
+      "invalidFileType": "Пожалуйста, выберите допустимый файл изображения",
+      "fileTooLarge": "Размер файла должен быть меньше 5 МБ",
+      "uploadFailed": "Не удалось загрузить фото профиля. Пожалуйста, попробуйте снова.",
+      "removeFailed": "Не удалось удалить фото профиля. Пожалуйста, попробуйте снова.",
+      "loadAddressesFailed": "Не удалось загрузить адреса",
+      "addressSaveFailed": "Не удалось сохранить адрес. Пожалуйста, попробуйте снова.",
+      "addressDeleteFailed": "Не удалось удалить адрес. Пожалуйста, попробуйте снова.",
+      "deleteFailed": "Не удалось удалить аккаунт. Пожалуйста, попробуйте снова.",
+      "sessionExpired": "Ваша сессия истекла. Пожалуйста, войдите снова.",
+      "permissionDenied": "Доступ запрещён. Вы не можете выполнить это действие.",
+      "notAuthenticated": "Пожалуйста, войдите в систему, чтобы продолжить."
     }
   },
   "home": {
@@ -942,7 +1109,8 @@
         "Cricova Cellars",
         "Moldova Wine Guild",
         "Slow Food Alliance"
-      ]
+      ],
+      "verified": "Подтвержденная покупка"
     },
     "mediaMentions": {
       "title": "О нас пишут",
@@ -1030,7 +1198,9 @@
       "placeholder": "Введите ваш email",
       "cta": "Подписаться",
       "success": "Спасибо! В ближайшее время мы отправим письмо с новостями.",
-      "disclaimer": "Мы пишем один-два раза в месяц, отписаться можно в любой момент."
+      "disclaimer": "Мы пишем один-два раза в месяц, отписаться можно в любой момент.",
+      "subscribeButton": "Подписаться",
+      "error": "Упс! Что-то пошло не так. Пожалуйста, попробуйте снова."
     },
     "faqPreview": {
       "title": "Вопросы перед заказом?",
@@ -1050,10 +1220,98 @@
           "answer": "Команда concierge отвечает в WhatsApp и по email, подбирая сочетания и индивидуальные наборы."
         }
       }
+    },
+    "certifications": {
+      "authentic": {
+        "title": "100% Подлинный",
+        "subtitle": "Напрямую из Молдовы",
+        "description": "Все продукты поставляются напрямую от подлинных молдавских производителей и мастеров, гарантируя настоящее качество и наследие"
+      },
+      "quality": {
+        "title": "Отмеченные наградами",
+        "subtitle": "Премиальный выбор",
+        "description": "Тщательно отобранная коллекция отмеченных наградами вин и ремесленных продуктов, признанных на международных конкурсах"
+      },
+      "sustainable": {
+        "title": "Экологичный",
+        "subtitle": "Эко-дружественный",
+        "description": "Поддержка устойчивых методов ведения сельского хозяйства и экологичной упаковки для защиты прекрасного терруара Молдовы"
+      },
+      "secure": {
+        "title": "Безопасная оплата",
+        "subtitle": "Надежно и защищено",
+        "description": "Передовое шифрование и безопасная обработка платежей для защиты вашей личной информации"
+      }
+    },
+    "ugcGallery": {
+      "badge": "Фотографии клиентов",
+      "title": "Посмотрите, чем наслаждаются наши клиенты",
+      "subtitle": "Реальные клиенты делятся своим опытом с Moldova Direct в Instagram",
+      "verified": "Подтвержденная покупка",
+      "ctaText": "Хотите быть в центре внимания? Отметьте нас в Instagram",
+      "ctaButton": "Подписаться в Instagram"
+    },
+    "productQuiz": {
+      "badge": "Найдите идеальное сочетание",
+      "title": "Не уверены, что заказать?",
+      "subtitle": "Пройдите наш быстрый тест, чтобы найти продукты, идеально подходящие вашему вкусу",
+      "progress": "Прогресс",
+      "startText": "Ответьте на 3 быстрых вопроса, и мы порекомендуем идеальные молдавские продукты для вас. Занимает менее 1 минуты!",
+      "startButton": "Начать тест",
+      "getResults": "Получить мои рекомендации",
+      "resultsTitle": "Отлично! Вот ваши совпадения",
+      "resultsSubtitle": "На основе ваших ответов мы выбрали эти продукты специально для вас",
+      "viewProducts": "Посмотреть все рекомендации",
+      "restart": "Пройти тест снова",
+      "questions": {
+        "occasion": {
+          "question": "Что привело вас в Moldova Direct?",
+          "description": "Помогите нам понять ваши потребности",
+          "options": {
+            "gift": {
+              "label": "Подарок для особенного человека",
+              "description": "Подарочные корзины и наборы"
+            },
+            "personal": {
+              "label": "Для личного удовольствия",
+              "description": "Вина и продукты для себя"
+            },
+            "event": {
+              "label": "Мероприятие или празднование",
+              "description": "Вечеринка, ужин или встреча"
+            },
+            "subscription": {
+              "label": "Регулярные доставки",
+              "description": "Ежемесячная подписка на вина"
+            }
+          }
+        },
+        "preference": {
+          "question": "Какой тип вина вы предпочитаете?",
+          "options": {
+            "red": "Красные вина",
+            "white": "Белые вина",
+            "sparkling": "Игристые вина",
+            "mixed": "Микс из всего"
+          }
+        },
+        "budget": {
+          "question": "Какой у вас бюджет на бутылку?",
+          "options": {
+            "under30": "До 30€",
+            "mid": "30€-60€",
+            "premium": "60€+"
+          }
+        }
+      }
+    },
+    "realtimeNotification": {
+      "purchased": "только что купил(а)",
+      "verified": "Подтвержденная покупка"
     }
   },
   "products": {
-    "commonProduct": "Товар",
+    "commonProduct": "этот продукт",
     "viewDetails": "Подробнее",
     "featured": "Рекомендуемые",
     "sale": "Распродажа",
@@ -1073,9 +1331,11 @@
     },
     "addToCart": "В корзину",
     "outOfStock": "Нет в наличии",
+    "productOutOfStock": "Товар отсутствует",
     "inCart": "В корзине",
     "adding": "Добавление...",
-    "cartEmpty": "Your cart is empty",
+    "quickViewProduct": "Быстрый просмотр",
+    "cartEmpty": "Ваша корзина пуста",
     "cartEmptyDescription": "Start shopping to add items to your cart",
     "itemsInCart": "items in cart",
     "description": "Описание",
@@ -1130,12 +1390,15 @@
       "clearAllFilters": "Очистить все активные фильтры",
       "swipeToClose": "Проведите вниз или нажмите кнопку закрыть, чтобы отменить",
       "apply": "Показать {count} товаров | Показать {count} товар | Показать {count} товара",
+      "showingCount": "Показано {count} товаров | Показан {count} товар | Показано {count} товара",
       "openFilters": "Открыть панель фильтров",
       "activeCount": "{count} активных фильтров",
       "minPrice": "Мин. цена",
       "maxPrice": "Макс. цена",
       "removeFilter": "Удалить фильтр {filter}",
-      "unknownCategory": "Неизвестная категория"
+      "unknownCategory": "Неизвестная категория",
+      "description": "Фильтровать товары по цене, наличию и категориям",
+      "applyFilters": "Применить фильтры"
     },
     "hero": {
       "seasonal": "Сезонные рекомендации",
@@ -1215,7 +1478,10 @@
     },
     "pagination": {
       "pageOf": "Страница {page} из {total}",
-      "showing": "Всего {count} товаров"
+      "showing": "Всего {count} товаров",
+      "previousPage": "Предыдущая страница",
+      "nextPage": "Следующая страница",
+      "goToPage": "Перейти на страницу {page}"
     },
     "story": {
       "title": "Гастрономическое путешествие",
@@ -1279,6 +1545,7 @@
     },
     "faq": {
       "title": "Частые вопросы",
+      "subtitle": "Ответы на самые частые вопросы о наших продуктах",
       "items": {
         "delivery": {
           "question": "Как быстро доставляете?",
@@ -1286,7 +1553,7 @@
         },
         "storage": {
           "question": "Как хранить продукт?",
-          "answer": "Держите в прохладном сухом месте, защищённом от света. Вина лучше всего чувствуют себя при 12–18 °C."
+          "answer": "Держите в прохладном сухом месте, защищённом от света. Смотрите этикетку продукта для конкретных рекомендаций по хранению."
         },
         "allergens": {
           "question": "Есть ли аллергены?",
@@ -1295,6 +1562,18 @@
         "returns": {
           "question": "Что делать, если товар повреждён?",
           "answer": "Сообщите в течение 7 дней — оперативно организуем замену или возврат."
+        },
+        "care": {
+          "question": "Как ухаживать за этим товаром?",
+          "answer": "Следуйте инструкциям по уходу на этикетке. Для текстиля рекомендуем бережную стирку и сушку на воздухе для сохранения качества."
+        },
+        "materials": {
+          "question": "Из каких материалов это сделано?",
+          "answer": "Все материалы указаны на странице товара. Наши ремесленные изделия изготовлены из традиционных высококачественных материалов местного производства в Молдове."
+        },
+        "origin": {
+          "question": "Откуда этот товар?",
+          "answer": "Этот товар изготовлен вручную искусными мастерами в Молдове, следуя традиционным техникам, передаваемым из поколения в поколение."
         }
       }
     },
@@ -1326,7 +1605,27 @@
       "shareText": "Посмотри со мной на этот молдавский фаворит.",
       "copyFallback": "Скопируйте ссылку и поделитесь с близкими."
     },
-    "commonProduct": "этот продукт"
+    "new": "Новинка",
+    "bestSeller": "Хит продаж",
+    "quickView": "Быстрый просмотр",
+    "onlyLeft": "Осталось только {count}",
+    "benefits": {
+      "authentic": "Подлинный молдавский",
+      "authenticTooltip": "Поставляется напрямую от подлинных молдавских производителей и мастеров",
+      "fastShipping": "Быстрая доставка",
+      "fastShippingTooltip": "Заказы отправляются в течение 48 часов по всей Испании",
+      "qualityGuaranteed": "Гарантия качества",
+      "qualityGuaranteedTooltip": "Продукты премиального качества с гарантией удовлетворенности",
+      "securePayment": "Безопасная оплата",
+      "securePaymentTooltip": "Надежная и безопасная обработка платежей"
+    },
+    "quickFilters": {
+      "label": "Быстрые фильтры",
+      "toggle": "Переключить фильтр {filter}"
+    },
+    "addingToCart": "Добавляем {name}...",
+    "productInCart": "{name} уже в корзине",
+    "addProductToCart": "Добавить {name} в корзину"
   },
   "returns": {
     "badge": "Готово для MVP",
@@ -1457,6 +1756,67 @@
       "emailSubject": "Запрос на возврат"
     }
   },
+  "trackOrder": {
+    "title": "Отследить Заказ",
+    "subtitle": "Введите номер заказа и email для отслеживания статуса заказа",
+    "pageTitle": "Отслеживание Заказа",
+    "pageDescription": "Отслеживайте статус заказа и информацию о доставке Moldova Direct",
+    "orderNumber": "Номер Заказа",
+    "orderNumberPlaceholder": "напр., MD-2024-XXXXX",
+    "email": "Email",
+    "emailPlaceholder": "Введите ваш email",
+    "trackButton": "Отследить Заказ",
+    "trackAnother": "Отследить другой заказ",
+    "trackingNumber": "Номер Отслеживания",
+    "estimatedDelivery": "Ожидаемая Доставка",
+    "orderItems": "Товары в Заказе",
+    "trackingHistory": "История Отслеживания",
+    "shippingTo": "Доставка в",
+    "needHelp": "Нужна помощь с заказом?",
+    "contactSupport": "Связаться с Поддержкой",
+    "description": "Отслеживайте статус заказа и информацию о доставке",
+    "status": {
+      "pending": "В Ожидании",
+      "confirmed": "Подтверждён",
+      "processing": "Обрабатывается",
+      "shipped": "Отправлен",
+      "delivered": "Доставлен",
+      "cancelled": "Отменён"
+    },
+    "steps": {
+      "confirmed": "Подтверждён",
+      "processing": "Обработка",
+      "shipped": "Отправлен",
+      "delivered": "Доставлен"
+    },
+    "errors": {
+      "notFound": "Заказ не найден. Пожалуйста, проверьте номер заказа и email.",
+      "generic": "Что-то пошло не так. Пожалуйста, попробуйте позже.",
+      "invalidInput": "Пожалуйста, введите корректный номер заказа и email.",
+      "tooManyRequests": "Слишком много запросов. Пожалуйста, подождите немного перед повторной попыткой.",
+      "serverError": "Ошибка сервера. Наша команда уведомлена.",
+      "networkError": "Ошибка сети. Пожалуйста, проверьте соединение и попробуйте снова."
+    }
+  },
+  "invoice": {
+    "title": "Счёт-фактура",
+    "tagline": "Ваш надёжный источник молдавских товаров",
+    "orderNumber": "Номер Заказа",
+    "date": "Дата",
+    "billTo": "Плательщик",
+    "shippingAddress": "Адрес Доставки",
+    "product": "Товар",
+    "quantity": "Кол-во",
+    "unitPrice": "Цена за ед.",
+    "total": "Итого",
+    "thankYou": "Спасибо за покупку в Moldova Direct!",
+    "questions": "Вопросы о вашем заказе?",
+    "print": "Печать Счёта",
+    "download": "Сохранить как PDF",
+    "error": "Ошибка Счёта",
+    "errorNoData": "Невозможно создать счёт. Данные заказа недоступны.",
+    "errorPopupBlocked": "Блокировщик всплывающих окон не позволил открыть счёт. Пожалуйста, разрешите всплывающие окна и попробуйте снова."
+  },
   "footer": {
     "terms": "Terms and Conditions",
     "privacy": "Privacy Policy",
@@ -1502,145 +1862,192 @@
     "copyright": "© 2024 Moldova Direct. Все права защищены."
   },
   "checkout": {
-    "title": "Checkout",
-    "secureCheckout": "Secure Checkout",
+    "title": "Оформление заказа",
+    "secureCheckout": "Безопасное оформление",
+    "trust": {
+      "secureCheckout": "100% Безопасная покупка",
+      "sslEncrypted": "256-битное SSL шифрование",
+      "dataProtected": "Ваши данные защищены",
+      "moneyBackGuarantee": "Гарантия возврата денег",
+      "needHelp": "Нужна помощь? Свяжитесь с нами",
+      "secure": "Безопасно",
+      "easyReturns": "Легкий Возврат",
+      "support247": "Поддержка 24/7"
+    },
     "steps": {
       "shipping": {
-        "name": "Shipping",
-        "description": "Delivery information",
-        "title": "Shipping Information",
-        "subtitle": "Where should we deliver your order?"
+        "name": "Доставка",
+        "description": "Информация о доставке",
+        "title": "Информация о Доставке",
+        "subtitle": "Куда доставить ваш заказ?"
       },
       "payment": {
-        "name": "Payment",
-        "description": "Payment method",
-        "title": "Payment Method",
-        "subtitle": "How would you like to pay?"
+        "name": "Оплата",
+        "description": "Способ оплаты",
+        "title": "Способ Оплаты",
+        "subtitle": "Как вы хотите оплатить?"
       },
       "review": {
-        "name": "Review",
-        "description": "Order summary",
-        "title": "Review Your Order",
-        "subtitle": "Please review your order details before completing your purchase"
+        "name": "Проверка",
+        "description": "Сводка заказа",
+        "title": "Проверьте Ваш Заказ",
+        "subtitle": "Пожалуйста, проверьте детали заказа перед завершением покупки"
       },
       "confirmation": {
-        "name": "Confirmation",
-        "description": "Order complete",
-        "title": "Order Confirmed!",
-        "subtitle": "Thank you for your order. We'll send you a confirmation email shortly.",
-        "emailSent": "A confirmation email has been sent to your email address",
-        "orderDetails": "Order Details",
-        "orderDetailsPlaceholder": "Your order details will be displayed here",
-        "viewOrders": "View My Orders",
-        "continueShopping": "Continue Shopping"
+        "name": "Подтверждение",
+        "description": "Заказ завершён",
+        "title": "Заказ Подтверждён!",
+        "subtitle": "Спасибо за ваш заказ. Мы отправим вам письмо с подтверждением в ближайшее время.",
+        "emailSent": "Письмо с подтверждением отправлено на вашу электронную почту",
+        "orderDetails": "Детали Заказа",
+        "orderDetailsPlaceholder": "Детали вашего заказа будут отображены здесь",
+        "viewOrders": "Мои Заказы",
+        "viewOrderDetails": "Посмотреть Детали Заказа",
+        "continueShopping": "Продолжить Покупки",
+        "pageTitle": "Подтверждение Заказа - Checkout",
+        "pageDescription": "Ваш заказ успешно оформлен"
       }
     },
     "guestCheckout": {
-      "title": "Checkout Options",
-      "description": "You can create an account for faster checkout or continue as a guest."
+      "title": "Войдите для быстрого оформления",
+      "description": "Вы можете создать аккаунт для быстрого оформления заказов или продолжить как гость.",
+      "benefits": {
+        "savedAddresses": "Используйте сохранённые адреса для быстрого оформления",
+        "fasterCheckout": "Пропустите заполнение данных в следующий раз",
+        "orderHistory": "Отслеживайте заказы и просматривайте историю покупок"
+      },
+      "loginButton": "Войти в аккаунт",
+      "guestButton": "Продолжить как гость"
     },
-    "continueAsGuest": "Continue as Guest",
-    "backToCart": "Back to Cart",
-    "continueToPayment": "Continue to Payment",
-    "backToShipping": "Back to Shipping",
-    "reviewOrder": "Review Order",
-    "backToPayment": "Back to Payment",
-    "placeOrder": "Place Order",
+    "continueAsGuest": "Продолжить как гость",
+    "backToCart": "Вернуться в корзину",
+    "continueToPayment": "Продолжить к оплате",
+    "continueToReview": "Проверить ваш заказ",
+    "backToShipping": "Назад к доставке",
+    "reviewOrder": "Проверить заказ",
+    "backToPayment": "Назад к оплате",
+    "placeOrder": "Оформить заказ",
+    "placeOrderSecure": "Безопасно оформить заказ",
+    "notChargedYet": "Оплата ещё не будет списана",
     "shippingForm": {
-      "title": "Shipping Information",
-      "placeholder": "Shipping form will be implemented in the next task"
+      "title": "Информация о Доставке",
+      "placeholder": "Форма доставки будет реализована в следующей задаче"
     },
     "paymentForm": {
-      "title": "Payment Method",
-      "placeholder": "Payment form will be implemented in the next task"
+      "title": "Способ Оплаты",
+      "placeholder": "Форма оплаты будет реализована в следующей задаче"
     },
     "orderReview": {
-      "title": "Order Summary",
-      "placeholder": "Order review will be implemented in the next task"
+      "title": "Сводка Заказа",
+      "placeholder": "Обзор заказа будет реализован в следующей задаче"
     },
     "review": {
-      "cartItems": "Cart Items",
-      "editCart": "Edit Cart",
-      "shippingInfo": "Shipping Information",
-      "editShipping": "Edit Shipping",
+      "cartItems": "Товары в Корзине",
+      "editCart": "Редактировать Корзину",
+      "shippingInfo": "Информация о Доставке",
+      "editShipping": "Редактировать Доставку",
       "emptyCart": "Ваша корзина пуста",
-      "shippingAddress": "Shipping Address",
-      "shippingMethod": "Shipping Method",
-      "deliveryInstructions": "Delivery Instructions",
-      "paymentMethod": "Payment Method",
-      "editPayment": "Edit Payment"
+      "shippingAddress": "Адрес Доставки",
+      "shippingMethod": "Способ Доставки",
+      "deliveryInstructions": "Инструкции по Доставке",
+      "paymentMethod": "Способ Оплаты",
+      "editPayment": "Редактировать Оплату",
+      "acceptTerms": "Я принимаю",
+      "termsOfService": "Условия использования",
+      "acceptPrivacy": "Я согласен на обработку моих персональных данных в соответствии с",
+      "privacyPolicy": "Политикой конфиденциальности",
+      "marketingConsent": "Я хочу получать маркетинговые сообщения и специальные предложения"
     },
-    "freeShipping": "Free",
-    "processing": "Processing...",
-    "continueToTerms": "Continue to Place Order",
+    "freeShipping": "Бесплатно",
+    "processing": "Обработка...",
+    "continueToTerms": "Продолжить к Оформлению",
     "terms": {
-      "title": "Terms and Conditions",
-      "acceptTerms": "I accept the",
-      "termsAndConditions": "Terms and Conditions",
-      "privacyPolicy": "Privacy Policy",
-      "acceptPrivacy": "I consent to the processing of my personal data as described in the Privacy Policy",
-      "marketingConsent": "I would like to receive marketing communications and special offers",
-      "marketingDescription": "You can unsubscribe at any time. We respect your privacy.",
-      "termsRequired": "You must accept the Terms and Conditions to continue",
-      "privacyRequired": "You must accept the Privacy Policy to continue"
+      "title": "Условия и Положения",
+      "acceptTerms": "Я принимаю",
+      "termsAndConditions": "Условия и Положения",
+      "privacyPolicy": "Политику Конфиденциальности",
+      "acceptPrivacy": "Я даю согласие на обработку моих персональных данных в соответствии с Политикой конфиденциальности",
+      "marketingConsent": "Я хочу получать маркетинговые сообщения и специальные предложения",
+      "marketingDescription": "Вы можете отписаться в любое время. Мы уважаем вашу конфиденциальность.",
+      "termsRequired": "Вы должны принять Условия и Положения для продолжения",
+      "privacyRequired": "Вы должны принять Политику конфиденциальности для продолжения"
     },
     "success": {
-      "shippingUpdated": "Shipping Updated",
-      "shippingInfoSaved": "Your shipping information has been saved",
-      "paymentUpdated": "Payment Updated",
-      "paymentMethodSaved": "Your payment method has been saved",
-      "orderCompleted": "Order Completed",
-      "orderConfirmation": "Your order has been successfully placed"
+      "shippingUpdated": "Доставка Обновлена",
+      "shippingInfoSaved": "Ваша информация о доставке сохранена",
+      "paymentUpdated": "Оплата Обновлена",
+      "paymentMethodSaved": "Ваш способ оплаты сохранен",
+      "orderCompleted": "Заказ Завершён",
+      "orderConfirmation": "Ваш заказ был успешно оформлен"
+    },
+    "warning": {
+      "cartLoadFailed": "Проблема с Загрузкой Корзины",
+      "cartLoadFailedDetails": "Не удалось загрузить корзину. Некоторые товары могут отсутствовать.",
+      "totalsUpdateFailed": "Проблема с Обновлением Цен",
+      "totalsUpdateFailedDetails": "Не удалось обновить итоги. Показанные цены могут быть устаревшими."
     },
     "validation": {
-      "firstNameRequired": "First name is required",
-      "lastNameRequired": "Last name is required",
-      "streetRequired": "Street address is required",
-      "cityRequired": "City is required",
-      "postalCodeRequired": "Postal code is required",
-      "countryRequired": "Country is required",
-      "shippingMethodRequired": "Shipping method is required",
-      "cardNumberRequired": "Card number is required",
-      "cardNumberInvalid": "Invalid card number",
-      "expiryRequired": "Expiry date is required",
-      "cvvRequired": "CVV is required",
-      "cvvInvalid": "Invalid CVV",
-      "holderNameRequired": "Cardholder name is required",
-      "paypalEmailRequired": "PayPal email is required",
-      "emailRequired": "Email is required",
-      "emailInvalid": "Please enter a valid email address"
+      "fullNameRequired": "Полное имя обязательно",
+      "firstNameRequired": "Имя обязательно",
+      "lastNameRequired": "Фамилия обязательна",
+      "streetRequired": "Адрес обязателен",
+      "cityRequired": "Город обязателен",
+      "postalCodeRequired": "Почтовый индекс обязателен",
+      "countryRequired": "Страна обязательна",
+      "shippingMethodRequired": "Способ доставки обязателен",
+      "cardNumberRequired": "Номер карты обязателен",
+      "cardNumberInvalid": "Неверный номер карты",
+      "expiryRequired": "Срок действия обязателен",
+      "cvvRequired": "CVV обязателен",
+      "cvvInvalid": "Неверный CVV",
+      "holderNameRequired": "Имя владельца карты обязательно",
+      "paypalEmailRequired": "Email PayPal обязателен",
+      "emailRequired": "Email обязателен",
+      "emailInvalid": "Пожалуйста, введите корректный email",
+      "orderDataMissing": "Данные заказа отсутствуют. Пожалуйста, начните оформление заново.",
+      "shippingInfoMissing": "Информация о доставке отсутствует. Пожалуйста, заполните данные доставки.",
+      "paymentMethodMissing": "Способ оплаты не выбран. Пожалуйста, выберите способ оплаты.",
+      "cartEmpty": "Ваша корзина пуста. Пожалуйста, добавьте товары перед оформлением.",
+      "invalidTotal": "Неверная сумма заказа. Пожалуйста, попробуйте снова."
+    },
+    "warnings": {
+      "concurrentCheckout": "Обнаружены Множественные Сессии Оформления Заказа",
+      "concurrentCheckoutDetails": "Похоже, что эта страница оформления заказа открыта в другой вкладке или окне. Пожалуйста, завершите покупку только в одном месте, чтобы избежать создания дублирующих заказов."
     },
     "addressForm": {
       "shipping": {
-        "title": "Shipping Address",
-        "subtitle": "Where should we deliver your order?"
+        "title": "Адрес Доставки",
+        "subtitle": "Куда доставить ваш заказ?"
       },
       "billing": {
-        "title": "Billing Address",
-        "subtitle": "Where should we send your invoice?"
+        "title": "Адрес Выставления Счета",
+        "subtitle": "Куда отправить счет?"
       },
-      "savedAddresses": "Saved Addresses",
-      "useNewAddress": "Use a new address",
-      "default": "Default",
-      "firstName": "First Name",
-      "firstNamePlaceholder": "Enter your first name",
-      "lastName": "Last Name",
-      "lastNamePlaceholder": "Enter your last name",
-      "company": "Company",
-      "companyPlaceholder": "Company name (optional)",
-      "street": "Street Address",
-      "streetPlaceholder": "Enter your street address",
-      "city": "City",
-      "cityPlaceholder": "Enter your city",
-      "postalCode": "Postal Code",
-      "postalCodePlaceholder": "Enter postal code",
-      "province": "Province/State",
-      "provincePlaceholder": "Province or state (optional)",
-      "country": "Country",
-      "selectCountry": "Select a country",
-      "phone": "Phone Number",
-      "phonePlaceholder": "Enter your phone number (optional)",
-      "saveAddress": "Save this address for future orders"
+      "savedAddresses": "Сохранённые Адреса",
+      "useNewAddress": "Использовать новый адрес",
+      "default": "По умолчанию",
+      "fullName": "Полное Имя",
+      "fullNamePlaceholder": "напр. Иван Петров",
+      "firstName": "Имя",
+      "firstNamePlaceholder": "Введите ваше имя",
+      "lastName": "Фамилия",
+      "lastNamePlaceholder": "Введите вашу фамилию",
+      "street": "Адрес",
+      "streetPlaceholder": "Улица, дом, квартира...",
+      "city": "Город",
+      "cityPlaceholder": "Введите ваш город",
+      "postalCode": "Почтовый Индекс",
+      "postalCodePlaceholder": "напр. 101000",
+      "province": "Область/Регион",
+      "provincePlaceholder": "Область или регион (необязательно)",
+      "country": "Страна",
+      "selectCountry": "Выберите страну",
+      "phone": "Телефон",
+      "phoneHelper": "для уведомлений о доставке",
+      "phonePlaceholder": "+7 900 000 0000",
+      "phoneDescription": "Мы свяжемся с вами по поводу доставки",
+      "saveAddress": "Сохранить этот адрес для будущих заказов",
+      "autocompleteHint": "Начните вводить для предложений адресов"
     },
     "shippingMethod": {
       "title": "Shipping Method",
@@ -1658,6 +2065,11 @@
       "noMethods": "No shipping methods available",
       "noMethodsDescription": "Please check your address or contact support",
       "error": "Error loading shipping methods",
+      "fallbackWarning": {
+        "title": "Расчетные Тарифы Доставки",
+        "description": "Не удалось загрузить тарифы в реальном времени от наших перевозчиков. Показываем расчетные тарифы ниже. Фактические тарифы будут рассчитаны перед окончательным подтверждением.",
+        "retry": "Повторить загрузку реальных тарифов"
+      },
       "standard": {
         "name": "Standard Shipping",
         "description": "Delivery in 3-5 business days"
@@ -1667,105 +2079,129 @@
         "description": "Delivery in 1-2 business days"
       },
       "freeShipping": {
-        "name": "Free Shipping",
-        "description": "Delivery in 5-7 business days (orders over €50)"
-      }
+        "name": "Бесплатная доставка",
+        "description": "Доставка за 5-7 рабочих дней (заказы от €50)"
+      },
+      "autoApplied": "Применено автоматически",
+      "changeMethod": "Изменить",
+      "estimatedDelivery": "Ориент. {days} рабочих дней",
+      "loadError": "Способы доставки",
+      "usingDefaultOptions": "Используются стандартные варианты доставки. Фактические тарифы могут отличаться."
     },
     "guestInfo": {
-      "title": "Contact Information",
-      "email": "Email Address",
-      "emailPlaceholder": "Enter your email address",
-      "emailUpdates": "Send me email updates about my order"
+      "title": "Контактная Информация",
+      "email": "Email",
+      "emailPlaceholder": "Введите ваш email",
+      "emailUpdates": "Отправлять мне обновления о заказе по email"
     },
     "shippingInstructions": {
-      "title": "Delivery Instructions",
-      "placeholder": "Any special instructions for delivery? (e.g., leave at door, ring bell, etc.)",
-      "help": "These instructions will be shared with the delivery service"
+      "title": "Инструкции по доставке",
+      "placeholder": "Особые инструкции для доставки? (напр., оставить у двери, позвонить в звонок и т.д.)",
+      "help": "Эти инструкции будут переданы службе доставки"
     },
     "payment": {
-      "title": "Payment Method",
-      "subtitle": "Choose how you'd like to pay for your order",
-      "savedMethods": "Saved Payment Methods",
-      "useNewMethod": "Use a new payment method",
-      "newMethod": "New Payment Method",
-      "default": "Default",
+      "title": "Способ Оплаты",
+      "subtitle": "Выберите, как вы хотите оплатить заказ",
+      "savedMethods": "Сохранённые способы оплаты",
+      "useNewMethod": "Использовать новый способ оплаты",
+      "newMethod": "Новый способ оплаты",
+      "default": "По умолчанию",
       "creditCard": {
-        "label": "Credit Card",
-        "summary": "Pay with Visa, Mastercard, or other cards",
-        "title": "Credit Card",
-        "description": "Pay securely using your credit or debit card."
+        "label": "Кредитная карта",
+        "summary": "Оплата Visa, Mastercard или другой картой",
+        "title": "Кредитная карта",
+        "description": "Безопасная оплата кредитной или дебетовой картой."
       },
       "paypal": {
         "label": "PayPal",
-        "summary": "Pay with your PayPal account",
-        "title": "Pay with PayPal",
-        "description": "You'll be redirected to PayPal to complete your payment securely."
+        "summary": "Оплата через аккаунт PayPal",
+        "title": "Оплата через PayPal",
+        "description": "Вы будете перенаправлены на PayPal для безопасной оплаты."
       },
       "bankTransfer": {
-        "label": "Bank Transfer",
-        "summary": "Transfer money directly from your bank",
-        "title": "Bank Transfer",
-        "description": "Transfer the order amount to our bank account using the details below."
+        "label": "Банковский перевод",
+        "summary": "Переведите деньги напрямую из вашего банка",
+        "title": "Банковский перевод",
+        "description": "Переведите сумму заказа на наш банковский счёт, используя реквизиты ниже."
       },
-      "cardNumber": "Card Number",
+      "cardNumber": "Номер Карты",
       "cardNumberPlaceholder": "1234 5678 9012 3456",
-      "expiryDate": "Expiry Date",
-      "expiryPlaceholder": "MM/YY",
+      "expiryDate": "Срок Действия",
+      "expiryPlaceholder": "MM/ГГ",
       "cvv": "CVV",
       "cvvPlaceholder": "123",
-      "cvvHelp": "The 3-digit security code on the back of your card (4 digits for Amex)",
-      "cardholderName": "Cardholder Name",
-      "cardholderNamePlaceholder": "Name as it appears on card",
-      "saveForFuture": "Save this payment method for future orders",
-      "securePayment": "Secure Payment",
-      "securityNotice": "Your payment information is encrypted and secure. We never store your card details.",
-      "paypalEmail": "PayPal Email",
+      "cvvHelp": "3-значный код безопасности на обратной стороне карты (4 цифры для Amex)",
+      "cardholderName": "Имя Владельца Карты",
+      "cardholderNamePlaceholder": "Имя как указано на карте",
+      "saveForFuture": "Сохранить этот способ оплаты для будущих заказов",
+      "securePayment": "Безопасная Оплата",
+      "securityNotice": "Ваша платёжная информация зашифрована и защищена. Мы никогда не храним данные вашей карты.",
+      "paypalEmail": "Email PayPal",
       "paypalEmailPlaceholder": "your.email{'@'}example.com",
-      "paypalNoticeTitle": "PayPal Payment",
-      "paypalNotice": "After clicking 'Review Order', you'll be redirected to PayPal to complete your payment.",
-      "bankDetails": "Bank Transfer Details",
-      "bankName": "Bank Name",
-      "accountHolder": "Account Holder",
+      "paypalNoticeTitle": "Оплата через PayPal",
+      "paypalNotice": "После нажатия 'Проверить Заказ' вы будете перенаправлены на PayPal для завершения оплаты.",
+      "bankDetails": "Реквизиты для банковского перевода",
+      "bankName": "Название банка",
+      "accountHolder": "Владелец счёта",
       "iban": "IBAN",
       "swift": "SWIFT/BIC",
-      "reference": "Payment Reference",
-      "copyDetails": "Copy Bank Details",
-      "bankTransferInstructions": "Important Instructions",
-      "bankInstruction1": "Please include the payment reference in your transfer",
-      "bankInstruction2": "Your order will be processed after payment confirmation",
-      "bankInstruction3": "Bank transfers may take 1-3 business days to process",
+      "reference": "Номер платежа",
+      "copyDetails": "Копировать реквизиты",
+      "bankTransferInstructions": "Важные Инструкции",
+      "bankInstruction1": "Пожалуйста, укажите номер заказа в переводе",
+      "bankInstruction2": "Ваш заказ будет обработан после подтверждения оплаты",
+      "bankInstruction3": "Банковские переводы могут занять 1-3 рабочих дня",
       "cash": {
-        "label": "Cash on Delivery",
-        "summary": "Pay with cash when your order is delivered",
-        "title": "Cash on Delivery",
-        "description": "You will pay for your order in cash when it is delivered to your address."
+        "label": "Оплата при получении",
+        "summary": "Оплатите наличными при доставке заказа",
+        "title": "Оплата при получении",
+        "description": "Вы оплатите заказ наличными при его доставке по вашему адресу."
       },
-      "cashInstructions": "How Cash on Delivery Works",
-      "cashInstruction1": "Place your order and we'll prepare it for delivery",
-      "cashInstruction2": "Our delivery team will contact you to schedule delivery",
-      "cashInstruction3": "Pay the exact amount in cash when your order arrives",
-      "cashInstruction4": "No additional fees for cash on delivery service",
-      "contactNoticeTitle": "Delivery Contact",
-      "contactNotice": "We'll contact you using the information provided to arrange delivery and payment.",
-      "comingSoon": "Coming Soon",
-      "error": "Payment Error"
+      "cashInstructions": "Как работает оплата при получении",
+      "cashInstruction1": "Оформите заказ, и мы подготовим его к доставке",
+      "cashInstruction2": "Наша служба доставки свяжется с вами для согласования времени",
+      "cashInstruction3": "Оплатите точную сумму наличными при получении заказа",
+      "cashInstruction4": "Без дополнительных сборов за оплату при получении",
+      "contactNoticeTitle": "Контакт для доставки",
+      "contactNotice": "Мы свяжемся с вами по указанным контактным данным для организации доставки и оплаты.",
+      "comingSoon": "Скоро",
+      "error": "Ошибка Оплаты",
+      "cvvHelpLabel": "Показать справку по CVV",
+      "copyBankDetails": "Скопировать банковские реквизиты в буфер обмена",
+      "bankDetailsCopied": "Банковские реквизиты скопированы в буфер обмена",
+      "bankDetailsCopyFailed": "Не удалось скопировать банковские реквизиты",
+      "validation": {
+        "cardNumberRequired": "Номер карты обязателен",
+        "cardNumberInvalid": "Неверный номер карты",
+        "expiryRequired": "Дата истечения срока обязательна",
+        "expiryInvalid": "Неверный формат даты истечения срока",
+        "expiryExpired": "Срок действия карты истёк",
+        "cvvRequired": "CVV обязателен",
+        "cvvInvalid": "Неверный CVV",
+        "cvvLength": "CVV должен содержать {length} цифр",
+        "holderNameRequired": "Имя владельца карты обязательно",
+        "paypalEmailRequired": "Email PayPal обязателен",
+        "paypalEmailInvalid": "Неверный адрес электронной почты"
+      }
     },
     "navigation": {
-      "back": "Back",
-      "reviewOrder": "Review Order",
-      "processing": "Processing..."
+      "back": "Назад",
+      "reviewOrder": "Проверить Заказ",
+      "processing": "Обработка..."
     },
     "confirmation": {
-      "orderNumber": "Order Number",
-      "orderItems": "Order Items",
-      "shippingInfo": "Shipping Information",
-      "shippingAddress": "Shipping Address",
-      "shippingMethod": "Shipping Method",
-      "estimatedDelivery": "Estimated Delivery",
-      "deliveryNote": "Delivery times are estimates and may vary",
-      "trackOrder": "Track Your Order",
-      "trackingAvailable": "Tracking information will be available once your order ships",
-      "printReceipt": "Print Receipt",
+      "orderNumber": "Номер Заказа",
+      "orderStatus": "Статус Заказа",
+      "stepIndicator": "Шаг {current} из {total}",
+      "orderItems": "Товары Заказа",
+      "shippingInfo": "Информация о Доставке",
+      "shippingAddress": "Адрес Доставки",
+      "shippingMethod": "Способ Доставки",
+      "estimatedDelivery": "Ожидаемая Доставка",
+      "deliveryNote": "Сроки доставки являются приблизительными и могут варьироваться",
+      "trackOrder": "Отследить Заказ",
+      "trackingAvailable": "Информация об отслеживании будет доступна после отправки заказа",
+      "printReceipt": "Печать Квитанции",
       "sessionRestoreFailed": "Не удалось загрузить данные заказа",
       "checkEmailForOrder": "Пожалуйста, проверьте вашу электронную почту для подтверждения заказа",
       "errorLoadingOrder": "Ошибка загрузки деталей заказа",
@@ -1773,7 +2209,33 @@
       "orderDataMissing": "Данные заказа недоступны",
       "checkYourEmail": "Ваш заказ успешно выполнен. Проверьте почту для получения подробностей",
       "cartClearFailed": "Не удалось очистить корзину",
-      "cartClearFailedDetails": "Ваш заказ успешно выполнен, но корзина не была очищена автоматически"
+      "cartClearFailedDetails": "Ваш заказ успешно выполнен, но корзина не была очищена автоматически",
+      "needHelp": "Нужна помощь? Связаться с поддержкой",
+      "createAccount": {
+        "title": "Сохраните данные для следующего раза",
+        "description": "Создайте аккаунт, чтобы отслеживать заказ и быстрее оформлять покупки в будущем.",
+        "benefits": {
+          "trackOrders": "Отслеживайте этот заказ и просматривайте историю",
+          "fasterCheckout": "Оформляйте быстрее с сохранёнными адресами",
+          "exclusiveOffers": "Получайте эксклюзивные предложения"
+        },
+        "button": "Создать аккаунт"
+      },
+      "preparingOrder": "Подготовка вашего заказа ({days} дней)",
+      "delivery": "Доставка",
+      "totalPaid": "Оплачено",
+      "viewDetails": "Показать детали",
+      "businessDays": "{days} рабочих дней",
+      "status": {
+        "placed": "Заказ Размещен",
+        "confirmed": "Подтвержден",
+        "processing": "Обрабатывается",
+        "preparing": "Подготовка",
+        "shipped": "Отправлено",
+        "delivered": "Доставлено",
+        "inProgress": "В Процессе",
+        "pending": "Ожидание"
+      }
     },
     "errors": {
       "failedToLoadAddresses": "Не удалось загрузить сохраненные адреса",
@@ -1782,7 +2244,10 @@
       "failedToSetDefaultAddress": "Не удалось установить адрес по умолчанию",
       "failedToDeleteAddress": "Не удалось удалить адрес",
       "expressCheckoutFailed": "Экспресс-оплата не удалась",
-      "pleaseTryAgain": "Пожалуйста, попробуйте снова или отредактируйте данные вручную"
+      "pleaseTryAgain": "Пожалуйста, попробуйте снова или отредактируйте данные вручную",
+      "orderFailed": "Ошибка обработки заказа",
+      "initFailed": "Ошибка инициализации оформления",
+      "loadFailed": "Ошибка загрузки оформления"
     },
     "expressCheckout": {
       "title": "Доступна Экспресс-Оплата",
@@ -1798,7 +2263,41 @@
       "countdownMessage": "Перенаправление к оплате через {seconds} секунд...",
       "cancelButton": "Подождите, я хочу проверить",
       "countdownCancelled": "Обратный отсчет отменен",
-      "countdownCancelledDetails": "Не спешите, проверьте свой заказ"
+      "countdownCancelledDetails": "Не спешите, проверьте свой заказ",
+      "oneClickDescription": "Завершите заказ одним кликом",
+      "shippingTo": "Доставка",
+      "paymentMethod": "Оплата",
+      "shipping": "Доставка",
+      "placeOrderNow": "Оформить Заказ",
+      "editDetails": "Изменить Данные"
+    },
+    "hybrid": {
+      "contact": "Контакт",
+      "shippingAddress": "Адрес Доставки",
+      "shippingMethod": "Способ Доставки",
+      "payment": "Оплата",
+      "reviewAndPay": "Проверить и Оплатить"
+    },
+    "trustBadges": {
+      "secure": "Безопасно",
+      "guaranteed": "Гарантировано",
+      "fastDelivery": "Быстрая Доставка"
+    },
+    "showItems": "Показать товары",
+    "hideItems": "Скрыть товары",
+    "estimatedDelivery": "Ожидаемая доставка",
+    "calculatedAtNextStep": "Рассчитано",
+    "securePayment": "Безопасная Оплата",
+    "moneyBackGuarantee": "Гарантия Возврата",
+    "needHelp": "Нужна Помощь?",
+    "secure": "Безопасно",
+    "guaranteed": "Гарантировано",
+    "error": {
+      "title": "Ошибка",
+      "proceedToPayment": "Не удалось перейти к оплате. Пожалуйста, попробуйте снова.",
+      "proceedToReview": "Не удалось перейти к проверке. Пожалуйста, попробуйте снова.",
+      "orderFailed": "Заказ не выполнен",
+      "orderProcessingFailed": "Не удалось обработать ваш заказ. Пожалуйста, попробуйте снова."
     }
   },
   "admin": {
@@ -1833,6 +2332,90 @@
         "registered": "Зарегистрирован",
         "lastLogin": "Последний вход",
         "actions": "Действия"
+      },
+      "actions": {
+        "menu": "Открыть меню",
+        "viewDetails": "Посмотреть детали",
+        "editProfile": "Редактировать профиль",
+        "verifyEmail": "Подтвердить email",
+        "resetPassword": "Сбросить пароль",
+        "manageRole": "Управление ролью",
+        "suspendAccount": "Приостановить аккаунт",
+        "unsuspendAccount": "Возобновить аккаунт",
+        "banAccount": "Заблокировать аккаунт",
+        "unbanAccount": "Разблокировать аккаунт"
+      },
+      "modal": {
+        "noName": "Без имени",
+        "suspensionDuration": "Срок приостановки",
+        "selectDuration": "Выберите срок",
+        "newRole": "Новая роль",
+        "selectRole": "Выберите роль",
+        "reason": "Причина",
+        "required": "(обязательно)",
+        "optional": "(необязательно)",
+        "additionalNotes": "Дополнительные заметки",
+        "additionalNotesPlaceholder": "Добавьте дополнительный контекст...",
+        "durations": {
+          "indefinite": "Бессрочно",
+          "oneDay": "1 день",
+          "threeDays": "3 дня",
+          "oneWeek": "1 неделя",
+          "oneMonth": "1 месяц"
+        },
+        "roles": {
+          "user": "Пользователь",
+          "moderator": "Модератор",
+          "admin": "Администратор"
+        },
+        "titles": {
+          "suspend": "Приостановить пользователя",
+          "ban": "Заблокировать пользователя",
+          "verifyEmail": "Подтвердить email",
+          "resetPassword": "Сбросить пароль",
+          "updateRole": "Обновить роль",
+          "confirm": "Подтвердить действие"
+        },
+        "descriptions": {
+          "suspend": "Временно отключить доступ этого пользователя к аккаунту.",
+          "ban": "Навсегда запретить этому пользователю доступ к платформе.",
+          "verifyEmail": "Вручную отметить email этого пользователя как подтверждённый.",
+          "resetPassword": "Отправить этому пользователю ссылку для сброса пароля.",
+          "updateRole": "Изменить роль и права доступа этого пользователя.",
+          "confirm": "Подтвердите это действие."
+        },
+        "placeholders": {
+          "suspend": "Укажите причину приостановки...",
+          "ban": "Укажите причину блокировки...",
+          "verifyEmail": "Укажите причину ручной верификации...",
+          "resetPassword": "Укажите причину сброса пароля...",
+          "updateRole": "Укажите причину изменения роли...",
+          "default": "Укажите причину..."
+        },
+        "warnings": {
+          "suspend": "Пользователь не сможет войти до снятия приостановки.",
+          "resetPassword": "Пользователь получит email со ссылкой для сброса.",
+          "updateRole": "Это изменит права доступа пользователя."
+        },
+        "dangers": {
+          "ban": "Это действие необратимо без ручного вмешательства."
+        },
+        "buttons": {
+          "suspend": "Приостановить пользователя",
+          "ban": "Заблокировать пользователя",
+          "verifyEmail": "Подтвердить email",
+          "resetPassword": "Отправить ссылку сброса",
+          "updateRole": "Обновить роль",
+          "confirm": "Подтвердить"
+        }
+      }
+    },
+    "imageUpload": {
+      "altTextModal": {
+        "title": "Редактировать альтернативный текст",
+        "description": "Опишите это изображение для программ чтения с экрана и SEO",
+        "label": "Альтернативный текст",
+        "placeholder": "Опишите изображение..."
       }
     }
   },
@@ -1991,6 +2574,351 @@
       "secondary": "Смотреть FAQ",
       "noteTitle": "Часы Работы",
       "noteDescription": "Понедельник - пятница, 9:00 - 18:00 CET"
+    }
+  },
+  "faqPage": {
+    "badge": "Служба поддержки",
+    "title": "Частые вопросы",
+    "description": "Быстрые ответы о заказах, доставке, возвратах и подлинных молдавских товарах в Испании.",
+    "updated": "Обновляется каждую неделю с актуальными данными о доставке и товарах.",
+    "ctaPrimary": "Связаться с поддержкой",
+    "ctaSecondary": "Отследить заказ",
+    "responseTime": "Время ответа: до 1 рабочего часа",
+    "languages": "Поддержка EN / ES / RO / RU",
+    "highlights": {
+      "title": "Что спрашивают чаще всего",
+      "items": {
+        "dispatch": "Заказы, оформленные до 16:00, отправляются в тот же день из Мадрида.",
+        "packaging": "Ударопрочная упаковка для вин и деликатесов.",
+        "support": "Живая команда поддержки быстро решает любые вопросы."
+      },
+      "turnaround": {
+        "title": "Приоритетное решение",
+        "description": "Поврежденные или недостающие товары заменяем сразу после проверки."
+      }
+    },
+    "sections": {
+      "orders": {
+        "title": "Заказы и доставка",
+        "items": {
+          "delivery": {
+            "question": "Как быстро вы доставляете?",
+            "answer": "Заказы, оформленные до 16:00, отправляются в тот же день и доставляются за 48–72 часа по материковой части Испании. Экспресс-опции появляются на checkout, когда доступны."
+          },
+          "shippingCosts": {
+            "question": "Сколько стоит доставка?",
+            "answer": "Стандартная доставка рассчитывается на checkout по весу и почтовому индексу. Бесплатная доставка — для заказов свыше 69 € по Испании (материк)."
+          },
+          "updates": {
+            "question": "Как отследить заказ?",
+            "answer": "После отправки вы получите трекинг по email и SMS. Также можно следить на странице Отследить заказ, указав email и номер заказа."
+          }
+        }
+      },
+      "payments": {
+        "title": "Оплата и счета",
+        "items": {
+          "methods": {
+            "question": "Какие способы оплаты доступны?",
+            "answer": "Принимаем основные карты, Bizum и безопасные банковские переводы. Все платежи шифруются и соответствуют PSD2."
+          },
+          "invoices": {
+            "question": "Можно ли получить счет на компанию?",
+            "answer": "Да. Добавьте данные компании и налоговый номер на checkout, и счет сформируется автоматически после оплаты."
+          },
+          "addresses": {
+            "question": "Можно доставить на другой адрес?",
+            "answer": "Да, укажите отдельный адрес доставки на checkout. Данные для выставления счета сохранятся для ваших записей."
+          }
+        }
+      },
+      "returns": {
+        "title": "Возвраты и вопросы",
+        "items": {
+          "policy": {
+            "question": "Какова политика возвратов?",
+            "answer": "У вас есть 30 дней, чтобы вернуть нераспечатанные товары в исходном состоянии. Мы предоставим предоплаченную этикетку или организуем курьерский забор, где это возможно."
+          },
+          "damaged": {
+            "question": "Что делать, если бутылка пришла поврежденной?",
+            "answer": "Сделайте фото посылки и поврежденного товара и свяжитесь с поддержкой. Мы отправим замену или вернем деньги сразу."
+          },
+          "process": {
+            "question": "Как оформить возврат или обмен?",
+            "answer": "Перейдите на страницу Возвраты или свяжитесь с поддержкой, указав номер заказа. Мы подтвердим условия и пришлем шаги в течение одного рабочего дня."
+          }
+        }
+      },
+      "products": {
+        "title": "Товары и подлинность",
+        "items": {
+          "authenticity": {
+            "question": "Товары действительно из Молдовы?",
+            "answer": "Да. Мы работаем напрямую с молдавскими производителями и подтверждаем происхождение на каждой этикетке. Наш центр в Мадриде обеспечивает контролируемое хранение."
+          },
+          "storage": {
+            "question": "Как хранить вина и деликатесы?",
+            "answer": "Храните вина при 12–18°C вдали от прямого солнца. Продукты кладовой держите в прохладном сухом месте; после открытия при необходимости уберите в холодильник."
+          },
+          "allergens": {
+            "question": "Где посмотреть информацию об аллергенах?",
+            "answer": "Сведения об аллергенах указаны на странице товара и на этикетке. Свяжитесь с нами для точных разъяснений перед заказом."
+          }
+        }
+      }
+    },
+    "quickLinks": {
+      "shipping": "Информация о доставке",
+      "returns": "Политика возвратов",
+      "tracking": "Отследить заказ",
+      "contact": "Связаться с поддержкой"
+    },
+    "needMore": {
+      "title": "Нужна дополнительная помощь?",
+      "description": "Отправьте номер заказа и короткое описание — мы ответим в течение часа рабочего времени.",
+      "commitment": {
+        "title": "Наше обещание",
+        "description": "Реальные люди, быстрые ответы и проактивные решения по доставке."
+      }
+    },
+    "seo": {
+      "title": "Частые вопросы — Moldova Direct",
+      "description": "Узнайте ответы о доставке, оплате, возвратах и подлинных молдавских товарах в Испании.",
+      "imageAlt": "Клиент читает раздел часто задаваемых вопросов Moldova Direct"
+    }
+  },
+  "wineStory": {
+    "hero": {
+      "badge": "Винное наследие Молдовы",
+      "title": "Откройте историю за каждой бутылкой",
+      "subtitle": "Исследуйте древние традиции молдавского виноделия, познакомьтесь с нашими увлеченными производителями и откройте идеальные сочетания вин"
+    },
+    "seo": {
+      "title": "История вина Молдовы | Наследие и традиции",
+      "description": "Откройте богатое винодельческое наследие Молдовы, познакомьтесь с нашими увлеченными производителями, исследуйте региональные терруары и найдите идеальные сочетания вин"
+    },
+    "cta": {
+      "title": "Готовы попробовать лучшие вина Молдовы?",
+      "subtitle": "Исследуйте нашу тщательно отобранную коллекцию премиальных молдавских вин",
+      "shopButton": "Купить вина",
+      "aboutButton": "Узнать больше о нас"
+    },
+    "producers": {
+      "title": "Познакомьтесь с нашими виноделами",
+      "subtitle": "Истории от лучших производителей Молдовы",
+      "viewStory": "Читать полную историю",
+      "readMore": "Читать далее",
+      "establishedYear": "Основано в {year}",
+      "generations": "{count} поколений виноделия",
+      "specialty": "Специализация",
+      "region": "Регион",
+      "vineyardSize": "Площадь виноградника",
+      "annualProduction": "Годовое производство",
+      "philosophy": "Философия",
+      "awards": "Награды и признание",
+      "certifications": "Сертификаты",
+      "contact": "Посетить сайт",
+      "featuredProducts": "Рекомендуемые вина",
+      "viewAllProducts": "Посмотреть все продукты",
+      "closeModal": "Закрыть",
+      "detailsDescription": "Подробная информация о {name}, включая историю, виноградник и отмеченные наградами вина",
+      "swipeHint": "Проведите для просмотра других виноделов",
+      "keyboardHint": "Используйте стрелки для навигации",
+      "loading": "Загрузка историй виноделов...",
+      "error": "Не удалось загрузить истории виноделов",
+      "noProducers": "Истории виноделов пока недоступны"
+    },
+    "regions": {
+      "title": "Откройте винные регионы Молдовы",
+      "subtitle": "Три уникальных терруара, бесчисленные истории",
+      "viewRegion": "Исследовать регион",
+      "characteristics": "Характеристики",
+      "soilType": "Тип почвы",
+      "elevation": "Высота",
+      "climate": "Климат",
+      "rainfall": "Годовые осадки",
+      "averageTemp": "Средняя температура",
+      "primaryGrapes": "Основные сорта винограда",
+      "producerCount": "{count} производителей",
+      "filterByRegion": "Фильтровать вина по региону",
+      "clearFilter": "Показать все регионы",
+      "mapTooltip": "Нажмите для исследования {region}",
+      "loading": "Загрузка винных регионов...",
+      "error": "Не удалось загрузить карту винных регионов",
+      "noRegions": "Винные регионы недоступны",
+      "codru": {
+        "name": "Кодру",
+        "description": "Сердце молдавского виноделия"
+      },
+      "stefanVoda": {
+        "name": "Штефан-Водэ",
+        "description": "Насыщенные красные и сладкие вина"
+      },
+      "valulLuiTraian": {
+        "name": "Валул-луй-Траян",
+        "description": "Ароматные белые и розовые вина"
+      }
+    },
+    "pairings": {
+      "title": "Идеальные сочетания",
+      "subtitle": "Откройте искусство сочетания вина и еды",
+      "viewPairing": "Полное сочетание",
+      "wine": "Вино",
+      "dish": "Блюдо",
+      "whyItWorks": "Почему это работает",
+      "servingSuggestions": "Рекомендации по подаче",
+      "temperature": "Температура",
+      "glassType": "Тип бокала",
+      "decanting": "Декантирование",
+      "garnishes": "Гарниры",
+      "alternativeWines": "Альтернативные вина",
+      "alternativeDishes": "Альтернативные блюда",
+      "recipe": "Смотреть рецепт",
+      "servings": "{count} порций",
+      "cookingTime": "Время приготовления",
+      "difficulty": "Сложность",
+      "ingredients": "Ингредиенты",
+      "instructions": "Инструкции",
+      "chefNotes": "Заметки шеф-повара",
+      "filters": {
+        "all": "Все сочетания",
+        "wineType": "Тип вина",
+        "occasion": "Повод",
+        "season": "Сезон",
+        "mealType": "Тип еды",
+        "cuisine": "Кухня",
+        "intensity": "Интенсивность"
+      },
+      "wineTypes": {
+        "red": "Красные вина",
+        "white": "Белые вина",
+        "rose": "Розовые вина",
+        "sparkling": "Игристые вина",
+        "dessert": "Десертные вина"
+      },
+      "occasions": {
+        "everyday": "Повседневный",
+        "specialOccasion": "Особый случай",
+        "celebration": "Празднование",
+        "romantic": "Романтический",
+        "holiday": "Праздник",
+        "casual": "Неформальный",
+        "formal": "Официальный"
+      },
+      "seasons": {
+        "spring": "Весна",
+        "summer": "Лето",
+        "fall": "Осень",
+        "winter": "Зима",
+        "yearRound": "Круглый год"
+      },
+      "mealTypes": {
+        "appetizer": "Закуска",
+        "mainCourse": "Основное блюдо",
+        "dessert": "Десерт",
+        "snack": "Перекус"
+      },
+      "intensity": {
+        "light": "Легкий и нежный",
+        "medium": "Средний корпус",
+        "bold": "Насыщенный и полный"
+      },
+      "loading": "Загрузка руководств по сочетаниям...",
+      "error": "Не удалось загрузить руководства по сочетаниям",
+      "noPairings": "Руководства по сочетаниям недоступны",
+      "noResults": "Сочетания, соответствующие вашим фильтрам, не найдены"
+    },
+    "giftPhilosophy": {
+      "title": "Дар молдавского наследия",
+      "subtitle": "Больше чем вино, история для совместного наслаждения",
+      "description": "Каждая бутылка от Moldova Direct несет в себе века винодельческих традиций, страсть семейных производителей и уникальный характер наших терруаров. Даря вино Moldova Direct, вы делитесь подлинной частью молдавской культуры.",
+      "reasons": {
+        "title": "Почему подарки Moldova Direct важны",
+        "authenticity": {
+          "title": "Подлинные истории",
+          "description": "Каждая бутылка от настоящих семейных производителей с поколениями опыта"
+        },
+        "quality": {
+          "title": "Премиальное качество",
+          "description": "Вручную отобранные вина, представляющие лучшее молдавское виноделие"
+        },
+        "sustainability": {
+          "title": "Устойчивый выбор",
+          "description": "Поддержка малых производителей и устойчивых методов ведения хозяйства"
+        },
+        "unique": {
+          "title": "Уникально молдавский",
+          "description": "Откройте сорта винограда и стили, которые не найдете больше нигде"
+        }
+      },
+      "scenarios": {
+        "title": "Идеальные поводы для подарков",
+        "corporate": {
+          "title": "Корпоративные подарки",
+          "description": "Произведите неизгладимое впечатление уникальными винами с историей"
+        },
+        "celebration": {
+          "title": "Празднования",
+          "description": "Отмечайте особые моменты жизни винами, столь же запоминающимися, как сам повод"
+        },
+        "gratitude": {
+          "title": "Выражение благодарности",
+          "description": "Выразите признательность продуманным подарком, демонстрирующим заботу и вкус"
+        },
+        "exploration": {
+          "title": "Открытие вин",
+          "description": "Познакомьте друзей со скрытой жемчужиной европейского виноделия"
+        }
+      },
+      "cta": {
+        "title": "Создайте идеальный подарок",
+        "description": "Просмотрите наши подарочные наборы или создайте собственную подборку",
+        "button": "Исследовать варианты подарков"
+      }
+    },
+    "production": {
+      "title": "От виноградника к вашему столу",
+      "subtitle": "Путешествие молдавского вина",
+      "steps": {
+        "harvest": {
+          "title": "Сбор урожая",
+          "description": "Виноград собирается вручную при оптимальной зрелости, обычно в сентябре-октябре",
+          "timing": "Сентябрь - Октябрь"
+        },
+        "crushing": {
+          "title": "Дробление и ферментация",
+          "description": "Традиционные методы в сочетании с современным контролем температуры",
+          "timing": "Октябрь - Ноябрь"
+        },
+        "aging": {
+          "title": "Выдержка",
+          "description": "Вина отдыхают в дубовых бочках или стальных емкостях, развивая сложность",
+          "timing": "6 месяцев - 2 года"
+        },
+        "bottling": {
+          "title": "Розлив",
+          "description": "Каждая бутылка тщательно наполняется и маркируется вручную",
+          "timing": "Круглый год"
+        },
+        "selection": {
+          "title": "Отбор качества",
+          "description": "Мы дегустируем и отбираем только лучшие бутылки для Moldova Direct",
+          "timing": "Постоянно"
+        },
+        "delivery": {
+          "title": "Прямо к вам",
+          "description": "Быстрая и надежная доставка лучшего из Молдовы прямо к вашей двери",
+          "timing": "3-5 рабочих дней"
+        }
+      },
+      "traditions": {
+        "title": "Почитание традиций",
+        "description": "Винодельческое наследие Молдовы насчитывает более 5000 лет. Наши производители сочетают проверенные временем техники с современными инновациями, создавая вина, чтящие прошлое и устремленные в будущее."
+      },
+      "sustainability": {
+        "title": "Устойчивые практики",
+        "description": "Многие из наших производителей переходят на органическое и биодинамическое земледелие, обеспечивая процветание молдавских виноградников для будущих поколений."
+      }
     }
   }
 }

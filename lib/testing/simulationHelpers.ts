@@ -268,7 +268,7 @@ export const importPersonaSession = (jsonString: string): PersonaSessionState =>
 
     return state
   }
-  catch (error: any) {
+  catch (error: unknown) {
     throw new SimulationError(
       'Failed to import session',
       'unknown',

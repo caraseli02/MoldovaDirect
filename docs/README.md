@@ -1,164 +1,278 @@
 # Moldova Direct Documentation
 
-Welcome to the Moldova Direct documentation! This folder contains all technical documentation organized by category for easy navigation.
-
-## 📁 Documentation Structure
-
-```
-docs/
-├── getting-started/     # Setup and quick start guides
-├── architecture/        # System architecture and design
-├── features/           # Feature-specific documentation
-│   ├── authentication/ # Auth-related features
-│   └── cart/          # Shopping cart features
-├── guides/            # How-to guides and best practices
-├── development/       # Development workflows and patterns
-├── meta/             # Documentation about documentation
-├── automation/       # CI/CD and automation
-├── testing/          # Testing documentation
-├── analysis/         # Code quality and review reports
-├── issues/           # Known issues and solutions
-├── archive/          # Archived/historical documents
-└── CHANGELOG.md      # Recent changes and updates
-```
-
-## 🚀 Quick Start
-
-**New to the project?** Start here:
-
-1. [Quick Start Guide](./getting-started/QUICK_START_GUIDE.md) - Get up and running quickly
-2. [MVP Quick Start](./getting-started/MVP_QUICK_START.md) - Minimal viable setup
-3. [Supabase Setup](./getting-started/SUPABASE_SETUP.md) - Database configuration
-4. [Local Testing Guide](./getting-started/LOCAL_TESTING_GUIDE.md) - Test locally
-
-## 📖 Documentation by Category
-
-### 🎯 Getting Started
-Essential guides for setting up and running the project:
-- [Quick Start Guide](./getting-started/QUICK_START_GUIDE.md) - Get started in minutes
-- [MVP Quick Start](./getting-started/MVP_QUICK_START.md) - Bare minimum setup
-- [Local Testing Guide](./getting-started/LOCAL_TESTING_GUIDE.md) - Run and test locally
-- [Supabase Setup](./getting-started/SUPABASE_SETUP.md) - Configure database
-
-### 🏗️ Architecture
-System design and architecture documentation:
-- [Architecture Review](./architecture/ARCHITECTURE_REVIEW.md) - Overall system architecture
-- [Architecture Improvement Roadmap](./architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md) - Future improvements
-- [Authentication Architecture](./architecture/AUTHENTICATION_ARCHITECTURE.md) - Auth system design
-- [Cart System Architecture](./architecture/CART_SYSTEM_ARCHITECTURE.md) - Shopping cart technical details
-- [Checkout Flow](./architecture/CHECKOUT_FLOW.md) - Multi-step checkout process
-
-### ✨ Features
-Feature-specific documentation and implementation details:
-
-#### Authentication
-- [MFA Implementation](./features/authentication/MFA_IMPLEMENTATION.md) - Multi-factor authentication
-- [Auth Middleware Test Results](./features/authentication/AUTH_MIDDLEWARE_TEST_RESULTS.md) - Test coverage
-- [Authentication Translations](./features/authentication/authentication-translations.md) - i18n support
-- [Auth Flow Review](./features/authentication/auth-flow-review.md) - Authentication flow analysis
-
-#### Shopping Cart
-- [Cart Analytics](./features/cart/CART_ANALYTICS.md) - Analytics system documentation
-- [Cart Locking](./features/cart/CART_LOCKING.md) - Inventory locking mechanism
-- [Atomic Inventory Fix](./features/cart/ATOMIC_INVENTORY_FIX.md) - Inventory consistency fixes
-
-#### Other Features
-- [Internationalization (i18n) Configuration](./features/I18N_CONFIGURATION.md) - Multi-language setup
-- [Landing Page CMS](./features/LANDING-PAGE-CMS.md) - Content management
-- [Audit Logging](./features/AUDIT_LOGGING.md) - System audit trails
-
-### 📚 Guides
-Practical how-to guides and best practices:
-- [Implementation Guide](./guides/implementation-guide.md) - General implementation guidelines
-- [Testing Strategy](./guides/TESTING_STRATEGY.md) - Overall testing approach
-- [Admin Testing](./guides/ADMIN_TESTING.md) - Admin dashboard testing
-- [Test User Simulation](./guides/TEST_USER_SIMULATION.md) - Test personas and simulation
-- [Key Rotation Completion Guide](./guides/KEY_ROTATION_COMPLETION_GUIDE.md) - Security key rotation
-- [Marketing Copy Improvements](./guides/MARKETING-COPY-IMPROVEMENTS.md) - Content guidelines
-
-### 🛠️ Development
-Development workflows, patterns, and standards:
-- [Patterns to Preserve](./development/PATTERNS_TO_PRESERVE.md) - Code patterns and conventions
-- [shadcn Migration](./development/SHADCN_MIGRATION.md) - UI component migration guide
-- [Component Modernization Plan](./development/component-modernization-plan.md) - Component upgrade strategy
-- [Component Inventory](./development/component-inventory.md) - All UI components
-- [UI/UX Review](./development/ui-ux-review.md) - Design system review
-- [Troubleshooting Components](./development/troubleshooting-components.md) - Common component issues
-
-### 🔧 Automation
-CI/CD and project automation:
-- [GitHub Project Automation](./automation/github-project-automation.md) - Automated workflows
-- [Project Automation Explained](./automation/PROJECT_AUTOMATION_EXPLAINED.md) - Automation overview
-
-### 🧪 Testing
-Testing documentation and coverage reports:
-- [Test Coverage Implementation](./testing/TEST_COVERAGE_IMPLEMENTATION.md) - Visual test coverage
-- [Test Coverage Analysis](./testing/TEST_COVERAGE_ANALYSIS.md) - Coverage reports
-- [Search Performance Verification](./testing/SEARCH_PERFORMANCE_VERIFICATION.md) - Performance testing
-
-### 📊 Analysis
-Code quality and review reports:
-- [Code Quality Analysis (2025-11-01)](./analysis/CODE_QUALITY_ANALYSIS_2025-11-01.md)
-- [Code Review 2025](./analysis/CODE_REVIEW_2025.md)
-- [GitHub Issues Deduplication Audit](./analysis/GITHUB_ISSUES_DEDUPLICATION_AUDIT_FINAL.md)
-- [GitHub Issues Deduplication (Corrected)](./analysis/GITHUB_ISSUES_DEDUPLICATION_FINAL_CORRECTED.md)
-- [Deduplication Complete](./analysis/DEDUPLICATION_COMPLETE.md)
-
-### 📋 Meta
-Documentation about documentation:
-- [Documentation Conventions](./meta/DOCUMENTATION_CONVENTIONS.md) - How to write docs
-- [Documentation Index](./meta/DOCUMENTATION_INDEX.md) - Full documentation index
-- [Documentation Summary](./meta/DOCUMENTATION_SUMMARY.md) - Overview of all docs
-- [Documentation Update (2025-11-01)](./meta/DOCUMENTATION_UPDATE_2025-11-01.md) - Recent changes
-- [Archival Policy](./meta/ARCHIVAL_POLICY.md) - How we archive docs
-- [MVP Priority Order](./meta/MVP_PRIORITY_ORDER.md) - Development priorities
-- [Remaining Work Summary](./meta/REMAINING_WORK_SUMMARY.md) - What's left to do
-
-### 🐛 Issues
-Known issues and their solutions:
-- [Transactional Email Hardening](./issues/transactional-email-hardening.md)
-- [Full App Unit Test Coverage](./issues/full-app-unit-test-coverage.md)
-
-### 📦 Archive
-Historical and archived documentation - see [archive/README.md](./archive/README.md)
-
-## 🔄 Recent Updates
-
-See [CHANGELOG.md](./CHANGELOG.md) for detailed recent changes.
-
-## 📞 Getting Help
-
-**Can't find what you're looking for?**
-
-1. Use your editor's search (Ctrl/Cmd + P) to find files by name
-2. Use grep to search file contents: `grep -r "search term" docs/`
-3. Check the [Documentation Index](./meta/DOCUMENTATION_INDEX.md) for a complete list
-4. See [Documentation Conventions](./meta/DOCUMENTATION_CONVENTIONS.md) for documentation standards
-
-**For other project resources:**
-- [Main Project README](../README.md) - Project overview
-- [Kiro Documentation](../docs/README.md) - Project specs and status
-- [Tech Stack](../docs/development/tech.md) - Technology decisions
-- [Code Conventions](../docs/development/code-conventions.md) - Coding standards
-
-## 🤝 Contributing to Documentation
-
-1. **Choose the right folder** for your documentation
-2. **Use clear, descriptive filenames** (kebab-case or UPPER_CASE)
-3. **Include a table of contents** for documents longer than 100 lines
-4. **Add examples** where applicable
-5. **Update this README** when adding new categories or important docs
-6. **Follow** the [Documentation Conventions](./meta/DOCUMENTATION_CONVENTIONS.md)
-
-## 📝 Documentation Standards
-
-- **Format**: All documentation in Markdown
-- **Structure**: Clear headings and logical organization
-- **Examples**: Include code examples where applicable
-- **Dates**: Include dates for time-sensitive information
-- **Maintenance**: Keep docs in sync with code changes
+> **Stack:** Nuxt 4 + Vue 3 + Supabase + TailwindCSS + Vercel
 
 ---
 
-**Last Updated**: November 5, 2025
-**Reorganization**: Docs restructured for improved discoverability
+## Start Here
+
+### 🆕 New to the Project?
+
+1. **[Quick Start Guide](./getting-started/QUICK_START_GUIDE.md)** - Get the app running locally (5 min)
+2. **[Tech Stack](./development/tech.md)** - Understand our technology choices
+3. **[Code Conventions](./development/code-conventions.md)** - How we write code
+4. **[Project Structure](./development/structure.md)** - Where things live
+
+### 🔄 Returning After Time Away?
+
+1. **[CHANGELOG](./CHANGELOG.md)** - What changed recently
+2. **[Project Status](./status/PROJECT_STATUS.md)** - Current state of the project
+3. **[Roadmap](./status/ROADMAP.md)** - What's planned next
+
+### 🐛 Need to Debug Something?
+
+1. **[Troubleshooting Components](./development/troubleshooting-components.md)** - Common issues
+2. **[Testing Strategy](./guides/TESTING_STRATEGY.md)** - How to run tests
+3. **[SSR Safety Verification](./analysis/SSR-SAFETY-VERIFICATION.md)** - SSR-related issues
+
+### 🛠️ Working on a Feature?
+
+1. **[Patterns to Preserve](./development/PATTERNS_TO_PRESERVE.md)** - Code patterns to follow
+2. **[Component Inventory](./development/component-inventory.md)** - Available UI components
+3. **[i18n Configuration](./features/I18N_CONFIGURATION.md)** - Adding translations (required for all UI)
+
+---
+
+## Core Documentation
+
+### Architecture
+How the system is designed:
+
+| Document | Description |
+|----------|-------------|
+| [Architecture Review](./architecture/ARCHITECTURE_REVIEW.md) | Overall system design |
+| [Authentication](./architecture/AUTHENTICATION_ARCHITECTURE.md) | Auth flow with Supabase |
+| [Checkout Flow](./architecture/CHECKOUT_FLOW.md) | Multi-step checkout process |
+| [Cart System](./architecture/CART_SYSTEM_ARCHITECTURE.md) | Shopping cart internals |
+
+### Key Features
+Feature-specific documentation:
+
+| Feature | Key Docs |
+|---------|----------|
+| **Auth** | [MFA](./features/authentication/MFA_IMPLEMENTATION.md), [Auth Flow](./features/authentication/auth-flow-review.md) |
+| **Cart** | [Cart Locking](./features/cart/CART_LOCKING.md), [Analytics](./features/cart/CART_ANALYTICS.md) |
+| **i18n** | [Configuration](./features/I18N_CONFIGURATION.md) - 4 languages: ES, EN, RO, RU |
+| **Admin** | [Admin Testing](./guides/ADMIN_TESTING.md) |
+
+### Testing
+How to test the application:
+
+| Type | Guide |
+|------|-------|
+| E2E Tests | [Testing Strategy](./guides/TESTING_STRATEGY.md) |
+| Visual Tests | [Test Coverage](./archive/testing/TEST_COVERAGE_IMPLEMENTATION.md) |
+| Local Testing | [Local Testing Guide](./getting-started/LOCAL_TESTING_GUIDE.md) |
+
+---
+
+## Quick Reference
+
+### Common Commands
+
+```bash
+# Development
+pnpm dev              # Start dev server (port 3000)
+pnpm build            # Production build
+
+# Testing
+pnpm test             # Run all tests
+pnpm test:e2e         # E2E tests only
+
+# Clean restart (if imports fail)
+pkill -9 node && rm -rf .nuxt node_modules/.vite && pnpm dev
+```
+
+### Project Structure
+
+```
+components/
+├── admin/           # Admin panel (requires auth)
+├── layout/          # Header, footer, nav
+├── product/         # Product display
+└── ui/              # Reusable UI (shadcn-style)
+
+pages/
+├── admin/           # Admin pages (middleware: auth + admin)
+├── auth/            # Login, register, forgot password
+└── products/        # Product listing and detail
+
+server/
+├── api/             # REST endpoints
+└── utils/           # Server utilities (auth, db)
+
+i18n/locales/        # Translations (es, en, ro, ru)
+```
+
+### Key Rules
+
+1. **Static imports only** in admin pages (no dynamic imports)
+2. **All UI text** must have translations in all 4 locales
+3. **Admin pages** need both `auth` and `admin` middleware
+4. **Never skip git hooks** - fix the issue instead
+
+---
+
+## All Documentation
+
+<details>
+<summary><strong>📁 Getting Started</strong> - Setup guides</summary>
+
+- [Quick Start Guide](./getting-started/QUICK_START_GUIDE.md)
+- [MVP Quick Start](./getting-started/MVP_QUICK_START.md)
+- [Supabase Setup](./getting-started/SUPABASE_SETUP.md)
+- [Database Setup](./getting-started/DATABASE_SETUP.md)
+- [Local Testing Guide](./getting-started/LOCAL_TESTING_GUIDE.md)
+
+</details>
+
+<details>
+<summary><strong>🏗️ Architecture</strong> - System design</summary>
+
+- [Architecture Review](./architecture/ARCHITECTURE_REVIEW.md)
+- [Architecture Improvement Roadmap](./architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md)
+- [Authentication Architecture](./architecture/AUTHENTICATION_ARCHITECTURE.md)
+- [Cart System Architecture](./architecture/CART_SYSTEM_ARCHITECTURE.md)
+- [Checkout Flow](./architecture/CHECKOUT_FLOW.md)
+
+</details>
+
+<details>
+<summary><strong>🛠️ Development</strong> - Patterns and standards</summary>
+
+- [Tech Stack](./development/tech.md)
+- [Code Conventions](./development/code-conventions.md)
+- [Project Structure](./development/structure.md)
+- [Patterns to Preserve](./development/PATTERNS_TO_PRESERVE.md)
+- [Component Inventory](./development/component-inventory.md)
+- [Troubleshooting Components](./development/troubleshooting-components.md)
+- [shadcn Migration](./archive/migrations/SHADCN_MIGRATION.md) *(archived)*
+
+</details>
+
+<details>
+<summary><strong>✨ Features</strong> - Feature documentation</summary>
+
+**Authentication:**
+- [MFA Implementation](./features/authentication/MFA_IMPLEMENTATION.md)
+- [Auth Flow Review](./features/authentication/auth-flow-review.md)
+- [Auth Middleware Test Results](./features/authentication/AUTH_MIDDLEWARE_TEST_RESULTS.md)
+
+**Cart:**
+- [Cart Analytics](./features/cart/CART_ANALYTICS.md)
+- [Cart Locking](./features/cart/CART_LOCKING.md)
+- [Atomic Inventory Fix](./features/cart/ATOMIC_INVENTORY_FIX.md)
+
+**Other:**
+- [i18n Configuration](./features/I18N_CONFIGURATION.md)
+- [Landing Page CMS](./features/LANDING-PAGE-CMS.md)
+- [Audit Logging](./features/AUDIT_LOGGING.md)
+
+</details>
+
+<details>
+<summary><strong>📚 Guides</strong> - How-to guides</summary>
+
+- [Implementation Guide](./guides/implementation-guide.md)
+- [Testing Strategy](./guides/TESTING_STRATEGY.md)
+- [Admin Testing](./guides/ADMIN_TESTING.md)
+- [Test User Simulation](./guides/TEST_USER_SIMULATION.md)
+- [Key Rotation Guide](./guides/KEY_ROTATION_COMPLETION_GUIDE.md)
+
+</details>
+
+<details>
+<summary><strong>🧪 Testing</strong> - Test documentation</summary>
+
+- [Test Coverage Implementation](./archive/testing/TEST_COVERAGE_IMPLEMENTATION.md) *(archived)*
+- [Test Coverage Analysis](./testing/TEST_COVERAGE_ANALYSIS.md)
+- [Playwright Best Practices](./archive/testing/playwright/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md) *(archived)*
+- [E2E Checkout Best Practices](./archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md) *(archived)*
+- [Visual Regression Issues](./visual-regression/VISUAL_REGRESSION_ISSUES_AND_FIXES.md)
+
+</details>
+
+<details>
+<summary><strong>🔍 Analysis</strong> - Code reviews and analysis</summary>
+
+- [Code Quality Analysis](./analysis/CODE_QUALITY_ANALYSIS_2025-11-01.md)
+- [Code Review 2025](./analysis/CODE_REVIEW_2025.md)
+- [SSR Safety Verification](./analysis/SSR-SAFETY-VERIFICATION.md)
+- [LocalStorage Verification](./analysis/LOCALSTORAGE-VERIFICATION-COMPLETE.md)
+
+</details>
+
+<details>
+<summary><strong>🔬 Research</strong> - Research and exploration</summary>
+
+- [Hero Section Quick Reference](./research/hero-section-quick-reference.md)
+- [Filter Documentation](./research/FILTER_DOCUMENTATION_RESEARCH.md)
+- [Landing Page Analysis](./research/LANDING_PAGE_SECTION_ANALYSIS.md)
+- See also: `archive/research/` for completed research
+
+</details>
+
+<details>
+<summary><strong>📝 Meta</strong> - Documentation guidelines</summary>
+
+- [Archival Policy](./meta/ARCHIVAL_POLICY.md)
+- [Documentation Conventions](./meta/DOCUMENTATION_CONVENTIONS.md)
+- [Consolidation Plan](./meta/DOCUMENTATION_CONSOLIDATION_PLAN.md)
+
+</details>
+
+<details>
+<summary><strong>📊 Status</strong> - Project status</summary>
+
+- [Project Status](./status/PROJECT_STATUS.md)
+- [Roadmap](./status/ROADMAP.md)
+- [Progress](./status/PROGRESS.md)
+
+</details>
+
+<details>
+<summary><strong>📋 Specs</strong> - Feature specifications</summary>
+
+Active feature specifications in `specs/`:
+- `user-authentication/` - Authentication system design
+- `admin-order-management/` - Order management for admins
+- `order-confirmation-emails/` - Email notification system
+- `product-catalog/` - Product display and filtering
+- See folder for full list (12+ active specs)
+
+</details>
+
+<details>
+<summary><strong>🔧 Fixes</strong> - Bug fixes and solutions</summary>
+
+- [Admin Fixes](./archive/fixes/admin-fixes/) - Admin panel issues and solutions *(archived)*
+- Error handling guides
+
+</details>
+
+<details>
+<summary><strong>🔒 Security</strong> - Security documentation</summary>
+
+- GDPR compliance documentation
+- Security logging guides
+
+</details>
+
+<details>
+<summary><strong>📦 Archive</strong> - Historical docs</summary>
+
+See [archive/README.md](./archive/README.md) for archived documentation.
+
+</details>
+
+---
+
+## Need Help?
+
+1. **Search docs:** `grep -r "search term" docs/`
+2. **Check CLAUDE.md:** Project rules and conventions
+3. **See archive:** Historical context in `docs/archive/`
+
+---
+
+**Last Updated:** January 6, 2026

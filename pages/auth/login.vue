@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+  <div class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
     <!-- Mobile-optimized header -->
     <main class="flex-1 flex items-center justify-center px-6 py-8 sm:px-8 lg:px-12">
       <div class="w-full max-w-sm sm:max-w-md space-y-6 sm:space-y-8">
@@ -489,6 +489,120 @@
               </form>
             </TabsContent>
           </Tabs>
+
+          <!-- Social Login Divider -->
+          <div class="relative mt-6">
+            <div class="absolute inset-0 flex items-center">
+              <div class="w-full border-t border-gray-200 dark:border-gray-600"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+              <span class="bg-white dark:bg-gray-800 px-4 text-gray-500 dark:text-gray-400">
+                {{ $t('auth.orContinueWith') }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Social Login Buttons -->
+          <div class="mt-6 grid grid-cols-2 gap-3">
+            <!-- Google Sign In -->
+            <Button
+              type="button"
+              variant="outline"
+              :disabled="loadingSocial === 'google'"
+              class="h-11 border-2 border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              @click="handleSocialLogin('google')"
+            >
+              <svg
+                v-if="loadingSocial === 'google'"
+                class="animate-spin h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                />
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+              <svg
+                v-else
+                class="w-5 h-5 mr-2"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fill="#4285F4"
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                />
+                <path
+                  fill="#34A853"
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                />
+                <path
+                  fill="#FBBC05"
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                />
+                <path
+                  fill="#EA4335"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                />
+              </svg>
+              {{ $t('auth.continueWithGoogle') }}
+            </Button>
+
+            <!-- Apple Sign In -->
+            <Button
+              type="button"
+              variant="outline"
+              :disabled="loadingSocial === 'apple'"
+              class="h-11 border-2 border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              @click="handleSocialLogin('apple')"
+            >
+              <svg
+                v-if="loadingSocial === 'apple'"
+                class="animate-spin h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                />
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+              <svg
+                v-else
+                class="w-5 h-5 mr-2"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
+              </svg>
+              {{ $t('auth.continueWithApple') }}
+            </Button>
+          </div>
+
+          <!-- Social Login Note -->
+          <p class="mt-4 text-xs text-center text-gray-500 dark:text-gray-400">
+            {{ $t('auth.socialLoginNote') }}
+          </p>
         </div>
       </div>
     </main>
@@ -517,6 +631,7 @@ const supabase = useSupabaseClient()
 const { t } = useI18n()
 const localePath = useLocalePath()
 const route = useRoute()
+const requestURL = useRequestURL()
 const {
   error: authError,
   isAccountLocked,
@@ -549,6 +664,7 @@ const rememberMe = ref(false)
 const localError = ref('')
 const loading = ref(false)
 const activeTab = ref('password')
+const loadingSocial = ref<'google' | 'apple' | null>(null)
 
 // Field-level validation errors
 const emailError = ref('')
@@ -661,9 +777,9 @@ async function handleLogin(): Promise<void> {
       await handleRedirectAfterLogin()
     }
   }
-  catch (err: any) {
+  catch (err: unknown) {
     if (!localError.value) {
-      localError.value = err?.message || t('auth.loginError')
+      localError.value = getErrorMessage(err) || t('auth.loginError')
     }
   }
   finally {
@@ -767,7 +883,7 @@ async function handleMagicLink(): Promise<void> {
     const { error: authError } = await supabase.auth.signInWithOtp({
       email: form.value.email,
       options: {
-        emailRedirectTo: `${window.location.origin}${localePath('/auth/confirm')}`,
+        emailRedirectTo: `${requestURL.origin}${localePath('/auth/confirm')}`,
       },
     })
 
@@ -780,11 +896,68 @@ async function handleMagicLink(): Promise<void> {
     // Start cooldown timer
     startMagicLinkCooldown()
   }
-  catch (err: any) {
-    localError.value = err.message || t('auth.magicLinkError')
+  catch (err: unknown) {
+    localError.value = getErrorMessage(err) || t('auth.magicLinkError')
   }
   finally {
     loadingMagic.value = false
+  }
+}
+
+/**
+ * Handle OAuth social login with Google or Apple
+ * Uses Supabase's signInWithOAuth which handles the OAuth flow
+ *
+ * Note: On success, the page redirects so loadingSocial state persists.
+ * On error or redirect failure, loadingSocial is cleared to allow retry.
+ * A 5-second timeout detects stuck redirects.
+ */
+async function handleSocialLogin(provider: 'google' | 'apple'): Promise<void> {
+  if (loadingSocial.value) return
+
+  localError.value = ''
+  success.value = ''
+  loadingSocial.value = provider
+
+  try {
+    // Preserve original redirect parameter from URL
+    const originalRedirect = route.query.redirect as string
+    const confirmUrl = new URL(`${requestURL.origin}${localePath('/auth/confirm')}`)
+    if (originalRedirect) {
+      confirmUrl.searchParams.set('redirect', originalRedirect)
+    }
+
+    const { error: authError } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: confirmUrl.toString(),
+        queryParams: provider === 'google'
+          ? {
+              access_type: 'offline',
+              prompt: 'consent',
+            }
+          : undefined,
+      },
+    })
+
+    if (authError) {
+      throw authError
+    }
+
+    // Set a timeout to detect if redirect didn't happen
+    // (e.g., blocked by browser extension, CSP, popup blocker)
+    setTimeout(() => {
+      if (loadingSocial.value === provider) {
+        console.error(`${provider} OAuth redirect did not occur within expected timeframe`)
+        localError.value = t('auth.socialLoginRedirectFailed')
+        loadingSocial.value = null
+      }
+    }, 5000)
+  }
+  catch (err: unknown) {
+    console.error(`${provider} login error:`, getErrorMessage(err))
+    localError.value = getErrorMessage(err) || t('auth.socialLoginError', { provider: provider.charAt(0).toUpperCase() + provider.slice(1) })
+    loadingSocial.value = null
   }
 }
 

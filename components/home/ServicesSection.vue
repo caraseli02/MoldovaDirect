@@ -27,7 +27,7 @@
           :key="service.title"
           class="group relative overflow-hidden rounded-3xl border border-gray-200 bg-gray-50 p-8 transition hover:-translate-y-1 hover:shadow-xl dark:border-gray-800 dark:bg-gray-900"
         >
-          <div class="absolute inset-0 bg-gradient-to-br from-primary-500/0 via-primary-500/0 to-primary-500/5 transition group-hover:from-primary-500/10 group-hover:to-primary-500/20"></div>
+          <div class="absolute inset-0 bg-primary-500/0 transition group-hover:bg-primary-500/10"></div>
           <div class="relative">
             <span class="inline-flex items-center justify-center rounded-xl bg-primary-100 p-3 text-primary-600">
               <commonIcon

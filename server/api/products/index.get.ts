@@ -65,12 +65,15 @@ export default defineCachedEventHandler(async (event) => {
     const {
       category,
       search,
-      priceMin,
-      priceMax,
-      inStock,
-      featured,
       sort = 'newest',
     } = query
+
+    // Parse numeric and boolean params explicitly (query params come as strings from URL)
+    const priceMin = query.priceMin ? Number(query.priceMin) : undefined
+    const priceMax = query.priceMax ? Number(query.priceMax) : undefined
+    // Query params are strings, so compare both string and boolean for safety
+    const inStock = String(query.inStock) === 'true'
+    const featured = String(query.featured) === 'true'
 
     // Parse pagination params as integers to prevent type coercion bugs
     // Add bounds validation to prevent DoS attacks
@@ -151,8 +154,13 @@ export default defineCachedEventHandler(async (event) => {
     }
 
     // Apply stock filter
-    if (inStock === true) {
+    if (inStock) {
       queryBuilder = queryBuilder.gt('stock_quantity', 0)
+    }
+
+    // Apply featured filter (uses attributes->featured JSONB field)
+    if (featured) {
+      queryBuilder = queryBuilder.eq('attributes->>featured', 'true')
     }
 
     // Apply search filter using PostgreSQL JSONB operators for better performance
@@ -203,7 +211,7 @@ export default defineCachedEventHandler(async (event) => {
 
     if (error) {
       console.error('[Products API] Supabase error:', {
-        message: error.message,
+        message: getServerErrorMessage(error),
         code: error.code,
         timestamp: new Date().toISOString(),
       })
@@ -306,7 +314,7 @@ export default defineCachedEventHandler(async (event) => {
 
     return response
   }
-  catch (error: any) {
+  catch (error: unknown) {
     console.error('[Products API] Error:', {
       error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined,

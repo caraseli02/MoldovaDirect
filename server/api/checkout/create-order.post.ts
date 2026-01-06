@@ -1,6 +1,7 @@
 // POST /api/checkout/create-order - Create order from checkout session
 import { serverSupabaseServiceRole } from '#supabase/server'
 import { createLogger } from '~/server/utils/secureLogger'
+import { validateOrigin } from '~/server/utils/csrfProtection'
 
 const logger = createLogger('checkout-create-order')
 
@@ -67,6 +68,21 @@ interface CreateOrderFromCheckoutRequest {
 
 export default defineEventHandler(async (event) => {
   try {
+    // ========================================
+    // CSRF PROTECTION - Validate request origin
+    // ========================================
+    const originResult = validateOrigin(event)
+    if (!originResult.valid) {
+      logger.warn('CSRF origin validation failed', {
+        reason: originResult.reason,
+        ip: getHeader(event, 'x-forwarded-for') || 'unknown',
+      })
+      throw createError({
+        statusCode: 403,
+        statusMessage: 'Forbidden - Invalid request origin',
+      })
+    }
+
     // Create admin client with service role key (bypasses RLS)
     const supabase = serverSupabaseServiceRole(event)
 
@@ -98,6 +114,133 @@ export default defineEventHandler(async (event) => {
         statusMessage: 'Payment was not successful',
       })
     }
+
+    // ========================================
+    // SERVER-SIDE PRICE VERIFICATION (Security)
+    // ========================================
+    // CRITICAL: Never trust client-sent prices. Always verify against database.
+    const productIds = body.items.map(item => item.productId)
+
+    const { data: dbProducts, error: productsError } = await supabase
+      .from('products')
+      .select('id, price_eur, name_translations, is_active, stock_quantity')
+      .in('id', productIds)
+
+    if (productsError || !dbProducts) {
+      logger.error('Failed to fetch products for price verification', {
+        error: productsError?.message,
+        productIds,
+      })
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Failed to verify product prices',
+      })
+    }
+
+    // Create a map for quick lookup
+    const productPriceMap = new Map(dbProducts.map(p => [p.id, p]))
+
+    // Verify each item and calculate server-side totals
+    let serverSubtotal = 0
+    const verifiedItems: Array<{
+      productId: number
+      productSnapshot: ProductSnapshot
+      quantity: number
+      price: number
+      total: number
+    }> = []
+
+    for (const item of body.items) {
+      const dbProduct = productPriceMap.get(item.productId)
+
+      if (!dbProduct) {
+        logger.warn('Product not found during price verification', {
+          productId: item.productId,
+          sessionId: body.sessionId,
+        })
+        throw createError({
+          statusCode: 400,
+          statusMessage: `Product with ID ${item.productId} not found`,
+        })
+      }
+
+      if (!dbProduct.is_active) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'One or more products are no longer available',
+        })
+      }
+
+      // Use server-side price, not client-sent price
+      const serverPrice = dbProduct.price_eur
+      const serverItemTotal = serverPrice * item.quantity
+      serverSubtotal += serverItemTotal
+
+      // Log price discrepancy if detected (potential fraud attempt)
+      if (Math.abs(item.price - serverPrice) > 0.01) {
+        logger.warn('Price discrepancy detected - potential tampering', {
+          productId: item.productId,
+          clientPrice: item.price,
+          serverPrice: serverPrice,
+          difference: item.price - serverPrice,
+          sessionId: body.sessionId,
+        })
+      }
+
+      // Build verified item with server-side prices
+      verifiedItems.push({
+        productId: item.productId,
+        productSnapshot: {
+          ...item.productSnapshot,
+          price: serverPrice, // Override with server price
+        },
+        quantity: item.quantity,
+        price: serverPrice,
+        total: serverItemTotal,
+      })
+    }
+
+    // Calculate server-side shipping cost based on method
+    const shippingMethod = body.shippingAddress?.method || 'standard'
+    let serverShippingCost = 5.99 // Default standard shipping
+    if (shippingMethod === 'express') {
+      serverShippingCost = 12.99
+    }
+    else if (shippingMethod === 'free' && serverSubtotal >= 50) {
+      serverShippingCost = 0
+    }
+
+    // Calculate server-side tax (configurable, default 0 for now)
+    const TAX_RATE = 0 // No tax in current configuration
+    const serverTax = serverSubtotal * TAX_RATE
+
+    // Calculate server-side total
+    const serverTotal = serverSubtotal + serverShippingCost + serverTax
+
+    // Log if total discrepancy detected
+    if (Math.abs(body.total - serverTotal) > 0.01) {
+      logger.warn('Total discrepancy detected - using server-calculated values', {
+        clientTotal: body.total,
+        serverTotal: serverTotal,
+        clientSubtotal: body.subtotal,
+        serverSubtotal: serverSubtotal,
+        clientShipping: body.shippingCost,
+        serverShipping: serverShippingCost,
+        sessionId: body.sessionId,
+      })
+    }
+
+    logger.info('Price verification completed', {
+      sessionId: body.sessionId,
+      serverSubtotal,
+      serverShippingCost,
+      serverTax,
+      serverTotal,
+      itemCount: verifiedItems.length,
+    })
+
+    // Use verified items and server-calculated totals from here on
+    // ========================================
 
     // Get user from session (optional for guest checkout)
     const authHeader = getHeader(event, 'authorization')
@@ -182,10 +325,10 @@ export default defineEventHandler(async (event) => {
       payment_method: dbPaymentMethod,
       payment_status: paymentStatus,
       payment_intent_id: body.paymentResult.transactionId,
-      subtotal_eur: body.subtotal,
-      shipping_cost_eur: body.shippingCost,
-      tax_eur: body.tax,
-      total_eur: body.total,
+      subtotal_eur: serverSubtotal, // Use server-verified price
+      shipping_cost_eur: serverShippingCost, // Use server-calculated shipping
+      tax_eur: serverTax, // Use server-calculated tax
+      total_eur: serverTotal, // Use server-calculated total
       shipping_address: body.shippingAddress,
       billing_address: body.billingAddress,
     }
@@ -203,13 +346,13 @@ export default defineEventHandler(async (event) => {
       hasGuestEmail: !!orderData.guest_email,
     })
 
-    // Prepare order items for RPC function - ensure productId is a number
-    const orderItemsData = body.items.map(item => ({
+    // Prepare order items for RPC function - use VERIFIED items with server prices
+    const orderItemsData = verifiedItems.map(item => ({
       product_id: typeof item.productId === 'string' ? parseInt(item.productId, 10) : item.productId,
       product_snapshot: item.productSnapshot,
       quantity: item.quantity,
-      price_eur: item.price,
-      total_eur: item.total,
+      price_eur: item.price, // Server-verified price
+      total_eur: item.total, // Server-calculated total
     }))
 
     // Call atomic RPC function that creates order + updates inventory in a single transaction
@@ -253,9 +396,10 @@ export default defineEventHandler(async (event) => {
         })
       }
 
+      // Log full error for debugging but return sanitized message to user
       throw createError({
         statusCode: 500,
-        statusMessage: `Failed to create order: ${rpcError.message || 'Unknown error'}`,
+        statusMessage: 'Failed to create order. Please try again or contact support.',
       })
     }
 
@@ -281,8 +425,8 @@ export default defineEventHandler(async (event) => {
     if (user?.id && body.shippingAddress) {
       try {
         // Extract shipping method from the request
-        // The shipping method might be in different formats, we need to extract the ID/name
-        const shippingMethodId = body.shippingAddress?.method || body.shippingCost > 0 ? 'standard' : 'free'
+        // Use explicit method if provided, otherwise determine based on shipping cost
+        const shippingMethodId = body.shippingAddress?.method || (body.shippingCost > 0 ? 'standard' : 'free')
 
         // Upsert user checkout preferences
         const { error: prefError } = await supabase
@@ -323,19 +467,19 @@ export default defineEventHandler(async (event) => {
       order: {
         id: order.id,
         orderNumber: order.order_number,
-        total: order.total,
+        total: order.total_eur || order.total,
         status: order.status,
         paymentStatus: order.payment_status,
         createdAt: order.created_at,
       },
     }
   }
-  catch (error: any) {
-    if (error.statusCode) {
+  catch (error: unknown) {
+    if (isH3Error(error)) {
       throw error
     }
 
-    logger.error('Order creation failed', { error: error.message || 'Unknown error' })
+    logger.error('Order creation failed', { error: getServerErrorMessage(error) })
     throw createError({
       statusCode: 500,
       statusMessage: 'Internal server error',

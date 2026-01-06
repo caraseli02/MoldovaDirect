@@ -69,6 +69,41 @@ type Subscription = { unsubscribe: () => void }
 let authSubscription: Subscription | null = null
 let stopUserWatcher: WatchStopHandle | null = null
 
+// Returns null when route is unavailable (SSR) - callers must handle null case
+const getSafeRoute = () => {
+  const nuxtApp = useNuxtApp()
+  const route = nuxtApp?._route
+  if (!route) {
+    if (import.meta.dev) {
+      console.debug('[auth-store] Route not available during SSR')
+    }
+    return null
+  }
+  return route
+}
+
+const getSafeLocalePath = () => {
+  const nuxtApp = useNuxtApp()
+  const localePath = (nuxtApp as any)?.$localePath as ((input: any) => string) | undefined
+  if (localePath) return localePath
+
+  if (import.meta.dev) {
+    console.debug('[auth-store] $localePath not available, using fallback path resolution')
+  }
+
+  // Fallback: try to preserve current locale from route params
+  const currentLocale = nuxtApp?._route?.params?.locale || 'es'
+
+  return (input: any) => {
+    const path = typeof input === 'string' ? input : input?.path || '/'
+    // Prepend locale if path doesn't already have one
+    if (path.startsWith('/') && !path.match(/^\/(es|en|ro|ru)(\/|$)/)) {
+      return `/${currentLocale}${path}`
+    }
+    return path
+  }
+}
+
 export interface AuthState extends TestUserState {
   user: AuthUser | null
   loading: boolean
@@ -257,8 +292,8 @@ export const useAuthStore = defineStore('auth', {
 
         this.sessionInitialized = true
       }
-      catch (error: any) {
-        console.error('Failed to initialize auth:', error)
+      catch (error: unknown) {
+        console.error('Failed to initialize auth:', getErrorMessage(error))
         this.error = 'Failed to initialize authentication'
       }
     },
@@ -368,11 +403,17 @@ export const useAuthStore = defineStore('auth', {
 
         // Redirect to login page when session expires or user logs out
         if (import.meta.client) {
-          const route = useRoute()
-          const localePath = useLocalePath()
+          const route = getSafeRoute()
+          const localePath = getSafeLocalePath()
+
+          // Skip redirect if route not available (shouldn't happen on client)
+          if (!route) {
+            console.warn('[auth-store] Cannot redirect: route not available')
+            return
+          }
 
           // Only redirect if not already on auth pages
-          if (!route.path.startsWith('/auth')) {
+          if (!route.path?.startsWith('/auth')) {
             navigateTo({
               path: localePath('/auth/login'),
               query: {
@@ -427,10 +468,10 @@ export const useAuthStore = defineStore('auth', {
 
         if (error) {
           // Handle specific authentication errors
-          if (error.message.includes('Invalid login credentials')) {
+          if (getErrorMessage(error).includes('Invalid login credentials')) {
             this.error = translateAuthError('Invalid login credentials', 'login')
           }
-          else if (error.message.includes('Email not confirmed')) {
+          else if (getErrorMessage(error).includes('Email not confirmed')) {
             this.error = translateAuthError('Email not confirmed', 'login')
             // Redirect to verification page
             await navigateTo({
@@ -442,13 +483,13 @@ export const useAuthStore = defineStore('auth', {
             })
             return
           }
-          else if (error.message.includes('Too many requests')) {
+          else if (getErrorMessage(error).includes('Too many requests')) {
             // Handle rate limiting
             this.lockoutTime = triggerAccountLockout(15)
             this.error = translateAuthError('Too many requests', 'login')
           }
           else {
-            this.error = translateAuthError(error.message, 'login')
+            this.error = translateAuthError(getErrorMessage(error), 'login')
           }
           throw new Error(this.error)
         }
@@ -474,8 +515,8 @@ export const useAuthStore = defineStore('auth', {
             }
             await this.challengeMFA(firstFactor.id)
 
-            const route = useRoute()
-            const redirect = route.query.redirect as string
+            const route = getSafeRoute()
+            const redirect = route?.query?.redirect as string
             await navigateTo({
               path: '/auth/mfa-verify',
               query: { redirect: redirect || '/account' },
@@ -489,8 +530,8 @@ export const useAuthStore = defineStore('auth', {
           )
 
           // Handle redirect after successful login
-          const route = useRoute()
-          const redirect = route.query.redirect as string
+          const route = getSafeRoute()
+          const redirect = route?.query?.redirect as string
           // Prevent open redirect attacks - only allow relative paths, not protocol-relative URLs
           if (redirect && redirect.startsWith('/') && !redirect.startsWith('//')) {
             await navigateTo(redirect)
@@ -500,8 +541,8 @@ export const useAuthStore = defineStore('auth', {
           }
         }
       }
-      catch (error: any) {
-        const errorMessage = error instanceof Error ? error.message : 'Login failed'
+      catch (error: unknown) {
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : 'Login failed'
         this.error = errorMessage
 
         toastStore.error(
@@ -564,7 +605,7 @@ export const useAuthStore = defineStore('auth', {
         })
 
         if (error) {
-          if (error.message.includes('User already registered')) {
+          if (getErrorMessage(error).includes('User already registered')) {
             this.error = translateAuthError('User already registered', 'register')
             // Provide link to login page
             toastStore.error(
@@ -577,7 +618,7 @@ export const useAuthStore = defineStore('auth', {
             )
           }
           else {
-            this.error = translateAuthError(error.message, 'register')
+            this.error = translateAuthError(getErrorMessage(error), 'register')
           }
           throw new Error(this.error)
         }
@@ -598,8 +639,8 @@ export const useAuthStore = defineStore('auth', {
           })
         }
       }
-      catch (error: any) {
-        const errorMessage = error instanceof Error ? error.message : 'Registration failed'
+      catch (error: unknown) {
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : 'Registration failed'
         this.error = errorMessage
 
         if (!errorMessage.includes('ya registrado')) {
@@ -638,7 +679,7 @@ export const useAuthStore = defineStore('auth', {
         })
 
         if (error) {
-          this.error = translateAuthError(error.message, 'verify')
+          this.error = translateAuthError(getErrorMessage(error), 'verify')
           throw new Error(this.error)
         }
 
@@ -653,8 +694,8 @@ export const useAuthStore = defineStore('auth', {
           query: { message: 'email-verified' },
         })
       }
-      catch (error: any) {
-        const errorMessage = error instanceof Error ? error.message : 'Email verification failed'
+      catch (error: unknown) {
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : 'Email verification failed'
         this.error = errorMessage
 
         toastStore.error(
@@ -696,7 +737,7 @@ export const useAuthStore = defineStore('auth', {
         })
 
         if (error) {
-          this.error = translateAuthError(error.message, 'verify')
+          this.error = translateAuthError(getErrorMessage(error), 'verify')
           throw new Error(this.error)
         }
 
@@ -705,8 +746,8 @@ export const useAuthStore = defineStore('auth', {
           'Se ha enviado un nuevo email de verificación. Revisa tu bandeja de entrada.',
         )
       }
-      catch (error: any) {
-        const errorMessage = error instanceof Error ? error.message : 'Failed to resend verification'
+      catch (error: unknown) {
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : 'Failed to resend verification'
         this.error = errorMessage
 
         toastStore.error(
@@ -745,7 +786,7 @@ export const useAuthStore = defineStore('auth', {
         )
 
         if (error) {
-          this.error = translateAuthError(error.message, 'reset')
+          this.error = translateAuthError(getErrorMessage(error), 'reset')
           throw new Error(this.error)
         }
 
@@ -754,8 +795,8 @@ export const useAuthStore = defineStore('auth', {
           'Si el email existe, recibirás instrucciones para restablecer tu contraseña.',
         )
       }
-      catch (error: any) {
-        const errorMessage = error instanceof Error ? error.message : 'Password reset request failed'
+      catch (error: unknown) {
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : 'Password reset request failed'
         this.error = errorMessage
 
         toastStore.error(
@@ -791,7 +832,7 @@ export const useAuthStore = defineStore('auth', {
         })
 
         if (error) {
-          this.error = translateAuthError(error.message, 'reset')
+          this.error = translateAuthError(getErrorMessage(error), 'reset')
           throw new Error(this.error)
         }
 
@@ -806,8 +847,8 @@ export const useAuthStore = defineStore('auth', {
           query: { message: 'password-reset' },
         })
       }
-      catch (error: any) {
-        const errorMessage = error instanceof Error ? error.message : 'Password reset failed'
+      catch (error: unknown) {
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : 'Password reset failed'
         this.error = errorMessage
 
         toastStore.error(
@@ -868,8 +909,8 @@ export const useAuthStore = defineStore('auth', {
           query: { message: 'logged-out' },
         })
       }
-      catch (error: any) {
-        console.error('Logout failed:', error)
+      catch (error: unknown) {
+        console.error('Logout failed:', getErrorMessage(error))
 
         // Force logout even if there's an error
         this.user = null
@@ -928,8 +969,8 @@ export const useAuthStore = defineStore('auth', {
         })
 
         if (error) {
-          this.profileError = error.message
-          throw new Error(error.message)
+          this.profileError = getErrorMessage(error)
+          throw new Error(getErrorMessage(error))
         }
 
         // Update local user state
@@ -946,8 +987,8 @@ export const useAuthStore = defineStore('auth', {
           'Tu perfil ha sido actualizado correctamente.',
         )
       }
-      catch (error: any) {
-        const errorMessage = error instanceof Error ? error.message : 'Profile update failed'
+      catch (error: unknown) {
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : 'Profile update failed'
         this.profileError = errorMessage
 
         toastStore.error(
@@ -978,7 +1019,7 @@ export const useAuthStore = defineStore('auth', {
           },
         })
       }
-      catch (error: any) {
+      catch (error: unknown) {
         // Non-critical error, just log it
         console.warn('Failed to update last login:', error)
       }
@@ -1022,7 +1063,7 @@ export const useAuthStore = defineStore('auth', {
           // Let Supabase handle automatic logout if refresh fails
         }
       }
-      catch (error: any) {
+      catch (error: unknown) {
         console.warn('Session refresh error:', error)
       }
     },
@@ -1045,8 +1086,8 @@ export const useAuthStore = defineStore('auth', {
         this.mfaEnrollment = enrollment
         return enrollment
       }
-      catch (error: any) {
-        const errorMessage = error instanceof Error ? error.message : 'MFA enrollment failed'
+      catch (error: unknown) {
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : 'MFA enrollment failed'
         this.mfaError = errorMessage
         throw error
       }
@@ -1078,8 +1119,8 @@ export const useAuthStore = defineStore('auth', {
         // Clear enrollment data
         this.mfaEnrollment = null
       }
-      catch (error: any) {
-        const errorMessage = error instanceof Error ? error.message : 'MFA verification failed'
+      catch (error: unknown) {
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : 'MFA verification failed'
         this.mfaError = errorMessage
         throw error
       }
@@ -1110,8 +1151,8 @@ export const useAuthStore = defineStore('auth', {
         this.mfaChallenge = challenge
         return challenge
       }
-      catch (error: any) {
-        const errorMessage = error instanceof Error ? error.message : 'MFA challenge failed'
+      catch (error: unknown) {
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : 'MFA challenge failed'
         this.mfaError = errorMessage
         throw error
       }
@@ -1138,8 +1179,8 @@ export const useAuthStore = defineStore('auth', {
         // Clear challenge
         this.mfaChallenge = null
       }
-      catch (error: any) {
-        const errorMessage = error instanceof Error ? error.message : 'MFA verification failed'
+      catch (error: unknown) {
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : 'MFA verification failed'
         this.mfaError = errorMessage
         throw error
       }
@@ -1164,8 +1205,8 @@ export const useAuthStore = defineStore('auth', {
         const supabaseUser = useSupabaseUser()
         await this.syncUserState(supabaseUser.value)
       }
-      catch (error: any) {
-        const errorMessage = error instanceof Error ? error.message : 'Failed to disable MFA'
+      catch (error: unknown) {
+        const errorMessage = error instanceof Error ? getErrorMessage(error) : 'Failed to disable MFA'
         this.mfaError = errorMessage
         throw error
       }

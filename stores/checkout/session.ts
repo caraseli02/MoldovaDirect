@@ -185,7 +185,7 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
 
   const handleError = (error: CheckoutError): void => {
     state.lastError = error
-    state.errors[error.field || 'general'] = error.message
+    state.errors[error.field || 'general'] = getErrorMessage(error)
   }
 
   const clearError = (field?: string): void => {
@@ -255,8 +255,8 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
       checkoutCookie.value = snapshot as any
       await nextTick() // Wait for cookie write to complete
     }
-    catch (error: any) {
-      console.error('Failed to persist checkout session:', error)
+    catch (error: unknown) {
+      console.error('Failed to persist checkout session:', getErrorMessage(error))
     }
   }
 
@@ -293,8 +293,8 @@ export const useCheckoutSessionStore = defineStore('checkout-session', () => {
         paymentMethod: sanitizedPaymentMethod,
       }
     }
-    catch (error: any) {
-      console.error('Failed to restore checkout session:', error)
+    catch (error: unknown) {
+      console.error('Failed to restore checkout session:', getErrorMessage(error))
       clearStorage()
       return null
     }
