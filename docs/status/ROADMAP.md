@@ -210,7 +210,7 @@ Build a premium e-commerce platform for authentic Moldovan products with seamles
 ## 📝 Notes
 
 ### Dependencies
-- Cloudflare infrastructure
+- Vercel + Supabase infrastructure
 - Stripe/PayPal accounts
 - Email service provider
 - Analytics platforms

@@ -1,12 +1,12 @@
 {
-  "category": "Accessibility & Reka UI Compliance",
-  "categoryId": "accessibility-reka",
-  "skill": "reka-ui",
+  "category": "Component Testing Coverage",
+  "categoryId": "component-testing-coverage",
+  "skill": "vue",
   "priority": "P1-high",
-  "stepId": "a11y-7",
-  "description": "Fix CSS-only tooltip in MediaMentions to be keyboard accessible",
-  "file": "components/home/MediaMentions.vue",
-  "testFile": "tests/components/home/__tests__/MediaMentions.test.ts",
+  "stepId": "comp-test-22",
+  "description": "Add unit tests for layout LanguageSwitcher",
+  "file": "components/layout/LanguageSwitcher.vue",
+  "testFile": "tests/components/layout/__tests__/LanguageSwitcher.test.ts",
   "testExists": false,
   "implemented": false
 }

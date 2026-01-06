@@ -175,9 +175,8 @@ tests/
 - `.env.example` - Template with all required variables
 - `.env` - Local development (gitignored)
 - `.env.test` - Testing environment
-- `wrangler.toml` - Cloudflare-specific configuration
 
 ### Variable Naming
 - `NUXT_` prefix for Nuxt-specific variables
-- `CLOUDFLARE_` prefix for Cloudflare credentials
+- `SUPABASE_` prefix for Supabase credentials
 - `JWT_` prefix for authentication secrets

@@ -840,8 +840,8 @@ git rm server/api/upload/*.disabled
 ```typescript
 /**
  * DISABLED: 2025-11-01
- * Reason: Migrating to Cloudflare R2 for image storage
- * Will re-enable after R2 integration is complete
+ * Reason: Migrating to Supabase Storage for image storage
+ * Will re-enable after storage integration is complete
  * See: Issue #XX
  */
 ```

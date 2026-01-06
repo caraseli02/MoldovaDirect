@@ -5,7 +5,7 @@
 ## 🚀 Quick Start
 
 ```bash
-# Install dependencies
+# Install dependencies (this project uses pnpm)
 pnpm install
 
 # Set up environment variables
@@ -19,7 +19,7 @@ pnpm dev
 http://localhost:3000
 ```
 
-**New to the project?** See [QUICK_START_GUIDE.md](./QUICK_START_GUIDE.md) for a comprehensive getting started guide.
+**New to the project?** See [Quick Start Guide](./docs/getting-started/QUICK_START_GUIDE.md) for a comprehensive getting started guide with Day 1 Checklist.
 
 ## 🔧 Development Setup
 
@@ -75,29 +75,29 @@ With Supabase, database management is handled through the Supabase dashboard:
 ### Deployment Commands
 ```bash
 # Build for production
-npm run build
+pnpm build
 
 # Deploy to Vercel (production)
-npm run deploy
+pnpm deploy
 
 # Deploy to Vercel (preview)
-npm run deploy:preview
+pnpm deploy:preview
 ```
 
 ## 📚 Documentation
 
 **Quick Links:**
-- **[Documentation Index](./docs/meta/DOCUMENTATION_INDEX.md)** - Master index of all documentation
-- **[Quick Start Guide](./docs/getting-started/QUICK_START_GUIDE.md)** - Get started in 5 minutes
-- **[Documentation Summary](./docs/meta/DOCUMENTATION_SUMMARY.md)** - Overview of all documentation (Updated Nov 1, 2025)
-- **[Code Review 2025](./docs/analysis/CODE_REVIEW_2025.md)** - Security and architecture analysis
+- **[Documentation Hub](./docs/README.md)** - Start here for all documentation
+- **[Quick Start Guide](./docs/getting-started/QUICK_START_GUIDE.md)** - Get started in 30 minutes
+- **[Code Conventions](./docs/development/code-conventions.md)** - How we write code
+- **[Project Status](./docs/status/PROJECT_STATUS.md)** - Current state and priorities
 
 **Project Status & Planning:**
 - **[Project Status](docs/status/PROJECT_STATUS.md)** - Current state and health
 - **[Roadmap](docs/status/ROADMAP.md)** - Development timeline
 - **[Progress](docs/status/PROGRESS.md)** - Completed milestones
 - **[Feature Specifications](docs/specs/)** - Feature requirements and designs
-- **[Troubleshooting Components](docs/development/troubleshooting-components.md)** - Fix for duplicate component names, shadcn-vue auto-imports, and casing
+- **[Troubleshooting Components](docs/development/troubleshooting-components.md)** - Fix for duplicate component names, auto-imports, and casing
 
 ### QA & Simulation Utilities
 
@@ -116,7 +116,7 @@ Use the built-in QA dashboards to simulate user activity without touching produc
 - Multi-step checkout UI with shipping, payment, and review steps
 - Order API endpoints with customer order history
 - Admin dashboard views for products and users
-- Dark/light theme system and shadcn-vue UI migration
+- Dark/light theme system with custom UI components
 - Stripe payment integration (primary payment processor)
 - Email notification system with Resend
 
@@ -147,14 +147,14 @@ Use the built-in QA dashboards to simulate user activity without touching produc
 - Organized test scripts into `scripts/` directory
 - Streamlined payment processing to focus on Stripe
 
-See [.kiro/ROADMAP.md](.kiro/ROADMAP.md) for detailed timeline.
+See [Roadmap](docs/status/ROADMAP.md) for detailed timeline.
 
 ## 🛠 Tech Stack
 
 ### Frontend
-- **Framework**: Nuxt 3.17+ with Vue 3.5 Composition API
+- **Framework**: Nuxt 4.2+ with Vue 3.5 Composition API
 - **Language**: TypeScript with strict type checking
-- **UI Components**: shadcn-vue component library
+- **UI Components**: Custom component library (lightweight, accessible)
 - **Styling**: Tailwind CSS v4 with CSS variables
 - **State Management**: Pinia stores
 - **Internationalization**: @nuxtjs/i18n with lazy loading (ES/EN/RO/RU)
@@ -410,19 +410,19 @@ Unit tests for composables, components, and utilities using Vitest.
 
 ```bash
 # Run unit tests
-npm run test:unit
+pnpm test:unit
 
 # Run unit tests in watch mode
-npm run test:unit:watch
+pnpm test:unit:watch
 
 # Run unit tests with UI
-npm run test:unit:ui
+pnpm test:unit:ui
 
 # Run unit tests with coverage
-npm run test:coverage
+pnpm test:coverage
 
 # View coverage report in browser
-npm run test:coverage:ui
+pnpm test:coverage:ui
 ```
 
 #### Unit Test Coverage Status
@@ -484,55 +484,55 @@ tests/
 #### Basic Testing
 ```bash
 # Run all tests
-npm test
+pnpm test
 
 # Run tests with UI
-npm run test:ui
+pnpm test:ui
 
 # Run tests in headed mode (see browser)
-npm run test:headed
+pnpm test:headed
 
 # Debug tests
-npm run test:debug
+pnpm test:debug
 ```
 
 #### Browser-specific Testing
 ```bash
 # Test specific browsers
-npm run test:chromium
-npm run test:firefox
-npm run test:webkit
-npm run test:mobile
+pnpm test:chromium
+pnpm test:firefox
+pnpm test:webkit
+pnpm test:mobile
 ```
 
 #### Feature-specific Testing
 ```bash
 # Test specific features
-npm run test:auth        # Authentication flows
-npm run test:products    # Product browsing
-npm run test:checkout    # Shopping cart & checkout
-npm run test:i18n        # Internationalization
+pnpm test:auth        # Authentication flows
+pnpm test:products    # Product browsing
+pnpm test:checkout    # Shopping cart & checkout
+pnpm test:i18n        # Internationalization
 ```
 
 #### Visual Testing
 ```bash
 # Run visual regression tests
-npm run test:visual
+pnpm test:visual
 
 # Update visual snapshots
-npm run test:visual:update
+pnpm test:visual:update
 ```
 
 #### Test Reports
 ```bash
 # Show test report
-npm run test:report
+pnpm test:report
 ```
 
 #### Setup Commands
 ```bash
 # Install browsers and dependencies
-npm run test:setup
+pnpm test:setup
 ```
 
 ### Test Configuration
@@ -561,27 +561,27 @@ Tests run across all supported locales:
    ```bash
    # Copy test environment file
    cp .env.example .env.test
-   
+
    # Install test dependencies
-   npm run test:setup
+   pnpm test:setup
    ```
 
 2. **Start Database** (if testing with real DB)
    ```bash
    # Start local PostgreSQL
    docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=postgres postgres:15
-   
+
    # Run migrations
-   npm run db:push
+   pnpm db:push
    ```
 
 3. **Run Tests**
    ```bash
    # Run all tests
-   npm test
-   
+   pnpm test
+
    # Run specific test suite
-   npm run test:auth
+   pnpm test:auth
    ```
 
 ### CI/CD Integration
@@ -662,7 +662,7 @@ Tests use isolated test database with:
 ### Troubleshooting
 
 #### Common Issues
-- **Browser installation**: Run `npm run test:setup`
+- **Browser installation**: Run `pnpm test:setup`
 - **Port conflicts**: Ensure dev server runs on port 3000
 - **Database connection**: Check PostgreSQL is running
 - **Locale issues**: Verify i18n configuration
@@ -670,7 +670,7 @@ Tests use isolated test database with:
 #### Debug Mode
 ```bash
 # Run single test in debug mode
-npm run test:debug -- tests/e2e/auth.spec.ts
+pnpm test:debug -- tests/e2e/auth.spec.ts
 ```
 
 ## 🚀 Deployment

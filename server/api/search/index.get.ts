@@ -18,6 +18,15 @@ export default defineCachedEventHandler(async (event) => {
     const searchTerm = query.q as string
     const locale = (query.locale as string) || 'es'
     const category = query.category as string
+    const sort = (query.sort as string) || 'created'
+
+    // Parse numeric and boolean filter parameters with validation
+    const priceMinRaw = query.priceMin ? Number(query.priceMin) : undefined
+    const priceMaxRaw = query.priceMax ? Number(query.priceMax) : undefined
+    const priceMin = priceMinRaw !== undefined && !isNaN(priceMinRaw) && priceMinRaw >= 0 ? priceMinRaw : undefined
+    const priceMax = priceMaxRaw !== undefined && !isNaN(priceMaxRaw) && priceMaxRaw >= 0 ? priceMaxRaw : undefined
+    const inStock = String(query.inStock) === 'true'
+    const featured = String(query.featured) === 'true'
 
     // Parse and validate pagination parameters
     const MAX_LIMIT = 100
@@ -77,6 +86,24 @@ export default defineCachedEventHandler(async (event) => {
       queryBuilder = queryBuilder.eq('categories.slug', category)
     }
 
+    // Apply price filters
+    if (priceMin !== undefined) {
+      queryBuilder = queryBuilder.gte('price_eur', priceMin)
+    }
+    if (priceMax !== undefined) {
+      queryBuilder = queryBuilder.lte('price_eur', priceMax)
+    }
+
+    // Apply stock filter
+    if (inStock) {
+      queryBuilder = queryBuilder.gt('stock_quantity', 0)
+    }
+
+    // Apply featured filter (uses attributes->featured JSONB field)
+    if (featured) {
+      queryBuilder = queryBuilder.eq('attributes->>featured', 'true')
+    }
+
     // Apply search filter using PostgreSQL JSONB operators
     // This searches across all language translations (es, en, ro, ru)
     // Sanitize search term to prevent SQL injection and escape special characters
@@ -93,6 +120,28 @@ export default defineCachedEventHandler(async (event) => {
       + `sku.ilike.${searchPattern}`,
     )
 
+    // Apply sorting (database-level for better performance)
+    switch (sort) {
+      case 'price_asc':
+        queryBuilder = queryBuilder.order('price_eur', { ascending: true })
+        break
+      case 'price_desc':
+        queryBuilder = queryBuilder.order('price_eur', { ascending: false })
+        break
+      case 'name':
+        queryBuilder = queryBuilder.order('name_translations', { ascending: true })
+        break
+      case 'featured':
+        queryBuilder = queryBuilder.order('created_at', { ascending: false })
+        break
+      case 'created':
+      case 'newest':
+      default:
+        // Default: sort by relevance (done in JavaScript after query)
+        // We'll keep the JavaScript sorting for relevance-based results
+        break
+    }
+
     const { data: matchingProducts, error } = await queryBuilder
 
     if (error) {
@@ -103,35 +152,40 @@ export default defineCachedEventHandler(async (event) => {
       })
     }
 
-    // Sort by relevance (exact matches first, then partial matches)
+    // Prepare lowercase search term for relevance calculations
     const searchTermLower = searchTerm.toLowerCase().trim()
-    ;(matchingProducts || []).sort((a, b) => {
-      const aName = getLocalizedContent(a.name_translations, locale).toLowerCase()
-      const bName = getLocalizedContent(b.name_translations, locale).toLowerCase()
 
-      // Exact matches first
-      if (aName === searchTermLower && bName !== searchTermLower) return -1
-      if (bName === searchTermLower && aName !== searchTermLower) return 1
+    // Sort by relevance (exact matches first, then partial matches)
+    // Only apply relevance sorting when no specific sort is requested
+    if (!sort || sort === 'created' || sort === 'newest') {
+      ;(matchingProducts || []).sort((a, b) => {
+        const aName = getLocalizedContent(a.name_translations, locale).toLowerCase()
+        const bName = getLocalizedContent(b.name_translations, locale).toLowerCase()
 
-      // Name starts with search term
-      if (aName.startsWith(searchTermLower) && !bName.startsWith(searchTermLower)) return -1
-      if (bName.startsWith(searchTermLower) && !aName.startsWith(searchTermLower)) return 1
+        // Exact matches first
+        if (aName === searchTermLower && bName !== searchTermLower) return -1
+        if (bName === searchTermLower && aName !== searchTermLower) return 1
 
-      // Shorter names first (more specific)
-      if (aName.length !== bName.length) {
-        return aName.length - bName.length
-      }
+        // Name starts with search term
+        if (aName.startsWith(searchTermLower) && !bName.startsWith(searchTermLower)) return -1
+        if (bName.startsWith(searchTermLower) && !aName.startsWith(searchTermLower)) return 1
 
-      // Finally by stock quantity (in stock first)
-      return b.stock_quantity - a.stock_quantity
-    })
+        // Shorter names first (more specific)
+        if (aName.length !== bName.length) {
+          return aName.length - bName.length
+        }
+
+        // Finally by stock quantity (in stock first)
+        return b.stock_quantity - a.stock_quantity
+      })
+    }
 
     // Calculate pagination offset
     const offset = (page - 1) * limit
     const total = matchingProducts?.length || 0
 
-    // Slice results for current page
-    const limitedResults = matchingProducts.slice(offset, offset + limit)
+    // Slice results for current page (with null safety)
+    const limitedResults = (matchingProducts || []).slice(offset, offset + limit)
 
     // Transform products to match expected format
     const transformedProducts = limitedResults.map(product => ({

@@ -507,7 +507,7 @@ const {
 // Local state
 const viewMode = ref<'grid' | 'list'>('grid')
 const searchQuery = ref('')
-const scrollContainer = ref<HTMLElement | null>(null)
+const scrollContainer = useTemplateRef<HTMLElement>('scrollContainer')
 const smartFilter = ref<'in-transit' | 'delivered-month' | 'last-3-months' | null>(null)
 
 // For compatibility with URL params
