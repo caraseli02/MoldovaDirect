@@ -36,6 +36,7 @@
     "retry": "Reîncearcă",
     "cancel": "Anulează",
     "keepIt": "Păstrează",
+    "save": "Salvează",
     "undo": "Anulează acțiunea",
     "showMore": "Arată Mai Mult",
     "showLess": "Arată Mai Puțin",
@@ -215,6 +216,7 @@
       "name": {
         "required": "Numele complet este obligatoriu",
         "minLength": "Numele trebuie să aibă cel puțin 2 caractere",
+        "maxLength": "Numele nu poate depăși 100 de caractere",
         "invalid": "Te rugăm să introduci un nume valid"
       },
       "phone": {
@@ -1390,6 +1392,18 @@
         "returns": {
           "question": "Ce fac dacă ajunge deteriorat?",
           "answer": "Anunță-ne în primele 7 zile și organizăm imediat înlocuire sau rambursare."
+        },
+        "care": {
+          "question": "Cum ar trebui să îngrijesc acest articol?",
+          "answer": "Urmează instrucțiunile de îngrijire de pe eticheta produsului. Pentru textile, recomandăm spălare delicată și uscare la aer pentru a păstra calitatea."
+        },
+        "materials": {
+          "question": "Din ce materiale este făcut?",
+          "answer": "Toate materialele sunt listate pe pagina produsului. Produsele noastre artizanale folosesc materiale tradiționale de înaltă calitate, provenite local din Moldova."
+        },
+        "origin": {
+          "question": "De unde provine acest produs?",
+          "answer": "Acest produs este confecționat manual de meșteri pricepuți din Moldova, urmând tehnici tradiționale transmise din generație în generație."
         }
       }
     },
@@ -2350,6 +2364,90 @@
         "registered": "Înregistrat",
         "lastLogin": "Ultima Autentificare",
         "actions": "Acțiuni"
+      },
+      "actions": {
+        "menu": "Meniu acțiuni utilizator",
+        "viewDetails": "Vezi Detalii",
+        "editProfile": "Editează Profil",
+        "verifyEmail": "Verifică Email",
+        "resetPassword": "Resetează Parola",
+        "manageRole": "Gestionează Rol",
+        "suspendAccount": "Suspendă Cont",
+        "unsuspendAccount": "Reactivează Cont",
+        "banAccount": "Interzice Cont",
+        "unbanAccount": "Ridică Interdicția"
+      },
+      "modal": {
+        "noName": "Fără nume",
+        "suspensionDuration": "Durata Suspendării",
+        "selectDuration": "Selectează durata",
+        "newRole": "Rol Nou",
+        "selectRole": "Selectează un rol",
+        "reason": "Motiv",
+        "required": "(Obligatoriu)",
+        "optional": "(Opțional)",
+        "additionalNotes": "Note Adiționale (Opțional)",
+        "additionalNotesPlaceholder": "Orice informații suplimentare...",
+        "durations": {
+          "indefinite": "Nedeterminat",
+          "oneDay": "1 zi",
+          "threeDays": "3 zile",
+          "oneWeek": "1 săptămână",
+          "oneMonth": "1 lună"
+        },
+        "roles": {
+          "user": "Utilizator",
+          "moderator": "Moderator",
+          "admin": "Administrator"
+        },
+        "titles": {
+          "suspend": "Suspendă Contul Utilizatorului",
+          "ban": "Interzice Contul Utilizatorului",
+          "verifyEmail": "Verifică Email-ul Utilizatorului",
+          "resetPassword": "Resetează Parola Utilizatorului",
+          "updateRole": "Actualizează Rolul Utilizatorului",
+          "confirm": "Confirmă Acțiunea"
+        },
+        "descriptions": {
+          "suspend": "Restricționează temporar accesul utilizatorului la contul său.",
+          "ban": "Dezactivează permanent accesul utilizatorului la contul său.",
+          "verifyEmail": "Marchează adresa de email a utilizatorului ca verificată.",
+          "resetPassword": "Generează un link de resetare a parolei pentru utilizator.",
+          "updateRole": "Schimbă rolul și permisiunile utilizatorului.",
+          "confirm": "Te rugăm să confirmi această acțiune."
+        },
+        "placeholders": {
+          "suspend": "De ce este suspendat acest cont?",
+          "ban": "De ce este interzis acest cont?",
+          "verifyEmail": "De ce este verificat manual email-ul?",
+          "resetPassword": "De ce este resetată parola?",
+          "updateRole": "De ce este schimbat rolul?",
+          "default": "Motivul acestei acțiuni..."
+        },
+        "warnings": {
+          "suspend": "Utilizatorul nu va putea să se autentifice până când suspendarea nu este ridicată.",
+          "resetPassword": "Utilizatorul va primi un email de resetare a parolei și sesiunea curentă va fi invalidată.",
+          "updateRole": "Schimbarea rolului utilizatorului va afecta permisiunile imediat."
+        },
+        "dangers": {
+          "ban": "Această acțiune va dezactiva permanent contul utilizatorului. Nu poate fi anulată ușor."
+        },
+        "buttons": {
+          "suspend": "Suspendă Cont",
+          "ban": "Interzice Cont",
+          "verifyEmail": "Verifică Email",
+          "resetPassword": "Resetează Parola",
+          "updateRole": "Actualizează Rol",
+          "confirm": "Confirmă"
+        }
+      }
+    },
+    "imageUpload": {
+      "altTextModal": {
+        "title": "Editează Text Alternativ",
+        "description": "Adaugă sau editează textul alternativ pentru această imagine (pentru accesibilitate).",
+        "label": "Text Alternativ (pentru accesibilitate)",
+        "placeholder": "Descrie această imagine..."
       }
     }
   },

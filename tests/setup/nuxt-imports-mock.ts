@@ -93,6 +93,20 @@ export const useLocalePath = global.useLocalePath || vi.fn(() => (path: any) => 
 export const useSupabaseClient = global.useSupabaseClient || vi.fn()
 export const useSupabaseUser = global.useSupabaseUser || vi.fn()
 export const createError = global.createError || vi.fn()
+export const useProducers = global.useProducers || vi.fn(() => ({
+  featuredProducers: ref([]),
+  loading: ref(false),
+  error: ref(null),
+  fetchProducers: vi.fn(),
+}))
+export const usePairingGuides = global.usePairingGuides || vi.fn(() => ({
+  pairings: ref([]),
+  loading: ref(false),
+  error: ref(null),
+  fetchPairings: vi.fn(),
+  applyFilters: vi.fn(),
+  clearFilters: vi.fn(),
+}))
 
 // Error utility functions (auto-imported from utils/errorUtils.ts)
 export function getErrorMessage(error: unknown): string {

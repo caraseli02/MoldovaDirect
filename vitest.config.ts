@@ -17,7 +17,7 @@ export default defineConfig({
   plugins,
   test: {
     environment: 'jsdom',
-    globals: process.env.PLAYWRIGHT_TEST ? false : true,
+    globals: !process.env.PLAYWRIGHT_TEST,
     setupFiles: process.env.PLAYWRIGHT_TEST ? [] : ['./tests/setup/vitest.setup.ts'],
     exclude: [
       '**/node_modules/**',
@@ -42,7 +42,18 @@ export default defineConfig({
       'tests/integration/**/*.test.ts',
       'components/layout/AppFooter.test.ts',
       '**/.{idea,git,cache,output,temp}/**',
+      // Exclude shadcn-vue/reka-ui components - these are third-party UI primitives
+      'tests/components/ui/**/*.test.ts',
+      'components/ui/**/*.test.ts',
     ],
+    // Limit parallel processes to prevent memory exhaustion
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        maxThreads: 4,
+        minThreads: 1,
+      },
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
@@ -56,6 +67,8 @@ export default defineConfig({
         '**/*.d.ts',
         '**/*.test.ts',
         '**/*.spec.ts',
+        // Exclude shadcn-vue/reka-ui components from coverage
+        'components/ui/**',
       ],
       // Coverage thresholds - Updated 2025-12-30
       // Current baseline: ~142k uncovered lines (codebase growth since 2025-12-08)

@@ -2,16 +2,16 @@
 
 ## Executive Summary
 
-Moldova Direct is an e-commerce platform specializing in authentic Moldovan food and wine products with delivery to Spain. The project is currently in active development with significant progress across foundation, product catalog, authentication, and shopping cart features.
+Moldova Direct is an e-commerce platform specializing in authentic Moldovan food and wine products with delivery to Spain. The project is currently in active development with significant progress across foundation, product catalog, authentication, shopping cart, and checkout features.
 
-**Current Phase**: Phase 5 - Payment & Notifications Integration (Checkout UI delivered)  
-**Previous Phase**: shadcn-vue UI Libraries Scaffolded ✅ (Aug 31, 2025); Adoption Ongoing
+**Current Phase**: Phase 5 - Payment & Notifications Integration
+**Previous Phase**: Checkout UI Complete ✅ (Jan 2026); Custom Component System Adopted
 
 ## 🏗️ Architecture Overview
 
 ### Technology Stack
-- **Frontend**: Nuxt 3.17+ + Vue 3.5 Composition API + TypeScript
-- **UI Components**: shadcn-vue component library (migrated Aug 31, 2025)
+- **Frontend**: Nuxt 4.2.2 + Vue 3.5 Composition API + TypeScript
+- **UI Components**: Custom component system (migrated from shadcn-vue in PR #346)
 - **Styling**: Tailwind CSS v4 with CSS variables and dark mode
 - **State Management**: Pinia stores with TypeScript
 - **Database**: Supabase (PostgreSQL) with Row Level Security
@@ -27,8 +27,9 @@ Moldova Direct is an e-commerce platform specializing in authentic Moldovan food
 - ✅ GitHub Actions CI/CD pipeline for testing
 - ✅ Row Level Security policies implemented
 - ✅ Authentication system with Supabase Auth
-- ✅ shadcn-vue component system integrated
+- ✅ Custom component system (replaced shadcn-vue/Reka UI)
 - ✅ Tailwind CSS v4 with modern configuration
+- ✅ Security hardening (CSP headers, CSRF, rate limiting)
 
 ## 📊 Development Progress
 
@@ -83,23 +84,38 @@ Moldova Direct is an e-commerce platform specializing in authentic Moldovan food
 
 ### Recently Completed (Latest Updates)
 
-#### February 2026 - Checkout & Admin Foundations
+#### January 2026 - Security & Codebase Improvements
 ```
-feat: deliver checkout flow scaffolding and admin dashboards
-- Added multi-step checkout pages (shipping, payment, review) with responsive layouts
-- Implemented checkout composables and validation helpers
-- Delivered admin product catalog management with bulk actions and inventory edits
-- Added admin user management views with detail modal and activity summaries
-- Exposed order creation, payment intent, and shipping method API endpoints
+PR #337: Security hardening
+- Implemented CSP headers and CSRF protection
+- Added rate limiting for API endpoints
+- Server-side price verification for checkout
+- Admin middleware fully re-enabled and working
+
+PR #346: Custom component system
+- Replaced shadcn-vue and Reka UI with lightweight custom components
+- Reduced bundle size and dependency complexity
+- Maintained accessibility and consistent design
+
+PR #341: Codebase cleanup
+- Removed 162 unused files
+- Eliminated dead code and unused dependencies
+- Improved project maintainability
+
+PR #348: Testing coverage improvements
+- Enhanced test infrastructure
+- Improved coverage thresholds
 ```
 
-#### August 31, 2025 - shadcn-vue Migration
+#### February 2026 - Checkout UI Complete
 ```
-feat: scaffold shadcn-vue UI libraries and start adoption
-- Generated component libraries via CLI and added aliases
-- Updated Tailwind CSS to v4 with CSS variables
-- Migrated primary buttons and key dialogs
-- Planned phased adoption across forms, tables, toasts
+feat: complete checkout flow UI
+- Multi-step checkout (shipping, delivery options, order confirmation)
+- Responsive layouts for all screen sizes
+- Checkout composables and validation helpers
+- Order creation and shipping method API endpoints
+- Pending: Stripe payment integration
+- Pending: Transactional email notifications
 ```
 
 ### Recent Updates (November 2025)
@@ -111,19 +127,7 @@ test: comprehensive visual regression test coverage
 - Created admin-visual.spec.ts (15 tests for admin pages)
 - Created account-visual.spec.ts (10 tests for account pages)
 - Created checkout-and-static-visual.spec.ts (22 tests)
-- Fixed dashboard routing bug in visual-regression.spec.ts
-- Fixed authenticatedPage fixture redirect expectations
 - Improved from 19% to 85% visual coverage
-```
-
-#### Deep Code Review (October 30, 2025)
-```
-docs: comprehensive code review with security analysis
-- Identified critical security issues (disabled middleware, missing rate limiting)
-- Documented technical debt (large components, code duplication)
-- Provided prioritized recommendations for improvements
-- Created CODE_REVIEW_2025.md with detailed findings
-- Split analysis into user-facing and admin-facing sections
 ```
 
 #### Code Cleanup & Optimization (October 12, 2025)
@@ -131,30 +135,26 @@ docs: comprehensive code review with security analysis
 chore: major code cleanup - remove unused features and dependencies
 - Removed PayPal integration (composables, API endpoints, configuration)
 - Deleted unused composables (useMobileCodeSplitting, usePushNotifications)
-- Removed tw-animate-css package (unused dependency)
 - Organized test scripts into scripts/ directory
-- Updated documentation to reflect Stripe-only payment processing
 - Impact: ~850 lines of code removed, cleaner dependency tree
 ```
 
 ### Active Work Items
 
-#### Critical Security (Immediate)
-- **Re-enable authentication middleware**: Admin middleware temporarily disabled for testing (CRITICAL)
-- **Implement rate limiting**: Add rate limiting for auth endpoints to prevent brute force attacks
-- **Server-side price verification**: Implement checkout price validation server-side
-
 #### High Priority Development
 - **Stripe payment capture**: Finalize payment intent flow, webhooks, and production configuration
-- **Code refactoring**: Products page (915 lines) and auth store (1,172 lines) need splitting
 - **Transactional email pipeline**: Order confirmation, shipping updates, and password recovery emails with localized templates
 - **Admin analytics dashboards**: Product performance, sales trends, and user growth metrics
 - **Checkout hardening**: Complete guest checkout edge cases and inventory reservation
 
-#### Testing & Quality
-- **Visual test coverage**: ✅ COMPLETED - 85% coverage achieved (40/47 pages)
+#### Code Quality
+- **Code refactoring**: Products page (915 lines) and auth store (1,172 lines) need splitting
 - **Unit test coverage**: Improve composable and component test coverage
 - **E2E test expansion**: Add tests for remaining critical flows
+
+#### Testing & Quality
+- **Visual test coverage**: ✅ COMPLETED - 85% coverage achieved (40/47 pages)
+- **Security hardening**: ✅ COMPLETED - CSP, CSRF, rate limiting, price verification (PR #337)
 
 ## 📋 Roadmap & Next Steps
 
@@ -173,10 +173,6 @@ chore: major code cleanup - remove unused features and dependencies
    - Add sales, inventory, and customer analytics widgets to admin dashboard
    - Schedule daily/weekly summary reports
    - Document monitoring and alerting expectations
-4. **Component Modernization**
-   - Migrate toast system to vue-sonner (HIGH PRIORITY)
-   - Complete checkout component migration to shadcn-vue
-   - Enhance mobile navigation with shadcn patterns
 
 ### Future Enhancements
 - Storage fallbacks for cart/session persistence and cross-tab sync
@@ -253,7 +249,7 @@ NODE_ENV=production
 ### Technical Goals
 - Edge-first architecture for global performance
 - <2 second page load times
-- 100% uptime with Cloudflare infrastructure
+- 100% uptime with Vercel infrastructure
 - Comprehensive test coverage
 - Clean, maintainable codebase
 
@@ -266,10 +262,11 @@ NODE_ENV=production
 - CSRF protection on state-changing operations
 - Role-based access control
 - Input validation and sanitization
+- ✅ Content Security Policy (CSP) headers (PR #337)
+- ✅ Rate limiting for API endpoints (PR #337)
+- ✅ Server-side price verification (PR #337)
 
 ### Pending Security Tasks
-- Rate limiting for API endpoints
-- Content Security Policy headers
 - Security audit and penetration testing
 - GDPR compliance implementation
 - PCI compliance for payment processing
@@ -335,32 +332,22 @@ NODE_ENV=production
 
 ---
 
-## 🚨 Critical Action Items
-
-Based on the recent code review, the following items require immediate attention:
-
-### Security (CRITICAL - This Week)
-1. **Re-enable Admin Middleware** - Currently bypassed for testing (middleware/admin.ts)
-2. **Implement Rate Limiting** - Add rate limiting for authentication endpoints
-3. **Server-Side Price Verification** - Validate cart prices server-side before checkout
+## 📝 Remaining Action Items
 
 ### Code Quality (HIGH - Next 2 Weeks)
 1. **Refactor Products Page** - Split 915-line component into smaller modules
 2. **Split Auth Store** - Break 1,172-line store into focused modules
 3. **Add API Authorization** - Secondary authorization checks at API route level
-4. **Implement Cart Encryption** - Encrypt cart data in localStorage
 
 ### Testing (MEDIUM - Next Month)
 1. **Expand Unit Test Coverage** - Target 80% coverage for composables
 2. **Add E2E Auth Tests** - Comprehensive authentication flow testing
 3. **Performance Testing** - Load testing for admin dashboard and checkout
 
-See [CODE_REVIEW_2025.md](../CODE_REVIEW_2025.md) for complete details.
-
 ---
 
-**Last Updated**: 2025-11-01
-**Status**: ⚠️ Action Required - Critical security items need immediate attention
-**Health**: 🟡 Good - Strong foundation with identified improvements needed
+**Last Updated**: 2026-01-05
+**Status**: On Track - Checkout UI complete, Stripe integration pending
+**Health**: Good - Security hardening complete, strong test coverage
 
 This document provides a comprehensive overview of the Moldova Direct project status. It should be updated regularly as development progresses.

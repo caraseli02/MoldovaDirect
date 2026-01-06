@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import type { ProductWithRelations } from '~/types'
 import type { PaginationState } from './useProductPagination'
 
@@ -9,14 +9,21 @@ const mockLocale = ref('en')
 const mockT = vi.fn((key: string) => key)
 const mockUseHead = vi.fn()
 
-// Override global useI18n mock with test-specific mock
-global.useI18n = vi.fn(() => ({
-  locale: mockLocale,
-  t: mockT,
+// Mock vue-i18n (the composable imports from vue-i18n, not #imports)
+vi.mock('vue-i18n', () => ({
+  useI18n: vi.fn(() => ({
+    locale: mockLocale,
+    t: mockT,
+  })),
 }))
 
-// Mock Nuxt's useHead
-global.useHead = mockUseHead
+// Mock #imports with test-specific mocks
+vi.mock('#imports', () => ({
+  useHead: mockUseHead,
+  ref,
+  watch,
+  computed: (fn: () => unknown) => ({ value: fn() }),
+}))
 
 // Import AFTER mocks are set up
 const { useProductStructuredData } = await import('./useProductStructuredData')

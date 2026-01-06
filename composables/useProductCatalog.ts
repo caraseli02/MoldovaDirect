@@ -190,7 +190,12 @@ export const useProductCatalog = () => {
       const params = new URLSearchParams()
       params.append('q', query)
 
+      // Add all filter parameters to search request
       if (searchFilters.category) params.append('category', searchFilters.category.toString())
+      if (searchFilters.priceMin) params.append('priceMin', searchFilters.priceMin.toString())
+      if (searchFilters.priceMax) params.append('priceMax', searchFilters.priceMax.toString())
+      if (searchFilters.inStock) params.append('inStock', 'true')
+      if (searchFilters.featured) params.append('featured', 'true')
       if (searchFilters.sort) params.append('sort', searchFilters.sort)
       if (searchFilters.page) params.append('page', searchFilters.page?.toString() || '1')
       if (searchFilters.limit) params.append('limit', searchFilters.limit?.toString() || '12')
