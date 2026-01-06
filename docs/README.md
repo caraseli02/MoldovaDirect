@@ -61,7 +61,7 @@ How to test the application:
 | Type | Guide |
 |------|-------|
 | E2E Tests | [Testing Strategy](./guides/TESTING_STRATEGY.md) |
-| Visual Tests | [Test Coverage](./testing/TEST_COVERAGE_IMPLEMENTATION.md) |
+| Visual Tests | [Test Coverage](./archive/testing/TEST_COVERAGE_IMPLEMENTATION.md) |
 | Local Testing | [Local Testing Guide](./getting-started/LOCAL_TESTING_GUIDE.md) |
 
 ---
@@ -146,7 +146,7 @@ i18n/locales/        # Translations (es, en, ro, ru)
 - [Patterns to Preserve](./development/PATTERNS_TO_PRESERVE.md)
 - [Component Inventory](./development/component-inventory.md)
 - [Troubleshooting Components](./development/troubleshooting-components.md)
-- [shadcn Migration](./development/SHADCN_MIGRATION.md)
+- [shadcn Migration](./archive/migrations/SHADCN_MIGRATION.md) *(archived)*
 
 </details>
 
@@ -184,10 +184,10 @@ i18n/locales/        # Translations (es, en, ro, ru)
 <details>
 <summary><strong>🧪 Testing</strong> - Test documentation</summary>
 
-- [Test Coverage Implementation](./testing/TEST_COVERAGE_IMPLEMENTATION.md)
+- [Test Coverage Implementation](./archive/testing/TEST_COVERAGE_IMPLEMENTATION.md) *(archived)*
 - [Test Coverage Analysis](./testing/TEST_COVERAGE_ANALYSIS.md)
-- [Playwright Best Practices](./testing/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md)
-- [E2E Checkout Best Practices](./testing/E2E_CHECKOUT_BEST_PRACTICES.md)
+- [Playwright Best Practices](./archive/testing/playwright/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md) *(archived)*
+- [E2E Checkout Best Practices](./archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md) *(archived)*
 - [Visual Regression Issues](./visual-regression/VISUAL_REGRESSION_ISSUES_AND_FIXES.md)
 
 </details>
@@ -245,7 +245,7 @@ Active feature specifications in `specs/`:
 <details>
 <summary><strong>🔧 Fixes</strong> - Bug fixes and solutions</summary>
 
-- [Admin Fixes](./fixes/admin-fixes/) - Admin panel issues and solutions
+- [Admin Fixes](./archive/fixes/admin-fixes/) - Admin panel issues and solutions *(archived)*
 - Error handling guides
 
 </details>
@@ -275,4 +275,4 @@ See [archive/README.md](./archive/README.md) for archived documentation.
 
 ---
 
-**Last Updated:** January 2, 2026
+**Last Updated:** January 6, 2026
