@@ -5,6 +5,30 @@
     </h2>
 
     <div class="space-y-3">
+      <!-- Cancel Order Button (only for pending orders) -->
+      <Button
+        v-if="canCancel"
+        data-testid="cancel-order-button"
+        variant="destructive"
+        class="w-full inline-flex items-center justify-center px-4 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+        @click="$emit('cancel')"
+      >
+        <svg
+          class="w-5 h-5 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+        {{ $t('orders.actions.cancel', 'Cancel Order') }}
+      </Button>
+
       <!-- Reorder Button -->
       <Button
         v-if="canReorder"
@@ -30,6 +54,7 @@
       <!-- Return Button -->
       <Button
         v-if="canReturn"
+        data-testid="return-order-button"
         variant="outline"
         class="w-full inline-flex items-center justify-center px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
         @click="$emit('return')"
@@ -120,14 +145,22 @@ interface Props {
   order: OrderWithItems
   canReorder: boolean
   canReturn: boolean
+  canCancel?: boolean
 }
 
-const _props = defineProps<Props>()
+const props = defineProps<Props>()
+
+// Computed property for cancel button visibility
+const canCancel = computed(() => {
+  // Only show cancel button if explicitly allowed and order is pending
+  return props.canCancel && props.order.status === 'pending'
+})
 
 defineEmits<{
   reorder: []
   return: []
   support: []
+  cancel: []
 }>()
 
 // Print handler

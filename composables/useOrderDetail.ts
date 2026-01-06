@@ -49,6 +49,19 @@ export interface TrackingResponse {
   data: TrackingInfo
 }
 
+export interface CancelOrderResponse {
+  success: boolean
+  message: string
+  order: {
+    id: number
+    orderNumber: string
+    status: string
+    cancelledAt: string
+    cancellationReason: string
+  }
+  emailSent: boolean
+}
+
 export interface UseOrderDetailReturn {
   // State
   order: Ref<OrderWithTracking | null>
@@ -61,10 +74,12 @@ export interface UseOrderDetailReturn {
   refreshTracking: () => Promise<void>
   reorder: () => Promise<void>
   initiateReturn: () => Promise<void>
+  cancelOrder: (reason?: string) => Promise<boolean>
 
   // Computed
   canReorder: ComputedRef<boolean>
   canReturn: ComputedRef<boolean>
+  canCancel: ComputedRef<boolean>
   isDelivered: ComputedRef<boolean>
 }
 
@@ -254,6 +269,70 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
     )
   }
 
+  /**
+   * Cancel order (only for pending orders)
+   */
+  const cancelOrder = async (reason?: string): Promise<boolean> => {
+    if (!order.value || !canCancel.value) {
+      toast.error(
+        'Cannot cancel',
+        'This order cannot be cancelled',
+      )
+      return false
+    }
+
+    try {
+      loading.value = true
+
+      const { data: { session } } = await supabaseClient.auth.getSession()
+      if (!session) {
+        throw new Error('Authentication required')
+      }
+
+      const response = await $fetch<CancelOrderResponse>(`/api/orders/${order.value.id}/cancel`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: { reason },
+      })
+
+      if (response.success && order.value) {
+        const currentOrder = order.value
+        // Update local order state
+        order.value = {
+          ...currentOrder,
+          status: 'cancelled' as OrderStatus,
+          cancelledAt: response.order.cancelledAt,
+        }
+
+        // Clear cache for this order
+        orderCache.delete(currentOrder.id)
+
+        toast.success(
+          'Order cancelled',
+          `Order ${currentOrder.orderNumber} has been cancelled successfully`,
+        )
+
+        return true
+      }
+      else {
+        throw new Error('Failed to cancel order')
+      }
+    }
+    catch (err: unknown) {
+      console.error('Error cancelling order:', getErrorMessage(err))
+      const errorMessage = (err as { data?: { statusMessage?: string } })?.data?.statusMessage
+        || getErrorMessage(err)
+        || 'Failed to cancel order'
+      toast.error('Cancel failed', errorMessage)
+      return false
+    }
+    finally {
+      loading.value = false
+    }
+  }
+
   // Computed properties
   const canReorder = computed(() => {
     if (!order.value) return false
@@ -279,6 +358,13 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
     return daysSinceDelivery <= 30
   })
 
+  const canCancel = computed(() => {
+    if (!order.value) return false
+
+    // Can only cancel pending orders
+    return order.value.status === 'pending'
+  })
+
   const isDelivered = computed(() => {
     return order.value?.status === 'delivered'
   })
@@ -295,10 +381,12 @@ export const useOrderDetail = (): UseOrderDetailReturn => {
     refreshTracking,
     reorder,
     initiateReturn,
+    cancelOrder,
 
     // Computed
     canReorder,
     canReturn,
+    canCancel,
     isDelivered,
   }
 }

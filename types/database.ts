@@ -271,6 +271,8 @@ export interface Order {
   adminNotes?: string
   shippedAt?: string
   deliveredAt?: string
+  cancelledAt?: string
+  cancellationReason?: string
   createdAt: string
   updatedAt: string
   // Admin-specific fields
