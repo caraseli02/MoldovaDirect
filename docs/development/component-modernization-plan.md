@@ -1,12 +1,13 @@
 # Component Modernization Plan
 
-> **IMPORTANT UPDATE (January 2026 - PR #346)**: The project direction changed from shadcn-vue/Reka UI to a custom component system. This reduces bundle size, dependency complexity, and maintenance overhead while maintaining accessibility and consistent design. The migration work described below is now ARCHIVED. See `docs/archive/migrations/` for historical shadcn-vue migration docs.
+> **IMPORTANT UPDATE (January 2026 - PR #346)**: The project direction changed from a CLI-managed shadcn-vue setup to a **localized custom component system**. This approach reduces dependency complexity and maintenance overhead by owning the component source code, while still leveraging **Reka UI** as a headless foundation for accessibility. The migration work described below is now ARCHIVED. See `docs/archive/migrations/` for historical shadcn-vue migration docs.
 
 ## Executive Summary
 
 ~~This document outlines a comprehensive plan to modernize component usage across the MoldovaDirect application by better utilizing shadcn-vue components.~~
 
-**Current Status**: The project now uses a lightweight custom component system. The shadcn-vue libraries were removed in PR #346 in favor of custom components that provide the same functionality with less complexity.
+**Current Status**: The project now uses a **localized component system** in `components/ui/`. While based on the shadcn-vue pattern, these components are manually maintained within the project to preserve critical customizations and bug fixes, using **Reka UI** for complex UI primitives.
+
 
 ## Historical Context (ARCHIVED)
 
@@ -20,10 +21,11 @@ The following libraries were scaffolded but later removed in favor of custom com
 **Total**: 19 shadcn-vue component libraries (77 individual files) - **REMOVED in PR #346**
 
 ### Why the Change?
-1. **Bundle size** - Custom components are smaller and more focused
-2. **Dependency complexity** - Removed Reka UI and shadcn-vue dependencies
-3. **Maintenance** - Custom components are easier to maintain and customize
-4. **Performance** - Lighter runtime footprint
+1. **Critical Customization** - Local components allow for bug fixes (like v-model reactivity issues) that cannot be updated via CLI.
+2. **Local Ownership** - Decoupling from the shadcn-vue CLI to treat components as first-class project code.
+3. **Maintenance** - Easier to maintain and customize specialized components without fear of overriding them.
+4. **Accessibility** - Preserves **Reka UI** for complex accessibility (Select, Dialog) while using simpler HTML/Tailwind for basic ones (Card).
+
 
 ### Current Component Status (January 2026)
 

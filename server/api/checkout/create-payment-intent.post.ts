@@ -13,7 +13,7 @@ function getStripe(): Stripe {
       })
     }
     stripe = new Stripe(secretKey, {
-      apiVersion: '2025-08-27.basil',
+      apiVersion: '2025-12-15.clover',
     })
   }
   return stripe

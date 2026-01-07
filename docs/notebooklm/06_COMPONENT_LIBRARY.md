@@ -2,7 +2,10 @@
 
 ## Overview
 
-The project uses a custom component library located in `components/ui/`. These are lightweight, accessible components with TypeScript support and dark mode.
+The project uses a **localized component system** in `components/ui/`. These components are built on the **shadcn-vue pattern** and utilize **Reka UI** (a headless UI primitive library) for industry-standard accessibility. 
+
+Because the source code resides directly in your project, it is considered a "custom" library—allowing for critical bug fixes (e.g., v-model reactivity fixes) and design customizations that wouldn't be possible with a standard external dependency. 
+
 
 ## Core Components
 

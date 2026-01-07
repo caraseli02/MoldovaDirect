@@ -30,14 +30,15 @@
 - Custom color palette (primary blue, secondary gray)
 - Inter font for typography
 
-### Custom UI Component Library
+### Localized Component System
 Located in `components/ui/`:
 - Button, Card, Dialog, Input, Select
 - Alert, Badge, Tooltip, Skeleton
 - Table, Tabs, Pagination, Avatar
 - Checkbox, Switch, RadioGroup, Textarea
 
-Previously used shadcn-vue, migrated to custom components in January 2026 (PR #346) for reduced bundle size and better maintainability.
+Originally scaffolded via shadcn-vue but migrated to a **localized system** in January 2026 (PR #346). This allows the project to own the source code and apply critical fixes (like v-model reactivity improvements) while still leveraging **Reka UI** for accessible primitives.
+
 
 ### State Management (Pinia)
 - Vue's official state management

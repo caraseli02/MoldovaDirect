@@ -499,15 +499,15 @@
         {
           "id": "deps-1",
           "description": "Fix glob security vulnerability (markdownlint-cli update)",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "priority": "critical"
         },
         {
           "id": "deps-2",
           "description": "Update Stripe packages (v18 to v20, stripe-js v7 to v8)",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "priority": "high"
         },
         {
@@ -555,8 +555,8 @@
         {
           "id": "deps-9",
           "description": "Create .env.example file with all required variables",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "priority": "high",
           "github_issue": 282
         }
