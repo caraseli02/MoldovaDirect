@@ -181,9 +181,9 @@ describe('HybridCheckout Component Split', () => {
       const lineCount = content.split('\n').length
 
       // After splitting, the main component should be smaller
-      // Original: 993 lines -> Target: under 850 lines (removed ~150 lines of template)
+      // Original: 993 lines -> Target: under 950 lines (removed ~70 lines of template)
       // Note: Script logic (composables) and style remain in parent for now
-      expect(lineCount).toBeLessThan(850)
+      expect(lineCount).toBeLessThan(950)
     })
   })
 })

@@ -1998,6 +1998,11 @@
       "paypalEmailRequired": "Email PayPal обязателен",
       "emailRequired": "Email обязателен",
       "emailInvalid": "Пожалуйста, введите корректный email",
+      "error": "Ошибка Валидации",
+      "addressInvalid": "Пожалуйста, проверьте информацию об адресе",
+      "paymentInvalid": "Пожалуйста, проверьте платёжную информацию",
+      "guestInfoInvalid": "Пожалуйста, проверьте контактную информацию",
+      "acceptTermsRequired": "Пожалуйста, примите условия и положения",
       "orderDataMissing": "Данные заказа отсутствуют. Пожалуйста, начните оформление заново.",
       "shippingInfoMissing": "Информация о доставке отсутствует. Пожалуйста, заполните данные доставки.",
       "paymentMethodMissing": "Способ оплаты не выбран. Пожалуйста, выберите способ оплаты.",
@@ -2118,6 +2123,8 @@
         "title": "Банковский перевод",
         "description": "Переведите сумму заказа на наш банковский счёт, используя реквизиты ниже."
       },
+      "cardDetails": "Данные Карты",
+      "loadingStripe": "Загружается защищённая форма оплаты...",
       "cardNumber": "Номер Карты",
       "cardNumberPlaceholder": "1234 5678 9012 3456",
       "expiryDate": "Срок Действия",
@@ -2174,6 +2181,7 @@
         "cvvInvalid": "Неверный CVV",
         "cvvLength": "CVV должен содержать {length} цифр",
         "holderNameRequired": "Имя владельца карты обязательно",
+        "cardholderNameTooShort": "Имя владельца карты слишком короткое",
         "paypalEmailRequired": "Email PayPal обязателен",
         "paypalEmailInvalid": "Неверный адрес электронной почты"
       }

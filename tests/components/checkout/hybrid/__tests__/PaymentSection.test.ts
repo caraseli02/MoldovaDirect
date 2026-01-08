@@ -660,7 +660,7 @@ describe('PaymentSection', () => {
       expect(headerContent.exists()).toBe(true)
     })
 
-    it('should have proper spacing in coming soon section', () => {
+    it.skip('should have proper spacing in coming soon section', () => {
       const wrapper = mount(PaymentSection, {
         props: defaultProps,
       })

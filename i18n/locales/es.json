@@ -2010,7 +2010,12 @@
       "holderNameRequired": "El nombre del titular es requerido",
       "paypalEmailRequired": "El email de PayPal es requerido",
       "emailRequired": "El email es requerido",
-      "emailInvalid": "Por favor ingresa un email válido"
+      "emailInvalid": "Por favor ingresa un email válido",
+      "error": "Error de Validación",
+      "addressInvalid": "Por favor verifica la información de tu dirección",
+      "paymentInvalid": "Por favor verifica la información de tu pago",
+      "guestInfoInvalid": "Por favor verifica tu información de contacto",
+      "acceptTermsRequired": "Por favor acepta los términos y condiciones"
     },
     "warnings": {
       "concurrentCheckout": "Múltiples Sesiones de Pago Detectadas",
@@ -2126,6 +2131,8 @@
         "title": "Transferencia Bancaria",
         "description": "Transfiere el monto del pedido a nuestra cuenta bancaria usando los detalles a continuación."
       },
+      "cardDetails": "Detalles de la Tarjeta",
+      "loadingStripe": "Cargando formulario de pago seguro...",
       "cardNumber": "Número de Tarjeta",
       "cardNumberPlaceholder": "1234 5678 9012 3456",
       "expiryDate": "Fecha de Vencimiento",
@@ -2182,6 +2189,7 @@
         "cvvInvalid": "CVV inválido",
         "cvvLength": "El CVV debe tener {length} dígitos",
         "holderNameRequired": "El nombre del titular es obligatorio",
+        "cardholderNameTooShort": "El nombre del titular es demasiado corto",
         "paypalEmailRequired": "El correo de PayPal es obligatorio",
         "paypalEmailInvalid": "Dirección de correo inválida"
       }
