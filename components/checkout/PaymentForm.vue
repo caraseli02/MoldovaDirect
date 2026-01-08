@@ -6,9 +6,12 @@
     <!-- Credit Card Form -->
     <PaymentCardSection
       v-else-if="modelValue.type === 'credit_card'"
+      ref="cardSectionRef"
       :model-value="creditCardFormData"
       :errors="errors"
       @update:model-value="onCreditCardUpdate"
+      @stripe-ready="onStripeReady"
+      @stripe-error="onStripeError"
     />
 
     <!-- PayPal Form -->
@@ -29,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch, onMounted } from 'vue'
+import { computed, watch, onMounted, ref } from 'vue'
 import type { PaymentMethod } from '~/types/checkout'
 import PaymentCashSection from '~/components/checkout/payment/CashSection.vue'
 import PaymentCardSection from '~/components/checkout/payment/CardSection.vue'
@@ -48,6 +51,8 @@ interface Props {
 
 interface Emits {
   (e: 'update:modelValue', value: PaymentMethod): void
+  (e: 'stripe-ready', ready: boolean): void
+  (e: 'stripe-error', error: string | null): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -56,6 +61,12 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<Emits>()
+
+// =============================================
+// REFS
+// =============================================
+
+const cardSectionRef = ref<{ validateForm: () => boolean, getStripeCardElement: () => any } | null>(null)
 
 // =============================================
 // COMPUTED - Form Data Adapters
@@ -113,6 +124,37 @@ const onBankTransferUpdate = (data: { reference: string }) => {
     bankTransfer: { reference: data.reference },
   })
 }
+
+const onStripeReady = (ready: boolean) => {
+  emit('stripe-ready', ready)
+}
+
+const onStripeError = (error: string | null) => {
+  emit('stripe-error', error)
+}
+
+// =============================================
+// EXPOSED METHODS
+// =============================================
+
+const validateForm = (): boolean => {
+  if (props.modelValue.type === 'credit_card' && cardSectionRef.value) {
+    return cardSectionRef.value.validateForm()
+  }
+  return true
+}
+
+const getStripeCardElement = () => {
+  if (props.modelValue.type === 'credit_card' && cardSectionRef.value) {
+    return cardSectionRef.value.getStripeCardElement()
+  }
+  return null
+}
+
+defineExpose({
+  validateForm,
+  getStripeCardElement,
+})
 
 // =============================================
 // LIFECYCLE

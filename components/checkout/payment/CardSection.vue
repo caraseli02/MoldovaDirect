@@ -1,164 +1,51 @@
 <template>
   <div class="space-y-4">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- Card Number -->
-      <div class="md:col-span-2">
-        <UiLabel
-          for="card-number"
-          class="mb-1"
-        >
-          {{ $t('checkout.payment.cardNumber') }}
-        </UiLabel>
-        <div class="relative">
-          <UiInput
-            id="card-number"
-            ref="cardNumberRef"
-            type="text"
-            :value="creditCardData.number"
-            :placeholder="$t('checkout.payment.cardNumberPlaceholder')"
-            :aria-invalid="hasError('cardNumber')"
-            :aria-describedby="hasError('cardNumber') ? 'card-number-error' : undefined"
-            maxlength="19"
-            autocomplete="cc-number"
-            @input="onCardNumberInput"
-            @blur="validateCardNumber"
-          />
-          <div
-            v-if="cardBrand"
-            class="absolute inset-y-0 right-0 pr-3 flex items-center"
-            aria-hidden="true"
-          >
-            <commonIcon
-              :name="getCardBrandIcon(cardBrand)"
-              class="h-6 w-6"
-            />
-          </div>
-        </div>
-        <p
-          v-if="hasError('cardNumber')"
-          id="card-number-error"
-          class="mt-1 text-sm text-destructive"
-          role="alert"
-        >
-          {{ getError('cardNumber') }}
-        </p>
-      </div>
+    <!-- Stripe Card Element Container -->
+    <div>
+      <UiLabel class="mb-2 block">
+        {{ $t('checkout.payment.cardDetails') }}
+      </UiLabel>
+      <div
+        ref="stripeCardContainer"
+        class="stripe-card-element p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
+        :class="{ 'border-red-500': stripeError }"
+      ></div>
+      <p
+        v-if="stripeError"
+        class="mt-1 text-sm text-destructive"
+        role="alert"
+      >
+        {{ stripeError }}
+      </p>
+    </div>
 
-      <!-- Expiry Date -->
-      <div>
-        <UiLabel
-          for="expiry-date"
-          class="mb-1"
-        >
-          {{ $t('checkout.payment.expiryDate') }}
-        </UiLabel>
-        <UiInput
-          id="expiry-date"
-          type="text"
-          :value="expiryDisplay"
-          :placeholder="$t('checkout.payment.expiryPlaceholder')"
-          :aria-invalid="hasError('expiry')"
-          :aria-describedby="hasError('expiry') ? 'expiry-error' : undefined"
-          maxlength="5"
-          autocomplete="cc-exp"
-          @input="onExpiryInput"
-          @blur="validateExpiry"
-        />
-        <p
-          v-if="hasError('expiry')"
-          id="expiry-error"
-          class="mt-1 text-sm text-destructive"
-          role="alert"
-        >
-          {{ getError('expiry') }}
-        </p>
-      </div>
-
-      <!-- CVV -->
-      <div>
-        <UiLabel
-          for="cvv"
-          class="mb-1"
-        >
-          {{ $t('checkout.payment.cvv') }}
-        </UiLabel>
-        <div class="relative">
-          <UiInput
-            id="cvv"
-            type="text"
-            :value="creditCardData.cvv"
-            :placeholder="$t('checkout.payment.cvvPlaceholder')"
-            :aria-invalid="hasError('cvv')"
-            :aria-describedby="hasError('cvv') ? 'cvv-error cvv-help' : showCVVHelp ? 'cvv-help' : undefined"
-            :maxlength="cvvMaxLength"
-            autocomplete="cc-csc"
-            @input="onCVVInput"
-            @blur="validateCVV"
-          />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            :aria-label="$t('checkout.payment.cvvHelpLabel')"
-            :aria-expanded="showCVVHelp"
-            class="absolute inset-y-0 right-0 pr-3 min-w-[44px] min-h-[44px]"
-            @click="showCVVHelp = !showCVVHelp"
-          >
-            <commonIcon
-              name="lucide:circle-help"
-              class="h-5 w-5 text-gray-400 hover:text-gray-500"
-              aria-hidden="true"
-            />
-          </Button>
-        </div>
-        <p
-          v-if="hasError('cvv')"
-          id="cvv-error"
-          class="mt-1 text-sm text-destructive"
-          role="alert"
-        >
-          {{ getError('cvv') }}
-        </p>
-        <div
-          v-if="showCVVHelp"
-          id="cvv-help"
-          class="mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-md"
-          role="region"
-        >
-          <p class="text-sm text-muted-foreground">
-            {{ $t('checkout.payment.cvvHelp') }}
-          </p>
-        </div>
-      </div>
-
-      <!-- Cardholder Name -->
-      <div class="md:col-span-2">
-        <UiLabel
-          for="cardholder-name"
-          class="mb-1"
-        >
-          {{ $t('checkout.payment.cardholderName') }}
-        </UiLabel>
-        <UiInput
-          id="cardholder-name"
-          type="text"
-          :value="creditCardData.holderName"
-          :placeholder="$t('checkout.payment.cardholderNamePlaceholder')"
-          :aria-invalid="hasError('holderName')"
-          :aria-describedby="hasError('holderName') ? 'holder-name-error' : undefined"
-          autocomplete="cc-name"
-          @blur="validateHolderName"
-          @input="onHolderNameInput"
-        />
-        <p
-          v-if="hasError('holderName')"
-          id="holder-name-error"
-          class="mt-1 text-sm text-destructive"
-          role="alert"
-        >
-          {{ getError('holderName') }}
-        </p>
-      </div>
+    <!-- Cardholder Name (separate from Stripe Element) -->
+    <div>
+      <UiLabel
+        for="cardholder-name"
+        class="mb-1"
+      >
+        {{ $t('checkout.payment.cardholderName') }}
+      </UiLabel>
+      <UiInput
+        id="cardholder-name"
+        type="text"
+        :value="creditCardData.holderName"
+        :placeholder="$t('checkout.payment.cardholderNamePlaceholder')"
+        :aria-invalid="hasError('holderName')"
+        :aria-describedby="hasError('holderName') ? 'holder-name-error' : undefined"
+        autocomplete="cc-name"
+        @blur="validateHolderName"
+        @input="onHolderNameInput"
+      />
+      <p
+        v-if="hasError('holderName')"
+        id="holder-name-error"
+        class="mt-1 text-sm text-destructive"
+        role="alert"
+      >
+        {{ getError('holderName') }}
+      </p>
     </div>
 
     <!-- Security Notice -->
@@ -182,13 +69,24 @@
         </div>
       </div>
     </div>
+
+    <!-- Loading State -->
+    <div
+      v-if="stripeLoading"
+      class="flex items-center justify-center py-4"
+    >
+      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
+      <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
+        {{ $t('checkout.payment.loadingStripe') }}
+      </span>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { Button } from '@/components/ui/button'
-import { useCardValidation } from '~/composables/checkout/useCardValidation'
+import { useStripe, formatStripeError } from '~/composables/useStripe'
 
 const { t } = useI18n()
 
@@ -207,6 +105,8 @@ interface Props {
 
 interface Emits {
   (e: 'update:modelValue', value: CardFormData): void
+  (e: 'stripe-ready', ready: boolean): void
+  (e: 'stripe-error', error: string | null): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -215,50 +115,58 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-const showCVVHelp = ref(false)
-
+// Stripe integration
 const {
-  creditCardData,
-  cardBrand,
-  validationErrors,
-  expiryDisplay,
-  cvvMaxLength,
-  formatCardNumber,
-  formatExpiry,
-  formatCVV,
-  validateCardNumber,
-  validateExpiry,
-  validateCVV,
-  validateHolderName,
-  getCardBrandIcon,
-  initializeFromData,
-} = useCardValidation(t)
+  stripe,
+  elements,
+  cardElement,
+  loading: stripeLoading,
+  error: stripeError,
+  initializeStripe,
+  createCardElement,
+} = useStripe()
+
+// Template refs
+const stripeCardContainer = ref<HTMLElement>()
+
+// Local state
+const creditCardData = ref<CardFormData>({
+  number: '',
+  expiryMonth: '',
+  expiryYear: '',
+  cvv: '',
+  holderName: props.modelValue.holderName || '',
+})
+
+const validationErrors = ref<Record<string, string>>({})
 
 // Error helpers that combine external and internal errors
 const hasError = (field: string): boolean => {
-  return !!((props.errors[field]) || validationErrors.value[field])
+  return !!((props.errors[field]) || validationErrors.value[field] || (field === 'stripe' && stripeError.value))
 }
 
 const getError = (field: string): string => {
+  if (field === 'stripe' && stripeError.value) {
+    return formatStripeError(stripeError.value)
+  }
   return props.errors[field] || validationErrors.value[field] || ''
 }
 
-// Input handlers that emit updates
-const onCardNumberInput = (event: Event) => {
-  formatCardNumber(event)
-  emitUpdate()
+// Validation functions
+const validateHolderName = () => {
+  if (!creditCardData.value.holderName.trim()) {
+    validationErrors.value.holderName = t('checkout.validation.cardholderNameRequired')
+    return false
+  }
+  if (creditCardData.value.holderName.trim().length < 2) {
+    validationErrors.value.holderName = t('checkout.validation.cardholderNameTooShort')
+    return false
+  }
+  delete validationErrors.value.holderName
+  return true
 }
 
-const onExpiryInput = (event: Event) => {
-  formatExpiry(event)
-  emitUpdate()
-}
-
-const onCVVInput = (event: Event) => {
-  formatCVV(event)
-  emitUpdate()
-}
-
+// Input handlers
 const onHolderNameInput = (event: Event) => {
   const input = event.target as HTMLInputElement
   creditCardData.value.holderName = input.value
@@ -267,33 +175,80 @@ const onHolderNameInput = (event: Event) => {
 
 const emitUpdate = () => {
   emit('update:modelValue', {
-    number: creditCardData.value.number,
-    expiryMonth: creditCardData.value.expiryMonth || '',
-    expiryYear: creditCardData.value.expiryYear || '',
-    cvv: creditCardData.value.cvv,
+    number: '', // Stripe handles this securely
+    expiryMonth: '', // Stripe handles this securely
+    expiryYear: '', // Stripe handles this securely
+    cvv: '', // Stripe handles this securely
     holderName: creditCardData.value.holderName,
   })
 }
 
-// Initialize from props
-watch(() => props.modelValue, (newValue) => {
-  if (newValue) {
-    const currentNumber = creditCardData.value.number.replace(/\s/g, '')
-    const newNumber = newValue.number.replace(/\s/g, '')
+// Initialize Stripe Elements
+const initializeStripeElements = async () => {
+  try {
+    await initializeStripe()
 
-    if (currentNumber !== newNumber
-      || creditCardData.value.expiryMonth !== newValue.expiryMonth
-      || creditCardData.value.expiryYear !== newValue.expiryYear
-      || creditCardData.value.cvv !== newValue.cvv
-      || creditCardData.value.holderName !== newValue.holderName) {
-      initializeFromData({
-        number: newValue.number,
-        expiryMonth: newValue.expiryMonth,
-        expiryYear: newValue.expiryYear,
-        cvv: newValue.cvv,
-        holderName: newValue.holderName,
-      })
+    if (stripeCardContainer.value && elements.value) {
+      await createCardElement(stripeCardContainer.value)
+      emit('stripe-ready', true)
     }
   }
+  catch (error) {
+    console.error('Failed to initialize Stripe Elements:', error)
+    emit('stripe-ready', false)
+  }
+}
+
+// Watch for Stripe errors and emit them
+watch(stripeError, (error) => {
+  emit('stripe-error', error)
+})
+
+// Initialize from props
+watch(() => props.modelValue, (newValue) => {
+  if (newValue && newValue.holderName !== creditCardData.value.holderName) {
+    creditCardData.value.holderName = newValue.holderName
+  }
 }, { immediate: true })
+
+// Lifecycle
+onMounted(async () => {
+  await nextTick()
+  await initializeStripeElements()
+})
+
+onUnmounted(() => {
+  // Cleanup Stripe elements
+  if (cardElement.value) {
+    cardElement.value.destroy()
+  }
+})
+
+// Expose validation method for parent components
+defineExpose({
+  validateForm: () => {
+    const isHolderNameValid = validateHolderName()
+    const isStripeReady = !!cardElement.value && !stripeError.value
+    return isHolderNameValid && isStripeReady
+  },
+  getStripeCardElement: () => cardElement.value,
+})
 </script>
+
+<style scoped>
+.stripe-card-element {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+/* Stripe element styling is handled by the Stripe library */
+.stripe-card-element:focus-within {
+  border-color: rgb(79 70 229);
+  box-shadow: 0 0 0 3px rgb(79 70 229 / 0.1);
+}
+
+.stripe-card-element.border-red-500 {
+  border-color: rgb(239 68 68);
+}
+</style>

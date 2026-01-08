@@ -2006,7 +2006,12 @@
       "holderNameRequired": "Cardholder name is required",
       "paypalEmailRequired": "PayPal email is required",
       "emailRequired": "Email is required",
-      "emailInvalid": "Please enter a valid email address"
+      "emailInvalid": "Please enter a valid email address",
+      "error": "Validation Error",
+      "addressInvalid": "Please check your address information",
+      "paymentInvalid": "Please check your payment information",
+      "guestInfoInvalid": "Please check your contact information",
+      "acceptTermsRequired": "Please accept the terms and conditions"
     },
     "warnings": {
       "concurrentCheckout": "Multiple Checkout Sessions Detected",
@@ -2122,7 +2127,8 @@
         "title": "Bank Transfer",
         "description": "Transfer the order amount to our bank account using the details below."
       },
-      "cardNumber": "Card Number",
+      "cardDetails": "Card Details",
+      "loadingStripe": "Loading secure payment form...",
       "cardNumberPlaceholder": "1234 5678 9012 3456",
       "expiryDate": "Expiry Date",
       "expiryPlaceholder": "MM/YY",
@@ -2178,6 +2184,7 @@
         "cvvInvalid": "Invalid CVV",
         "cvvLength": "CVV must be {length} digits",
         "holderNameRequired": "Cardholder name is required",
+        "cardholderNameTooShort": "Cardholder name is too short",
         "paypalEmailRequired": "PayPal email is required",
         "paypalEmailInvalid": "Invalid email address"
       }
