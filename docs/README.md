@@ -40,7 +40,7 @@ How the system is designed:
 
 | Document | Description |
 |----------|-------------|
-| [Architecture Review](./architecture/ARCHITECTURE_REVIEW.md) | Overall system design |
+| [Architecture Review (Nov 2025)](./archive/architecture-reviews/ARCHITECTURE_REVIEW_2025_11.md) | Historical system design (Archived) |
 | [Authentication](./architecture/AUTHENTICATION_ARCHITECTURE.md) | Auth flow with Supabase |
 | [Checkout Flow](./architecture/CHECKOUT_FLOW.md) | Multi-step checkout process |
 | [Cart System](./architecture/CART_SYSTEM_ARCHITECTURE.md) | Shopping cart internals |
@@ -60,7 +60,7 @@ How to test the application:
 
 | Type | Guide |
 |------|-------|
-| E2E Tests | [Testing Strategy](./guides/TESTING_STRATEGY.md) |
+| E2E Tests | [Testing Strategy](./manuals/TESTING_STRATEGY.md) |
 | Visual Tests | [Test Coverage](./archive/testing/TEST_COVERAGE_IMPLEMENTATION.md) |
 | Local Testing | [Local Testing Guide](./getting-started/LOCAL_TESTING_GUIDE.md) |
 
@@ -129,7 +129,7 @@ i18n/locales/        # Translations (es, en, ro, ru)
 <details>
 <summary><strong>🏗️ Architecture</strong> - System design</summary>
 
-- [Architecture Review](./architecture/ARCHITECTURE_REVIEW.md)
+- [Architecture Review (Nov 2025)](./archive/architecture-reviews/ARCHITECTURE_REVIEW_2025_11.md) *(archived)*
 - [Architecture Improvement Roadmap](./architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md)
 - [Authentication Architecture](./architecture/AUTHENTICATION_ARCHITECTURE.md)
 - [Cart System Architecture](./architecture/CART_SYSTEM_ARCHITECTURE.md)
@@ -173,10 +173,10 @@ i18n/locales/        # Translations (es, en, ro, ru)
 <details>
 <summary><strong>📚 Guides</strong> - How-to guides</summary>
 
-- [Implementation Guide](./guides/implementation-guide.md)
-- [Testing Strategy](./guides/TESTING_STRATEGY.md)
-- [Admin Testing](./guides/ADMIN_TESTING.md)
-- [Test User Simulation](./guides/TEST_USER_SIMULATION.md)
+- [Implementation Guide](./manuals/IMPLEMENTATION_GUIDE.md)
+- [Testing Strategy](./manuals/TESTING_STRATEGY.md)
+- [Admin Testing](./manuals/ADMIN_TESTING.md)
+- [Test User Simulation](./manuals/TEST_USER_SIMULATION.md)
 - [Key Rotation Guide](./guides/KEY_ROTATION_COMPLETION_GUIDE.md)
 
 </details>
@@ -195,10 +195,10 @@ i18n/locales/        # Translations (es, en, ro, ru)
 <details>
 <summary><strong>🔍 Analysis</strong> - Code reviews and analysis</summary>
 
-- [Code Quality Analysis](./analysis/CODE_QUALITY_ANALYSIS_2025-11-01.md)
-- [Code Review 2025](./analysis/CODE_REVIEW_2025.md)
 - [SSR Safety Verification](./analysis/SSR-SAFETY-VERIFICATION.md)
 - [LocalStorage Verification](./analysis/LOCALSTORAGE-VERIFICATION-COMPLETE.md)
+- [Code Quality Analysis (Nov 2025)](./archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md) *(archived)*
+- [Code Review 2025](./archive/reviews/CODE_REVIEW_2025.md) *(archived)*
 
 </details>
 
