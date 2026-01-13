@@ -1,13 +1,13 @@
 // POST /api/orders/create - Create a new order from cart
 import { serverSupabaseServiceRole } from '#supabase/server'
-import type { SupabaseClient } from '@supabase/supabase-js'
-import type { User } from '~/types/auth'
+import type { SupabaseClient, User } from '@supabase/supabase-js'
 import { sendOrderConfirmationEmail } from '~/server/utils/orderEmails'
 import {
   extractCustomerInfoFromOrder,
   transformOrderToEmailData,
   validateOrderForEmail,
 } from '~/server/utils/orderDataTransform'
+import type { DatabaseOrder } from '~/server/utils/emailTemplates/types'
 
 interface CreateOrderRequest {
   cartId: number
@@ -213,10 +213,13 @@ export default defineEventHandler(async (event) => {
 
     // Send order confirmation email (non-blocking)
     // Requirements: 1.1, 1.6
+    // Send order confirmation email (non-blocking)
+    // Requirements: 1.1, 1.6
     if (completeOrder) {
       // Send email asynchronously without blocking the response
-      sendOrderConfirmationEmailAsync(completeOrder, user as any, supabase)
-        .catch((error: any) => {
+      // We know completeOrder matches the DatabaseOrder shape because it comes from the DB
+      sendOrderConfirmationEmailAsync(completeOrder as unknown as DatabaseOrder, user, supabase)
+        .catch((error: unknown) => {
           console.error('Failed to send order confirmation email:', getServerErrorMessage(error))
           // Email failure doesn't block order creation
         })
@@ -255,13 +258,13 @@ export default defineEventHandler(async (event) => {
  * @param supabase - Supabase client
  */
 async function sendOrderConfirmationEmailAsync(
-  order: Record<string, any>,
+  order: DatabaseOrder,
   user: User | null,
   supabase: SupabaseClient,
 ): Promise<void> {
   try {
     // Validate order data before sending email
-    const validation = validateOrderForEmail(order as any)
+    const validation = validateOrderForEmail(order)
     if (!validation.isValid) {
       console.error('Order validation failed for email:', validation.errors)
       return
@@ -280,11 +283,11 @@ async function sendOrderConfirmationEmailAsync(
     }
 
     // Extract customer information (handles both authenticated and guest)
-    const customerInfo = await extractCustomerInfoFromOrder(order as any, userProfile as any)
+    const customerInfo = await extractCustomerInfoFromOrder(order, userProfile || undefined)
 
     // Transform order data for email template
     const emailData = transformOrderToEmailData(
-      order as any,
+      order,
       customerInfo.name,
       customerInfo.email,
       customerInfo.locale,

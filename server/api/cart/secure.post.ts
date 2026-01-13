@@ -23,7 +23,7 @@ import {
 
 interface SecureCartOperation {
   operation: 'addItem' | 'updateQuantity' | 'removeItem' | 'clearCart' | 'validateCart' | 'getCSRFToken'
-  data?: any
+  data?: unknown
   sessionId: string
   csrfToken?: string
 }
@@ -32,6 +32,30 @@ interface CartValidationResult {
   isValid: boolean
   errors: string[]
   sanitizedData?: unknown
+}
+
+interface AddItemData {
+  productId: number
+  quantity: number
+}
+
+interface UpdateQuantityData {
+  itemId: string
+  quantity: number
+}
+
+interface RemoveItemData {
+  itemId: string
+}
+
+interface ValidateCartItem {
+  id: string
+  productId: number
+  quantity: number
+}
+
+interface ValidateCartData {
+  items: ValidateCartItem[]
 }
 
 interface ProductResponse {
@@ -48,16 +72,17 @@ interface ProductResponse {
   stockStatus: string
   images: Array<{ url: string, alt?: string }>
   primaryImage: string
-  attributes: Record<string, any>
+  attributes: Record<string, unknown>
   category: {
     id: number
     slug: string
     name: string
     description: string
     nameTranslations: Record<string, string>
-    breadcrumb: any[]
+    breadcrumb: unknown[]
+    // ...
   }
-  relatedProducts: any[]
+  relatedProducts: unknown[]
   isActive: boolean
   createdAt: string
   updatedAt: string
@@ -192,13 +217,13 @@ export default defineEventHandler(async (event) => {
  */
 function validateCartOperationData(
   operation: string,
-  data: any,
+  data: unknown,
   sessionId: string,
   csrfToken?: string,
 ): CartValidationResult {
   try {
     let validatedData: any
-    const dataWithSession = { ...(data as Record<string, any>), sessionId, csrfToken }
+    const dataWithSession = { ...((data || {}) as Record<string, unknown>), sessionId, csrfToken }
 
     switch (operation) {
       case 'addItem':
@@ -226,7 +251,7 @@ function validateCartOperationData(
         break
 
       case 'validateCart':
-        validatedData = cartValidationSchemas.validateCart.parse({ ...data, sessionId })
+        validatedData = cartValidationSchemas.validateCart.parse({ ...((data || {}) as Record<string, unknown>), sessionId })
 
         // Validate all product IDs in cart items
         for (const item of validatedData.items) {
@@ -278,24 +303,24 @@ function validateCartOperationData(
  */
 async function processCartOperation(
   operation: string,
-  data: any,
+  data: unknown,
   _sessionId: string,
 ): Promise<unknown> {
   switch (operation) {
     case 'addItem':
-      return await processAddItem(data)
+      return await processAddItem(data as AddItemData)
 
     case 'updateQuantity':
-      return await processUpdateQuantity(data)
+      return await processUpdateQuantity(data as UpdateQuantityData)
 
     case 'removeItem':
-      return await processRemoveItem(data)
+      return await processRemoveItem(data as RemoveItemData)
 
     case 'clearCart':
       return await processClearCart(data)
 
     case 'validateCart':
-      return await processValidateCart(data)
+      return await processValidateCart(data as ValidateCartData)
 
     default:
       throw createError({
@@ -308,7 +333,7 @@ async function processCartOperation(
 /**
  * Process add item operation
  */
-async function processAddItem(data: any): Promise<unknown> {
+async function processAddItem(data: AddItemData): Promise<unknown> {
   const { productId, quantity } = data
 
   try {
@@ -365,7 +390,7 @@ async function processAddItem(data: any): Promise<unknown> {
 /**
  * Process update quantity operation
  */
-async function processUpdateQuantity(data: any): Promise<unknown> {
+async function processUpdateQuantity(data: UpdateQuantityData): Promise<unknown> {
   const { itemId, quantity } = data
 
   // For quantity updates, we need to validate against current product stock
@@ -383,7 +408,7 @@ async function processUpdateQuantity(data: any): Promise<unknown> {
 /**
  * Process remove item operation
  */
-async function processRemoveItem(data: any): Promise<unknown> {
+async function processRemoveItem(data: RemoveItemData): Promise<unknown> {
   const { itemId } = data
 
   return {
@@ -406,7 +431,7 @@ async function processClearCart(_data: any): Promise<unknown> {
 /**
  * Process validate cart operation
  */
-async function processValidateCart(data: any): Promise<unknown> {
+async function processValidateCart(data: ValidateCartData): Promise<unknown> {
   const { items } = data
   const validationResults = []
 
