@@ -60,7 +60,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // 5. Initialize checkout if not already initialized
   if (!checkoutStore.sessionId) {
     try {
-      await checkoutStore.initializeCheckout(items.value)
+      await checkoutStore.initializeCheckout(items.value as any)
     }
     catch (error: unknown) {
       console.error('Failed to initialize checkout:', error)

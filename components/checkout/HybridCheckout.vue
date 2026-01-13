@@ -384,7 +384,7 @@ const cartItems = computed(() => {
   }))
 })
 
-const orderData = computed(() => (checkoutStore as any).orderData)
+const orderData = computed(() => checkoutStore.orderData)
 
 // Calculate order totals directly from cart items (fallback for reactivity issues)
 const calculatedSubtotal = computed(() => {
@@ -413,7 +413,7 @@ const formattedTotal = computed(() => {
 })
 
 const preferredShippingMethod = computed(() => {
-  return (checkoutStore as any).preferences?.preferred_shipping_method || null
+  return checkoutStore.preferences?.preferred_shipping_method || null
 })
 
 const showExpressCheckout = computed(() => {
@@ -500,8 +500,8 @@ const handleExpressPlaceOrder = async () => {
     }
 
     // Update checkout store
-    await (checkoutStore as any).updateShippingInfo(shippingInfo)
-    await (checkoutStore as any).updatePaymentMethod({ type: 'cash', saveForFuture: false })
+    await checkoutStore.updateShippingInfo(shippingInfo)
+    await checkoutStore.updatePaymentMethod({ type: 'cash', saveForFuture: false })
 
     // Process order
     await processOrder()
@@ -594,15 +594,15 @@ const handlePlaceOrder = async () => {
 
     // Update guest info if needed
     if (!user.value && showGuestForm.value) {
-      await (checkoutStore as any).updateGuestInfo({
+      await checkoutStore.updateGuestInfo({
         email: guestInfo.value.email.trim(),
         emailUpdates: guestInfo.value.emailUpdates,
       })
     }
 
     // Update checkout store
-    await (checkoutStore as any).updateShippingInfo(shippingInfo)
-    await (checkoutStore as any).updatePaymentMethod(paymentMethod.value)
+    await checkoutStore.updateShippingInfo(shippingInfo)
+    await checkoutStore.updatePaymentMethod(paymentMethod.value)
 
     // Process order
     await processOrder()
@@ -641,12 +641,12 @@ const handlePlaceOrder = async () => {
 
 const processOrder = async () => {
   // Set terms acceptance in store before processing
-  ;(checkoutStore as any).setTermsAccepted(true)
-  ;(checkoutStore as any).setPrivacyAccepted(true)
-  ;(checkoutStore as any).setMarketingConsent(marketingConsent.value)
+  ;(checkoutStore).setTermsAccepted(true)
+  ;(checkoutStore).setPrivacyAccepted(true)
+  ;(checkoutStore).setMarketingConsent(marketingConsent.value)
 
   // Set step to review for checkout flow
-  ;(checkoutStore as any).currentStep = 'review'
+  ;(checkoutStore).currentStep = 'review'
 
   try {
     // Handle Stripe payment processing for credit cards
@@ -654,8 +654,8 @@ const processOrder = async () => {
       await processStripePayment()
     }
     else {
-      // Process other payment types (cash, etc.)
-      await (checkoutStore as any).processPayment()
+      // Process other payment types (cash, etc.) using the unified checkout store method
+      await checkoutStore.processPayment()
     }
   }
   catch (paymentError: any) {
@@ -764,7 +764,7 @@ onMounted(async () => {
     await cartStore.loadFromStorage()
 
     // Calculate order data from cart items
-    await (checkoutStore as any).calculateOrderData()
+    await checkoutStore.calculateOrderData()
 
     // Load existing data from store
     loadAddressFromStore()
@@ -783,7 +783,7 @@ onMounted(async () => {
     }
 
     // Load guest info if available
-    const storedGuestInfo = (checkoutStore as any).guestInfo
+    const storedGuestInfo = checkoutStore.guestInfo
     if (!user.value && storedGuestInfo) {
       showGuestForm.value = true
       guestInfo.value = {
@@ -793,7 +793,7 @@ onMounted(async () => {
     }
 
     // Load shipping info from store if available
-    const storedShippingInfo = (checkoutStore as any).shippingInfo
+    const storedShippingInfo = checkoutStore.shippingInfo
     if (storedShippingInfo) {
       if (storedShippingInfo.method) {
         selectedMethod.value = storedShippingInfo.method
