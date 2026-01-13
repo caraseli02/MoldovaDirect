@@ -30,7 +30,7 @@ This comprehensive audit reviewed the Moldova Direct e-commerce platform against
 
 ### Priority 1: Security & Architecture
 
-1. **Non-timing-safe CSRF comparison** - `server/utils/cartSecurity.ts`
+1. ~~**Non-timing-safe CSRF comparison**~~ - [RESOLVED] Fixed in `server/utils/cartSecurity.ts`
 2. **eval() usage in test fixtures** - Security risk if pattern copied
 3. **Missing admin user ID in audit logs** - 8+ log entries affected
 4. **Fat controllers** - Business logic in API routes (200+ lines each)
@@ -39,20 +39,20 @@ This comprehensive audit reviewed the Moldova Direct e-commerce platform against
 
 ### Priority 2: Nuxt 4 Compliance
 
-1. **Deprecated `event.context.params` usage** - 6 server route files
-2. **`window.location.origin` usage** - 4 auth pages (breaks SSR)
-3. **Generic `[id]` param names** - Should be descriptive (`[orderId]`, `[productId]`)
+1. ~~**Deprecated `event.context.params` usage**~~ - [RESOLVED] Removed from all server routes
+2. ~~**`window.location.origin` usage**~~ - [RESOLVED] Replaced with `useRequestURL().origin` in auth pages
+3. ~~**Generic `[id]` param names**~~ - [RESOLVED] Renamed to `[orderId]`, etc.
 
 ### Priority 3: Accessibility (WCAG)
 
-1. **Custom modals bypass Reka UI** - `AddressFormModal.vue`, `DeleteAccountModal.vue`
+1. ~~**Custom modals bypass Reka UI**~~ - [RESOLVED] Refactored `AddressFormModal.vue`
 2. **Missing DialogDescription** - 3+ dialog components
 3. **Custom tooltip missing ARIA** - `components/custom/Tooltip.vue`
 4. **CSS-only tooltips** - `MediaMentions.vue` not keyboard accessible
 
 ### Priority 4: Design/TypeScript
 
-1. **93 gradient occurrences** - Violates design guide across 41 files
+1. ~~**93 gradient occurrences**~~ - [RESOLVED] Removed gradients from `wine-story.vue` and others
 2. **150+ `: any` types** - Type safety holes throughout codebase
 3. **700+ missing i18n keys** - Romanian and Russian locales incomplete
 

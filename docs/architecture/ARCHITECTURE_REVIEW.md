@@ -1,3 +1,27 @@
+---
+archived: true
+archived_date: 2026-01-13
+archived_by: Antigravity
+reason: Superseded by Project Status and Codebase Audit Report. Critical issues have been resolved.
+superseded_by: ../../status/PROJECT_STATUS.md
+---
+
+> ⚠️ **ARCHIVED DOCUMENTATION**
+> This document was archived on 2026-01-13.
+> Reason: This review from Nov 2025 describes critical issues that have since been resolved (Jan 2026).
+> For current status, see: [Project Status](../../status/PROJECT_STATUS.md)
+
+# Status Update (January 2026)
+
+The following critical issues identified in this report have been **RESOLVED**:
+
+*   **Authentication Bypass**: The middleware bypass has been removed and is now properly environmental.
+*   **Exposed Service Key**: Keys have been rotated and `.env.example` sanitised.
+*   **CSRF Timing Attack**: Fixed in `server/utils/cartSecurity.ts`.
+*   **Admin Middleware**: Fully implemented and enabled.
+
+---
+
 # MoldovaDirect - Comprehensive Architecture Review
 
 **Review Date:** 2025-11-01
