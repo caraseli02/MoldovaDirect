@@ -6,7 +6,7 @@ import { useCheckoutPaymentStore } from './checkout/payment'
 import { useAuthStore } from '~/stores/auth'
 import { useCartStore } from '~/stores/cart'
 import { useStoreI18n } from '~/composables/useStoreI18n'
-import type { CheckoutStep, ShippingInformation, PaymentMethod, SavedPaymentMethod, Address, GuestInfo } from '~/types/checkout'
+import type { CheckoutState, CheckoutStep, ShippingInformation, PaymentMethod, SavedPaymentMethod, Address, GuestInfo } from '~/types/checkout'
 import type { CartItem } from '~/stores/cart/types'
 import { validateShippingInformation, validatePaymentMethod } from '~/utils/checkout-validation'
 import { createSystemError, CheckoutErrorCode } from '~/utils/checkout-errors'
@@ -333,7 +333,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
     }
   }
 
-  const api: Record<string | symbol, unknown> = {
+  const api = {
     canProceedToPayment,
     canProceedToReview,
     canCompleteOrder,
@@ -411,7 +411,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
       }
       return Reflect.set(session, prop as keyof typeof session, value)
     },
-  })
+  }) as unknown as typeof api & CheckoutState
 })
 
 export type CheckoutStore = ReturnType<typeof useCheckoutStore>
