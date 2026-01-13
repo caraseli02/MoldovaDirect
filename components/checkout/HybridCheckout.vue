@@ -704,7 +704,7 @@ const processStripePayment = async () => {
   }
 
   // Create payment intent on server
-  const { data: paymentIntentData } = await $fetch('/api/checkout/create-payment-intent', {
+  const paymentIntentData = await $fetch('/api/checkout/create-payment-intent', {
     method: 'POST',
     body: {
       amount: Math.round(calculatedTotal.value * 100), // Convert to cents
