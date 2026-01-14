@@ -129,9 +129,8 @@ describe('CardSection - Stripe Elements Integration', () => {
       const wrapper = mountComponent()
       const stripeContainer = wrapper.find('.stripe-card-element')
       expect(stripeContainer.exists()).toBe(true)
-      expect(stripeContainer.classes()).toContain('p-3')
-      expect(stripeContainer.classes()).toContain('border')
-      expect(stripeContainer.classes()).toContain('rounded-md')
+      // Container now has minimal styling - no padding, border, or rounded corners
+      // Styling is applied via Stripe's classes option instead
     })
 
     it('should render cardholder name input field', () => {

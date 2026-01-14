@@ -220,13 +220,18 @@ describe('useStripe', () => {
         style: expect.objectContaining({
           base: expect.objectContaining({
             fontSize: '16px',
-            color: '#424770',
+            color: '#1f2937', // Updated color
           }),
           invalid: expect.objectContaining({
-            color: '#9e2146',
+            color: '#ef4444', // Updated color
           }),
         }),
         hidePostalCode: true,
+        classes: expect.objectContaining({
+          base: 'stripe-element-base',
+          focus: 'stripe-element-focus',
+          invalid: 'stripe-element-invalid',
+        }),
       }))
     })
 
@@ -297,34 +302,45 @@ describe('useStripe', () => {
 
     it('handles payment confirmation with custom payment data', async () => {
       const { useStripe } = await import('./useStripe')
-      const { initializeStripe, confirmPayment } = useStripe()
+      const { initializeStripe, createCardElement, confirmPayment } = useStripe()
       await initializeStripe()
 
+      const mockContainer = document.createElement('div')
+      await createCardElement(mockContainer)
+
       const mockClientSecret = 'pi_test_secret_123'
-      const mockPaymentData = {
-        payment_method: 'pm_custom_123',
-        billing_details: {
-          name: 'John Doe',
-          email: 'john@example.com',
+      const mockBillingDetails = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        address: {
+          line1: '123 Main St',
+          city: 'Madrid',
+          postal_code: '28001',
+          country: 'ES',
         },
       }
 
       mockStripe.confirmCardPayment.mockResolvedValue(mockStripePaymentSuccess(29.99))
 
-      await confirmPayment(mockClientSecret, mockPaymentData)
+      await confirmPayment(mockClientSecret, mockBillingDetails)
 
       expect(mockStripe.confirmCardPayment).toHaveBeenCalledWith(
         mockClientSecret,
         expect.objectContaining({
-          payment_method: 'pm_custom_123',
+          payment_method: expect.objectContaining({
+            billing_details: mockBillingDetails,
+          }),
         }),
       )
     })
 
     it('handles payment confirmation failure', async () => {
       const { useStripe } = await import('./useStripe')
-      const { initializeStripe, confirmPayment, error } = useStripe()
+      const { initializeStripe, createCardElement, confirmPayment, error } = useStripe()
       await initializeStripe()
+
+      const mockContainer = document.createElement('div')
+      await createCardElement(mockContainer)
 
       const mockClientSecret = 'pi_test_secret_123'
       mockStripe.confirmCardPayment.mockResolvedValue(
@@ -340,8 +356,11 @@ describe('useStripe', () => {
 
     it('handles payment confirmation exception', async () => {
       const { useStripe } = await import('./useStripe')
-      const { initializeStripe, confirmPayment, error } = useStripe()
+      const { initializeStripe, createCardElement, confirmPayment, error } = useStripe()
       await initializeStripe()
+
+      const mockContainer = document.createElement('div')
+      await createCardElement(mockContainer)
 
       mockStripe.confirmCardPayment.mockRejectedValue(new Error('Network error'))
 
@@ -365,8 +384,11 @@ describe('useStripe', () => {
       }))
 
       const { useStripe } = await import('./useStripe')
-      const { initializeStripe, confirmPayment, loading } = useStripe()
+      const { initializeStripe, createCardElement, confirmPayment, loading } = useStripe()
       await initializeStripe()
+
+      const mockContainer = document.createElement('div')
+      await createCardElement(mockContainer)
 
       const promise = confirmPayment('pi_test_secret_123')
 
@@ -400,7 +422,7 @@ describe('useStripe', () => {
         },
       }
 
-      const result = await createPaymentMethod(mockCardElement, mockBillingDetails)
+      const result = await createPaymentMethod(mockBillingDetails)
 
       expect(result.success).toBe(true)
       expect(result.paymentMethod).toBeDefined()
@@ -413,10 +435,13 @@ describe('useStripe', () => {
 
     it('creates payment method without billing details', async () => {
       const { useStripe } = await import('./useStripe')
-      const { initializeStripe, createPaymentMethod } = useStripe()
+      const { initializeStripe, createCardElement, createPaymentMethod } = useStripe()
       await initializeStripe()
 
-      const result = await createPaymentMethod(mockCardElement)
+      const mockContainer = document.createElement('div')
+      await createCardElement(mockContainer)
+
+      const result = await createPaymentMethod()
 
       expect(result.success).toBe(true)
       expect(mockStripe.createPaymentMethod).toHaveBeenCalledWith({
@@ -428,8 +453,11 @@ describe('useStripe', () => {
 
     it('handles payment method creation failure', async () => {
       const { useStripe } = await import('./useStripe')
-      const { initializeStripe, createPaymentMethod, error } = useStripe()
+      const { initializeStripe, createCardElement, createPaymentMethod, error } = useStripe()
       await initializeStripe()
+
+      const mockContainer = document.createElement('div')
+      await createCardElement(mockContainer)
 
       mockStripe.createPaymentMethod.mockResolvedValue({
         error: {
@@ -440,7 +468,7 @@ describe('useStripe', () => {
         paymentMethod: undefined,
       })
 
-      const result = await createPaymentMethod(mockCardElement)
+      const result = await createPaymentMethod()
 
       expect(result.success).toBe(false)
       expect(result.error).toBeDefined()
@@ -449,12 +477,15 @@ describe('useStripe', () => {
 
     it('handles payment method creation exception', async () => {
       const { useStripe } = await import('./useStripe')
-      const { initializeStripe, createPaymentMethod, error } = useStripe()
+      const { initializeStripe, createCardElement, createPaymentMethod, error } = useStripe()
       await initializeStripe()
+
+      const mockContainer = document.createElement('div')
+      await createCardElement(mockContainer)
 
       mockStripe.createPaymentMethod.mockRejectedValue(new Error('Network error'))
 
-      const result = await createPaymentMethod(mockCardElement)
+      const result = await createPaymentMethod()
 
       expect(result.success).toBe(false)
       expect(error.value).toBe('Network error')
@@ -464,7 +495,7 @@ describe('useStripe', () => {
       const { useStripe } = await import('./useStripe')
       const { createPaymentMethod } = useStripe()
 
-      await expect(createPaymentMethod(mockCardElement)).rejects.toThrow('Stripe not initialized')
+      await expect(createPaymentMethod()).rejects.toThrow('Stripe not initialized')
     })
 
     it('sets loading state during payment method creation', async () => {
@@ -474,10 +505,13 @@ describe('useStripe', () => {
       }))
 
       const { useStripe } = await import('./useStripe')
-      const { initializeStripe, createPaymentMethod, loading } = useStripe()
+      const { initializeStripe, createCardElement, createPaymentMethod, loading } = useStripe()
       await initializeStripe()
 
-      const promise = createPaymentMethod(mockCardElement)
+      const mockContainer = document.createElement('div')
+      await createCardElement(mockContainer)
+
+      const promise = createPaymentMethod()
 
       await nextTick()
       expect(loading.value).toBe(true)
