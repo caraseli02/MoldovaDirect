@@ -55,6 +55,7 @@ export interface PaymentMethod {
     expiryYear: string
     cvv: string
     holderName: string
+    useStripeElements?: boolean
   }
   paypal?: {
     email: string
@@ -66,6 +67,8 @@ export interface PaymentMethod {
     confirmed: boolean
   }
   saveForFuture?: boolean
+  stripePaymentIntentId?: string
+  transactionId?: string
 }
 
 export interface SavedPaymentMethod {

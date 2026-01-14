@@ -433,6 +433,30 @@ async function globalSetup(config: FullConfig) {
 
   await browser.close()
 
+  // Seed test products for E2E tests
+  console.log('→ Seeding test products for E2E tests')
+  try {
+    const seedBrowser = await chromium.launch()
+    const seedContext = await seedBrowser.newContext({ baseURL })
+    const seedPage = await seedContext.newPage()
+
+    // Import the seeding helper
+    const { ensureTestProducts } = await import('./helpers/seed-test-products')
+
+    // Ensure test products exist
+    await ensureTestProducts(seedPage, baseURL)
+
+    await seedContext.close()
+    await seedBrowser.close()
+
+    console.log('✓ Test products seeding completed')
+  }
+  catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    console.warn(`⚠️  Failed to seed test products: ${errorMessage}`)
+    console.warn('   E2E tests may fail if products are not available')
+  }
+
   console.log('✓ Global setup completed successfully')
 }
 

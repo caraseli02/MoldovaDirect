@@ -2006,7 +2006,12 @@
       "holderNameRequired": "Cardholder name is required",
       "paypalEmailRequired": "PayPal email is required",
       "emailRequired": "Email is required",
-      "emailInvalid": "Please enter a valid email address"
+      "emailInvalid": "Please enter a valid email address",
+      "error": "Validation Error",
+      "addressInvalid": "Please check your address information",
+      "paymentInvalid": "Please check your payment information",
+      "guestInfoInvalid": "Please check your contact information",
+      "acceptTermsRequired": "Please accept the terms and conditions"
     },
     "warnings": {
       "concurrentCheckout": "Multiple Checkout Sessions Detected",
@@ -2122,10 +2127,17 @@
         "title": "Bank Transfer",
         "description": "Transfer the order amount to our bank account using the details below."
       },
+      "cardDetails": "Card Details",
+      "enterCardInfo": "Enter your credit or debit card information",
+      "loadingStripe": "Loading secure payment form...",
+      "stripeLoadFailed": "Unable to Load Payment Form",
+      "stripeLoadFailedMessage": "We're having trouble loading the secure payment form. Please check your internet connection and try again.",
+      "retryStripe": "Retry Loading",
       "cardNumber": "Card Number",
       "cardNumberPlaceholder": "1234 5678 9012 3456",
       "expiryDate": "Expiry Date",
       "expiryPlaceholder": "MM/YY",
+      "cvc": "CVC",
       "cvv": "CVV",
       "cvvPlaceholder": "123",
       "cvvHelp": "The 3-digit security code on the back of your card (4 digits for Amex)",
@@ -2178,6 +2190,7 @@
         "cvvInvalid": "Invalid CVV",
         "cvvLength": "CVV must be {length} digits",
         "holderNameRequired": "Cardholder name is required",
+        "cardholderNameTooShort": "Cardholder name is too short",
         "paypalEmailRequired": "PayPal email is required",
         "paypalEmailInvalid": "Invalid email address"
       }

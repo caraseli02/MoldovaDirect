@@ -644,7 +644,7 @@ const validateField = (fieldName: string) => {
   // Type guard to check if value is a string
   const getStringValue = (val: unknown): string => {
     if (typeof val === 'string') return val
-    if (val != null && typeof val !== 'boolean' && typeof val !== 'number') return String(val)
+    if (val !== null && val !== undefined && typeof val !== 'boolean' && typeof val !== 'number') return String(val)
     return ''
   }
 

@@ -199,7 +199,7 @@ const localFilters = ref<ProductFilters>({ ...props.filters })
 // Computed properties
 const selectedCategories = computed(() => {
   const category = localFilters.value.category
-  if (category == null) return []
+  if (category === null || category === undefined) return []
   return [String(category)]
 })
 

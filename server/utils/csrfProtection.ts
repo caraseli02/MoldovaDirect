@@ -288,6 +288,8 @@ export function createCSRFTokenEndpoint() {
     if (authHeader) {
       // Extract user ID from JWT if needed
       // This is a placeholder - implement based on your auth system
+      // For now, we'll leave userId as undefined
+      userId = undefined
     }
 
     const token = getOrCreateCSRFToken(sessionId, userId)

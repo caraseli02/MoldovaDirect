@@ -7,14 +7,38 @@ interface StripeComposable {
   cardElement: Ref<StripeCardElement | null>
   loading: Ref<boolean>
   error: Ref<string | null>
+  retryCount: Ref<number>
   initializeStripe: () => Promise<void>
   createCardElement: (container: HTMLElement) => Promise<void>
-  confirmPayment: (clientSecret: string, paymentData?: unknown) => Promise<unknown>
-  createPaymentMethod: (cardElement: StripeCardElement, billingDetails?: unknown) => Promise<unknown>
+  confirmPayment: (clientSecret: string, billingDetails?: unknown) => Promise<unknown>
+  createPaymentMethod: (billingDetails?: unknown) => Promise<unknown>
+  retryInitialization: () => Promise<void>
 }
 
 let stripePromise: Promise<Stripe | null> | null = null
 let stripeLibraryPromise: Promise<unknown> | null = null
+
+// Debug logging flag - set to false in production
+const DEBUG_MODE = process.env.NODE_ENV === 'development'
+const MAX_RETRY_ATTEMPTS = 3
+const RETRY_DELAY_MS = 1000
+
+function debugLog(...args: unknown[]) {
+  if (DEBUG_MODE) {
+    console.log('[Stripe Debug]', ...args)
+  }
+}
+
+function debugWarn(...args: unknown[]) {
+  if (DEBUG_MODE) {
+    console.warn('[Stripe Debug]', ...args)
+  }
+}
+
+function debugError(...args: unknown[]) {
+  // Always log errors, even in production
+  console.error('[Stripe Error]', ...args)
+}
 
 export const useStripe = (): StripeComposable => {
   const stripe = ref<Stripe | null>(null)
@@ -22,8 +46,9 @@ export const useStripe = (): StripeComposable => {
   const cardElement = ref<StripeCardElement | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const retryCount = ref(0)
 
-  const initializeStripe = async (): Promise<void> => {
+  const initializeStripe = async (attempt = 1): Promise<void> => {
     if (stripe.value) return
 
     try {
@@ -36,6 +61,9 @@ export const useStripe = (): StripeComposable => {
       if (!publishableKey) {
         throw new Error('Stripe publishable key not configured')
       }
+
+      debugLog('Initializing Stripe (attempt', attempt, 'of', MAX_RETRY_ATTEMPTS, ')')
+      debugLog('Using key:', publishableKey.substring(0, 15) + '...')
 
       // Dynamically import Stripe.js library (singleton pattern)
       if (!stripeLibraryPromise) {
@@ -54,16 +82,42 @@ export const useStripe = (): StripeComposable => {
         throw new Error('Failed to load Stripe')
       }
 
+      debugLog('Stripe loaded successfully')
       stripe.value = stripeInstance
       elements.value = stripeInstance.elements()
+      debugLog('Stripe elements created')
+      retryCount.value = 0 // Reset retry count on success
     }
     catch (err: unknown) {
-      error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to initialize Stripe'
-      console.error('Stripe initialization error:', getErrorMessage(err))
+      const errorMessage = err instanceof Error ? getErrorMessage(err) : 'Failed to initialize Stripe'
+      debugError('Stripe initialization error:', errorMessage)
+
+      // Retry logic for transient failures
+      if (attempt < MAX_RETRY_ATTEMPTS) {
+        debugLog(`Retrying Stripe initialization in ${RETRY_DELAY_MS}ms...`)
+        retryCount.value = attempt
+        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS * attempt))
+        return initializeStripe(attempt + 1)
+      }
+
+      // Max retries reached
+      error.value = errorMessage
+      retryCount.value = MAX_RETRY_ATTEMPTS
+      debugError('Max retry attempts reached. Stripe initialization failed.')
     }
     finally {
       loading.value = false
     }
+  }
+
+  const retryInitialization = async (): Promise<void> => {
+    // Reset state for manual retry
+    stripe.value = null
+    elements.value = null
+    cardElement.value = null
+    stripePromise = null
+    retryCount.value = 0
+    await initializeStripe()
   }
 
   const createCardElement = async (container: HTMLElement): Promise<void> => {
@@ -79,27 +133,46 @@ export const useStripe = (): StripeComposable => {
       loading.value = true
       error.value = null
 
-      // Create card element with styling
+      // Ensure container is visible and has dimensions
+      if (!container.offsetParent) {
+        debugWarn('Stripe container is not visible')
+      }
+
+      // Create unified card element with better styling
       const cardElementInstance = elements.value.create('card', {
         style: {
           base: {
             'fontSize': '16px',
-            'color': '#424770',
+            'color': '#1f2937',
+            'fontFamily': 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+            'lineHeight': '44px',
+            'padding': '12px',
             '::placeholder': {
-              color: '#aab7c4',
+              color: '#9ca3af',
             },
-            'fontFamily': 'system-ui, -apple-system, sans-serif',
           },
           invalid: {
-            color: '#9e2146',
+            color: '#ef4444',
+            iconColor: '#ef4444',
           },
         },
-        hidePostalCode: true, // We collect this separately
+        hidePostalCode: true,
+        classes: {
+          base: 'stripe-element-base',
+          focus: 'stripe-element-focus',
+          invalid: 'stripe-element-invalid',
+        },
       })
 
       // Mount the card element
       cardElementInstance.mount(container)
       cardElement.value = cardElementInstance
+
+      // Listen for ready event
+      cardElementInstance.on('ready', () => {
+        debugLog('Stripe Card Element is ready')
+        loading.value = false
+      })
 
       // Listen for changes
       cardElementInstance.on('change', (event) => {
@@ -110,18 +183,21 @@ export const useStripe = (): StripeComposable => {
           error.value = null
         }
       })
+
+      // Listen for focus
+      cardElementInstance.on('focus', () => {
+        debugLog('Stripe Card Element focused')
+      })
     }
     catch (err: unknown) {
       error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to create card element'
-      console.error('Card element creation error:', getErrorMessage(err))
-    }
-    finally {
+      debugError('Card element creation error:', getErrorMessage(err))
       loading.value = false
     }
   }
 
-  const confirmPayment = async (clientSecret: string, paymentData?: unknown): Promise<unknown> => {
-    if (!stripe.value) {
+  const confirmPayment = async (clientSecret: string, billingDetails?: unknown): Promise<unknown> => {
+    if (!stripe.value || !cardElement.value) {
       throw new Error('Stripe not initialized')
     }
 
@@ -129,11 +205,10 @@ export const useStripe = (): StripeComposable => {
       loading.value = true
       error.value = null
 
-      const paymentDataTyped = paymentData as { payment_method?: any, billing_details?: unknown } | undefined
       const result = await stripe.value.confirmCardPayment(clientSecret, {
-        payment_method: paymentDataTyped?.payment_method || {
-          card: cardElement.value!,
-          billing_details: paymentDataTyped?.billing_details || {},
+        payment_method: {
+          card: cardElement.value,
+          billing_details: billingDetails || {},
         },
       })
 
@@ -146,7 +221,7 @@ export const useStripe = (): StripeComposable => {
     }
     catch (err: unknown) {
       error.value = err instanceof Error ? getErrorMessage(err) : 'Payment confirmation failed'
-      console.error('Payment confirmation error:', getErrorMessage(err))
+      debugError('Payment confirmation error:', getErrorMessage(err))
       return { success: false, error: err }
     }
     finally {
@@ -154,8 +229,8 @@ export const useStripe = (): StripeComposable => {
     }
   }
 
-  const createPaymentMethod = async (cardElement: StripeCardElement, billingDetails?: unknown): Promise<unknown> => {
-    if (!stripe.value) {
+  const createPaymentMethod = async (billingDetails?: unknown): Promise<unknown> => {
+    if (!stripe.value || !cardElement.value) {
       throw new Error('Stripe not initialized')
     }
 
@@ -165,7 +240,7 @@ export const useStripe = (): StripeComposable => {
 
       const result = await stripe.value.createPaymentMethod({
         type: 'card',
-        card: cardElement,
+        card: cardElement.value,
         billing_details: billingDetails || {},
       })
 
@@ -178,7 +253,7 @@ export const useStripe = (): StripeComposable => {
     }
     catch (err: unknown) {
       error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to create payment method'
-      console.error('Payment method creation error:', getErrorMessage(err))
+      debugError('Payment method creation error:', getErrorMessage(err))
       return { success: false, error: err }
     }
     finally {
@@ -192,10 +267,12 @@ export const useStripe = (): StripeComposable => {
     cardElement,
     loading,
     error,
+    retryCount,
     initializeStripe,
     createCardElement,
     confirmPayment,
     createPaymentMethod,
+    retryInitialization,
   }
 }
 

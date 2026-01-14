@@ -665,7 +665,7 @@ describe('PaymentSection', () => {
         props: defaultProps,
       })
 
-      const comingSoonContainer = wrapper.find('.mt-3.space-y-2')
+      const comingSoonContainer = wrapper.find('.mt-6.space-y-2')
       expect(comingSoonContainer.exists()).toBe(true)
     })
 

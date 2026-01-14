@@ -25,41 +25,96 @@
       </span>
     </div>
     <div class="section-content">
-      <!-- Cash Payment (Active) -->
-      <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg">
-        <label class="flex items-center cursor-pointer">
-          <input
-            :checked="modelValue.type === 'cash'"
-            type="radio"
-            value="cash"
-            class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
-            @change="updatePaymentType('cash')"
-          />
-          <div class="ml-3 flex items-center">
-            <span class="text-xl mr-2">💵</span>
-            <div>
-              <p class="font-medium text-gray-900 dark:text-white">
-                {{ $t('checkout.payment.cash.label') }}
-              </p>
-              <p class="text-sm text-gray-600 dark:text-gray-400">
-                {{ $t('checkout.payment.cash.summary') }}
-              </p>
+      <!-- Payment Method Selection -->
+      <div class="space-y-3">
+        <!-- Cash Payment -->
+        <div
+          class="p-4 border rounded-lg cursor-pointer transition-colors"
+          :class="modelValue.type === 'cash'
+            ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700'
+            : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
+          @click="updatePaymentType('cash')"
+        >
+          <label class="flex items-center cursor-pointer">
+            <input
+              :checked="modelValue.type === 'cash'"
+              type="radio"
+              value="cash"
+              class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
+              @change="updatePaymentType('cash')"
+            />
+            <div class="ml-3 flex items-center">
+              <span class="text-xl mr-2">💵</span>
+              <div>
+                <p class="font-medium text-gray-900 dark:text-white">
+                  {{ $t('checkout.payment.cash.label') }}
+                </p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  {{ $t('checkout.payment.cash.summary') }}
+                </p>
+              </div>
             </div>
-          </div>
-        </label>
+          </label>
+        </div>
+
+        <!-- Credit Card Payment (Stripe) -->
+        <div
+          class="p-4 border rounded-lg cursor-pointer transition-colors"
+          :class="modelValue.type === 'credit_card'
+            ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700'
+            : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
+          @click="updatePaymentType('credit_card')"
+        >
+          <label class="flex items-center cursor-pointer">
+            <input
+              :checked="modelValue.type === 'credit_card'"
+              type="radio"
+              value="credit_card"
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+              @change="updatePaymentType('credit_card')"
+            />
+            <div class="ml-3 flex items-center">
+              <span class="text-xl mr-2">💳</span>
+              <div>
+                <p class="font-medium text-gray-900 dark:text-white">
+                  {{ $t('checkout.payment.creditCard.label') }}
+                </p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  {{ $t('checkout.payment.creditCard.summary') }}
+                </p>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Payment Form for Selected Method -->
+      <div
+        v-if="modelValue.type !== 'cash'"
+        class="mt-6"
+      >
+        <PaymentForm
+          ref="paymentFormRef"
+          :model-value="modelValue"
+          :loading="loading"
+          :errors="errors"
+          @update:model-value="(value) => emit('update:modelValue', value)"
+          @stripe-ready="onStripeReady"
+          @stripe-error="onStripeError"
+        />
       </div>
 
       <!-- Coming Soon Methods -->
-      <div class="mt-3 space-y-2">
+      <div class="mt-6 space-y-2">
         <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">
           {{ $t('checkout.payment.comingSoon') }}
         </p>
         <div class="flex flex-wrap gap-2">
           <span class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 flex items-center">
-            💳 {{ $t('checkout.payment.creditCard.label') }}
+            🅿️ {{ $t('checkout.payment.paypal.label') }}
           </span>
           <span class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 flex items-center">
-            🅿️ {{ $t('checkout.payment.paypal.label') }}
+            🏦 {{ $t('checkout.payment.bankTransfer.label') }}
           </span>
         </div>
       </div>
@@ -68,23 +123,41 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import type { PaymentMethod as PaymentMethodType } from '~/types/checkout'
+import PaymentForm from '~/components/checkout/PaymentForm.vue'
 
 interface Props {
   modelValue: PaymentMethodType
   sectionNumber: string | number
+  loading?: boolean
+  errors?: Record<string, string>
 }
 
 interface Emits {
   (e: 'update:modelValue', value: PaymentMethodType): void
+  (e: 'stripe-ready', ready: boolean): void
+  (e: 'stripe-error', error: string | null): void
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  loading: false,
+  errors: () => ({}),
+})
 const emit = defineEmits<Emits>()
 
+// Refs
+const paymentFormRef = ref<{ validateForm: () => boolean, getStripeCardElement: () => any } | null>(null)
+
 const isPaymentValid = computed(() => {
-  return props.modelValue.type === 'cash'
+  if (props.modelValue.type === 'cash') {
+    return true
+  }
+  if (props.modelValue.type === 'credit_card') {
+    const card = props.modelValue.creditCard
+    return !!(card?.holderName) // Stripe handles card validation
+  }
+  return false
 })
 
 const updatePaymentType = (type: 'cash' | 'credit_card' | 'paypal' | 'bank_transfer') => {
@@ -93,6 +166,30 @@ const updatePaymentType = (type: 'cash' | 'credit_card' | 'paypal' | 'bank_trans
     type,
   })
 }
+
+const onStripeReady = (ready: boolean) => {
+  emit('stripe-ready', ready)
+}
+
+const onStripeError = (error: string | null) => {
+  emit('stripe-error', error)
+}
+
+// Expose methods for parent components
+defineExpose({
+  validateForm: () => {
+    if (paymentFormRef.value) {
+      return paymentFormRef.value.validateForm()
+    }
+    return true
+  },
+  getStripeCardElement: () => {
+    if (paymentFormRef.value) {
+      return paymentFormRef.value.getStripeCardElement()
+    }
+    return null
+  },
+})
 </script>
 
 <style scoped>

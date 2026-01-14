@@ -455,18 +455,24 @@ export class CheckoutPage {
    * Place order (clicks the Place Order button - handles both desktop and mobile)
    */
   async placeOrder() {
+    // Log current state before clicking
+    console.log('🔍 Current URL before place order:', this.page.url())
+
     // Try desktop button first
     if (await this.placeOrderButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+      console.log('✅ Found desktop place order button')
       await this.placeOrderButton.click()
     }
     else {
       // Try mobile sticky footer button
       const mobileButton = this.page.locator('.lg\\:hidden button:has-text("Realizar"), .lg\\:hidden button:has-text("Place Order"), button.fixed:has-text("Realizar"), button.fixed:has-text("Place Order")').first()
       if (await mobileButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+        console.log('✅ Found mobile place order button')
         await mobileButton.click()
       }
       else {
         // Last resort: use JavaScript to find and click any place order button
+        console.log('⚠️  Using JavaScript to find place order button')
         await this.page.evaluate(() => {
           const buttons = Array.from(document.querySelectorAll('button'))
           const placeOrderBtn = buttons.find(b =>
@@ -474,11 +480,56 @@ export class CheckoutPage {
             || b.textContent?.includes('Place Order')
             || b.textContent?.includes('Plasează'),
           )
-          if (placeOrderBtn) placeOrderBtn.click()
+          if (placeOrderBtn) {
+            console.log('Found button:', placeOrderBtn.textContent)
+            placeOrderBtn.click()
+          }
+          else {
+            console.log('❌ No place order button found')
+          }
         })
       }
     }
-    await this.page.waitForLoadState('networkidle')
+
+    console.log('⏳ Waiting for navigation or error...')
+
+    // Wait for either:
+    // 1. Navigation to confirmation page (success)
+    // 2. Error message (failure)
+    try {
+      await Promise.race([
+        this.page.waitForURL('**/checkout/confirmation**', { timeout: 45000 }).then(() => {
+          console.log('✅ Navigated to confirmation page')
+        }),
+        this.page.waitForSelector('[role="alert"]', { timeout: 45000 }).then(async () => {
+          const alertText = await this.page.locator('[role="alert"]').textContent()
+          console.log('⚠️  Alert appeared:', alertText)
+        }),
+      ])
+    }
+    catch (error) {
+      // If timeout, log detailed debugging info
+      console.log('❌ Timeout waiting for navigation or error')
+      console.log('   Current URL:', this.page.url())
+
+      // Check for any console errors
+      const consoleErrors = await this.page.evaluate(() => {
+        return (window as any).__testErrors || []
+      })
+      if (consoleErrors.length > 0) {
+        console.log('   Console errors:', consoleErrors)
+      }
+
+      // Check if button is still enabled (might indicate processing stuck)
+      const buttonEnabled = await this.placeOrderButton.isEnabled().catch(() => null)
+      console.log('   Place order button enabled:', buttonEnabled)
+
+      // Take a screenshot for debugging
+      await this.page.screenshot({ path: 'test-results/place-order-timeout.png', fullPage: true })
+      console.log('   Screenshot saved to: test-results/place-order-timeout.png')
+
+      throw error
+    }
   }
 
   /**

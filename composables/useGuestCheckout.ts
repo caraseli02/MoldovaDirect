@@ -22,10 +22,10 @@ export function useGuestCheckout() {
   const { t } = useI18n()
 
   // State
-  const showGuestForm = ref(process.env.NODE_ENV === 'development' ? true : false)
+  const showGuestForm = ref(process.env.NODE_ENV === 'development')
   const guestInfo = ref<GuestInfo>({
     email: process.env.NODE_ENV === 'development' ? 'john.doe@example.com' : '',
-    emailUpdates: process.env.NODE_ENV === 'development' ? true : false,
+    emailUpdates: process.env.NODE_ENV === 'development',
   })
   const guestErrors = ref<Record<string, string>>({})
 

@@ -256,6 +256,42 @@ export function validatePaymentMethod(paymentMethod: Partial<PaymentMethod>): Ch
   }
 }
 
+function validateCardholderNameOnly(holderName?: string): CheckoutValidationResult {
+  const errors: CheckoutValidationError[] = []
+  const warnings: ValidationWarning[] = []
+
+  if (!holderName?.trim()) {
+    errors.push({
+      field: 'holderName',
+      code: 'REQUIRED',
+      message: 'Cardholder name is required',
+      severity: 'error',
+    })
+  }
+  else if (holderName.length < 2) {
+    errors.push({
+      field: 'holderName',
+      code: 'TOO_SHORT',
+      message: 'Cardholder name must be at least 2 characters',
+      severity: 'error',
+    })
+  }
+  else if (holderName.length > 50) {
+    errors.push({
+      field: 'holderName',
+      code: 'TOO_LONG',
+      message: 'Cardholder name must be less than 50 characters',
+      severity: 'error',
+    })
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+    warnings,
+  }
+}
+
 function validateCreditCard(creditCard?: PaymentMethod['creditCard']): CheckoutValidationResult {
   const errors: CheckoutValidationError[] = []
   const warnings: ValidationWarning[] = []
@@ -270,6 +306,13 @@ function validateCreditCard(creditCard?: PaymentMethod['creditCard']): CheckoutV
     return { isValid: false, errors, warnings }
   }
 
+  // When using Stripe Elements, only validate cardholder name
+  // Card details are handled securely by Stripe's iframe
+  if (creditCard.useStripeElements) {
+    return validateCardholderNameOnly(creditCard.holderName)
+  }
+
+  // Legacy validation for non-Stripe card entry
   // Card number validation
   if (!creditCard.number?.trim()) {
     errors.push({

@@ -140,8 +140,11 @@
           <!-- Payment Section -->
           <CheckoutPaymentSection
             v-if="isAddressValid && selectedMethod"
+            ref="paymentSectionRef"
             v-model="paymentMethod"
             :section-number="user ? '3' : '4'"
+            @stripe-ready="onStripeReady"
+            @stripe-error="onStripeError"
           />
 
           <!-- Delivery Instructions (Optional) -->
@@ -236,6 +239,7 @@ import type { ShippingInformation, PaymentMethod as PaymentMethodType, ShippingM
 import type { GuestInfo } from '~/composables/useGuestCheckout'
 import type { Address } from '~/types/address'
 import { useCartStore } from '~/stores/cart'
+import { useCheckoutSessionStore } from '~/stores/checkout/session'
 
 // Components - with error handling for async loading failures
 const createAsyncComponent = (loader: () => Promise<unknown>, name: string) =>
@@ -303,6 +307,7 @@ const toast = useToast()
 
 // Component refs
 const addressFormRef = ref<{ validateForm: () => boolean } | null>(null)
+const paymentSectionRef = ref<{ validateForm: () => boolean, getStripeCardElement: () => any } | null>(null)
 
 // Guest checkout composable
 const {
@@ -343,6 +348,8 @@ const processingOrder = ref(false)
 const loadingOrder = ref(false)
 const expressCheckoutDismissed = ref(false)
 const shippingInstructions = ref('')
+const stripeReady = ref(false)
+const stripeError = ref<string | null>(null)
 
 // Payment state
 const paymentMethod = ref<PaymentMethodType>({
@@ -422,7 +429,13 @@ const isAddressComplete = computed(() => {
 })
 
 const isPaymentValid = computed(() => {
-  return paymentMethod.value.type === 'cash'
+  if (paymentMethod.value.type === 'cash') {
+    return true
+  }
+  if (paymentMethod.value.type === 'credit_card') {
+    return stripeReady.value && !stripeError.value && paymentMethod.value.creditCard?.holderName
+  }
+  return false
 })
 
 const shippingMethodValidationError = computed(() => {
@@ -455,6 +468,14 @@ const onAddressComplete = () => {
   if (isAddressValid.value) {
     loadShippingMethods()
   }
+}
+
+const onStripeReady = (ready: boolean) => {
+  stripeReady.value = ready
+}
+
+const onStripeError = (error: string | null) => {
+  stripeError.value = error
 }
 
 const handleExpressPlaceOrder = async () => {
@@ -553,6 +574,15 @@ const handlePlaceOrder = async () => {
     return
   }
 
+  // Validate payment form (including Stripe validation for credit cards)
+  if (paymentSectionRef.value && !paymentSectionRef.value.validateForm()) {
+    toast.error(
+      t('checkout.validation.error'),
+      t('checkout.validation.paymentInvalid'),
+    )
+    return
+  }
+
   processingOrder.value = true
 
   try {
@@ -620,11 +650,14 @@ const processOrder = async () => {
   ;(checkoutStore).currentStep = 'review'
 
   try {
-    // Process payment - this handles the full checkout flow:
-    // 1. Creates order record
-    // 2. Processes payment by type
-    // 3. Calls completeCheckout with order data
-    await checkoutStore.processPayment()
+    // Handle Stripe payment processing for credit cards
+    if (paymentMethod.value.type === 'credit_card') {
+      await processStripePayment()
+    }
+    else {
+      // Process other payment types (cash, etc.) using the unified checkout store method
+      await checkoutStore.processPayment()
+    }
   }
   catch (paymentError: any) {
     // Log error for debugging (production would use proper error tracking)
@@ -650,6 +683,82 @@ const processOrder = async () => {
       window.location.href = localePath('/checkout/confirmation')
     }, 2000)
   }
+}
+
+const processStripePayment = async () => {
+  const { useStripe } = await import('~/composables/useStripe')
+  const { stripe, initializeStripe } = useStripe()
+
+  // Ensure Stripe is initialized
+  if (!stripe.value) {
+    await initializeStripe()
+  }
+
+  if (!stripe.value) {
+    throw new Error('Stripe not available')
+  }
+
+  // Get the Stripe card element from the payment form
+  const cardElement = paymentSectionRef.value?.getStripeCardElement()
+  if (!cardElement) {
+    throw new Error('Card element not available')
+  }
+
+  // Create payment intent on server
+  const paymentIntentData = await $fetch('/api/checkout/create-payment-intent', {
+    method: 'POST',
+    body: {
+      amount: Math.round(calculatedTotal.value * 100), // Convert to cents
+      currency: 'eur',
+      sessionId: checkoutStore.sessionId || 'temp-session',
+    },
+  })
+
+  if (!paymentIntentData.success || !paymentIntentData.paymentIntent.client_secret) {
+    throw new Error('Failed to create payment intent')
+  }
+
+  // Confirm payment with Stripe
+  const { error: stripeError, paymentIntent } = await stripe.value.confirmCardPayment(
+    paymentIntentData.paymentIntent.client_secret,
+    {
+      payment_method: {
+        card: cardElement,
+        billing_details: {
+          name: paymentMethod.value.creditCard?.holderName || '',
+          address: {
+            line1: shippingAddress.value.street || '',
+            city: shippingAddress.value.city || '',
+            postal_code: shippingAddress.value.postalCode || '',
+            country: shippingAddress.value.country || '',
+          },
+        },
+      },
+    },
+  )
+
+  if (stripeError) {
+    throw new Error(stripeError.message || 'Payment failed')
+  }
+
+  if (paymentIntent?.status !== 'succeeded') {
+    throw new Error('Payment was not completed successfully')
+  }
+
+  // Store payment intent in checkout session store
+  const sessionStore = useCheckoutSessionStore()
+  sessionStore.setPaymentIntent(paymentIntent.id)
+  sessionStore.setPaymentClientSecret(paymentIntentData.paymentIntent.client_secret)
+
+  // Update payment method with Stripe transaction details
+  await checkoutStore.updatePaymentMethod({
+    ...paymentMethod.value,
+    stripePaymentIntentId: paymentIntent.id,
+    transactionId: paymentIntent.id,
+  })
+
+  // Complete the checkout process
+  await checkoutStore.processPayment()
 }
 
 // Initialize

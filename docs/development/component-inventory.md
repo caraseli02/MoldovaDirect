@@ -6,7 +6,8 @@ This document provides a comprehensive inventory of UI components available in t
 
 ## Overview
 
-As of January 2026, the project uses a **custom component library** located in `components/ui/`. This replaces the previous shadcn-vue and Reka UI dependencies (removed in PR #346) for a lighter-weight, more maintainable solution.
+As of January 2026, the project uses a **localized component system** located in `components/ui/`. This replaces the reliance on purely external UI libraries, allowing for a more maintainable, project-specific solution that preserves custom fixes (such as v-model reactivity improvements) while still leveraging **Reka UI** (a headless UI primitive library) for industry-standard accessibility.
+
 
 ## Available UI Components
 

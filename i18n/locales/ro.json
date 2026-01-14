@@ -2009,7 +2009,12 @@
       "holderNameRequired": "Numele titularului cardului este obligatoriu",
       "paypalEmailRequired": "Email-ul PayPal este obligatoriu",
       "emailRequired": "Email-ul este obligatoriu",
-      "emailInvalid": "Te rugăm să introduci o adresă de email validă"
+      "emailInvalid": "Te rugăm să introduci o adresă de email validă",
+      "error": "Eroare de Validare",
+      "addressInvalid": "Te rugăm să verifici informațiile adresei",
+      "paymentInvalid": "Te rugăm să verifici informațiile de plată",
+      "guestInfoInvalid": "Te rugăm să verifici informațiile de contact",
+      "acceptTermsRequired": "Te rugăm să accepți termenii și condițiile"
     },
     "warnings": {
       "concurrentCheckout": "Sesiuni Multiple de Plată Detectate",
@@ -2125,10 +2130,17 @@
         "title": "Transfer Bancar",
         "description": "Transferă suma comenzii în contul nostru bancar folosind detaliile de mai jos."
       },
+      "cardDetails": "Detalii Card",
+      "enterCardInfo": "Introdu informațiile cardului tău de credit sau debit",
+      "loadingStripe": "Se încarcă formularul de plată securizat...",
+      "stripeLoadFailed": "Nu se Poate Încărca Formularul de Plată",
+      "stripeLoadFailedMessage": "Avem probleme la încărcarea formularului de plată securizat. Vă rugăm să verificați conexiunea la internet și să încercați din nou.",
+      "retryStripe": "Reîncercați Încărcarea",
       "cardNumber": "Număr Card",
       "cardNumberPlaceholder": "1234 5678 9012 3456",
       "expiryDate": "Data de Expirare",
       "expiryPlaceholder": "LL/AA",
+      "cvc": "CVC",
       "cvv": "CVV",
       "cvvPlaceholder": "123",
       "cvvHelp": "Codul de securitate de 3 cifre de pe spatele cardului (4 cifre pentru Amex)",
@@ -2181,6 +2193,7 @@
         "cvvInvalid": "CVV invalid",
         "cvvLength": "CVV-ul trebuie să aibă {length} cifre",
         "holderNameRequired": "Numele titularului este obligatoriu",
+        "cardholderNameTooShort": "Numele titularului este prea scurt",
         "paypalEmailRequired": "Email-ul PayPal este obligatoriu",
         "paypalEmailInvalid": "Adresă de email invalidă"
       }

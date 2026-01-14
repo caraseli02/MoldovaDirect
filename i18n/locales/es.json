@@ -2010,7 +2010,12 @@
       "holderNameRequired": "El nombre del titular es requerido",
       "paypalEmailRequired": "El email de PayPal es requerido",
       "emailRequired": "El email es requerido",
-      "emailInvalid": "Por favor ingresa un email válido"
+      "emailInvalid": "Por favor ingresa un email válido",
+      "error": "Error de Validación",
+      "addressInvalid": "Por favor verifica la información de tu dirección",
+      "paymentInvalid": "Por favor verifica la información de tu pago",
+      "guestInfoInvalid": "Por favor verifica tu información de contacto",
+      "acceptTermsRequired": "Por favor acepta los términos y condiciones"
     },
     "warnings": {
       "concurrentCheckout": "Múltiples Sesiones de Pago Detectadas",
@@ -2126,10 +2131,17 @@
         "title": "Transferencia Bancaria",
         "description": "Transfiere el monto del pedido a nuestra cuenta bancaria usando los detalles a continuación."
       },
+      "cardDetails": "Detalles de la Tarjeta",
+      "enterCardInfo": "Ingresa la información de tu tarjeta de crédito o débito",
+      "loadingStripe": "Cargando formulario de pago seguro...",
+      "stripeLoadFailed": "No se Puede Cargar el Formulario de Pago",
+      "stripeLoadFailedMessage": "Tenemos problemas para cargar el formulario de pago seguro. Por favor, verifique su conexión a internet e intente nuevamente.",
+      "retryStripe": "Reintentar Carga",
       "cardNumber": "Número de Tarjeta",
       "cardNumberPlaceholder": "1234 5678 9012 3456",
       "expiryDate": "Fecha de Vencimiento",
       "expiryPlaceholder": "MM/AA",
+      "cvc": "CVC",
       "cvv": "CVV",
       "cvvPlaceholder": "123",
       "cvvHelp": "El código de seguridad de 3 dígitos en el reverso de tu tarjeta (4 dígitos para Amex)",
@@ -2182,6 +2194,7 @@
         "cvvInvalid": "CVV inválido",
         "cvvLength": "El CVV debe tener {length} dígitos",
         "holderNameRequired": "El nombre del titular es obligatorio",
+        "cardholderNameTooShort": "El nombre del titular es demasiado corto",
         "paypalEmailRequired": "El correo de PayPal es obligatorio",
         "paypalEmailInvalid": "Dirección de correo inválida"
       }
