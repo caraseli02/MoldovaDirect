@@ -7,14 +7,38 @@ interface StripeComposable {
   cardElement: Ref<StripeCardElement | null>
   loading: Ref<boolean>
   error: Ref<string | null>
+  retryCount: Ref<number>
   initializeStripe: () => Promise<void>
   createCardElement: (container: HTMLElement) => Promise<void>
   confirmPayment: (clientSecret: string, billingDetails?: unknown) => Promise<unknown>
   createPaymentMethod: (billingDetails?: unknown) => Promise<unknown>
+  retryInitialization: () => Promise<void>
 }
 
 let stripePromise: Promise<Stripe | null> | null = null
 let stripeLibraryPromise: Promise<unknown> | null = null
+
+// Debug logging flag - set to false in production
+const DEBUG_MODE = process.env.NODE_ENV === 'development'
+const MAX_RETRY_ATTEMPTS = 3
+const RETRY_DELAY_MS = 1000
+
+function debugLog(...args: unknown[]) {
+  if (DEBUG_MODE) {
+    console.log('[Stripe Debug]', ...args)
+  }
+}
+
+function debugWarn(...args: unknown[]) {
+  if (DEBUG_MODE) {
+    console.warn('[Stripe Debug]', ...args)
+  }
+}
+
+function debugError(...args: unknown[]) {
+  // Always log errors, even in production
+  console.error('[Stripe Error]', ...args)
+}
 
 export const useStripe = (): StripeComposable => {
   const stripe = ref<Stripe | null>(null)
@@ -22,8 +46,9 @@ export const useStripe = (): StripeComposable => {
   const cardElement = ref<StripeCardElement | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const retryCount = ref(0)
 
-  const initializeStripe = async (): Promise<void> => {
+  const initializeStripe = async (attempt = 1): Promise<void> => {
     if (stripe.value) return
 
     try {
@@ -37,8 +62,8 @@ export const useStripe = (): StripeComposable => {
         throw new Error('Stripe publishable key not configured')
       }
 
-      // Log key type for debugging (only first few characters for security)
-      console.log('Initializing Stripe with key:', publishableKey.substring(0, 15) + '...')
+      debugLog('Initializing Stripe (attempt', attempt, 'of', MAX_RETRY_ATTEMPTS, ')')
+      debugLog('Using key:', publishableKey.substring(0, 15) + '...')
 
       // Dynamically import Stripe.js library (singleton pattern)
       if (!stripeLibraryPromise) {
@@ -57,18 +82,42 @@ export const useStripe = (): StripeComposable => {
         throw new Error('Failed to load Stripe')
       }
 
-      console.log('Stripe loaded successfully')
+      debugLog('Stripe loaded successfully')
       stripe.value = stripeInstance
       elements.value = stripeInstance.elements()
-      console.log('Stripe elements created')
+      debugLog('Stripe elements created')
+      retryCount.value = 0 // Reset retry count on success
     }
     catch (err: unknown) {
-      error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to initialize Stripe'
-      console.error('Stripe initialization error:', getErrorMessage(err))
+      const errorMessage = err instanceof Error ? getErrorMessage(err) : 'Failed to initialize Stripe'
+      debugError('Stripe initialization error:', errorMessage)
+
+      // Retry logic for transient failures
+      if (attempt < MAX_RETRY_ATTEMPTS) {
+        debugLog(`Retrying Stripe initialization in ${RETRY_DELAY_MS}ms...`)
+        retryCount.value = attempt
+        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS * attempt))
+        return initializeStripe(attempt + 1)
+      }
+
+      // Max retries reached
+      error.value = errorMessage
+      retryCount.value = MAX_RETRY_ATTEMPTS
+      debugError('Max retry attempts reached. Stripe initialization failed.')
     }
     finally {
       loading.value = false
     }
+  }
+
+  const retryInitialization = async (): Promise<void> => {
+    // Reset state for manual retry
+    stripe.value = null
+    elements.value = null
+    cardElement.value = null
+    stripePromise = null
+    retryCount.value = 0
+    await initializeStripe()
   }
 
   const createCardElement = async (container: HTMLElement): Promise<void> => {
@@ -86,7 +135,7 @@ export const useStripe = (): StripeComposable => {
 
       // Ensure container is visible and has dimensions
       if (!container.offsetParent) {
-        console.warn('Stripe container is not visible')
+        debugWarn('Stripe container is not visible')
       }
 
       // Create unified card element with better styling
@@ -121,7 +170,7 @@ export const useStripe = (): StripeComposable => {
 
       // Listen for ready event
       cardElementInstance.on('ready', () => {
-        console.log('Stripe Card Element is ready')
+        debugLog('Stripe Card Element is ready')
         loading.value = false
       })
 
@@ -137,12 +186,12 @@ export const useStripe = (): StripeComposable => {
 
       // Listen for focus
       cardElementInstance.on('focus', () => {
-        console.log('Stripe Card Element focused')
+        debugLog('Stripe Card Element focused')
       })
     }
     catch (err: unknown) {
       error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to create card element'
-      console.error('Card element creation error:', getErrorMessage(err))
+      debugError('Card element creation error:', getErrorMessage(err))
       loading.value = false
     }
   }
@@ -172,7 +221,7 @@ export const useStripe = (): StripeComposable => {
     }
     catch (err: unknown) {
       error.value = err instanceof Error ? getErrorMessage(err) : 'Payment confirmation failed'
-      console.error('Payment confirmation error:', getErrorMessage(err))
+      debugError('Payment confirmation error:', getErrorMessage(err))
       return { success: false, error: err }
     }
     finally {
@@ -204,7 +253,7 @@ export const useStripe = (): StripeComposable => {
     }
     catch (err: unknown) {
       error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to create payment method'
-      console.error('Payment method creation error:', getErrorMessage(err))
+      debugError('Payment method creation error:', getErrorMessage(err))
       return { success: false, error: err }
     }
     finally {
@@ -218,10 +267,12 @@ export const useStripe = (): StripeComposable => {
     cardElement,
     loading,
     error,
+    retryCount,
     initializeStripe,
     createCardElement,
     confirmPayment,
     createPaymentMethod,
+    retryInitialization,
   }
 }
 

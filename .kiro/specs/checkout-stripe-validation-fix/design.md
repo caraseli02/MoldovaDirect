@@ -120,9 +120,46 @@ No database changes required. The `useStripeElements` flag is runtime-only.
 ## Testing Strategy
 
 ### Unit Tests
-- Test `validateCreditCard` with `useStripeElements: true` and valid holderName → passes
-- Test `validateCreditCard` with `useStripeElements: true` and empty holderName → fails
-- Test `validateCreditCard` with `useStripeElements: false` and missing card fields → fails
+- ✅ Test `validateCreditCard` with `useStripeElements: true` and valid holderName → passes
+- ✅ Test `validateCreditCard` with `useStripeElements: true` and empty holderName → fails
+- ✅ Test `validateCreditCard` with `useStripeElements: false` and missing card fields → fails
 
 ### E2E Tests
-Existing tests in `tests/e2e/stripe-payment-integration.spec.ts` should pass after the fix.
+✅ Existing tests in `tests/e2e/stripe-payment-integration.spec.ts` pass after the fix.
+
+**E2E Test Improvements Made:**
+- Fixed `placeOrder()` method to wait for confirmation URL instead of networkidle
+- Added Promise.race() to detect either success (URL change) or failure (error alert)
+- Increased wait times for Stripe Card Element field auto-advance (1000ms card, 1000ms expiry, 500ms CVC)
+- Added product seeding in global-setup.ts to ensure consistent test data
+- Added cart clearing in beforeEach to prevent state leakage between tests
+- Enhanced logging to track console errors, API requests, and responses
+
+## Implementation Notes
+
+### Stripe UI Improvements
+
+The original implementation had container padding/border that blocked iframe interaction. This was fixed by:
+1. Removing padding and border from the container div
+2. Using Stripe's built-in `classes` option to apply global CSS classes
+3. Allowing direct interaction with the Stripe iframe
+
+### Type Safety Improvements
+
+The HybridCheckout component was using type casting (`as any`) to access `setPaymentIntent`. This was fixed by:
+1. Adding proper import: `import { useCheckoutSessionStore } from '~/stores/checkout/session'`
+2. Accessing the session store directly instead of casting
+3. Adding `stripePaymentIntentId` and `transactionId` to the PaymentMethod type
+
+### Test Infrastructure
+
+To ensure reliable E2E tests, a product seeding infrastructure was created:
+- `tests/helpers/seed-test-products.ts` - Helper functions for seeding products
+- `tests/global-setup.ts` - Seeds 20 products with categories before E2E tests
+- Uses existing `/api/admin/seed-data` endpoint
+
+## Status
+
+✅ **COMPLETED** - All implementation work finished and pushed to `feat/stripe-payments-ui` branch.
+
+Manual testing confirms the payment flow works correctly from card entry through confirmation page navigation.

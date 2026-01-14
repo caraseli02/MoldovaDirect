@@ -16,6 +16,42 @@
       >
         {{ stripeError }}
       </p>
+
+      <!-- Fallback UI for Stripe loading failure -->
+      <div
+        v-if="stripeFailed && !stripeLoading"
+        class="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg"
+        role="alert"
+      >
+        <div class="flex items-start">
+          <commonIcon
+            name="lucide:alert-triangle"
+            class="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-3 mt-0.5 shrink-0"
+            aria-hidden="true"
+          />
+          <div class="flex-1">
+            <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+              {{ $t('checkout.payment.stripeLoadFailed') }}
+            </h3>
+            <p class="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+              {{ $t('checkout.payment.stripeLoadFailedMessage') }}
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              class="mt-3"
+              @click="handleRetry"
+            >
+              <commonIcon
+                name="lucide:refresh-cw"
+                class="h-4 w-4 mr-2"
+              />
+              {{ $t('checkout.payment.retryStripe') }}
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Cardholder Name -->
@@ -85,8 +121,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, watch, onMounted, onUnmounted, nextTick, computed } from 'vue'
 import { useStripe, formatStripeError } from '~/composables/useStripe'
+import { Button } from '@/components/ui/button'
 
 const { t } = useI18n()
 
@@ -123,8 +160,10 @@ const {
   cardElement,
   loading: stripeLoading,
   error: stripeError,
+  retryCount,
   initializeStripe,
   createCardElement,
+  retryInitialization,
 } = useStripe()
 
 // Template refs
@@ -140,6 +179,12 @@ const creditCardData = ref<CardFormData>({
 })
 
 const validationErrors = ref<Record<string, string>>({})
+const initializationAttempted = ref(false)
+
+// Computed
+const stripeFailed = computed(() => {
+  return initializationAttempted.value && !!stripeError.value && retryCount.value >= 3
+})
 
 // Error helpers
 const hasError = (field: string): boolean => {
@@ -185,31 +230,34 @@ const emitUpdate = () => {
 // Initialize Stripe Elements
 const initializeStripeElements = async () => {
   try {
-    console.log('Initializing Stripe Elements...')
+    initializationAttempted.value = true
     await initializeStripe()
 
     if (!stripeCardContainer.value) {
-      console.error('Stripe card container ref is not available')
       emit('stripe-ready', false)
       return
     }
 
     if (!elements.value) {
-      console.error('Stripe elements not initialized')
       emit('stripe-ready', false)
       return
     }
 
-    console.log('Creating card element...')
     await createCardElement(stripeCardContainer.value)
-    console.log('Card element created successfully')
     emit('stripe-ready', true)
     emitUpdate()
   }
   catch (error) {
-    console.error('Failed to initialize Stripe Elements:', error)
     emit('stripe-ready', false)
   }
+}
+
+// Handle manual retry
+const handleRetry = async () => {
+  initializationAttempted.value = false
+  await retryInitialization()
+  await nextTick()
+  await initializeStripeElements()
 }
 
 // Watch for Stripe errors
