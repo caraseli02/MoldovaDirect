@@ -1,29 +1,28 @@
 <template>
   <div class="space-y-4">
-    <!-- Stripe Card Element Container -->
+    <!-- Stripe Card Element - One field for card number, expiry, CVC -->
     <div>
-      <UiLabel class="mb-2 block">
+      <UiLabel class="mb-2 block text-sm font-medium">
         {{ $t('checkout.payment.cardDetails') }}
       </UiLabel>
       <div
         ref="stripeCardContainer"
-        class="stripe-card-element p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
-        :class="{ 'border-red-500': stripeError }"
+        class="stripe-card-element"
       ></div>
       <p
         v-if="stripeError"
-        class="mt-1 text-sm text-destructive"
+        class="mt-2 text-sm text-destructive"
         role="alert"
       >
         {{ stripeError }}
       </p>
     </div>
 
-    <!-- Cardholder Name (separate from Stripe Element) -->
+    <!-- Cardholder Name -->
     <div>
       <UiLabel
         for="cardholder-name"
-        class="mb-1"
+        class="mb-2 block text-sm font-medium"
       >
         {{ $t('checkout.payment.cardholderName') }}
       </UiLabel>
@@ -35,6 +34,7 @@
         :aria-invalid="hasError('holderName')"
         :aria-describedby="hasError('holderName') ? 'holder-name-error' : undefined"
         autocomplete="cc-name"
+        class="h-11"
         @blur="validateHolderName"
         @input="onHolderNameInput"
       />
@@ -48,15 +48,27 @@
       </p>
     </div>
 
+    <!-- Loading State -->
+    <div
+      v-if="stripeLoading"
+      class="flex items-center justify-center py-4"
+    >
+      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
+      <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
+        {{ $t('checkout.payment.loadingStripe') }}
+      </span>
+    </div>
+
     <!-- Security Notice -->
     <div
+      v-if="!stripeLoading"
       class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4"
       role="status"
     >
       <div class="flex">
         <commonIcon
           name="lucide:shield-check"
-          class="h-5 w-5 text-green-400 mr-2 mt-0.5"
+          class="h-5 w-5 text-green-600 dark:text-green-400 mr-3 mt-0.5 shrink-0"
           aria-hidden="true"
         />
         <div>
@@ -69,23 +81,11 @@
         </div>
       </div>
     </div>
-
-    <!-- Loading State -->
-    <div
-      v-if="stripeLoading"
-      class="flex items-center justify-center py-4"
-    >
-      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
-      <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
-        {{ $t('checkout.payment.loadingStripe') }}
-      </span>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
-import { Button } from '@/components/ui/button'
 import { useStripe, formatStripeError } from '~/composables/useStripe'
 
 const { t } = useI18n()
@@ -96,6 +96,7 @@ interface CardFormData {
   expiryYear: string
   cvv: string
   holderName: string
+  useStripeElements?: boolean
 }
 
 interface Props {
@@ -115,7 +116,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-// Stripe integration
+// Stripe integration - using unified Card Element
 const {
   stripe,
   elements,
@@ -140,19 +141,16 @@ const creditCardData = ref<CardFormData>({
 
 const validationErrors = ref<Record<string, string>>({})
 
-// Error helpers that combine external and internal errors
+// Error helpers
 const hasError = (field: string): boolean => {
-  return !!((props.errors[field]) || validationErrors.value[field] || (field === 'stripe' && stripeError.value))
+  return !!(props.errors[field] || validationErrors.value[field])
 }
 
 const getError = (field: string): string => {
-  if (field === 'stripe' && stripeError.value) {
-    return formatStripeError(stripeError.value)
-  }
   return props.errors[field] || validationErrors.value[field] || ''
 }
 
-// Validation functions
+// Validation
 const validateHolderName = () => {
   if (!creditCardData.value.holderName.trim()) {
     validationErrors.value.holderName = t('checkout.validation.cardholderNameRequired')
@@ -180,18 +178,33 @@ const emitUpdate = () => {
     expiryYear: '', // Stripe handles this securely
     cvv: '', // Stripe handles this securely
     holderName: creditCardData.value.holderName,
+    useStripeElements: true, // Flag to indicate Stripe Elements is handling card data
   })
 }
 
 // Initialize Stripe Elements
 const initializeStripeElements = async () => {
   try {
+    console.log('Initializing Stripe Elements...')
     await initializeStripe()
 
-    if (stripeCardContainer.value && elements.value) {
-      await createCardElement(stripeCardContainer.value)
-      emit('stripe-ready', true)
+    if (!stripeCardContainer.value) {
+      console.error('Stripe card container ref is not available')
+      emit('stripe-ready', false)
+      return
     }
+
+    if (!elements.value) {
+      console.error('Stripe elements not initialized')
+      emit('stripe-ready', false)
+      return
+    }
+
+    console.log('Creating card element...')
+    await createCardElement(stripeCardContainer.value)
+    console.log('Card element created successfully')
+    emit('stripe-ready', true)
+    emitUpdate()
   }
   catch (error) {
     console.error('Failed to initialize Stripe Elements:', error)
@@ -199,12 +212,12 @@ const initializeStripeElements = async () => {
   }
 }
 
-// Watch for Stripe errors and emit them
+// Watch for Stripe errors
 watch(stripeError, (error) => {
   emit('stripe-error', error)
 })
 
-// Initialize from props
+// Watch for prop changes
 watch(() => props.modelValue, (newValue) => {
   if (newValue && newValue.holderName !== creditCardData.value.holderName) {
     creditCardData.value.holderName = newValue.holderName
@@ -218,13 +231,12 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
-  // Cleanup Stripe elements
   if (cardElement.value) {
     cardElement.value.destroy()
   }
 })
 
-// Expose validation method for parent components
+// Expose methods
 defineExpose({
   validateForm: () => {
     const isHolderNameValid = validateHolderName()
@@ -236,19 +248,49 @@ defineExpose({
 </script>
 
 <style scoped>
+/* Stripe Card Element container - minimal styling */
 .stripe-card-element {
-  min-height: 44px;
-  display: flex;
-  align-items: center;
+  width: 100%;
 }
 
-/* Stripe element styling is handled by the Stripe library */
-.stripe-card-element:focus-within {
-  border-color: rgb(79 70 229);
-  box-shadow: 0 0 0 3px rgb(79 70 229 / 0.1);
+/* Global styles for Stripe elements (not scoped) */
+</style>
+
+<style>
+/* Stripe element base styling - must be global to work with iframe */
+.stripe-element-base {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: white;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.stripe-card-element.border-red-500 {
-  border-color: rgb(239 68 68);
+.stripe-element-focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  outline: none;
+}
+
+.stripe-element-invalid {
+  border-color: #ef4444;
+}
+
+/* Dark mode support */
+.dark .stripe-element-base {
+  background-color: #1f2937;
+  border-color: #4b5563;
+  color: white;
+}
+
+.dark .stripe-element-focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.dark .stripe-element-invalid {
+  border-color: #ef4444;
 }
 </style>

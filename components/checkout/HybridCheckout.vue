@@ -239,6 +239,7 @@ import type { ShippingInformation, PaymentMethod as PaymentMethodType, ShippingM
 import type { GuestInfo } from '~/composables/useGuestCheckout'
 import type { Address } from '~/types/address'
 import { useCartStore } from '~/stores/cart'
+import { useCheckoutSessionStore } from '~/stores/checkout/session'
 
 // Components - with error handling for async loading failures
 const createAsyncComponent = (loader: () => Promise<unknown>, name: string) =>
@@ -709,7 +710,7 @@ const processStripePayment = async () => {
     body: {
       amount: Math.round(calculatedTotal.value * 100), // Convert to cents
       currency: 'eur',
-      sessionId: (checkoutStore as any).sessionId || 'temp-session',
+      sessionId: checkoutStore.sessionId || 'temp-session',
     },
   })
 
@@ -744,15 +745,20 @@ const processStripePayment = async () => {
     throw new Error('Payment was not completed successfully')
   }
 
+  // Store payment intent in checkout session store
+  const sessionStore = useCheckoutSessionStore()
+  sessionStore.setPaymentIntent(paymentIntent.id)
+  sessionStore.setPaymentClientSecret(paymentIntentData.paymentIntent.client_secret)
+
   // Update payment method with Stripe transaction details
-  await (checkoutStore as any).updatePaymentMethod({
+  await checkoutStore.updatePaymentMethod({
     ...paymentMethod.value,
     stripePaymentIntentId: paymentIntent.id,
     transactionId: paymentIntent.id,
   })
 
   // Complete the checkout process
-  await (checkoutStore as any).processPayment()
+  await checkoutStore.processPayment()
 }
 
 // Initialize

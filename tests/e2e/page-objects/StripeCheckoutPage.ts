@@ -89,14 +89,50 @@ export class StripeCheckoutPage extends CheckoutPage {
    * Complete setup flow: add product to cart and navigate to checkout
    */
   async setupCheckoutFlow() {
-    // Add product to cart
+    // Clear any existing cart first
+    await this.page.goto(`${BASE_URL}/cart`, { timeout: 30000 })
+    await this.page.waitForLoadState('networkidle')
+
+    // Remove all items from cart if any exist
+    const removeButtons = this.page.locator('button:has-text("Eliminar"), button:has-text("Remove"), button[aria-label*="Remove"], button[aria-label*="Eliminar"]')
+    const removeCount = await removeButtons.count()
+    for (let i = 0; i < removeCount; i++) {
+      await removeButtons.first().click()
+      await this.page.waitForTimeout(500)
+    }
+
+    // Navigate to products page
     await this.page.goto(`${BASE_URL}/products`, { timeout: 30000 })
     await this.page.waitForLoadState('networkidle')
 
+    // Wait for products to load and find the first available "Add to Cart" button
     const addToCartButton = this.page.locator('button:has-text("Añadir al Carrito"), button:has-text("Add to Cart")').first()
     await expect(addToCartButton).toBeVisible({ timeout: 15000 })
+
+    // Get the product ID from the button or parent element to verify it exists
+    const productCard = addToCartButton.locator('xpath=ancestor::*[contains(@class, "product") or contains(@data-testid, "product")]').first()
+    const productId = await productCard.getAttribute('data-product-id').catch(() => null)
+
+    if (productId) {
+      console.log(`Adding product ID ${productId} to cart`)
+    }
+
     await addToCartButton.click()
     await this.page.waitForTimeout(2000)
+
+    // Verify product was added to cart by checking cart count or navigating to cart
+    await this.page.goto(`${BASE_URL}/cart`, { timeout: 30000 })
+    await this.page.waitForLoadState('networkidle')
+
+    // Verify cart has items
+    const cartItems = this.page.locator('[data-testid="cart-item"], .cart-item')
+    const itemCount = await cartItems.count()
+
+    if (itemCount === 0) {
+      throw new Error('Failed to add product to cart - cart is empty')
+    }
+
+    console.log(`Cart has ${itemCount} item(s)`)
 
     // Navigate to checkout
     await this.page.goto(`${BASE_URL}/checkout`, { timeout: 30000 })
@@ -243,31 +279,38 @@ export class StripeCheckoutPage extends CheckoutPage {
    * Fill Stripe card number (interacts with Stripe iframe)
    */
   async fillStripeCardNumber(cardNumber: string) {
+    // Wait for Stripe iframe to be ready
+    await this.page.waitForTimeout(1000)
+
     // Click on the Stripe card container to focus
     await this.stripeCardContainer.click()
-
-    // Type the card number
-    await this.page.keyboard.type(cardNumber)
     await this.page.waitForTimeout(500)
+
+    // Type the card number directly - Stripe will handle it
+    await this.page.keyboard.type(cardNumber, { delay: 50 })
+    // Wait longer for Stripe to process and auto-advance to expiry field
+    await this.page.waitForTimeout(1000)
   }
 
   /**
    * Fill Stripe card expiry (interacts with Stripe iframe)
    */
   async fillStripeCardExpiry(expiry: string) {
-    // Tab to expiry field or click if separate
-    await this.page.keyboard.press('Tab')
-    await this.page.keyboard.type(expiry)
-    await this.page.waitForTimeout(500)
+    // Stripe unified Card Element auto-advances after card number
+    // Just type the expiry in MMYY format (remove the slash)
+    const expiryFormatted = expiry.replace('/', '')
+    await this.page.keyboard.type(expiryFormatted, { delay: 50 })
+    // Wait longer for Stripe to process and auto-advance to CVC field
+    await this.page.waitForTimeout(1000)
   }
 
   /**
    * Fill Stripe card CVC (interacts with Stripe iframe)
    */
   async fillStripeCardCVC(cvc: string) {
-    // Tab to CVC field
-    await this.page.keyboard.press('Tab')
-    await this.page.keyboard.type(cvc)
+    // Stripe unified Card Element auto-advances after expiry
+    // Just type the CVC
+    await this.page.keyboard.type(cvc, { delay: 50 })
     await this.page.waitForTimeout(500)
   }
 

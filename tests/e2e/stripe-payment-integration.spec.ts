@@ -48,8 +48,15 @@ const STRIPE_TEST_CARDS = {
 
 test.describe('Stripe Payment Integration', () => {
   test.beforeEach(async ({ page }) => {
-    // Start fresh - clear cart cookies
+    // Clear browser storage to start fresh
     await page.context().clearCookies()
+
+    // Clear localStorage and sessionStorage to remove any persisted cart data
+    await page.goto('http://localhost:3000')
+    await page.evaluate(() => {
+      localStorage.clear()
+      sessionStorage.clear()
+    })
   })
 
   test('Payment method selection - Cash vs Credit Card', async ({ page }) => {
@@ -226,6 +233,53 @@ test.describe('Stripe Payment Integration', () => {
   test('Successful payment processing with Stripe', async ({ page }) => {
     const checkoutPage = new StripeCheckoutPage(page)
 
+    // Track console messages and errors
+    const consoleMessages: string[] = []
+    const consoleErrors: string[] = []
+
+    page.on('console', (msg) => {
+      const text = msg.text()
+      consoleMessages.push(`[${msg.type()}] ${text}`)
+      if (msg.type() === 'error') {
+        console.log('❌ Browser console error:', text)
+        consoleErrors.push(text)
+      }
+    })
+
+    // Listen for page errors
+    page.on('pageerror', (error) => {
+      const errorMsg = error.message
+      console.log('❌ Page error:', errorMsg)
+      consoleErrors.push(errorMsg)
+    })
+
+    // Track network requests
+    const networkRequests: any[] = []
+    page.on('request', (request) => {
+      if (request.url().includes('/api/')) {
+        networkRequests.push({
+          url: request.url(),
+          method: request.method(),
+        })
+      }
+    })
+
+    page.on('response', async (response) => {
+      if (response.url().includes('/api/')) {
+        const status = response.status()
+        if (status >= 400) {
+          console.log(`❌ API error: ${response.url()} - ${status}`)
+          try {
+            const body = await response.text()
+            console.log(`   Response: ${body.substring(0, 200)}`)
+          }
+          catch {
+            // Ignore if can't read body
+          }
+        }
+      }
+    })
+
     // Setup checkout flow
     await checkoutPage.setupCheckoutFlow()
     await checkoutPage.selectCreditCardPayment()
@@ -242,6 +296,10 @@ test.describe('Stripe Payment Integration', () => {
     })
     console.log('✅ Step 2: Filled valid card details')
 
+    // Wait a bit longer for Stripe to fully process the card details
+    await page.waitForTimeout(2000)
+    console.log('✅ Step 2.5: Waited for Stripe to process card details')
+
     // Verify form validation passes
     const isFormValid = await checkoutPage.isPaymentFormValid()
     expect(isFormValid).toBe(true)
@@ -257,21 +315,34 @@ test.describe('Stripe Payment Integration', () => {
     console.log('✅ Step 5: Place order button enabled')
 
     // Place order and verify processing
-    await checkoutPage.placeOrder()
-    console.log('✅ Step 6: Placed order')
+    console.log('🔄 Clicking Place Order button...')
 
-    // Wait for payment processing and redirect to confirmation
-    await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 30000 })
-    console.log('✅ Step 7: Redirected to confirmation page')
+    try {
+      await checkoutPage.placeOrder()
+      console.log('✅ Step 6: Placed order')
 
-    // Verify confirmation page elements
-    const confirmationTitle = page.locator('h1, h2').filter({
-      hasText: /order.*confirmed|pedido.*confirmado|заказ.*подтвержден|comandă.*confirmată/i,
-    })
-    await expect(confirmationTitle).toBeVisible({ timeout: 5000 })
-    console.log('✅ Step 8: Confirmation title visible')
+      // Wait for payment processing and redirect to confirmation
+      await expect(page).toHaveURL(/\/checkout\/confirmation/, { timeout: 45000 })
+      console.log('✅ Step 7: Redirected to confirmation page')
 
-    console.log('\n🎉 Successful Stripe payment test completed!')
+      // Verify confirmation page elements
+      const confirmationTitle = page.locator('h1, h2').filter({
+        hasText: /order.*confirmed|pedido.*confirmado|заказ.*подтвержден|comandă.*confirmată/i,
+      })
+      await expect(confirmationTitle).toBeVisible({ timeout: 5000 })
+      console.log('✅ Step 8: Confirmation title visible')
+
+      console.log('\n🎉 Successful Stripe payment test completed!')
+    }
+    catch (error) {
+      console.log('\n❌ Test failed with error:', error.message)
+      console.log('\n📋 Console errors:', consoleErrors.length > 0 ? consoleErrors : 'None')
+      console.log('\n📋 Recent console messages:')
+      consoleMessages.slice(-10).forEach(msg => console.log('   ', msg))
+      console.log('\n📋 API requests made:')
+      networkRequests.slice(-5).forEach(req => console.log('   ', req.method, req.url))
+      throw error
+    }
   })
 
   test('Payment failure handling - Declined card', async ({ page }) => {

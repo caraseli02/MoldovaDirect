@@ -2128,10 +2128,13 @@
         "description": "Transfer the order amount to our bank account using the details below."
       },
       "cardDetails": "Card Details",
+      "enterCardInfo": "Enter your credit or debit card information",
       "loadingStripe": "Loading secure payment form...",
+      "cardNumber": "Card Number",
       "cardNumberPlaceholder": "1234 5678 9012 3456",
       "expiryDate": "Expiry Date",
       "expiryPlaceholder": "MM/YY",
+      "cvc": "CVC",
       "cvv": "CVV",
       "cvvPlaceholder": "123",
       "cvvHelp": "The 3-digit security code on the back of your card (4 digits for Amex)",

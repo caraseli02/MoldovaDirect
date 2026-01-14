@@ -98,6 +98,7 @@ const onCreditCardUpdate = (data: {
   expiryYear: string
   cvv: string
   holderName: string
+  useStripeElements?: boolean
 }) => {
   emit('update:modelValue', {
     ...props.modelValue,
@@ -107,6 +108,7 @@ const onCreditCardUpdate = (data: {
       expiryYear: data.expiryYear,
       cvv: data.cvv,
       holderName: data.holderName,
+      useStripeElements: data.useStripeElements, // Preserve the Stripe Elements flag
     },
   })
 }

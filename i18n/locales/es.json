@@ -2132,11 +2132,13 @@
         "description": "Transfiere el monto del pedido a nuestra cuenta bancaria usando los detalles a continuación."
       },
       "cardDetails": "Detalles de la Tarjeta",
+      "enterCardInfo": "Ingresa la información de tu tarjeta de crédito o débito",
       "loadingStripe": "Cargando formulario de pago seguro...",
       "cardNumber": "Número de Tarjeta",
       "cardNumberPlaceholder": "1234 5678 9012 3456",
       "expiryDate": "Fecha de Vencimiento",
       "expiryPlaceholder": "MM/AA",
+      "cvc": "CVC",
       "cvv": "CVV",
       "cvvPlaceholder": "123",
       "cvvHelp": "El código de seguridad de 3 dígitos en el reverso de tu tarjeta (4 dígitos para Amex)",

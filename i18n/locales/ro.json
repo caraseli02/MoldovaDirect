@@ -2131,11 +2131,13 @@
         "description": "Transferă suma comenzii în contul nostru bancar folosind detaliile de mai jos."
       },
       "cardDetails": "Detalii Card",
+      "enterCardInfo": "Introdu informațiile cardului tău de credit sau debit",
       "loadingStripe": "Se încarcă formularul de plată securizat...",
       "cardNumber": "Număr Card",
       "cardNumberPlaceholder": "1234 5678 9012 3456",
       "expiryDate": "Data de Expirare",
       "expiryPlaceholder": "LL/AA",
+      "cvc": "CVC",
       "cvv": "CVV",
       "cvvPlaceholder": "123",
       "cvvHelp": "Codul de securitate de 3 cifre de pe spatele cardului (4 cifre pentru Amex)",
