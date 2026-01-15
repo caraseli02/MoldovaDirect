@@ -1,0 +1,4792 @@
+{
+  "state": {
+    "phase": "complete",
+    "startTime": "2026-01-15T11:43:14.655Z",
+    "totalFiles": 324,
+    "migratedFiles": 285,
+    "failedFiles": 39,
+    "skippedFiles": 0,
+    "errors": [
+      {
+        "file": "docs/guides/README.md",
+        "error": "Target file already exists: docs/how-to/authentication/README.md"
+      },
+      {
+        "file": "docs/notebooklm/README.md",
+        "error": "Target file already exists: docs/explanation/authentication/README.md"
+      },
+      {
+        "file": "docs/security/README.md",
+        "error": "Target file already exists: docs/how-to/authentication/README.md"
+      },
+      {
+        "file": "docs/architecture/README.md",
+        "error": "Target file already exists: docs/explanation/authentication/README.md"
+      },
+      {
+        "file": "docs/specs/admin-order-management/README.md",
+        "error": "Target file already exists: docs/reference/authentication/README.md"
+      },
+      {
+        "file": "docs/project/AI_CONTEXT_TESTING_GUIDE.md",
+        "error": "Target file already exists: docs/project/AI_CONTEXT_TESTING_GUIDE.md"
+      },
+      {
+        "file": "docs/project/MAINTENANCE_GUIDE.md",
+        "error": "Target file already exists: docs/project/MAINTENANCE_GUIDE.md"
+      },
+      {
+        "file": "docs/project/MIGRATION_GUIDE.md",
+        "error": "Target file already exists: docs/project/MIGRATION_GUIDE.md"
+      },
+      {
+        "file": "docs/specs/code-refactoring/tasks.md",
+        "error": "Target file already exists: docs/how-to/authentication/tasks.md"
+      },
+      {
+        "file": "docs/specs/invoice-generation/tasks.md",
+        "error": "Target file already exists: docs/how-to/authentication/tasks.md"
+      },
+      {
+        "file": "docs/specs/order-confirmation-emails/tasks.md",
+        "error": "Target file already exists: docs/how-to/authentication/tasks.md"
+      },
+      {
+        "file": "docs/specs/product-recommendations/tasks.md",
+        "error": "Target file already exists: docs/how-to/authentication/tasks.md"
+      },
+      {
+        "file": "docs/specs/shipping-notifications/tasks.md",
+        "error": "Target file already exists: docs/how-to/checkout/tasks.md"
+      },
+      {
+        "file": "docs/specs/shopping-cart/tasks.md",
+        "error": "Target file already exists: docs/how-to/checkout/tasks.md"
+      },
+      {
+        "file": "docs/specs/user-authentication/tasks.md",
+        "error": "Target file already exists: docs/how-to/authentication/tasks.md"
+      },
+      {
+        "file": "docs/specs/wishlist/tasks.md",
+        "error": "Target file already exists: docs/how-to/authentication/tasks.md"
+      },
+      {
+        "file": "docs/archive/fixes/README.md",
+        "error": "Target file already exists: docs/archive/2026-01-15/README.md"
+      },
+      {
+        "file": "docs/archive/test-reports/visual-regression-20251123/README.md",
+        "error": "Target file already exists: docs/archive/2026-01-15/README.md"
+      },
+      {
+        "file": "docs/specs/admin-dashboard/design.md",
+        "error": "Target file already exists: docs/reference/authentication/design.md"
+      },
+      {
+        "file": "docs/specs/admin-order-management/design.md",
+        "error": "Target file already exists: docs/reference/authentication/design.md"
+      },
+      {
+        "file": "docs/specs/invoice-generation/design.md",
+        "error": "Target file already exists: docs/reference/authentication/design.md"
+      },
+      {
+        "file": "docs/specs/invoice-generation/requirements.md",
+        "error": "Target file already exists: docs/reference/authentication/requirements.md"
+      },
+      {
+        "file": "docs/specs/order-confirmation-emails/design.md",
+        "error": "Target file already exists: docs/reference/authentication/design.md"
+      },
+      {
+        "file": "docs/specs/order-confirmation-emails/requirements.md",
+        "error": "Target file already exists: docs/reference/authentication/requirements.md"
+      },
+      {
+        "file": "docs/specs/product-recommendations/design.md",
+        "error": "Target file already exists: docs/reference/authentication/design.md"
+      },
+      {
+        "file": "docs/specs/shipping-notifications/design.md",
+        "error": "Target file already exists: docs/reference/authentication/design.md"
+      },
+      {
+        "file": "docs/specs/shopping-cart/design.md",
+        "error": "Target file already exists: docs/reference/checkout/design.md"
+      },
+      {
+        "file": "docs/specs/shopping-cart/requirements.md",
+        "error": "Target file already exists: docs/reference/checkout/requirements.md"
+      },
+      {
+        "file": "docs/specs/user-authentication/requirements.md",
+        "error": "Target file already exists: docs/reference/authentication/requirements.md"
+      },
+      {
+        "file": "docs/specs/wishlist/design.md",
+        "error": "Target file already exists: docs/reference/authentication/design.md"
+      },
+      {
+        "file": "docs/specs/wishlist/requirements.md",
+        "error": "Target file already exists: docs/reference/authentication/requirements.md"
+      },
+      {
+        "file": "docs/archive/completed-specs/order-status-updates/COMPLETE.md",
+        "error": "Target file already exists: docs/archive/2026-01-15/COMPLETE.md"
+      },
+      {
+        "file": "docs/archive/completed-specs/order-status-updates/design.md",
+        "error": "Target file already exists: docs/archive/2026-01-15/design.md"
+      },
+      {
+        "file": "docs/archive/completed-specs/order-status-updates/requirements.md",
+        "error": "Target file already exists: docs/archive/2026-01-15/requirements.md"
+      },
+      {
+        "file": "docs/archive/completed-specs/order-status-updates/tasks.md",
+        "error": "Target file already exists: docs/archive/2026-01-15/tasks.md"
+      },
+      {
+        "file": "docs/archive/completed-specs/shipping-step-refactor/design.md",
+        "error": "Target file already exists: docs/archive/2026-01-15/design.md"
+      },
+      {
+        "file": "docs/archive/completed-specs/shipping-step-refactor/requirements.md",
+        "error": "Target file already exists: docs/archive/2026-01-15/requirements.md"
+      },
+      {
+        "file": "docs/archive/completed-specs/shipping-step-refactor/tasks.md",
+        "error": "Target file already exists: docs/archive/2026-01-15/tasks.md"
+      },
+      {
+        "file": "docs/archive/specs-legacy/design.md",
+        "error": "Target file already exists: docs/archive/2026-01-15/design.md"
+      }
+    ],
+    "backupPath": "docs-backup-2026-01-15T11-43-14-821Z",
+    "completionTime": "2026-01-15T11:43:15.302Z"
+  },
+  "migrationMap": {
+    "totalMappings": 324,
+    "mappings": [
+      {
+        "oldPath": "docs/testing/README.md",
+        "newPath": "docs/how-to/authentication/README.md",
+        "category": "how-to",
+        "priority": 9,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/README.md",
+        "newPath": "docs/explanation/authentication/README.md",
+        "category": "explanation",
+        "priority": 8,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/getting-started/QUICK_START_GUIDE.md",
+        "newPath": "docs/tutorials/QUICK_START_GUIDE.md",
+        "category": "tutorial",
+        "priority": 8,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/guides/README.md",
+        "newPath": "docs/how-to/authentication/README.md",
+        "category": "how-to",
+        "priority": 8,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/notebooklm/README.md",
+        "newPath": "docs/explanation/authentication/README.md",
+        "category": "explanation",
+        "priority": 8,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/research/README.md",
+        "newPath": "docs/how-to/deployment/README.md",
+        "category": "how-to",
+        "priority": 8,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/security/README.md",
+        "newPath": "docs/how-to/authentication/README.md",
+        "category": "how-to",
+        "priority": 8,
+        "estimatedEffort": "low"
+      },
+      {
+        "oldPath": "docs/ai-context/DEPENDENCIES.md",
+        "newPath": "docs/how-to/authentication/DEPENDENCIES.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/api/README.md",
+        "newPath": "docs/reference/authentication/README.md",
+        "category": "reference",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/README.md",
+        "newPath": "docs/explanation/authentication/README.md",
+        "category": "explanation",
+        "priority": 7,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/development/component-inventory.md",
+        "newPath": "docs/how-to/checkout/component-inventory.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/development/tech.md",
+        "newPath": "docs/how-to/authentication/tech.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/features/landing-videos/IMPLEMENTATION.md",
+        "newPath": "docs/how-to/authentication/IMPLEMENTATION.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/features/landing-videos/QUICK-START.md",
+        "newPath": "docs/how-to/deployment/QUICK-START.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/getting-started/DATABASE_SETUP.md",
+        "newPath": "docs/tutorials/DATABASE_SETUP.md",
+        "category": "tutorial",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/getting-started/LOCAL_TESTING_GUIDE.md",
+        "newPath": "docs/tutorials/LOCAL_TESTING_GUIDE.md",
+        "category": "tutorial",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/getting-started/MVP_QUICK_START.md",
+        "newPath": "docs/tutorials/MVP_QUICK_START.md",
+        "category": "tutorial",
+        "priority": 7,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/getting-started/SUPABASE_SETUP.md",
+        "newPath": "docs/tutorials/SUPABASE_SETUP.md",
+        "category": "tutorial",
+        "priority": 7,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/lessons/lesson-1-security-and-dependencies.md",
+        "newPath": "docs/how-to/authentication/lesson-1-security-and-dependencies.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/lessons/lesson-2-technical-debt-and-code-quality.md",
+        "newPath": "docs/how-to/authentication/lesson-2-technical-debt-and-code-quality.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/manuals/IMPLEMENTATION_GUIDE.md",
+        "newPath": "docs/how-to/authentication/IMPLEMENTATION_GUIDE.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/meta/DOCUMENTATION_CONSOLIDATION_PLAN.md",
+        "newPath": "docs/how-to/authentication/DOCUMENTATION_CONSOLIDATION_PLAN.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md",
+        "newPath": "docs/how-to/authentication/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/meta/DOCUMENTATION_QUICK_WINS.md",
+        "newPath": "docs/how-to/authentication/DOCUMENTATION_QUICK_WINS.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/meta/DUAL_LAYER_DOCS_IMPLEMENTATION_PROMPT.md",
+        "newPath": "docs/how-to/authentication/DUAL_LAYER_DOCS_IMPLEMENTATION_PROMPT.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/meta/QUICK_START_DUAL_LAYER_DOCS.md",
+        "newPath": "docs/how-to/authentication/QUICK_START_DUAL_LAYER_DOCS.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/notebooklm/02_TECH_STACK.md",
+        "newPath": "docs/how-to/authentication/02_TECH_STACK.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/notebooklm/06_COMPONENT_LIBRARY.md",
+        "newPath": "docs/how-to/checkout/06_COMPONENT_LIBRARY.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/notebooklm/07_TESTING_GUIDE.md",
+        "newPath": "docs/how-to/authentication/07_TESTING_GUIDE.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/notebooklm/09_TROUBLESHOOTING.md",
+        "newPath": "docs/how-to/authentication/09_TROUBLESHOOTING.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/research/HERO-SECTION-RESEARCH-README.md",
+        "newPath": "docs/explanation/authentication/HERO-SECTION-RESEARCH-README.md",
+        "category": "explanation",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/research/hero-section-quick-reference.md",
+        "newPath": "docs/how-to/deployment/hero-section-quick-reference.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/reviews/FAQ_REVIEW_SUMMARY.md",
+        "newPath": "docs/how-to/checkout/FAQ_REVIEW_SUMMARY.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/GLOBAL_TASKS.md",
+        "newPath": "docs/how-to/authentication/GLOBAL_TASKS.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-order-management/README.md",
+        "newPath": "docs/reference/authentication/README.md",
+        "category": "reference",
+        "priority": 7,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/testing/PRODUCTION_TESTING_STRATEGY.md",
+        "newPath": "docs/how-to/authentication/PRODUCTION_TESTING_STRATEGY.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/testing/TESTING_AUDIT_AND_STRATEGY.md",
+        "newPath": "docs/how-to/authentication/TESTING_AUDIT_AND_STRATEGY.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/testing/VISUAL-REGRESSION-SETUP.md",
+        "newPath": "docs/how-to/authentication/VISUAL-REGRESSION-SETUP.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/testing/VISUAL-REGRESSION-SUMMARY.md",
+        "newPath": "docs/how-to/authentication/VISUAL-REGRESSION-SUMMARY.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/visual-regression/VISUAL_REGRESSION_ISSUES_AND_FIXES.md",
+        "newPath": "docs/how-to/testing/VISUAL_REGRESSION_ISSUES_AND_FIXES.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/visual-regression/VISUAL_REGRESSION_REVIEW_INDEX.md",
+        "newPath": "docs/how-to/testing/VISUAL_REGRESSION_REVIEW_INDEX.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/visual-regression/VISUAL_REGRESSION_REVIEW_REPORT.md",
+        "newPath": "docs/how-to/authentication/VISUAL_REGRESSION_REVIEW_REPORT.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/visual-regression/VISUAL_REGRESSION_SUMMARY.md",
+        "newPath": "docs/how-to/authentication/VISUAL_REGRESSION_SUMMARY.md",
+        "category": "how-to",
+        "priority": 7,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/CODEBASE_AUDIT_REPORT.md",
+        "newPath": "docs/explanation/authentication/CODEBASE_AUDIT_REPORT.md",
+        "category": "explanation",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/MVP_ASSESSMENT_REPORT.md",
+        "newPath": "docs/reference/authentication/MVP_ASSESSMENT_REPORT.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/ai-context/ARCHITECTURE_SUMMARY.md",
+        "newPath": "docs/explanation/authentication/ARCHITECTURE_SUMMARY.md",
+        "category": "explanation",
+        "priority": 6,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/ai-context/CONVENTIONS.md",
+        "newPath": "docs/reference/authentication/CONVENTIONS.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/ai-context/PATTERNS.md",
+        "newPath": "docs/reference/authentication/PATTERNS.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/AUTHENTICATION_ARCHITECTURE.md",
+        "newPath": "docs/explanation/authentication/AUTHENTICATION_ARCHITECTURE.md",
+        "category": "explanation",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/CART_SYSTEM_ARCHITECTURE.md",
+        "newPath": "docs/explanation/authentication/CART_SYSTEM_ARCHITECTURE.md",
+        "category": "explanation",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/DOCUMENTATION_UPDATE_2026_01.md",
+        "newPath": "docs/explanation/authentication/DOCUMENTATION_UPDATE_2026_01.md",
+        "category": "explanation",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/architecture-reviews/ARCHITECTURE_REVIEW_2025_11.md",
+        "newPath": "docs/explanation/authentication/ARCHITECTURE_REVIEW_2025_11.md",
+        "category": "explanation",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/customer-order-history/API_USAGE_GUIDE.md",
+        "newPath": "docs/reference/authentication/API_USAGE_GUIDE.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/shipping-step-refactor/FINAL_STATUS.md",
+        "newPath": "docs/project/FINAL_STATUS.md",
+        "category": "project",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/TEST_STATUS_REPORT.md",
+        "newPath": "docs/project/TEST_STATUS_REPORT.md",
+        "category": "project",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/automation/github-project-automation.md",
+        "newPath": "docs/how-to/authentication/github-project-automation.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/development/MILESTONE_QUICK_START.md",
+        "newPath": "docs/how-to/authentication/MILESTONE_QUICK_START.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/development/STATIC_ANALYSIS.md",
+        "newPath": "docs/reference/testing/STATIC_ANALYSIS.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/development/component-modernization-plan.md",
+        "newPath": "docs/explanation/authentication/component-modernization-plan.md",
+        "category": "explanation",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/development/structure.md",
+        "newPath": "docs/reference/authentication/structure.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/development/supabase-best-practices.md",
+        "newPath": "docs/how-to/authentication/supabase-best-practices.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/development/troubleshooting-components.md",
+        "newPath": "docs/how-to/checkout/troubleshooting-components.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/features/I18N_CONFIGURATION.md",
+        "newPath": "docs/how-to/authentication/I18N_CONFIGURATION.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/features/authentication/MFA_IMPLEMENTATION.md",
+        "newPath": "docs/how-to/authentication/MFA_IMPLEMENTATION.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/features/authentication/auth-flow-review.md",
+        "newPath": "docs/how-to/authentication/auth-flow-review.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/features/authentication/authentication-translations.md",
+        "newPath": "docs/how-to/authentication/authentication-translations.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/guides/DEPLOYMENT_CHECKLIST.md",
+        "newPath": "docs/how-to/checkout/DEPLOYMENT_CHECKLIST.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/guides/DEPLOYMENT_GUIDE.md",
+        "newPath": "docs/how-to/authentication/DEPLOYMENT_GUIDE.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/guides/KEY_ROTATION_COMPLETION_GUIDE.md",
+        "newPath": "docs/how-to/authentication/KEY_ROTATION_COMPLETION_GUIDE.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/guides/MARKETING-COPY-IMPROVEMENTS.md",
+        "newPath": "docs/how-to/authentication/MARKETING-COPY-IMPROVEMENTS.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/guides/PREVENTION_STRATEGY.md",
+        "newPath": "docs/how-to/deployment/PREVENTION_STRATEGY.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/guides/STRIPE_WEBHOOK_SETUP.md",
+        "newPath": "docs/how-to/authentication/STRIPE_WEBHOOK_SETUP.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/guides/TESTING.md",
+        "newPath": "docs/how-to/authentication/TESTING.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/guides/asset-optimization-quick-reference.md",
+        "newPath": "docs/how-to/checkout/asset-optimization-quick-reference.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/guides/build-optimization-implementation.md",
+        "newPath": "docs/how-to/authentication/build-optimization-implementation.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/guides/build-optimization-quick-start.md",
+        "newPath": "docs/how-to/authentication/build-optimization-quick-start.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/guides/css-optimization-summary.md",
+        "newPath": "docs/how-to/checkout/css-optimization-summary.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/guides/prerender-optimization-quick-reference.md",
+        "newPath": "docs/how-to/checkout/prerender-optimization-quick-reference.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/guides/tanstack-table-lazy-loading.md",
+        "newPath": "docs/how-to/testing/tanstack-table-lazy-loading.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/lessons/lesson-3-testing-and-action-plan.md",
+        "newPath": "docs/reference/authentication/lesson-3-testing-and-action-plan.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/manuals/ADMIN_TESTING.md",
+        "newPath": "docs/reference/authentication/ADMIN_TESTING.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/manuals/TESTING_STRATEGY.md",
+        "newPath": "docs/reference/authentication/TESTING_STRATEGY.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/manuals/TEST_USER_SIMULATION.md",
+        "newPath": "docs/reference/authentication/TEST_USER_SIMULATION.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md",
+        "newPath": "docs/explanation/authentication/AI_ERA_DOCUMENTATION_PROPOSAL.md",
+        "category": "explanation",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/meta/ARCHIVAL_POLICY.md",
+        "newPath": "docs/reference/checkout/ARCHIVAL_POLICY.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/meta/DOCUMENTATION_CONVENTIONS.md",
+        "newPath": "docs/how-to/authentication/DOCUMENTATION_CONVENTIONS.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/meta/DOCUMENTATION_INDEX.md",
+        "newPath": "docs/how-to/authentication/DOCUMENTATION_INDEX.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/notebooklm/01_PROJECT_OVERVIEW.md",
+        "newPath": "docs/reference/authentication/01_PROJECT_OVERVIEW.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/notebooklm/03_ARCHITECTURE.md",
+        "newPath": "docs/explanation/authentication/03_ARCHITECTURE.md",
+        "category": "explanation",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/notebooklm/04_FEATURES.md",
+        "newPath": "docs/reference/authentication/04_FEATURES.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/notebooklm/05_CODE_CONVENTIONS.md",
+        "newPath": "docs/reference/authentication/05_CODE_CONVENTIONS.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/notebooklm/08_API_REFERENCE.md",
+        "newPath": "docs/reference/authentication/08_API_REFERENCE.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/project/AI_CONTEXT_TESTING_GUIDE.md",
+        "newPath": "docs/project/AI_CONTEXT_TESTING_GUIDE.md",
+        "category": "project",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/project/MAINTENANCE_GUIDE.md",
+        "newPath": "docs/project/MAINTENANCE_GUIDE.md",
+        "category": "project",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/project/MIGRATION_GUIDE.md",
+        "newPath": "docs/project/MIGRATION_GUIDE.md",
+        "category": "project",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/research/RESEARCH_SUMMARY.md",
+        "newPath": "docs/how-to/testing/RESEARCH_SUMMARY.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/research/build-performance-comparison.md",
+        "newPath": "docs/how-to/checkout/build-performance-comparison.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/research/nuxt3-pinia-ssr-best-practices.md",
+        "newPath": "docs/how-to/deployment/nuxt3-pinia-ssr-best-practices.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/reviews/CODE_REVIEW_FAQ_PAGE.md",
+        "newPath": "docs/reference/authentication/CODE_REVIEW_FAQ_PAGE.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/reviews/DOCS_COMPLEXITY_AUDIT.md",
+        "newPath": "docs/explanation/checkout/DOCS_COMPLEXITY_AUDIT.md",
+        "category": "explanation",
+        "priority": 6,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/reviews/IMPROVEMENTS_APPLIED.md",
+        "newPath": "docs/reference/checkout/IMPROVEMENTS_APPLIED.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/reviews/PR_REVIEW.md",
+        "newPath": "docs/reference/checkout/PR_REVIEW.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/reviews/VISUAL_VALIDATION_RESULTS.md",
+        "newPath": "docs/reference/checkout/VISUAL_VALIDATION_RESULTS.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/reviews/checkout-ux-review-2025-12-23.md",
+        "newPath": "docs/explanation/checkout/checkout-ux-review-2025-12-23.md",
+        "category": "explanation",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/security/GDPR_COMPLIANCE.md",
+        "newPath": "docs/how-to/authentication/GDPR_COMPLIANCE.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/security/SECURE_LOGGER.md",
+        "newPath": "docs/how-to/authentication/SECURE_LOGGER.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/GLOBAL_REQUIREMENTS.md",
+        "newPath": "docs/reference/authentication/GLOBAL_REQUIREMENTS.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-dashboard/requirements.md",
+        "newPath": "docs/how-to/authentication/requirements.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-dashboard/tasks.md",
+        "newPath": "docs/how-to/authentication/tasks.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-order-management/FULFILLMENT_WORKFLOW.md",
+        "newPath": "docs/how-to/authentication/FULFILLMENT_WORKFLOW.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-order-management/QUICK_REFERENCE.md",
+        "newPath": "docs/how-to/testing/QUICK_REFERENCE.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-order-management/tasks.md",
+        "newPath": "docs/how-to/checkout/tasks.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/code-refactoring/tasks.md",
+        "newPath": "docs/how-to/authentication/tasks.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/invoice-generation/tasks.md",
+        "newPath": "docs/how-to/authentication/tasks.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/order-confirmation-emails/TESTING-GUIDE.md",
+        "newPath": "docs/how-to/authentication/TESTING-GUIDE.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/order-confirmation-emails/admin-interface-guide.md",
+        "newPath": "docs/how-to/testing/admin-interface-guide.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/order-confirmation-emails/task-3.1-verification.md",
+        "newPath": "docs/how-to/checkout/task-3.1-verification.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/specs/order-confirmation-emails/tasks.md",
+        "newPath": "docs/how-to/authentication/tasks.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/product-catalog/tasks.md",
+        "newPath": "docs/reference/testing/tasks.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/product-recommendations/tasks.md",
+        "newPath": "docs/how-to/authentication/tasks.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/shipping-notifications/tasks.md",
+        "newPath": "docs/how-to/checkout/tasks.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/shopping-cart/tasks.md",
+        "newPath": "docs/how-to/checkout/tasks.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/user-authentication/design.md",
+        "newPath": "docs/reference/authentication/design.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/user-authentication/tasks.md",
+        "newPath": "docs/how-to/authentication/tasks.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/wishlist/tasks.md",
+        "newPath": "docs/how-to/authentication/tasks.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/status/CURRENT_TEST_FAILURES_DETAILED.md",
+        "newPath": "docs/reference/authentication/CURRENT_TEST_FAILURES_DETAILED.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/status/E2E_TEST_FAILURES_ANALYSIS.md",
+        "newPath": "docs/reference/authentication/E2E_TEST_FAILURES_ANALYSIS.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/status/P0_ISSUES_SUMMARY.md",
+        "newPath": "docs/explanation/authentication/P0_ISSUES_SUMMARY.md",
+        "category": "explanation",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/status/PROGRESS.md",
+        "newPath": "docs/reference/authentication/PROGRESS.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/status/PROJECT_STATUS.md",
+        "newPath": "docs/project/PROJECT_STATUS.md",
+        "category": "project",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/status/ROADMAP.md",
+        "newPath": "docs/project/ROADMAP.md",
+        "category": "project",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/testing/ADMIN_PAGES_COMPREHENSIVE_REPORT.md",
+        "newPath": "docs/how-to/authentication/ADMIN_PAGES_COMPREHENSIVE_REPORT.md",
+        "category": "how-to",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/testing/COMPREHENSIVE_CHECKOUT_REVIEW.md",
+        "newPath": "docs/reference/authentication/COMPREHENSIVE_CHECKOUT_REVIEW.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/testing/MUTATION_TESTING_FINAL_REPORT.md",
+        "newPath": "docs/reference/authentication/MUTATION_TESTING_FINAL_REPORT.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/testing/TESTING_REVIEW.md",
+        "newPath": "docs/reference/authentication/TESTING_REVIEW.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/testing/TEST_COVERAGE_ANALYSIS.md",
+        "newPath": "docs/reference/authentication/TEST_COVERAGE_ANALYSIS.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/testing/TEST_COVERAGE_SUMMARY.md",
+        "newPath": "docs/reference/authentication/TEST_COVERAGE_SUMMARY.md",
+        "category": "reference",
+        "priority": 6,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/CHANGELOG.md",
+        "newPath": "docs/project/CHANGELOG.md",
+        "category": "project",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/NUXT3_LANDING_PAGES_RESEARCH.md",
+        "newPath": "docs/reference/authentication/NUXT3_LANDING_PAGES_RESEARCH.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md",
+        "newPath": "docs/reference/authentication/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/QUICK_REFERENCE_PRODUCT_PAGES.md",
+        "newPath": "docs/reference/authentication/QUICK_REFERENCE_PRODUCT_PAGES.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/analysis/LOCALSTORAGE-PAGES-VERIFICATION.md",
+        "newPath": "docs/reference/authentication/LOCALSTORAGE-PAGES-VERIFICATION.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/analysis/LOCALSTORAGE-PROBLEM-DEEP-DIVE.md",
+        "newPath": "docs/reference/authentication/LOCALSTORAGE-PROBLEM-DEEP-DIVE.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/analysis/LOCALSTORAGE-SECURITY-AUDIT.md",
+        "newPath": "docs/reference/authentication/LOCALSTORAGE-SECURITY-AUDIT.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/analysis/SSR-SAFETY-VERIFICATION.md",
+        "newPath": "docs/reference/authentication/SSR-SAFETY-VERIFICATION.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/ACCESSIBILITY_REFACTORING_PLAN.md",
+        "newPath": "docs/explanation/checkout/ACCESSIBILITY_REFACTORING_PLAN.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/ADR-001-auth-store-modularization.md",
+        "newPath": "docs/explanation/authentication/ADR-001-auth-store-modularization.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md",
+        "newPath": "docs/explanation/authentication/ARCHITECTURE_IMPROVEMENT_ROADMAP.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/CHECKOUT_FLOW.md",
+        "newPath": "docs/explanation/checkout/CHECKOUT_FLOW.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/MIDDLEWARE_ARCHITECTURE_ANALYSIS.md",
+        "newPath": "docs/explanation/checkout/MIDDLEWARE_ARCHITECTURE_ANALYSIS.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/asset-caching-strategy.md",
+        "newPath": "docs/explanation/checkout/asset-caching-strategy.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/build-configuration-review.md",
+        "newPath": "docs/explanation/authentication/build-configuration-review.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/build-optimization-adr.md",
+        "newPath": "docs/explanation/authentication/build-optimization-adr.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/build-optimization-plan.md",
+        "newPath": "docs/explanation/checkout/build-optimization-plan.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/tailwind-v4-build-fix-adr.md",
+        "newPath": "docs/explanation/authentication/tailwind-v4-build-fix-adr.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/tailwind-v4-compatibility-summary.md",
+        "newPath": "docs/explanation/authentication/tailwind-v4-compatibility-summary.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/tailwind-v4-implementation-checklist.md",
+        "newPath": "docs/explanation/authentication/tailwind-v4-implementation-checklist.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/architecture/tanstack-table-lazy-loading-implementation.md",
+        "newPath": "docs/explanation/deployment/tanstack-table-lazy-loading-implementation.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/README.md",
+        "newPath": "docs/archive/2026-01-15/README.md",
+        "category": "archive",
+        "priority": 5,
+        "estimatedEffort": "low"
+      },
+      {
+        "oldPath": "docs/archive/checkout-reviews/README_CHECKOUT_REVIEW.md",
+        "newPath": "docs/archive/2026-01-15/README_CHECKOUT_REVIEW.md",
+        "category": "archive",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/fixes/README.md",
+        "newPath": "docs/archive/2026-01-15/README.md",
+        "category": "archive",
+        "priority": 5,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/test-reports/visual-regression-20251123/README.md",
+        "newPath": "docs/archive/2026-01-15/README.md",
+        "category": "archive",
+        "priority": 5,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/automation/PROJECT_AUTOMATION_EXPLAINED.md",
+        "newPath": "docs/project/PROJECT_AUTOMATION_EXPLAINED.md",
+        "category": "project",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/design-inspiration/VISUAL_ANALYSIS.md",
+        "newPath": "docs/explanation/testing/VISUAL_ANALYSIS.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/development/ACCESSIBILITY_QUICK_REFERENCE.md",
+        "newPath": "docs/explanation/testing/ACCESSIBILITY_QUICK_REFERENCE.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/development/MILESTONE_STRATEGY.md",
+        "newPath": "docs/reference/authentication/MILESTONE_STRATEGY.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/development/PATTERNS_TO_PRESERVE.md",
+        "newPath": "docs/explanation/authentication/PATTERNS_TO_PRESERVE.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/development/code-cleanup.md",
+        "newPath": "docs/reference/checkout/code-cleanup.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/development/code-conventions.md",
+        "newPath": "docs/reference/authentication/code-conventions.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/development/ui-ux-review.md",
+        "newPath": "docs/reference/checkout/ui-ux-review.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/features/AUDIT_LOGGING.md",
+        "newPath": "docs/reference/authentication/AUDIT_LOGGING.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/features/GUEST_CHECKOUT_IMPLEMENTATION.md",
+        "newPath": "docs/reference/authentication/GUEST_CHECKOUT_IMPLEMENTATION.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/features/LANDING-PAGE-CMS.md",
+        "newPath": "docs/reference/authentication/LANDING-PAGE-CMS.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/features/authentication/AUTH_MIDDLEWARE_TEST_RESULTS.md",
+        "newPath": "docs/reference/authentication/AUTH_MIDDLEWARE_TEST_RESULTS.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/features/cart/ATOMIC_INVENTORY_FIX.md",
+        "newPath": "docs/reference/authentication/ATOMIC_INVENTORY_FIX.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/features/cart/CART_ANALYTICS.md",
+        "newPath": "docs/reference/checkout/CART_ANALYTICS.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/features/cart/CART_LOCKING.md",
+        "newPath": "docs/reference/checkout/CART_LOCKING.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/issues/full-app-unit-test-coverage.md",
+        "newPath": "docs/reference/authentication/full-app-unit-test-coverage.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/issues/transactional-email-hardening.md",
+        "newPath": "docs/reference/checkout/transactional-email-hardening.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/meta/REMAINING_WORK_SUMMARY.md",
+        "newPath": "docs/reference/authentication/REMAINING_WORK_SUMMARY.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/optimization/date-fns-optimization-report.md",
+        "newPath": "docs/reference/testing/date-fns-optimization-report.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/optimization/date-fns-quick-reference.md",
+        "newPath": "docs/reference/testing/date-fns-quick-reference.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/research/FILTER_DOCUMENTATION_RESEARCH.md",
+        "newPath": "docs/reference/authentication/FILTER_DOCUMENTATION_RESEARCH.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/research/FILTER_SEARCH_UX_RESEARCH.md",
+        "newPath": "docs/explanation/testing/FILTER_SEARCH_UX_RESEARCH.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/research/IMPLEMENTATION_EXAMPLES.md",
+        "newPath": "docs/reference/api/IMPLEMENTATION_EXAMPLES.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/research/KISS-PRINCIPLE-LANDING-PAGE-RESEARCH.md",
+        "newPath": "docs/explanation/authentication/KISS-PRINCIPLE-LANDING-PAGE-RESEARCH.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/research/LANDING_PAGE_SECTION_ANALYSIS.md",
+        "newPath": "docs/reference/authentication/LANDING_PAGE_SECTION_ANALYSIS.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/research/brand-examples-reference.md",
+        "newPath": "docs/explanation/authentication/brand-examples-reference.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/research/research-wine-luxury-ecommerce-best-practices.md",
+        "newPath": "docs/explanation/checkout/research-wine-luxury-ecommerce-best-practices.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-dashboard/design.md",
+        "newPath": "docs/reference/authentication/design.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-order-management/ALIGNMENT_REVIEW.md",
+        "newPath": "docs/explanation/authentication/ALIGNMENT_REVIEW.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-order-management/MODERN_UI_IMPROVEMENTS.md",
+        "newPath": "docs/explanation/testing/MODERN_UI_IMPROVEMENTS.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-order-management/STATUS_WORKFLOW.md",
+        "newPath": "docs/project/STATUS_WORKFLOW.md",
+        "category": "project",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-order-management/TASK_6_IMPLEMENTATION.md",
+        "newPath": "docs/reference/testing/TASK_6_IMPLEMENTATION.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-order-management/UI_IMPROVEMENTS.md",
+        "newPath": "docs/explanation/testing/UI_IMPROVEMENTS.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-order-management/design.md",
+        "newPath": "docs/reference/authentication/design.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/admin-order-management/requirements.md",
+        "newPath": "docs/reference/authentication/requirements.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/code-refactoring/FIXES_APPLIED.md",
+        "newPath": "docs/reference/testing/FIXES_APPLIED.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/code-refactoring/IMPLEMENTATION_SUMMARY.md",
+        "newPath": "docs/explanation/deployment/IMPLEMENTATION_SUMMARY.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/code-refactoring/MIGRATION_GUIDE.md",
+        "newPath": "docs/reference/testing/MIGRATION_GUIDE.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/code-refactoring/design.md",
+        "newPath": "docs/reference/checkout/design.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/code-refactoring/requirements.md",
+        "newPath": "docs/reference/checkout/requirements.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/invoice-generation/design.md",
+        "newPath": "docs/reference/authentication/design.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/invoice-generation/requirements.md",
+        "newPath": "docs/reference/authentication/requirements.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/order-confirmation-emails/IMPLEMENTATION_SUMMARY.md",
+        "newPath": "docs/reference/authentication/IMPLEMENTATION_SUMMARY.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/order-confirmation-emails/design.md",
+        "newPath": "docs/reference/authentication/design.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/order-confirmation-emails/requirements.md",
+        "newPath": "docs/reference/authentication/requirements.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/order-confirmation-emails/task-3-completion-summary.md",
+        "newPath": "docs/reference/authentication/task-3-completion-summary.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/order-confirmation-emails/task-3.2-verification.md",
+        "newPath": "docs/reference/authentication/task-3.2-verification.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/order-confirmation-emails/task-4-completion-summary.md",
+        "newPath": "docs/reference/authentication/task-4-completion-summary.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/order-confirmation-emails/task-5-completion-summary.md",
+        "newPath": "docs/reference/testing/task-5-completion-summary.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/order-confirmation-emails/task-6-completion-summary.md",
+        "newPath": "docs/reference/authentication/task-6-completion-summary.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/order-confirmation-emails/usage-examples.md",
+        "newPath": "docs/reference/testing/usage-examples.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/product-catalog/design.md",
+        "newPath": "docs/reference/testing/design.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/product-catalog/requirements.md",
+        "newPath": "docs/reference/general/requirements.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/product-recommendations/design.md",
+        "newPath": "docs/reference/authentication/design.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/product-recommendations/requirements.md",
+        "newPath": "docs/explanation/configuration/requirements.md",
+        "category": "explanation",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/shipping-notifications/design.md",
+        "newPath": "docs/reference/authentication/design.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/shipping-notifications/requirements.md",
+        "newPath": "docs/reference/configuration/requirements.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/shopping-cart/design.md",
+        "newPath": "docs/reference/checkout/design.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/shopping-cart/requirements.md",
+        "newPath": "docs/reference/checkout/requirements.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/user-authentication/requirements.md",
+        "newPath": "docs/reference/authentication/requirements.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/wishlist/design.md",
+        "newPath": "docs/reference/authentication/design.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/specs/wishlist/requirements.md",
+        "newPath": "docs/reference/authentication/requirements.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/testing/E2E_CART_TESTS.md",
+        "newPath": "docs/reference/checkout/E2E_CART_TESTS.md",
+        "category": "reference",
+        "priority": 5,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/cart-fixes/CART_PERSISTENCE_FIX.md",
+        "newPath": "docs/archive/2026-01-15/CART_PERSISTENCE_FIX.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/cart-fixes/CART_SSR_HYDRATION_FIX_V2.md",
+        "newPath": "docs/archive/2026-01-15/CART_SSR_HYDRATION_FIX_V2.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/checkout-fixes/CHECKOUT_BUTTON_ERROR_FINAL_REPORT.md",
+        "newPath": "docs/archive/2026-01-15/CHECKOUT_BUTTON_ERROR_FINAL_REPORT.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/checkout-fixes/FINAL_CHECKOUT_BUTTON_FIX.md",
+        "newPath": "docs/archive/2026-01-15/FINAL_CHECKOUT_BUTTON_FIX.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/checkout-fixes/LOGIN_INVESTIGATION.md",
+        "newPath": "docs/archive/2026-01-15/LOGIN_INVESTIGATION.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/checkout-fixes/add-to-cart-root-cause.md",
+        "newPath": "docs/archive/2026-01-15/add-to-cart-root-cause.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/checkout-fixes/products-page-empty-fix.md",
+        "newPath": "docs/archive/2026-01-15/products-page-empty-fix.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/checkout-fixes/vercel-investigation-report.md",
+        "newPath": "docs/archive/2026-01-15/vercel-investigation-report.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/checkout-reviews/CHECKOUT_BEFORE_AFTER_COMPARISON.md",
+        "newPath": "docs/archive/2026-01-15/CHECKOUT_BEFORE_AFTER_COMPARISON.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_INDEX.md",
+        "newPath": "docs/archive/2026-01-15/CHECKOUT_SIMPLIFICATION_INDEX.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_QUICK_REFERENCE.md",
+        "newPath": "docs/archive/2026-01-15/CHECKOUT_SIMPLIFICATION_QUICK_REFERENCE.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_REFACTOR_GUIDE.md",
+        "newPath": "docs/archive/2026-01-15/CHECKOUT_SIMPLIFICATION_REFACTOR_GUIDE.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/checkout-reviews/CHECKOUT_UX_ANALYSIS_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/CHECKOUT_UX_ANALYSIS_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md",
+        "newPath": "docs/archive/2026-01-15/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/checkout-reviews/CHECKOUT_UX_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/CHECKOUT_UX_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/customer-order-history/COMPLETE.md",
+        "newPath": "docs/archive/2026-01-15/COMPLETE.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/customer-order-history/FIXES_APPLIED.md",
+        "newPath": "docs/archive/2026-01-15/FIXES_APPLIED.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/customer-order-history/MIGRATION_GUIDE.md",
+        "newPath": "docs/archive/2026-01-15/MIGRATION_GUIDE.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/customer-order-history/design.md",
+        "newPath": "docs/archive/2026-01-15/design.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/customer-order-history/requirements.md",
+        "newPath": "docs/archive/2026-01-15/requirements.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/customer-order-history/tasks.md",
+        "newPath": "docs/archive/2026-01-15/tasks.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/order-status-updates/COMPLETE.md",
+        "newPath": "docs/archive/2026-01-15/COMPLETE.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/order-status-updates/design.md",
+        "newPath": "docs/archive/2026-01-15/design.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/order-status-updates/requirements.md",
+        "newPath": "docs/archive/2026-01-15/requirements.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/order-status-updates/tasks.md",
+        "newPath": "docs/archive/2026-01-15/tasks.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/shipping-step-refactor/RECURSIVE_UPDATE_FIX.md",
+        "newPath": "docs/archive/2026-01-15/RECURSIVE_UPDATE_FIX.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/shipping-step-refactor/VERIFICATION_REPORT.md",
+        "newPath": "docs/archive/2026-01-15/VERIFICATION_REPORT.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/shipping-step-refactor/design.md",
+        "newPath": "docs/archive/2026-01-15/design.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/shipping-step-refactor/requirements.md",
+        "newPath": "docs/archive/2026-01-15/requirements.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/completed-specs/shipping-step-refactor/tasks.md",
+        "newPath": "docs/archive/2026-01-15/tasks.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/fix-summaries/CART-LOCK-FIX-SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/CART-LOCK-FIX-SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/fix-summaries/CART_COOKIE_FIX_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/CART_COOKIE_FIX_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/fix-summaries/CHANGES_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/CHANGES_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/fix-summaries/CHECKOUT_FIXES_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/CHECKOUT_FIXES_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/fixes/ARCHITECTURAL_FIXES_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/ARCHITECTURAL_FIXES_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/fixes/ERROR_HANDLING_AUDIT.md",
+        "newPath": "docs/archive/2026-01-15/ERROR_HANDLING_AUDIT.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/fixes/ERROR_HANDLING_FIXES.md",
+        "newPath": "docs/archive/2026-01-15/ERROR_HANDLING_FIXES.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/fixes/FINAL_OPTIMIZATION_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/FINAL_OPTIMIZATION_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/fixes/MIDDLEWARE_FIX_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/MIDDLEWARE_FIX_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/fixes/RACE_CONDITION_FIX_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/RACE_CONDITION_FIX_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/fixes/SSR_FIX_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/SSR_FIX_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/fixes/VISUAL_TEST_RESULTS.md",
+        "newPath": "docs/archive/2026-01-15/VISUAL_TEST_RESULTS.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/fixes/admin-fixes/CLEAN-CODE-REVIEW.md",
+        "newPath": "docs/archive/2026-01-15/CLEAN-CODE-REVIEW.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/fixes/admin-fixes/ISSUES-AND-SOLUTIONS.md",
+        "newPath": "docs/archive/2026-01-15/ISSUES-AND-SOLUTIONS.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/meta-old/DOCUMENTATION_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/DOCUMENTATION_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/meta-old/DOCUMENTATION_UPDATES_LOG.md",
+        "newPath": "docs/archive/2026-01-15/DOCUMENTATION_UPDATES_LOG.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/meta-old/DOCUMENTATION_UPDATE_2025-11-01.md",
+        "newPath": "docs/archive/2026-01-15/DOCUMENTATION_UPDATE_2025-11-01.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/meta-old/MVP_PRIORITY_ORDER.md",
+        "newPath": "docs/archive/2026-01-15/MVP_PRIORITY_ORDER.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/migrations/BUTTON_MIGRATION_AUDIT.md",
+        "newPath": "docs/archive/2026-01-15/BUTTON_MIGRATION_AUDIT.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/migrations/SHADCN_MIGRATION.md",
+        "newPath": "docs/archive/2026-01-15/SHADCN_MIGRATION.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/phase-docs/phase1-results.md",
+        "newPath": "docs/archive/2026-01-15/phase1-results.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/phase-docs/phase2-results.md",
+        "newPath": "docs/archive/2026-01-15/phase2-results.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/phase-docs/phase3-results.md",
+        "newPath": "docs/archive/2026-01-15/phase3-results.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/phase-docs/phase4-analysis.md",
+        "newPath": "docs/archive/2026-01-15/phase4-analysis.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/phase-docs/phase4-honest-assessment.md",
+        "newPath": "docs/archive/2026-01-15/phase4-honest-assessment.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/phase-docs/phase4-optimized-results.md",
+        "newPath": "docs/archive/2026-01-15/phase4-optimized-results.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/reports/ASSET_OPTIMIZATION_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/ASSET_OPTIMIZATION_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/reports/BUILD_SUCCESS_REPORT.md",
+        "newPath": "docs/archive/2026-01-15/BUILD_SUCCESS_REPORT.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md",
+        "newPath": "docs/archive/2026-01-15/CODE_QUALITY_ANALYSIS_2025-11-01.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/reports/TANSTACK_TABLE_LAZY_LOADING_DELIVERABLES.md",
+        "newPath": "docs/archive/2026-01-15/TANSTACK_TABLE_LAZY_LOADING_DELIVERABLES.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/reports/prerender-optimization-report.md",
+        "newPath": "docs/archive/2026-01-15/prerender-optimization-report.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/research/hero-section/hero-demo-images.md",
+        "newPath": "docs/archive/2026-01-15/hero-demo-images.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/research/hero-section/hero-image-requirements.md",
+        "newPath": "docs/archive/2026-01-15/hero-image-requirements.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/research/hero-section/hero-section-best-practices-2025.md",
+        "newPath": "docs/archive/2026-01-15/hero-section-best-practices-2025.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/research/hero-section/hero-section-implementation-guide.md",
+        "newPath": "docs/archive/2026-01-15/hero-section-implementation-guide.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/research/hero-section/hero-section-technical-implementation.md",
+        "newPath": "docs/archive/2026-01-15/hero-section-technical-implementation.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/reviews/CODE_REVIEW_2025.md",
+        "newPath": "docs/archive/2026-01-15/CODE_REVIEW_2025.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/reviews/DOCUMENTATION_REVIEW_2025-11-27.md",
+        "newPath": "docs/archive/2026-01-15/DOCUMENTATION_REVIEW_2025-11-27.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md",
+        "newPath": "docs/archive/2026-01-15/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/reviews/PR_258_EXECUTIVE_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/PR_258_EXECUTIVE_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/specs/CART_FIXES_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/CART_FIXES_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/specs-legacy/ORIGINAL_REQUIREMENTS.md",
+        "newPath": "docs/archive/2026-01-15/ORIGINAL_REQUIREMENTS.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/specs-legacy/design.md",
+        "newPath": "docs/archive/2026-01-15/design.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/test-reports/visual-regression-20251123/MANUAL_TEST_CHECKLIST.md",
+        "newPath": "docs/archive/2026-01-15/MANUAL_TEST_CHECKLIST.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/test-reports/visual-regression-20251123/TEST_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/TEST_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/test-reports/visual-regression-20251123/VISUAL_REGRESSION_TEST_REPORT.md",
+        "newPath": "docs/archive/2026-01-15/VISUAL_REGRESSION_TEST_REPORT.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/BRANCH_COMPARISON_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/BRANCH_COMPARISON_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/E2E_AUTH_TEST_IMPROVEMENTS.md",
+        "newPath": "docs/archive/2026-01-15/E2E_AUTH_TEST_IMPROVEMENTS.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/E2E_TEST_REVIEW_AND_FIXES.md",
+        "newPath": "docs/archive/2026-01-15/E2E_TEST_REVIEW_AND_FIXES.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/IMPLEMENTATION_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/IMPLEMENTATION_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/PHASE_2_PLAYWRIGHT_CONFIG_SIMPLIFICATION.md",
+        "newPath": "docs/archive/2026-01-15/PHASE_2_PLAYWRIGHT_CONFIG_SIMPLIFICATION.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/PHASE_3_FINAL_CLEANUP.md",
+        "newPath": "docs/archive/2026-01-15/PHASE_3_FINAL_CLEANUP.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/QUICK_START_TESTING_GUIDE.md",
+        "newPath": "docs/archive/2026-01-15/QUICK_START_TESTING_GUIDE.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/SEARCH_PERFORMANCE_VERIFICATION.md",
+        "newPath": "docs/archive/2026-01-15/SEARCH_PERFORMANCE_VERIFICATION.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/TEST_COVERAGE_IMPLEMENTATION.md",
+        "newPath": "docs/archive/2026-01-15/TEST_COVERAGE_IMPLEMENTATION.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/checkout/CHECKOUT-TEST-COVERAGE-ANALYSIS.md",
+        "newPath": "docs/archive/2026-01-15/CHECKOUT-TEST-COVERAGE-ANALYSIS.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/checkout/E2E_TEST_FIXES.md",
+        "newPath": "docs/archive/2026-01-15/E2E_TEST_FIXES.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      },
+      {
+        "oldPath": "docs/archive/testing/checkout/END-TO-END-TESTING-COMPLETE.md",
+        "newPath": "docs/archive/2026-01-15/END-TO-END-TESTING-COMPLETE.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/mutation/MUTATION_TESTING_QUICK_REFERENCE.md",
+        "newPath": "docs/archive/2026-01-15/MUTATION_TESTING_QUICK_REFERENCE.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/mutation/MUTATION_TESTING_REPORT.md",
+        "newPath": "docs/archive/2026-01-15/MUTATION_TESTING_REPORT.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/mutation/MUTATION_TESTING_REPORT_ORDER_COMPONENTS.md",
+        "newPath": "docs/archive/2026-01-15/MUTATION_TESTING_REPORT_ORDER_COMPONENTS.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/mutation/MUTATION_TESTING_SUMMARY.md",
+        "newPath": "docs/archive/2026-01-15/MUTATION_TESTING_SUMMARY.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/mutation/mutation-test-report-checkout.md",
+        "newPath": "docs/archive/2026-01-15/mutation-test-report-checkout.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md",
+        "newPath": "docs/archive/2026-01-15/E2E_CHECKOUT_BEST_PRACTICES.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/testing/playwright/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md",
+        "newPath": "docs/archive/2026-01-15/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/vercel-debug/VERCEL_ADD_TO_CART_DEBUG.md",
+        "newPath": "docs/archive/2026-01-15/VERCEL_ADD_TO_CART_DEBUG.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/vercel-debug/VERCEL_ADD_TO_CART_FIX.md",
+        "newPath": "docs/archive/2026-01-15/VERCEL_ADD_TO_CART_FIX.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/vercel-debug/VERCEL_CLIENT_BUNDLES_FIX.md",
+        "newPath": "docs/archive/2026-01-15/VERCEL_CLIENT_BUNDLES_FIX.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "high"
+      },
+      {
+        "oldPath": "docs/archive/vercel-debug/VERCEL_DEBUG_STEPS.md",
+        "newPath": "docs/archive/2026-01-15/VERCEL_DEBUG_STEPS.md",
+        "category": "archive",
+        "priority": 3,
+        "estimatedEffort": "medium"
+      }
+    ]
+  },
+  "results": [
+    {
+      "success": true,
+      "oldPath": "docs/testing/README.md",
+      "newPath": "docs/how-to/authentication/README.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/README.md",
+      "newPath": "docs/explanation/authentication/README.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/getting-started/QUICK_START_GUIDE.md",
+      "newPath": "docs/tutorials/QUICK_START_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/guides/README.md",
+      "newPath": "docs/how-to/authentication/README.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/how-to/authentication/README.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/notebooklm/README.md",
+      "newPath": "docs/explanation/authentication/README.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/explanation/authentication/README.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/research/README.md",
+      "newPath": "docs/how-to/deployment/README.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/security/README.md",
+      "newPath": "docs/how-to/authentication/README.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/how-to/authentication/README.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/ai-context/DEPENDENCIES.md",
+      "newPath": "docs/how-to/authentication/DEPENDENCIES.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/api/README.md",
+      "newPath": "docs/reference/authentication/README.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/architecture/README.md",
+      "newPath": "docs/explanation/authentication/README.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/explanation/authentication/README.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/component-inventory.md",
+      "newPath": "docs/how-to/checkout/component-inventory.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/tech.md",
+      "newPath": "docs/how-to/authentication/tech.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/features/landing-videos/IMPLEMENTATION.md",
+      "newPath": "docs/how-to/authentication/IMPLEMENTATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/features/landing-videos/QUICK-START.md",
+      "newPath": "docs/how-to/deployment/QUICK-START.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/getting-started/DATABASE_SETUP.md",
+      "newPath": "docs/tutorials/DATABASE_SETUP.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/getting-started/LOCAL_TESTING_GUIDE.md",
+      "newPath": "docs/tutorials/LOCAL_TESTING_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/getting-started/MVP_QUICK_START.md",
+      "newPath": "docs/tutorials/MVP_QUICK_START.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/getting-started/SUPABASE_SETUP.md",
+      "newPath": "docs/tutorials/SUPABASE_SETUP.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/lessons/lesson-1-security-and-dependencies.md",
+      "newPath": "docs/how-to/authentication/lesson-1-security-and-dependencies.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/lessons/lesson-2-technical-debt-and-code-quality.md",
+      "newPath": "docs/how-to/authentication/lesson-2-technical-debt-and-code-quality.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/manuals/IMPLEMENTATION_GUIDE.md",
+      "newPath": "docs/how-to/authentication/IMPLEMENTATION_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/meta/DOCUMENTATION_CONSOLIDATION_PLAN.md",
+      "newPath": "docs/how-to/authentication/DOCUMENTATION_CONSOLIDATION_PLAN.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md",
+      "newPath": "docs/how-to/authentication/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/meta/DOCUMENTATION_QUICK_WINS.md",
+      "newPath": "docs/how-to/authentication/DOCUMENTATION_QUICK_WINS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/meta/DUAL_LAYER_DOCS_IMPLEMENTATION_PROMPT.md",
+      "newPath": "docs/how-to/authentication/DUAL_LAYER_DOCS_IMPLEMENTATION_PROMPT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/meta/QUICK_START_DUAL_LAYER_DOCS.md",
+      "newPath": "docs/how-to/authentication/QUICK_START_DUAL_LAYER_DOCS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/notebooklm/02_TECH_STACK.md",
+      "newPath": "docs/how-to/authentication/02_TECH_STACK.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/notebooklm/06_COMPONENT_LIBRARY.md",
+      "newPath": "docs/how-to/checkout/06_COMPONENT_LIBRARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/notebooklm/07_TESTING_GUIDE.md",
+      "newPath": "docs/how-to/authentication/07_TESTING_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/notebooklm/09_TROUBLESHOOTING.md",
+      "newPath": "docs/how-to/authentication/09_TROUBLESHOOTING.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/research/HERO-SECTION-RESEARCH-README.md",
+      "newPath": "docs/explanation/authentication/HERO-SECTION-RESEARCH-README.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/research/hero-section-quick-reference.md",
+      "newPath": "docs/how-to/deployment/hero-section-quick-reference.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/reviews/FAQ_REVIEW_SUMMARY.md",
+      "newPath": "docs/how-to/checkout/FAQ_REVIEW_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/GLOBAL_TASKS.md",
+      "newPath": "docs/how-to/authentication/GLOBAL_TASKS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/admin-order-management/README.md",
+      "newPath": "docs/reference/authentication/README.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/authentication/README.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/testing/PRODUCTION_TESTING_STRATEGY.md",
+      "newPath": "docs/how-to/authentication/PRODUCTION_TESTING_STRATEGY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/testing/TESTING_AUDIT_AND_STRATEGY.md",
+      "newPath": "docs/how-to/authentication/TESTING_AUDIT_AND_STRATEGY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/testing/VISUAL-REGRESSION-SETUP.md",
+      "newPath": "docs/how-to/authentication/VISUAL-REGRESSION-SETUP.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/testing/VISUAL-REGRESSION-SUMMARY.md",
+      "newPath": "docs/how-to/authentication/VISUAL-REGRESSION-SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/visual-regression/VISUAL_REGRESSION_ISSUES_AND_FIXES.md",
+      "newPath": "docs/how-to/testing/VISUAL_REGRESSION_ISSUES_AND_FIXES.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/visual-regression/VISUAL_REGRESSION_REVIEW_INDEX.md",
+      "newPath": "docs/how-to/testing/VISUAL_REGRESSION_REVIEW_INDEX.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/visual-regression/VISUAL_REGRESSION_REVIEW_REPORT.md",
+      "newPath": "docs/how-to/authentication/VISUAL_REGRESSION_REVIEW_REPORT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/visual-regression/VISUAL_REGRESSION_SUMMARY.md",
+      "newPath": "docs/how-to/authentication/VISUAL_REGRESSION_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/CODEBASE_AUDIT_REPORT.md",
+      "newPath": "docs/explanation/authentication/CODEBASE_AUDIT_REPORT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/MVP_ASSESSMENT_REPORT.md",
+      "newPath": "docs/reference/authentication/MVP_ASSESSMENT_REPORT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/ai-context/ARCHITECTURE_SUMMARY.md",
+      "newPath": "docs/explanation/authentication/ARCHITECTURE_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/ai-context/CONVENTIONS.md",
+      "newPath": "docs/reference/authentication/CONVENTIONS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/ai-context/PATTERNS.md",
+      "newPath": "docs/reference/authentication/PATTERNS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/AUTHENTICATION_ARCHITECTURE.md",
+      "newPath": "docs/explanation/authentication/AUTHENTICATION_ARCHITECTURE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/CART_SYSTEM_ARCHITECTURE.md",
+      "newPath": "docs/explanation/authentication/CART_SYSTEM_ARCHITECTURE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/DOCUMENTATION_UPDATE_2026_01.md",
+      "newPath": "docs/explanation/authentication/DOCUMENTATION_UPDATE_2026_01.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/architecture-reviews/ARCHITECTURE_REVIEW_2025_11.md",
+      "newPath": "docs/explanation/authentication/ARCHITECTURE_REVIEW_2025_11.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/completed-specs/customer-order-history/API_USAGE_GUIDE.md",
+      "newPath": "docs/reference/authentication/API_USAGE_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/completed-specs/shipping-step-refactor/FINAL_STATUS.md",
+      "newPath": "docs/project/FINAL_STATUS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/TEST_STATUS_REPORT.md",
+      "newPath": "docs/project/TEST_STATUS_REPORT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/automation/github-project-automation.md",
+      "newPath": "docs/how-to/authentication/github-project-automation.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/MILESTONE_QUICK_START.md",
+      "newPath": "docs/how-to/authentication/MILESTONE_QUICK_START.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/STATIC_ANALYSIS.md",
+      "newPath": "docs/reference/testing/STATIC_ANALYSIS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/component-modernization-plan.md",
+      "newPath": "docs/explanation/authentication/component-modernization-plan.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/structure.md",
+      "newPath": "docs/reference/authentication/structure.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/supabase-best-practices.md",
+      "newPath": "docs/how-to/authentication/supabase-best-practices.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/troubleshooting-components.md",
+      "newPath": "docs/how-to/checkout/troubleshooting-components.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/features/I18N_CONFIGURATION.md",
+      "newPath": "docs/how-to/authentication/I18N_CONFIGURATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/features/authentication/MFA_IMPLEMENTATION.md",
+      "newPath": "docs/how-to/authentication/MFA_IMPLEMENTATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/features/authentication/auth-flow-review.md",
+      "newPath": "docs/how-to/authentication/auth-flow-review.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/features/authentication/authentication-translations.md",
+      "newPath": "docs/how-to/authentication/authentication-translations.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/guides/DEPLOYMENT_CHECKLIST.md",
+      "newPath": "docs/how-to/checkout/DEPLOYMENT_CHECKLIST.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/guides/DEPLOYMENT_GUIDE.md",
+      "newPath": "docs/how-to/authentication/DEPLOYMENT_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/guides/KEY_ROTATION_COMPLETION_GUIDE.md",
+      "newPath": "docs/how-to/authentication/KEY_ROTATION_COMPLETION_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/guides/MARKETING-COPY-IMPROVEMENTS.md",
+      "newPath": "docs/how-to/authentication/MARKETING-COPY-IMPROVEMENTS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/guides/PREVENTION_STRATEGY.md",
+      "newPath": "docs/how-to/deployment/PREVENTION_STRATEGY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/guides/STRIPE_WEBHOOK_SETUP.md",
+      "newPath": "docs/how-to/authentication/STRIPE_WEBHOOK_SETUP.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/guides/TESTING.md",
+      "newPath": "docs/how-to/authentication/TESTING.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/guides/asset-optimization-quick-reference.md",
+      "newPath": "docs/how-to/checkout/asset-optimization-quick-reference.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/guides/build-optimization-implementation.md",
+      "newPath": "docs/how-to/authentication/build-optimization-implementation.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/guides/build-optimization-quick-start.md",
+      "newPath": "docs/how-to/authentication/build-optimization-quick-start.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/guides/css-optimization-summary.md",
+      "newPath": "docs/how-to/checkout/css-optimization-summary.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/guides/prerender-optimization-quick-reference.md",
+      "newPath": "docs/how-to/checkout/prerender-optimization-quick-reference.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/guides/tanstack-table-lazy-loading.md",
+      "newPath": "docs/how-to/testing/tanstack-table-lazy-loading.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/lessons/lesson-3-testing-and-action-plan.md",
+      "newPath": "docs/reference/authentication/lesson-3-testing-and-action-plan.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/manuals/ADMIN_TESTING.md",
+      "newPath": "docs/reference/authentication/ADMIN_TESTING.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/manuals/TESTING_STRATEGY.md",
+      "newPath": "docs/reference/authentication/TESTING_STRATEGY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/manuals/TEST_USER_SIMULATION.md",
+      "newPath": "docs/reference/authentication/TEST_USER_SIMULATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md",
+      "newPath": "docs/explanation/authentication/AI_ERA_DOCUMENTATION_PROPOSAL.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/meta/ARCHIVAL_POLICY.md",
+      "newPath": "docs/reference/checkout/ARCHIVAL_POLICY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/meta/DOCUMENTATION_CONVENTIONS.md",
+      "newPath": "docs/how-to/authentication/DOCUMENTATION_CONVENTIONS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/meta/DOCUMENTATION_INDEX.md",
+      "newPath": "docs/how-to/authentication/DOCUMENTATION_INDEX.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/notebooklm/01_PROJECT_OVERVIEW.md",
+      "newPath": "docs/reference/authentication/01_PROJECT_OVERVIEW.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/notebooklm/03_ARCHITECTURE.md",
+      "newPath": "docs/explanation/authentication/03_ARCHITECTURE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/notebooklm/04_FEATURES.md",
+      "newPath": "docs/reference/authentication/04_FEATURES.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/notebooklm/05_CODE_CONVENTIONS.md",
+      "newPath": "docs/reference/authentication/05_CODE_CONVENTIONS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/notebooklm/08_API_REFERENCE.md",
+      "newPath": "docs/reference/authentication/08_API_REFERENCE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/project/AI_CONTEXT_TESTING_GUIDE.md",
+      "newPath": "docs/project/AI_CONTEXT_TESTING_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/project/AI_CONTEXT_TESTING_GUIDE.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/project/MAINTENANCE_GUIDE.md",
+      "newPath": "docs/project/MAINTENANCE_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/project/MAINTENANCE_GUIDE.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/project/MIGRATION_GUIDE.md",
+      "newPath": "docs/project/MIGRATION_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/project/MIGRATION_GUIDE.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/research/RESEARCH_SUMMARY.md",
+      "newPath": "docs/how-to/testing/RESEARCH_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/research/build-performance-comparison.md",
+      "newPath": "docs/how-to/checkout/build-performance-comparison.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/research/nuxt3-pinia-ssr-best-practices.md",
+      "newPath": "docs/how-to/deployment/nuxt3-pinia-ssr-best-practices.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/reviews/CODE_REVIEW_FAQ_PAGE.md",
+      "newPath": "docs/reference/authentication/CODE_REVIEW_FAQ_PAGE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/reviews/DOCS_COMPLEXITY_AUDIT.md",
+      "newPath": "docs/explanation/checkout/DOCS_COMPLEXITY_AUDIT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/reviews/IMPROVEMENTS_APPLIED.md",
+      "newPath": "docs/reference/checkout/IMPROVEMENTS_APPLIED.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/reviews/PR_REVIEW.md",
+      "newPath": "docs/reference/checkout/PR_REVIEW.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/reviews/VISUAL_VALIDATION_RESULTS.md",
+      "newPath": "docs/reference/checkout/VISUAL_VALIDATION_RESULTS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/reviews/checkout-ux-review-2025-12-23.md",
+      "newPath": "docs/explanation/checkout/checkout-ux-review-2025-12-23.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/security/GDPR_COMPLIANCE.md",
+      "newPath": "docs/how-to/authentication/GDPR_COMPLIANCE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/security/SECURE_LOGGER.md",
+      "newPath": "docs/how-to/authentication/SECURE_LOGGER.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/GLOBAL_REQUIREMENTS.md",
+      "newPath": "docs/reference/authentication/GLOBAL_REQUIREMENTS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/admin-dashboard/requirements.md",
+      "newPath": "docs/how-to/authentication/requirements.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/admin-dashboard/tasks.md",
+      "newPath": "docs/how-to/authentication/tasks.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/admin-order-management/FULFILLMENT_WORKFLOW.md",
+      "newPath": "docs/how-to/authentication/FULFILLMENT_WORKFLOW.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/admin-order-management/QUICK_REFERENCE.md",
+      "newPath": "docs/how-to/testing/QUICK_REFERENCE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/admin-order-management/tasks.md",
+      "newPath": "docs/how-to/checkout/tasks.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/code-refactoring/tasks.md",
+      "newPath": "docs/how-to/authentication/tasks.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/how-to/authentication/tasks.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/invoice-generation/tasks.md",
+      "newPath": "docs/how-to/authentication/tasks.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/how-to/authentication/tasks.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/order-confirmation-emails/TESTING-GUIDE.md",
+      "newPath": "docs/how-to/authentication/TESTING-GUIDE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/order-confirmation-emails/admin-interface-guide.md",
+      "newPath": "docs/how-to/testing/admin-interface-guide.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/order-confirmation-emails/task-3.1-verification.md",
+      "newPath": "docs/how-to/checkout/task-3.1-verification.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/order-confirmation-emails/tasks.md",
+      "newPath": "docs/how-to/authentication/tasks.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/how-to/authentication/tasks.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/product-catalog/tasks.md",
+      "newPath": "docs/reference/testing/tasks.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/product-recommendations/tasks.md",
+      "newPath": "docs/how-to/authentication/tasks.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/how-to/authentication/tasks.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/shipping-notifications/tasks.md",
+      "newPath": "docs/how-to/checkout/tasks.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/how-to/checkout/tasks.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/shopping-cart/tasks.md",
+      "newPath": "docs/how-to/checkout/tasks.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/how-to/checkout/tasks.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/user-authentication/design.md",
+      "newPath": "docs/reference/authentication/design.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/user-authentication/tasks.md",
+      "newPath": "docs/how-to/authentication/tasks.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/how-to/authentication/tasks.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/wishlist/tasks.md",
+      "newPath": "docs/how-to/authentication/tasks.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/how-to/authentication/tasks.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/status/CURRENT_TEST_FAILURES_DETAILED.md",
+      "newPath": "docs/reference/authentication/CURRENT_TEST_FAILURES_DETAILED.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/status/E2E_TEST_FAILURES_ANALYSIS.md",
+      "newPath": "docs/reference/authentication/E2E_TEST_FAILURES_ANALYSIS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/status/P0_ISSUES_SUMMARY.md",
+      "newPath": "docs/explanation/authentication/P0_ISSUES_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/status/PROGRESS.md",
+      "newPath": "docs/reference/authentication/PROGRESS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/status/PROJECT_STATUS.md",
+      "newPath": "docs/project/PROJECT_STATUS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/status/ROADMAP.md",
+      "newPath": "docs/project/ROADMAP.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/testing/ADMIN_PAGES_COMPREHENSIVE_REPORT.md",
+      "newPath": "docs/how-to/authentication/ADMIN_PAGES_COMPREHENSIVE_REPORT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/testing/COMPREHENSIVE_CHECKOUT_REVIEW.md",
+      "newPath": "docs/reference/authentication/COMPREHENSIVE_CHECKOUT_REVIEW.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/testing/MUTATION_TESTING_FINAL_REPORT.md",
+      "newPath": "docs/reference/authentication/MUTATION_TESTING_FINAL_REPORT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/testing/TESTING_REVIEW.md",
+      "newPath": "docs/reference/authentication/TESTING_REVIEW.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/testing/TEST_COVERAGE_ANALYSIS.md",
+      "newPath": "docs/reference/authentication/TEST_COVERAGE_ANALYSIS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/testing/TEST_COVERAGE_SUMMARY.md",
+      "newPath": "docs/reference/authentication/TEST_COVERAGE_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/CHANGELOG.md",
+      "newPath": "docs/project/CHANGELOG.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/NUXT3_LANDING_PAGES_RESEARCH.md",
+      "newPath": "docs/reference/authentication/NUXT3_LANDING_PAGES_RESEARCH.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md",
+      "newPath": "docs/reference/authentication/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/QUICK_REFERENCE_PRODUCT_PAGES.md",
+      "newPath": "docs/reference/authentication/QUICK_REFERENCE_PRODUCT_PAGES.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/analysis/LOCALSTORAGE-PAGES-VERIFICATION.md",
+      "newPath": "docs/reference/authentication/LOCALSTORAGE-PAGES-VERIFICATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/analysis/LOCALSTORAGE-PROBLEM-DEEP-DIVE.md",
+      "newPath": "docs/reference/authentication/LOCALSTORAGE-PROBLEM-DEEP-DIVE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/analysis/LOCALSTORAGE-SECURITY-AUDIT.md",
+      "newPath": "docs/reference/authentication/LOCALSTORAGE-SECURITY-AUDIT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/analysis/SSR-SAFETY-VERIFICATION.md",
+      "newPath": "docs/reference/authentication/SSR-SAFETY-VERIFICATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/ACCESSIBILITY_REFACTORING_PLAN.md",
+      "newPath": "docs/explanation/checkout/ACCESSIBILITY_REFACTORING_PLAN.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/ADR-001-auth-store-modularization.md",
+      "newPath": "docs/explanation/authentication/ADR-001-auth-store-modularization.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md",
+      "newPath": "docs/explanation/authentication/ARCHITECTURE_IMPROVEMENT_ROADMAP.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/CHECKOUT_FLOW.md",
+      "newPath": "docs/explanation/checkout/CHECKOUT_FLOW.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/MIDDLEWARE_ARCHITECTURE_ANALYSIS.md",
+      "newPath": "docs/explanation/checkout/MIDDLEWARE_ARCHITECTURE_ANALYSIS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/asset-caching-strategy.md",
+      "newPath": "docs/explanation/checkout/asset-caching-strategy.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/build-configuration-review.md",
+      "newPath": "docs/explanation/authentication/build-configuration-review.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/build-optimization-adr.md",
+      "newPath": "docs/explanation/authentication/build-optimization-adr.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/build-optimization-plan.md",
+      "newPath": "docs/explanation/checkout/build-optimization-plan.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/tailwind-v4-build-fix-adr.md",
+      "newPath": "docs/explanation/authentication/tailwind-v4-build-fix-adr.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/tailwind-v4-compatibility-summary.md",
+      "newPath": "docs/explanation/authentication/tailwind-v4-compatibility-summary.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/tailwind-v4-implementation-checklist.md",
+      "newPath": "docs/explanation/authentication/tailwind-v4-implementation-checklist.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/architecture/tanstack-table-lazy-loading-implementation.md",
+      "newPath": "docs/explanation/deployment/tanstack-table-lazy-loading-implementation.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/README.md",
+      "newPath": "docs/archive/2026-01-15/README.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-reviews/README_CHECKOUT_REVIEW.md",
+      "newPath": "docs/archive/2026-01-15/README_CHECKOUT_REVIEW.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/archive/fixes/README.md",
+      "newPath": "docs/archive/2026-01-15/README.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/archive/2026-01-15/README.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/archive/test-reports/visual-regression-20251123/README.md",
+      "newPath": "docs/archive/2026-01-15/README.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/archive/2026-01-15/README.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/automation/PROJECT_AUTOMATION_EXPLAINED.md",
+      "newPath": "docs/project/PROJECT_AUTOMATION_EXPLAINED.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/design-inspiration/VISUAL_ANALYSIS.md",
+      "newPath": "docs/explanation/testing/VISUAL_ANALYSIS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/ACCESSIBILITY_QUICK_REFERENCE.md",
+      "newPath": "docs/explanation/testing/ACCESSIBILITY_QUICK_REFERENCE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/MILESTONE_STRATEGY.md",
+      "newPath": "docs/reference/authentication/MILESTONE_STRATEGY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/PATTERNS_TO_PRESERVE.md",
+      "newPath": "docs/explanation/authentication/PATTERNS_TO_PRESERVE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/code-cleanup.md",
+      "newPath": "docs/reference/checkout/code-cleanup.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/code-conventions.md",
+      "newPath": "docs/reference/authentication/code-conventions.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/development/ui-ux-review.md",
+      "newPath": "docs/reference/checkout/ui-ux-review.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/features/AUDIT_LOGGING.md",
+      "newPath": "docs/reference/authentication/AUDIT_LOGGING.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/features/GUEST_CHECKOUT_IMPLEMENTATION.md",
+      "newPath": "docs/reference/authentication/GUEST_CHECKOUT_IMPLEMENTATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/features/LANDING-PAGE-CMS.md",
+      "newPath": "docs/reference/authentication/LANDING-PAGE-CMS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/features/authentication/AUTH_MIDDLEWARE_TEST_RESULTS.md",
+      "newPath": "docs/reference/authentication/AUTH_MIDDLEWARE_TEST_RESULTS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/features/cart/ATOMIC_INVENTORY_FIX.md",
+      "newPath": "docs/reference/authentication/ATOMIC_INVENTORY_FIX.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/features/cart/CART_ANALYTICS.md",
+      "newPath": "docs/reference/checkout/CART_ANALYTICS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/features/cart/CART_LOCKING.md",
+      "newPath": "docs/reference/checkout/CART_LOCKING.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/issues/full-app-unit-test-coverage.md",
+      "newPath": "docs/reference/authentication/full-app-unit-test-coverage.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/issues/transactional-email-hardening.md",
+      "newPath": "docs/reference/checkout/transactional-email-hardening.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/meta/REMAINING_WORK_SUMMARY.md",
+      "newPath": "docs/reference/authentication/REMAINING_WORK_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/optimization/date-fns-optimization-report.md",
+      "newPath": "docs/reference/testing/date-fns-optimization-report.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/optimization/date-fns-quick-reference.md",
+      "newPath": "docs/reference/testing/date-fns-quick-reference.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/research/FILTER_DOCUMENTATION_RESEARCH.md",
+      "newPath": "docs/reference/authentication/FILTER_DOCUMENTATION_RESEARCH.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/research/FILTER_SEARCH_UX_RESEARCH.md",
+      "newPath": "docs/explanation/testing/FILTER_SEARCH_UX_RESEARCH.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/research/IMPLEMENTATION_EXAMPLES.md",
+      "newPath": "docs/reference/api/IMPLEMENTATION_EXAMPLES.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/research/KISS-PRINCIPLE-LANDING-PAGE-RESEARCH.md",
+      "newPath": "docs/explanation/authentication/KISS-PRINCIPLE-LANDING-PAGE-RESEARCH.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/research/LANDING_PAGE_SECTION_ANALYSIS.md",
+      "newPath": "docs/reference/authentication/LANDING_PAGE_SECTION_ANALYSIS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/research/brand-examples-reference.md",
+      "newPath": "docs/explanation/authentication/brand-examples-reference.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/research/research-wine-luxury-ecommerce-best-practices.md",
+      "newPath": "docs/explanation/checkout/research-wine-luxury-ecommerce-best-practices.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/admin-dashboard/design.md",
+      "newPath": "docs/reference/authentication/design.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/authentication/design.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/admin-order-management/ALIGNMENT_REVIEW.md",
+      "newPath": "docs/explanation/authentication/ALIGNMENT_REVIEW.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/admin-order-management/MODERN_UI_IMPROVEMENTS.md",
+      "newPath": "docs/explanation/testing/MODERN_UI_IMPROVEMENTS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/admin-order-management/STATUS_WORKFLOW.md",
+      "newPath": "docs/project/STATUS_WORKFLOW.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/admin-order-management/TASK_6_IMPLEMENTATION.md",
+      "newPath": "docs/reference/testing/TASK_6_IMPLEMENTATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/admin-order-management/UI_IMPROVEMENTS.md",
+      "newPath": "docs/explanation/testing/UI_IMPROVEMENTS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/admin-order-management/design.md",
+      "newPath": "docs/reference/authentication/design.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/authentication/design.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/admin-order-management/requirements.md",
+      "newPath": "docs/reference/authentication/requirements.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/code-refactoring/FIXES_APPLIED.md",
+      "newPath": "docs/reference/testing/FIXES_APPLIED.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/code-refactoring/IMPLEMENTATION_SUMMARY.md",
+      "newPath": "docs/explanation/deployment/IMPLEMENTATION_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/code-refactoring/MIGRATION_GUIDE.md",
+      "newPath": "docs/reference/testing/MIGRATION_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/code-refactoring/design.md",
+      "newPath": "docs/reference/checkout/design.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/code-refactoring/requirements.md",
+      "newPath": "docs/reference/checkout/requirements.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/invoice-generation/design.md",
+      "newPath": "docs/reference/authentication/design.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/authentication/design.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/invoice-generation/requirements.md",
+      "newPath": "docs/reference/authentication/requirements.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/authentication/requirements.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/order-confirmation-emails/IMPLEMENTATION_SUMMARY.md",
+      "newPath": "docs/reference/authentication/IMPLEMENTATION_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/order-confirmation-emails/design.md",
+      "newPath": "docs/reference/authentication/design.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/authentication/design.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/order-confirmation-emails/requirements.md",
+      "newPath": "docs/reference/authentication/requirements.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/authentication/requirements.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/order-confirmation-emails/task-3-completion-summary.md",
+      "newPath": "docs/reference/authentication/task-3-completion-summary.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/order-confirmation-emails/task-3.2-verification.md",
+      "newPath": "docs/reference/authentication/task-3.2-verification.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/order-confirmation-emails/task-4-completion-summary.md",
+      "newPath": "docs/reference/authentication/task-4-completion-summary.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/order-confirmation-emails/task-5-completion-summary.md",
+      "newPath": "docs/reference/testing/task-5-completion-summary.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/order-confirmation-emails/task-6-completion-summary.md",
+      "newPath": "docs/reference/authentication/task-6-completion-summary.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/order-confirmation-emails/usage-examples.md",
+      "newPath": "docs/reference/testing/usage-examples.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/product-catalog/design.md",
+      "newPath": "docs/reference/testing/design.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/product-catalog/requirements.md",
+      "newPath": "docs/reference/general/requirements.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/product-recommendations/design.md",
+      "newPath": "docs/reference/authentication/design.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/authentication/design.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/product-recommendations/requirements.md",
+      "newPath": "docs/explanation/configuration/requirements.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/shipping-notifications/design.md",
+      "newPath": "docs/reference/authentication/design.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/authentication/design.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/specs/shipping-notifications/requirements.md",
+      "newPath": "docs/reference/configuration/requirements.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/shopping-cart/design.md",
+      "newPath": "docs/reference/checkout/design.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/checkout/design.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/shopping-cart/requirements.md",
+      "newPath": "docs/reference/checkout/requirements.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/checkout/requirements.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/user-authentication/requirements.md",
+      "newPath": "docs/reference/authentication/requirements.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/authentication/requirements.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/wishlist/design.md",
+      "newPath": "docs/reference/authentication/design.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/authentication/design.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/specs/wishlist/requirements.md",
+      "newPath": "docs/reference/authentication/requirements.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/reference/authentication/requirements.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/testing/E2E_CART_TESTS.md",
+      "newPath": "docs/reference/checkout/E2E_CART_TESTS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/cart-fixes/CART_PERSISTENCE_FIX.md",
+      "newPath": "docs/archive/2026-01-15/CART_PERSISTENCE_FIX.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/cart-fixes/CART_SSR_HYDRATION_FIX_V2.md",
+      "newPath": "docs/archive/2026-01-15/CART_SSR_HYDRATION_FIX_V2.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-fixes/CHECKOUT_BUTTON_ERROR_FINAL_REPORT.md",
+      "newPath": "docs/archive/2026-01-15/CHECKOUT_BUTTON_ERROR_FINAL_REPORT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-fixes/FINAL_CHECKOUT_BUTTON_FIX.md",
+      "newPath": "docs/archive/2026-01-15/FINAL_CHECKOUT_BUTTON_FIX.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-fixes/LOGIN_INVESTIGATION.md",
+      "newPath": "docs/archive/2026-01-15/LOGIN_INVESTIGATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-fixes/add-to-cart-root-cause.md",
+      "newPath": "docs/archive/2026-01-15/add-to-cart-root-cause.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-fixes/products-page-empty-fix.md",
+      "newPath": "docs/archive/2026-01-15/products-page-empty-fix.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-fixes/vercel-investigation-report.md",
+      "newPath": "docs/archive/2026-01-15/vercel-investigation-report.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-reviews/CHECKOUT_BEFORE_AFTER_COMPARISON.md",
+      "newPath": "docs/archive/2026-01-15/CHECKOUT_BEFORE_AFTER_COMPARISON.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_INDEX.md",
+      "newPath": "docs/archive/2026-01-15/CHECKOUT_SIMPLIFICATION_INDEX.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_QUICK_REFERENCE.md",
+      "newPath": "docs/archive/2026-01-15/CHECKOUT_SIMPLIFICATION_QUICK_REFERENCE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_REFACTOR_GUIDE.md",
+      "newPath": "docs/archive/2026-01-15/CHECKOUT_SIMPLIFICATION_REFACTOR_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-reviews/CHECKOUT_UX_ANALYSIS_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/CHECKOUT_UX_ANALYSIS_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md",
+      "newPath": "docs/archive/2026-01-15/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/checkout-reviews/CHECKOUT_UX_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/CHECKOUT_UX_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/completed-specs/customer-order-history/COMPLETE.md",
+      "newPath": "docs/archive/2026-01-15/COMPLETE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/completed-specs/customer-order-history/FIXES_APPLIED.md",
+      "newPath": "docs/archive/2026-01-15/FIXES_APPLIED.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/completed-specs/customer-order-history/MIGRATION_GUIDE.md",
+      "newPath": "docs/archive/2026-01-15/MIGRATION_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/completed-specs/customer-order-history/design.md",
+      "newPath": "docs/archive/2026-01-15/design.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/completed-specs/customer-order-history/requirements.md",
+      "newPath": "docs/archive/2026-01-15/requirements.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/completed-specs/customer-order-history/tasks.md",
+      "newPath": "docs/archive/2026-01-15/tasks.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/archive/completed-specs/order-status-updates/COMPLETE.md",
+      "newPath": "docs/archive/2026-01-15/COMPLETE.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/archive/2026-01-15/COMPLETE.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/archive/completed-specs/order-status-updates/design.md",
+      "newPath": "docs/archive/2026-01-15/design.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/archive/2026-01-15/design.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/archive/completed-specs/order-status-updates/requirements.md",
+      "newPath": "docs/archive/2026-01-15/requirements.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/archive/2026-01-15/requirements.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/archive/completed-specs/order-status-updates/tasks.md",
+      "newPath": "docs/archive/2026-01-15/tasks.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/archive/2026-01-15/tasks.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/completed-specs/shipping-step-refactor/RECURSIVE_UPDATE_FIX.md",
+      "newPath": "docs/archive/2026-01-15/RECURSIVE_UPDATE_FIX.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/completed-specs/shipping-step-refactor/VERIFICATION_REPORT.md",
+      "newPath": "docs/archive/2026-01-15/VERIFICATION_REPORT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/archive/completed-specs/shipping-step-refactor/design.md",
+      "newPath": "docs/archive/2026-01-15/design.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/archive/2026-01-15/design.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/archive/completed-specs/shipping-step-refactor/requirements.md",
+      "newPath": "docs/archive/2026-01-15/requirements.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/archive/2026-01-15/requirements.md"
+      ]
+    },
+    {
+      "success": false,
+      "oldPath": "docs/archive/completed-specs/shipping-step-refactor/tasks.md",
+      "newPath": "docs/archive/2026-01-15/tasks.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/archive/2026-01-15/tasks.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fix-summaries/CART-LOCK-FIX-SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/CART-LOCK-FIX-SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fix-summaries/CART_COOKIE_FIX_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/CART_COOKIE_FIX_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fix-summaries/CHANGES_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/CHANGES_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fix-summaries/CHECKOUT_FIXES_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/CHECKOUT_FIXES_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fixes/ARCHITECTURAL_FIXES_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/ARCHITECTURAL_FIXES_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fixes/ERROR_HANDLING_AUDIT.md",
+      "newPath": "docs/archive/2026-01-15/ERROR_HANDLING_AUDIT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fixes/ERROR_HANDLING_FIXES.md",
+      "newPath": "docs/archive/2026-01-15/ERROR_HANDLING_FIXES.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fixes/FINAL_OPTIMIZATION_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/FINAL_OPTIMIZATION_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fixes/MIDDLEWARE_FIX_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/MIDDLEWARE_FIX_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fixes/RACE_CONDITION_FIX_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/RACE_CONDITION_FIX_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fixes/SSR_FIX_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/SSR_FIX_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fixes/VISUAL_TEST_RESULTS.md",
+      "newPath": "docs/archive/2026-01-15/VISUAL_TEST_RESULTS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fixes/admin-fixes/CLEAN-CODE-REVIEW.md",
+      "newPath": "docs/archive/2026-01-15/CLEAN-CODE-REVIEW.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/fixes/admin-fixes/ISSUES-AND-SOLUTIONS.md",
+      "newPath": "docs/archive/2026-01-15/ISSUES-AND-SOLUTIONS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/meta-old/DOCUMENTATION_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/DOCUMENTATION_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/meta-old/DOCUMENTATION_UPDATES_LOG.md",
+      "newPath": "docs/archive/2026-01-15/DOCUMENTATION_UPDATES_LOG.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/meta-old/DOCUMENTATION_UPDATE_2025-11-01.md",
+      "newPath": "docs/archive/2026-01-15/DOCUMENTATION_UPDATE_2025-11-01.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/meta-old/MVP_PRIORITY_ORDER.md",
+      "newPath": "docs/archive/2026-01-15/MVP_PRIORITY_ORDER.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/migrations/BUTTON_MIGRATION_AUDIT.md",
+      "newPath": "docs/archive/2026-01-15/BUTTON_MIGRATION_AUDIT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/migrations/SHADCN_MIGRATION.md",
+      "newPath": "docs/archive/2026-01-15/SHADCN_MIGRATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/phase-docs/phase1-results.md",
+      "newPath": "docs/archive/2026-01-15/phase1-results.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/phase-docs/phase2-results.md",
+      "newPath": "docs/archive/2026-01-15/phase2-results.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/phase-docs/phase3-results.md",
+      "newPath": "docs/archive/2026-01-15/phase3-results.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/phase-docs/phase4-analysis.md",
+      "newPath": "docs/archive/2026-01-15/phase4-analysis.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/phase-docs/phase4-honest-assessment.md",
+      "newPath": "docs/archive/2026-01-15/phase4-honest-assessment.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/phase-docs/phase4-optimized-results.md",
+      "newPath": "docs/archive/2026-01-15/phase4-optimized-results.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/reports/ASSET_OPTIMIZATION_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/ASSET_OPTIMIZATION_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/reports/BUILD_SUCCESS_REPORT.md",
+      "newPath": "docs/archive/2026-01-15/BUILD_SUCCESS_REPORT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md",
+      "newPath": "docs/archive/2026-01-15/CODE_QUALITY_ANALYSIS_2025-11-01.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/reports/TANSTACK_TABLE_LAZY_LOADING_DELIVERABLES.md",
+      "newPath": "docs/archive/2026-01-15/TANSTACK_TABLE_LAZY_LOADING_DELIVERABLES.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/reports/prerender-optimization-report.md",
+      "newPath": "docs/archive/2026-01-15/prerender-optimization-report.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/research/hero-section/hero-demo-images.md",
+      "newPath": "docs/archive/2026-01-15/hero-demo-images.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/research/hero-section/hero-image-requirements.md",
+      "newPath": "docs/archive/2026-01-15/hero-image-requirements.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/research/hero-section/hero-section-best-practices-2025.md",
+      "newPath": "docs/archive/2026-01-15/hero-section-best-practices-2025.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/research/hero-section/hero-section-implementation-guide.md",
+      "newPath": "docs/archive/2026-01-15/hero-section-implementation-guide.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/research/hero-section/hero-section-technical-implementation.md",
+      "newPath": "docs/archive/2026-01-15/hero-section-technical-implementation.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/reviews/CODE_REVIEW_2025.md",
+      "newPath": "docs/archive/2026-01-15/CODE_REVIEW_2025.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/reviews/DOCUMENTATION_REVIEW_2025-11-27.md",
+      "newPath": "docs/archive/2026-01-15/DOCUMENTATION_REVIEW_2025-11-27.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md",
+      "newPath": "docs/archive/2026-01-15/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/reviews/PR_258_EXECUTIVE_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/PR_258_EXECUTIVE_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/specs/CART_FIXES_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/CART_FIXES_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/specs-legacy/ORIGINAL_REQUIREMENTS.md",
+      "newPath": "docs/archive/2026-01-15/ORIGINAL_REQUIREMENTS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": false,
+      "oldPath": "docs/archive/specs-legacy/design.md",
+      "newPath": "docs/archive/2026-01-15/design.md",
+      "linksUpdated": 0,
+      "errors": [
+        "Target file already exists: docs/archive/2026-01-15/design.md"
+      ]
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/test-reports/visual-regression-20251123/MANUAL_TEST_CHECKLIST.md",
+      "newPath": "docs/archive/2026-01-15/MANUAL_TEST_CHECKLIST.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/test-reports/visual-regression-20251123/TEST_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/TEST_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/test-reports/visual-regression-20251123/VISUAL_REGRESSION_TEST_REPORT.md",
+      "newPath": "docs/archive/2026-01-15/VISUAL_REGRESSION_TEST_REPORT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/BRANCH_COMPARISON_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/BRANCH_COMPARISON_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/E2E_AUTH_TEST_IMPROVEMENTS.md",
+      "newPath": "docs/archive/2026-01-15/E2E_AUTH_TEST_IMPROVEMENTS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/E2E_TEST_REVIEW_AND_FIXES.md",
+      "newPath": "docs/archive/2026-01-15/E2E_TEST_REVIEW_AND_FIXES.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/IMPLEMENTATION_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/IMPLEMENTATION_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/PHASE_2_PLAYWRIGHT_CONFIG_SIMPLIFICATION.md",
+      "newPath": "docs/archive/2026-01-15/PHASE_2_PLAYWRIGHT_CONFIG_SIMPLIFICATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/PHASE_3_FINAL_CLEANUP.md",
+      "newPath": "docs/archive/2026-01-15/PHASE_3_FINAL_CLEANUP.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/QUICK_START_TESTING_GUIDE.md",
+      "newPath": "docs/archive/2026-01-15/QUICK_START_TESTING_GUIDE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/SEARCH_PERFORMANCE_VERIFICATION.md",
+      "newPath": "docs/archive/2026-01-15/SEARCH_PERFORMANCE_VERIFICATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/TEST_COVERAGE_IMPLEMENTATION.md",
+      "newPath": "docs/archive/2026-01-15/TEST_COVERAGE_IMPLEMENTATION.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/checkout/CHECKOUT-TEST-COVERAGE-ANALYSIS.md",
+      "newPath": "docs/archive/2026-01-15/CHECKOUT-TEST-COVERAGE-ANALYSIS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/checkout/E2E_TEST_FIXES.md",
+      "newPath": "docs/archive/2026-01-15/E2E_TEST_FIXES.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/checkout/END-TO-END-TESTING-COMPLETE.md",
+      "newPath": "docs/archive/2026-01-15/END-TO-END-TESTING-COMPLETE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/mutation/MUTATION_TESTING_QUICK_REFERENCE.md",
+      "newPath": "docs/archive/2026-01-15/MUTATION_TESTING_QUICK_REFERENCE.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/mutation/MUTATION_TESTING_REPORT.md",
+      "newPath": "docs/archive/2026-01-15/MUTATION_TESTING_REPORT.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/mutation/MUTATION_TESTING_REPORT_ORDER_COMPONENTS.md",
+      "newPath": "docs/archive/2026-01-15/MUTATION_TESTING_REPORT_ORDER_COMPONENTS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/mutation/MUTATION_TESTING_SUMMARY.md",
+      "newPath": "docs/archive/2026-01-15/MUTATION_TESTING_SUMMARY.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/mutation/mutation-test-report-checkout.md",
+      "newPath": "docs/archive/2026-01-15/mutation-test-report-checkout.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md",
+      "newPath": "docs/archive/2026-01-15/E2E_CHECKOUT_BEST_PRACTICES.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/testing/playwright/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md",
+      "newPath": "docs/archive/2026-01-15/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/vercel-debug/VERCEL_ADD_TO_CART_DEBUG.md",
+      "newPath": "docs/archive/2026-01-15/VERCEL_ADD_TO_CART_DEBUG.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/vercel-debug/VERCEL_ADD_TO_CART_FIX.md",
+      "newPath": "docs/archive/2026-01-15/VERCEL_ADD_TO_CART_FIX.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/vercel-debug/VERCEL_CLIENT_BUNDLES_FIX.md",
+      "newPath": "docs/archive/2026-01-15/VERCEL_CLIENT_BUNDLES_FIX.md",
+      "linksUpdated": 0,
+      "errors": []
+    },
+    {
+      "success": true,
+      "oldPath": "docs/archive/vercel-debug/VERCEL_DEBUG_STEPS.md",
+      "newPath": "docs/archive/2026-01-15/VERCEL_DEBUG_STEPS.md",
+      "linksUpdated": 0,
+      "errors": []
+    }
+  ],
+  "generatedAt": "2026-01-15T11:43:15.302Z"
+}

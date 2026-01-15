@@ -4,275 +4,269 @@
 
 ---
 
-## Start Here
+## 🎯 Find What You Need
 
-### 🆕 New to the Project?
+Our documentation is organized by **what you want to do**:
 
-1. **[Quick Start Guide](./getting-started/QUICK_START_GUIDE.md)** - Get the app running locally (5 min)
-2. **[Tech Stack](./development/tech.md)** - Understand our technology choices
-3. **[Code Conventions](./development/code-conventions.md)** - How we write code
-4. **[Project Structure](./development/structure.md)** - Where things live
+### 📖 [Tutorials](./tutorials/) - Learning
+**You want to:** Learn something new  
+**Start here if:** You're new to the project or learning a concept
 
-### 🔄 Returning After Time Away?
+- [Quick Start Guide](./tutorials/QUICK_START_GUIDE.md) - Get running in 5 minutes
+- [Database Setup](./tutorials/DATABASE_SETUP.md) - Set up Supabase
+- [Local Testing Guide](./tutorials/LOCAL_TESTING_GUIDE.md) - Run tests locally
 
-1. **[CHANGELOG](./CHANGELOG.md)** - What changed recently
-2. **[Project Status](./status/PROJECT_STATUS.md)** - Current state of the project
-3. **[Roadmap](./status/ROADMAP.md)** - What's planned next
+### 🔧 [How-To Guides](./how-to/) - Problem Solving
+**You want to:** Solve a specific problem  
+**Start here if:** You know what you need to do
 
-### 🐛 Need to Debug Something?
+- [Authentication](./how-to/authentication/) - Auth setup, MFA, security
+- [Checkout](./how-to/checkout/) - Payment flows, cart management
+- [Deployment](./how-to/deployment/) - Deploy to production
+- [Testing](./how-to/testing/) - Write and run tests
 
-1. **[Troubleshooting Components](./development/troubleshooting-components.md)** - Common issues
-2. **[Testing Strategy](./guides/TESTING_STRATEGY.md)** - How to run tests
-3. **[SSR Safety Verification](./analysis/SSR-SAFETY-VERIFICATION.md)** - SSR-related issues
+### 📋 [Reference](./reference/) - Information Lookup
+**You want to:** Look up technical details  
+**Start here if:** You need API docs or specifications
 
-### 🛠️ Working on a Feature?
+- [API Documentation](./reference/api/)
+- [Architecture Specs](./reference/architecture/)
+- [Component Library](./reference/components/)
+- [Configuration](./reference/configuration/)
 
-1. **[Patterns to Preserve](./development/PATTERNS_TO_PRESERVE.md)** - Code patterns to follow
-2. **[Component Inventory](./development/component-inventory.md)** - Available UI components
-3. **[i18n Configuration](./features/I18N_CONFIGURATION.md)** - Adding translations (required for all UI)
+### 💡 [Explanation](./explanation/) - Understanding
+**You want to:** Understand why things work the way they do  
+**Start here if:** You want to understand concepts and decisions
 
----
+- [Architecture](./explanation/architecture/) - System design
+- [Decisions](./explanation/decisions/) - Why we made certain choices
+- [Concepts](./explanation/concepts/) - Core concepts explained
 
-## Core Documentation
+### 📁 [Project](./project/) - Project Management
+**You want to:** Project status and management info  
+**Start here if:** You need roadmap, status, or guides
 
-### Architecture
-How the system is designed:
-
-| Document | Description |
-|----------|-------------|
-| [Architecture Review (Nov 2025)](./archive/architecture-reviews/ARCHITECTURE_REVIEW_2025_11.md) | Historical system design (Archived) |
-| [Authentication](./architecture/AUTHENTICATION_ARCHITECTURE.md) | Auth flow with Supabase |
-| [Checkout Flow](./architecture/CHECKOUT_FLOW.md) | Multi-step checkout process |
-| [Cart System](./architecture/CART_SYSTEM_ARCHITECTURE.md) | Shopping cart internals |
-
-### Key Features
-Feature-specific documentation:
-
-| Feature | Key Docs |
-|---------|----------|
-| **Auth** | [MFA](./features/authentication/MFA_IMPLEMENTATION.md), [Auth Flow](./features/authentication/auth-flow-review.md) |
-| **Cart** | [Cart Locking](./features/cart/CART_LOCKING.md), [Analytics](./features/cart/CART_ANALYTICS.md) |
-| **i18n** | [Configuration](./features/I18N_CONFIGURATION.md) - 4 languages: ES, EN, RO, RU |
-| **Admin** | [Admin Testing](./guides/ADMIN_TESTING.md) |
-
-### Testing
-How to test the application:
-
-| Type | Guide |
-|------|-------|
-| E2E Tests | [Testing Strategy](./manuals/TESTING_STRATEGY.md) |
-| Visual Tests | [Test Coverage](./archive/testing/TEST_COVERAGE_IMPLEMENTATION.md) |
-| Local Testing | [Local Testing Guide](./getting-started/LOCAL_TESTING_GUIDE.md) |
+- [Migration Announcement](./project/MIGRATION_ANNOUNCEMENT.md) - 📢 New structure!
+- [Migration Summary](./project/PRODUCTION_MIGRATION_SUMMARY.md)
+- [Maintenance Guide](./project/MAINTENANCE_GUIDE.md)
+- [Changelog](./CHANGELOG.md)
 
 ---
 
-## Quick Reference
+## 🚀 Quick Start
 
-### Common Commands
+### New to the Project?
+
+1. **[Quick Start Guide](./tutorials/QUICK_START_GUIDE.md)** - Get running (5 min)
+2. **[Tech Stack](./how-to/authentication/tech.md)** - Understand our stack
+3. **[Code Conventions](./reference/authentication/CONVENTIONS.md)** - How we code
+
+### Need to Solve a Problem?
+
+1. Browse [How-To Guides](./how-to/) by feature area
+2. Check [Reference](./reference/) for API details
+3. Read [Explanation](./explanation/) to understand why
+
+### Working with AI Tools?
+
+AI assistants automatically read:
+- `llms.txt` (project root) - Quick overview
+- `AGENTS.md` (project root) - Comprehensive context
+- `.cursorrules` (project root) - Cursor AI rules
+- `docs/ai-context/` - Detailed AI context
+
+No configuration needed! AI tools will generate better code that follows our patterns.
+
+---
+
+## 📚 Documentation Structure
+
+```
+docs/
+├── tutorials/          # 📖 Learning-oriented (step-by-step)
+├── how-to/            # 🔧 Problem-oriented (task-focused)
+│   ├── authentication/
+│   ├── checkout/
+│   ├── deployment/
+│   └── testing/
+├── reference/         # 📋 Information-oriented (lookup)
+│   ├── api/
+│   ├── architecture/
+│   ├── components/
+│   └── configuration/
+├── explanation/       # 💡 Understanding-oriented (concepts)
+│   ├── architecture/
+│   ├── decisions/
+│   └── concepts/
+├── project/          # 📁 Project management
+│   ├── status/
+│   ├── roadmap/
+│   └── guides/
+└── archive/          # 🗄️ Historical documentation
+```
+
+---
+
+## 🔍 Common Tasks
+
+### Development
 
 ```bash
-# Development
-pnpm dev              # Start dev server (port 3000)
-pnpm build            # Production build
+# Start development server
+pnpm dev
 
-# Testing
-pnpm test             # Run all tests
-pnpm test:e2e         # E2E tests only
+# Build for production
+pnpm build
 
-# Clean restart (if imports fail)
-pkill -9 node && rm -rf .nuxt node_modules/.vite && pnpm dev
+# Run tests
+pnpm test
+pnpm test:e2e
 ```
 
-### Project Structure
+### Finding Documentation
 
-```
-components/
-├── admin/           # Admin panel (requires auth)
-├── layout/          # Header, footer, nav
-├── product/         # Product display
-└── ui/              # Reusable UI (shadcn-style)
+**Old way (deprecated):**
+- Browse through 24 folders
+- Average time: 30+ minutes
 
-pages/
-├── admin/           # Admin pages (middleware: auth + admin)
-├── auth/            # Login, register, forgot password
-└── products/        # Product listing and detail
+**New way:**
+1. Ask: "What do I need?"
+   - Learning? → `tutorials/`
+   - Problem? → `how-to/`
+   - Lookup? → `reference/`
+   - Understanding? → `explanation/`
+2. Navigate to section
+3. Target time: Under 3 minutes
 
-server/
-├── api/             # REST endpoints
-└── utils/           # Server utilities (auth, db)
+### Updating Documentation
 
-i18n/locales/        # Translations (es, en, ro, ru)
-```
-
-### Key Rules
-
-1. **Static imports only** in admin pages (no dynamic imports)
-2. **All UI text** must have translations in all 4 locales
-3. **Admin pages** need both `auth` and `admin` middleware
-4. **Never skip git hooks** - fix the issue instead
+See [Maintenance Guide](./project/MAINTENANCE_GUIDE.md) for:
+- How to add new documentation
+- Where to place different types of docs
+- Documentation quality standards
+- Review process
 
 ---
 
-## All Documentation
+## 🎨 Key Concepts
 
-<details>
-<summary><strong>📁 Getting Started</strong> - Setup guides</summary>
+### Diátaxis Framework
 
-- [Quick Start Guide](./getting-started/QUICK_START_GUIDE.md)
-- [MVP Quick Start](./getting-started/MVP_QUICK_START.md)
-- [Supabase Setup](./getting-started/SUPABASE_SETUP.md)
-- [Database Setup](./getting-started/DATABASE_SETUP.md)
-- [Local Testing Guide](./getting-started/LOCAL_TESTING_GUIDE.md)
+Our documentation follows the [Diátaxis framework](https://diataxis.fr/):
 
-</details>
+| Type | Purpose | Example |
+|------|---------|---------|
+| **Tutorial** | Learning | "How to build your first feature" |
+| **How-To** | Problem-solving | "How to add authentication" |
+| **Reference** | Information | "API endpoint documentation" |
+| **Explanation** | Understanding | "Why we use Supabase" |
 
-<details>
-<summary><strong>🏗️ Architecture</strong> - System design</summary>
+### Code Conventions
 
-- [Architecture Review (Nov 2025)](./archive/architecture-reviews/ARCHITECTURE_REVIEW_2025_11.md) *(archived)*
-- [Architecture Improvement Roadmap](./architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md)
-- [Authentication Architecture](./architecture/AUTHENTICATION_ARCHITECTURE.md)
-- [Cart System Architecture](./architecture/CART_SYSTEM_ARCHITECTURE.md)
-- [Checkout Flow](./architecture/CHECKOUT_FLOW.md)
+- **TypeScript strict mode** for all code
+- **Components:** PascalCase (e.g., `ProductCard.vue`)
+- **Files:** kebab-case (e.g., `product-card.vue`)
+- **Composables:** camelCase with "use" prefix (e.g., `useAuth.ts`)
+- **Never trust client-sent prices** - always verify server-side
+- **Add data-testid** to all interactive elements
 
-</details>
+### Security Rules
 
-<details>
-<summary><strong>🛠️ Development</strong> - Patterns and standards</summary>
+⚠️ **Critical:**
+- Never trust client-sent prices
+- Always verify prices server-side
+- Use CSRF validation for state changes
+- Use atomic RPC functions for inventory
+- Never expose service keys in code
 
-- [Tech Stack](./development/tech.md)
-- [Code Conventions](./development/code-conventions.md)
-- [Project Structure](./development/structure.md)
-- [Patterns to Preserve](./development/PATTERNS_TO_PRESERVE.md)
-- [Component Inventory](./development/component-inventory.md)
-- [Troubleshooting Components](./development/troubleshooting-components.md)
-- [shadcn Migration](./archive/migrations/SHADCN_MIGRATION.md) *(archived)*
-
-</details>
-
-<details>
-<summary><strong>✨ Features</strong> - Feature documentation</summary>
-
-**Authentication:**
-- [MFA Implementation](./features/authentication/MFA_IMPLEMENTATION.md)
-- [Auth Flow Review](./features/authentication/auth-flow-review.md)
-- [Auth Middleware Test Results](./features/authentication/AUTH_MIDDLEWARE_TEST_RESULTS.md)
-
-**Cart:**
-- [Cart Analytics](./features/cart/CART_ANALYTICS.md)
-- [Cart Locking](./features/cart/CART_LOCKING.md)
-- [Atomic Inventory Fix](./features/cart/ATOMIC_INVENTORY_FIX.md)
-
-**Other:**
-- [i18n Configuration](./features/I18N_CONFIGURATION.md)
-- [Landing Page CMS](./features/LANDING-PAGE-CMS.md)
-- [Audit Logging](./features/AUDIT_LOGGING.md)
-
-</details>
-
-<details>
-<summary><strong>📚 Guides</strong> - How-to guides</summary>
-
-- [Implementation Guide](./manuals/IMPLEMENTATION_GUIDE.md)
-- [Testing Strategy](./manuals/TESTING_STRATEGY.md)
-- [Admin Testing](./manuals/ADMIN_TESTING.md)
-- [Test User Simulation](./manuals/TEST_USER_SIMULATION.md)
-- [Key Rotation Guide](./guides/KEY_ROTATION_COMPLETION_GUIDE.md)
-
-</details>
-
-<details>
-<summary><strong>🧪 Testing</strong> - Test documentation</summary>
-
-- [Test Coverage Implementation](./archive/testing/TEST_COVERAGE_IMPLEMENTATION.md) *(archived)*
-- [Test Coverage Analysis](./testing/TEST_COVERAGE_ANALYSIS.md)
-- [Playwright Best Practices](./archive/testing/playwright/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md) *(archived)*
-- [E2E Checkout Best Practices](./archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md) *(archived)*
-- [Visual Regression Issues](./visual-regression/VISUAL_REGRESSION_ISSUES_AND_FIXES.md)
-
-</details>
-
-<details>
-<summary><strong>🔍 Analysis</strong> - Code reviews and analysis</summary>
-
-- [SSR Safety Verification](./analysis/SSR-SAFETY-VERIFICATION.md)
-- [LocalStorage Verification](./analysis/LOCALSTORAGE-VERIFICATION-COMPLETE.md)
-- [Code Quality Analysis (Nov 2025)](./archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md) *(archived)*
-- [Code Review 2025](./archive/reviews/CODE_REVIEW_2025.md) *(archived)*
-
-</details>
-
-<details>
-<summary><strong>🔬 Research</strong> - Research and exploration</summary>
-
-- [Hero Section Quick Reference](./research/hero-section-quick-reference.md)
-- [Filter Documentation](./research/FILTER_DOCUMENTATION_RESEARCH.md)
-- [Landing Page Analysis](./research/LANDING_PAGE_SECTION_ANALYSIS.md)
-- See also: `archive/research/` for completed research
-
-</details>
-
-<details>
-<summary><strong>📝 Meta</strong> - Documentation guidelines</summary>
-
-- [Archival Policy](./meta/ARCHIVAL_POLICY.md)
-- [Documentation Conventions](./meta/DOCUMENTATION_CONVENTIONS.md)
-- [Consolidation Plan](./meta/DOCUMENTATION_CONSOLIDATION_PLAN.md)
-
-</details>
-
-<details>
-<summary><strong>📊 Status</strong> - Project status</summary>
-
-- [Project Status](./status/PROJECT_STATUS.md)
-- [Roadmap](./status/ROADMAP.md)
-- [Progress](./status/PROGRESS.md)
-
-</details>
-
-<details>
-<summary><strong>📋 Specs</strong> - Feature specifications</summary>
-
-Active feature specifications in `specs/`:
-- `user-authentication/` - Authentication system design
-- `admin-order-management/` - Order management for admins
-- `order-confirmation-emails/` - Email notification system
-- `product-catalog/` - Product display and filtering
-- See folder for full list (12+ active specs)
-
-</details>
-
-<details>
-<summary><strong>🔧 Fixes</strong> - Bug fixes and solutions</summary>
-
-- [Admin Fixes](./archive/fixes/admin-fixes/) - Admin panel issues and solutions *(archived)*
-- Error handling guides
-
-</details>
-
-<details>
-<summary><strong>🔒 Security</strong> - Security documentation</summary>
-
-- GDPR compliance documentation
-- Security logging guides
-
-</details>
-
-<details>
-<summary><strong>📦 Archive</strong> - Historical docs</summary>
-
-See [archive/README.md](./archive/README.md) for archived documentation.
-
-</details>
+See [AGENTS.md](../AGENTS.md) for complete security rules with code examples.
 
 ---
 
-## Need Help?
+## 📊 Project Status
 
-1. **Search docs:** `grep -r "search term" docs/`
-2. **Check CLAUDE.md:** Project rules and conventions
-3. **See archive:** Historical context in `docs/archive/`
+### Current State
+- **Quality Score:** 52/100 (improvements ongoing)
+- **Documentation Files:** 609
+- **Migration Status:** ✅ Complete
+- **Backup Available:** ✅ Yes
+
+### Known Issues
+- 680 broken links (being fixed incrementally)
+- 609 files need metadata (being added)
+- 39 file conflicts (being resolved)
+
+See [Migration Summary](./project/PRODUCTION_MIGRATION_SUMMARY.md) for details.
 
 ---
 
-**Last Updated:** January 6, 2026
+## 🆘 Need Help?
+
+### Documentation Issues
+1. Check [Migration Announcement](./project/MIGRATION_ANNOUNCEMENT.md)
+2. Review [Migration Guide](./project/MIGRATION_GUIDE.md)
+3. See [Quality Report](../scripts/documentation/quality-report.md)
+
+### Old Documentation Locations
+Old locations still work with deprecation notices. You have **30 days** to update bookmarks.
+
+Example:
+```markdown
+> ⚠️ **DEPRECATED**: This documentation has been moved.
+> **New location:** [docs/how-to/README.md](docs/how-to/README.md)
+```
+
+### Questions?
+- Search docs: `grep -r "search term" docs/`
+- Check [AGENTS.md](../AGENTS.md) for AI context
+- Review [CLAUDE.md](../CLAUDE.md) for project rules
+
+---
+
+## 🔄 Recent Changes
+
+### January 15, 2026 - Documentation Migration
+- ✅ Migrated to Diátaxis structure
+- ✅ Generated AI context files
+- ✅ Added deprecation notices
+- ✅ Created redirects
+- 📊 Quality score: 52/100 (improving)
+
+See [CHANGELOG.md](./CHANGELOG.md) for full history.
+
+---
+
+## 📖 Additional Resources
+
+### For Developers
+- [Quick Start Guide](./tutorials/QUICK_START_GUIDE.md)
+- [Code Conventions](./reference/authentication/CONVENTIONS.md)
+- [Testing Guide](./how-to/testing/QUICK_REFERENCE.md)
+
+### For AI Tools
+- [llms.txt](../llms.txt) - Quick overview
+- [AGENTS.md](../AGENTS.md) - Comprehensive context
+- [.cursorrules](../.cursorrules) - Cursor rules
+- [ai-context/](./ai-context/) - Detailed context
+
+### For Project Management
+- [Migration Summary](./project/PRODUCTION_MIGRATION_SUMMARY.md)
+- [Maintenance Guide](./project/MAINTENANCE_GUIDE.md)
+- [Roadmap](./project/ROADMAP.md)
+
+---
+
+**Last Updated:** January 15, 2026  
+**Migration Status:** ✅ Complete  
+**Documentation Version:** 2.0 (Diátaxis)
+
+---
+
+## 💬 Feedback
+
+We want to hear from you:
+- Is the new structure easier to navigate?
+- Are you finding information faster?
+- What could be improved?
+
+Share feedback in team chat or create an issue.

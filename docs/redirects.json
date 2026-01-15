@@ -1,0 +1,24 @@
+{
+  "redirects": [
+    {
+      "source": "/docs/getting-started",
+      "destination": "/docs/tutorials",
+      "permanent": false
+    },
+    {
+      "source": "/docs/guides",
+      "destination": "/docs/how-to",
+      "permanent": false
+    },
+    {
+      "source": "/docs/api",
+      "destination": "/docs/reference/api",
+      "permanent": false
+    },
+    {
+      "source": "/docs/architecture",
+      "destination": "/docs/explanation/architecture",
+      "permanent": false
+    }
+  ]
+}

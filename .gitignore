@@ -79,6 +79,8 @@ tmp/
 *.bak
 *.backup
 *~
+docs-backup*/
+docs-backups/
 
 # Playwright/Testing
 /test-results/
@@ -179,6 +181,7 @@ debug-*.png
 debug-*.log
 *.debug.log
 /test-*.ts
+migration-log.txt
 
 # Documentation - keep in .docs/ only
 /*.md
