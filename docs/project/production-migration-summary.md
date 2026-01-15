@@ -182,9 +182,9 @@ Questions? See docs/project/MIGRATION_GUIDE.md
 
 ## References
 
-- [Migration Guide](./MIGRATION_GUIDE.md)
-- [Maintenance Guide](./MAINTENANCE_GUIDE.md)
-- [AI Context Testing Guide](./AI_CONTEXT_TESTING_GUIDE.md)
+- [Migration Guide](migration-guide.md)
+- [Maintenance Guide](maintenance-guide.md)
+- [AI Context Testing Guide](../how-to/testing/ai-context-testing-guide.md)
 - [Quality Report](../../scripts/documentation/quality-report.md)
 - [Migration Report](../../scripts/documentation/migration-report.json)
 

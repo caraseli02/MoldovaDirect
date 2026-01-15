@@ -30,7 +30,7 @@ export async function findInternalLinks(content: string, _filePath?: string): Pr
     const url = node.url
     const text = node.children
       .filter((child) => child.type === 'text')
-      .map((child: any) => child.value)
+      .map((child: { type: string; value: string }) => child.value)
       .join('')
 
     // Determine if link is internal or external

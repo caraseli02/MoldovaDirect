@@ -101,7 +101,7 @@ This directory contains comprehensive technical research for implementing an imp
 
 ---
 
-### 3. [hero-section-quick-reference.md](./hero-section-quick-reference.md)
+### 3. [hero-section-quick-reference.md](../hero-section-quick-reference.md)
 **Quick Reference Guide** - Essential snippets and commands
 
 **Contents**:

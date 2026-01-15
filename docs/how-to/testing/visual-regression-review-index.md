@@ -42,7 +42,7 @@ Comprehensive 10-section analysis including:
 **Read if:** You want complete technical details and evidence.
 
 ### 2. Issues and Fixes Guide
-**File:** [VISUAL_REGRESSION_ISSUES_AND_FIXES.md](VISUAL_REGRESSION_ISSUES_AND_FIXES.md)
+**File:** [VISUAL_REGRESSION_ISSUES_AND_FIXES.md](visual-regression-issues-and-fixes.md)
 
 Step-by-step fixes for all identified issues:
 - Fix #1: Update testMatch pattern (quick fix)

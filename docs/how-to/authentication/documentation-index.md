@@ -15,7 +15,7 @@ This is the master index for all Moldova Direct documentation. Use this as your 
 
 ### New to the Project?
 1. **[Quick Start Guide](../getting-started/QUICK_START_GUIDE.md)** - Get up and running in 5 minutes
-2. **[README.md](../../README.md)** - Complete project overview
+2. **[README.md](../../uncategorized/README.md)** - Complete project overview
 3. **[Documentation Summary](./DOCUMENTATION_SUMMARY.md)** - What's new and what changed
 
 ### Essential Reading
@@ -29,7 +29,7 @@ This is the master index for all Moldova Direct documentation. Use this as your 
 
 | Document | Purpose | Last Updated |
 |----------|---------|--------------|
-| [README.md](../../README.md) | Main project documentation | Nov 2025 |
+| [README.md](../../uncategorized/README.md) | Main project documentation | Nov 2025 |
 | [Quick Start Guide](../getting-started/QUICK_START_GUIDE.md) | Quick start for developers | Nov 2025 |
 | [Documentation Summary](./DOCUMENTATION_SUMMARY.md) | Documentation overview | Nov 2025 |
 | [Project Status](../status/PROJECT_STATUS.md) | Current project status | Nov 2025 |
@@ -157,7 +157,7 @@ All feature specs are located in `docs/specs/[feature-name]/` with the following
 
 ### For New Developers
 1. [Quick Start Guide](../getting-started/QUICK_START_GUIDE.md)
-2. [README.md](../../README.md)
+2. [README.md](../../uncategorized/README.md)
 3. [Code Conventions](../development/code-conventions.md)
 4. [Tech Stack](../development/tech.md)
 

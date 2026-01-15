@@ -372,7 +372,7 @@ import {
 ---
 
 **Quick Links:**
-- [Full Documentation](./NUXT3_PRODUCT_PAGE_DOCUMENTATION.md)
+- [Full Documentation](../../how-to/authentication/nuxt3-product-page-documentation.md)
 - [Nuxt Docs](https://nuxt.com/docs)
 - [Nuxt Image](https://image.nuxt.com)
 - [Pinia](https://pinia.vuejs.org)

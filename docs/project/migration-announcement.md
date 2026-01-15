@@ -170,12 +170,12 @@ These will be fixed incrementally over the next few weeks.
 ## Need Help?
 
 ### Documentation
-- [Migration Guide](./MIGRATION_GUIDE.md) - Detailed migration information
-- [Maintenance Guide](./MAINTENANCE_GUIDE.md) - How to maintain documentation
-- [AI Context Testing Guide](./AI_CONTEXT_TESTING_GUIDE.md) - Testing AI context
+- [Migration Guide](migration-guide.md) - Detailed migration information
+- [Maintenance Guide](maintenance-guide.md) - How to maintain documentation
+- [AI Context Testing Guide](../how-to/testing/ai-context-testing-guide.md) - Testing AI context
 
 ### Questions?
-- Check the [Migration Summary](./PRODUCTION_MIGRATION_SUMMARY.md)
+- Check the [Migration Summary](production-migration-summary.md)
 - Review the [Quality Report](../../scripts/documentation/quality-report.md)
 - Ask in the team chat
 
@@ -217,4 +217,4 @@ Happy coding! 🚀
 
 ---
 
-**Questions?** Contact the documentation team or check the [Migration Guide](./MIGRATION_GUIDE.md)
+**Questions?** Contact the documentation team or check the [Migration Guide](migration-guide.md)

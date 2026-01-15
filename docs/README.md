@@ -12,9 +12,9 @@ Our documentation is organized by **what you want to do**:
 **You want to:** Learn something new  
 **Start here if:** You're new to the project or learning a concept
 
-- [Quick Start Guide](./tutorials/QUICK_START_GUIDE.md) - Get running in 5 minutes
-- [Database Setup](./tutorials/DATABASE_SETUP.md) - Set up Supabase
-- [Local Testing Guide](./tutorials/LOCAL_TESTING_GUIDE.md) - Run tests locally
+- [Quick Start Guide](tutorials/quick-start-guide.md) - Get running in 5 minutes
+- [Database Setup](tutorials/database-setup.md) - Set up Supabase
+- [Local Testing Guide](how-to/testing/local-testing-guide.md) - Run tests locally
 
 ### 🔧 [How-To Guides](./how-to/) - Problem Solving
 **You want to:** Solve a specific problem  
@@ -46,10 +46,10 @@ Our documentation is organized by **what you want to do**:
 **You want to:** Project status and management info  
 **Start here if:** You need roadmap, status, or guides
 
-- [Migration Announcement](./project/MIGRATION_ANNOUNCEMENT.md) - 📢 New structure!
-- [Migration Summary](./project/PRODUCTION_MIGRATION_SUMMARY.md)
-- [Maintenance Guide](./project/MAINTENANCE_GUIDE.md)
-- [Changelog](./CHANGELOG.md)
+- [Migration Announcement](project/migration-announcement.md) - 📢 New structure!
+- [Migration Summary](project/production-migration-summary.md)
+- [Maintenance Guide](project/maintenance-guide.md)
+- [Changelog](CHANGELOG.md)
 
 ---
 
@@ -57,9 +57,9 @@ Our documentation is organized by **what you want to do**:
 
 ### New to the Project?
 
-1. **[Quick Start Guide](./tutorials/QUICK_START_GUIDE.md)** - Get running (5 min)
-2. **[Tech Stack](./how-to/authentication/tech.md)** - Understand our stack
-3. **[Code Conventions](./reference/authentication/CONVENTIONS.md)** - How we code
+1. **[Quick Start Guide](tutorials/quick-start-guide.md)** - Get running (5 min)
+2. **[Tech Stack](explanation/tech-stack.md)** - Understand our stack
+3. **[Code Conventions](reference/code-conventions.md)** - How we code
 
 ### Need to Solve a Problem?
 
@@ -140,7 +140,7 @@ pnpm test:e2e
 
 ### Updating Documentation
 
-See [Maintenance Guide](./project/MAINTENANCE_GUIDE.md) for:
+See [Maintenance Guide](project/maintenance-guide.md) for:
 - How to add new documentation
 - Where to place different types of docs
 - Documentation quality standards
@@ -196,15 +196,15 @@ See [AGENTS.md](../AGENTS.md) for complete security rules with code examples.
 - 609 files need metadata (being added)
 - 39 file conflicts (being resolved)
 
-See [Migration Summary](./project/PRODUCTION_MIGRATION_SUMMARY.md) for details.
+See [Migration Summary](project/production-migration-summary.md) for details.
 
 ---
 
 ## 🆘 Need Help?
 
 ### Documentation Issues
-1. Check [Migration Announcement](./project/MIGRATION_ANNOUNCEMENT.md)
-2. Review [Migration Guide](./project/MIGRATION_GUIDE.md)
+1. Check [Migration Announcement](project/migration-announcement.md)
+2. Review [Migration Guide](project/migration-guide.md)
 3. See [Quality Report](../scripts/documentation/quality-report.md)
 
 ### Old Documentation Locations
@@ -213,7 +213,7 @@ Old locations still work with deprecation notices. You have **30 days** to updat
 Example:
 ```markdown
 > ⚠️ **DEPRECATED**: This documentation has been moved.
-> **New location:** [docs/how-to/README.md](docs/how-to/README.md)
+> **New location:** [docs/how-to/README.md](how-to/testing/README.md)
 ```
 
 ### Questions?
@@ -232,16 +232,16 @@ Example:
 - ✅ Created redirects
 - 📊 Quality score: 52/100 (improving)
 
-See [CHANGELOG.md](./CHANGELOG.md) for full history.
+See [CHANGELOG.md](CHANGELOG.md) for full history.
 
 ---
 
 ## 📖 Additional Resources
 
 ### For Developers
-- [Quick Start Guide](./tutorials/QUICK_START_GUIDE.md)
-- [Code Conventions](./reference/authentication/CONVENTIONS.md)
-- [Testing Guide](./how-to/testing/QUICK_REFERENCE.md)
+- [Quick Start Guide](tutorials/quick-start-guide.md)
+- [Code Conventions](reference/code-conventions.md)
+- [Testing Guide](how-to/testing/quick-reference.md)
 
 ### For AI Tools
 - [llms.txt](../llms.txt) - Quick overview
@@ -250,9 +250,9 @@ See [CHANGELOG.md](./CHANGELOG.md) for full history.
 - [ai-context/](./ai-context/) - Detailed context
 
 ### For Project Management
-- [Migration Summary](./project/PRODUCTION_MIGRATION_SUMMARY.md)
-- [Maintenance Guide](./project/MAINTENANCE_GUIDE.md)
-- [Roadmap](./project/ROADMAP.md)
+- [Migration Summary](project/production-migration-summary.md)
+- [Maintenance Guide](project/maintenance-guide.md)
+- [Roadmap](project/roadmap.md)
 
 ---
 

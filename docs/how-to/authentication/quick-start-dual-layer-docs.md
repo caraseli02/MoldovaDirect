@@ -483,7 +483,7 @@ Track these to measure effectiveness:
 
 ## Resources
 
-- [Full Implementation Guide](./DUAL_LAYER_DOCS_IMPLEMENTATION_PROMPT.md)
+- [Full Implementation Guide](dual-layer-docs-implementation-prompt.md)
 - [AI-Era Documentation Proposal](./AI_ERA_DOCUMENTATION_PROPOSAL.md)
 - [llms.txt Standard](https://llmstxt.org/)
 

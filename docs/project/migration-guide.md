@@ -683,8 +683,8 @@ When reporting migration issues, include:
 
 ### Additional Resources
 
-- [Maintenance Guide](./MAINTENANCE_GUIDE.md)
-- [AI Context Testing Guide](./AI_CONTEXT_TESTING_GUIDE.md)
+- [Maintenance Guide](maintenance-guide.md)
+- [AI Context Testing Guide](../how-to/testing/ai-context-testing-guide.md)
 - [Diátaxis Framework](https://diataxis.fr/)
 - [Migration Tool Source](../../scripts/documentation/)
 

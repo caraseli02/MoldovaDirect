@@ -512,6 +512,6 @@ This change provides:
 ## Related Documentation
 
 - [Cart Analytics System](./CART_ANALYTICS.md)
-- [Authentication Architecture](./AUTHENTICATION_ARCHITECTURE.md)
+- [Authentication Architecture](../../explanation/authentication-architecture.md)
 - [Performance Optimization](./PERFORMANCE.md)
 - [State Management](./STATE_MANAGEMENT.md)

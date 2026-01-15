@@ -1,5 +1,16 @@
 # Code Conventions
 
+This document defines naming conventions, file organization, and code style rules for the Moldova Direct project.
+
+## Naming Conventions
+
+| Entity | Convention | Example |
+| :--- | :--- | :--- |
+| **Files** | `kebab-case` | `product-list.vue`, `use-cart.ts` |
+| **Components** | `PascalCase` | `ProductList`, `CartItem` |
+| **Composables** | `camelCase` with `use` prefix | `useCart`, `useAuth` |
+| **Types/Interfaces** | `PascalCase` | `Product`, `CartItem` |
+| **Constants** | `UPPER_SNAKE_CASE` | `MAX_ITEMS`, `API_URL` |
 
 ## TypeScript Standards
 

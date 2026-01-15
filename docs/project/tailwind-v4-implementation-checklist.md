@@ -291,9 +291,9 @@ If critical issues are discovered:
 ## Support & References
 
 ### Documentation
-- [Tailwind v4 Build Fix ADR](./tailwind-v4-build-fix-adr.md)
-- [Compatibility Summary](./tailwind-v4-compatibility-summary.md)
-- [Architecture README](./README.md)
+- [Tailwind v4 Build Fix ADR](../../explanation/tailwind-v4-build-fix-adr.md)
+- [Compatibility Summary](../../project/tailwind-v4-compatibility-summary.md)
+- [Architecture README](../../how-to/authentication/README.md)
 
 ### External Resources
 - [Tailwind CSS v4 Beta](https://tailwindcss.com/blog/tailwindcss-v4-beta)

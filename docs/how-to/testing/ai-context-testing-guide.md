@@ -778,8 +778,8 @@ If AI-generated code doesn't meet quality standards:
 - [AGENTS.md](../ai-context/AGENTS.md) - Main AI context file
 - [llms.txt](../../llms.txt) - AI entry point
 - [.cursorrules](../../.cursorrules) - Cursor-specific rules
-- [Maintenance Guide](./MAINTENANCE_GUIDE.md) - Documentation maintenance
-- [Migration Guide](./MIGRATION_GUIDE.md) - Migration procedures
+- [Maintenance Guide](maintenance-guide.md) - Documentation maintenance
+- [Migration Guide](migration-guide.md) - Migration procedures
 
 ## Getting Help
 

@@ -704,7 +704,7 @@ export default defineNuxtConfig({
 ---
 
 ## 🔗 Related Documentation
-- [Tailwind v4 Build Fix ADR](./tailwind-v4-build-fix-adr.md)
+- [Tailwind v4 Build Fix ADR](../../how-to/authentication/tailwind-v4-build-fix-adr.md)
 - [Component Architecture](../COMPONENT_ARCHITECTURE.md)
 - [Testing Strategy](../../TESTING_STRATEGY.md)
 

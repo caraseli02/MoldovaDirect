@@ -246,7 +246,7 @@ pnpm install
 
 ### Documentation
 - [Main README](../../README.md)
-- [Documentation Index](../README.md)
+- [Documentation Index](../uncategorized/README.md)
 - [Project Status](../status/PROJECT_STATUS.md)
 
 ### Key Guides
@@ -261,7 +261,7 @@ pnpm install
 1. **Explore the codebase**: Look at `components/product/Card.vue` for a well-structured component example
 2. **Run the admin panel**: Navigate to `/admin` (requires admin user)
 3. **Check open issues**: See [Project Status](../status/PROJECT_STATUS.md) for current work items
-4. **Read the CHANGELOG**: See [CHANGELOG](../CHANGELOG.md) for recent changes
+4. **Read the CHANGELOG**: See [CHANGELOG](../uncategorized/changelog.md) for recent changes
 
 ---
 

@@ -747,7 +747,7 @@ WHERE log_message LIKE '%@%'  -- Detect potential email exposure
 
 ## Related Documentation
 
-- [Secure Logger Reference](./SECURE_LOGGER.md)
+- [Secure Logger Reference](secure-logger.md)
 - [Rate Limiting Guide](./RATE_LIMITING.md)
 - [Authentication Guide](/docs/features/authentication/README.md)
 - [Privacy Policy](https://moldovadirect.com/privacy)

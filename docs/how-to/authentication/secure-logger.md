@@ -9,7 +9,7 @@
 
 **Last Updated:** November 16, 2025
 **Location:** `server/utils/secureLogger.ts`
-**Related:** [GDPR Compliance Guide](./GDPR_COMPLIANCE.md)
+**Related:** [GDPR Compliance Guide](gdpr-compliance.md)
 
 ---
 
@@ -771,7 +771,7 @@ const SENSITIVE_FIELDS = new Set([
 
 ## Related Documentation
 
-- [GDPR Compliance Guide](./GDPR_COMPLIANCE.md)
+- [GDPR Compliance Guide](gdpr-compliance.md)
 - [Rate Limiting Guide](./RATE_LIMITING.md)
 - [Authentication Security](/docs/features/authentication/README.md)
 
