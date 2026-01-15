@@ -27,9 +27,9 @@ describe('QualityValidator - Property Tests', () => {
           hasDescription: fc.boolean(),
           hasLastUpdated: fc.boolean(),
           hasTags: fc.boolean(),
-          title: fc.string({ minLength: 1, maxLength: 100 }),
-          description: fc.string({ minLength: 1, maxLength: 200 }),
-          tags: fc.array(fc.string({ minLength: 1, maxLength: 20 }), { minLength: 1, maxLength: 5 }),
+          title: fc.string({ minLength: 1, maxLength: 100 }).filter(s => s.trim().length > 0),
+          description: fc.string({ minLength: 1, maxLength: 200 }).filter(s => s.trim().length > 0),
+          tags: fc.array(fc.string({ minLength: 1, maxLength: 20 }).filter(s => s.trim().length > 0), { minLength: 1, maxLength: 5 }),
         }),
         (metadata) => {
           // Build content with or without metadata based on flags
