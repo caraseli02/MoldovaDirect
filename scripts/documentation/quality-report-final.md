@@ -1,0 +1,1132 @@
+# Documentation Quality Report
+
+Generated: 2026-01-15T11:24:11.224Z
+
+## Overall Score
+
+**53/100**
+
+⚠ Fair quality - improvements needed
+
+## Link Validation
+
+- Total Links: 618
+- Valid Links: 357
+- Broken Links: 261
+
+### Broken Links
+
+- `docs/CHANGELOG.md`: ../TEST_COVERAGE_IMPLEMENTATION.md
+- `docs/CHANGELOG.md`: ../CODE_REVIEW_2025.md
+- `docs/CHANGELOG.md`: ../.kiro/archive/cleanup/CODE_CLEANUP_REPORT.md
+- `docs/CHANGELOG.md`: ../.kiro/archive/cleanup/CLEANUP_COMPLETED_2025-10-12.md
+- `docs/CHANGELOG.md`: ../.kiro/ROADMAP.md
+- `docs/CHANGELOG.md`: ../.kiro/PROJECT_STATUS.md
+- `docs/README.md`: ./guides/TESTING_STRATEGY.md
+- `docs/README.md`: ./guides/ADMIN_TESTING.md
+- `docs/README.md`: ./analysis/LOCALSTORAGE-VERIFICATION-COMPLETE.md
+- `docs/architecture/CART_SYSTEM_ARCHITECTURE.md`: ./CART_ANALYTICS.md
+- `docs/architecture/CART_SYSTEM_ARCHITECTURE.md`: ./PERFORMANCE.md
+- `docs/architecture/CART_SYSTEM_ARCHITECTURE.md`: ./STATE_MANAGEMENT.md
+- `docs/architecture/CHECKOUT_FLOW.md`: ./STRIPE_WEBHOOK_SETUP.md
+- `docs/architecture/CHECKOUT_FLOW.md`: ./STRIPE_WEBHOOK_SETUP.md
+- `docs/architecture/build-configuration-review.md`: ../COMPONENT_ARCHITECTURE.md
+- `docs/architecture/build-configuration-review.md`: ../../TESTING_STRATEGY.md
+- `docs/architecture/tanstack-table-lazy-loading-implementation.md`: /docs/architecture/build-optimization-plan.md
+- `docs/architecture/tanstack-table-lazy-loading-implementation.md`: /docs/guides/tanstack-table-lazy-loading.md
+- `docs/architecture/tanstack-table-lazy-loading-implementation.md`: /components/admin/Tables/README.md
+- `docs/archive/fixes/README.md`: ./CART_SSR_HYDRATION_FIX_V2.md
+- `docs/archive/fixes/README.md`: ./add-to-cart-root-cause.md
+- `docs/archive/fixes/README.md`: ../testing/E2E_CART_TESTS.md
+- `docs/archive/fixes/README.md`: ./VERCEL_ADD_TO_CART_DEBUG.md
+- `docs/archive/fixes/README.md`: ./VERCEL_ADD_TO_CART_FIX.md
+- `docs/archive/fixes/README.md`: ./VERCEL_CLIENT_BUNDLES_FIX.md
+- `docs/archive/fixes/README.md`: ./VERCEL_DEBUG_STEPS.md
+- `docs/archive/fixes/README.md`: ./vercel-investigation-report.md
+- `docs/archive/fixes/README.md`: ./LOGIN_INVESTIGATION.md
+- `docs/archive/fixes/README.md`: ./products-page-empty-fix.md
+- `docs/archive/fixes/README.md`: /docs/CHANGELOG.md
+- `docs/archive/fixes/README.md`: /CODE_REVIEW_2025.md
+- `docs/archive/fixes/README.md`: /docs/guides/TESTING_STRATEGY.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./TEST_COVERAGE_ANALYSIS.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./TEST_COVERAGE_IMPLEMENTATION.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./CODE_REVIEW_2025.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/PROJECT_STATUS.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./QUICK_START_GUIDE.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./QUICK_START_GUIDE.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./README.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/PROJECT_STATUS.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./CODE_REVIEW_2025.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/steering/code-conventions.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/steering/tech.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/steering/supabase-best-practices.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/steering/code-cleanup.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./TEST_COVERAGE_ANALYSIS.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./TEST_COVERAGE_IMPLEMENTATION.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./docs/TESTING_STRATEGY.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./tests/AUTH_TESTING_GUIDE.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/specs/shopping-cart/
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/specs/checkout/
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/specs/admin-dashboard/
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/specs/user-authentication/
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/PROJECT_STATUS.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./CODE_REVIEW_2025.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./QUICK_START_GUIDE.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./CODE_REVIEW_2025.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/PROJECT_STATUS.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/steering/code-conventions.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./TEST_COVERAGE_ANALYSIS.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./CODE_REVIEW_2025.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./QUICK_START_GUIDE.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./README.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/PROJECT_STATUS.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./CODE_REVIEW_2025.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./TEST_COVERAGE_ANALYSIS.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./docs/CHANGELOG.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/DOCUMENTATION_UPDATES_LOG.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./docs/README.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./QUICK_START_GUIDE.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./.kiro/PROJECT_STATUS.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./CODE_REVIEW_2025.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./QUICK_START_GUIDE.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./TEST_COVERAGE_ANALYSIS.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./docs/TESTING_STRATEGY.md
+- `docs/archive/meta-old/DOCUMENTATION_SUMMARY.md`: ./tests/AUTH_TESTING_GUIDE.md
+- `docs/archive/meta-old/DOCUMENTATION_UPDATE_2025-11-01.md`: ./CHANGELOG.md
+- `docs/archive/meta-old/DOCUMENTATION_UPDATE_2025-11-01.md`: ./README.md
+- `docs/archive/meta-old/DOCUMENTATION_UPDATE_2025-11-01.md`: ../.kiro/PROJECT_STATUS.md
+- `docs/archive/meta-old/DOCUMENTATION_UPDATE_2025-11-01.md`: ../TEST_COVERAGE_ANALYSIS.md
+- `docs/archive/meta-old/DOCUMENTATION_UPDATE_2025-11-01.md`: ../TEST_COVERAGE_IMPLEMENTATION.md
+- `docs/archive/meta-old/DOCUMENTATION_UPDATE_2025-11-01.md`: ../CODE_REVIEW_2025.md
+- `docs/archive/meta-old/DOCUMENTATION_UPDATE_2025-11-01.md`: ../.kiro/ROADMAP.md
+- `docs/archive/meta-old/DOCUMENTATION_UPDATE_2025-11-01.md`: ../.kiro/PROGRESS.md
+- `docs/archive/meta-old/DOCUMENTATION_UPDATE_2025-11-01.md`: ../tests/AUTH_TESTING_GUIDE.md
+- `docs/archive/reports/ASSET_OPTIMIZATION_SUMMARY.md`: ./asset-caching-strategy.md
+- `docs/archive/reports/ASSET_OPTIMIZATION_SUMMARY.md`: ../guides/asset-optimization-quick-reference.md
+- `docs/archive/reports/ASSET_OPTIMIZATION_SUMMARY.md`: ../guides/build-optimization-implementation.md
+- `docs/archive/reports/BUILD_SUCCESS_REPORT.md`: ./tailwind-v4-build-fix-adr.md
+- `docs/archive/reports/BUILD_SUCCESS_REPORT.md`: ./tailwind-v4-compatibility-summary.md
+- `docs/archive/reports/BUILD_SUCCESS_REPORT.md`: ./tailwind-v4-implementation-checklist.md
+- `docs/archive/reports/BUILD_SUCCESS_REPORT.md`: ./README.md
+- `docs/archive/reports/TANSTACK_TABLE_LAZY_LOADING_DELIVERABLES.md`: /components/admin/Tables/README.md
+- `docs/archive/reports/TANSTACK_TABLE_LAZY_LOADING_DELIVERABLES.md`: /docs/guides/tanstack-table-lazy-loading.md
+- `docs/archive/reports/TANSTACK_TABLE_LAZY_LOADING_DELIVERABLES.md`: /docs/architecture/tanstack-table-lazy-loading-implementation.md
+- `docs/archive/research/hero-section/hero-demo-images.md`: unsplash.com/@username
+- `docs/archive/reviews/DOCUMENTATION_REVIEW_2025-11-27.md`: ./.kiro/PROJECT_STATUS.md
+- `docs/archive/reviews/DOCUMENTATION_REVIEW_2025-11-27.md`: ./docs/...
+- `docs/archive/reviews/DOCUMENTATION_REVIEW_2025-11-27.md`: ./QUICK_START_GUIDE.md
+- `docs/archive/reviews/DOCUMENTATION_REVIEW_2025-11-27.md`: ./docs/getting-started/QUICK_START_GUIDE.md
+- `docs/development/code-cleanup.md`: ../PROJECT_STATUS.md
+- `docs/development/code-cleanup.md`: ../archive/cleanup/CODE_CLEANUP_REPORT.md
+- `docs/development/code-cleanup.md`: ../archive/cleanup/CLEANUP_COMPLETED_2025-10-12.md
+- `docs/development/code-cleanup.md`: ../PROJECT_STATUS.md
+- `docs/development/supabase-best-practices.md`: ../../SUPABASE_FIXES_COMPLETED.md
+- `docs/features/GUEST_CHECKOUT_IMPLEMENTATION.md`: ./checkout-ux-testing/README.md
+- `docs/features/GUEST_CHECKOUT_IMPLEMENTATION.md`: ./middleware/checkout.ts
+- `docs/features/GUEST_CHECKOUT_IMPLEMENTATION.md`: ./stores/checkout/session.ts
+- `docs/features/cart/CART_ANALYTICS.md`: ./ANALYTICS_SYSTEM.md
+- `docs/features/cart/CART_ANALYTICS.md`: ./PERFORMANCE.md
+- `docs/features/cart/CART_ANALYTICS.md`: ./MEMORY_MANAGEMENT.md
+- `docs/features/cart/CART_ANALYTICS.md`: ./API.md
+- `docs/features/cart/CART_LOCKING.md`: ./CART_SYSTEM_ARCHITECTURE.md
+- `docs/features/cart/CART_LOCKING.md`: ./CHECKOUT_FLOW.md
+- `docs/features/cart/CART_LOCKING.md`: ../supabase/sql/supabase-schema.sql
+- `docs/getting-started/MVP_QUICK_START.md`: ./MVP_PRIORITY_ORDER.md
+- `docs/getting-started/QUICK_START_GUIDE.md`: ../guides/TESTING_STRATEGY.md
+- `docs/guides/README.md`: ./TESTING_STRATEGY.md
+- `docs/guides/README.md`: ./ADMIN_TESTING.md
+- `docs/guides/README.md`: ./TEST_USER_SIMULATION.md
+- `docs/guides/README.md`: ../I18N_CONFIGURATION.md
+- `docs/guides/README.md`: ../authentication-translations.md
+- `docs/guides/README.md`: /README.md
+- `docs/guides/README.md`: /.kiro/ROADMAP.md
+- `docs/guides/STRIPE_WEBHOOK_SETUP.md`: ./CHECKOUT_FLOW.md
+- `docs/guides/tanstack-table-lazy-loading.md`: /components/admin/Tables/README.md
+- `docs/manuals/TEST_USER_SIMULATION.md`: ../pages/test-users.vue
+- `docs/manuals/TEST_USER_SIMULATION.md`: ../nuxt.config.ts
+- `docs/manuals/TEST_USER_SIMULATION.md`: ../lib/testing/testUserPersonas.ts
+- `docs/manuals/TEST_USER_SIMULATION.md`: ../lib/testing/testUserPersonas.ts
+- `docs/manuals/TEST_USER_SIMULATION.md`: ../lib/testing/simulationHelpers.ts
+- `docs/manuals/TEST_USER_SIMULATION.md`: ../tests/fixtures/testUserPersonas.fixture.ts
+- `docs/manuals/TEST_USER_SIMULATION.md`: ../lib/testing/testUserValidation.ts
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/ai-context/ARCHITECTURE_SUMMARY.md
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/ai-context/PATTERNS.md
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/reference/api/README.md
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/architecture/AUTHENTICATION_ARCHITECTURE.md
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/architecture/CART_SYSTEM_ARCHITECTURE.md
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/architecture/CHECKOUT_FLOW.md
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/tutorials/01-getting-started.md
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/guides/TESTING.md
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/guides/DEPLOYMENT_GUIDE.md
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/ai-context/PATTERNS.md#typescript
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/ai-context/PATTERNS.md#vue3
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/ai-context/PATTERNS.md#nuxt4
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/ai-context/PATTERNS.md#testing
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/CODEBASE_AUDIT_REPORT.md
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/archive/architecture-reviews/
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/testing/VISUAL-REGRESSION-SUMMARY.md
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/README.md
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/architecture/
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/reference/api/
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md`: docs/guides/TESTING.md
+- `docs/meta/ARCHIVAL_POLICY.md`: ./docs/archive/README.md
+- `docs/meta/ARCHIVAL_POLICY.md`: ./docs/archive/2025/code-reviews/CODE_REVIEW_2025.md
+- `docs/meta/ARCHIVAL_POLICY.md`: ../DOCUMENTATION_INDEX.md
+- `docs/meta/ARCHIVAL_POLICY.md`: ./archive/README.md
+- `docs/meta/ARCHIVAL_POLICY.md`: ./CHANGELOG.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: tutorials/01-getting-started.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: explanation/architecture/overview.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: tutorials/02-your-first-feature.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: tutorials/01-getting-started.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: tutorials/02-your-first-feature.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: tutorials/03-testing-basics.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: tutorials/04-deployment-basics.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: how-to/authentication/
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: how-to/checkout/
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: how-to/deployment/
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: how-to/testing/
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: reference/api/
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: reference/architecture/
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: reference/configuration/
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: reference/components/
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: explanation/decisions/
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: explanation/concepts/
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: explanation/architecture/
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: how-to/checkout/add-payment-method.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: how-to/deployment/deploy-to-production.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: how-to/testing/write-e2e-tests.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: how-to/authentication/troubleshoot-login.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: project/status.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: project/roadmap.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: project/changelog.md
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md`: project/contributing.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ./DOCUMENTATION_SUMMARY.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../analysis/CODE_REVIEW_2025.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ./DOCUMENTATION_SUMMARY.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../analysis/CODE_REVIEW_2025.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../testing/TEST_COVERAGE_IMPLEMENTATION.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../guides/TESTING_STRATEGY.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../guides/ADMIN_TESTING.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../guides/TEST_USER_SIMULATION.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../development/SHADCN_MIGRATION.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../specs/checkout/
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../specs/order-status-updates/
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../specs/customer-order-history/
+- `docs/meta/DOCUMENTATION_INDEX.md`: ./DOCUMENTATION_UPDATES_LOG.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ./DOCUMENTATION_UPDATE_2025-11-01.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../guides/ADMIN_TESTING.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../guides/TEST_USER_SIMULATION.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../analysis/CODE_REVIEW_2025.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../testing/TEST_COVERAGE_IMPLEMENTATION.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../guides/TESTING_STRATEGY.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../analysis/CODE_REVIEW_2025.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../analysis/CODE_REVIEW_2025.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../specs/checkout/
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../specs/order-status-updates/
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../guides/ADMIN_TESTING.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../analysis/CODE_REVIEW_2025.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../testing/TEST_COVERAGE_IMPLEMENTATION.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../guides/TESTING_STRATEGY.md
+- `docs/meta/DOCUMENTATION_INDEX.md`: ../analysis/CODE_REVIEW_2025.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: getting-started/QUICK_START_GUIDE.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: status/PROJECT_STATUS.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: guides/STRIPE_WEBHOOK_SETUP.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: guides/DEPLOYMENT_GUIDE.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: guides/TESTING.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: architecture/AUTHENTICATION_ARCHITECTURE.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: api/README.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: architecture/
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: getting-started/DATABASE_SETUP.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: status/PROJECT_STATUS.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: status/ROADMAP.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: CHANGELOG.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ./README.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ../api/authentication.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ./CHECKOUT_FLOW.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ../how-to/add-oauth-provider.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ../how-to/troubleshoot-auth.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ../api/authentication.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ./AUTHENTICATION_ARCHITECTURE.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ./MIDDLEWARE_ARCHITECTURE_ANALYSIS.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ./CART_SYSTEM_ARCHITECTURE.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ./CHECKOUT_FLOW.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ./ADR-001-auth-store-modularization.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ./build-optimization-adr.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ./AUTHENTICATION_ARCHITECTURE.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ./CHECKOUT_FLOW.md
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md`: ./CART_SYSTEM_ARCHITECTURE.md
+- `docs/meta/QUICK_START_DUAL_LAYER_DOCS.md`: docs/README.md
+- `docs/meta/QUICK_START_DUAL_LAYER_DOCS.md`: docs/architecture/
+- `docs/meta/QUICK_START_DUAL_LAYER_DOCS.md`: docs/guides/TESTING.md
+- `docs/project/AI_CONTEXT_TESTING_GUIDE.md`: ../ai-context/AGENTS.md
+- `docs/project/AI_CONTEXT_TESTING_GUIDE.md`: ../../llms.txt
+- `docs/project/AI_CONTEXT_TESTING_GUIDE.md`: ../../.cursorrules
+- `docs/project/MAINTENANCE_GUIDE.md`: ../CONTRIBUTING.md
+- `docs/research/README.md`: ./hero-section-technical-implementation.md
+- `docs/security/GDPR_COMPLIANCE.md`: ./RATE_LIMITING.md
+- `docs/security/GDPR_COMPLIANCE.md`: /docs/features/authentication/README.md
+- `docs/security/README.md`: ./RATE_LIMITING.md
+- `docs/security/README.md`: /docs/architecture/AUTHENTICATION_ARCHITECTURE.md
+- `docs/security/README.md`: /docs/features/authentication/MFA_IMPLEMENTATION.md
+- `docs/security/README.md`: /CODE_REVIEW_2025.md
+- `docs/security/SECURE_LOGGER.md`: ./RATE_LIMITING.md
+- `docs/security/SECURE_LOGGER.md`: /docs/features/authentication/README.md
+- `docs/specs/admin-order-management/FULFILLMENT_WORKFLOW.md`: ../../supabase/sql/supabase-admin-order-management.sql
+- `docs/testing/README.md`: ../guides/TESTING_STRATEGY.md
+- `docs/testing/README.md`: /tests/AUTH_TESTING_GUIDE.md
+- `docs/testing/README.md`: ../guides/ADMIN_TESTING.md
+- `docs/testing/README.md`: ../guides/TEST_USER_SIMULATION.md
+- `docs/testing/VISUAL-REGRESSION-SETUP.md`: ../../tests/e2e/README.md
+
+## Code Example Validation
+
+- Total Examples: 2763
+- Valid Examples: 1938
+- Invalid Examples: 825
+
+### Invalid Code Examples
+
+- `docs/CODEBASE_AUDIT_REPORT.md:88`: Code example contains placeholders
+- `docs/CODEBASE_AUDIT_REPORT.md:300`: Code example contains placeholders
+- `docs/MVP_ASSESSMENT_REPORT.md:191`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:35`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:56`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:65`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:139`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:180`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:323`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:397`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:439`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:652`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:692`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:881`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:917`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:971`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:988`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1095`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1144`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1164`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1187`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1424`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1485`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1501`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1530`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1666`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1708`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1758`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1777`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1793`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1874`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1890`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1952`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1959`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:1983`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:2016`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:2045`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:2138`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:2165`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:2197`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:2241`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:2327`: Code example contains placeholders
+- `docs/NUXT3_LANDING_PAGES_RESEARCH.md:2436`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:286`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:365`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:436`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:524`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:571`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:595`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:672`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:740`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:781`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:824`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:875`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:933`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:957`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:1002`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:1178`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:1310`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:1364`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:1400`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:1477`: Code example contains placeholders
+- `docs/NUXT3_PRODUCT_PAGE_DOCUMENTATION.md:1581`: Code example contains placeholders
+- `docs/QUICK_REFERENCE_PRODUCT_PAGES.md:106`: Code example contains placeholders
+- `docs/QUICK_REFERENCE_PRODUCT_PAGES.md:228`: Code example contains placeholders
+- `docs/analysis/LOCALSTORAGE-PROBLEM-DEEP-DIVE.md:296`: Code example contains placeholders
+- `docs/analysis/LOCALSTORAGE-PROBLEM-DEEP-DIVE.md:411`: Code example contains placeholders
+- `docs/analysis/LOCALSTORAGE-PROBLEM-DEEP-DIVE.md:435`: Code example contains placeholders
+- `docs/analysis/LOCALSTORAGE-PROBLEM-DEEP-DIVE.md:546`: Code example contains placeholders
+- `docs/analysis/LOCALSTORAGE-PROBLEM-DEEP-DIVE.md:575`: Code example contains placeholders
+- `docs/analysis/LOCALSTORAGE-PROBLEM-DEEP-DIVE.md:611`: Code example contains placeholders
+- `docs/analysis/LOCALSTORAGE-PROBLEM-DEEP-DIVE.md:661`: Code example contains placeholders
+- `docs/analysis/LOCALSTORAGE-PROBLEM-DEEP-DIVE.md:754`: Code example contains placeholders
+- `docs/analysis/SSR-SAFETY-VERIFICATION.md:18`: Code example contains placeholders
+- `docs/analysis/SSR-SAFETY-VERIFICATION.md:26`: Code example contains placeholders
+- `docs/analysis/SSR-SAFETY-VERIFICATION.md:32`: Code example contains placeholders
+- `docs/analysis/SSR-SAFETY-VERIFICATION.md:51`: Code example contains placeholders
+- `docs/analysis/SSR-SAFETY-VERIFICATION.md:72`: Code example contains placeholders
+- `docs/analysis/SSR-SAFETY-VERIFICATION.md:116`: Code example contains placeholders
+- `docs/analysis/SSR-SAFETY-VERIFICATION.md:140`: Code example contains placeholders
+- `docs/analysis/SSR-SAFETY-VERIFICATION.md:162`: Code example contains placeholders
+- `docs/analysis/SSR-SAFETY-VERIFICATION.md:186`: Code example contains placeholders
+- `docs/analysis/SSR-SAFETY-VERIFICATION.md:228`: Code example contains placeholders
+- `docs/api/README.md:18`: Code example contains placeholders
+- `docs/architecture/ACCESSIBILITY_REFACTORING_PLAN.md:29`: Code example contains placeholders
+- `docs/architecture/ACCESSIBILITY_REFACTORING_PLAN.md:95`: Code example contains placeholders
+- `docs/architecture/ACCESSIBILITY_REFACTORING_PLAN.md:113`: Code example contains placeholders
+- `docs/architecture/ACCESSIBILITY_REFACTORING_PLAN.md:416`: Code example contains placeholders
+- `docs/architecture/ACCESSIBILITY_REFACTORING_PLAN.md:705`: Code example contains placeholders
+- `docs/architecture/ACCESSIBILITY_REFACTORING_PLAN.md:810`: Code example contains placeholders
+- `docs/architecture/ACCESSIBILITY_REFACTORING_PLAN.md:820`: Code example contains placeholders
+- `docs/architecture/ACCESSIBILITY_REFACTORING_PLAN.md:946`: Code example contains placeholders
+- `docs/architecture/ACCESSIBILITY_REFACTORING_PLAN.md:1018`: Code example contains placeholders
+- `docs/architecture/ACCESSIBILITY_REFACTORING_PLAN.md:1038`: Code example contains placeholders
+- `docs/architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md:40`: Code example contains placeholders
+- `docs/architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md:102`: Code example contains placeholders
+- `docs/architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md:152`: Code example contains placeholders
+- `docs/architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md:275`: Code example contains placeholders
+- `docs/architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md:378`: Code example contains placeholders
+- `docs/architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md:443`: Code example contains placeholders
+- `docs/architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md:477`: Code example contains placeholders
+- `docs/architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md:550`: Code example contains placeholders
+- `docs/architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md:591`: Code example contains placeholders
+- `docs/architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md:623`: Code example contains placeholders
+- `docs/architecture/ARCHITECTURE_IMPROVEMENT_ROADMAP.md:757`: Code example contains placeholders
+- `docs/architecture/CART_SYSTEM_ARCHITECTURE.md:15`: Code example contains placeholders
+- `docs/architecture/CART_SYSTEM_ARCHITECTURE.md:90`: Code example contains placeholders
+- `docs/architecture/CART_SYSTEM_ARCHITECTURE.md:154`: Code example contains placeholders
+- `docs/architecture/CART_SYSTEM_ARCHITECTURE.md:413`: Code example contains placeholders
+- `docs/architecture/CHECKOUT_FLOW.md:65`: Code example contains placeholders
+- `docs/architecture/MIDDLEWARE_ARCHITECTURE_ANALYSIS.md:217`: Code example contains placeholders
+- `docs/architecture/MIDDLEWARE_ARCHITECTURE_ANALYSIS.md:254`: Code example contains placeholders
+- `docs/architecture/MIDDLEWARE_ARCHITECTURE_ANALYSIS.md:464`: Code example contains placeholders
+- `docs/architecture/MIDDLEWARE_ARCHITECTURE_ANALYSIS.md:644`: Code example contains placeholders
+- `docs/architecture/asset-caching-strategy.md:26`: Code example contains placeholders
+- `docs/architecture/asset-caching-strategy.md:44`: Code example contains placeholders
+- `docs/architecture/asset-caching-strategy.md:65`: Code example contains placeholders
+- `docs/architecture/asset-caching-strategy.md:237`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:34`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:49`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:126`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:155`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:193`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:213`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:223`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:244`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:252`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:284`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:295`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:373`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:399`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:431`: Code example contains placeholders
+- `docs/architecture/build-configuration-review.md:553`: Code example contains placeholders
+- `docs/architecture/build-optimization-adr.md:47`: Code example contains placeholders
+- `docs/architecture/build-optimization-adr.md:61`: Code example contains placeholders
+- `docs/architecture/build-optimization-adr.md:114`: Code example contains placeholders
+- `docs/architecture/build-optimization-adr.md:170`: Code example contains placeholders
+- `docs/architecture/build-optimization-adr.md:230`: Code example contains placeholders
+- `docs/architecture/build-optimization-adr.md:372`: Code example contains placeholders
+- `docs/architecture/build-optimization-adr.md:399`: Code example contains placeholders
+- `docs/architecture/build-optimization-plan.md:80`: Code example contains placeholders
+- `docs/architecture/build-optimization-plan.md:113`: Code example contains placeholders
+- `docs/architecture/build-optimization-plan.md:140`: Code example contains placeholders
+- `docs/architecture/build-optimization-plan.md:158`: Code example contains placeholders
+- `docs/architecture/build-optimization-plan.md:189`: Code example contains placeholders
+- `docs/architecture/build-optimization-plan.md:237`: Code example contains placeholders
+- `docs/architecture/build-optimization-plan.md:335`: Code example contains placeholders
+- `docs/architecture/tailwind-v4-build-fix-adr.md:43`: Code example contains placeholders
+- `docs/architecture/tailwind-v4-build-fix-adr.md:79`: Code example contains placeholders
+- `docs/architecture/tailwind-v4-build-fix-adr.md:201`: Code example contains placeholders
+- `docs/architecture/tailwind-v4-compatibility-summary.md:21`: Code example contains placeholders
+- `docs/architecture/tanstack-table-lazy-loading-implementation.md:35`: Code example contains placeholders
+- `docs/archive/architecture-reviews/ARCHITECTURE_REVIEW_2025_11.md:240`: Code example contains placeholders
+- `docs/archive/architecture-reviews/ARCHITECTURE_REVIEW_2025_11.md:304`: Code example contains placeholders
+- `docs/archive/architecture-reviews/ARCHITECTURE_REVIEW_2025_11.md:374`: Code example contains placeholders
+- `docs/archive/architecture-reviews/ARCHITECTURE_REVIEW_2025_11.md:416`: Code example contains placeholders
+- `docs/archive/architecture-reviews/ARCHITECTURE_REVIEW_2025_11.md:524`: Code example contains placeholders
+- `docs/archive/architecture-reviews/ARCHITECTURE_REVIEW_2025_11.md:571`: Code example contains placeholders
+- `docs/archive/architecture-reviews/ARCHITECTURE_REVIEW_2025_11.md:617`: Code example contains placeholders
+- `docs/archive/cart-fixes/CART_SSR_HYDRATION_FIX_V2.md:9`: Code example contains placeholders
+- `docs/archive/cart-fixes/CART_SSR_HYDRATION_FIX_V2.md:40`: Code example contains placeholders
+- `docs/archive/cart-fixes/CART_SSR_HYDRATION_FIX_V2.md:108`: Code example contains placeholders
+- `docs/archive/checkout-fixes/CHECKOUT_BUTTON_ERROR_FINAL_REPORT.md:37`: Code example contains placeholders
+- `docs/archive/checkout-fixes/CHECKOUT_BUTTON_ERROR_FINAL_REPORT.md:164`: Code example contains placeholders
+- `docs/archive/checkout-fixes/CHECKOUT_BUTTON_ERROR_FINAL_REPORT.md:232`: Code example contains placeholders
+- `docs/archive/checkout-fixes/FINAL_CHECKOUT_BUTTON_FIX.md:49`: Code example contains placeholders
+- `docs/archive/checkout-fixes/FINAL_CHECKOUT_BUTTON_FIX.md:59`: Code example contains placeholders
+- `docs/archive/checkout-fixes/FINAL_CHECKOUT_BUTTON_FIX.md:104`: Code example contains placeholders
+- `docs/archive/checkout-fixes/add-to-cart-root-cause.md:26`: Code example contains placeholders
+- `docs/archive/checkout-fixes/add-to-cart-root-cause.md:49`: Code example contains placeholders
+- `docs/archive/checkout-fixes/add-to-cart-root-cause.md:140`: Code example contains placeholders
+- `docs/archive/checkout-fixes/products-page-empty-fix.md:68`: Code example contains placeholders
+- `docs/archive/checkout-fixes/vercel-investigation-report.md:52`: Code example contains placeholders
+- `docs/archive/checkout-fixes/vercel-investigation-report.md:66`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_BEFORE_AFTER_COMPARISON.md:14`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_BEFORE_AFTER_COMPARISON.md:62`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_BEFORE_AFTER_COMPARISON.md:100`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_BEFORE_AFTER_COMPARISON.md:115`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_BEFORE_AFTER_COMPARISON.md:156`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_BEFORE_AFTER_COMPARISON.md:234`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_BEFORE_AFTER_COMPARISON.md:257`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_BEFORE_AFTER_COMPARISON.md:296`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_BEFORE_AFTER_COMPARISON.md:311`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_QUICK_REFERENCE.md:67`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_QUICK_REFERENCE.md:82`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_QUICK_REFERENCE.md:90`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_QUICK_REFERENCE.md:98`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_QUICK_REFERENCE.md:111`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_REFACTOR_GUIDE.md:11`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_REFACTOR_GUIDE.md:57`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_REFACTOR_GUIDE.md:102`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_REFACTOR_GUIDE.md:116`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_REFACTOR_GUIDE.md:161`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_REFACTOR_GUIDE.md:212`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_REFACTOR_GUIDE.md:229`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_REFACTOR_GUIDE.md:276`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_SIMPLIFICATION_REFACTOR_GUIDE.md:290`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md:46`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md:70`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md:94`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md:125`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md:144`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md:196`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md:207`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md:235`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md:249`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md:271`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md:316`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md:337`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SIMPLIFICATION_REVIEW.md:359`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SUMMARY.md:28`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SUMMARY.md:193`: Code example contains placeholders
+- `docs/archive/checkout-reviews/CHECKOUT_UX_SUMMARY.md:217`: Code example contains placeholders
+- `docs/archive/completed-specs/customer-order-history/API_USAGE_GUIDE.md:213`: Code example contains placeholders
+- `docs/archive/completed-specs/customer-order-history/FIXES_APPLIED.md:27`: Code example contains placeholders
+- `docs/archive/completed-specs/customer-order-history/FIXES_APPLIED.md:56`: Code example contains placeholders
+- `docs/archive/completed-specs/customer-order-history/MIGRATION_GUIDE.md:116`: Code example contains placeholders
+- `docs/archive/completed-specs/customer-order-history/design.md:13`: Code example contains placeholders
+- `docs/archive/completed-specs/customer-order-history/design.md:115`: Code example contains placeholders
+- `docs/archive/completed-specs/customer-order-history/design.md:282`: Code example contains placeholders
+- `docs/archive/completed-specs/customer-order-history/design.md:404`: Code example contains placeholders
+- `docs/archive/completed-specs/customer-order-history/design.md:440`: Code example contains placeholders
+- `docs/archive/completed-specs/order-status-updates/design.md:11`: Code example contains placeholders
+- `docs/archive/completed-specs/order-status-updates/design.md:239`: Code example contains placeholders
+- `docs/archive/completed-specs/order-status-updates/design.md:296`: Code example contains placeholders
+- `docs/archive/completed-specs/shipping-step-refactor/RECURSIVE_UPDATE_FIX.md:36`: Code example contains placeholders
+- `docs/archive/completed-specs/shipping-step-refactor/RECURSIVE_UPDATE_FIX.md:61`: Code example contains placeholders
+- `docs/archive/completed-specs/shipping-step-refactor/RECURSIVE_UPDATE_FIX.md:70`: Code example contains placeholders
+- `docs/archive/completed-specs/shipping-step-refactor/RECURSIVE_UPDATE_FIX.md:145`: Code example contains placeholders
+- `docs/archive/completed-specs/shipping-step-refactor/design.md:139`: Code example contains placeholders
+- `docs/archive/completed-specs/shipping-step-refactor/design.md:185`: Code example contains placeholders
+- `docs/archive/completed-specs/shipping-step-refactor/design.md:235`: Code example contains placeholders
+- `docs/archive/completed-specs/shipping-step-refactor/design.md:343`: Code example contains placeholders
+- `docs/archive/fix-summaries/CART_COOKIE_FIX_SUMMARY.md:52`: Code example contains placeholders
+- `docs/archive/fix-summaries/CHANGES_SUMMARY.md:113`: Code example contains placeholders
+- `docs/archive/fix-summaries/CHECKOUT_FIXES_SUMMARY.md:14`: Code example contains placeholders
+- `docs/archive/fix-summaries/CHECKOUT_FIXES_SUMMARY.md:47`: Code example contains placeholders
+- `docs/archive/fix-summaries/CHECKOUT_FIXES_SUMMARY.md:102`: Code example contains placeholders
+- `docs/archive/fix-summaries/CHECKOUT_FIXES_SUMMARY.md:122`: Code example contains placeholders
+- `docs/archive/fixes/ARCHITECTURAL_FIXES_SUMMARY.md:44`: Code example contains placeholders
+- `docs/archive/fixes/ARCHITECTURAL_FIXES_SUMMARY.md:156`: Code example contains placeholders
+- `docs/archive/fixes/ARCHITECTURAL_FIXES_SUMMARY.md:190`: Code example contains placeholders
+- `docs/archive/fixes/ARCHITECTURAL_FIXES_SUMMARY.md:253`: Code example contains placeholders
+- `docs/archive/fixes/ARCHITECTURAL_FIXES_SUMMARY.md:303`: Code example contains placeholders
+- `docs/archive/fixes/ARCHITECTURAL_FIXES_SUMMARY.md:411`: Code example contains placeholders
+- `docs/archive/fixes/ERROR_HANDLING_AUDIT.md:42`: Code example contains placeholders
+- `docs/archive/fixes/ERROR_HANDLING_AUDIT.md:76`: Code example contains placeholders
+- `docs/archive/fixes/ERROR_HANDLING_FIXES.md:13`: Code example contains placeholders
+- `docs/archive/fixes/ERROR_HANDLING_FIXES.md:24`: Code example contains placeholders
+- `docs/archive/fixes/ERROR_HANDLING_FIXES.md:71`: Code example contains placeholders
+- `docs/archive/fixes/ERROR_HANDLING_FIXES.md:110`: Code example contains placeholders
+- `docs/archive/fixes/ERROR_HANDLING_FIXES.md:537`: Code example contains placeholders
+- `docs/archive/fixes/FINAL_OPTIMIZATION_SUMMARY.md:136`: Code example contains placeholders
+- `docs/archive/fixes/FINAL_OPTIMIZATION_SUMMARY.md:145`: Code example contains placeholders
+- `docs/archive/fixes/FINAL_OPTIMIZATION_SUMMARY.md:173`: Code example contains placeholders
+- `docs/archive/fixes/MIDDLEWARE_FIX_SUMMARY.md:31`: Code example contains placeholders
+- `docs/archive/fixes/RACE_CONDITION_FIX_SUMMARY.md:50`: Code example contains placeholders
+- `docs/archive/fixes/RACE_CONDITION_FIX_SUMMARY.md:84`: Code example contains placeholders
+- `docs/archive/fixes/RACE_CONDITION_FIX_SUMMARY.md:108`: Code example contains placeholders
+- `docs/archive/fixes/RACE_CONDITION_FIX_SUMMARY.md:175`: Code example contains placeholders
+- `docs/archive/fixes/RACE_CONDITION_FIX_SUMMARY.md:230`: Code example contains placeholders
+- `docs/archive/fixes/SSR_FIX_SUMMARY.md:35`: Code example contains placeholders
+- `docs/archive/fixes/SSR_FIX_SUMMARY.md:56`: Code example contains placeholders
+- `docs/archive/fixes/SSR_FIX_SUMMARY.md:85`: Code example contains placeholders
+- `docs/archive/fixes/admin-fixes/CLEAN-CODE-REVIEW.md:122`: Code example contains placeholders
+- `docs/archive/fixes/admin-fixes/CLEAN-CODE-REVIEW.md:131`: Code example contains placeholders
+- `docs/archive/fixes/admin-fixes/CLEAN-CODE-REVIEW.md:187`: Code example contains placeholders
+- `docs/archive/fixes/admin-fixes/CLEAN-CODE-REVIEW.md:284`: Code example contains placeholders
+- `docs/archive/fixes/admin-fixes/CLEAN-CODE-REVIEW.md:292`: Code example contains placeholders
+- `docs/archive/fixes/admin-fixes/CLEAN-CODE-REVIEW.md:319`: Code example contains placeholders
+- `docs/archive/fixes/admin-fixes/CLEAN-CODE-REVIEW.md:341`: Code example contains placeholders
+- `docs/archive/fixes/admin-fixes/ISSUES-AND-SOLUTIONS.md:81`: Code example contains placeholders
+- `docs/archive/migrations/BUTTON_MIGRATION_AUDIT.md:351`: Code example contains placeholders
+- `docs/archive/migrations/SHADCN_MIGRATION.md:38`: Code example contains placeholders
+- `docs/archive/migrations/SHADCN_MIGRATION.md:166`: Code example contains placeholders
+- `docs/archive/migrations/SHADCN_MIGRATION.md:181`: Code example contains placeholders
+- `docs/archive/phase-docs/phase1-results.md:60`: Code example contains placeholders
+- `docs/archive/phase-docs/phase1-results.md:73`: Code example contains placeholders
+- `docs/archive/phase-docs/phase4-optimized-results.md:84`: Code example contains placeholders
+- `docs/archive/phase-docs/phase4-optimized-results.md:119`: Code example contains placeholders
+- `docs/archive/reports/ASSET_OPTIMIZATION_SUMMARY.md:19`: Code example contains placeholders
+- `docs/archive/reports/ASSET_OPTIMIZATION_SUMMARY.md:44`: Code example contains placeholders
+- `docs/archive/reports/ASSET_OPTIMIZATION_SUMMARY.md:130`: Code example contains placeholders
+- `docs/archive/reports/BUILD_SUCCESS_REPORT.md:17`: Code example contains placeholders
+- `docs/archive/reports/BUILD_SUCCESS_REPORT.md:24`: Code example contains placeholders
+- `docs/archive/reports/BUILD_SUCCESS_REPORT.md:41`: Code example contains placeholders
+- `docs/archive/reports/BUILD_SUCCESS_REPORT.md:111`: Code example contains placeholders
+- `docs/archive/reports/BUILD_SUCCESS_REPORT.md:128`: Code example contains placeholders
+- `docs/archive/reports/BUILD_SUCCESS_REPORT.md:366`: Code example contains placeholders
+- `docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md:79`: Code example contains placeholders
+- `docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md:114`: Code example contains placeholders
+- `docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md:132`: Code example contains placeholders
+- `docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md:263`: Code example contains placeholders
+- `docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md:277`: Code example contains placeholders
+- `docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md:313`: Code example contains placeholders
+- `docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md:525`: Code example contains placeholders
+- `docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md:568`: Code example contains placeholders
+- `docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md:621`: Code example contains placeholders
+- `docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md:676`: Code example contains placeholders
+- `docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md:700`: Code example contains placeholders
+- `docs/archive/reports/CODE_QUALITY_ANALYSIS_2025-11-01.md:718`: Code example contains placeholders
+- `docs/archive/reports/TANSTACK_TABLE_LAZY_LOADING_DELIVERABLES.md:187`: Code example contains placeholders
+- `docs/archive/reports/prerender-optimization-report.md:35`: Code example contains placeholders
+- `docs/archive/reports/prerender-optimization-report.md:98`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-demo-images.md:90`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-demo-images.md:107`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-demo-images.md:120`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-demo-images.md:167`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-image-requirements.md:117`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-implementation-guide.md:10`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-implementation-guide.md:292`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-implementation-guide.md:832`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-implementation-guide.md:874`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-implementation-guide.md:923`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-implementation-guide.md:1150`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-implementation-guide.md:1172`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:24`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:139`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:150`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:203`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:261`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:819`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:884`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:943`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:978`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:1037`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:1092`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:1139`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:1315`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:1405`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:1423`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:1563`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:1748`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:2054`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:2226`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:2245`: Code example contains placeholders
+- `docs/archive/research/hero-section/hero-section-technical-implementation.md:2361`: Code example contains placeholders
+- `docs/archive/reviews/DOCUMENTATION_REVIEW_2025-11-27.md:148`: Code example contains placeholders
+- `docs/archive/reviews/DOCUMENTATION_REVIEW_2025-11-27.md:200`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:91`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:104`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:124`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:205`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:288`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:551`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:628`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:644`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:735`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:924`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:949`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:976`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:981`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:1025`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_ACCESSIBILITY_ARCHITECTURE_REVIEW.md:1057`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_EXECUTIVE_SUMMARY.md:60`: Code example contains placeholders
+- `docs/archive/reviews/PR_258_EXECUTIVE_SUMMARY.md:92`: Code example contains placeholders
+- `docs/archive/specs-legacy/ORIGINAL_REQUIREMENTS.md:216`: Code example contains placeholders
+- `docs/archive/specs-legacy/ORIGINAL_REQUIREMENTS.md:465`: Code example contains placeholders
+- `docs/archive/specs-legacy/ORIGINAL_REQUIREMENTS.md:540`: Code example contains placeholders
+- `docs/archive/specs-legacy/ORIGINAL_REQUIREMENTS.md:690`: Code example contains placeholders
+- `docs/archive/specs-legacy/ORIGINAL_REQUIREMENTS.md:770`: Code example contains placeholders
+- `docs/archive/specs-legacy/ORIGINAL_REQUIREMENTS.md:810`: Code example contains placeholders
+- `docs/archive/specs-legacy/ORIGINAL_REQUIREMENTS.md:919`: Code example contains placeholders
+- `docs/archive/specs-legacy/ORIGINAL_REQUIREMENTS.md:993`: Code example contains placeholders
+- `docs/archive/specs-legacy/design.md:162`: Code example contains placeholders
+- `docs/archive/specs-legacy/design.md:186`: Code example contains placeholders
+- `docs/archive/specs-legacy/design.md:331`: Code example contains placeholders
+- `docs/archive/specs-legacy/design.md:387`: Code example contains placeholders
+- `docs/archive/test-reports/visual-regression-20251123/MANUAL_TEST_CHECKLIST.md:212`: Code example contains placeholders
+- `docs/archive/testing/BRANCH_COMPARISON_SUMMARY.md:113`: Code example contains placeholders
+- `docs/archive/testing/E2E_AUTH_TEST_IMPROVEMENTS.md:34`: Code example contains placeholders
+- `docs/archive/testing/E2E_AUTH_TEST_IMPROVEMENTS.md:50`: Code example contains placeholders
+- `docs/archive/testing/E2E_AUTH_TEST_IMPROVEMENTS.md:66`: Code example contains placeholders
+- `docs/archive/testing/E2E_AUTH_TEST_IMPROVEMENTS.md:100`: Code example contains placeholders
+- `docs/archive/testing/E2E_AUTH_TEST_IMPROVEMENTS.md:116`: Code example contains placeholders
+- `docs/archive/testing/E2E_TEST_REVIEW_AND_FIXES.md:107`: Code example contains placeholders
+- `docs/archive/testing/E2E_TEST_REVIEW_AND_FIXES.md:124`: Code example contains placeholders
+- `docs/archive/testing/E2E_TEST_REVIEW_AND_FIXES.md:271`: Code example contains placeholders
+- `docs/archive/testing/E2E_TEST_REVIEW_AND_FIXES.md:442`: Code example contains placeholders
+- `docs/archive/testing/E2E_TEST_REVIEW_AND_FIXES.md:504`: Code example contains placeholders
+- `docs/archive/testing/PHASE_2_PLAYWRIGHT_CONFIG_SIMPLIFICATION.md:241`: Code example contains placeholders
+- `docs/archive/testing/PHASE_2_PLAYWRIGHT_CONFIG_SIMPLIFICATION.md:248`: Code example contains placeholders
+- `docs/archive/testing/PHASE_2_PLAYWRIGHT_CONFIG_SIMPLIFICATION.md:289`: Code example contains placeholders
+- `docs/archive/testing/PHASE_3_FINAL_CLEANUP.md:205`: Code example contains placeholders
+- `docs/archive/testing/QUICK_START_TESTING_GUIDE.md:199`: Code example contains placeholders
+- `docs/archive/testing/QUICK_START_TESTING_GUIDE.md:260`: Code example contains placeholders
+- `docs/archive/testing/TEST_COVERAGE_IMPLEMENTATION.md:229`: Code example contains placeholders
+- `docs/archive/testing/checkout/E2E_TEST_FIXES.md:43`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_QUICK_REFERENCE.md:46`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_QUICK_REFERENCE.md:63`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_QUICK_REFERENCE.md:109`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_QUICK_REFERENCE.md:129`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_QUICK_REFERENCE.md:140`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_QUICK_REFERENCE.md:152`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_QUICK_REFERENCE.md:179`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_QUICK_REFERENCE.md:192`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_REPORT.md:49`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_REPORT.md:219`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_REPORT.md:246`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_REPORT.md:258`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_REPORT.md:285`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_REPORT.md:313`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_REPORT.md:338`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_REPORT.md:369`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_REPORT.md:377`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_REPORT_ORDER_COMPONENTS.md:72`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_REPORT_ORDER_COMPONENTS.md:131`: Code example contains placeholders
+- `docs/archive/testing/mutation/MUTATION_TESTING_SUMMARY.md:64`: Code example contains placeholders
+- `docs/archive/testing/mutation/mutation-test-report-checkout.md:108`: Code example contains placeholders
+- `docs/archive/testing/mutation/mutation-test-report-checkout.md:176`: Code example contains placeholders
+- `docs/archive/testing/mutation/mutation-test-report-checkout.md:230`: Code example contains placeholders
+- `docs/archive/testing/mutation/mutation-test-report-checkout.md:265`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:154`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:210`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:264`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:464`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:525`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:545`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:761`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:794`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:999`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:1102`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:1196`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:1235`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:1331`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:1388`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:1631`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:1778`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:1868`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:1885`: Code example contains placeholders
+- `docs/archive/testing/playwright/E2E_CHECKOUT_BEST_PRACTICES.md:1957`: Code example contains placeholders
+- `docs/archive/testing/playwright/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md:266`: Code example contains placeholders
+- `docs/archive/testing/playwright/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md:333`: Code example contains placeholders
+- `docs/archive/testing/playwright/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md:678`: Code example contains placeholders
+- `docs/archive/testing/playwright/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md:749`: Code example contains placeholders
+- `docs/archive/testing/playwright/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md:784`: Code example contains placeholders
+- `docs/archive/testing/playwright/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md:815`: Code example contains placeholders
+- `docs/archive/testing/playwright/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md:847`: Code example contains placeholders
+- `docs/archive/testing/playwright/PLAYWRIGHT_BEST_PRACTICES_ANALYSIS.md:887`: Code example contains placeholders
+- `docs/archive/vercel-debug/VERCEL_ADD_TO_CART_DEBUG.md:19`: Code example contains placeholders
+- `docs/archive/vercel-debug/VERCEL_ADD_TO_CART_DEBUG.md:90`: Code example contains placeholders
+- `docs/archive/vercel-debug/VERCEL_ADD_TO_CART_DEBUG.md:175`: Code example contains placeholders
+- `docs/archive/vercel-debug/VERCEL_ADD_TO_CART_DEBUG.md:247`: Code example contains placeholders
+- `docs/archive/vercel-debug/VERCEL_ADD_TO_CART_FIX.md:18`: Code example contains placeholders
+- `docs/archive/vercel-debug/VERCEL_ADD_TO_CART_FIX.md:55`: Code example contains placeholders
+- `docs/archive/vercel-debug/VERCEL_CLIENT_BUNDLES_FIX.md:60`: Code example contains placeholders
+- `docs/archive/vercel-debug/VERCEL_CLIENT_BUNDLES_FIX.md:81`: Code example contains placeholders
+- `docs/archive/vercel-debug/VERCEL_CLIENT_BUNDLES_FIX.md:102`: Code example contains placeholders
+- `docs/archive/vercel-debug/VERCEL_DEBUG_STEPS.md:59`: Code example contains placeholders
+- `docs/automation/PROJECT_AUTOMATION_EXPLAINED.md:74`: Code example contains placeholders
+- `docs/automation/PROJECT_AUTOMATION_EXPLAINED.md:100`: Code example contains placeholders
+- `docs/automation/PROJECT_AUTOMATION_EXPLAINED.md:209`: Code example contains placeholders
+- `docs/automation/github-project-automation.md:17`: Code example contains placeholders
+- `docs/development/ACCESSIBILITY_QUICK_REFERENCE.md:75`: Code example contains placeholders
+- `docs/development/ACCESSIBILITY_QUICK_REFERENCE.md:101`: Code example contains placeholders
+- `docs/development/ACCESSIBILITY_QUICK_REFERENCE.md:205`: Code example contains placeholders
+- `docs/development/ACCESSIBILITY_QUICK_REFERENCE.md:325`: Code example contains placeholders
+- `docs/development/ACCESSIBILITY_QUICK_REFERENCE.md:469`: Code example contains placeholders
+- `docs/development/MILESTONE_QUICK_START.md:131`: Code example contains placeholders
+- `docs/development/PATTERNS_TO_PRESERVE.md:48`: Code example contains placeholders
+- `docs/development/PATTERNS_TO_PRESERVE.md:96`: Code example contains placeholders
+- `docs/development/PATTERNS_TO_PRESERVE.md:266`: Code example contains placeholders
+- `docs/development/PATTERNS_TO_PRESERVE.md:411`: Code example contains placeholders
+- `docs/development/PATTERNS_TO_PRESERVE.md:448`: Code example contains placeholders
+- `docs/development/PATTERNS_TO_PRESERVE.md:560`: Code example contains placeholders
+- `docs/development/PATTERNS_TO_PRESERVE.md:592`: Code example contains placeholders
+- `docs/development/STATIC_ANALYSIS.md:118`: Code example contains placeholders
+- `docs/development/code-conventions.md:74`: Code example contains placeholders
+- `docs/development/code-conventions.md:177`: Code example contains placeholders
+- `docs/development/code-conventions.md:257`: Code example contains placeholders
+- `docs/development/code-conventions.md:289`: Code example contains placeholders
+- `docs/development/code-conventions.md:386`: Code example contains placeholders
+- `docs/development/structure.md:11`: Code example contains placeholders
+- `docs/development/supabase-best-practices.md:113`: Code example contains placeholders
+- `docs/features/AUDIT_LOGGING.md:44`: Code example contains placeholders
+- `docs/features/AUDIT_LOGGING.md:160`: Code example contains placeholders
+- `docs/features/AUDIT_LOGGING.md:227`: Code example contains placeholders
+- `docs/features/AUDIT_LOGGING.md:276`: Code example contains placeholders
+- `docs/features/I18N_CONFIGURATION.md:378`: Code example contains placeholders
+- `docs/features/LANDING-PAGE-CMS.md:41`: Code example contains placeholders
+- `docs/features/LANDING-PAGE-CMS.md:128`: Code example contains placeholders
+- `docs/features/LANDING-PAGE-CMS.md:142`: Code example contains placeholders
+- `docs/features/LANDING-PAGE-CMS.md:163`: Code example contains placeholders
+- `docs/features/LANDING-PAGE-CMS.md:182`: Code example contains placeholders
+- `docs/features/LANDING-PAGE-CMS.md:205`: Code example contains placeholders
+- `docs/features/authentication/authentication-translations.md:30`: Code example contains placeholders
+- `docs/features/authentication/authentication-translations.md:214`: Code example contains placeholders
+- `docs/features/authentication/authentication-translations.md:229`: Code example contains placeholders
+- `docs/features/authentication/authentication-translations.md:249`: Code example contains placeholders
+- `docs/features/authentication/authentication-translations.md:405`: Code example contains placeholders
+- `docs/features/cart/ATOMIC_INVENTORY_FIX.md:62`: Code example contains placeholders
+- `docs/features/cart/ATOMIC_INVENTORY_FIX.md:86`: Code example contains placeholders
+- `docs/features/cart/ATOMIC_INVENTORY_FIX.md:162`: Code example contains placeholders
+- `docs/features/cart/CART_ANALYTICS.md:57`: Code example contains placeholders
+- `docs/features/cart/CART_ANALYTICS.md:245`: Code example contains placeholders
+- `docs/features/cart/CART_LOCKING.md:37`: Code example contains placeholders
+- `docs/features/cart/CART_LOCKING.md:343`: Code example contains placeholders
+- `docs/features/landing-videos/IMPLEMENTATION.md:34`: Code example contains placeholders
+- `docs/features/landing-videos/IMPLEMENTATION.md:93`: Code example contains placeholders
+- `docs/features/landing-videos/QUICK-START.md:85`: Code example contains placeholders
+- `docs/getting-started/QUICK_START_GUIDE.md:39`: Code example contains placeholders
+- `docs/guides/DEPLOYMENT_CHECKLIST.md:46`: Code example contains placeholders
+- `docs/guides/DEPLOYMENT_CHECKLIST.md:62`: Code example contains placeholders
+- `docs/guides/DEPLOYMENT_CHECKLIST.md:83`: Code example contains placeholders
+- `docs/guides/DEPLOYMENT_GUIDE.md:29`: Code example contains placeholders
+- `docs/guides/MARKETING-COPY-IMPROVEMENTS.md:246`: Code example contains placeholders
+- `docs/guides/PREVENTION_STRATEGY.md:71`: Code example contains placeholders
+- `docs/guides/STRIPE_WEBHOOK_SETUP.md:93`: Code example contains placeholders
+- `docs/guides/STRIPE_WEBHOOK_SETUP.md:167`: Code example contains placeholders
+- `docs/guides/STRIPE_WEBHOOK_SETUP.md:360`: Code example contains placeholders
+- `docs/guides/STRIPE_WEBHOOK_SETUP.md:423`: Code example contains placeholders
+- `docs/guides/TESTING.md:80`: Code example contains placeholders
+- `docs/guides/TESTING.md:129`: Code example contains placeholders
+- `docs/guides/TESTING.md:155`: Code example contains placeholders
+- `docs/guides/TESTING.md:192`: Code example contains placeholders
+- `docs/guides/TESTING.md:207`: Code example contains placeholders
+- `docs/guides/TESTING.md:250`: Code example contains placeholders
+- `docs/guides/TESTING.md:345`: Code example contains placeholders
+- `docs/guides/TESTING.md:357`: Code example contains placeholders
+- `docs/guides/TESTING.md:369`: Code example contains placeholders
+- `docs/guides/asset-optimization-quick-reference.md:103`: Code example contains placeholders
+- `docs/guides/build-optimization-implementation.md:14`: Code example contains placeholders
+- `docs/guides/build-optimization-implementation.md:580`: Code example contains placeholders
+- `docs/guides/build-optimization-implementation.md:598`: Code example contains placeholders
+- `docs/guides/build-optimization-quick-start.md:59`: Code example contains placeholders
+- `docs/guides/build-optimization-quick-start.md:94`: Code example contains placeholders
+- `docs/guides/build-optimization-quick-start.md:140`: Code example contains placeholders
+- `docs/guides/build-optimization-quick-start.md:170`: Code example contains placeholders
+- `docs/guides/build-optimization-quick-start.md:241`: Code example contains placeholders
+- `docs/guides/build-optimization-quick-start.md:282`: Code example contains placeholders
+- `docs/guides/build-optimization-quick-start.md:361`: Code example contains placeholders
+- `docs/guides/build-optimization-quick-start.md:440`: Code example contains placeholders
+- `docs/guides/build-optimization-quick-start.md:538`: Code example contains placeholders
+- `docs/guides/css-optimization-summary.md:60`: Code example contains placeholders
+- `docs/guides/prerender-optimization-quick-reference.md:13`: Code example contains placeholders
+- `docs/guides/prerender-optimization-quick-reference.md:48`: Code example contains placeholders
+- `docs/guides/tanstack-table-lazy-loading.md:72`: Code example contains placeholders
+- `docs/guides/tanstack-table-lazy-loading.md:92`: Code example contains placeholders
+- `docs/guides/tanstack-table-lazy-loading.md:116`: Code example contains placeholders
+- `docs/guides/tanstack-table-lazy-loading.md:317`: Code example contains placeholders
+- `docs/guides/tanstack-table-lazy-loading.md:378`: Code example contains placeholders
+- `docs/issues/full-app-unit-test-coverage.md:123`: Code example contains placeholders
+- `docs/issues/full-app-unit-test-coverage.md:192`: Code example contains placeholders
+- `docs/issues/full-app-unit-test-coverage.md:265`: Code example contains placeholders
+- `docs/issues/full-app-unit-test-coverage.md:1051`: Code example contains placeholders
+- `docs/manuals/ADMIN_TESTING.md:67`: Code example contains placeholders
+- `docs/manuals/ADMIN_TESTING.md:83`: Code example contains placeholders
+- `docs/manuals/ADMIN_TESTING.md:291`: Code example contains placeholders
+- `docs/manuals/IMPLEMENTATION_GUIDE.md:509`: Code example contains placeholders
+- `docs/manuals/TESTING_STRATEGY.md:54`: Code example contains placeholders
+- `docs/manuals/TESTING_STRATEGY.md:94`: Code example contains placeholders
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md:69`: Code example contains placeholders
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md:97`: Code example contains placeholders
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md:357`: Code example contains placeholders
+- `docs/meta/AI_ERA_DOCUMENTATION_PROPOSAL.md:459`: Code example contains placeholders
+- `docs/meta/ARCHIVAL_POLICY.md:98`: Code example contains placeholders
+- `docs/meta/ARCHIVAL_POLICY.md:137`: Code example contains placeholders
+- `docs/meta/ARCHIVAL_POLICY.md:149`: Code example contains placeholders
+- `docs/meta/ARCHIVAL_POLICY.md:240`: Code example contains placeholders
+- `docs/meta/DOCUMENTATION_CONSOLIDATION_PLAN.md:48`: Code example contains placeholders
+- `docs/meta/DOCUMENTATION_CONVENTIONS.md:64`: Code example contains placeholders
+- `docs/meta/DOCUMENTATION_CONVENTIONS.md:200`: Code example contains placeholders
+- `docs/meta/DOCUMENTATION_CONVENTIONS.md:338`: Code example contains placeholders
+- `docs/meta/DOCUMENTATION_CONVENTIONS.md:642`: Code example contains placeholders
+- `docs/meta/DOCUMENTATION_CONVENTIONS.md:697`: Code example contains placeholders
+- `docs/meta/DOCUMENTATION_IMPROVEMENT_PROPOSAL.md:185`: Code example contains placeholders
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md:26`: Code example contains placeholders
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md:58`: Code example contains placeholders
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md:81`: Code example contains placeholders
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md:105`: Code example contains placeholders
+- `docs/meta/DOCUMENTATION_QUICK_WINS.md:157`: Code example contains placeholders
+- `docs/meta/DUAL_LAYER_DOCS_IMPLEMENTATION_PROMPT.md:174`: Code example contains placeholders
+- `docs/meta/QUICK_START_DUAL_LAYER_DOCS.md:103`: Code example contains placeholders
+- `docs/meta/QUICK_START_DUAL_LAYER_DOCS.md:276`: Code example contains placeholders
+- `docs/notebooklm/01_PROJECT_OVERVIEW.md:88`: Code example contains placeholders
+- `docs/notebooklm/03_ARCHITECTURE.md:50`: Code example contains placeholders
+- `docs/notebooklm/05_CODE_CONVENTIONS.md:65`: Code example contains placeholders
+- `docs/notebooklm/05_CODE_CONVENTIONS.md:223`: Code example contains placeholders
+- `docs/notebooklm/06_COMPONENT_LIBRARY.md:286`: Code example contains placeholders
+- `docs/notebooklm/07_TESTING_GUIDE.md:64`: Code example contains placeholders
+- `docs/notebooklm/07_TESTING_GUIDE.md:120`: Code example contains placeholders
+- `docs/notebooklm/07_TESTING_GUIDE.md:153`: Code example contains placeholders
+- `docs/notebooklm/07_TESTING_GUIDE.md:210`: Code example contains placeholders
+- `docs/notebooklm/07_TESTING_GUIDE.md:303`: Code example contains placeholders
+- `docs/notebooklm/08_API_REFERENCE.md:34`: Code example contains placeholders
+- `docs/notebooklm/08_API_REFERENCE.md:99`: Code example contains placeholders
+- `docs/notebooklm/08_API_REFERENCE.md:135`: Code example contains placeholders
+- `docs/notebooklm/08_API_REFERENCE.md:176`: Code example contains placeholders
+- `docs/notebooklm/08_API_REFERENCE.md:190`: Code example contains placeholders
+- `docs/notebooklm/08_API_REFERENCE.md:198`: Code example contains placeholders
+- `docs/notebooklm/09_TROUBLESHOOTING.md:76`: Code example contains placeholders
+- `docs/project/AI_CONTEXT_TESTING_GUIDE.md:236`: Code example contains placeholders
+- `docs/project/AI_CONTEXT_TESTING_GUIDE.md:318`: Code example contains placeholders
+- `docs/project/AI_CONTEXT_TESTING_GUIDE.md:375`: Code example contains placeholders
+- `docs/project/AI_CONTEXT_TESTING_GUIDE.md:441`: Code example contains placeholders
+- `docs/project/MAINTENANCE_GUIDE.md:50`: Code example contains placeholders
+- `docs/project/MIGRATION_GUIDE.md:94`: Code example contains placeholders
+- `docs/project/MIGRATION_GUIDE.md:197`: Code example contains placeholders
+- `docs/project/MIGRATION_GUIDE.md:433`: Code example contains placeholders
+- `docs/project/MIGRATION_GUIDE.md:641`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:113`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:150`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:225`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:243`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:273`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:304`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:360`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:379`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:523`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:564`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:659`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:798`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:839`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:965`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1000`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1013`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1037`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1065`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1116`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1238`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1292`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1388`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1412`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1467`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1489`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1556`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1701`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1771`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:1836`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:2129`: Code example contains placeholders
+- `docs/research/FILTER_DOCUMENTATION_RESEARCH.md:2288`: Code example contains placeholders
+- `docs/research/FILTER_SEARCH_UX_RESEARCH.md:90`: Code example contains placeholders
+- `docs/research/FILTER_SEARCH_UX_RESEARCH.md:184`: Code example contains placeholders
+- `docs/research/FILTER_SEARCH_UX_RESEARCH.md:343`: Code example contains placeholders
+- `docs/research/FILTER_SEARCH_UX_RESEARCH.md:588`: Code example contains placeholders
+- `docs/research/FILTER_SEARCH_UX_RESEARCH.md:658`: Code example contains placeholders
+- `docs/research/FILTER_SEARCH_UX_RESEARCH.md:779`: Code example contains placeholders
+- `docs/research/FILTER_SEARCH_UX_RESEARCH.md:1056`: Code example contains placeholders
+- `docs/research/HERO-SECTION-RESEARCH-README.md:208`: Code example contains placeholders
+- `docs/research/IMPLEMENTATION_EXAMPLES.md:14`: Code example contains placeholders
+- `docs/research/IMPLEMENTATION_EXAMPLES.md:253`: Code example contains placeholders
+- `docs/research/IMPLEMENTATION_EXAMPLES.md:384`: Code example contains placeholders
+- `docs/research/IMPLEMENTATION_EXAMPLES.md:514`: Code example contains placeholders
+- `docs/research/IMPLEMENTATION_EXAMPLES.md:644`: Code example contains placeholders
+- `docs/research/IMPLEMENTATION_EXAMPLES.md:740`: Code example contains placeholders
+- `docs/research/LANDING_PAGE_SECTION_ANALYSIS.md:249`: Code example contains placeholders
+- `docs/research/LANDING_PAGE_SECTION_ANALYSIS.md:327`: Code example contains placeholders
+- `docs/research/LANDING_PAGE_SECTION_ANALYSIS.md:389`: Code example contains placeholders
+- `docs/research/LANDING_PAGE_SECTION_ANALYSIS.md:411`: Code example contains placeholders
+- `docs/research/LANDING_PAGE_SECTION_ANALYSIS.md:539`: Code example contains placeholders
+- `docs/research/LANDING_PAGE_SECTION_ANALYSIS.md:578`: Code example contains placeholders
+- `docs/research/LANDING_PAGE_SECTION_ANALYSIS.md:637`: Code example contains placeholders
+- `docs/research/LANDING_PAGE_SECTION_ANALYSIS.md:727`: Code example contains placeholders
+- `docs/research/LANDING_PAGE_SECTION_ANALYSIS.md:881`: Code example contains placeholders
+- `docs/research/LANDING_PAGE_SECTION_ANALYSIS.md:1086`: Code example contains placeholders
+- `docs/research/README.md:170`: Code example contains placeholders
+- `docs/research/RESEARCH_SUMMARY.md:192`: Code example contains placeholders
+- `docs/research/hero-section-quick-reference.md:67`: Code example contains placeholders
+- `docs/research/hero-section-quick-reference.md:108`: Code example contains placeholders
+- `docs/research/nuxt3-pinia-ssr-best-practices.md:50`: Code example contains placeholders
+- `docs/research/nuxt3-pinia-ssr-best-practices.md:70`: Code example contains placeholders
+- `docs/research/nuxt3-pinia-ssr-best-practices.md:144`: Code example contains placeholders
+- `docs/research/nuxt3-pinia-ssr-best-practices.md:164`: Code example contains placeholders
+- `docs/research/nuxt3-pinia-ssr-best-practices.md:190`: Code example contains placeholders
+- `docs/research/nuxt3-pinia-ssr-best-practices.md:206`: Code example contains placeholders
+- `docs/research/nuxt3-pinia-ssr-best-practices.md:236`: Code example contains placeholders
+- `docs/research/nuxt3-pinia-ssr-best-practices.md:428`: Code example contains placeholders
+- `docs/research/nuxt3-pinia-ssr-best-practices.md:487`: Code example contains placeholders
+- `docs/research/nuxt3-pinia-ssr-best-practices.md:518`: Code example contains placeholders
+- `docs/research/nuxt3-pinia-ssr-best-practices.md:617`: Code example contains placeholders
+- `docs/research/nuxt3-pinia-ssr-best-practices.md:656`: Code example contains placeholders
+- `docs/reviews/CODE_REVIEW_FAQ_PAGE.md:35`: Code example contains placeholders
+- `docs/reviews/CODE_REVIEW_FAQ_PAGE.md:148`: Code example contains placeholders
+- `docs/reviews/CODE_REVIEW_FAQ_PAGE.md:193`: Code example contains placeholders
+- `docs/reviews/CODE_REVIEW_FAQ_PAGE.md:222`: Code example contains placeholders
+- `docs/reviews/IMPROVEMENTS_APPLIED.md:31`: Code example contains placeholders
+- `docs/reviews/IMPROVEMENTS_APPLIED.md:67`: Code example contains placeholders
+- `docs/reviews/IMPROVEMENTS_APPLIED.md:121`: Code example contains placeholders
+- `docs/reviews/PR_REVIEW.md:106`: Code example contains placeholders
+- `docs/reviews/PR_REVIEW.md:111`: Code example contains placeholders
+- `docs/reviews/VISUAL_VALIDATION_RESULTS.md:31`: Code example contains placeholders
+- `docs/reviews/checkout-ux-review-2025-12-23.md:89`: Code example contains placeholders
+- `docs/reviews/checkout-ux-review-2025-12-23.md:166`: Code example contains placeholders
+- `docs/reviews/checkout-ux-review-2025-12-23.md:211`: Code example contains placeholders
+- `docs/reviews/checkout-ux-review-2025-12-23.md:274`: Code example contains placeholders
+- `docs/reviews/checkout-ux-review-2025-12-23.md:300`: Code example contains placeholders
+- `docs/security/GDPR_COMPLIANCE.md:149`: Code example contains placeholders
+- `docs/security/GDPR_COMPLIANCE.md:263`: Code example contains placeholders
+- `docs/security/GDPR_COMPLIANCE.md:281`: Code example contains placeholders
+- `docs/security/GDPR_COMPLIANCE.md:305`: Code example contains placeholders
+- `docs/security/GDPR_COMPLIANCE.md:344`: Code example contains placeholders
+- `docs/security/GDPR_COMPLIANCE.md:367`: Code example contains placeholders
+- `docs/security/GDPR_COMPLIANCE.md:410`: Code example contains placeholders
+- `docs/security/GDPR_COMPLIANCE.md:509`: Code example contains placeholders
+- `docs/security/GDPR_COMPLIANCE.md:518`: Code example contains placeholders
+- `docs/security/GDPR_COMPLIANCE.md:609`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:51`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:64`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:76`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:214`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:233`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:252`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:296`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:336`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:385`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:428`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:530`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:545`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:611`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:734`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:755`: Code example contains placeholders
+- `docs/security/SECURE_LOGGER.md:786`: Code example contains placeholders
+- `docs/specs/admin-dashboard/design.md:21`: Code example contains placeholders
+- `docs/specs/admin-dashboard/design.md:50`: Code example contains placeholders
+- `docs/specs/admin-dashboard/design.md:102`: Code example contains placeholders
+- `docs/specs/admin-dashboard/design.md:130`: Code example contains placeholders
+- `docs/specs/admin-dashboard/design.md:251`: Code example contains placeholders
+- `docs/specs/admin-dashboard/design.md:281`: Code example contains placeholders
+- `docs/specs/admin-order-management/ALIGNMENT_REVIEW.md:108`: Code example contains placeholders
+- `docs/specs/admin-order-management/FULFILLMENT_WORKFLOW.md:75`: Code example contains placeholders
+- `docs/specs/admin-order-management/MODERN_UI_IMPROVEMENTS.md:36`: Code example contains placeholders
+- `docs/specs/admin-order-management/MODERN_UI_IMPROVEMENTS.md:72`: Code example contains placeholders
+- `docs/specs/admin-order-management/MODERN_UI_IMPROVEMENTS.md:289`: Code example contains placeholders
+- `docs/specs/admin-order-management/MODERN_UI_IMPROVEMENTS.md:306`: Code example contains placeholders
+- `docs/specs/admin-order-management/QUICK_REFERENCE.md:6`: Code example contains placeholders
+- `docs/specs/admin-order-management/QUICK_REFERENCE.md:31`: Code example contains placeholders
+- `docs/specs/admin-order-management/QUICK_REFERENCE.md:46`: Code example contains placeholders
+- `docs/specs/admin-order-management/QUICK_REFERENCE.md:234`: Code example contains placeholders
+- `docs/specs/admin-order-management/QUICK_REFERENCE.md:244`: Code example contains placeholders
+- `docs/specs/admin-order-management/README.md:53`: Code example contains placeholders
+- `docs/specs/admin-order-management/STATUS_WORKFLOW.md:5`: Code example contains placeholders
+- `docs/specs/admin-order-management/UI_IMPROVEMENTS.md:12`: Code example contains placeholders
+- `docs/specs/admin-order-management/UI_IMPROVEMENTS.md:42`: Code example contains placeholders
+- `docs/specs/admin-order-management/UI_IMPROVEMENTS.md:51`: Code example contains placeholders
+- `docs/specs/admin-order-management/UI_IMPROVEMENTS.md:69`: Code example contains placeholders
+- `docs/specs/admin-order-management/UI_IMPROVEMENTS.md:77`: Code example contains placeholders
+- `docs/specs/admin-order-management/UI_IMPROVEMENTS.md:117`: Code example contains placeholders
+- `docs/specs/admin-order-management/UI_IMPROVEMENTS.md:128`: Code example contains placeholders
+- `docs/specs/admin-order-management/design.md:13`: Code example contains placeholders
+- `docs/specs/admin-order-management/design.md:65`: Code example contains placeholders
+- `docs/specs/admin-order-management/design.md:84`: Code example contains placeholders
+- `docs/specs/admin-order-management/design.md:116`: Code example contains placeholders
+- `docs/specs/admin-order-management/design.md:138`: Code example contains placeholders
+- `docs/specs/admin-order-management/design.md:159`: Code example contains placeholders
+- `docs/specs/admin-order-management/design.md:213`: Code example contains placeholders
+- `docs/specs/admin-order-management/design.md:320`: Code example contains placeholders
+- `docs/specs/admin-order-management/design.md:400`: Code example contains placeholders
+- `docs/specs/admin-order-management/design.md:590`: Code example contains placeholders
+- `docs/specs/code-refactoring/FIXES_APPLIED.md:41`: Code example contains placeholders
+- `docs/specs/code-refactoring/FIXES_APPLIED.md:89`: Code example contains placeholders
+- `docs/specs/code-refactoring/FIXES_APPLIED.md:207`: Code example contains placeholders
+- `docs/specs/code-refactoring/IMPLEMENTATION_SUMMARY.md:120`: Code example contains placeholders
+- `docs/specs/code-refactoring/design.md:95`: Code example contains placeholders
+- `docs/specs/code-refactoring/design.md:114`: Code example contains placeholders
+- `docs/specs/code-refactoring/design.md:135`: Code example contains placeholders
+- `docs/specs/code-refactoring/design.md:155`: Code example contains placeholders
+- `docs/specs/code-refactoring/design.md:171`: Code example contains placeholders
+- `docs/specs/code-refactoring/design.md:192`: Code example contains placeholders
+- `docs/specs/code-refactoring/design.md:225`: Code example contains placeholders
+- `docs/specs/code-refactoring/design.md:382`: Code example contains placeholders
+- `docs/specs/invoice-generation/design.md:13`: Code example contains placeholders
+- `docs/specs/order-confirmation-emails/TESTING-GUIDE.md:63`: Code example contains placeholders
+- `docs/specs/order-confirmation-emails/design.md:44`: Code example contains placeholders
+- `docs/specs/order-confirmation-emails/design.md:136`: Code example contains placeholders
+- `docs/specs/order-confirmation-emails/design.md:161`: Code example contains placeholders
+- `docs/specs/order-confirmation-emails/usage-examples.md:439`: Code example contains placeholders
+- `docs/specs/order-confirmation-emails/usage-examples.md:512`: Code example contains placeholders
+- `docs/specs/product-catalog/design.md:157`: Code example contains placeholders
+- `docs/specs/product-catalog/design.md:216`: Code example contains placeholders
+- `docs/specs/product-catalog/design.md:266`: Code example contains placeholders
+- `docs/specs/product-catalog/design.md:311`: Code example contains placeholders
+- `docs/specs/product-catalog/design.md:420`: Code example contains placeholders
+- `docs/specs/product-catalog/design.md:548`: Code example contains placeholders
+- `docs/specs/product-catalog/design.md:595`: Code example contains placeholders
+- `docs/specs/product-catalog/design.md:651`: Code example contains placeholders
+- `docs/specs/product-catalog/design.md:668`: Code example contains placeholders
+- `docs/specs/product-catalog/design.md:702`: Code example contains placeholders
+- `docs/specs/product-catalog/design.md:765`: Code example contains placeholders
+- `docs/specs/product-catalog/design.md:785`: Code example contains placeholders
+- `docs/specs/product-recommendations/design.md:13`: Code example contains placeholders
+- `docs/specs/product-recommendations/design.md:61`: Code example contains placeholders
+- `docs/specs/product-recommendations/design.md:149`: Code example contains placeholders
+- `docs/specs/product-recommendations/design.md:181`: Code example contains placeholders
+- `docs/specs/product-recommendations/design.md:235`: Code example contains placeholders
+- `docs/specs/product-recommendations/design.md:356`: Code example contains placeholders
+- `docs/specs/shipping-notifications/design.md:11`: Code example contains placeholders
+- `docs/specs/shipping-notifications/design.md:268`: Code example contains placeholders
+- `docs/specs/shopping-cart/design.md:11`: Code example contains placeholders
+- `docs/specs/shopping-cart/design.md:51`: Code example contains placeholders
+- `docs/specs/shopping-cart/design.md:106`: Code example contains placeholders
+- `docs/specs/shopping-cart/design.md:134`: Code example contains placeholders
+- `docs/specs/shopping-cart/design.md:152`: Code example contains placeholders
+- `docs/specs/shopping-cart/design.md:399`: Code example contains placeholders
+- `docs/specs/user-authentication/design.md:453`: Code example contains placeholders
+- `docs/specs/user-authentication/design.md:584`: Code example contains placeholders
+- `docs/specs/user-authentication/design.md:662`: Code example contains placeholders
+- `docs/specs/wishlist/design.md:21`: Code example contains placeholders
+- `docs/specs/wishlist/design.md:48`: Code example contains placeholders
+- `docs/specs/wishlist/design.md:61`: Code example contains placeholders
+- `docs/specs/wishlist/design.md:112`: Code example contains placeholders
+- `docs/specs/wishlist/design.md:133`: Code example contains placeholders
+- `docs/status/PROGRESS.md:73`: Code example contains placeholders
+- `docs/status/PROJECT_STATUS.md:232`: Code example contains placeholders
+- `docs/testing/MUTATION_TESTING_FINAL_REPORT.md:207`: Code example contains placeholders
+- `docs/testing/PRODUCTION_TESTING_STRATEGY.md:152`: Code example contains placeholders
+- `docs/testing/PRODUCTION_TESTING_STRATEGY.md:262`: Code example contains placeholders
+- `docs/testing/PRODUCTION_TESTING_STRATEGY.md:348`: Code example contains placeholders
+- `docs/testing/PRODUCTION_TESTING_STRATEGY.md:407`: Code example contains placeholders
+- `docs/testing/PRODUCTION_TESTING_STRATEGY.md:485`: Code example contains placeholders
+- `docs/testing/PRODUCTION_TESTING_STRATEGY.md:751`: Code example contains placeholders
+- `docs/testing/TESTING_AUDIT_AND_STRATEGY.md:103`: Code example contains placeholders
+- `docs/testing/TESTING_AUDIT_AND_STRATEGY.md:295`: Code example contains placeholders
+- `docs/testing/TESTING_REVIEW.md:63`: Code example contains placeholders
+- `docs/testing/TESTING_REVIEW.md:120`: Code example contains placeholders
+- `docs/testing/TESTING_REVIEW.md:155`: Code example contains placeholders
+- `docs/testing/TESTING_REVIEW.md:325`: Code example contains placeholders
+- `docs/testing/TESTING_REVIEW.md:340`: Code example contains placeholders
+- `docs/testing/VISUAL-REGRESSION-SETUP.md:154`: Code example contains placeholders
+- `docs/visual-regression/VISUAL_REGRESSION_ISSUES_AND_FIXES.md:15`: Code example contains placeholders
+- `docs/visual-regression/VISUAL_REGRESSION_ISSUES_AND_FIXES.md:25`: Code example contains placeholders
+- `docs/visual-regression/VISUAL_REGRESSION_ISSUES_AND_FIXES.md:43`: Code example contains placeholders
+- `docs/visual-regression/VISUAL_REGRESSION_ISSUES_AND_FIXES.md:122`: Code example contains placeholders
+- `docs/visual-regression/VISUAL_REGRESSION_REVIEW_REPORT.md:217`: Code example contains placeholders
+- `docs/visual-regression/VISUAL_REGRESSION_REVIEW_REPORT.md:236`: Code example contains placeholders
+- `docs/visual-regression/VISUAL_REGRESSION_SUMMARY.md:74`: Code example contains placeholders
+
+## Structure Issues
+
+Found 208 files with structure issues
+
+## Formatting Issues
+
+Found 1 files with formatting issues
+
+## Metadata Issues
+
+Found 320 files with metadata issues
+
+## Recommendations
+
+1. Fix 261 broken links
+2. Fix 825 invalid code examples
+3. Improve structure in 208 documents
+4. Add missing metadata to 320 documents

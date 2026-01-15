@@ -1,0 +1,104 @@
+{
+  "overallScore": 45,
+  "linkValidation": {
+    "totalLinks": 1,
+    "validLinks": 0,
+    "brokenLinks": [
+      {
+        "file": "/Users/vladislavcaraseli/Documents/MoldovaDirect/scripts/documentation/__tests__/fixtures/cli-test/docs/with-links.md",
+        "link": "./non-existent.md",
+        "line": 3
+      }
+    ]
+  },
+  "codeValidation": {
+    "totalExamples": 0,
+    "validExamples": 0,
+    "invalidExamples": []
+  },
+  "structureIssues": [
+    {
+      "hasRequiredSections": false,
+      "missingSections": [
+        "Overview",
+        "Parameters",
+        "Examples"
+      ],
+      "recommendations": [
+        "Reference docs should document parameters/options"
+      ]
+    },
+    {
+      "hasRequiredSections": false,
+      "missingSections": [
+        "Overview",
+        "Concepts"
+      ],
+      "recommendations": []
+    },
+    {
+      "hasRequiredSections": false,
+      "missingSections": [
+        "Introduction",
+        "Prerequisites",
+        "Steps"
+      ],
+      "recommendations": [
+        "Tutorials should include step-by-step instructions"
+      ]
+    }
+  ],
+  "formattingIssues": [],
+  "metadataIssues": [
+    {
+      "hasTitle": true,
+      "hasDescription": false,
+      "hasLastUpdated": false,
+      "hasTags": false,
+      "missingFields": [
+        "description",
+        "last-updated",
+        "tags"
+      ]
+    },
+    {
+      "hasTitle": true,
+      "hasDescription": false,
+      "hasLastUpdated": false,
+      "hasTags": false,
+      "missingFields": [
+        "description",
+        "last-updated",
+        "tags"
+      ]
+    },
+    {
+      "hasTitle": true,
+      "hasDescription": false,
+      "hasLastUpdated": false,
+      "hasTags": false,
+      "missingFields": [
+        "description",
+        "last-updated",
+        "tags"
+      ]
+    },
+    {
+      "hasTitle": true,
+      "hasDescription": false,
+      "hasLastUpdated": false,
+      "hasTags": false,
+      "missingFields": [
+        "description",
+        "last-updated",
+        "tags"
+      ]
+    }
+  ],
+  "recommendations": [
+    "Fix 1 broken links",
+    "Improve structure in 3 documents",
+    "Add missing metadata to 4 documents"
+  ],
+  "generatedAt": "2026-01-15T16:31:54.159Z"
+}
