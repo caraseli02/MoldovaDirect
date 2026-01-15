@@ -58,9 +58,10 @@ export async function createBackup(
     logger.info(`Total size: ${formatBytes(result.totalSize)}`)
 
     return result
-  } catch (error: any) {
-    result.errors.push(error.message)
-    logger.error(`Backup failed: ${error.message}`)
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    result.errors.push(errorMessage)
+    logger.error(`Backup failed: ${errorMessage}`)
     throw error
   }
 }

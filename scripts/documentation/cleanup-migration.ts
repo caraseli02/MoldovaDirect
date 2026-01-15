@@ -49,9 +49,11 @@ async function removeOldDirectories(): Promise<void> {
       await fs.access(dirPath)
       await fs.rm(dirPath, { recursive: true, force: true })
       console.log(`✓ Removed: ${dir}/`)
-    } catch (error: any) {
-      if (error.code !== 'ENOENT') {
-        console.error(`✗ Error removing ${dir}/:`, error.message)
+    } catch (error) {
+      const errorCode = error && typeof error === 'object' && 'code' in error ? error.code : undefined
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      if (errorCode !== 'ENOENT') {
+        console.error(`✗ Error removing ${dir}/:`, errorMessage)
       }
     }
   }
@@ -84,9 +86,11 @@ async function removeOldRootFiles(): Promise<void> {
       await fs.access(filePath)
       await fs.unlink(filePath)
       console.log(`✓ Removed: ${file}`)
-    } catch (error: any) {
-      if (error.code !== 'ENOENT') {
-        console.error(`✗ Error removing ${file}:`, error.message)
+    } catch (error) {
+      const errorCode = error && typeof error === 'object' && 'code' in error ? error.code : undefined
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      if (errorCode !== 'ENOENT') {
+        console.error(`✗ Error removing ${file}:`, errorMessage)
       }
     }
   }
@@ -130,8 +134,9 @@ async function cleanupBackups(): Promise<void> {
     }
 
     console.log(`\n✓ Cleaned up ${toRemove.length} old backup(s)`)
-  } catch (error: any) {
-    if (error.code === 'ENOENT') {
+  } catch (error) {
+    const errorCode = error && typeof error === 'object' && 'code' in error ? error.code : undefined
+    if (errorCode === 'ENOENT') {
       console.log('\n✓ No backups directory found')
     } else {
       console.error('Error cleaning up backups:', error.message)
@@ -206,8 +211,9 @@ async function main(): Promise<void> {
     // Step 4: Display summary
     await displaySummary()
 
-  } catch (error: any) {
-    console.error('\n❌ Cleanup failed:', error.message)
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    console.error('\n❌ Cleanup failed:', errorMessage)
     process.exit(1)
   }
 }

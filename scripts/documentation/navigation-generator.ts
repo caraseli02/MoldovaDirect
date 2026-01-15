@@ -340,6 +340,7 @@ export class NavigationGenerator {
 
       // Check if this is a heading that has detailed content
       if (line.startsWith('## ') || line.startsWith('### ')) {
+        const heading = line.replace(/^#+\s+/, '').trim()
 
         // Check if this section has detailed content
         if (detailedSections.has(heading)) {

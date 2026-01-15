@@ -58,12 +58,12 @@ export class ContentOrganizer {
           organizedPath: targetPath,
           errors: [],
         })
-      } catch (error: any) {
+      } catch (error) {
         results.push({
           success: false,
           originalPath: file.path,
           organizedPath: '',
-          errors: [error.message],
+          errors: [error instanceof Error ? error.message : String(error)],
         })
       }
     }
@@ -114,12 +114,12 @@ export class ContentOrganizer {
           organizedPath: targetPath,
           errors: [],
         })
-      } catch (error: any) {
+      } catch (error) {
         results.push({
           success: false,
           originalPath: file.path,
           organizedPath: '',
-          errors: [error.message],
+          errors: [error instanceof Error ? error.message : String(error)],
         })
       }
     }

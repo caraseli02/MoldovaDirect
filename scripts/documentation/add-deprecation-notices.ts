@@ -49,11 +49,13 @@ async function addDeprecationNotice(
     await fs.writeFile(filePath, newContent, 'utf-8')
     
     console.log(`[✓] Added deprecation notice: ${filePath} -> ${newPath}`)
-  } catch (error: any) {
-    if (error.code === 'ENOENT') {
+  } catch (error) {
+    const errorCode = error && typeof error === 'object' && 'code' in error ? error.code : undefined
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    if (errorCode === 'ENOENT') {
       console.log(`[SKIP] File no longer exists: ${filePath}`)
     } else {
-      console.error(`[ERROR] Failed to add deprecation notice to ${filePath}:`, error.message)
+      console.error(`[ERROR] Failed to add deprecation notice to ${filePath}:`, errorMessage)
     }
   }
 }
@@ -133,9 +135,11 @@ async function main(): Promise<void> {
         }
         
         await addDeprecationNotice(readmePath, newLocation)
-      } catch (error: any) {
-        if (error.code !== 'ENOENT') {
-          console.error(`Error processing ${readmePath}:`, error.message)
+      } catch (error) {
+        const errorCode = error && typeof error === 'object' && 'code' in error ? error.code : undefined
+        const errorMessage = error instanceof Error ? error.message : String(error)
+        if (errorCode !== 'ENOENT') {
+          console.error(`Error processing ${readmePath}:`, errorMessage)
         }
       }
     }
@@ -154,8 +158,9 @@ async function main(): Promise<void> {
     console.log(`[✓] Redirects configuration saved to: ${redirectsPath}`)
     
     console.log('\n✅ Deprecation notices and redirects completed!')
-  } catch (error: any) {
-    console.error('Error:', error.message)
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    console.error('Error:', errorMessage)
     process.exit(1)
   }
 }

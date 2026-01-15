@@ -57,9 +57,10 @@ export class ContentMigrator {
     for (const dir of directories) {
       try {
         await fs.mkdir(dir, { recursive: true })
-      } catch (error: any) {
+      } catch (error) {
+        const errorCode = error && typeof error === 'object' && 'code' in error ? error.code : undefined
         // If directory already exists, that's fine
-        if (error.code !== 'EEXIST') {
+        if (errorCode !== 'EEXIST') {
           throw new MigrationError(
             `Failed to create directory ${dir}`,
             'DIRECTORY_CREATION_FAILED',
@@ -134,8 +135,9 @@ export class ContentMigrator {
         linksUpdated: 0, // Will be updated by link updater
         errors: [],
       }
-    } catch (error: any) {
-      errors.push(error.message)
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      errors.push(errorMessage)
       return {
         success: false,
         oldPath: mapping.oldPath,
@@ -295,7 +297,7 @@ export class ContentMigrator {
     try {
       // Try to use git mv to preserve history
       await execFileAsync('git', ['mv', oldPath, newPath])
-    } catch (error: any) {
+    } catch (error) {
       // If git mv fails, fall back to regular copy
       // This might happen if:
       // - Not in a git repository

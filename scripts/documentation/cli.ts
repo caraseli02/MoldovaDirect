@@ -83,8 +83,9 @@ function parseCliArgs(): CLIOptions {
         help: values.help as boolean,
       },
     }
-  } catch (error: any) {
-    console.error(`Error parsing arguments: ${error.message}`)
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    console.error(`Error parsing arguments: ${errorMessage}`)
     process.exit(1)
   }
 }
@@ -186,10 +187,12 @@ async function main(): Promise<void> {
 
     logger.info('Command completed successfully')
     process.exit(0)
-  } catch (error: any) {
-    logger.error(`Command failed: ${error.message}`)
-    if (options.flags.verbose && error.stack) {
-      logger.error(error.stack)
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    const errorStack = error instanceof Error ? error.stack : undefined
+    logger.error(`Command failed: ${errorMessage}`)
+    if (options.flags.verbose && errorStack) {
+      logger.error(errorStack)
     }
     process.exit(1)
   }

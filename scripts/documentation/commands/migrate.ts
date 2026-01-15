@@ -117,13 +117,14 @@ export async function runMigrate(options: CLIOptions, logger: Logger): Promise<v
             })
             logger.error(`${progress} ✗ Failed: ${result.errors.join(', ')}`)
           }
-        } catch (error: any) {
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : String(error)
           state.failedFiles++
           state.errors.push({
             file: mapping.oldPath,
-            error: error.message,
+            error: errorMessage,
           })
-          logger.error(`${progress} ✗ Error: ${error.message}`)
+          logger.error(`${progress} ✗ Error: ${errorMessage}`)
         }
       } else {
         logger.info(`${progress} [DRY-RUN] Would migrate: ${mapping.oldPath} -> ${mapping.newPath}`)
@@ -160,8 +161,9 @@ export async function runMigrate(options: CLIOptions, logger: Logger): Promise<v
           const updatedContent = await linkUpdater.updateLinksInContent(content, linkMap, filePath)
           await fs.writeFile(filePath, updatedContent, 'utf-8')
           logger.verbose(`Updated links in: ${filePath}`)
-        } catch (error: any) {
-          logger.warn(`Failed to update links in ${filePath}: ${error.message}`)
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : String(error)
+          logger.warn(`Failed to update links in ${filePath}: ${errorMessage}`)
         }
       }
 
@@ -183,11 +185,12 @@ export async function runMigrate(options: CLIOptions, logger: Logger): Promise<v
       await saveMigrationReport(state, migrationMap, results, reportPath, logger)
     }
 
-  } catch (error: any) {
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
     state.phase = 'failed'
     state.completionTime = new Date()
 
-    logger.error(`\nMigration failed: ${error.message}`)
+    logger.error(`\nMigration failed: ${errorMessage}`)
 
     if (!dryRun && state.backupPath) {
       logger.info('\nAttempting rollback...')
