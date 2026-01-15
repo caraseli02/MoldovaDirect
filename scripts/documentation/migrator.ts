@@ -303,8 +303,9 @@ export class ContentMigrator {
       // - Not in a git repository
       // - File is not tracked by git
       // - Git is not installed
+      const errorMessage = error instanceof Error ? error.message : String(error)
       console.warn(
-        `Could not preserve Git history for ${oldPath}: ${error.message}`,
+        `Could not preserve Git history for ${oldPath}: ${errorMessage}`,
       )
       console.warn('Falling back to regular file copy')
     }

@@ -136,10 +136,11 @@ async function cleanupBackups(): Promise<void> {
     console.log(`\n✓ Cleaned up ${toRemove.length} old backup(s)`)
   } catch (error) {
     const errorCode = error && typeof error === 'object' && 'code' in error ? error.code : undefined
+    const errorMessage = error instanceof Error ? error.message : String(error)
     if (errorCode === 'ENOENT') {
       console.log('\n✓ No backups directory found')
     } else {
-      console.error('Error cleaning up backups:', error.message)
+      console.error('Error cleaning up backups:', errorMessage)
     }
   }
 }
