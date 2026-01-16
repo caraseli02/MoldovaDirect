@@ -29,18 +29,18 @@ Our documentation is organized by **what you want to do**:
 **You want to:** Look up technical details  
 **Start here if:** You need API docs or specifications
 
-- [API Documentation](./reference/api/)
-- [Architecture Specs](./reference/architecture/)
-- [Component Library](./reference/components/)
-- [Configuration](./reference/configuration/)
+- [API Documentation](./reference/api/) - API reference and usage guides
+- [Architecture Specs](./reference/architecture/) - Requirements and implementation specs
+- [Component Library](./reference/components/) - Component inventory and library
+- [Configuration](./reference/configuration/) - Code and documentation conventions
 
 ### 💡 [Explanation](./explanation/) - Understanding
 **You want to:** Understand why things work the way they do  
 **Start here if:** You want to understand concepts and decisions
 
-- [Architecture](./explanation/architecture/) - System design
-- [Decisions](./explanation/decisions/) - Why we made certain choices
-- [Concepts](./explanation/concepts/) - Core concepts explained
+- [Architecture](./explanation/architecture/) - System design and architecture docs
+- [Decisions](./explanation/decisions/) - ADRs and why we made certain choices
+- [Concepts](./explanation/concepts/) - Core concepts, research, and analysis
 
 ### 📁 [Project](./project/) - Project Management
 **You want to:** Project status and management info  
@@ -48,7 +48,10 @@ Our documentation is organized by **what you want to do**:
 
 - [Migration Announcement](project/migration-announcement.md) - 📢 New structure!
 - [Migration Summary](project/production-migration-summary.md)
-- [Maintenance Guide](project/maintenance-guide.md)
+- [Maintenance Guide](project/guides/maintenance-guide.md)
+- [Project Status](project/status/project-status.md) - Current development phase
+- [Roadmap](project/roadmap/roadmap.md) - Development timeline
+- [Project Automation](project/guides/project-automation-explained.md) - Automation setup
 - [Changelog](CHANGELOG.md)
 
 ---
@@ -140,7 +143,7 @@ pnpm test:e2e
 
 ### Updating Documentation
 
-See [Maintenance Guide](project/maintenance-guide.md) for:
+See [Maintenance Guide](project/guides/maintenance-guide.md) for:
 - How to add new documentation
 - Where to place different types of docs
 - Documentation quality standards
@@ -204,7 +207,7 @@ See [Migration Summary](project/production-migration-summary.md) for details.
 
 ### Documentation Issues
 1. Check [Migration Announcement](project/migration-announcement.md)
-2. Review [Migration Guide](project/migration-guide.md)
+2. Review [Migration Guide](project/guides/migration-guide.md)
 3. See [Quality Report](../scripts/documentation/quality-report.md)
 
 ### Old Documentation Locations
@@ -240,8 +243,9 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 
 ### For Developers
 - [Quick Start Guide](tutorials/quick-start-guide.md)
-- [Code Conventions](reference/code-conventions.md)
+- [Code Conventions](reference/configuration/code-conventions.md)
 - [Testing Guide](how-to/testing/quick-reference.md)
+- [Tech Stack](explanation/concepts/tech-stack.md)
 
 ### For AI Tools
 - [llms.txt](../llms.txt) - Quick overview
@@ -251,8 +255,8 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 
 ### For Project Management
 - [Migration Summary](project/production-migration-summary.md)
-- [Maintenance Guide](project/maintenance-guide.md)
-- [Roadmap](project/roadmap.md)
+- [Maintenance Guide](project/guides/maintenance-guide.md)
+- [Roadmap](project/roadmap/roadmap.md)
 
 ---
 
