@@ -48,10 +48,10 @@ Our documentation is organized by **what you want to do**:
 
 - [Migration Announcement](project/migration-announcement.md) - 📢 New structure!
 - [Migration Summary](project/production-migration-summary.md)
-- [Maintenance Guide](project/maintenance-guide.md)
-- [Project Status](project/project-status.md) - Current development phase
-- [Roadmap](project/roadmap-1.md) - Development timeline
-- [Project Automation](project/project-automation-explained.md) - Automation setup
+- [Maintenance Guide](project/guides/maintenance-guide.md)
+- [Project Status](project/status/project-status.md) - Current development phase
+- [Roadmap](project/roadmap/roadmap.md) - Development timeline
+- [Project Automation](project/guides/project-automation-explained.md) - Automation setup
 - [Changelog](CHANGELOG.md)
 
 ---
@@ -143,7 +143,7 @@ pnpm test:e2e
 
 ### Updating Documentation
 
-See [Maintenance Guide](project/maintenance-guide.md) for:
+See [Maintenance Guide](project/guides/maintenance-guide.md) for:
 - How to add new documentation
 - Where to place different types of docs
 - Documentation quality standards
@@ -207,7 +207,7 @@ See [Migration Summary](project/production-migration-summary.md) for details.
 
 ### Documentation Issues
 1. Check [Migration Announcement](project/migration-announcement.md)
-2. Review [Migration Guide](project/migration-guide.md)
+2. Review [Migration Guide](project/guides/migration-guide.md)
 3. See [Quality Report](../scripts/documentation/quality-report.md)
 
 ### Old Documentation Locations
@@ -254,8 +254,8 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 
 ### For Project Management
 - [Migration Summary](project/production-migration-summary.md)
-- [Maintenance Guide](project/maintenance-guide.md)
-- [Roadmap](project/roadmap.md)
+- [Maintenance Guide](project/guides/maintenance-guide.md)
+- [Roadmap](project/roadmap/roadmap.md)
 
 ---
 
