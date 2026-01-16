@@ -29,10 +29,10 @@ Our documentation is organized by **what you want to do**:
 **You want to:** Look up technical details  
 **Start here if:** You need API docs or specifications
 
-- [API Documentation](./reference/api/)
-- [Architecture Specs](./reference/architecture/)
-- [Component Library](./reference/components/)
-- [Configuration](./reference/configuration/)
+- [API Documentation](./reference/api/) - API reference and usage guides
+- [Architecture Specs](./reference/architecture/) - Requirements and implementation specs
+- [Component Library](./reference/components/) - Component inventory and library
+- [Configuration](./reference/configuration/) - Code and documentation conventions
 
 ### 💡 [Explanation](./explanation/) - Understanding
 **You want to:** Understand why things work the way they do  
@@ -243,7 +243,7 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 
 ### For Developers
 - [Quick Start Guide](tutorials/quick-start-guide.md)
-- [Code Conventions](reference/code-conventions.md)
+- [Code Conventions](reference/configuration/code-conventions.md)
 - [Testing Guide](how-to/testing/quick-reference.md)
 
 ### For AI Tools
