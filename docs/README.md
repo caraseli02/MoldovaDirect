@@ -49,6 +49,9 @@ Our documentation is organized by **what you want to do**:
 - [Migration Announcement](project/migration-announcement.md) - 📢 New structure!
 - [Migration Summary](project/production-migration-summary.md)
 - [Maintenance Guide](project/maintenance-guide.md)
+- [Project Status](project/project-status.md) - Current development phase
+- [Roadmap](project/roadmap-1.md) - Development timeline
+- [Project Automation](project/project-automation-explained.md) - Automation setup
 - [Changelog](CHANGELOG.md)
 
 ---
