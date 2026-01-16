@@ -38,9 +38,9 @@ Our documentation is organized by **what you want to do**:
 **You want to:** Understand why things work the way they do  
 **Start here if:** You want to understand concepts and decisions
 
-- [Architecture](./explanation/architecture/) - System design
-- [Decisions](./explanation/decisions/) - Why we made certain choices
-- [Concepts](./explanation/concepts/) - Core concepts explained
+- [Architecture](./explanation/architecture/) - System design and architecture docs
+- [Decisions](./explanation/decisions/) - ADRs and why we made certain choices
+- [Concepts](./explanation/concepts/) - Core concepts, research, and analysis
 
 ### 📁 [Project](./project/) - Project Management
 **You want to:** Project status and management info  
@@ -245,6 +245,7 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 - [Quick Start Guide](tutorials/quick-start-guide.md)
 - [Code Conventions](reference/configuration/code-conventions.md)
 - [Testing Guide](how-to/testing/quick-reference.md)
+- [Tech Stack](explanation/concepts/tech-stack.md)
 
 ### For AI Tools
 - [llms.txt](../llms.txt) - Quick overview
