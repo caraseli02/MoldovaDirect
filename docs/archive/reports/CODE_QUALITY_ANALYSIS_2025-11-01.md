@@ -447,7 +447,58 @@ wc -l pages/products/index.vue
 - Large bundle size
 - Poor code-splitting
 
+**Current Test Coverage Assessment (60% Ready):**
+
+✅ **Well Tested:**
+- E2E pagination tests (11 test cases)
+- API integration tests (9 test cases)
+- Product component tests (10 files)
+- `useProductPagination` composable (40+ tests)
+- Visual regression tests
+
+❌ **Critical Testing Gaps:**
+- No tests for `pages/products/index.vue` itself
+- No tests for `pages/products/[slug].vue`
+- **9 product composables have NO tests (93% untested):**
+  - `useProductCatalog.ts` (279 lines) - NO TESTS
+  - `useProductFilters.ts` - NO TESTS
+  - `useProductSearch.ts` - NO TESTS
+  - `useProductUtils.ts` - NO TESTS
+  - `useProductDetailSEO.ts` - NO TESTS
+  - `useProductStructuredData.ts` - NO TESTS
+  - `useProductStockStatus.ts` - NO TESTS
+  - `useProductStory.ts` - NO TESTS
+  - `useProductPlaceholder.ts` - NO TESTS
+
+**⚠️ Refactoring Risk Without Tests:**
+- Subtle bugs in filter logic
+- State management issues
+- URL sync problems
+- Edge cases in search/filter combinations
+- E2E tests will catch major breakage but not subtle bugs
+
 **Recommended Solution:**
+
+**Phase 1: Add Safety Net Tests (2-3 days) - REQUIRED BEFORE REFACTORING**
+
+```typescript
+// 1. Page integration tests
+tests/pages/products/index.test.ts
+  - Test filter + search + pagination integration
+  - Test URL sync for all query params
+  - Test state management across navigation
+  - Snapshot current behavior
+
+// 2. Composable unit tests (priority order)
+tests/composables/useProductFilters.test.ts (HIGH - filter logic)
+tests/composables/useProductSearch.test.ts (HIGH - search logic)
+tests/composables/useProductCatalog.test.ts (HIGH - catalog state)
+tests/composables/useProductUtils.test.ts (MEDIUM)
+tests/composables/useProductStockStatus.test.ts (MEDIUM)
+```
+
+**Phase 2: Refactor with Confidence (4 days)**
+
 ```
 pages/products/index.vue (200 lines)
   ├─ components/product/Filters.vue (150 lines)
@@ -458,21 +509,23 @@ pages/products/index.vue (200 lines)
 
 composables/useProductFilters.ts (200 lines)
 composables/useProductSearch.ts (150 lines)
-composables/useProductPagination.ts (100 lines)
+composables/useProductPagination.ts (100 lines) ✅ Already tested
 ```
 
 **Benefits:**
-- Faster rendering
+- Easier to maintain
+- Better testability
+- Improved performance
 - Better code reuse
-- Easier testing
-- Improved maintainability
-- Better performance
+- Easier for new developers
+- **Confidence that refactoring preserves behavior**
 
 **Related Issues:**
 - Similar to Issue #6 in ISSUES_FROM_REVIEW.md
 - Issue #84 (component duplication)
+- Issue #91 (missing composable tests)
 
-**Estimated Fix Time:** 4 days
+**Estimated Fix Time:** 6-7 days total (2-3 days testing + 4 days refactoring)
 
 ---
 

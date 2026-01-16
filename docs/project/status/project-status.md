@@ -335,8 +335,22 @@ NODE_ENV=production
 ## 📝 Remaining Action Items
 
 ### Code Quality (HIGH - Next 2 Weeks)
+
 1. **Refactor Products Page** - Split 915-line component into smaller modules
+   - **Phase 1 (2-3 days):** Add safety net tests FIRST
+     - Create page integration tests (`tests/pages/products/index.test.ts`)
+     - Add composable unit tests for `useProductFilters`, `useProductSearch`, `useProductCatalog`
+     - Add snapshot tests for current behavior
+     - **Current Gap:** 9 product composables have NO tests (93% untested)
+   - **Phase 2 (4 days):** Refactor with confidence
+     - Extract components (Filters, SearchBar, Grid, Pagination)
+     - Extract composables with test coverage
+     - Reduce main page to <200 lines
+   - **Total Effort:** 6-7 days
+   - **Risk:** HIGH without Phase 1 tests (subtle bugs in filter/search logic)
+
 2. **Split Auth Store** - Break 1,172-line store into focused modules
+
 3. **Add API Authorization** - Secondary authorization checks at API route level
 
 ### Testing (MEDIUM - Next Month)

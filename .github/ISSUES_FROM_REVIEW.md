@@ -364,6 +364,7 @@ The products page component is 915 lines long, making it difficult to maintain, 
 
 **Location:**
 - File: `pages/products/index.vue:1-914`
+- File: `pages/products/[slug].vue` (product detail page)
 
 **Current Issues:**
 - **915 lines** (recommended: <400)
@@ -373,7 +374,51 @@ The products page component is 915 lines long, making it difficult to maintain, 
 - Poor code reusability
 - Slow render performance
 
+**Current Test Coverage (60% Ready):**
+✅ **Well Tested:**
+- E2E pagination tests (`tests/e2e/products-pagination.spec.ts` - 11 tests)
+- API integration tests (`tests/api/products-api.test.ts` - 9 tests)
+- Product component tests (10 component test files)
+- `useProductPagination` composable (40+ tests)
+- Visual regression tests
+
+❌ **Missing Tests (Critical Gap):**
+- No tests for `pages/products/index.vue` (915 lines)
+- No tests for `pages/products/[slug].vue` (detail page)
+- 9 product composables have NO tests:
+  - `useProductCatalog.ts` (279 lines)
+  - `useProductFilters.ts`
+  - `useProductSearch.ts`
+  - `useProductUtils.ts`
+  - `useProductDetailSEO.ts`
+  - `useProductStructuredData.ts`
+  - `useProductStockStatus.ts`
+  - `useProductStory.ts`
+  - `useProductPlaceholder.ts`
+
+**⚠️ REFACTORING RISK:** Without composable tests, refactoring may introduce subtle bugs in filter logic, state management, and URL sync that E2E tests won't catch.
+
 **Proposed Solution:**
+**Phase 1: Add Safety Net Tests (2-3 days) - DO THIS FIRST**
+
+```typescript
+// 1. Add page-level integration tests
+tests/pages/products/index.test.ts
+  - Test filter + search + pagination integration
+  - Test URL sync for all query params
+  - Test state management across navigation
+  - Snapshot current behavior
+
+// 2. Add composable unit tests (priority order)
+tests/composables/useProductFilters.test.ts (HIGH)
+tests/composables/useProductSearch.test.ts (HIGH)
+tests/composables/useProductCatalog.test.ts (HIGH)
+tests/composables/useProductUtils.test.ts (MEDIUM)
+tests/composables/useProductStockStatus.test.ts (MEDIUM)
+```
+
+**Phase 2: Refactor with Confidence (4 days)**
+
 Split into focused components:
 
 ```
@@ -389,10 +434,20 @@ pages/products/index.vue (200 lines)
 
 composables/useProductFilters.ts (200 lines)
 composables/useProductSearch.ts (150 lines)
-composables/useProductPagination.ts (100 lines)
+composables/useProductPagination.ts (100 lines) ✅ Already tested
 ```
 
 **Acceptance Criteria:**
+
+**Phase 1 (Testing):**
+- [ ] Create `tests/pages/products/index.test.ts` with integration tests
+- [ ] Create `tests/composables/useProductFilters.test.ts` (>80% coverage)
+- [ ] Create `tests/composables/useProductSearch.test.ts` (>80% coverage)
+- [ ] Create `tests/composables/useProductCatalog.test.ts` (>80% coverage)
+- [ ] Add snapshot tests for current page behavior
+- [ ] All new tests passing
+
+**Phase 2 (Refactoring):**
 - [ ] Create `components/product/Filters.vue` (<150 lines)
 - [ ] Create `components/product/SearchBar.vue` (<100 lines)
 - [ ] Create `components/product/Grid.vue` (<120 lines)
@@ -400,7 +455,7 @@ composables/useProductPagination.ts (100 lines)
 - [ ] Extract filter logic to `composables/useProductFilters.ts`
 - [ ] Extract search logic to `composables/useProductSearch.ts`
 - [ ] Main page component <200 lines
-- [ ] All tests passing
+- [ ] All tests passing (including new ones from Phase 1)
 - [ ] Performance benchmarks maintained
 - [ ] Update documentation
 
@@ -410,12 +465,14 @@ composables/useProductPagination.ts (100 lines)
 - Improved performance
 - Better code reuse
 - Easier onboarding for new developers
+- Confidence that refactoring preserves behavior
 
 **References:**
 - Code Review: `/CODE_REVIEW_2025.md` - Section 1.1
+- Test Coverage Analysis: Testing readiness assessment (2026-01-16)
 - Vue Component Best Practices: https://vuejs.org/guide/best-practices/
 
-**Estimated Effort:** 4 days
+**Estimated Effort:** 6-7 days total (2-3 days testing + 4 days refactoring)
 
 ---
 
