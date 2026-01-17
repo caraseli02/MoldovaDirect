@@ -130,7 +130,7 @@ Use the built-in QA dashboards to simulate user activity without touching produc
 ⚠️ **Known Issues (From Code Review)**
 - Admin middleware temporarily disabled for testing (CRITICAL - needs re-enabling)
 - Missing rate limiting on authentication endpoints
-- Products page needs refactoring (915 lines)
+- Products page needs refactoring (915 lines) - **Test plan ready:** See `docs/how-to/testing/products-page-refactoring-test-plan.md`
 - Auth store needs splitting (1,172 lines)
 
 📝 **Recent Changes (November 2025)**
