@@ -360,3 +360,11 @@ Screenshots follow: `[name]-[viewport].png`
 **Last Updated:** 2026-01-06
 **Admin Status:** All 5 pages working ✅
 **Docs Structure:** Role-based navigation (January 2026 cleanup)
+
+
+---
+
+## Plan Mode
+
+- Make the plan extremely concise. Sacrifice grammar for the sake of concision.
+- At the end of each plan, give me a list of unresolved questions to answer, if any.
