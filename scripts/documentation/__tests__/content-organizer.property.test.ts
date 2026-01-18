@@ -153,7 +153,10 @@ describe('ContentOrganizer Property Tests', () => {
           ),
         }),
         async ({ name, keyword }) => {
-          const howToRoot = path.join(testDir, 'how-to')
+          // Use a unique directory for each run to avoid collisions
+          const uniqueId = Math.random().toString(36).substring(7)
+          const runDir = path.join(testDir, `run-${uniqueId}`)
+          const howToRoot = path.join(runDir, 'how-to')
           await fs.mkdir(howToRoot, { recursive: true })
 
           const filePath = path.join(howToRoot, name)
@@ -175,17 +178,13 @@ describe('ContentOrganizer Property Tests', () => {
           )
 
           expect(results).toHaveLength(1)
-          expect(results[0].success).toBe(true)
+          const result = results[0]
+          expect(result).toBeDefined()
+          expect(result!.success).toBe(true)
 
           // Verify file is in the correct feature subdirectory
-          const organizedPath = results[0].organizedPath
+          const organizedPath = result!.organizedPath
           expect(organizedPath).toContain(keyword)
-
-          // Clean up for next iteration
-          await fs.rm(path.join(howToRoot, keyword), {
-            recursive: true,
-            force: true,
-          })
         },
       ),
       { numRuns: 100 },
@@ -302,7 +301,10 @@ describe('ContentOrganizer Property Tests', () => {
           ),
         }),
         async ({ name, keyword }) => {
-          const referenceRoot = path.join(testDir, 'reference')
+          // Use a unique directory for each run to avoid collisions
+          const uniqueId = Math.random().toString(36).substring(7)
+          const runDir = path.join(testDir, `run-${uniqueId}`)
+          const referenceRoot = path.join(runDir, 'reference')
           await fs.mkdir(referenceRoot, { recursive: true })
 
           const filePath = path.join(referenceRoot, name)
@@ -324,17 +326,13 @@ describe('ContentOrganizer Property Tests', () => {
           )
 
           expect(results).toHaveLength(1)
-          expect(results[0].success).toBe(true)
+          const result = results[0]
+          expect(result).toBeDefined()
+          expect(result!.success).toBe(true)
 
           // Verify file is in the correct domain subdirectory
-          const organizedPath = results[0].organizedPath
+          const organizedPath = result!.organizedPath
           expect(organizedPath).toContain(keyword)
-
-          // Clean up for next iteration
-          await fs.rm(path.join(referenceRoot, keyword), {
-            recursive: true,
-            force: true,
-          })
         },
       ),
       { numRuns: 100 },
