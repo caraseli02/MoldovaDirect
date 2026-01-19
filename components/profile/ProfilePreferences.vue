@@ -25,6 +25,8 @@ interface Props {
 
 const { preferredLanguage, preferredCurrency } = defineProps<Props>()
 
+const { t } = useI18n()
+
 const emit = defineEmits<{
   /** Emitted when language selection changes */
   'update:language': [value: 'es' | 'en' | 'ro' | 'ru']
@@ -35,10 +37,10 @@ const emit = defineEmits<{
 }>()
 
 const languageOptions = [
-  { value: 'es', label: 'Español' },
-  { value: 'en', label: 'English' },
-  { value: 'ro', label: 'Română' },
-  { value: 'ru', label: 'Русский' },
+  { value: 'es', labelKey: 'profile.languages.es' },
+  { value: 'en', labelKey: 'profile.languages.en' },
+  { value: 'ro', labelKey: 'profile.languages.ro' },
+  { value: 'ru', labelKey: 'profile.languages.ru' },
 ] as const
 
 const currencyOptions = [
@@ -86,7 +88,7 @@ const selectArrowIcon = 'url(\'data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27
           :key="option.value"
           :value="option.value"
         >
-          {{ option.label }}
+          {{ $t(option.labelKey) }}
         </option>
       </select>
     </div>

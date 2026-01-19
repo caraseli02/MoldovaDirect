@@ -11,9 +11,7 @@ if ! pnpm run test:quick; then
   echo ""
   echo "❌ Tests failed! Push blocked."
   echo ""
-  echo "Options:"
-  echo "  - Fix failing tests"
-  echo "  - Use 'git push --no-verify' to skip (not recommended)"
+  echo "Please fix failing tests before pushing."
   exit 1
 fi
 

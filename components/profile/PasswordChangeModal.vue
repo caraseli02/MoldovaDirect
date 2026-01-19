@@ -7,9 +7,15 @@
  *
  * @example
  * ```vue
- * <PasswordChangeModal v-if="showPasswordModal" @close="showPasswordModal = false" />
+ * <PasswordChangeModal :show="showPasswordModal" @close="showPasswordModal = false" />
  * ```
  */
+
+interface Props {
+  show: boolean
+}
+
+defineProps<Props>()
 
 const emit = defineEmits<{
   close: []
@@ -62,7 +68,7 @@ function trapFocus(event: KeyboardEvent) {
       leave-to-class="opacity-0"
     >
       <div
-        v-if="true"
+        v-if="show"
         ref="modalRef"
         role="dialog"
         aria-modal="true"

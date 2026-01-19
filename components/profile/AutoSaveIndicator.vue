@@ -21,14 +21,16 @@ interface Props {
 
 const { status } = defineProps<Props>()
 
+const { t } = useI18n()
+
 const saveStatusText = computed(() => {
   switch (status) {
     case 'saving':
-      return 'Saving...'
+      return t('profile.saving')
     case 'saved':
-      return 'All changes saved'
+      return t('profile.saved')
     case 'error':
-      return 'Failed to save changes'
+      return t('profile.saveError')
     default:
       return ''
   }

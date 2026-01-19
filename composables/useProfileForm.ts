@@ -15,37 +15,8 @@ import { computed, reactive, ref, watch } from 'vue'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 import { PROFILE_VALIDATION } from './profile/validation-constants'
-
-interface ToastPlugin {
-  success: (message: string) => void
-  error: (message: string) => void
-}
-
-interface UserMetadata {
-  name?: string
-  full_name?: string
-  phone?: string
-  preferred_language?: 'es' | 'en' | 'ro' | 'ru'
-  preferred_currency?: 'EUR' | 'USD' | 'MDL'
-}
-
-interface SupabaseUser {
-  email?: string | null
-  user_metadata?: UserMetadata
-}
-
-interface ProfileForm {
-  name: string
-  email: string
-  phone: string
-  preferredLanguage: 'es' | 'en' | 'ro' | 'ru'
-  preferredCurrency: 'EUR' | 'USD' | 'MDL'
-}
-
-interface ProfileFormErrors {
-  name: string
-  phone: string
-}
+import type { ProfileForm, ProfileFormErrors, SupabaseUser } from '~/types/user'
+import type { ToastPlugin } from '~/types/plugins'
 
 interface UseProfileFormOptions {
   /** Supabase client instance */

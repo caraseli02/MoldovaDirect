@@ -461,18 +461,19 @@ const handleSubmit = async () => {
 
   isLoading.value = true
 
-  try {
-    emit('save', { ...form })
-  }
-  catch (error: unknown) {
-    console.error('Error saving address:', error)
-    // CRITICAL FIX: Show toast error so user knows save failed
-    const errorMsg = getErrorMessage(error)
-    $toast.error(errorMsg || t('profile.errors.addressSaveFailed'))
-  }
-  finally {
-    isLoading.value = false
-  }
+  // Emit save event - parent component handles actual save and errors
+  // Parent will close modal on success or keep open on error
+  emit('save', { ...form })
+
+  // Note: emit() is synchronous and doesn't throw.
+  // The parent component handles the actual async save operation.
+  // On success, parent calls closeAddressForm() which unmounts this component.
+  // On error, we provide a fallback timeout to reset loading state.
+  setTimeout(() => {
+    if (isLoading.value) {
+      isLoading.value = false
+    }
+  }, 5000) // Reset after 5 seconds if parent hasn't closed modal
 }
 
 // Initialize form on mount

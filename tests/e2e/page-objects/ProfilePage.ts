@@ -77,11 +77,11 @@ export class ProfilePage {
     this.securityAccordion = accordionButtons.nth(3)
 
     // Form Fields
-    this.nameInput = page.locator('input[id="name"]')
-    this.emailInput = page.locator('input[id="email"]')
-    this.phoneInput = page.locator('input[id="phone"]')
-    this.languageSelect = page.locator('select[id="language"]')
-    this.currencySelect = page.locator('select[id="currency"]')
+    this.nameInput = page.locator('[data-testid="profile-name-input"]')
+    this.emailInput = page.locator('[data-testid="profile-email-input"]')
+    this.phoneInput = page.locator('[data-testid="profile-phone-input"]')
+    this.languageSelect = page.locator('[data-testid="profile-language-select"]')
+    this.currencySelect = page.locator('[data-testid="profile-currency-select"]')
 
     // Addresses (Scoped to accordion)
     const addressSection = page.locator('main').filter({ hasText: /direcciones|addresses/i })
@@ -240,6 +240,45 @@ export class ProfilePage {
   // ===========================================
   // Visibility & State helpers
   // ===========================================
+
+  // ===========================================
+  // I18n Verification
+  // ===========================================
+
+  async getPersonalHeader(): Promise<string> {
+    const text = await this.personalInfoAccordion.textContent()
+    return text?.trim() || ''
+  }
+
+  async getPreferencesHeader(): Promise<string> {
+    const text = await this.preferencesAccordion.textContent()
+    return text?.trim() || ''
+  }
+
+  async getAddressesHeader(): Promise<string> {
+    const text = await this.addressesAccordion.textContent()
+    return text?.trim() || ''
+  }
+
+  async getSecurityHeader(): Promise<string> {
+    const text = await this.securityAccordion.textContent()
+    return text?.trim() || ''
+  }
+
+  // ===========================================
+  // Error Handling
+  // ===========================================
+
+  async getErrorToast(): Promise<Locator> {
+    // Selector based on Sonner usage in the codebase
+    // Broadened regex to catch "Error", "Failed", "Fallo", "Erro"
+    return this.page.locator('[role="status"], .sonner-toast, [data-sonner-toast]').filter({ hasText: /error|fail|fallo|erro/i }).first()
+  }
+
+  async waitForErrorToast(timeout: number = 5000) {
+    const toast = await this.getErrorToast()
+    await expect(toast).toBeVisible({ timeout })
+  }
 
   async isFieldEditable(field: Locator): Promise<boolean> {
     return await field.isEditable()

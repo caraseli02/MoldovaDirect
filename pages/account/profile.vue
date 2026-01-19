@@ -249,13 +249,13 @@
 
     <!-- Password Change Modal (Placeholder) -->
     <PasswordChangeModal
-      v-if="showPasswordModal"
+      :show="showPasswordModal"
       @close="showPasswordModal = false"
     />
 
     <!-- 2FA Modal (Placeholder) -->
     <TwoFAModal
-      v-if="show2FAModal"
+      :show="show2FAModal"
       @close="show2FAModal = false"
     />
 
@@ -325,7 +325,9 @@ import ProfileSecuritySection from '~/components/profile/ProfileSecuritySection.
 import TwoFAModal from '~/components/profile/TwoFAModal.vue'
 import AutoSaveIndicator from '~/components/profile/AutoSaveIndicator.vue'
 
-// Type imports - use canonical types
+// Type imports - use shared types
+import type { ProfileForm } from '~/types/user'
+import type { ToastPlugin } from '~/types/plugins'
 import type { Address, AddressEntity } from '~/types/address'
 
 // Database address type alias for internal use
@@ -336,25 +338,10 @@ definePageMeta({
   middleware: 'auth',
 })
 
-interface ProfileForm {
-  name: string
-  email: string
-  phone: string
-  preferredLanguage: 'es' | 'en' | 'ro' | 'ru'
-  preferredCurrency: 'EUR' | 'USD' | 'MDL'
-}
-
-interface ToastPlugin {
-  success: (message: string) => void
-  error: (message: string) => void
-  warning?: (message: string) => void
-  info?: (message: string) => void
-}
-
 // Composables and utilities
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
-const { t } = useI18n()
+const { t, setLocale } = useI18n()
 const nuxtApp = useNuxtApp()
 const $toast = nuxtApp.$toast as ToastPlugin
 
@@ -647,6 +634,11 @@ const handleSave = async () => {
 
     // Update original form to reflect saved state
     originalForm.value = { ...form }
+
+    // Switch locale if language changed
+    if (form.preferredLanguage) {
+      setLocale(form.preferredLanguage)
+    }
 
     saveStatus.value = 'saved'
 

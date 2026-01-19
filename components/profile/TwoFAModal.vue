@@ -7,9 +7,15 @@
  *
  * @example
  * ```vue
- * <TwoFAModal v-if="show2FAModal" @close="show2FAModal = false" />
+ * <TwoFAModal :show="show2FAModal" @close="show2FAModal = false" />
  * ```
  */
+
+interface Props {
+  show: boolean
+}
+
+defineProps<Props>()
 
 const emit = defineEmits<{
   close: []
@@ -62,7 +68,7 @@ function trapFocus(event: KeyboardEvent) {
       leave-to-class="opacity-0"
     >
       <div
-        v-if="true"
+        v-if="show"
         ref="modalRef"
         role="dialog"
         aria-modal="true"

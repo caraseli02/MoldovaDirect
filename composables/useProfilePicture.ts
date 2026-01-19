@@ -13,28 +13,13 @@
  */
 
 import type { Ref } from 'vue'
-import { computed, ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 import { getErrorMessage } from '~/utils/errorUtils'
 import { PROFILE_VALIDATION, SAVE_TIMING, type SaveStatus } from './profile/validation-constants'
-
-interface ToastPlugin {
-  success: (message: string) => void
-  error: (message: string) => void
-}
-
-interface UserMetadata {
-  avatar_url?: string | null
-  name?: string
-  full_name?: string
-}
-
-interface SupabaseUser {
-  id: string
-  email?: string | null
-  user_metadata?: UserMetadata
-}
+import type { SupabaseUser } from '~/types/user'
+import type { ToastPlugin } from '~/types/plugins'
 
 interface UseProfilePictureOptions {
   /** Supabase client instance */
@@ -92,6 +77,9 @@ export function useProfilePicture(options: UseProfilePictureOptions): UseProfile
   const isLoading = ref(false)
   const fileInputRef = ref<HTMLInputElement>()
   const formName = ref('')
+
+  // Track timeouts for cleanup
+  const timeouts: ReturnType<typeof setTimeout>[] = []
 
   /**
    * User's initials computed from form name or email
@@ -184,9 +172,10 @@ export function useProfilePicture(options: UseProfilePictureOptions): UseProfile
       $toast.success(t('profile.success.pictureUpdated'))
 
       // Auto-hide saved status
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         onStatusChange('idle')
       }, SAVE_TIMING.SAVED_STATUS_DURATION)
+      timeouts.push(timeoutId)
     }
     catch (error: unknown) {
       console.error('Error uploading profile picture:', getErrorMessage(error))
@@ -195,9 +184,10 @@ export function useProfilePicture(options: UseProfilePictureOptions): UseProfile
       $toast.error(`${t('profile.errors.uploadFailed')}: ${errorMessage}`)
 
       // Auto-hide error status
-      setTimeout(() => {
+      const errorTimeoutId = setTimeout(() => {
         onStatusChange('idle')
       }, SAVE_TIMING.ERROR_STATUS_DURATION)
+      timeouts.push(errorTimeoutId)
     }
     finally {
       isLoading.value = false
@@ -245,9 +235,10 @@ export function useProfilePicture(options: UseProfilePictureOptions): UseProfile
       $toast.success(t('profile.success.pictureRemoved'))
 
       // Auto-hide saved status
-      setTimeout(() => {
+      const savedTimeoutId = setTimeout(() => {
         onStatusChange('idle')
       }, SAVE_TIMING.SAVED_STATUS_DURATION)
+      timeouts.push(savedTimeoutId)
     }
     catch (error: unknown) {
       console.error('Error removing profile picture:', getErrorMessage(error))
@@ -255,14 +246,20 @@ export function useProfilePicture(options: UseProfilePictureOptions): UseProfile
       $toast.error(t('profile.errors.removeFailed'))
 
       // Auto-hide error status
-      setTimeout(() => {
+      const errorTimeoutId = setTimeout(() => {
         onStatusChange('idle')
       }, SAVE_TIMING.ERROR_STATUS_DURATION)
+      timeouts.push(errorTimeoutId)
     }
     finally {
       isLoading.value = false
     }
   }
+
+  // Cleanup timeouts on unmount
+  onUnmounted(() => {
+    timeouts.forEach(clearTimeout)
+  })
 
   return {
     profilePictureUrl,

@@ -839,6 +839,12 @@
       "enable2FA": "Enable 2FA",
       "enable2FADescription": "Two-factor authentication will be available soon."
     },
+    "languages": {
+      "es": "Spanish",
+      "en": "English",
+      "ro": "Romanian",
+      "ru": "Russian"
+    },
     "addresses": "Addresses",
     "addressesDescription": "Manage your shipping and billing addresses",
     "addAddress": "Add Address",
