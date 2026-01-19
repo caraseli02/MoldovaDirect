@@ -52,6 +52,7 @@ async function authenticateUser(context: any) {
 }
 
 test.describe('Profile Address Management', () => {
+  test.describe.configure({ mode: 'serial' })
   let profilePage: ProfilePage
 
   test.beforeEach(async ({ context, page }) => {
@@ -68,10 +69,11 @@ test.describe('Profile Address Management', () => {
   test('should add a new shipping address', async () => {
     const initialCount = await profilePage.getAddressCount()
 
+    const timestamp = Date.now()
     const newAddress = {
-      firstName: 'Jane',
-      lastName: 'Doe',
-      street: 'Calle Mayor 100',
+      firstName: `Jane-${timestamp}`,
+      lastName: 'Doe-Test',
+      street: `Calle Mayor ${timestamp}`,
       city: 'Madrid',
       postalCode: '28013',
       country: 'ES',
@@ -84,7 +86,7 @@ test.describe('Profile Address Management', () => {
     expect(finalCount).toBe(initialCount + 1)
 
     // Verify names in list
-    await expect(profilePage.addressNames.last()).toContainText('Jane Doe')
+    await expect(profilePage.addressNames.last()).toHaveText(/Jane-\d+ Doe-Test/)
   })
 
   test('should edit an existing address', async () => {
@@ -102,15 +104,15 @@ test.describe('Profile Address Management', () => {
     }
 
     const updatedAddress = {
-      firstName: 'Edited',
-      lastName: 'Name',
+      firstName: 'Edited-Name',
+      lastName: 'Surname',
       street: 'Updated Street 123',
     }
 
     await profilePage.editAddress(0, updatedAddress)
 
     // Verify update
-    await expect(profilePage.addressNames.first()).toContainText('Edited Name')
+    await expect(profilePage.addressNames.first()).toContainText('Edited-Name Surname')
     await expect(profilePage.addressCards.first()).toContainText('Updated Street 123')
   })
 
@@ -167,6 +169,36 @@ test.describe('Profile Address Management', () => {
     const postalCodeError = profilePage.addressDialog.locator('p:has-text("postal")')
     await expect(postalCodeError).toBeVisible()
 
+    await profilePage.addrCancelButton.click()
+  })
+  test('should not allow creating duplicate addresses', async ({ page: _page }) => {
+    // 1. Add an address with unique data
+    const timestamp = Date.now()
+    const address = {
+      firstName: `Dup-${timestamp}`,
+      lastName: 'Test',
+      street: `Dup St ${timestamp}`,
+      city: 'Duplicate City',
+      postalCode: '12345',
+      country: 'ES',
+      phone: '123456789',
+    }
+
+    await profilePage.addAddress(address)
+
+    // 2. Try to add the same address again
+    await profilePage.addAddressButton.click()
+    await profilePage.fillAddressForm(address)
+    await profilePage.addrSaveButton.click()
+
+    // 3. Verify save was prevented (dialog still open)
+    await expect(profilePage.addressDialog).toBeVisible()
+
+    // Optional: check for error message if stable, but dialog open is sufficient proof it didn't save
+    // const errorToast = page.getByText(/Address/i)
+    // await expect(errorToast).toBeVisible()
+
+    // 4. Close modal
     await profilePage.addrCancelButton.click()
   })
 })

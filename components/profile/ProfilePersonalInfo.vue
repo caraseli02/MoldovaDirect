@@ -1,0 +1,134 @@
+<script setup lang="ts">
+/**
+ * Profile Personal Info Component
+ *
+ * Name, email (disabled), and phone input fields with validation errors.
+ * Displays user's personal information in the profile form.
+ *
+ * @example
+ * ```vue
+ * <ProfilePersonalInfo
+ *   :form="form"
+ *   :errors="errors"
+ *   @update:name="form.name = $event"
+ *   @update:phone="form.phone = $event"
+ *   @input="debouncedSave"
+ * />
+ * ```
+ */
+
+import type { ProfileForm, ProfileFormErrors } from '~/composables/useProfileForm'
+
+interface Props {
+  /** Current form values */
+  form: ProfileForm
+  /** Form validation errors */
+  errors: ProfileFormErrors
+}
+
+const { form, errors } = defineProps<Props>()
+
+const emit = defineEmits<{
+  /** Emitted when name input changes */
+  'update:name': [value: string]
+  /** Emitted when phone input changes */
+  'update:phone': [value: string]
+  /** Emitted on any input change (for auto-save) */
+  'input': []
+}>()
+
+function updateName(event: Event) {
+  const value = (event.target as HTMLInputElement).value
+  emit('update:name', value)
+  emit('input')
+}
+
+function updatePhone(event: Event) {
+  const value = (event.target as HTMLInputElement).value
+  emit('update:phone', value)
+  emit('input')
+}
+</script>
+
+<template>
+  <div class="space-y-4">
+    <!-- Name Input -->
+    <div>
+      <label
+        for="profile-name"
+        class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+      >
+        {{ $t('auth.labels.fullName') }} *
+      </label>
+      <input
+        id="profile-name"
+        :value="form.name"
+        type="text"
+        required
+        class="w-full px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-white transition-all duration-200"
+        :class="{ 'border-red-500 focus:ring-red-500': errors.name }"
+        :placeholder="$t('auth.placeholders.fullName')"
+        data-testid="profile-name-input"
+        @input="updateName"
+      />
+      <p
+        v-if="errors.name"
+        class="mt-1 text-sm text-red-600 dark:text-red-400"
+        data-testid="profile-name-error"
+      >
+        {{ errors.name }}
+      </p>
+    </div>
+
+    <!-- Email Input (Disabled) -->
+    <div>
+      <label
+        for="profile-email"
+        class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+      >
+        {{ $t('auth.labels.email') }} *
+      </label>
+      <input
+        id="profile-email"
+        :value="form.email"
+        type="email"
+        required
+        disabled
+        class="w-full px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg shadow-sm bg-zinc-50 dark:bg-zinc-600 text-zinc-500 dark:text-zinc-400 cursor-not-allowed"
+        :placeholder="$t('auth.placeholders.email')"
+        data-testid="profile-email-input"
+      />
+      <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+        {{ $t('profile.emailCannotBeChanged') }}
+      </p>
+    </div>
+
+    <!-- Phone Input -->
+    <div>
+      <label
+        for="profile-phone"
+        class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+      >
+        {{ $t('auth.labels.phone') }}
+      </label>
+      <input
+        id="profile-phone"
+        :value="form.phone"
+        type="tel"
+        inputmode="tel"
+        class="w-full px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-white transition-all duration-200"
+        :class="{ 'border-red-500 focus:ring-red-500': errors.phone }"
+        :placeholder="$t('auth.placeholders.phone')"
+        data-testid="profile-phone-input"
+        @input="updatePhone"
+      />
+      <p
+        v-if="errors.phone"
+        class="mt-1 text-sm text-red-600 dark:text-red-400"
+        data-testid="profile-phone-error"
+      >
+        {{ errors.phone }}
+      </p>
+    </div>
+  </div>
+</template>

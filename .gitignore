@@ -149,6 +149,9 @@ playwright.*.config.ts
 .tmp/
 .temp/
 
+# Property test temp directories
+scripts/**/__tests__/temp-*/
+
 # Screenshots
 screenshots/
 visual-regression-screenshots/

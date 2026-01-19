@@ -97,6 +97,7 @@
         <!-- Total Orders Card -->
         <NuxtLink
           :to="localePath('/account/orders')"
+          data-testid="stats-total-orders"
           class="bg-white dark:bg-zinc-800 border-2 border-primary-200 dark:border-primary-900 rounded-xl p-4 hover:border-primary-300 dark:hover:border-primary-800 hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
         >
           <div class="flex items-center justify-between mb-2">
@@ -134,7 +135,10 @@
         </NuxtLink>
 
         <!-- Wishlist Card -->
-        <div class="bg-white dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700 rounded-xl p-4">
+        <div
+          data-testid="stats-wishlist"
+          class="bg-white dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700 rounded-xl p-4"
+        >
           <div class="flex items-center justify-between mb-2">
             <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">
               {{ $t('account.wishlistItems') }}
@@ -198,7 +202,9 @@
           v-else-if="orderStats.error"
           class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center"
         >
-          <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div
+            class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
             <svg
               class="w-6 h-6 text-red-600 dark:text-red-400"
               fill="none"
@@ -262,7 +268,9 @@
           v-else
           class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-12 text-center"
         >
-          <div class="w-16 h-16 bg-zinc-100 dark:bg-zinc-700 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div
+            class="w-16 h-16 bg-zinc-100 dark:bg-zinc-700 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
             <svg
               class="w-8 h-8 text-zinc-400 dark:text-zinc-500"
               fill="none"
@@ -298,6 +306,7 @@
           <!-- Profile Button -->
           <NuxtLink
             :to="localePath('/account/profile')"
+            data-testid="quick-profile"
             class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
           >
             <div class="flex flex-col items-center text-center">
@@ -325,6 +334,7 @@
           <!-- Addresses Button -->
           <NuxtLink
             :to="localePath('/account/profile')"
+            data-testid="quick-addresses"
             class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
           >
             <div class="flex flex-col items-center text-center">
@@ -357,6 +367,7 @@
 
           <!-- Payment Methods Button -->
           <button
+            data-testid="quick-payment"
             class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
             disabled
           >
@@ -385,6 +396,7 @@
           <!-- Returns Button -->
           <NuxtLink
             :to="localePath('/account/orders')"
+            data-testid="quick-returns"
             class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
           >
             <div class="flex flex-col items-center text-center">
