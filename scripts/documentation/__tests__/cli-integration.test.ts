@@ -153,12 +153,13 @@ describe('CLI Integration Tests', () => {
         'utf-8'
       )
 
+      const outputPath = path.join(testDir, 'quality-report-error.json')
       const logger = createMockLogger()
 
       const options: CLIOptions = {
         command: 'validate',
         args: [path.join(testDir, 'docs')],
-        flags: {},
+        flags: { output: outputPath },
       }
 
       await runValidate(options, logger)
@@ -194,10 +195,10 @@ describe('CLI Integration Tests', () => {
       expect(agentsMdExists).toBe(true)
 
       // Clean up generated files
-      await fs.unlink('llms.txt').catch(() => {})
-      await fs.unlink('AGENTS.md').catch(() => {})
-      await fs.unlink('.cursorrules').catch(() => {})
-      await fs.rm('docs/ai-context', { recursive: true, force: true }).catch(() => {})
+      await fs.unlink('llms.txt').catch(() => { })
+      await fs.unlink('AGENTS.md').catch(() => { })
+      await fs.unlink('.cursorrules').catch(() => { })
+      await fs.rm('docs/ai-context', { recursive: true, force: true }).catch(() => { })
     })
   })
 })
