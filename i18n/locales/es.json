@@ -876,6 +876,15 @@
     "country": "País",
     "phone": "Teléfono",
     "phonePlaceholder": "Número de teléfono (opcional)",
+    "countries": {
+      "ES": "España",
+      "FR": "Francia",
+      "IT": "Italia",
+      "PT": "Portugal",
+      "DE": "Alemania",
+      "MD": "Moldavia",
+      "RO": "Rumanía"
+    },
     "deleteAccount": "Eliminar Cuenta",
     "deleteAccountWarning": "Esta acción no se puede deshacer",
     "deleteAccountConsequences": {

@@ -35,9 +35,12 @@ export interface AddressEntity {
 /**
  * Client/UI representation (camelCase)
  * Used by Vue components and composables
+ *
+ * Note: id is optional - not present when creating a new address,
+ * present when loading an existing address from the database.
  */
 export interface Address {
-  id?: number
+  id?: number // Not present for new addresses
   type: 'shipping' | 'billing'
   firstName: string
   lastName: string

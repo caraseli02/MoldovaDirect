@@ -224,26 +224,12 @@
                 v-model="form.country"
                 class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
               >
-                <option value="ES">
-                  España
-                </option>
-                <option value="FR">
-                  France
-                </option>
-                <option value="IT">
-                  Italia
-                </option>
-                <option value="PT">
-                  Portugal
-                </option>
-                <option value="DE">
-                  Deutschland
-                </option>
-                <option value="MD">
-                  Moldova
-                </option>
-                <option value="RO">
-                  România
+                <option
+                  v-for="country in countryOptions"
+                  :key="country.value"
+                  :value="country.value"
+                >
+                  {{ country.label }}
                 </option>
               </select>
             </div>
@@ -335,11 +321,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import type { Address } from '~/types/address'
-
-interface ToastPlugin {
-  success: (message: string) => void
-  error: (message: string) => void
-}
+import type { ToastPlugin } from '~/types/plugins'
 
 interface Props {
   address?: Address | null
@@ -391,6 +373,17 @@ const errors = reactive({
   postalCode: '',
   phone: '',
 })
+
+// Country options with i18n
+const countryOptions = computed(() => [
+  { value: 'ES', label: t('profile.countries.ES') },
+  { value: 'FR', label: t('profile.countries.FR') },
+  { value: 'IT', label: t('profile.countries.IT') },
+  { value: 'PT', label: t('profile.countries.PT') },
+  { value: 'DE', label: t('profile.countries.DE') },
+  { value: 'MD', label: t('profile.countries.MD') },
+  { value: 'RO', label: t('profile.countries.RO') },
+])
 
 // Handle dialog open state change (when ESC pressed or backdrop clicked)
 const handleOpenChange = (open: boolean) => {

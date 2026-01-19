@@ -876,6 +876,15 @@
     "country": "Country",
     "phone": "Phone",
     "phonePlaceholder": "Phone number (optional)",
+    "countries": {
+      "ES": "Spain",
+      "FR": "France",
+      "IT": "Italy",
+      "PT": "Portugal",
+      "DE": "Germany",
+      "MD": "Moldova",
+      "RO": "Romania"
+    },
     "deleteAccount": "Delete Account",
     "deleteAccountWarning": "This action cannot be undone",
     "deleteAccountConsequences": {

@@ -670,6 +670,15 @@
     "country": "Țară",
     "phone": "Telefon",
     "phonePlaceholder": "Număr de telefon (opțional)",
+    "countries": {
+      "ES": "Spania",
+      "FR": "Franța",
+      "IT": "Italia",
+      "PT": "Portugalia",
+      "DE": "Germania",
+      "MD": "Moldova",
+      "RO": "România"
+    },
     "deleteAccount": "Șterge Contul",
     "deleteAccountWarning": "Această acțiune nu poate fi anulată",
     "deleteAccountConsequences": {
