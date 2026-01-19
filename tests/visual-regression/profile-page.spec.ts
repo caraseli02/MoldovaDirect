@@ -1,19 +1,6 @@
-/**
- * Visual Regression Tests - Profile Page
- *
- * Tests visual consistency of the authenticated profile page.
- * Uses Playwright's toHaveScreenshot() for pixel-perfect comparisons.
- *
- * Usage:
- * - First run: Creates baseline screenshots
- * - Subsequent runs: Compares against baselines
- * - Update baselines: npx playwright test --update-snapshots
- *
- * @see https://playwright.dev/docs/test-snapshots
- */
-
 import { test, expect } from '@playwright/test'
 import { createClient } from '@supabase/supabase-js'
+import { ProfilePage } from '../e2e/page-objects/ProfilePage'
 
 // Common options for screenshot comparison
 const screenshotOptions = {
@@ -29,6 +16,7 @@ const dynamicContentMasks = [
   '.skeleton-loader',
   '.animate-pulse',
   '[data-testid="profile-completion"]', // Dynamic completion percentage
+  '[data-testid="save-status"]', // Auto-save indicator
 ]
 
 // Test credentials from environment
@@ -81,22 +69,23 @@ async function authenticateUser(context: any) {
 }
 
 test.describe('Profile Page Visual Regression', () => {
+  let profilePage: ProfilePage
+
   test.beforeEach(async ({ context, page }) => {
     const isAuthenticated = await authenticateUser(context)
     if (!isAuthenticated) {
       test.skip()
     }
 
-    await page.goto('/account/profile')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1500) // Wait for accordions and avatars to load
+    profilePage = new ProfilePage(page)
+    await profilePage.goto()
   })
 
   test('profile page renders correctly on desktop', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 })
 
     // Verify profile page loaded
-    await expect(page.locator('h1, h2').first()).toBeVisible()
+    await expect(profilePage.title).toBeVisible()
 
     await expect(page).toHaveScreenshot('profile-desktop.png', {
       ...screenshotOptions,
@@ -108,7 +97,7 @@ test.describe('Profile Page Visual Regression', () => {
   test('profile page renders correctly on tablet', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 })
 
-    await expect(page.locator('h1, h2').first()).toBeVisible()
+    await expect(profilePage.title).toBeVisible()
 
     await expect(page).toHaveScreenshot('profile-tablet.png', {
       ...screenshotOptions,
@@ -120,7 +109,7 @@ test.describe('Profile Page Visual Regression', () => {
   test('profile page renders correctly on mobile', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 })
 
-    await expect(page.locator('h1, h2').first()).toBeVisible()
+    await expect(profilePage.title).toBeVisible()
 
     await expect(page).toHaveScreenshot('profile-mobile.png', {
       ...screenshotOptions,
@@ -129,27 +118,17 @@ test.describe('Profile Page Visual Regression', () => {
     })
   })
 
-  test('avatar section renders correctly', async ({ page }) => {
-    await page.setViewportSize({ width: 1920, height: 1080 })
-
-    // Find avatar section
-    const avatarSection = page.locator('.relative.group, [class*="avatar"]').first()
-
-    if (await avatarSection.isVisible({ timeout: 3000 })) {
-      await expect(avatarSection).toHaveScreenshot('profile-avatar.png', {
+  test('avatar section renders correctly', async () => {
+    if (await profilePage.avatarSection.isVisible({ timeout: 3000 })) {
+      await expect(profilePage.avatarSection).toHaveScreenshot('profile-avatar.png', {
         ...screenshotOptions,
       })
     }
   })
 
-  test('camera button has correct touch target (44px)', async ({ page }) => {
-    await page.setViewportSize({ width: 1920, height: 1080 })
-
-    // Find camera button
-    const cameraButton = page.locator('button[aria-label*="picture" i], button[aria-label*="foto" i], .absolute button').first()
-
-    if (await cameraButton.isVisible({ timeout: 3000 })) {
-      const box = await cameraButton.boundingBox()
+  test('camera button has correct touch target (44px)', async () => {
+    if (await profilePage.cameraButton.isVisible({ timeout: 3000 })) {
+      const box = await profilePage.cameraButton.boundingBox()
       expect(box).not.toBeNull()
       expect(box!.width).toBeGreaterThanOrEqual(44)
       expect(box!.height).toBeGreaterThanOrEqual(44)
@@ -158,63 +137,34 @@ test.describe('Profile Page Visual Regression', () => {
 })
 
 test.describe('Profile Page Accordion Interactions', () => {
+  let profilePage: ProfilePage
+
   test.beforeEach(async ({ context, page }) => {
     const isAuthenticated = await authenticateUser(context)
     if (!isAuthenticated) {
       test.skip()
     }
 
-    await page.goto('/account/profile')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1500)
+    profilePage = new ProfilePage(page)
+    await profilePage.goto()
   })
 
   test('personal information accordion expands correctly', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 })
 
-    // Find and click personal info accordion
-    const personalInfoAccordion = page.locator('[data-state], button[aria-expanded]').first()
+    await profilePage.toggleAccordion(profilePage.personalInfoAccordion, 'open')
 
-    if (await personalInfoAccordion.isVisible({ timeout: 3000 })) {
-      // Ensure it's expanded
-      const isExpanded = await personalInfoAccordion.getAttribute('data-state') === 'open'
-        || await personalInfoAccordion.getAttribute('aria-expanded') === 'true'
-
-      if (!isExpanded) {
-        await personalInfoAccordion.click()
-        await page.waitForTimeout(500)
-      }
-
-      await expect(page).toHaveScreenshot('profile-accordion-personal.png', {
-        ...screenshotOptions,
-        fullPage: true,
-        mask: dynamicContentMasks.map(s => page.locator(s)),
-      })
-    }
+    await expect(page).toHaveScreenshot('profile-accordion-personal.png', {
+      ...screenshotOptions,
+      fullPage: true,
+      mask: dynamicContentMasks.map(s => page.locator(s)),
+    })
   })
 
   test('all accordions expanded view', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 })
 
-    // Expand all accordions
-    const accordions = await page.$$('[data-state], button[aria-expanded]')
-
-    for (const accordion of accordions) {
-      const state = await accordion.getAttribute('data-state')
-      const expanded = await accordion.getAttribute('aria-expanded')
-
-      if (state === 'closed' || expanded === 'false') {
-        try {
-          await accordion.click()
-          await page.waitForTimeout(300)
-        }
-        catch {
-          // Ignore click errors
-        }
-      }
-    }
-
-    await page.waitForTimeout(500)
+    await profilePage.expandAllAccordions()
 
     await expect(page).toHaveScreenshot('profile-all-accordions-open.png', {
       ...screenshotOptions,
@@ -225,34 +175,28 @@ test.describe('Profile Page Accordion Interactions', () => {
 })
 
 test.describe('Profile Page Form Inputs', () => {
+  let profilePage: ProfilePage
+
   test.beforeEach(async ({ context, page }) => {
     const isAuthenticated = await authenticateUser(context)
     if (!isAuthenticated) {
       test.skip()
     }
 
-    await page.goto('/account/profile')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1500)
+    profilePage = new ProfilePage(page)
+    await profilePage.goto()
   })
 
   test('form inputs are accessible and editable', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 })
 
-    // Expand personal info accordion if needed
-    const personalInfo = page.locator('[data-state="closed"]').first()
-    if (await personalInfo.isVisible({ timeout: 2000 })) {
-      await personalInfo.click()
-      await page.waitForTimeout(500)
-    }
+    await profilePage.toggleAccordion(profilePage.personalInfoAccordion, 'open')
 
-    // Check name input
-    const nameInput = page.locator('input[id="name"], input[name="name"]').first()
-    if (await nameInput.isVisible({ timeout: 3000 })) {
-      await expect(nameInput).toBeEditable()
+    if (await profilePage.nameInput.isVisible({ timeout: 3000 })) {
+      await expect(profilePage.nameInput).toBeEditable()
 
-      // Test input interaction
-      await nameInput.fill('Test Name')
+      // Test input interaction (don't use the POM updateName to avoid waiting for save here if we want a specific screenshot)
+      await profilePage.nameInput.fill('Test Name')
       await page.waitForTimeout(500)
 
       await expect(page).toHaveScreenshot('profile-form-filled.png', {
@@ -266,32 +210,27 @@ test.describe('Profile Page Form Inputs', () => {
   test('phone input accepts valid format', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 })
 
-    // Expand personal info accordion if needed
-    const accordions = await page.$$('[data-state="closed"]')
-    for (const acc of accordions) {
-      await acc.click()
-      await page.waitForTimeout(300)
-    }
+    await profilePage.expandAllAccordions()
 
-    const phoneInput = page.locator('input[id="phone"], input[name="phone"], input[type="tel"]').first()
-    if (await phoneInput.isVisible({ timeout: 3000 })) {
-      await expect(phoneInput).toBeEditable()
-      await phoneInput.fill('+1234567890')
+    if (await profilePage.phoneInput.isVisible({ timeout: 3000 })) {
+      await expect(profilePage.phoneInput).toBeEditable()
+      await profilePage.phoneInput.fill('+1234567890')
       await page.waitForTimeout(300)
     }
   })
 })
 
 test.describe('Profile Page Accessibility', () => {
+  let profilePage: ProfilePage
+
   test.beforeEach(async ({ context, page }) => {
     const isAuthenticated = await authenticateUser(context)
     if (!isAuthenticated) {
       test.skip()
     }
 
-    await page.goto('/account/profile')
-    await page.waitForLoadState('networkidle')
-    await page.waitForTimeout(1500)
+    profilePage = new ProfilePage(page)
+    await profilePage.goto()
   })
 
   test('keyboard navigation works correctly', async ({ page }) => {
@@ -322,12 +261,7 @@ test.describe('Profile Page Accessibility', () => {
   test('touch targets meet minimum size requirements', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 })
 
-    // Expand all accordions to show all buttons
-    const accordions = await page.$$('[data-state="closed"]')
-    for (const acc of accordions) {
-      await acc.click()
-      await page.waitForTimeout(300)
-    }
+    await profilePage.expandAllAccordions()
 
     // Check profile-specific buttons (not header/footer)
     const profileContainer = page.locator('main')
@@ -342,8 +276,6 @@ test.describe('Profile Page Accessibility', () => {
     }
 
     // Allow small buttons for accordion chevrons and icon buttons
-    // Important action buttons (camera, submit, delete) should still be 44px+
-    // We verified the camera button separately above
     expect(smallButtonsInProfile).toBeLessThan(10)
   })
 })

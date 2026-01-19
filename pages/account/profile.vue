@@ -31,7 +31,9 @@
         </div>
 
         <!-- Profile Content -->
-        <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden">
+        <div
+          class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden"
+        >
           <!-- Profile Picture Section (Always Visible) -->
           <div class="border-b border-zinc-200 dark:border-zinc-700">
             <div class="p-6 text-center">
@@ -409,7 +411,9 @@
           >
             <div class="space-y-3">
               <!-- Password -->
-              <div class="flex justify-between items-center p-4 bg-zinc-50 dark:bg-zinc-700/50 rounded-lg border border-zinc-200 dark:border-zinc-600">
+              <div
+                class="flex justify-between items-center p-4 bg-zinc-50 dark:bg-zinc-700/50 rounded-lg border border-zinc-200 dark:border-zinc-600"
+              >
                 <div>
                   <p class="text-sm font-medium text-zinc-900 dark:text-white">
                     {{ $t('profile.sections.password') }}
@@ -428,7 +432,9 @@
               </div>
 
               <!-- 2FA -->
-              <div class="flex justify-between items-center p-4 bg-zinc-50 dark:bg-zinc-700/50 rounded-lg border border-zinc-200 dark:border-zinc-600">
+              <div
+                class="flex justify-between items-center p-4 bg-zinc-50 dark:bg-zinc-700/50 rounded-lg border border-zinc-200 dark:border-zinc-600"
+              >
                 <div>
                   <p class="text-sm font-medium text-zinc-900 dark:text-white">
                     {{ $t('profile.sections.twoFactor') }}
@@ -470,6 +476,7 @@
           <div
             v-if="saveStatus !== 'idle'"
             class="fixed bottom-6 right-6 z-50"
+            data-testid="save-status"
           >
             <div
               class="flex items-center gap-2 px-4 py-2.5 rounded-full shadow-lg transition-colors duration-200"

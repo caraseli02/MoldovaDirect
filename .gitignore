@@ -192,3 +192,4 @@ migration-log.txt
 
 # Claude flow metrics (auto-generated)
 .claude-flow/
+.agent
