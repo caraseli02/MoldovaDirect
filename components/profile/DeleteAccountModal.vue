@@ -210,11 +210,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-
-interface ToastPlugin {
-  success: (message: string) => void
-  error: (message: string) => void
-}
+import { getErrorMessage } from '~/utils/errorUtils'
+import type { ToastPlugin } from '~/types/plugins'
 
 interface Emits {
   (e: 'confirm', data: { password: string, reason?: string }): void

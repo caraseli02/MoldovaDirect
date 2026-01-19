@@ -330,6 +330,9 @@ import type { ProfileForm } from '~/types/user'
 import type { ToastPlugin } from '~/types/plugins'
 import type { Address, AddressEntity } from '~/types/address'
 
+// Error handling utilities
+import { getErrorMessage, getErrorCode } from '~/utils/errorUtils'
+
 // Database address type alias for internal use
 type DatabaseAddress = AddressEntity
 

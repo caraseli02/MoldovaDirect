@@ -44,6 +44,11 @@ async function authenticateUser(context: any) {
         user: {
           ...authData.session.user,
           email_confirmed_at: new Date().toISOString(),
+          user_metadata: {
+            ...authData.session.user?.user_metadata,
+            name: 'Test User',
+            full_name: 'Test User',
+          },
         },
       }),
       domain: 'localhost',
@@ -82,6 +87,9 @@ test.describe('Profile Page I18n & Error Handling', () => {
 
       if (url.includes('/auth/v1/user') && method === 'PUT') {
         console.log('MATCHED PUT USER REQUEST')
+        const requestBody = JSON.parse(route.request().postData() || '{}')
+        const preferredLang = requestBody.data?.preferred_language || 'en'
+
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
@@ -91,8 +99,13 @@ test.describe('Profile Page I18n & Error Handling', () => {
               aud: 'authenticated',
               role: 'authenticated',
               email: 'test@example.com',
-              user_metadata: { preferred_language: 'en' },
+              user_metadata: {
+                preferred_language: preferredLang,
+                name: 'Test User',
+                full_name: 'Test User',
+              },
               updated_at: new Date().toISOString(),
+              email_confirmed_at: new Date().toISOString(),
             },
           }),
         })
@@ -116,6 +129,8 @@ test.describe('Profile Page I18n & Error Handling', () => {
       console.log('Resetting language to es...')
       await profilePage.languageSelect.selectOption('es')
       await profilePage.waitForSave()
+      // Wait for UI to settle in Spanish to ensure re-render is complete
+      await expect(profilePage.personalInfoAccordion).toContainText(/Información Personal|Informacion/i)
     }
 
     // Switch to English explicitly
