@@ -462,7 +462,7 @@ import type { ProductFilters, ProductWithRelations, CategoryFilter, PriceRange, 
 import type { ProductSortOption } from '~/types/guards'
 import type { FilterChip } from '~/composables/useProductFilters'
 import { getErrorMessage } from '~/utils/errorUtils'
-import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'
+import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 // Components
@@ -530,7 +530,7 @@ const {
   products,
   categoriesTree,
   currentCategory,
-  searchQuery: storeSearchQuery,
+  searchQuery,
   filters,
   pagination,
   loading,
@@ -562,7 +562,6 @@ const { visiblePages } = useProductPagination(pagination)
 const { setupWatchers: setupStructuredDataWatchers } = useProductStructuredData(products, pagination)
 
 // Local state
-const searchQuery = ref('')
 const searchInput = ref<HTMLInputElement>()
 const searchAbortController = ref<AbortController | null>(null)
 
@@ -793,13 +792,6 @@ const editorialStories = computed(() => {
 })
 
 // Watchers
-watchEffect(() => {
-  // Sync store search query to local (read-only sync, no fetch trigger)
-  if (storeSearchQuery.value && storeSearchQuery.value !== searchQuery.value) {
-    searchQuery.value = storeSearchQuery.value
-  }
-})
-
 watch(() => filters.value.sort, (newValue) => {
   // Sync filters.sort to local sortBy (read-only sync, no fetch trigger)
   if (newValue && newValue !== localSortBy.value) {
@@ -854,8 +846,6 @@ watch(() => route.query.page, async (newPage, oldPage) => {
 
 // Lifecycle Hooks
 onMounted(async () => {
-  searchQuery.value = storeSearchQuery.value || ''
-
   // Sync local sortBy with store
   localSortBy.value = (sortBy.value as ProductSortOption) || 'created'
 
