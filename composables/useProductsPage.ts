@@ -78,7 +78,7 @@ export function useProductsPage(options: UseProductsPageOptions) {
   })
 
   // Debounced search handler to prevent excessive API calls
-  const handleSearchInput = useDebounceFn(() => {
+  const handleSearchInput = useDebounceFn(async () => {
     // Cancel previous search request if it exists
     if (searchAbortController.value) {
       searchAbortController.value.abort()
@@ -87,23 +87,28 @@ export function useProductsPage(options: UseProductsPageOptions) {
     // Create new abort controller for this search
     searchAbortController.value = new AbortController()
 
-    if (searchQuery.value.trim()) {
-      search(searchQuery.value.trim(), {
-        ...filters.value,
-        page: 1,
-        sort: localSortBy.value,
-      }, searchAbortController.value.signal)
+    try {
+      if (searchQuery.value.trim()) {
+        await search(searchQuery.value.trim(), {
+          ...filters.value,
+          page: 1,
+          sort: localSortBy.value,
+        }, searchAbortController.value.signal)
+      }
+      else {
+        await fetchProducts({
+          ...filters.value,
+          page: 1,
+          sort: localSortBy.value,
+        })
+      }
     }
-    else {
-      fetchProducts({
-        ...filters.value,
-        page: 1,
-        sort: localSortBy.value,
-      })
+    catch (error: unknown) {
+      console.error('[Products Page] Search handler error:', getErrorMessage(error))
     }
   }, 300)
 
-  const handleSortChange = () => {
+  const handleSortChange = async () => {
     // Update the store sortBy
     sortBy.value = localSortBy.value
 
@@ -113,11 +118,16 @@ export function useProductsPage(options: UseProductsPageOptions) {
       page: 1,
     }
 
-    if (searchQuery.value.trim()) {
-      search(searchQuery.value.trim(), currentFilters)
+    try {
+      if (searchQuery.value.trim()) {
+        await search(searchQuery.value.trim(), currentFilters)
+      }
+      else {
+        await fetchProducts(currentFilters)
+      }
     }
-    else {
-      fetchProducts(currentFilters)
+    catch (error: unknown) {
+      console.error('[Products Page] Sort change failed:', getErrorMessage(error))
     }
   }
 
@@ -125,31 +135,42 @@ export function useProductsPage(options: UseProductsPageOptions) {
     updateFilters(newFilters)
   }
 
-  const handleApplyFilters = (closePanel = false) => {
+  const handleApplyFilters = async (closePanel = false) => {
     const currentFilters: ProductFilters = {
       ...filters.value,
       sort: localSortBy.value,
       page: 1,
     }
 
-    if (searchQuery.value.trim()) {
-      search(searchQuery.value.trim(), currentFilters)
-    }
-    else {
-      fetchProducts(currentFilters)
-    }
+    try {
+      if (searchQuery.value.trim()) {
+        await search(searchQuery.value.trim(), currentFilters)
+      }
+      else {
+        await fetchProducts(currentFilters)
+      }
 
-    if (closePanel) {
-      closeFilterPanel()
+      if (closePanel) {
+        closeFilterPanel()
+      }
+    }
+    catch (error: unknown) {
+      console.error('[Products Page] Apply filters failed:', getErrorMessage(error))
+      // Keep panel open on error so user can try again
     }
   }
 
-  const clearAllFilters = () => {
+  const clearAllFilters = async () => {
     searchQuery.value = ''
     localSortBy.value = 'created'
     sortBy.value = 'created'
     clearFilters()
-    fetchProducts({ sort: 'created', page: 1, limit: 12 })
+    try {
+      await fetchProducts({ sort: 'created', page: 1, limit: 12 })
+    }
+    catch (error: unknown) {
+      console.error('[Products Page] Clear filters failed:', getErrorMessage(error))
+    }
   }
 
   /**
@@ -171,13 +192,36 @@ export function useProductsPage(options: UseProductsPageOptions) {
 
     // Update URL with new page parameter
     // The URL watcher will handle fetching products automatically
-    await router.push({
-      query: {
-        ...route.query,
-        page: validPage.toString(),
-        limit: (route.query.limit || '12').toString(),
-      },
-    })
+    try {
+      await router.push({
+        query: {
+          ...route.query,
+          page: validPage.toString(),
+          limit: (route.query.limit || '12').toString(),
+        },
+      })
+    }
+    catch (error: unknown) {
+      console.error('[Products Page] Navigation failed:', getErrorMessage(error))
+      // Consider fetching products directly as fallback
+      try {
+        const currentFilters: ProductFilters = {
+          ...filters.value,
+          sort: localSortBy.value,
+          page: validPage,
+        }
+
+        if (searchQuery.value.trim()) {
+          await search(searchQuery.value.trim(), currentFilters)
+        }
+        else {
+          await fetchProducts(currentFilters)
+        }
+      }
+      catch (fetchError: unknown) {
+        console.error('[Products Page] Fallback fetch also failed:', getErrorMessage(fetchError))
+      }
+    }
 
     // Note: Scroll is handled by the URL watcher after products load
   }
@@ -185,8 +229,9 @@ export function useProductsPage(options: UseProductsPageOptions) {
   /**
    * Refresh product list
    * Used by pull-to-refresh and retry actions
+   * @returns true if refresh succeeded, false otherwise
    */
-  const refreshProducts = async () => {
+  const refreshProducts = async (): Promise<boolean> => {
     try {
       const currentFilters: ProductFilters = {
         ...filters.value,
@@ -200,9 +245,11 @@ export function useProductsPage(options: UseProductsPageOptions) {
       else {
         await fetchProducts(currentFilters)
       }
+      return true
     }
     catch (error: unknown) {
-      console.error('Failed to refresh products:', getErrorMessage(error))
+      console.error('[Products Page] Failed to refresh products:', getErrorMessage(error))
+      return false
     }
   }
 
@@ -215,9 +262,10 @@ export function useProductsPage(options: UseProductsPageOptions) {
 
   /**
    * Load more products for infinite scroll
+   * @returns true if load succeeded, false otherwise
    */
-  const loadMoreProducts = async () => {
-    if (loading.value || pagination.value.page >= pagination.value.totalPages) return
+  const loadMoreProducts = async (): Promise<boolean> => {
+    if (loading.value || pagination.value.page >= pagination.value.totalPages) return false
 
     try {
       const nextPage = pagination.value.page + 1
@@ -233,18 +281,25 @@ export function useProductsPage(options: UseProductsPageOptions) {
       else {
         await fetchProducts(currentFilters)
       }
+      return true
     }
     catch (error: unknown) {
-      console.error('Failed to load more products:', getErrorMessage(error))
+      console.error('[Products Page] Failed to load more products:', getErrorMessage(error))
+      return false
     }
   }
 
   /**
    * Handle filter chip removal
    */
-  const removeActiveChip = (chip: FilterChip) => {
+  const removeActiveChip = async (chip: FilterChip) => {
     const nextFilters = removeFilterChip(chip)
-    fetchProducts({ ...nextFilters, page: 1, sort: localSortBy.value })
+    try {
+      await fetchProducts({ ...nextFilters, page: 1, sort: localSortBy.value })
+    }
+    catch (error: unknown) {
+      console.error('[Products Page] Failed to remove filter:', getErrorMessage(error))
+    }
   }
 
   // Editorial stories computed
@@ -290,7 +345,46 @@ export function useProductsPage(options: UseProductsPageOptions) {
 
   watch(() => [filters.value.category, filters.value.inStock, filters.value.featured], async () => {
     // Refresh price range when filters change
-    await refreshPriceRange()
+    try {
+      await refreshPriceRange()
+    }
+    catch (error: unknown) {
+      console.error('[Products Page] Failed to refresh price range:', getErrorMessage(error))
+    }
+  })
+
+  // Watch searchQuery and sync to URL
+  watch(searchQuery, async (newQuery, oldQuery) => {
+    // Skip if search query hasn't actually changed
+    if (newQuery === oldQuery) return
+
+    try {
+      const currentUrlQuery = route.query.q as string || ''
+      const newQueryTrimmed = newQuery.trim()
+
+      // Skip if URL already has the correct value
+      if (currentUrlQuery === newQueryTrimmed) return
+
+      const currentQuery = { ...route.query }
+
+      if (newQueryTrimmed) {
+        // Add search query to URL
+        currentQuery.q = newQueryTrimmed
+      }
+      else {
+        // Remove search query from URL
+        delete currentQuery.q
+      }
+
+      // Use replace to avoid creating navigation history
+      await router.replace({ query: currentQuery })
+    }
+    catch (error: unknown) {
+      // Ignore duplicate navigation errors
+      if (error instanceof Error && !error.message.includes('redundant navigation')) {
+        console.warn('[Products Page] Failed to sync search query to URL:', getErrorMessage(error))
+      }
+    }
   })
 
   // Watch URL query parameter changes (critical for Vercel production)
@@ -306,23 +400,28 @@ export function useProductsPage(options: UseProductsPageOptions) {
     // Validate page boundaries
     const validPage = Math.max(1, Math.min(pageNum, pagination.value.totalPages || 1))
 
-    // Build filters for fetch
-    const currentFilters: ProductFilters = {
-      ...filters.value,
-      sort: localSortBy.value,
-      page: validPage,
-    }
+    try {
+      // Build filters for fetch
+      const currentFilters: ProductFilters = {
+        ...filters.value,
+        sort: localSortBy.value,
+        page: validPage,
+      }
 
-    // Fetch products based on current context
-    if (searchQuery.value.trim()) {
-      await search(searchQuery.value.trim(), currentFilters)
-    }
-    else {
-      await fetchProducts(currentFilters)
-    }
+      // Fetch products based on current context
+      if (searchQuery.value.trim()) {
+        await search(searchQuery.value.trim(), currentFilters)
+      }
+      else {
+        await fetchProducts(currentFilters)
+      }
 
-    // Scroll to top for better UX
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+      // Scroll to top for better UX
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+    catch (error: unknown) {
+      console.error('[Products Page] Route change handler failed:', getErrorMessage(error))
+    }
   }, { immediate: false })
 
   // Lifecycle hooks that need to be called by the component
@@ -338,8 +437,13 @@ export function useProductsPage(options: UseProductsPageOptions) {
     }
 
     // Setup mobile interactions
-    nextTick(() => {
-      mobileInteractions.setup()
+    nextTick(async () => {
+      try {
+        await mobileInteractions.setup()
+      }
+      catch (error: unknown) {
+        console.error('[Products Page] Mobile interactions setup failed:', getErrorMessage(error))
+      }
     })
 
     // Fetch dynamic price range
@@ -354,11 +458,13 @@ export function useProductsPage(options: UseProductsPageOptions) {
         sessionStorage.removeItem('products-filter-state')
       }
       catch (error: unknown) {
+        // Log but don't throw - cleanup failures shouldn't block unmount
         console.error('[Product Catalog] Session storage cleanup failed:', getErrorMessage(error))
 
-        // Only ignore SecurityError (private browsing), rethrow others
+        // SecurityError is expected in private browsing, others are less common
+        // but still shouldn't block the lifecycle
         if (error instanceof Error && error.name !== 'SecurityError') {
-          throw error
+          console.warn('[Product Catalog] Unexpected storage error during cleanup:', error)
         }
       }
     }

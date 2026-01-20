@@ -1121,6 +1121,11 @@
     }
   },
   "products": {
+    "pullToRefresh": {
+      "pull": "Trage pentru a reîmprospăta",
+      "release": "Eliberează pentru a reîmprospăta",
+      "refreshing": "Se reîmprospătează..."
+    },
     "commonProduct": "acest produs",
     "viewDetails": "Vezi Detalii",
     "featured": "Recomandat",

@@ -1326,6 +1326,11 @@
     }
   },
   "products": {
+    "pullToRefresh": {
+      "pull": "Потяните для обновления",
+      "release": "Отпустите для обновления",
+      "refreshing": "Обновление..."
+    },
     "commonProduct": "этот продукт",
     "viewDetails": "Подробнее",
     "featured": "Рекомендуемые",

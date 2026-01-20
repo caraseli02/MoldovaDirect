@@ -225,15 +225,24 @@ const mainContainer = ref<HTMLElement>()
 const contentContainer = ref<HTMLElement>()
 const scrollContainer = ref<HTMLElement>()
 
-// Mobile Interactions (with placeholders)
+// Mobile Interactions Setup
+// using mutable wrappers to handle circular dependency with useProductsPage
+// eslint-disable-next-line prefer-const -- Reassigned after useProductsPage call due to circular dependency
+let refreshProductsImpl: (() => Promise<boolean>) | undefined
+const refreshProductsWrapper = async () => {
+  if (refreshProductsImpl) await refreshProductsImpl()
+}
+
+const paginationHandler = {
+  get currentPage() { return pagination.value?.page ?? 1 },
+  get totalPages() { return pagination.value?.totalPages ?? 1 },
+  goToPage: async (_page: number) => { /* assigned later */ },
+}
+
 const mobileInteractions = useMobileProductInteractions(
   scrollContainer,
-  async () => {}, // refreshProducts placeholder
-  {
-    get currentPage() { return pagination.value?.page ?? 1 },
-    get totalPages() { return pagination.value?.totalPages ?? 1 },
-    goToPage: async () => {}, // placeholder
-  },
+  refreshProductsWrapper,
+  paginationHandler,
 )
 
 // Products Page Business Logic
@@ -284,8 +293,8 @@ const {
 })
 
 // Update mobile interactions with actual implementations
-;(mobileInteractions as any).refreshProducts = refreshProducts
-;(mobileInteractions as any).paginationControls.goToPage = goToPage
+refreshProductsImpl = refreshProducts
+paginationHandler.goToPage = goToPage
 
 // Lifecycle Hooks
 onMounted(onMountedHook)
@@ -295,3 +304,4 @@ onUnmounted(onUnmountedHook)
 // Setup structured data watchers for SEO
 setupStructuredDataWatchers()
 </script>
+// Force HMR update

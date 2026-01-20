@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 import type { ProductFilters, CategoryFilter, AttributeFilter, PriceRange } from '~/types'
+import ProductFilterContent from '~/components/product/Filter/Content.vue'
 
 interface Props {
   filters: ProductFilters
