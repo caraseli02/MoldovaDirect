@@ -571,8 +571,8 @@
         {
           "id": "td-files-1",
           "description": "Split pages/account/profile.vue (1,359 lines) into sub-components",
-          "implemented": false,
-          "tested": false,
+          "implemented": true,
+          "tested": true,
           "priority": "high"
         },
         {
