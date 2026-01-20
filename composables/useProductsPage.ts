@@ -62,6 +62,13 @@ export function useProductsPage(options: UseProductsPageOptions) {
   const searchInput = ref<HTMLInputElement>()
   const searchAbortController = ref<AbortController | null>(null)
   const localSortBy = ref<ProductSortOption>(sortBy.value as ProductSortOption)
+
+  // Initialize searchQuery from URL query parameter on first load
+  // This ensures direct links like /products?q=wine work correctly
+  const initialQueryFromUrl = (route.query.q as string) || ''
+  if (initialQueryFromUrl && !searchQuery.value) {
+    searchQuery.value = initialQueryFromUrl
+  }
   const recentlyViewedProducts = useState<ProductWithRelations[]>('recentlyViewedProducts', () => [])
 
   // Computed
@@ -417,7 +424,9 @@ export function useProductsPage(options: UseProductsPageOptions) {
       }
 
       // Scroll to top for better UX
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      if (import.meta.client) {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
     }
     catch (error: unknown) {
       console.error('[Products Page] Route change handler failed:', getErrorMessage(error))

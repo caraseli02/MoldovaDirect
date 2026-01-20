@@ -3,7 +3,7 @@
     <div class="relative">
       <input
         ref="inputRef"
-        :model-value="modelValue"
+        :value="modelValue"
         type="search"
         :placeholder="placeholder"
         class="w-full rounded-lg border border-gray-300 bg-white pl-10 pr-4 py-3 text-sm text-gray-900 placeholder-gray-600 transition focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-400 dark:focus:ring-primary-400"

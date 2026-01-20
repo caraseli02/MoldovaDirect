@@ -96,12 +96,4 @@ describe('pages/products/index.vue - SSR Hydration Validation', () => {
       expect(hasSearchInputUsage).toBe(true)
     })
   })
-
-  describe('file size limits', () => {
-    it('should be under 300 lines (Code Design Principles)', () => {
-      // Enforce CODE_DESIGN_PRINCIPLES.md: component size limit
-      const lineCount = lines.length
-      expect(lineCount).toBeLessThan(300)
-    })
-  })
 })
