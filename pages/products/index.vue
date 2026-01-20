@@ -461,6 +461,7 @@
 import type { ProductFilters, ProductWithRelations, CategoryFilter, PriceRange, AttributeFilter } from '~/types'
 import type { ProductSortOption } from '~/types/guards'
 import type { FilterChip } from '~/composables/useProductFilters'
+import { getErrorMessage } from '~/utils/errorUtils'
 import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, nextTick, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 
