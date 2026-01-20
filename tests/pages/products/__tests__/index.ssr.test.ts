@@ -99,9 +99,11 @@ describe('pages/products/index.vue - SSR Hydration Validation', () => {
 
   describe('hydration-safe search input', () => {
     it('should bind search input directly to store value', () => {
-      // v-model should bind to store's searchQuery, not local copy
+      // v-model or :model-value should bind to store's searchQuery, not local copy
       const hasStoreBinding = componentSource.includes('v-model="searchQuery"')
         || componentSource.includes('v-model=\'searchQuery\'')
+        || componentSource.includes(':model-value="searchQuery"')
+        || componentSource.includes(':model-value=\'searchQuery\'')
 
       // This is OK if searchQuery refers to store's value
       expect(hasStoreBinding).toBe(true)
