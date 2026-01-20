@@ -38,7 +38,7 @@
       >
         <productFilterMain
           :filters="filters"
-          :available-filters="availableFilters as unknown as { categories: CategoryFilter[]; priceRange: PriceRange; attributes: AttributeFilter[] }"
+          :available-filters="availableFilters"
           :filtered-product-count="pagination.total || 0"
           :show-title="false"
           @update:filters="handleFiltersUpdate"
@@ -314,14 +314,14 @@
                     :key="`page-${page}`"
                   >
                     <UiButton
-                      v-if="page !== '...'"
+                      v-if="isValidPage(page)"
                       size="sm"
                       :variant="page === pagination.page ? 'default' : 'ghost'"
                       class="rounded-full"
                       :class="page === pagination.page ? 'shadow-lg shadow-blue-500/30' : ''"
                       :aria-label="t('products.pagination.goToPage', { page })"
                       :aria-current="page === pagination.page ? 'page' : undefined"
-                      @click="goToPage(page as number)"
+                      @click="goToPage(page)"
                     >
                       {{ page }}
                     </UiButton>
@@ -537,7 +537,7 @@ const {
   error,
   sortBy,
   showFilterPanel,
-} = useProductCatalog()
+} = useProductCatalog() // Re-trigger HMR
 
 // Initialize and fetch products during SSR (using URL params)
 // During client hydration, state is restored from SSR payload
@@ -586,6 +586,11 @@ const hasActiveFilters = computed(() => {
     || filters.value.featured
   )
 })
+
+// Type guard for pagination page (number | string '...')
+function isValidPage(page: number | string): page is number {
+  return typeof page === 'number'
+}
 
 // Debounced search handler to prevent excessive API calls
 const handleSearchInput = debounce(() => {

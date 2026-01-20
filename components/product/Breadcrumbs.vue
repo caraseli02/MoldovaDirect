@@ -274,8 +274,8 @@ const breadcrumbItems = computed((): BreadcrumbItem[] => {
     const label = typeof categoryName === 'string'
       ? categoryName
       : typeof categoryName === 'object'
-        ? categoryName?.en || 'Category'
-        : 'Category'
+        ? categoryName?.en || t('products.category')
+        : t('products.category')
 
     items.push({
       id: String(category.id),

@@ -21,7 +21,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import type { ProductFilters, CategoryWithChildren } from '~/types'
+import type { ProductFilters, CategoryWithChildren, CategoryFilter } from '~/types'
 import type { Ref } from 'vue'
 
 export interface FilterState extends ProductFilters {
@@ -35,14 +35,6 @@ export interface FilterChip {
   type: string
   attributeKey?: string
   attributeValue?: string
-}
-
-interface AvailableCategory {
-  id: number
-  name: Record<string, string>
-  slug: string
-  productCount: number
-  children: AvailableCategory[]
 }
 
 export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) {
@@ -276,10 +268,10 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
    * Generate available filters based on categories tree
    */
   const availableFilters = computed(() => {
-    const convertCategories = (cats: CategoryWithChildren[]): AvailableCategory[] => {
-      return cats.map((cat): AvailableCategory => ({
+    const convertCategories = (cats: CategoryWithChildren[]): CategoryFilter[] => {
+      return cats.map((cat): CategoryFilter => ({
         id: cat.id,
-        name: cat.name as Record<string, string>,
+        name: cat.nameTranslations,
         slug: cat.slug,
         productCount: cat.productCount || 0,
         children: cat.children ? convertCategories(cat.children) : [],
