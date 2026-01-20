@@ -3,6 +3,9 @@
  *
  * TDD Cycle: RED phase
  * This test verifies type safety - no double assertions or unsafe casts
+ *
+ * Updated: After refactoring to use useProductsPage composable
+ * Types are now handled by the composable, not imported directly in the page
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
@@ -41,7 +44,7 @@ describe('pages/products/index.vue - Type Safety Validation', () => {
 
   describe('unsafe type casts', () => {
     it('should not cast page as number without validation', () => {
-      // Instead of \`goToPage(page as number)\`, the type should be correct
+      // Instead of `goToPage(page as number)`, the type should be correct
       // or use proper type guards
       const hasUnsafePageCast = lines.some(line =>
         line.includes('page as number')
@@ -71,15 +74,13 @@ describe('pages/products/index.vue - Type Safety Validation', () => {
   })
 
   describe('proper type definitions', () => {
-    it('should have proper imports for type definitions', () => {
-      // Component should import all required types
-      const hasCategoryFilterImport = componentSource.includes('CategoryFilter')
-      const hasPriceRangeImport = componentSource.includes('PriceRange')
-      const hasAttributeFilterImport = componentSource.includes('AttributeFilter')
+    it('should use useProductsPage composable for type-safe business logic', () => {
+      // After refactoring, types are handled by the composable
+      const hasComposableImport = componentSource.includes('useProductsPage')
+      const hasComposableUsage = componentSource.includes('useProductsPage({')
 
-      expect(hasCategoryFilterImport).toBe(true)
-      expect(hasPriceRangeImport).toBe(true)
-      expect(hasAttributeFilterImport).toBe(true)
+      expect(hasComposableImport).toBe(true)
+      expect(hasComposableUsage).toBe(true)
     })
 
     it('should use proper typing for availableFilters', () => {
@@ -101,6 +102,14 @@ describe('pages/products/index.vue - Type Safety Validation', () => {
       )
 
       expect(hasUnsafeCast).toBe(false)
+    })
+  })
+
+  describe('file size limits', () => {
+    it('should be under 300 lines (Code Design Principles)', () => {
+      // Enforce CODE_DESIGN_PRINCIPLES.md: component size limit
+      const lineCount = lines.length
+      expect(lineCount).toBeLessThan(300)
     })
   })
 })

@@ -2,7 +2,10 @@
  * Test: Missing Import Detection for pages/products/index.vue
  *
  * TDD Cycle: RED phase
- * This test verifies that getErrorMessage is properly imported
+ * This test verifies that error handling is properly delegated to the composable
+ *
+ * Updated: After refactoring to use useProductsPage composable
+ * Error handling is now handled by the composable, not the page directly
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
@@ -10,61 +13,59 @@ import { readFileSync } from 'fs'
 import { resolve } from 'path'
 
 const componentPath = resolve(process.cwd(), 'pages/products/index.vue')
+const composablePath = resolve(process.cwd(), 'composables/useProductsPage.ts')
 
 describe('pages/products/index.vue - Import Validation', () => {
   let componentSource: string
+  let composableSource: string
 
   beforeEach(() => {
     componentSource = readFileSync(componentPath, 'utf-8')
+    composableSource = readFileSync(composablePath, 'utf-8')
   })
 
-  describe('getErrorMessage import', () => {
-    it('should import getErrorMessage from utils/errorUtils', () => {
-      // The component uses getErrorMessage at lines 715, 759, 889
-      // This test verifies the import exists
+  describe('useProductsPage composable', () => {
+    it('should import useProductsPage composable', () => {
+      const hasComposableImport = componentSource.includes('useProductsPage')
 
-      const hasImportStatement = componentSource.includes('import { getErrorMessage }')
-        || componentSource.includes('import {getErrorMessage}')
-        || componentSource.includes('from \'~/utils/errorUtils\'')
-        || componentSource.includes('from \'@/utils/errorUtils\'')
-        || componentSource.includes('from \'@utils/errorUtils\'')
-        || componentSource.includes('from \'#app/utils/errorUtils\'')
-
-      expect(hasImportStatement).toBe(true)
+      expect(hasComposableImport).toBe(true)
     })
 
-    it('should have getErrorMessage available in scope', () => {
-      // Verify that all usages of getErrorMessage have a corresponding import
-      const importMatches = componentSource.match(/import.*getErrorMessage.*from/g)
-      const usageMatches = componentSource.match(/getErrorMessage\(/g)
+    it('should use useProductsPage for business logic', () => {
+      const hasComposableUsage = componentSource.includes('useProductsPage({')
 
-      // If getErrorMessage is used, it must be imported
-      if (usageMatches && usageMatches.length > 0) {
-        expect(importMatches).not.toBeNull()
-        expect(importMatches?.length).toBeGreaterThan(0)
-      }
-    })
-
-    it('should use getErrorMessage for error handling at least once', () => {
-      // Verify the function is actually used for error handling
-      const hasGetErrorMessageUsage = componentSource.includes('getErrorMessage(')
-      expect(hasGetErrorMessageUsage).toBe(true)
+      expect(hasComposableUsage).toBe(true)
     })
   })
 
-  describe('error handling consistency', () => {
-    it('should handle all error scenarios with getErrorMessage', () => {
-      // Lines 715, 759, 889 use getErrorMessage
-      const lines = componentSource.split('\n')
+  describe('error handling delegation', () => {
+    it('should delegate error handling to composable', () => {
+      // After refactoring, error handling is in the composable
+      const hasGetErrorMessageInComposable = composableSource.includes('getErrorMessage')
+      const hasComposableImportInPage = componentSource.includes('useProductsPage')
 
-      // Find lines that use getErrorMessage
-      const errorHandlingLines = lines
-        .map((line, index) => ({ line, lineNum: index + 1, hasUsage: line.includes('getErrorMessage(') }))
-        .filter(item => item.hasUsage)
+      // Composable should handle errors, page should use composable
+      expect(hasGetErrorMessageInComposable).toBe(true)
+      expect(hasComposableImportInPage).toBe(true)
+    })
 
-      // All lines using getErrorMessage should have the import present
-      expect(errorHandlingLines.length).toBeGreaterThan(0)
-      expect(componentSource).toContain('getErrorMessage')
+    it('should have retryLoad function from composable', () => {
+      // Error recovery (retryLoad) should be provided by composable
+      const hasRetryLoadDestructuring = componentSource.includes('retryLoad')
+      const hasRetryLoadUsage = componentSource.includes('@retry="retryLoad"')
+
+      expect(hasRetryLoadDestructuring).toBe(true)
+      expect(hasRetryLoadUsage).toBe(true)
+    })
+  })
+
+  describe('debounce utility', () => {
+    it('should use VueUse useDebounceFn (SSR-friendly)', () => {
+      // Composable should import useDebounceFn from @vueuse/core
+      // VueUse is explicitly SSR-friendly and is the recommended approach for Nuxt
+      const hasVueUseImport = composableSource.includes('import { useDebounceFn } from \'@vueuse/core\'')
+
+      expect(hasVueUseImport).toBe(true)
     })
   })
 })

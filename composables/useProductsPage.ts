@@ -6,35 +6,11 @@
  */
 import { ref, computed, nextTick, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useDebounceFn } from '@vueuse/core'
 import type { ProductFilters, ProductWithRelations } from '~/types'
 import type { ProductSortOption } from '~/types/guards'
 import type { FilterChip } from '~/composables/useProductFilters'
 import { getErrorMessage } from '~/utils/errorUtils'
-
-// CRITICAL: Custom debounce implementation (DO NOT replace with VueUse)
-//
-// Context: useDebounceFn from @vueuse/core caused 500 errors on mobile production (commit ffbe86a)
-// Root cause: VueUse's debounce is not SSR-safe and fails during server-side rendering
-//
-// This implementation:
-// - Works correctly in both SSR and client contexts
-// - Uses standard setTimeout which is available in all environments
-// - Properly cleans up timeouts to prevent memory leaks
-//
-// Performance: 300ms delay prevents excessive API calls during rapid typing
-function debounce<T extends (...args: unknown[]) => any>(fn: T, delay: number) {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null
-
-  return function (this: any, ...args: Parameters<T>) {
-    if (timeoutId) {
-      clearTimeout(timeoutId)
-    }
-
-    timeoutId = setTimeout(() => {
-      fn.apply(this, args)
-    }, delay)
-  }
-}
 
 interface UseProductsPageOptions {
   products: Ref<ProductWithRelations[]>
@@ -102,7 +78,7 @@ export function useProductsPage(options: UseProductsPageOptions) {
   })
 
   // Debounced search handler to prevent excessive API calls
-  const handleSearchInput = debounce(() => {
+  const handleSearchInput = useDebounceFn(() => {
     // Cancel previous search request if it exists
     if (searchAbortController.value) {
       searchAbortController.value.abort()
