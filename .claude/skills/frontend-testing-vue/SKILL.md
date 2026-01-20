@@ -23,6 +23,21 @@ Apply this skill when the user:
 - User is asking about E2E tests (Playwright) - separate skill
 - User is only asking conceptual questions without code context
 
+## Design for Testability
+
+⚠️ **Tests assume code is designed for testability. If testing is difficult:**
+
+1. Review `docs/development/CODE_DESIGN_PRINCIPLES.md`
+2. Extract business logic to composables (testable without DOM)
+3. Use typed props/emits for clear contracts
+4. Minimize component dependencies
+
+**Signs code needs refactoring:**
+- Can't test logic without rendering entire component tree
+- Test setup requires 20+ lines of mocks
+- Tests fail when unrelated UI changes
+- Can't test in isolation
+
 ## Quick Reference
 
 ### Tech Stack
