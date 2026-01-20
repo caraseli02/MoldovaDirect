@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center gap-2 overflow-x-auto pb-2"
+    class="flex items-center gap-2 overflow-x-auto pb-2 mt-0.5"
     role="group"
     :aria-label="$t('orders.filters.quickFilters')"
   >

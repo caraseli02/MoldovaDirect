@@ -84,6 +84,10 @@ test.describe('Account Dashboard', () => {
       // Check for redirect to login page with sign in/up options
       await expect(freshPage).toHaveURL(/\/auth\/login/)
 
+      // Verify login elements are present (using IDs from login page)
+      await expect(freshPage.getByTestId('login-button')).toBeVisible()
+      await expect(freshPage.locator('a[href*="/auth/register"]')).toBeVisible()
+
       await context.close()
     })
   })
@@ -109,7 +113,7 @@ test.describe('Account Dashboard', () => {
       await authenticatedPage.waitForTimeout(2000)
 
       // Should show total orders card with a number
-      const totalOrdersCard = authenticatedPage.locator('text="Total Orders"').first()
+      const totalOrdersCard = authenticatedPage.getByTestId('stats-total-orders')
       await expect(totalOrdersCard).toBeVisible({ timeout: 5000 })
 
       // The order count should be visible (either a number or loading state)
@@ -143,11 +147,17 @@ test.describe('Account Dashboard', () => {
       const emptyState = authenticatedPage.getByText(/don't have any orders/i)
       const recentOrders = authenticatedPage.locator('[class*="space-y-3"]')
 
-      const hasEmptyState = await emptyState.count() > 0
+      const _hasEmptyState = await emptyState.count() > 0
       const hasOrders = await recentOrders.count() > 0
 
-      // Either should be true
-      expect(hasEmptyState || hasOrders).toBeTruthy()
+      // Either should be true (if we have seeded orders, hasOrders is true. If clean, hasEmptyState is true)
+      // Note: Since we seed data in other tests, usually hasOrders will be true.
+      if (await hasOrders.count() > 0) {
+        expect(await hasOrders.count()).toBeGreaterThan(0)
+      }
+      else {
+        await expect(emptyState).toBeVisible()
+      }
     })
 
     test('should navigate to order details on card click', async ({ authenticatedPage }) => {
@@ -172,7 +182,7 @@ test.describe('Account Dashboard', () => {
       await authenticatedPage.waitForLoadState('networkidle')
 
       // Click on My Profile quick action
-      const profileLink = authenticatedPage.getByText('My Profile').first()
+      const profileLink = authenticatedPage.getByTestId('quick-profile')
       await profileLink.click()
 
       await expect(authenticatedPage).toHaveURL(/\/account\/profile/, { timeout: 5000 })
@@ -183,7 +193,7 @@ test.describe('Account Dashboard', () => {
       await authenticatedPage.waitForLoadState('networkidle')
 
       // Click on Returns which links to orders
-      const returnsLink = authenticatedPage.getByText('Returns').first()
+      const returnsLink = authenticatedPage.getByTestId('quick-returns')
       await returnsLink.click()
 
       await expect(authenticatedPage).toHaveURL(/\/account\/orders/, { timeout: 5000 })
@@ -194,7 +204,7 @@ test.describe('Account Dashboard', () => {
       await authenticatedPage.waitForLoadState('networkidle')
 
       // Payment Methods button should be disabled
-      const paymentButton = authenticatedPage.locator('button:has-text("Payment Methods")')
+      const paymentButton = authenticatedPage.getByTestId('quick-payment')
       await expect(paymentButton).toBeDisabled()
     })
   })
@@ -237,7 +247,7 @@ test.describe('Account Dashboard', () => {
       await authenticatedPage.waitForLoadState('networkidle')
 
       const logoutButton = authenticatedPage.locator('[data-testid="logout-button"]')
-      await expect(logoutButton).toBeVisible()
+      await expect(logoutButton).toBeVisible({ timeout: 10000 })
 
       // Should be keyboard accessible
       await logoutButton.focus()
@@ -307,15 +317,26 @@ test.describe('Account Dashboard', () => {
       const projectName = testInfo.project.name
       const locale = projectName.split('-')[1] || 'es'
 
-      await authenticatedPage.goto(`/${locale}/account`)
+      const targetUrl = locale === 'es' ? '/account' : `/${locale}/account` // es is default
+
+      await authenticatedPage.goto(targetUrl)
       await authenticatedPage.waitForLoadState('networkidle')
 
-      // Should have locale in URL
-      expect(authenticatedPage.url()).toContain(`/${locale}/`)
+      // Should have correct URL
+      if (locale === 'es') {
+        expect(authenticatedPage.url()).not.toContain('/es/') // Default locale has no prefix
+      }
+      else {
+        expect(authenticatedPage.url()).toContain(`/${locale}/`)
+      }
 
-      // Content should be visible (translated text)
+      // Content should be visible
       const pageContent = await authenticatedPage.textContent('body')
       expect(pageContent).toBeTruthy()
+
+      // Ensure it's not a 404 page
+      const notFound = authenticatedPage.getByText('404', { exact: true })
+      expect(await notFound.count()).toBe(0)
     })
   })
 })

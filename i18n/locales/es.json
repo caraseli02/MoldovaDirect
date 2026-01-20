@@ -839,6 +839,12 @@
       "enable2FA": "Activar 2FA",
       "enable2FADescription": "La autenticación de dos factores estará disponible próximamente."
     },
+    "languages": {
+      "es": "Español",
+      "en": "Inglés",
+      "ro": "Rumano",
+      "ru": "Ruso"
+    },
     "addresses": "Direcciones",
     "addressesDescription": "Gestiona tus direcciones de envío y facturación",
     "addAddress": "Añadir Dirección",
@@ -870,6 +876,15 @@
     "country": "País",
     "phone": "Teléfono",
     "phonePlaceholder": "Número de teléfono (opcional)",
+    "countries": {
+      "ES": "España",
+      "FR": "Francia",
+      "IT": "Italia",
+      "PT": "Portugal",
+      "DE": "Alemania",
+      "MD": "Moldavia",
+      "RO": "Rumanía"
+    },
     "deleteAccount": "Eliminar Cuenta",
     "deleteAccountWarning": "Esta acción no se puede deshacer",
     "deleteAccountConsequences": {

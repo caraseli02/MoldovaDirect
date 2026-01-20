@@ -324,7 +324,7 @@
       <div v-else>
         <!-- Desktop view (grid or list based on toggle) -->
         <div
-          class="hidden md:block"
+          class="hidden md:block md:space-y-4"
           :class="[
             viewMode === 'grid'
               ? 'grid grid-cols-2 lg:grid-cols-3 gap-6'

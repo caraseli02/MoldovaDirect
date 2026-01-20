@@ -26,7 +26,9 @@
               {{ $t('profile.addressType.label') }} *
             </label>
             <div class="flex space-x-2">
-              <label class="relative flex items-center justify-center min-w-[44px] min-h-[44px] p-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+              <label
+                class="relative flex items-center justify-center min-w-[44px] min-h-[44px] p-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
                 <input
                   v-model="form.type"
                   type="radio"
@@ -37,7 +39,9 @@
                   {{ $t('profile.addressType.shipping') }}
                 </span>
               </label>
-              <label class="relative flex items-center justify-center min-w-[44px] min-h-[44px] p-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+              <label
+                class="relative flex items-center justify-center min-w-[44px] min-h-[44px] p-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
                 <input
                   v-model="form.type"
                   type="radio"
@@ -64,7 +68,6 @@
                 id="firstName"
                 v-model="form.firstName"
                 type="text"
-                required
                 class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
                 :class="{ 'border-red-500': errors.firstName }"
                 :placeholder="$t('profile.firstNamePlaceholder')"
@@ -88,7 +91,6 @@
                 id="lastName"
                 v-model="form.lastName"
                 type="text"
-                required
                 class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
                 :class="{ 'border-red-500': errors.lastName }"
                 :placeholder="$t('profile.lastNamePlaceholder')"
@@ -131,7 +133,6 @@
               id="street"
               v-model="form.street"
               type="text"
-              required
               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
               :class="{ 'border-red-500': errors.street }"
               :placeholder="$t('profile.streetPlaceholder')"
@@ -157,7 +158,6 @@
                 id="city"
                 v-model="form.city"
                 type="text"
-                required
                 class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
                 :class="{ 'border-red-500': errors.city }"
                 :placeholder="$t('profile.cityPlaceholder')"
@@ -181,7 +181,6 @@
                 id="postalCode"
                 v-model="form.postalCode"
                 type="text"
-                required
                 class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
                 :class="{ 'border-red-500': errors.postalCode }"
                 :placeholder="$t('profile.postalCodePlaceholder')"
@@ -223,29 +222,14 @@
               <select
                 id="country"
                 v-model="form.country"
-                required
                 class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
               >
-                <option value="ES">
-                  España
-                </option>
-                <option value="FR">
-                  France
-                </option>
-                <option value="IT">
-                  Italia
-                </option>
-                <option value="PT">
-                  Portugal
-                </option>
-                <option value="DE">
-                  Deutschland
-                </option>
-                <option value="MD">
-                  Moldova
-                </option>
-                <option value="RO">
-                  România
+                <option
+                  v-for="country in countryOptions"
+                  :key="country.value"
+                  :value="country.value"
+                >
+                  {{ country.label }}
                 </option>
               </select>
             </div>
@@ -337,11 +321,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import type { Address } from '~/types/address'
-
-interface ToastPlugin {
-  success: (message: string) => void
-  error: (message: string) => void
-}
+import type { ToastPlugin } from '~/types/plugins'
 
 interface Props {
   address?: Address | null
@@ -393,6 +373,17 @@ const errors = reactive({
   postalCode: '',
   phone: '',
 })
+
+// Country options with i18n
+const countryOptions = computed(() => [
+  { value: 'ES', label: t('profile.countries.ES') },
+  { value: 'FR', label: t('profile.countries.FR') },
+  { value: 'IT', label: t('profile.countries.IT') },
+  { value: 'PT', label: t('profile.countries.PT') },
+  { value: 'DE', label: t('profile.countries.DE') },
+  { value: 'MD', label: t('profile.countries.MD') },
+  { value: 'RO', label: t('profile.countries.RO') },
+])
 
 // Handle dialog open state change (when ESC pressed or backdrop clicked)
 const handleOpenChange = (open: boolean) => {
@@ -463,18 +454,19 @@ const handleSubmit = async () => {
 
   isLoading.value = true
 
-  try {
-    emit('save', { ...form })
-  }
-  catch (error: unknown) {
-    console.error('Error saving address:', error)
-    // CRITICAL FIX: Show toast error so user knows save failed
-    const errorMsg = getErrorMessage(error)
-    $toast.error(errorMsg || t('profile.errors.addressSaveFailed'))
-  }
-  finally {
-    isLoading.value = false
-  }
+  // Emit save event - parent component handles actual save and errors
+  // Parent will close modal on success or keep open on error
+  emit('save', { ...form })
+
+  // Note: emit() is synchronous and doesn't throw.
+  // The parent component handles the actual async save operation.
+  // On success, parent calls closeAddressForm() which unmounts this component.
+  // On error, we provide a fallback timeout to reset loading state.
+  setTimeout(() => {
+    if (isLoading.value) {
+      isLoading.value = false
+    }
+  }, 5000) // Reset after 5 seconds if parent hasn't closed modal
 }
 
 // Initialize form on mount

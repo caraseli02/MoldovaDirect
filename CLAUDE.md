@@ -195,6 +195,13 @@ pnpm build && pnpm test
 - [ ] `docs/status/PROJECT_STATUS.md` updated if needed
 - [ ] Project left in ready-to-merge state
 
+### Code Design (NEW - Prevents Monoliths)
+- [ ] Component under 300 lines? (See: [CODE_DESIGN_PRINCIPLES.md](docs/development/CODE_DESIGN_PRINCIPLES.md))
+- [ ] Business logic extracted to composables?
+- [ ] Types defined in `types/*.ts`?
+- [ ] Can test logic without DOM?
+- [ ] Single responsibility per file?
+
 ### Admin Changes
 - [ ] Static imports only (no dynamic imports)
 - [ ] Plugin route guards in place
@@ -245,7 +252,7 @@ The `docs/` folder uses **role-based navigation**. Start with the right path:
 | 🆕 New to project | [Quick Start](docs/getting-started/QUICK_START_GUIDE.md) → [Tech Stack](docs/development/tech.md) → [Code Conventions](docs/development/code-conventions.md) |
 | 🔄 Returning | [CHANGELOG](docs/CHANGELOG.md) → [Project Status](docs/status/PROJECT_STATUS.md) |
 | 🐛 Debugging | [Troubleshooting](docs/development/troubleshooting-components.md) → [Testing Strategy](docs/guides/TESTING_STRATEGY.md) |
-| 🛠️ Building feature | [Patterns](docs/development/PATTERNS_TO_PRESERVE.md) → [Components](docs/development/component-inventory.md) → [i18n](docs/features/I18N_CONFIGURATION.md) |
+| 🛠️ Building feature | [Code Design Principles](docs/development/CODE_DESIGN_PRINCIPLES.md) → [Patterns](docs/development/PATTERNS_TO_PRESERVE.md) → [Components](docs/development/component-inventory.md) → [i18n](docs/features/I18N_CONFIGURATION.md) |
 
 ### Documentation Guidelines
 
@@ -298,6 +305,44 @@ When creating or updating documentation:
 **Styling:** TailwindCSS utility classes
 **State:** Pinia stores for shared state
 **API:** Supabase client with RLS policies
+
+---
+
+## 🏗️ Code Design Principles
+
+**CRITICAL:** Read [Code Design Principles](docs/development/CODE_DESIGN_PRINCIPLES.md) before writing new features.
+
+> *"Testability is not just about writing tests. It's about designing for testability from the beginning."*
+
+### Quick Rules
+
+| Rule | Limit | Action |
+|------|-------|--------|
+| **Component Size** | Max 300 lines | Extract when exceeded |
+| **Function Size** | Max 50 lines | Break down further |
+| **Cyclomatic Complexity** | Max 10 | Simplify logic |
+| **File Responsibility** | One thing | Split if multiple |
+
+### Before Committing New Code
+
+```yaml
+Design for Testability:
+  ☐ Can test logic without DOM? (Extract to composable)
+  ☐ Can test component in isolation? (Minimize dependencies)
+  ☐ Business logic separate from UI? (Three-layer pattern)
+
+Prevent Monoliths:
+  ☐ File under 300 lines? (Else split)
+  ☐ Single responsibility? (Else extract)
+  ☐ Reusable logic in composable? (Not duplicated)
+
+Three-Layer Pattern:
+  ☐ Types in types/*.ts (contracts)
+  ☐ Logic in composables/*.ts (testable without Vue)
+  ☐ UI in components/**/*.vue (presentation only)
+```
+
+**Full guide:** `docs/development/CODE_DESIGN_PRINCIPLES.md`
 
 ---
 
@@ -357,9 +402,10 @@ Screenshots follow: `[name]-[viewport].png`
 
 ---
 
-**Last Updated:** 2026-01-06
+**Last Updated:** 2026-01-19
 **Admin Status:** All 5 pages working ✅
 **Docs Structure:** Role-based navigation (January 2026 cleanup)
+**Code Design:** Added principles to prevent monolithic components
 
 
 ---

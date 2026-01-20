@@ -7,6 +7,7 @@
       type="button"
       :aria-expanded="expanded"
       :aria-controls="contentId"
+      data-testid="profile-accordion-button"
       class="w-full flex items-center justify-between p-4 md:px-6 text-left hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
       @click="$emit('toggle')"
       @keydown.home.prevent="$emit('navigate-first')"

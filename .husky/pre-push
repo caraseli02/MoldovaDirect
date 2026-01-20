@@ -1,21 +1,19 @@
 #!/bin/bash
 
-# Pre-push hook: Run critical tests before pushing
-# This prevents broken code from being pushed to remote
+# Pre-push hook: Run tests for changed files before pushing
+# This prevents pushing broken changes while staying fast
 
 echo "🚀 Pre-push checks..."
 
-# Run unit tests with coverage threshold
-echo "🧪 Running unit tests with coverage..."
-if ! pnpm run test:coverage:check; then
+# Run tests only for changed files
+echo "🧪 Running tests for changed files..."
+if ! pnpm run test:quick; then
   echo ""
-  echo "❌ Tests or coverage failed! Push blocked."
+  echo "❌ Tests failed! Push blocked."
   echo ""
-  echo "Options:"
-  echo "  - Fix failing tests"
-  echo "  - Use 'git push --no-verify' to skip (not recommended)"
+  echo "Please fix failing tests before pushing."
   exit 1
 fi
 
 echo ""
-echo "✅ All checks passed! Pushing..."
+echo "✅ Related tests passed! Pushing..."

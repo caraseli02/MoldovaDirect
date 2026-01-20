@@ -8,6 +8,13 @@ license: MIT
 
 Reference for Vue 3 Composition API patterns, component architecture, and testing practices.
 
+## Before Writing Components
+
+⚠️ **First read `docs/development/CODE_DESIGN_PRINCIPLES.md` for:**
+- Component size limits (max 300 lines)
+- When to extract composables
+- Design for testability guidelines
+
 ## Overview
 
 Progressive reference system for Vue 3 projects. Load only files relevant to current task to minimize context usage (~250 tokens base, 500-1500 per sub-file).

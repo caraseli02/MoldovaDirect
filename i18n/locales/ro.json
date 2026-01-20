@@ -633,6 +633,12 @@
       "enable2FA": "Activează 2FA",
       "enable2FADescription": "Autentificarea în doi pași va fi disponibilă în curând."
     },
+    "languages": {
+      "es": "Spaniolă",
+      "en": "Engleză",
+      "ro": "Română",
+      "ru": "Rusă"
+    },
     "addresses": "Adrese",
     "addressesDescription": "Gestionează adresele tale de livrare și facturare",
     "addAddress": "Adaugă Adresă",
@@ -664,6 +670,15 @@
     "country": "Țară",
     "phone": "Telefon",
     "phonePlaceholder": "Număr de telefon (opțional)",
+    "countries": {
+      "ES": "Spania",
+      "FR": "Franța",
+      "IT": "Italia",
+      "PT": "Portugalia",
+      "DE": "Germania",
+      "MD": "Moldova",
+      "RO": "România"
+    },
     "deleteAccount": "Șterge Contul",
     "deleteAccountWarning": "Această acțiune nu poate fi anulată",
     "deleteAccountConsequences": {

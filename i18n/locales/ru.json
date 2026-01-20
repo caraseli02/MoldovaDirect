@@ -838,6 +838,12 @@
       "enable2FA": "Включить 2FA",
       "enable2FADescription": "Двухфакторная аутентификация будет доступна в ближайшее время."
     },
+    "languages": {
+      "es": "Испанский",
+      "en": "Английский",
+      "ro": "Румынский",
+      "ru": "Русский"
+    },
     "addresses": "Адреса",
     "addressesDescription": "Manage your shipping and billing addresses",
     "addAddress": "Добавить Адрес",
@@ -869,6 +875,15 @@
     "country": "Country",
     "phone": "Телефон",
     "phonePlaceholder": "Номер телефона (необязательно)",
+    "countries": {
+      "ES": "Испания",
+      "FR": "Франция",
+      "IT": "Италия",
+      "PT": "Португалия",
+      "DE": "Германия",
+      "MD": "Молдавия",
+      "RO": "Румыния"
+    },
     "deleteAccount": "Delete Account",
     "deleteAccountWarning": "This action cannot be undone",
     "deleteAccountConsequences": {
@@ -906,16 +921,16 @@
       "postalCodeRequired": "Почтовый индекс обязателен",
       "invalidSpanishPostalCode": "Пожалуйста, введите действительный испанский почтовый индекс (5 цифр)",
       "phoneInvalid": "Пожалуйста, введите действительный номер телефона",
-      "confirmationRequired": "Please type 'DELETE' to confirm",
-      "passwordRequired": "Password is required for account deletion"
+      "confirmationRequired": "Пожалуйста, введите 'DELETE' для подтверждения",
+      "passwordRequired": "Пароль обязателен для удаления аккаунта"
     },
     "success": {
-      "profileUpdated": "Profile updated successfully",
-      "pictureUpdated": "Profile picture updated successfully",
-      "pictureRemoved": "Profile picture removed successfully",
-      "addressSaved": "Address saved successfully",
-      "addressDeleted": "Address deleted successfully",
-      "accountDeleted": "Account deleted successfully"
+      "profileUpdated": "Профиль успешно обновлен",
+      "pictureUpdated": "Фотография профиля успешно обновлена",
+      "pictureRemoved": "Фотография профиля успешно удалена",
+      "addressSaved": "Адрес успешно сохранен",
+      "addressDeleted": "Адрес успешно удален",
+      "accountDeleted": "Аккаунт успешно удален"
     },
     "errors": {
       "updateFailed": "Не удалось обновить профиль. Пожалуйста, попробуйте снова.",
