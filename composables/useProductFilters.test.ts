@@ -53,12 +53,14 @@ describe('useProductFilters', () => {
     {
       id: 1,
       slug: 'electronics',
+      nameTranslations: { en: 'Electronics', es: 'Electrónica' },
       name: { en: 'Electronics', es: 'Electrónica' },
       productCount: 50,
       children: [
         {
           id: 2,
           slug: 'phones',
+          nameTranslations: { en: 'Phones', es: 'Teléfonos' },
           name: { en: 'Phones', es: 'Teléfonos' },
           productCount: 20,
           children: [],
@@ -68,6 +70,7 @@ describe('useProductFilters', () => {
     {
       id: 3,
       slug: 'clothing',
+      nameTranslations: { en: 'Clothing', es: 'Ropa' },
       name: { en: 'Clothing', es: 'Ropa' },
       productCount: 30,
       children: [],

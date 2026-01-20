@@ -141,10 +141,9 @@
                   :is="index === breadcrumbItems.length - 1 && !searchQuery ? 'span' : 'NuxtLink'"
                   :to="index === breadcrumbItems.length - 1 && !searchQuery ? undefined : item.href"
                   class="transition-colors"
-                  :class="
-                    index === breadcrumbItems.length - 1 && !searchQuery
-                      ? 'font-medium text-gray-900 dark:text-white'
-                      : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                  :class="index === breadcrumbItems.length - 1 && !searchQuery
+                    ? 'font-medium text-gray-900 dark:text-white'
+                    : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                   "
                   :itemprop="item.href ? 'item' : undefined"
                 >
@@ -232,7 +231,8 @@ import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useWindowSize } from '@vueuse/core'
 import commonIcon from '~/components/common/Icon.vue'
-import type { Category } from '~/types'
+import type { Category, LanguageCode, Translations } from '~/types'
+import { getLocalizedText } from '~/types'
 
 interface BreadcrumbItem {
   id: string
@@ -243,16 +243,18 @@ interface BreadcrumbItem {
 interface Props {
   currentCategory?: Category | null
   searchQuery?: string
+  parentCategory?: Category | null
   categoryPath?: Category[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
   currentCategory: null,
   searchQuery: '',
+  parentCategory: null,
   categoryPath: () => [],
 })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const { width } = useWindowSize()
 
 // Mobile detection
@@ -270,12 +272,12 @@ const breadcrumbItems = computed((): BreadcrumbItem[] => {
 
   categories.forEach((category, _index) => {
     // Get localized name from translations
-    const categoryName = (category as Record<string, any>).name
+    // Handle both 'name' (from transformed) and 'nameTranslations' (from raw)
+    const categoryName = (category as any).name || (category as any).nameTranslations
+
     const label = typeof categoryName === 'string'
       ? categoryName
-      : typeof categoryName === 'object'
-        ? categoryName?.en || 'Category'
-        : 'Category'
+      : getLocalizedText(categoryName as Translations, locale.value as LanguageCode) || t('products.category')
 
     items.push({
       id: String(category.id),

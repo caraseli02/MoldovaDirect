@@ -3,6 +3,7 @@
  * Provides touch-based pull-to-refresh functionality
  */
 export const usePullToRefresh = (onRefresh: () => Promise<void> | void) => {
+  const { t } = useI18n()
   const isRefreshing = ref(false)
   const pullDistance = ref(0)
   const isPulling = ref(false)
@@ -121,9 +122,9 @@ export const usePullToRefresh = (onRefresh: () => Promise<void> | void) => {
 
   // Pull status text
   const pullStatusText = computed(() => {
-    if (isRefreshing.value) return 'Refreshing...'
-    if (canRefresh.value) return 'Release to refresh'
-    if (isPulling.value) return 'Pull to refresh'
+    if (isRefreshing.value) return t('products.pullToRefresh.refreshing')
+    if (canRefresh.value) return t('products.pullToRefresh.release')
+    if (isPulling.value) return t('products.pullToRefresh.pull')
     return ''
   })
 

@@ -1327,6 +1327,11 @@
     }
   },
   "products": {
+    "pullToRefresh": {
+      "pull": "Pull to refresh",
+      "release": "Release to refresh",
+      "refreshing": "Refreshing..."
+    },
     "commonProduct": "this product",
     "viewDetails": "View Details",
     "featured": "Featured",
@@ -1444,7 +1449,7 @@
         "quality": "100% authentic"
       }
     },
-    "breadcrumb": "Products",
+    "breadcrumb": "Shop",
     "breadcrumbNav": {
       "showAll": "Show all categories",
       "searchResults": "Search results for \"{query}\""

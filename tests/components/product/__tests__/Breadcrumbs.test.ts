@@ -6,6 +6,7 @@ import ProductBreadcrumbs from '~/components/product/Breadcrumbs.vue'
 // Mock vue-i18n
 vi.mock('vue-i18n', () => ({
   useI18n: vi.fn(() => ({
+    locale: ref('en'),
     t: (key: string, params?: Record<string, unknown>) => {
       if (params) {
         let result = key
@@ -81,7 +82,7 @@ describe('Product Breadcrumbs', () => {
   it('should show category path', () => {
     const mockCategory = {
       id: 1,
-      name: { en: 'Wines' },
+      name: { en: 'Wines', es: 'Vinos' },
     }
     const wrapper = mountComponent({ currentCategory: mockCategory })
     expect(wrapper.text()).toContain('Wines')
@@ -106,7 +107,7 @@ describe('Product Breadcrumbs', () => {
   it('should render category breadcrumb items when category is provided', () => {
     const mockCategory = {
       id: 1,
-      name: { en: 'Red Wines' },
+      name: { en: 'Red Wines', es: 'Vinos Tintos' },
     }
     const wrapper = mountComponent({ currentCategory: mockCategory })
 
@@ -116,8 +117,8 @@ describe('Product Breadcrumbs', () => {
 
   it('should render nested category path correctly', () => {
     const mockCategoryPath = [
-      { id: 1, name: { en: 'Wines' } },
-      { id: 2, name: { en: 'Red Wines' } },
+      { id: 1, name: { en: 'Wines', es: 'Vinos' } },
+      { id: 2, name: { en: 'Red Wines', es: 'Vinos Tintos' } },
     ]
     const wrapper = mountComponent({ categoryPath: mockCategoryPath })
 
@@ -129,7 +130,7 @@ describe('Product Breadcrumbs', () => {
   it('should show chevron separators between breadcrumb items', () => {
     const mockCategory = {
       id: 1,
-      name: { en: 'Wines' },
+      name: { en: 'Wines', es: 'Vinos' },
     }
     const wrapper = mountComponent({ currentCategory: mockCategory })
 
@@ -140,7 +141,7 @@ describe('Product Breadcrumbs', () => {
   it('should style last breadcrumb item differently (current page)', () => {
     const mockCategory = {
       id: 1,
-      name: { en: 'Wines' },
+      name: { en: 'Wines', es: 'Vinos' },
     }
     const wrapper = mountComponent({ currentCategory: mockCategory })
 
@@ -152,7 +153,7 @@ describe('Product Breadcrumbs', () => {
   it('should include searchQuery in breadcrumbs after category path', () => {
     const mockCategory = {
       id: 1,
-      name: { en: 'Wines' },
+      name: { en: 'Wines', es: 'Vinos' },
     }
     const wrapper = mountComponent({
       currentCategory: mockCategory,

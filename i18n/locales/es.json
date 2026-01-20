@@ -1425,6 +1425,11 @@
       "description": "Filtrar productos por precio, disponibilidad y categorías",
       "applyFilters": "Aplicar filtros"
     },
+    "pullToRefresh": {
+      "pull": "Tira para actualizar",
+      "release": "Suelta para actualizar",
+      "refreshing": "Actualizando..."
+    },
     "hero": {
       "seasonal": "Destacados de temporada",
       "title": "Descubre los sabores emblemáticos de Moldavia",
@@ -1438,7 +1443,7 @@
         "quality": "100% auténtico"
       }
     },
-    "breadcrumb": "Productos",
+    "breadcrumb": "Tienda",
     "breadcrumbNav": {
       "showAll": "Mostrar todas las categorías",
       "searchResults": "Resultados de búsqueda para \"{query}\""

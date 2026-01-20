@@ -1326,6 +1326,11 @@
     }
   },
   "products": {
+    "pullToRefresh": {
+      "pull": "Потяните для обновления",
+      "release": "Отпустите для обновления",
+      "refreshing": "Обновление..."
+    },
     "commonProduct": "этот продукт",
     "viewDetails": "Подробнее",
     "featured": "Рекомендуемые",
@@ -1373,11 +1378,11 @@
     "noProducts": "Товары недоступны",
     "tryDifferentFilters": "Попробуйте другие фильтры",
     "comingSoon": "Скоро у нас будут доступны товары",
-    "showingResults": "Showing {start}-{end} of {total} products",
-    "filtersApplied": "Filters applied",
-    "clearFilters": "Clear all filters",
-    "sortPriceLowHigh": "Price: Low to High",
-    "sortPriceHighLow": "Price: High to Low",
+    "showingResults": "Показано {start}-{end} из {total} товаров",
+    "filtersApplied": "Фильтры применены",
+    "clearFilters": "Очистить все фильтры",
+    "sortPriceLowHigh": "Цена: по возрастанию",
+    "sortPriceHighLow": "Цена: по убыванию",
     "categories": {
       "all": "Все",
       "wine": "Вина",
