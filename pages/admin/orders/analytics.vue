@@ -28,9 +28,7 @@
       <CardContent class="pt-6">
         <div class="flex items-center space-x-4">
           <div class="flex-1">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
-              Date Range
-            </label>
+            <UiLabel>Date Range</UiLabel>
             <div class="flex items-center space-x-2">
               <Input
                 v-model="dateFrom"

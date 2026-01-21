@@ -94,14 +94,11 @@
             Edit Stock for {{ stockEditModal.product?.name ? getLocalizedText(stockEditModal.product.name) : '' }}
           </h3>
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Stock Quantity
-            </label>
-            <input
+            <UiLabel>Stock Quantity</UiLabel>
+            <UiInput
               v-model.number="stockEditModal.quantity"
               type="number"
               min="0"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
           </div>
           <div class="flex justify-end space-x-3">

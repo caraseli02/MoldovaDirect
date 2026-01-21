@@ -137,10 +137,7 @@
           class="grid grid-cols-2 gap-3 mb-6 slide-up stagger-5"
         >
           <!-- Delivery Card -->
-          <button
-            class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-3 text-left card-interactive bg-white dark:bg-zinc-800"
-            @click="scrollToOrderDetails()"
-          >
+          <UiButton @click="scrollToOrderDetails()">
             <p class="text-xs text-zinc-600 dark:text-zinc-400 mb-1">
               {{ $t('checkout.confirmation.delivery') }}
             </p>
@@ -153,13 +150,10 @@
             <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
               {{ shippingInfo?.method?.description || $t('checkout.confirmation.businessDays', { days: '3-5' }) }}
             </p>
-          </button>
+          </UiButton>
 
           <!-- Total Paid Card -->
-          <button
-            class="border border-zinc-200 dark:border-zinc-700 rounded-lg p-3 text-left card-interactive bg-white dark:bg-zinc-800"
-            @click="toggleOrderSummary"
-          >
+          <UiButton @click="toggleOrderSummary">
             <p class="text-xs text-zinc-600 dark:text-zinc-400 mb-1">
               {{ $t('checkout.confirmation.totalPaid') }}
             </p>
@@ -169,7 +163,7 @@
             <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
               {{ $t('checkout.confirmation.viewDetails') }} →
             </p>
-          </button>
+          </UiButton>
         </div>
 
         <!-- Expandable Order Summary -->
@@ -246,8 +240,7 @@
         >
           <!-- Order Items Section -->
           <div class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden mb-4">
-            <button
-              class="w-full p-4 flex items-center justify-between card-interactive"
+            <UiButton
               :aria-expanded="isOrderItemsExpanded"
               aria-controls="order-items-content"
               @click="toggleOrderItems"
@@ -288,7 +281,7 @@
                   d="M19 9l-7 7-7-7"
                 />
               </svg>
-            </button>
+            </UiButton>
             <div
               id="order-items-content"
               :class="['expandable px-4 pb-4', { expanded: isOrderItemsExpanded }]"
@@ -334,8 +327,7 @@
             v-if="shippingInfo"
             class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden"
           >
-            <button
-              class="w-full p-4 flex items-center justify-between card-interactive"
+            <UiButton
               :aria-expanded="isShippingInfoExpanded"
               aria-controls="shipping-info-content"
               @click="toggleShippingInfo"
@@ -382,7 +374,7 @@
                   d="M19 9l-7 7-7-7"
                 />
               </svg>
-            </button>
+            </UiButton>
             <div
               id="shipping-info-content"
               :class="['expandable px-4 pb-4', { expanded: isShippingInfoExpanded }]"
@@ -541,19 +533,13 @@
           class="space-y-3 slide-up stagger-7"
         >
           <!-- Primary: View Order Details (always visible) -->
-          <button
-            class="w-full py-3 bg-green-600 text-white font-semibold rounded-lg btn-primary flex items-center justify-center gap-2"
-            @click="viewOrderDetails"
-          >
+          <UiButton @click="viewOrderDetails">
             {{ $t('checkout.steps.confirmation.viewOrderDetails') }}
-          </button>
+          </UiButton>
 
           <!-- Print/Download Invoice Buttons -->
           <div class="grid grid-cols-2 gap-3">
-            <button
-              class="py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-medium rounded-lg btn-secondary flex items-center justify-center gap-2"
-              @click="handlePrintInvoice"
-            >
+            <UiButton @click="handlePrintInvoice">
               <svg
                 class="w-4 h-4"
                 fill="none"
@@ -568,11 +554,8 @@
                 />
               </svg>
               {{ $t('invoice.print') }}
-            </button>
-            <button
-              class="py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-medium rounded-lg btn-secondary flex items-center justify-center gap-2"
-              @click="handleDownloadInvoice"
-            >
+            </UiButton>
+            <UiButton @click="handleDownloadInvoice">
               <svg
                 class="w-4 h-4"
                 fill="none"
@@ -587,7 +570,7 @@
                 />
               </svg>
               {{ $t('invoice.download') }}
-            </button>
+            </UiButton>
           </div>
 
           <!-- Secondary: Continue Shopping -->

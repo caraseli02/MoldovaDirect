@@ -164,11 +164,10 @@
                 class="overflow-x-auto pb-2 -mx-6 px-6 scrollbar-hide lg:mx-0 lg:px-0 lg:overflow-visible lg:pb-0"
               >
                 <div class="flex gap-2 lg:flex-col lg:space-y-2 lg:gap-0">
-                  <button
+                  <UiButton
                     v-for="(image, index) in product.images"
                     :key="image.id || index"
                     type="button"
-                    class="flex-shrink-0 w-20 h-20 lg:w-full lg:aspect-square rounded-xl overflow-hidden border-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
                     :class="selectedImageIndex === index ? 'border-blue-500 ring-2 ring-blue-500 ring-offset-1' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'"
                     :aria-label="`View image ${index + 1}`"
                     @click="selectedImageIndex = index"
@@ -182,7 +181,7 @@
                       loading="lazy"
                       class="w-full h-full object-cover"
                     />
-                  </button>
+                  </UiButton>
                 </div>
               </div>
             </div>
@@ -484,22 +483,26 @@
             </UiCardHeader>
 
             <UiCardContent class="space-y-4">
-              <label class="block text-sm font-medium text-gray-900 dark:text-white">{{ $t('common.quantity') }}</label>
-              <select
+              <UiLabel>{{ $t('common.quantity') }}</UiLabel>
+              <UiSelect
                 v-model="selectedQuantity"
                 :disabled="(product.stockQuantity || 0) <= 0"
-                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400"
               >
-                <option
-                  v-for="n in Math.min(10, Math.max(1, product.stockQuantity || 1))"
-                  :key="n"
-                  :value="n"
-                >
-                  {{ n }}
-                </option>
-              </select>
+                <UiSelectTrigger class="w-full">
+                  <UiSelectValue />
+                </UiSelectTrigger>
+                <UiSelectContent>
+                  <UiSelectItem
+                    v-for="n in Math.min(10, Math.max(1, product.stockQuantity || 1))"
+                    :key="n"
+                    :value="n.toString()"
+                  >
+                    {{ n }}
+                  </UiSelectItem>
+                </UiSelectContent>
+              </UiSelect>
 
-              <Button
+              <UiButton
                 data-testid="add-to-cart-button"
                 :disabled="(product.stockQuantity || 0) <= 0 || cartLoading"
                 class="flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
@@ -531,7 +534,7 @@
                     {{ $t('products.outOfStock') }}
                   </template>
                 </span>
-              </Button>
+              </UiButton>
 
               <UiButton
                 type="button"
@@ -593,9 +596,9 @@
               </div>
             </UiCardContent>
             <UiCardFooter>
-              <Button class="w-full justify-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-900/40 dark:bg-blue-900/20 dark:text-blue-200">
+              <UiButton class="w-full justify-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-900/40 dark:bg-blue-900/20 dark:text-blue-200">
                 {{ $t('products.bundle.cta') }}
-              </Button>
+              </UiButton>
             </UiCardFooter>
           </UiCard>
         </aside>
@@ -661,7 +664,7 @@
               </div>
 
               <!-- Add to Cart Button (Thumb-Friendly) -->
-              <Button
+              <UiButton
                 :disabled="(product.stockQuantity || 0) <= 0 || cartLoading"
                 class="flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition min-h-[48px] min-w-[140px]"
                 :class="[
@@ -692,7 +695,7 @@
                     {{ $t('products.outOfStock') }}
                   </template>
                 </span>
-              </Button>
+              </UiButton>
             </div>
           </div>
         </div>

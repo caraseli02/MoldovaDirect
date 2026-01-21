@@ -84,15 +84,12 @@
             <h2 class="text-lg font-medium text-gray-900">
               User Details
             </h2>
-            <button
-              class="text-gray-400 hover:text-gray-600"
-              @click="closeUserDetail"
-            >
+            <UiButton @click="closeUserDetail">
               <commonIcon
                 name="lucide:x"
                 class="w-6 h-6"
               />
-            </button>
+            </UiButton>
           </div>
 
           <!-- Modal Content -->

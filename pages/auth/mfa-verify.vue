@@ -16,13 +16,10 @@
       >
         <div class="rounded-md shadow-sm -space-y-px">
           <div>
-            <label
-              for="mfa-code"
-              class="sr-only"
-            >
+            <UiLabel for="mfa-code">
               {{ $t('auth.mfa.verify.codeLabel') }}
-            </label>
-            <input
+            </UiLabel>
+            <UiInput
               id="mfa-code"
               v-model="code"
               type="text"
@@ -31,11 +28,7 @@
               maxlength="6"
               autocomplete="one-time-code"
               required
-              class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm text-center text-2xl tracking-widest"
-              :class="{
-                'border-red-500': error,
-                'border-gray-300': !error,
-              }"
+              :class="{ 'border-red-500': error, 'border-gray-300': !error }"
               :placeholder="$t('auth.mfa.verify.codePlaceholder')"
               :disabled="authStore.mfaLoading"
               @input="handleInput"

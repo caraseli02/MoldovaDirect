@@ -100,49 +100,45 @@
                       class="group rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900"
                     >
                       <div class="flex items-start gap-3">
-                        <input
+                        <UiInput
                           :id="`step-${index}`"
                           type="checkbox"
                           :checked="isStepCompleted(index)"
-                          class="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-800"
                           @change="handleToggleStep(index)"
                         />
-                        <label
+                        <UiLabel
                           :for="`step-${index}`"
-                          class="flex-1 cursor-pointer text-sm"
                           :class="isStepCompleted(index) ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-200'"
                         >
                           {{ step }}
-                        </label>
+                        </UiLabel>
                       </div>
                       <div
                         v-if="showNoteInput[index] || getStepNote(index)"
                         class="mt-2 pl-7"
                       >
-                        <textarea
+                        <UiTextarea
                           :value="getStepNote(index)"
                           placeholder="Add notes (issues found, observations, etc.)"
                           rows="2"
-                          class="w-full rounded border border-slate-300 bg-slate-50 px-2 py-1 text-xs text-slate-700 placeholder-slate-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-500"
-                          @input="(e) => handleUpdateNote(index, (e.target as HTMLTextAreaElement).value)"
-                        ></textarea>
+                          @input="handleUpdateNote(index, $event)"
+                        />
                       </div>
-                      <button
+                      <UiButton
                         v-if="!showNoteInput[index] && !getStepNote(index)"
-                        class="ml-7 mt-1 text-xs text-slate-400 opacity-0 transition group-hover:opacity-100 hover:text-primary-600 dark:text-slate-500 dark:hover:text-primary-400"
                         @click="showNoteInput[index] = true"
                       >
                         + Add note
-                      </button>
+                      </UiButton>
                     </div>
                   </div>
-                  <button
-                    v-if="currentProgress && currentProgress.completedSteps.length > 0"
+                  <UiButton
+                    v-if="currentProgress && currentProgress.completedSteps.length>0"
                     class="mt-3 text-xs text-slate-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400"
                     @click="handleClearProgress"
                   >
                     Clear progress
-                  </button>
+                  </UiButton>
                 </div>
               </div>
             </div>
@@ -204,8 +200,7 @@
                   Open account dashboard
                 </NuxtLink>
                 <div class="flex gap-2">
-                  <button
-                    class="flex-1 inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+                  <UiButton
                     type="button"
                     title="Export current session state"
                     @click="handleExportSession"
@@ -215,9 +210,8 @@
                       class="h-4 w-4"
                     />
                     Export
-                  </button>
-                  <button
-                    class="flex-1 inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+                  </UiButton>
+                  <UiButton
                     type="button"
                     title="Import session state"
                     @click="handleShowImport"
@@ -227,11 +221,10 @@
                       class="h-4 w-4"
                     />
                     Import
-                  </button>
+                  </UiButton>
                 </div>
-                <button
+                <UiButton
                   v-if="authStore.lockoutTime"
-                  class="inline-flex items-center justify-center gap-2 rounded-md border border-orange-500 px-4 py-2 text-sm font-medium text-orange-600 transition hover:bg-orange-50 dark:text-orange-300 dark:hover:bg-orange-500/10"
                   type="button"
                   @click="handleClearLockout"
                 >
@@ -240,9 +233,8 @@
                     class="h-4 w-4"
                   />
                   Clear lockout timer
-                </button>
-                <button
-                  class="inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
+                </UiButton>
+                <UiButton
                   type="button"
                   @click="handleEndSimulation"
                 >
@@ -251,7 +243,7 @@
                     class="h-4 w-4"
                   />
                   End simulation
-                </button>
+                </UiButton>
               </div>
             </div>
           </div>
@@ -263,27 +255,28 @@
               Available personas
             </h2>
             <div class="flex flex-col gap-3 md:flex-row md:items-center">
-              <input
+              <UiInput
                 v-model="searchQuery"
                 type="text"
                 placeholder="Search personas..."
-                class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-500"
               />
-              <select
-                v-model="filterFocusArea"
-                class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm text-slate-900 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
-              >
-                <option value="">
-                  All Focus Areas
-                </option>
-                <option
-                  v-for="area in uniqueFocusAreas"
-                  :key="area"
-                  :value="area"
-                >
-                  {{ area }}
-                </option>
-              </select>
+              <UiSelect v-model="filterFocusArea">
+                <UiSelectTrigger class="w-full">
+                  <UiSelectValue placeholder="All Focus Areas" />
+                </UiSelectTrigger>
+                <UiSelectContent>
+                  <UiSelectItem value="">
+                    All Focus Areas
+                  </UiSelectItem>
+                  <UiSelectItem
+                    v-for="area in uniqueFocusAreas"
+                    :key="area"
+                    :value="area"
+                  >
+                    {{ area }}
+                  </UiSelectItem>
+                </UiSelectContent>
+              </UiSelect>
             </div>
           </div>
           <div
@@ -293,12 +286,9 @@
             <p class="text-slate-600 dark:text-slate-400">
               No personas match your search criteria
             </p>
-            <button
-              class="mt-4 text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400"
-              @click="searchQuery = ''; filterFocusArea = ''"
-            >
+            <UiButton @click="searchQuery = ''; filterFocusArea = ''">
               Clear filters
-            </button>
+            </UiButton>
           </div>
           <div class="grid gap-6 md:grid-cols-2">
             <article
@@ -354,8 +344,7 @@
               </div>
 
               <div class="mt-6 flex flex-col gap-2">
-                <button
-                  class="inline-flex items-center justify-center gap-2 rounded-md bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60"
+                <UiButton
                   type="button"
                   :disabled="activePersona?.key === persona.key"
                   @click="() => handleActivatePersona(persona.key)"
@@ -365,7 +354,7 @@
                     class="h-4 w-4"
                   />
                   Activate persona
-                </button>
+                </UiButton>
                 <NuxtLink
                   :to="localePath(persona.quickLinks[0]?.route || '/account')"
                   class="inline-flex items-center justify-center gap-2 rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
@@ -393,38 +382,28 @@
             <h3 class="text-xl font-semibold text-slate-900 dark:text-white">
               Import Session State
             </h3>
-            <button
-              class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
-              @click="showImportModal = false"
-            >
+            <UiButton @click="showImportModal = false">
               <Icon
                 name="i-heroicons-x-mark"
                 class="h-6 w-6"
               />
-            </button>
+            </UiButton>
           </div>
           <p class="mb-4 text-sm text-slate-600 dark:text-slate-300">
             Paste the exported session JSON below to restore a previous test session.
           </p>
-          <textarea
+          <UiTextarea
             v-model="importJson"
             placeholder="Paste exported session JSON here..."
             rows="10"
-            class="w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-3 font-mono text-sm text-slate-900 placeholder-slate-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-slate-600 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500"
-          ></textarea>
+          />
           <div class="mt-4 flex gap-3 justify-end">
-            <button
-              class="px-4 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
-              @click="showImportModal = false"
-            >
+            <UiButton @click="showImportModal = false">
               Cancel
-            </button>
-            <button
-              class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
-              @click="handleImportSession"
-            >
+            </UiButton>
+            <UiButton @click="handleImportSession">
               Import Session
-            </button>
+            </UiButton>
           </div>
         </div>
       </div>

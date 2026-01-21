@@ -2,10 +2,7 @@
   <div class="py-12">
     <div class="container max-w-6xl">
       <!-- Back Button -->
-      <button
-        class="mb-6 inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-        @click="router.back()"
-      >
+      <UiButton @click="router.back()">
         <svg
           class="w-4 h-4 mr-2"
           fill="none"
@@ -20,7 +17,7 @@
           />
         </svg>
         {{ $t('common.back', 'Back to Orders') }}
-      </button>
+      </UiButton>
 
       <!-- Loading State -->
       <div
@@ -58,12 +55,9 @@
         <p class="text-red-700 dark:text-red-300 mb-4">
           {{ errorValue }}
         </p>
-        <button
-          class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-          @click="router.push(localePath('/account/orders'))"
-        >
+        <UiButton @click="router.push(localePath('/account/orders'))">
           {{ $t('orders.backToOrders', 'Back to Orders') }}
-        </button>
+        </UiButton>
       </div>
 
       <!-- Order Details -->
