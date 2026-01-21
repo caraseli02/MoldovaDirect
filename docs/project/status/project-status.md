@@ -11,7 +11,7 @@ Moldova Direct is an e-commerce platform specializing in authentic Moldovan food
 
 ### Technology Stack
 - **Frontend**: Nuxt 4.2.2 + Vue 3.5 Composition API + TypeScript
-- **UI Components**: Custom component system (migrated from shadcn-vue in PR #346)
+- **UI Components**: shadcn-vue + reka-ui (enforced via ESLint, PR #360)
 - **Styling**: Tailwind CSS v4 with CSS variables and dark mode
 - **State Management**: Pinia stores with TypeScript
 - **Database**: Supabase (PostgreSQL) with Row Level Security
@@ -27,7 +27,7 @@ Moldova Direct is an e-commerce platform specializing in authentic Moldovan food
 - ✅ GitHub Actions CI/CD pipeline for testing
 - ✅ Row Level Security policies implemented
 - ✅ Authentication system with Supabase Auth
-- ✅ Custom component system (replaced shadcn-vue/Reka UI)
+- ✅ shadcn-vue UI components enforced (PR #360, fixed Jan 21)
 - ✅ Tailwind CSS v4 with modern configuration
 - ✅ Security hardening (CSP headers, CSRF, rate limiting)
 
@@ -84,6 +84,21 @@ Moldova Direct is an e-commerce platform specializing in authentic Moldovan food
 
 ### Recently Completed (Latest Updates)
 
+#### January 21, 2026 - shadcn-vue Component Fixes
+```
+Critical bug fix and alignment with official shadcn-vue patterns
+
+Issue: Infinite recursion in Input.vue and Textarea.vue during SSR
+- Fixed: Updated to raw HTML elements (matches official shadcn-vue)
+- Verified: Server stable, all components working
+- Documentation: docs/reports/shadcn-vue-refactor-test-report.md
+
+Changes:
+- Input.vue: Raw <input> element, passive: true
+- Textarea.vue: Raw <textarea> element, passive: true
+- Removed Primitive imports (not needed for simple form elements)
+```
+
 #### January 2026 - Security & Codebase Improvements
 ```
 PR #337: Security hardening
@@ -96,6 +111,11 @@ PR #346: Custom component system
 - Replaced shadcn-vue and Reka UI with lightweight custom components
 - Reduced bundle size and dependency complexity
 - Maintained accessibility and consistent design
+
+PR #360: shadcn-vue UI components enforcement
+- Enforced shadcn-vue components across 95 files
+- ESLint rule for restricted HTML elements
+- Critical Input/Textarea component fixes (Jan 21)
 
 PR #341: Codebase cleanup
 - Removed 162 unused files

@@ -298,4 +298,14 @@ export default withNuxt(
       'sonarjs/cognitive-complexity': ['warn', 15],
     },
   },
+
+  // UI component files - ALLOW raw HTML elements
+  // shadcn-vue components use raw HTML for simple form elements (input, textarea)
+  // See: https://github.com/unovue/shadcn-vue/tree/dev/apps/v4/registry/new-york-v4/ui
+  {
+    files: ['components/ui/**/*.vue'],
+    rules: {
+      'vue/no-restricted-html-elements': 'off',
+    },
+  },
 )
