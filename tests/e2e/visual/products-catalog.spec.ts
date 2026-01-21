@@ -75,8 +75,9 @@ test.describe('Products Catalog Visual Review', () => {
       await page.waitForLoadState('networkidle')
       await page.waitForTimeout(1000)
 
-      // Verify language switcher is visible (use first() as there's one for desktop and one for mobile)
-      const localeSwitcher = page.locator('[data-testid="locale-switcher"]').first()
+      // Verify language switcher trigger is visible (use first() as there's one for desktop and one for mobile)
+      // Note: We check for the trigger button, not the dropdown content (which is hidden until opened)
+      const localeSwitcher = page.locator('[data-testid="locale-switcher-trigger"]').first()
       await expect(localeSwitcher).toBeVisible({ timeout: 5000 })
 
       await captureResponsiveScreenshots(page, {
