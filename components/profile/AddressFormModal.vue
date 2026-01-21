@@ -283,11 +283,13 @@ import type { ToastPlugin } from '~/types/plugins'
 
 interface Props {
   address?: Address | null
+  loading?: boolean
 }
 
 interface Emits {
   (e: 'save', address: Address): void
   (e: 'close'): void
+  (e: 'update:loading', value: boolean): void
 }
 
 const props = defineProps<Props>()
@@ -298,8 +300,16 @@ const user = useSupabaseUser()
 const nuxtApp = useNuxtApp()
 const $toast = nuxtApp.$toast as ToastPlugin
 
-// Reactive state
-const isLoading = ref(false)
+// Reactive state - local loading state when prop not provided
+const localIsLoading = ref(false)
+const isLoading = computed(() => props.loading ?? localIsLoading.value)
+
+const setIsLoading = (value: boolean) => {
+  if (props.loading === undefined) {
+    localIsLoading.value = value
+  }
+  emit('update:loading', value)
+}
 
 // Get user's name parts
 const userName = user.value?.user_metadata?.full_name || user.value?.user_metadata?.name || ''
@@ -410,21 +420,13 @@ const validateForm = (): boolean => {
 const handleSubmit = async () => {
   if (!validateForm()) return
 
-  isLoading.value = true
+  setIsLoading(true)
 
   // Emit save event - parent component handles actual save and errors
-  // Parent will close modal on success or keep open on error
+  // Parent is responsible for:
+  // - Closing modal on success (via close event)
+  // - Resetting loading state on error (via v-model:loading or keeping modal open)
   emit('save', { ...form })
-
-  // Note: emit() is synchronous and doesn't throw.
-  // The parent component handles the actual async save operation.
-  // On success, parent calls closeAddressForm() which unmounts this component.
-  // On error, we provide a fallback timeout to reset loading state.
-  setTimeout(() => {
-    if (isLoading.value) {
-      isLoading.value = false
-    }
-  }, 5000) // Reset after 5 seconds if parent hasn't closed modal
 }
 
 // Initialize form on mount

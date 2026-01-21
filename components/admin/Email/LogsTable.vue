@@ -387,17 +387,19 @@ const debouncedSearch = () => {
 async function searchLogs() {
   loading.value = true
   try {
-    const { data } = await useFetch('/api/admin/email-logs/search', {
-      params: {
-        ...filters.value,
-        page: pagination.value.page,
-        limit: pagination.value.limit,
-      },
+    const queryParams = new URLSearchParams({
+      ...filters.value,
+      page: String(pagination.value.page),
+      limit: String(pagination.value.limit),
     })
 
-    if (data.value) {
-      logs.value = data.value.logs
-      pagination.value = data.value.pagination
+    const data = await $fetch<{ logs: typeof logs.value, pagination: typeof pagination.value }>(
+      `/api/admin/email-logs/search?${queryParams.toString()}`,
+    )
+
+    if (data) {
+      logs.value = data.logs
+      pagination.value = data.pagination
     }
   }
   catch (error: unknown) {

@@ -98,13 +98,13 @@ The refactoring correctly enforced shadcn-vue component usage across the codebas
 
 ### Priority Issues
 
-| Priority | Component | Issue | Fix Effort |
-|----------|-----------|-------|------------|
-| CRITICAL | `AddressFormModal.vue` | 5-second fallback timeout masks save failures | High |
-| HIGH | `PaymentStep.vue` | Optional chaining hides missing methods | Medium |
-| HIGH | `LogsTable.vue` | useFetch used incorrectly in async function | Low |
-| MEDIUM | `StatusUpdateDialog.vue` | Unsafe type assertions in error handlers | Low |
-| MEDIUM | `useUserAddresses.ts` | Dual error handling pattern (state + throw) | Medium |
+| Priority | Component | Issue | Fix Effort | Status |
+|----------|-----------|-------|------------|--------|
+| CRITICAL | `AddressFormModal.vue` | 5-second fallback timeout masks save failures | High | ✅ Fixed |
+| HIGH | `PaymentStep.vue` | Optional chaining hides missing methods | Medium | ✅ Fixed |
+| HIGH | `LogsTable.vue` | useFetch used incorrectly in async function | Low | ✅ Fixed |
+| MEDIUM | `StatusUpdateDialog.vue` | Unsafe type assertions in error handlers | Low | ⏳ Pending |
+| MEDIUM | `useUserAddresses.ts` | Dual error handling pattern (state + throw) | Medium | ⏳ Pending |
 
 ### Detailed Issues
 
@@ -391,9 +391,9 @@ import type { SelectProps, CheckboxProps } from '~/components/ui/...'
 - [ ] Run full E2E test suite (has timeout issues separate from refactor)
 
 ### Optional Follow-ups (Post-Merge)
-- [ ] Fix AddressFormModal timeout pattern
-- [ ] Fix PaymentStep optional chaining
-- [ ] Fix LogsTable useFetch pattern
+- [x] Fix AddressFormModal timeout pattern (Completed 2026-01-21)
+- [x] Fix PaymentStep optional chaining (Completed 2026-01-21)
+- [x] Fix LogsTable useFetch pattern (Completed 2026-01-21)
 - [ ] Add type re-exports to UI components
 - [ ] Create Form Field wrapper types
 - [ ] Fix Input/Textarea null consistency
@@ -432,9 +432,9 @@ import type { SelectProps, CheckboxProps } from '~/components/ui/...'
 
 | Priority | Task | Status | Effort | File |
 |----------|------|--------|--------|------|
-| CRITICAL | Fix AddressFormModal fallback timeout pattern | ⏳ | High | `components/profile/AddressFormModal.vue:410-428` |
-| HIGH | Fix PaymentStep optional chaining | ⏳ | Medium | `components/checkout/PaymentStep.vue:471-509` |
-| HIGH | Fix LogsTable useFetch pattern | ⏳ | Low | `components/admin/Email/LogsTable.vue:387-410` |
+| CRITICAL | Fix AddressFormModal fallback timeout pattern | ✅ | High | `components/profile/AddressFormModal.vue` |
+| HIGH | Fix PaymentStep optional chaining | ✅ | Medium | `components/checkout/PaymentStep.vue` |
+| HIGH | Fix LogsTable useFetch pattern | ✅ | Low | `components/admin/Email/LogsTable.vue` |
 | MEDIUM | Fix StatusUpdateDialog type assertions | ⏳ | Low | `components/admin/Orders/StatusUpdateDialog.vue:338-345` |
 | MEDIUM | Fix useUserAddresses dual error handling | ⏳ | Medium | `composables/useUserAddresses.ts` |
 
@@ -464,7 +464,7 @@ import type { SelectProps, CheckboxProps } from '~/components/ui/...'
 ```
 Progress: ████████████████████ 100%
 
-Completed:   18 tasks
+Completed:   21 tasks
 In Progress: 0 tasks
 Pending:     0 tasks (ready to merge)
 ```
@@ -478,6 +478,9 @@ Pending:     0 tasks (ready to merge)
 6. ✅ Run visual regression tests (12/17 passed)
 7. ✅ Manual browser testing with Playwright
 8. ✅ Fixed test selector bug (locale-switcher)
+9. ✅ Fixed AddressFormModal timeout pattern (parent-controlled loading state)
+10. ✅ Fixed PaymentStep optional chaining (removed type assertions)
+11. ✅ Fixed LogsTable useFetch pattern (changed to $fetch)
 
 **Ready:**
 1. ✅ All critical fixes completed
