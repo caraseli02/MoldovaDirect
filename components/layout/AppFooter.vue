@@ -327,7 +327,8 @@ const subscribeNewsletter = async () => {
     )
     email.value = ''
   }
-  catch {
+  catch (error: unknown) {
+    console.error('Newsletter subscription failed:', error)
     toast.error(
       t('footer.newsletter.error.title') || 'Subscription failed',
       {

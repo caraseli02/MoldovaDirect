@@ -22,10 +22,6 @@ const FEATURE = 'orders'
 const TEST_EMAIL = process.env.TEST_USER_EMAIL
 const TEST_PASSWORD = process.env.TEST_USER_PASSWORD
 
-if (!TEST_EMAIL || !TEST_PASSWORD) {
-  throw new Error('TEST_USER_EMAIL and TEST_USER_PASSWORD required')
-}
-
 // Helper for inline login - use pressSequentially to trigger Vue reactivity
 async function performLogin(page: any) {
   await page.goto('/auth/login')
@@ -56,6 +52,11 @@ const test = base.extend<{
   authPage: ReturnType<typeof base.info>['fixtures']['page']
 }>({
   authPage: async ({ browser }, use, testInfo) => {
+    // Skip tests if credentials not available
+    if (!TEST_EMAIL || !TEST_PASSWORD) {
+      test.skip(true, 'TEST_USER_EMAIL and TEST_USER_PASSWORD not set in environment')
+    }
+
     const projectName = testInfo.project.name
     const locale = projectName.split('-')[1] || 'es'
     const storagePath = path.join(process.cwd(), `tests/fixtures/.auth/user-${locale}.json`)
