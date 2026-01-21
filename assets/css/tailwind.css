@@ -26,7 +26,8 @@
   }
 
   html.dark {
-    background-color: rgb(17 24 39); /* gray-900 */
+    background-color: rgb(17 24 39);
+    /* gray-900 */
   }
 
   body {
@@ -34,7 +35,15 @@
   }
 
   .dark body {
-    background-color: rgb(17 24 39); /* gray-900 */
+    background-color: rgb(17 24 39);
+    /* gray-900 */
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
   }
 }
 
@@ -281,6 +290,7 @@
 
 /* Animation Presets for Landing Page Modernization */
 @layer utilities {
+
   /* Screen Reader Only - Accessibility utility */
   .sr-only,
   .visually-hidden {
@@ -337,6 +347,7 @@
 
 /* Reduced Motion Support for Accessibility */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -356,4 +367,27 @@
     transform: none;
     box-shadow: none;
   }
+}
+
+/* Page Transitions */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* Layout Transitions */
+.layout-enter-active,
+.layout-leave-active {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.layout-enter-from,
+.layout-leave-to {
+  opacity: 0;
 }

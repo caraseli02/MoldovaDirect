@@ -30,6 +30,10 @@ export default defineNuxtConfig({
     dirs: [...BASE_COMPONENT_DIRS],
   },
   devtools: { enabled: false },
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
+    layoutTransition: { name: 'layout', mode: 'out-in' },
+  },
 
   css: ['~/assets/css/tailwind.css'],
 
@@ -231,8 +235,9 @@ export default defineNuxtConfig({
         modifiers: { format: 'avif', quality: 80, fit: 'cover', width: 800, height: 800 },
       },
     },
-    // Vercel's native image optimization in production, IPX in development
-    provider: process.env.VERCEL ? 'vercel' : 'ipx',
+    // Temporarily disabled IPX in development to fix 404 image errors
+    // See implementation_plan.md for details
+    provider: process.env.VERCEL ? 'vercel' : 'none',
   },
 
   pwa: {

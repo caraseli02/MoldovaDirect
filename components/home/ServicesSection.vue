@@ -1,18 +1,18 @@
 <template>
-  <section class="bg-white py-20 dark:bg-gray-950 md:py-28">
-    <div class="container">
-      <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 class="text-4xl font-bold md:text-5xl lg:text-6xl tracking-tight">
+  <section class="bg-white py-16 dark:bg-gray-950 md:py-24 lg:py-32">
+    <div class="container px-6 md:px-8">
+      <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between mb-16">
+        <div class="max-w-3xl">
+          <h2 class="text-3xl font-bold md:text-5xl lg:text-7xl tracking-tight leading-[1.1]">
             {{ t('home.services.title') }}
           </h2>
-          <p class="mt-4 max-w-2xl text-sm md:text-base text-gray-600 dark:text-gray-400">
+          <p class="mt-6 text-base md:text-lg text-gray-600 dark:text-gray-400">
             {{ t('home.services.subtitle') }}
           </p>
         </div>
         <NuxtLink
           :to="localePath('/contact')"
-          class="inline-flex items-center gap-2 rounded-full border border-primary-200 px-5 py-2 text-sm font-semibold text-primary-700 transition hover:border-primary-400 hover:text-primary-800 dark:border-primary-700/40 dark:text-primary-200"
+          class="inline-flex items-center gap-2 rounded-full border border-primary-200 px-6 py-3 text-sm font-bold text-primary-700 transition hover:bg-primary-50 dark:border-primary-700/40 dark:text-primary-200 dark:hover:bg-primary-950/30"
         >
           {{ t('home.services.contactCta') }}
           <commonIcon

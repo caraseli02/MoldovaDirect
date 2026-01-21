@@ -1,10 +1,13 @@
 <template>
   <section class="relative flex items-center overflow-hidden bg-brand-dark">
-    <!-- Optimized min-height for mobile-first (60vh mobile, 75vh desktop) -->
-    <div class="relative flex min-h-[60vh] w-full items-center md:min-h-[75vh]">
+    <!-- Optimized min-height for mobile-first with aspect ratio to prevent CLS -->
+    <div
+      class="hero-container relative flex w-full items-center"
+      style="aspect-ratio: 16/9; min-height: 60vh;"
+    >
       <!-- Video Background (Optional - controlled by showVideo prop) -->
       <div
-        v-if="showVideo && !videoLoadError"
+        v-if="showVideo && !videoLoadError && !videoPlaybackFailed"
         class="absolute inset-0 z-0"
         aria-hidden="true"
       >
@@ -57,7 +60,8 @@
             class="h-full w-full object-cover object-center"
           />
           <!-- Gradient overlay for visual contrast -->
-          <div class="absolute inset-0 bg-[linear-gradient(to_br,_rgba(36,20,5,0.88)_0%,_rgba(114,47,55,0.52)_100%)]"></div>
+          <div class="absolute inset-0 bg-[linear-gradient(to_br,_rgba(36,20,5,0.88)_0%,_rgba(114,47,55,0.52)_100%)]">
+          </div>
         </div>
 
         <!-- Poster fallback (mobile or error state) -->
@@ -74,14 +78,16 @@
             sizes="sm:100vw md:100vw lg:100vw"
             class="h-full w-full object-cover object-center"
           />
-          <div class="absolute inset-0 bg-[linear-gradient(to_br,_rgba(36,20,5,0.88)_0%,_rgba(114,47,55,0.52)_100%)]"></div>
+          <div class="absolute inset-0 bg-[linear-gradient(to_br,_rgba(36,20,5,0.88)_0%,_rgba(114,47,55,0.52)_100%)]">
+          </div>
         </div>
 
         <!-- Luxury gradient fallback background -->
         <div
           v-else
           class="absolute inset-0 bg-[linear-gradient(135deg,_#241405_0%,_#1a0e03_50%,_#722F37_100%),_radial-gradient(circle_at_10%_10%,_rgba(252,250,242,0.05),_transparent_45%)]"
-        ></div>
+        >
+        </div>
       </div>
 
       <!-- Content Container -->
@@ -355,8 +361,18 @@ video {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
+  }
+}
+
+/* Hide video on mobile to save bandwidth - poster will show instead */
+
+/* Responsive hero container min-height */
+@media (min-width: 768px) {
+  .hero-container {
+    min-height: 75vh;
   }
 }
 </style>

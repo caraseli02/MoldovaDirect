@@ -14,8 +14,6 @@
  * const { currentVideo, showVideo } = useHeroVideos()
  */
 
-import { ref } from 'vue'
-
 export interface HeroVideo {
   id: string
   webm: string
@@ -89,11 +87,6 @@ export const useHeroVideos = () => {
     // Add more videos here as needed
   ]
 
-  // Detect mobile devices to show poster image instead of video (bandwidth savings)
-  const { isMobile, updateDimensions } = useDevice()
-  const deviceReady = ref(false)
-  const isClient = import.meta.client
-
   /**
    * Randomly select a video from the library
    * Selection persists for the page session via useState
@@ -121,30 +114,16 @@ export const useHeroVideos = () => {
   // Select video once per page load
   const currentVideo = useState<HeroVideo>('hero-video', getRandomVideo)
 
-  const setDeviceReady = () => {
-    updateDimensions()
-    deviceReady.value = true
-  }
-
-  // Guard onMounted so calling this composable outside setup (e.g., unit tests) doesn't warn
-  if (isClient) {
-    if (getCurrentInstance()) {
-      onMounted(setDeviceReady)
-    }
-    else {
-      setDeviceReady()
-    }
-  }
-
   /**
    * Determine if video should play
-   * Best practice: Disable on mobile to save bandwidth
-   * Falls back to poster image on small screens
+   * Performance optimization: Let video load on all devices, but use CSS media queries
+   * to hide it on mobile. This eliminates hydration blocking from device detection.
+   * Mobile users will see the poster image via CSS, saving bandwidth.
    */
   const showVideo = computed(() => {
-    // Show video only on desktop devices to save mobile bandwidth
-    // Client-side check ensures consistent hydration and waits for device measure
-    return isClient && deviceReady.value && !isMobile.value
+    // Always true to prevent hydration mismatches
+    // CSS handles hiding video on mobile: @media (max-width: 768px) { video { display: none; } }
+    return true
   })
 
   return {
