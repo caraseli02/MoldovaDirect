@@ -158,7 +158,10 @@
               <div class="space-y-4 pb-4">
                 <div class="flex justify-between">
                   <span class="text-zinc-500 dark:text-zinc-400">{{ $t('common.subtotal') }}</span>
-                  <span class="text-zinc-900 dark:text-white font-medium">{{ formattedSubtotal }}</span>
+                  <span
+                    data-testid="cart-subtotal"
+                    class="text-zinc-900 dark:text-white font-medium"
+                  >{{ formattedSubtotal }}</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-zinc-500 dark:text-zinc-400">{{ $t('common.shipping') }}</span>
@@ -182,10 +185,10 @@
               </div>
 
               <!-- Checkout Button -->
-              <button
+              <UiButton
                 :aria-label="$t('common.proceedToCheckout')"
                 :disabled="loading || isEmpty"
-                class="w-full py-4 bg-primary-600 text-white text-base font-semibold rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[52px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                class="w-full py-4 flex items-center justify-center gap-2 min-h-[52px]"
                 @click="goToCheckout"
               >
                 <span>{{ $t('common.checkout') }}</span>
@@ -202,7 +205,7 @@
                     d="M17 8l4 4m0 0l-4 4m4-4H3"
                   />
                 </svg>
-              </button>
+              </UiButton>
 
               <!-- Continue Shopping -->
               <NuxtLink
@@ -259,14 +262,15 @@
       class="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 shadow-lg z-50"
     >
       <!-- Expand Handle -->
-      <button
-        class="w-full py-2 flex justify-center"
+      <UiButton
+        variant="ghost"
+        class="w-full py-2 flex justify-center h-auto"
         :aria-label="showMobileSummary ? $t('common.hideOrderSummary') : $t('common.showOrderSummary')"
         :aria-expanded="showMobileSummary"
         @click="showMobileSummary = !showMobileSummary"
       >
         <div class="w-8 h-1 bg-zinc-300 dark:bg-zinc-700 rounded-full"></div>
-      </button>
+      </UiButton>
 
       <!-- Expandable Summary -->
       <div
@@ -276,7 +280,10 @@
         <div class="space-y-2 border-b border-zinc-100 dark:border-zinc-800 pb-4">
           <div class="flex justify-between text-sm">
             <span class="text-zinc-500 dark:text-zinc-400">{{ $t('common.subtotal') }}</span>
-            <span class="text-zinc-900 dark:text-white">{{ formattedSubtotal }}</span>
+            <span
+              data-testid="cart-subtotal-mobile"
+              class="text-zinc-900 dark:text-white"
+            >{{ formattedSubtotal }}</span>
           </div>
           <div class="flex justify-between text-sm">
             <span class="text-zinc-500 dark:text-zinc-400">{{ $t('common.shipping') }}</span>
@@ -322,10 +329,10 @@
         </div>
 
         <!-- Checkout Button -->
-        <button
+        <UiButton
           :disabled="loading || isEmpty"
           :aria-label="$t('common.proceedToCheckout')"
-          class="w-full py-4 bg-primary-600 text-white text-base font-semibold rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[52px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+          class="w-full py-4 flex items-center justify-center gap-2 min-h-[52px]"
           @click="goToCheckout"
         >
           <span>{{ $t('common.checkout') }}</span>
@@ -342,7 +349,7 @@
               d="M17 8l4 4m0 0l-4 4m4-4H3"
             />
           </svg>
-        </button>
+        </UiButton>
 
         <!-- Continue Shopping -->
         <NuxtLink

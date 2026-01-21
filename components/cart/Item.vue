@@ -31,6 +31,7 @@
 
           <!-- Remove Button -->
           <UiButton
+            data-testid="cart-remove-button"
             :disabled="loading"
             :aria-label="$t('cart.removeItem')"
             @click="$emit('remove-item', item.id)"
@@ -77,6 +78,7 @@
       <!-- Quantity Controls -->
       <div class="flex items-center bg-zinc-100 dark:bg-zinc-700/50 rounded-lg p-1">
         <UiButton
+          data-testid="cart-decrease-button"
           :disabled="loading || item.quantity <= 1"
           :aria-label="$t('cart.decreaseQuantity')"
           @click="updateQuantity(item.quantity - 1)"
@@ -98,6 +100,7 @@
         </UiButton>
 
         <span
+          data-testid="cart-quantity"
           role="status"
           aria-live="polite"
           class="w-10 text-center font-semibold text-zinc-900 dark:text-white"
@@ -106,6 +109,7 @@
         </span>
 
         <UiButton
+          data-testid="cart-increase-button"
           :disabled="loading || item.quantity>= item.product.stock"
           :aria-label="$t('cart.increaseQuantity')"
           class="w-10 h-10 rounded-md flex items-center justify-center text-zinc-600 dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
