@@ -7,19 +7,17 @@
 <template>
   <div class="flex items-center gap-2">
     <div class="relative">
-      <input
+      <UiInput
         v-model="fromDate"
         type="date"
-        class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
         @change="updateRange"
       />
     </div>
     <span class="text-gray-500 text-sm">{{ $t('common.to') }}</span>
     <div class="relative">
-      <input
+      <UiInput
         v-model="toDate"
         type="date"
-        class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
         @change="updateRange"
       />
     </div>

@@ -149,11 +149,10 @@ defineExpose({ triggerFileUpload })
           </div>
         </Transition>
 
-        <button
+        <UiButton
           type="button"
           :aria-label="$t('profile.changePicture')"
           :disabled="isLoading"
-          class="absolute -bottom-1 -right-1 h-11 w-11 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg flex items-center justify-center transition-all duration-200 group-hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
           data-testid="profile-avatar-camera-btn"
           @click.stop="triggerFileUpload"
           @keydown.enter.stop="triggerFileUpload"
@@ -164,7 +163,7 @@ defineExpose({ triggerFileUpload })
             class="h-5 w-5"
             aria-hidden="true"
           />
-        </button>
+        </UiButton>
       </div>
 
       <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-2">
@@ -175,22 +174,20 @@ defineExpose({ triggerFileUpload })
         v-if="pictureUrl"
         class="flex justify-center"
       >
-        <button
+        <UiButton
           type="button"
           :disabled="isLoading"
-          class="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           data-testid="profile-avatar-remove-btn"
           @click="emit('remove')"
         >
           {{ $t('profile.removePicture') }}
-        </button>
+        </UiButton>
       </div>
 
-      <input
+      <UiInput
         ref="fileInputRef"
         type="file"
         accept="image/*"
-        class="hidden"
         data-testid="profile-avatar-file-input"
         @change="handleFileUpload"
       />

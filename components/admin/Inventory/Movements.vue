@@ -39,51 +39,47 @@
       <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Movement Type Filter -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Movement Type
-          </label>
-          <select
+          <UiLabel>Movement Type</UiLabel>
+          <UiSelect
             v-model="filters.movementType"
-            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm"
-            @change="applyFilters"
+            @update:model-value="applyFilters"
           >
-            <option value="">
-              All Types
-            </option>
-            <option value="in">
-              Stock In
-            </option>
-            <option value="out">
-              Stock Out
-            </option>
-            <option value="adjustment">
-              Adjustment
-            </option>
-          </select>
+            <UiSelectTrigger>
+              <UiSelectValue />
+            </UiSelectTrigger>
+            <UiSelectContent>
+              <UiSelectItem value="">
+                All Types
+              </UiSelectItem>
+              <UiSelectItem value="in">
+                Stock In
+              </UiSelectItem>
+              <UiSelectItem value="out">
+                Stock Out
+              </UiSelectItem>
+              <UiSelectItem value="adjustment">
+                Adjustment
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
         </div>
 
         <!-- Start Date Filter -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Start Date
-          </label>
-          <input
+          <UiLabel>Start Date</UiLabel>
+          <UiInput
             v-model="filters.startDate"
             type="date"
-            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm"
             @change="applyFilters"
           />
         </div>
 
         <!-- End Date Filter -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            End Date
-          </label>
-          <input
+          <UiLabel>End Date</UiLabel>
+          <UiInput
             v-model="filters.endDate"
             type="date"
-            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm"
             @change="applyFilters"
           />
         </div>

@@ -34,12 +34,11 @@
           >
             <div class="flex items-center justify-between">
               <div class="flex items-center space-x-3">
-                <input
+                <UiInput
                   :id="`saved-${savedMethod.id}`"
                   v-model="selectedSavedMethod"
                   type="radio"
                   :value="savedMethod.id"
-                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                 />
                 <div>
                   <div class="flex items-center space-x-2">
@@ -95,12 +94,11 @@
               class="border border-green-200 dark:border-green-700 rounded-lg p-4 bg-green-50 dark:bg-green-900/20"
             >
               <div class="flex items-center space-x-3">
-                <input
+                <UiInput
                   id="cash"
                   v-model="paymentMethod.type"
                   type="radio"
                   value="cash"
-                  class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
                   checked
                 />
                 <div>
@@ -130,10 +128,9 @@
               <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-800/50">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-3">
-                    <input
+                    <UiInput
                       type="radio"
                       disabled
-                      class="h-4 w-4 text-gray-400 border-gray-300"
                     />
                     <div>
                       <div class="flex items-center space-x-2">
@@ -160,10 +157,9 @@
               <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-800/50">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-3">
-                    <input
+                    <UiInput
                       type="radio"
                       disabled
-                      class="h-4 w-4 text-gray-400 border-gray-300"
                     />
                     <div>
                       <div class="flex items-center space-x-2">
@@ -190,10 +186,9 @@
               <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-800/50">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-3">
-                    <input
+                    <UiInput
                       type="radio"
                       disabled
-                      class="h-4 w-4 text-gray-400 border-gray-300"
                     />
                     <div>
                       <div class="flex items-center space-x-2">
@@ -239,16 +234,15 @@
           v-if="isAuthenticated && paymentMethod.type !== 'bank_transfer'"
           class="mt-4"
         >
-          <label class="flex items-center space-x-2">
-            <input
-              v-model="paymentMethod.saveForFuture"
-              type="checkbox"
-              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          <div class="flex items-center gap-2">
+            <UiCheckbox
+              :checked="paymentMethod.saveForFuture"
+              @update:checked="(val: boolean) => paymentMethod.saveForFuture = val"
             />
             <span class="text-sm text-gray-700 dark:text-gray-300">
               {{ $t('checkout.payment.saveForFuture') }}
             </span>
-          </label>
+          </div>
         </div>
       </div>
 
@@ -316,6 +310,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
 import { useCheckoutStore } from '~/stores/checkout'
 import type { PaymentMethod, SavedPaymentMethod } from '~/types/checkout'
 import { useAuthStore } from '~/stores/auth'

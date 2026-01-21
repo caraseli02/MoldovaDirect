@@ -118,25 +118,19 @@
         </Swiper>
 
         <!-- Custom Navigation Buttons - Mobile optimized positioning -->
-        <button
-          class="swiper-button-prev-custom absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-2.5 shadow-lg transition-all hover:scale-110 hover:bg-gold-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 md:-left-4 md:p-3 lg:-left-6"
-          :aria-label="t('common.previous')"
-        >
+        <UiButton :aria-label="t('common.previous')">
           <commonIcon
             name="lucide:chevron-left"
             class="h-5 w-5 text-slate-700 transition-colors hover:text-gold-600 md:h-6 md:w-6"
           />
-        </button>
+        </UiButton>
 
-        <button
-          class="swiper-button-next-custom absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-2.5 shadow-lg transition-all hover:scale-110 hover:bg-gold-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 md:-right-4 md:p-3 lg:-right-6"
-          :aria-label="t('common.next')"
-        >
+        <UiButton :aria-label="t('common.next')">
           <commonIcon
             name="lucide:chevron-right"
             class="h-5 w-5 text-slate-700 transition-colors hover:text-gold-600 md:h-6 md:w-6"
           />
-        </button>
+        </UiButton>
 
         <!-- Custom Pagination -->
         <div class="swiper-pagination-custom mt-6 flex justify-center md:mt-8"></div>

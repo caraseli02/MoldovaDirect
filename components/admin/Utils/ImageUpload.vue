@@ -23,21 +23,17 @@
           />
         </svg>
         <div class="text-sm md:text-sm text-gray-600 dark:text-gray-400">
-          <label
-            for="file-upload"
-            class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 px-2 py-1"
-          >
+          <UiLabel for="file-upload">
             <span class="text-base md:text-sm">Upload images</span>
-            <input
+            <UiInput
               id="file-upload"
               ref="fileInput"
               type="file"
               multiple
               :accept="accept"
-              class="sr-only"
               @change="handleFileSelect"
             />
-          </label>
+          </UiLabel>
           <span class="pl-1 hidden md:inline">or drag and drop</span>
         </div>
         <p class="text-xs text-gray-500 dark:text-gray-400">

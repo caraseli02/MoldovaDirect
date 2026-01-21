@@ -6,9 +6,8 @@
       <span class="text-sm text-gray-600 dark:text-gray-400">{{ $t('common.total') }}</span>
       <span class="text-lg font-bold text-gray-900 dark:text-white">{{ formattedTotal }}</span>
     </div>
-    <button
+    <UiButton
       :disabled="!canPlaceOrder || processingOrder"
-      class="w-full flex items-center justify-center px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
       @click="$emit('place-order')"
     >
       <span
@@ -37,7 +36,7 @@
         {{ $t('checkout.processing') }}
       </span>
       <span v-else>{{ $t('checkout.placeOrder') }}</span>
-    </button>
+    </UiButton>
   </div>
 </template>
 

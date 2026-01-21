@@ -17,15 +17,10 @@
       </CardHeader>
       <CardContent>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button
+          <UiButton
             v-for="type in templateTypes"
             :key="type.value"
-            :class="[
-              'p-4 border-2 rounded-lg text-left transition-all',
-              selectedType === type.value
-                ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
-                : 'border-gray-200 dark:border-gray-700 hover:border-gray-300',
-            ]"
+            :class="['p-4 border-2 rounded-lg text-left transition-all', selectedType === type.value ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300']"
             @click="selectedType = type.value"
           >
             <div class="font-semibold text-gray-900 dark:text-white">
@@ -34,7 +29,7 @@
             <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
               {{ type.description }}
             </div>
-          </button>
+          </UiButton>
         </div>
       </CardContent>
     </Card>
@@ -46,19 +41,14 @@
       </CardHeader>
       <CardContent>
         <div class="flex gap-2">
-          <button
+          <UiButton
             v-for="locale in supportedLocales"
             :key="locale.code"
-            :class="[
-              'px-4 py-2 rounded-lg font-medium transition-all',
-              selectedLocale === locale.code
-                ? 'bg-red-500 text-white'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200',
-            ]"
+            :class="['px-4 py-2 rounded-lg font-medium transition-all', selectedLocale === locale.code ? 'bg-red-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200']"
             @click="selectedLocale = locale.code"
           >
             {{ locale.name }}
-          </button>
+          </UiButton>
         </div>
       </CardContent>
     </Card>
@@ -104,41 +94,32 @@
         <CardContent>
           <!-- Subject Line -->
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Subject Line
-            </label>
-            <input
+            <UiLabel>Subject Line</UiLabel>
+            <UiInput
               v-model="templateData.subject"
               type="text"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               placeholder="Order Confirmation #{orderNumber}"
             />
           </div>
 
           <!-- Preheader Text -->
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Preheader Text
-            </label>
-            <input
+            <UiLabel>Preheader Text</UiLabel>
+            <UiInput
               v-model="templateData.preheader"
               type="text"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               placeholder="Thank you for your order"
             />
           </div>
 
           <!-- Template Content -->
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Template Content (JSON)
-            </label>
-            <textarea
+            <UiLabel>Template Content (JSON)</UiLabel>
+            <UiTextarea
               v-model="templateContent"
               rows="20"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono text-sm"
               placeholder="Enter template translations JSON"
-            ></textarea>
+            />
           </div>
 
           <!-- Validation Messages -->

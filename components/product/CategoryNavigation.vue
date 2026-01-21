@@ -29,8 +29,7 @@
                 :key="category.id"
                 class="relative group"
               >
-                <button
-                  class="flex items-center text-gray-900 dark:text-white hover:text-blue-700 dark:hover:text-blue-300 px-3 py-2 text-sm font-medium transition-colors"
+                <UiButton
                   :class="{ 'text-blue-700 dark:text-blue-300 border-b-2 border-blue-700 dark:border-blue-300': isCurrentCategory(category) }"
                   @click="navigateToCategory(category)"
                   @mouseenter="showDropdown(category.id)"
@@ -53,7 +52,7 @@
                     name="lucide:chevron-down"
                     class="w-4 h-4 ml-1"
                   />
-                </button>
+                </UiButton>
 
                 <!-- Dropdown Menu -->
                 <div
@@ -98,10 +97,7 @@
       class="lg:hidden"
     >
       <!-- Mobile Category Button -->
-      <button
-        class="w-full flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 text-left"
-        @click="showMobileNav = true"
-      >
+      <UiButton @click="showMobileNav = true">
         <div class="flex items-center">
           <commonIcon
             name="lucide:panels-top-left"
@@ -115,7 +111,7 @@
           name="lucide:chevron-down"
           class="w-5 h-5 text-gray-400 dark:text-gray-500"
         />
-      </button>
+      </UiButton>
 
       <!-- Mobile Category Modal -->
       <Teleport to="body">
@@ -136,15 +132,12 @@
               <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                 {{ $t('products.filters.categories') }}
               </h2>
-              <button
-                class="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
-                @click="showMobileNav = false"
-              >
+              <UiButton @click="showMobileNav = false">
                 <commonIcon
                   name="lucide:x"
                   class="w-5 h-5"
                 />
-              </button>
+              </UiButton>
             </div>
 
             <!-- Mobile Category List -->

@@ -22,12 +22,11 @@
         class="w-6"
       ></div>
 
-      <label class="flex items-center flex-1 cursor-pointer">
-        <input
+      <UiLabel>
+        <UiInput
           :checked="isSelected"
           type="radio"
           :name="'category-' + level"
-          class="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
           @change="handleSelection"
         />
         <span class="ml-2 text-sm text-gray-700 dark:text-gray-300 flex-1">
@@ -36,7 +35,7 @@
         <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
           ({{ category.count }})
         </span>
-      </label>
+      </UiLabel>
     </div>
 
     <div

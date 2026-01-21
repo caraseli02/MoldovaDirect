@@ -5,13 +5,8 @@
     :aria-label="$t('orders.filters.quickFilters')"
   >
     <!-- In Transit Filter -->
-    <button
-      :class="[
-        'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-        activeFilter === 'in-transit'
-          ? 'bg-blue-600 text-white hover:bg-blue-700'
-          : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600',
-      ]"
+    <UiButton
+      :class="['px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2', activeFilter === 'in-transit' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600']"
       :aria-pressed="activeFilter === 'in-transit'"
       @click="handleFilterClick('in-transit')"
     >
@@ -39,16 +34,11 @@
           {{ safeCounts.inTransit }}
         </span>
       </span>
-    </button>
+    </UiButton>
 
     <!-- Delivered This Month Filter -->
-    <button
-      :class="[
-        'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2',
-        activeFilter === 'delivered-month'
-          ? 'bg-green-600 text-white hover:bg-green-700'
-          : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600',
-      ]"
+    <UiButton
+      :class="['px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2', activeFilter === 'delivered-month' ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600']"
       :aria-pressed="activeFilter === 'delivered-month'"
       @click="handleFilterClick('delivered-month')"
     >
@@ -76,16 +66,11 @@
           {{ safeCounts.deliveredMonth }}
         </span>
       </span>
-    </button>
+    </UiButton>
 
     <!-- Last 3 Months Filter -->
-    <button
-      :class="[
-        'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2',
-        activeFilter === 'last-3-months'
-          ? 'bg-purple-600 text-white hover:bg-purple-700'
-          : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600',
-      ]"
+    <UiButton
+      :class="['px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2', activeFilter === 'last-3-months' ? 'bg-purple-600 text-white hover:bg-purple-700' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600']"
       :aria-pressed="activeFilter === 'last-3-months'"
       @click="handleFilterClick('last-3-months')"
     >
@@ -106,16 +91,11 @@
         </svg>
         {{ $t('orders.filters.last3Months') }}
       </span>
-    </button>
+    </UiButton>
 
     <!-- All Orders Filter (Clear) -->
-    <button
-      :class="[
-        'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2',
-        activeFilter === null
-          ? 'bg-gray-600 dark:bg-gray-500 text-white hover:bg-gray-700 dark:hover:bg-gray-600'
-          : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600',
-      ]"
+    <UiButton
+      :class="['px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2', activeFilter === null ? 'bg-gray-600 dark:bg-gray-500 text-white hover:bg-gray-700 dark:hover:bg-gray-600' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600']"
       :aria-pressed="activeFilter === null"
       @click="handleFilterClick(null)"
     >
@@ -136,7 +116,7 @@
         </svg>
         {{ $t('orders.filters.allOrders') }}
       </span>
-    </button>
+    </UiButton>
   </div>
 </template>
 

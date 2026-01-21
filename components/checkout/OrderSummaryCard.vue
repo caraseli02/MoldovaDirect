@@ -42,10 +42,7 @@
     >
       <!-- Cart Items (Collapsed by default) -->
       <div class="mb-4">
-        <button
-          class="w-full flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-          @click="showItems = !showItems"
-        >
+        <UiButton @click="showItems = !showItems">
           <span>{{ showItems ? $t('checkout.hideItems', 'Hide items') : $t('checkout.showItems', 'Show items') }}</span>
           <svg
             class="w-4 h-4 transition-transform"
@@ -61,7 +58,7 @@
               d="M19 9l-7 7-7-7"
             />
           </svg>
-        </button>
+        </UiButton>
 
         <div
           v-show="showItems"

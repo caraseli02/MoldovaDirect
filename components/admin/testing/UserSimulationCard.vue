@@ -12,13 +12,12 @@
     </CardHeader>
     <CardContent class="space-y-4">
       <div class="space-y-2">
-        <label class="text-sm font-medium">Number of Users</label>
-        <input
+        <UiLabel>Number of Users</UiLabel>
+        <UiInput
           v-model.number="localUserCount"
           type="number"
           min="1"
           max="100"
-          class="w-full px-3 py-2 border rounded-md"
           :class="validationError ? 'border-red-500' : ''"
         />
         <p
@@ -30,47 +29,45 @@
       </div>
 
       <div class="space-y-2">
-        <label class="text-sm font-medium">User Role</label>
-        <select
-          v-model="localUserRole"
-          class="w-full px-3 py-2 border rounded-md"
-        >
-          <option value="customer">
-            Customer
-          </option>
-          <option value="admin">
-            Admin
-          </option>
-          <option value="manager">
-            Manager
-          </option>
-        </select>
+        <UiLabel>User Role</UiLabel>
+        <UiSelect v-model="localUserRole">
+          <UiSelectTrigger>
+            <UiSelectValue />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem value="customer">
+              Customer
+            </UiSelectItem>
+            <UiSelectItem value="admin">
+              Admin
+            </UiSelectItem>
+            <UiSelectItem value="manager">
+              Manager
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
       </div>
 
       <div class="flex items-center space-x-2">
-        <input
+        <UiCheckbox
           id="with-addresses"
-          v-model="localWithAddresses"
-          type="checkbox"
-          class="rounded"
+          :checked="localWithAddresses"
+          @update:checked="localWithAddresses = $event"
         />
-        <label
-          for="with-addresses"
-          class="text-sm"
-        >Include addresses</label>
+        <UiLabel for="with-addresses">
+          Include addresses
+        </UiLabel>
       </div>
 
       <div class="flex items-center space-x-2">
-        <input
+        <UiCheckbox
           id="with-orders"
-          v-model="localWithOrders"
-          type="checkbox"
-          class="rounded"
+          :checked="localWithOrders"
+          @update:checked="localWithOrders = $event"
         />
-        <label
-          for="with-orders"
-          class="text-sm"
-        >Create order history</label>
+        <UiLabel for="with-orders">
+          Create order history
+        </UiLabel>
       </div>
 
       <Button
@@ -97,6 +94,7 @@
 <script setup lang="ts">
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
 
 defineProps<{
   loading: boolean

@@ -43,12 +43,9 @@
       class="space-y-3"
     >
       <!-- Primary Action -->
-      <button
+      <UiButton
         v-if="hasActiveFilters"
-        class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium rounded-lg transition-colors touch-manipulation active:scale-95"
-        :class="{
-          'min-h-[44px] px-6': isMobile,
-        }"
+        :class="{ 'min-h-[44px] px-6': isMobile }"
         type="button"
         @click="clearFilters"
         @touchstart="isMobile && vibrate('tap')"
@@ -58,7 +55,7 @@
           class="w-4 h-4 mr-2"
         />
         {{ $t('admin.users.actions.clearFilters') }}
-      </button>
+      </UiButton>
 
       <!-- Secondary Actions -->
       <div
@@ -68,11 +65,8 @@
         }"
       >
         <!-- Refresh Button -->
-        <button
-          class="inline-flex items-center px-3 py-2 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 rounded-lg transition-colors touch-manipulation active:scale-95"
-          :class="{
-            'min-h-[44px] w-full sm:w-auto': isMobile,
-          }"
+        <UiButton
+          :class="{ 'min-h-[44px] w-full sm:w-auto': isMobile }"
           type="button"
           @click="refreshUsers"
           @touchstart="isMobile && vibrate('tap')"
@@ -82,15 +76,12 @@
             class="w-4 h-4 mr-2"
           />
           {{ $t('admin.users.actions.refresh') }}
-        </button>
+        </UiButton>
 
         <!-- Invite User Button (if no users at all) -->
-        <button
+        <UiButton
           v-if="!hasActiveFilters && totalUsers === 0"
-          class="inline-flex items-center px-3 py-2 text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900/50 rounded-lg transition-colors touch-manipulation active:scale-95"
-          :class="{
-            'min-h-[44px] w-full sm:w-auto': isMobile,
-          }"
+          :class="{ 'min-h-[44px] w-full sm:w-auto': isMobile }"
           type="button"
           @click="inviteUser"
           @touchstart="isMobile && vibrate('tap')"
@@ -100,7 +91,7 @@
             class="w-4 h-4 mr-2"
           />
           {{ $t('admin.users.actions.invite') }}
-        </button>
+        </UiButton>
       </div>
     </div>
 

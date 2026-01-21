@@ -22,12 +22,11 @@
         leave-to-class="opacity-0 scale-90"
         move-class="transition-all duration-200"
       >
-        <button
+        <UiButton
           v-for="chip in chips"
           :key="chip.id"
           type="button"
           role="listitem"
-          class="group inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 transition-all hover:bg-blue-100 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-900/40 dark:text-blue-200 dark:hover:bg-blue-900/60"
           :aria-label="t('products.filterSummary.removeFilter', { filter: chip.label })"
           @click="handleRemoveChip(chip)"
         >
@@ -37,14 +36,13 @@
             class="h-3.5 w-3.5 transition-transform group-hover:scale-110"
             aria-hidden="true"
           />
-        </button>
+        </UiButton>
 
         <!-- Clear All Button -->
-        <button
+        <UiButton
           v-if="showClearAll"
           key="clear-all"
           type="button"
-          class="inline-flex items-center gap-1.5 rounded-full border-2 border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700"
           :aria-label="t('products.filterSummary.clearAllFilters')"
           @click="handleClearAll"
         >
@@ -54,7 +52,7 @@
             aria-hidden="true"
           />
           <span>{{ clearAllLabel || t('products.filterSummary.clear') }}</span>
-        </button>
+        </UiButton>
       </TransitionGroup>
     </div>
   </Transition>

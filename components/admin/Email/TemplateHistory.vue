@@ -101,21 +101,21 @@
         class="space-y-4"
       >
         <div>
-          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Subject</label>
+          <UiLabel>Subject</UiLabel>
           <p class="text-sm text-gray-900 dark:text-white mt-1">
             {{ selectedVersion.subject }}
           </p>
         </div>
 
         <div v-if="selectedVersion.preheader">
-          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Preheader</label>
+          <UiLabel>Preheader</UiLabel>
           <p class="text-sm text-gray-900 dark:text-white mt-1">
             {{ selectedVersion.preheader }}
           </p>
         </div>
 
         <div>
-          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Translations</label>
+          <UiLabel>Translations</UiLabel>
           <pre class="mt-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg text-xs overflow-x-auto">{{ JSON.stringify(selectedVersion.translations, null, 2) }}</pre>
         </div>
 

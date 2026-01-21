@@ -30,10 +30,9 @@
           </div>
 
           <!-- Remove Button -->
-          <button
+          <UiButton
             :disabled="loading"
             :aria-label="$t('cart.removeItem')"
-            class="p-2 -mr-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             @click="$emit('remove-item', item.id)"
           >
             <svg
@@ -50,7 +49,7 @@
                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
               />
             </svg>
-          </button>
+          </UiButton>
         </div>
 
         <!-- Stock Indicator -->
@@ -77,10 +76,9 @@
     <div class="flex items-center justify-between mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-700/50">
       <!-- Quantity Controls -->
       <div class="flex items-center bg-zinc-100 dark:bg-zinc-700/50 rounded-lg p-1">
-        <button
+        <UiButton
           :disabled="loading || item.quantity <= 1"
           :aria-label="$t('cart.decreaseQuantity')"
-          class="w-10 h-10 rounded-md flex items-center justify-center text-zinc-600 dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           @click="updateQuantity(item.quantity - 1)"
         >
           <svg
@@ -97,7 +95,7 @@
               d="M20 12H4"
             />
           </svg>
-        </button>
+        </UiButton>
 
         <span
           role="status"
@@ -107,8 +105,8 @@
           {{ item.quantity }}
         </span>
 
-        <button
-          :disabled="loading || item.quantity >= item.product.stock"
+        <UiButton
+          :disabled="loading || item.quantity>= item.product.stock"
           :aria-label="$t('cart.increaseQuantity')"
           class="w-10 h-10 rounded-md flex items-center justify-center text-zinc-600 dark:text-zinc-300 hover:bg-white dark:hover:bg-zinc-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           @click="updateQuantity(item.quantity + 1)"
@@ -127,7 +125,7 @@
               d="M12 6v12m6-6H6"
             />
           </svg>
-        </button>
+        </UiButton>
       </div>
 
       <!-- Item Total -->
@@ -146,10 +144,7 @@
 
     <!-- Actions Row -->
     <div class="flex items-center justify-between mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-700/50">
-      <button
-        class="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors flex items-center gap-1 font-medium"
-        @click="$emit('save-for-later', item.id)"
-      >
+      <UiButton @click="$emit('save-for-later', item.id)">
         <svg
           class="w-3.5 h-3.5"
           fill="none"
@@ -165,7 +160,7 @@
           />
         </svg>
         {{ $t('cart.saveForLater') }}
-      </button>
+      </UiButton>
 
       <!-- Selection Checkbox (hidden on mobile for cleaner UI) -->
       <div class="hidden md:flex items-center gap-2">

@@ -54,18 +54,14 @@ function updatePhone(event: Event) {
   <div class="space-y-4">
     <!-- Name Input -->
     <div>
-      <label
-        for="profile-name"
-        class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
-      >
+      <UiLabel for="profile-name">
         {{ $t('auth.labels.fullName') }} *
-      </label>
-      <input
+      </UiLabel>
+      <UiInput
         id="profile-name"
         :value="form.name"
         type="text"
         required
-        class="w-full px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-white transition-all duration-200"
         :class="{ 'border-red-500 focus:ring-red-500': errors.name }"
         :placeholder="$t('auth.placeholders.fullName')"
         data-testid="profile-name-input"
@@ -82,19 +78,15 @@ function updatePhone(event: Event) {
 
     <!-- Email Input (Disabled) -->
     <div>
-      <label
-        for="profile-email"
-        class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
-      >
+      <UiLabel for="profile-email">
         {{ $t('auth.labels.email') }} *
-      </label>
-      <input
+      </UiLabel>
+      <UiInput
         id="profile-email"
         :value="form.email"
         type="email"
         required
         disabled
-        class="w-full px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg shadow-sm bg-zinc-50 dark:bg-zinc-600 text-zinc-500 dark:text-zinc-400 cursor-not-allowed"
         :placeholder="$t('auth.placeholders.email')"
         data-testid="profile-email-input"
       />
@@ -105,18 +97,14 @@ function updatePhone(event: Event) {
 
     <!-- Phone Input -->
     <div>
-      <label
-        for="profile-phone"
-        class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
-      >
+      <UiLabel for="profile-phone">
         {{ $t('auth.labels.phone') }}
-      </label>
-      <input
+      </UiLabel>
+      <UiInput
         id="profile-phone"
         :value="form.phone"
         type="tel"
         inputmode="tel"
-        class="w-full px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-white transition-all duration-200"
         :class="{ 'border-red-500 focus:ring-red-500': errors.phone }"
         :placeholder="$t('auth.placeholders.phone')"
         data-testid="profile-phone-input"

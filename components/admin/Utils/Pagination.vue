@@ -30,14 +30,13 @@
               v-if="pageNum !== '...'"
               :value="pageNum as number"
             >
-              <button
+              <UiButton
                 :data-testid="pageNum === internal.page ? 'current-page' : undefined"
-                class="px-3 py-1 rounded-md"
                 :class="pageNum === internal.page ? 'bg-accent text-accent-foreground' : ''"
                 @click="emitGoTo(pageNum as number)"
               >
                 {{ pageNum }}
-              </button>
+              </UiButton>
             </UiPaginationItem>
             <UiPaginationEllipsis v-else />
           </template>

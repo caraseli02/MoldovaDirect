@@ -27,18 +27,12 @@
           :key="address.id"
           class="relative"
         >
-          <label
-            class="flex items-start space-x-3 p-4 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-700"
-            :class="selectedSavedAddressId === address.id
-              ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-              : 'border-gray-200 dark:border-gray-600'"
-          >
-            <input
+          <UiLabel :class="selectedSavedAddressId === address.id ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-600'">
+            <UiInput
               v-model="selectedSavedAddressId"
               type="radio"
               :name="`saved-address-${type}`"
               :value="address.id"
-              class="mt-1 text-primary-600 focus:ring-primary-500"
               @change="selectSavedAddress(address)"
             />
             <div class="flex-1 min-w-0">
@@ -60,29 +54,23 @@
                 {{ address.city }}, {{ address.postalCode }} {{ address.country }}
               </p>
             </div>
-          </label>
+          </UiLabel>
         </div>
       </div>
 
       <!-- Use New Address Option -->
-      <label
-        class="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 mt-3"
-        :class="selectedSavedAddressId === null
-          ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-          : 'border-gray-200 dark:border-gray-600'"
-      >
-        <input
+      <UiLabel :class="selectedSavedAddressId === null ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-600'">
+        <UiInput
           v-model="selectedSavedAddressId"
           type="radio"
           :name="`saved-address-${type}`"
           :value="null"
-          class="text-primary-600 focus:ring-primary-500"
           @change="useNewAddress"
         />
         <span class="text-sm font-medium text-gray-900 dark:text-white">
           {{ $t('checkout.addressForm.useNewAddress') }}
         </span>
-      </label>
+      </UiLabel>
     </div>
 
     <!-- Address Form -->
@@ -92,21 +80,17 @@
     >
       <!-- Full Name (Single Field) -->
       <div>
-        <label
-          for="fullName"
-          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-        >
+        <UiLabel for="fullName">
           {{ $t('checkout.addressForm.fullName') }}
           <span class="text-red-500">*</span>
-        </label>
-        <input
+        </UiLabel>
+        <UiInput
           id="fullName"
           :value="fullName"
           type="text"
           name="name"
           autocomplete="name"
           :placeholder="$t('checkout.addressForm.fullNamePlaceholder')"
-          class="w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
           :class="getFieldClasses('fullName')"
           @input="handleFullNameInput(($event.target as HTMLInputElement).value)"
           @blur="validateField('fullName')"
@@ -122,15 +106,12 @@
 
       <!-- Street Address with Autocomplete -->
       <div class="relative">
-        <label
-          for="street"
-          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-        >
+        <UiLabel for="street">
           {{ $t('checkout.addressForm.street') }}
           <span class="text-red-500">*</span>
-        </label>
+        </UiLabel>
         <div class="relative">
-          <input
+          <UiInput
             id="street"
             ref="streetInputRef"
             :value="localAddress.street"
@@ -138,7 +119,6 @@
             name="street-address"
             autocomplete="street-address"
             :placeholder="$t('checkout.addressForm.streetPlaceholder')"
-            class="w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
             :class="getFieldClasses('street')"
             @input="handleStreetInput(($event.target as HTMLInputElement).value)"
             @blur="validateField('street')"
@@ -158,11 +138,10 @@
           v-if="showSuggestions && addressSuggestions.length > 0"
           class="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"
         >
-          <button
+          <UiButton
             v-for="(suggestion, index) in addressSuggestions"
             :key="index"
             type="button"
-            class="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 focus:bg-gray-50 dark:focus:bg-gray-700 border-b border-gray-100 dark:border-gray-700 last:border-0 transition-colors"
             @click="selectAddressSuggestion(suggestion)"
           >
             <p class="text-sm font-medium text-gray-900 dark:text-white">
@@ -171,7 +150,7 @@
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
               {{ suggestion.city }}, {{ suggestion.postalCode }} {{ suggestion.country }}
             </p>
-          </button>
+          </UiButton>
         </div>
 
         <p
@@ -191,21 +170,17 @@
       <!-- City & Postal Code (Side by Side) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label
-            for="city"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-          >
+          <UiLabel for="city">
             {{ $t('checkout.addressForm.city') }}
             <span class="text-red-500">*</span>
-          </label>
-          <input
+          </UiLabel>
+          <UiInput
             id="city"
             :value="localAddress.city"
             type="text"
             name="address-level2"
             autocomplete="address-level2"
             :placeholder="$t('checkout.addressForm.cityPlaceholder')"
-            class="w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
             :class="getFieldClasses('city')"
             @input="updateField('city', ($event.target as HTMLInputElement).value)"
             @blur="validateField('city')"
@@ -220,21 +195,17 @@
         </div>
 
         <div>
-          <label
-            for="postalCode"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-          >
+          <UiLabel for="postalCode">
             {{ $t('checkout.addressForm.postalCode') }}
             <span class="text-red-500">*</span>
-          </label>
-          <input
+          </UiLabel>
+          <UiInput
             id="postalCode"
             :value="localAddress.postalCode"
             type="text"
             name="postal-code"
             autocomplete="postal-code"
             :placeholder="$t('checkout.addressForm.postalCodePlaceholder')"
-            class="w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base"
             :class="getFieldClasses('postalCode')"
             @input="updateField('postalCode', ($event.target as HTMLInputElement).value)"
             @blur="validateField('postalCode')"
@@ -251,34 +222,29 @@
 
       <!-- Country -->
       <div>
-        <label
-          for="country"
-          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-        >
+        <UiLabel for="country">
           {{ $t('checkout.addressForm.country') }}
           <span class="text-red-500">*</span>
-        </label>
-        <select
-          id="country"
+        </UiLabel>
+        <UiSelect
           :value="localAddress.country"
-          name="country"
-          autocomplete="country"
-          class="country-select w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 transition-colors text-base appearance-none bg-no-repeat"
           :class="getFieldClasses('country')"
-          @change="updateField('country', ($event.target as HTMLSelectElement).value); clearFieldError('country')"
+          @update:model-value="updateField('country', $event as string); clearFieldError('country')"
           @blur="validateField('country')"
         >
-          <option value="">
-            {{ $t('checkout.addressForm.selectCountry') }}
-          </option>
-          <option
-            v-for="country in availableCountries"
-            :key="country.code"
-            :value="country.code"
-          >
-            {{ country.flag }} {{ country.name }}
-          </option>
-        </select>
+          <UiSelectTrigger>
+            <UiSelectValue :placeholder="$t('checkout.addressForm.selectCountry')" />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem
+              v-for="country in availableCountries"
+              :key="country.code"
+              :value="country.code"
+            >
+              {{ country.flag }} {{ country.name }}
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
         <p
           v-if="fieldErrors.country"
           class="mt-1 text-sm text-red-600 dark:text-red-400"
@@ -289,14 +255,11 @@
 
       <!-- Phone (Optional but Recommended) -->
       <div>
-        <label
-          for="phone"
-          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-        >
+        <UiLabel for="phone">
           {{ $t('checkout.addressForm.phone') }}
           <span class="text-gray-500 text-xs ml-1">({{ $t('checkout.addressForm.phoneHelper') }})</span>
-        </label>
-        <input
+        </UiLabel>
+        <UiInput
           id="phone"
           :value="localAddress.phone"
           type="tel"
@@ -304,7 +267,6 @@
           autocomplete="tel"
           inputmode="tel"
           :placeholder="$t('checkout.addressForm.phonePlaceholder')"
-          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors text-base"
           @input="updateField('phone', ($event.target as HTMLInputElement).value)"
         />
         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -317,19 +279,15 @@
         v-if="showSaveOption && user"
         class="flex items-center space-x-2 pt-2"
       >
-        <input
+        <UiInput
           id="saveAddress"
           :checked="localAddress.saveForFuture"
           type="checkbox"
-          class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
           @change="updateField('saveForFuture', ($event.target as HTMLInputElement).checked)"
         />
-        <label
-          for="saveAddress"
-          class="text-sm text-gray-700 dark:text-gray-300"
-        >
+        <UiLabel for="saveAddress">
           {{ $t('checkout.addressForm.saveAddress') }}
-        </label>
+        </UiLabel>
       </div>
     </div>
   </div>

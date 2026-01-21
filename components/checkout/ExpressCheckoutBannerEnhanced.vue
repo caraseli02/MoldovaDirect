@@ -16,8 +16,7 @@
           </p>
         </div>
       </div>
-      <button
-        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1"
+      <UiButton
         :aria-label="$t('common.close')"
         @click="$emit('dismiss')"
       >
@@ -34,7 +33,7 @@
             d="M6 18L18 6M6 6l12 12"
           />
         </svg>
-      </button>
+      </UiButton>
     </div>
 
     <!-- Saved Details Card -->
@@ -90,9 +89,8 @@
 
     <!-- Action Buttons -->
     <div class="flex flex-col sm:flex-row gap-3">
-      <button
+      <UiButton
         :disabled="loading"
-        class="flex-1 flex items-center justify-center px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
         @click="$emit('place-order')"
       >
         <span
@@ -139,14 +137,11 @@
           </svg>
           {{ $t('checkout.expressCheckout.placeOrderNow', 'Place Order Now') }}
         </span>
-      </button>
+      </UiButton>
 
-      <button
-        class="px-6 py-3 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors font-medium"
-        @click="$emit('edit')"
-      >
+      <UiButton @click="$emit('edit')">
         {{ $t('checkout.expressCheckout.editDetails', 'Edit Details') }}
-      </button>
+      </UiButton>
     </div>
 
     <!-- Trust Badges -->

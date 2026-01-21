@@ -2,9 +2,7 @@
   <div class="space-y-4">
     <!-- Note Type Selector -->
     <div class="flex items-center space-x-4">
-      <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-        Note Type:
-      </label>
+      <UiLabel>Note Type:</UiLabel>
       <div class="flex items-center space-x-2">
         <Button
           :variant="noteType === 'internal' ? 'default' : 'outline'"
@@ -49,12 +47,9 @@
 
     <!-- Note Content -->
     <div>
-      <label
-        for="note-content"
-        class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
-      >
+      <UiLabel for="note-content">
         Note Content
-      </label>
+      </UiLabel>
       <Textarea
         id="note-content"
         v-model="content"

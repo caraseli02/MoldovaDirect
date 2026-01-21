@@ -65,13 +65,12 @@
                 @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
-                <label
+                <UiLabel
                   :for="`task-${task.id}`"
-                  class="text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
                   :class="{ 'line-through text-gray-500': task.completed }"
                 >
                   {{ task.task_name }}
-                </label>
+                </UiLabel>
                 <p
                   v-if="task.description"
                   class="text-xs text-gray-600 dark:text-gray-400 mt-1"
@@ -128,13 +127,12 @@
                 @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
-                <label
+                <UiLabel
                   :for="`task-${task.id}`"
-                  class="text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
                   :class="{ 'line-through text-gray-500': task.completed }"
                 >
                   {{ task.task_name }}
-                </label>
+                </UiLabel>
                 <p
                   v-if="task.description"
                   class="text-xs text-gray-600 dark:text-gray-400 mt-1"
@@ -191,13 +189,12 @@
                 @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
-                <label
+                <UiLabel
                   :for="`task-${task.id}`"
-                  class="text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
                   :class="{ 'line-through text-gray-500': task.completed }"
                 >
                   {{ task.task_name }}
-                </label>
+                </UiLabel>
                 <p
                   v-if="task.description"
                   class="text-xs text-gray-600 dark:text-gray-400 mt-1"
@@ -254,13 +251,12 @@
                 @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
-                <label
+                <UiLabel
                   :for="`task-${task.id}`"
-                  class="text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
                   :class="{ 'line-through text-gray-500': task.completed }"
                 >
                   {{ task.task_name }}
-                </label>
+                </UiLabel>
                 <p
                   v-if="task.description"
                   class="text-xs text-gray-600 dark:text-gray-400 mt-1"
@@ -317,13 +313,12 @@
                 @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
-                <label
+                <UiLabel
                   :for="`task-${task.id}`"
-                  class="text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
                   :class="{ 'line-through text-gray-500': task.completed }"
                 >
                   {{ task.task_name }}
-                </label>
+                </UiLabel>
                 <p
                   v-if="task.description"
                   class="text-xs text-gray-600 dark:text-gray-400 mt-1"

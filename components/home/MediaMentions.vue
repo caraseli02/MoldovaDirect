@@ -41,13 +41,12 @@
         >
           <div class="group relative">
             <!-- Logo/Name - Interactive button if quote exists -->
-            <button
+            <UiButton
               v-if="mention.quote"
               type="button"
               :aria-label="mention.name"
               :aria-describedby="`tooltip-${index}`"
               :title="mention.quote"
-              class="flex h-16 w-full items-center justify-center rounded-lg px-6 transition-all duration-300 hover:bg-brand-light/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 dark:hover:bg-brand-dark/30"
             >
               <!-- If image URL provided, show image with aspect ratio -->
               <NuxtImg
@@ -68,7 +67,7 @@
               >
                 {{ mention.name }}
               </span>
-            </button>
+            </UiButton>
 
             <!-- Static display if no quote -->
             <div
@@ -132,19 +131,18 @@
           <span>{{ t('home.mediaMentions.featuredIn') }}</span>
         </div>
         <div class="flex flex-wrap items-center justify-center gap-4">
-          <button
+          <UiButton
             v-for="platform in socialPlatforms"
             :key="platform.name"
             type="button"
             :aria-label="`Follow us on ${platform.name}`"
-            class="flex min-h-[44px] items-center gap-2 rounded-full border border-brand-light/20 bg-brand-light/10 px-6 py-3 text-sm font-medium tracking-wide text-brand-dark backdrop-blur-sm transition-all hover:border-brand-light/30 hover:bg-brand-light/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent focus-visible:ring-offset-2 dark:border-brand-dark/20 dark:bg-brand-dark/10 dark:text-brand-light dark:hover:border-brand-dark/30 dark:hover:bg-brand-dark/20"
           >
             <commonIcon
               :name="platform.icon"
               class="h-4 w-4"
             />
             <span>{{ platform.name }}</span>
-          </button>
+          </UiButton>
         </div>
       </div>
     </div>

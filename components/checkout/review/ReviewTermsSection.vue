@@ -5,12 +5,11 @@
     </h3>
 
     <div class="space-y-4">
-      <label class="flex items-start space-x-3">
-        <input
+      <UiLabel>
+        <UiInput
           id="accept-terms"
           type="checkbox"
           :checked="termsAccepted"
-          class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
           @change="updateTermsAccepted(($event.target as HTMLInputElement)?.checked ?? false)"
         />
         <div class="text-sm">
@@ -37,14 +36,13 @@
             {{ $t('checkout.terms.termsRequired') }}
           </p>
         </div>
-      </label>
+      </UiLabel>
 
-      <label class="flex items-start space-x-3">
-        <input
+      <UiLabel>
+        <UiInput
           id="accept-privacy"
           type="checkbox"
           :checked="privacyAccepted"
-          class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
           @change="updatePrivacyAccepted(($event.target as HTMLInputElement)?.checked ?? false)"
         />
         <div class="text-sm">
@@ -58,14 +56,13 @@
             {{ $t('checkout.terms.privacyRequired') }}
           </p>
         </div>
-      </label>
+      </UiLabel>
 
-      <label class="flex items-start space-x-3">
-        <input
+      <UiLabel>
+        <UiInput
           id="marketing-consent"
           type="checkbox"
           :checked="marketingConsent"
-          class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
           @change="updateMarketingConsent(($event.target as HTMLInputElement)?.checked ?? false)"
         />
         <div class="text-sm">
@@ -77,7 +74,7 @@
             {{ $t('checkout.terms.marketingDescription') }}
           </p>
         </div>
-      </label>
+      </UiLabel>
     </div>
   </section>
 </template>

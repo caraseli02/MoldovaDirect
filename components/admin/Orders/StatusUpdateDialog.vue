@@ -35,9 +35,7 @@
 
         <!-- New Status Selection -->
         <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-            New Status <span class="text-red-500">*</span>
-          </label>
+          <UiLabel>New Status <span class="text-red-500">*</span></UiLabel>
           <Select
             v-model="formData.status"
             :disabled="loading"
@@ -92,9 +90,7 @@
           </p>
 
           <div class="space-y-2">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Tracking Number <span class="text-red-500">*</span>
-            </label>
+            <UiLabel>Tracking Number <span class="text-red-500">*</span></UiLabel>
             <Input
               v-model="formData.trackingNumber"
               type="text"
@@ -105,9 +101,7 @@
           </div>
 
           <div class="space-y-2">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Carrier <span class="text-red-500">*</span>
-            </label>
+            <UiLabel>Carrier <span class="text-red-500">*</span></UiLabel>
             <Select
               v-model="formData.carrier"
               :disabled="loading"
@@ -141,9 +135,7 @@
 
         <!-- Admin Notes -->
         <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Admin Notes (Optional)
-          </label>
+          <UiLabel>Admin Notes (Optional)</UiLabel>
           <Textarea
             v-model="formData.adminNotes"
             rows="3"

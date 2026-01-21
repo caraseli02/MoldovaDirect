@@ -22,53 +22,41 @@
         >
           <!-- Address Type -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {{ $t('profile.addressType.label') }} *
-            </label>
+            <UiLabel>{{ $t('profile.addressType.label') }} *</UiLabel>
             <div class="flex space-x-2">
-              <label
-                class="relative flex items-center justify-center min-w-[44px] min-h-[44px] p-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              >
-                <input
+              <UiLabel>
+                <UiInput
                   v-model="form.type"
                   type="radio"
                   value="shipping"
-                  class="h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300"
                 />
                 <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
                   {{ $t('profile.addressType.shipping') }}
                 </span>
-              </label>
-              <label
-                class="relative flex items-center justify-center min-w-[44px] min-h-[44px] p-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              >
-                <input
+              </UiLabel>
+              <UiLabel>
+                <UiInput
                   v-model="form.type"
                   type="radio"
                   value="billing"
-                  class="h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300"
                 />
                 <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
                   {{ $t('profile.addressType.billing') }}
                 </span>
-              </label>
+              </UiLabel>
             </div>
           </div>
 
           <!-- First Name and Last Name -->
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label
-                for="firstName"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <UiLabel for="firstName">
                 {{ $t('profile.firstName') }} *
-              </label>
-              <input
+              </UiLabel>
+              <UiInput
                 id="firstName"
                 v-model="form.firstName"
                 type="text"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
                 :class="{ 'border-red-500': errors.firstName }"
                 :placeholder="$t('profile.firstNamePlaceholder')"
               />
@@ -81,17 +69,13 @@
             </div>
 
             <div>
-              <label
-                for="lastName"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <UiLabel for="lastName">
                 {{ $t('profile.lastName') }} *
-              </label>
-              <input
+              </UiLabel>
+              <UiInput
                 id="lastName"
                 v-model="form.lastName"
                 type="text"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
                 :class="{ 'border-red-500': errors.lastName }"
                 :placeholder="$t('profile.lastNamePlaceholder')"
               />
@@ -106,34 +90,26 @@
 
           <!-- Company (optional) -->
           <div>
-            <label
-              for="company"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >
+            <UiLabel for="company">
               {{ $t('profile.company') }}
-            </label>
-            <input
+            </UiLabel>
+            <UiInput
               id="company"
               v-model="form.company"
               type="text"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
               :placeholder="$t('profile.companyPlaceholder')"
             />
           </div>
 
           <!-- Street Address -->
           <div>
-            <label
-              for="street"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >
+            <UiLabel for="street">
               {{ $t('profile.street') }} *
-            </label>
-            <input
+            </UiLabel>
+            <UiInput
               id="street"
               v-model="form.street"
               type="text"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
               :class="{ 'border-red-500': errors.street }"
               :placeholder="$t('profile.streetPlaceholder')"
             />
@@ -148,17 +124,13 @@
           <!-- City and Postal Code -->
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label
-                for="city"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <UiLabel for="city">
                 {{ $t('profile.city') }} *
-              </label>
-              <input
+              </UiLabel>
+              <UiInput
                 id="city"
                 v-model="form.city"
                 type="text"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
                 :class="{ 'border-red-500': errors.city }"
                 :placeholder="$t('profile.cityPlaceholder')"
               />
@@ -171,17 +143,13 @@
             </div>
 
             <div>
-              <label
-                for="postalCode"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <UiLabel for="postalCode">
                 {{ $t('profile.postalCode') }} *
-              </label>
-              <input
+              </UiLabel>
+              <UiInput
                 id="postalCode"
                 v-model="form.postalCode"
                 type="text"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
                 :class="{ 'border-red-500': errors.postalCode }"
                 :placeholder="$t('profile.postalCodePlaceholder')"
               />
@@ -197,57 +165,47 @@
           <!-- Province and Country -->
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label
-                for="province"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <UiLabel for="province">
                 {{ $t('profile.province') }}
-              </label>
-              <input
+              </UiLabel>
+              <UiInput
                 id="province"
                 v-model="form.province"
                 type="text"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
                 :placeholder="$t('profile.provincePlaceholder')"
               />
             </div>
 
             <div>
-              <label
-                for="country"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
+              <UiLabel for="country">
                 {{ $t('profile.country') }} *
-              </label>
-              <select
-                id="country"
-                v-model="form.country"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
-              >
-                <option
-                  v-for="country in countryOptions"
-                  :key="country.value"
-                  :value="country.value"
-                >
-                  {{ country.label }}
-                </option>
-              </select>
+              </UiLabel>
+              <UiSelect v-model="form.country">
+                <UiSelectTrigger>
+                  <UiSelectValue />
+                </UiSelectTrigger>
+                <UiSelectContent>
+                  <UiSelectItem
+                    v-for="country in countryOptions"
+                    :key="country.value"
+                    :value="country.value"
+                  >
+                    {{ country.label }}
+                  </UiSelectItem>
+                </UiSelectContent>
+              </UiSelect>
             </div>
           </div>
 
           <!-- Phone -->
           <div>
-            <label
-              for="phone"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >
+            <UiLabel for="phone">
               {{ $t('profile.phone') }}
-            </label>
-            <input
+            </UiLabel>
+            <UiInput
               id="phone"
               v-model="form.phone"
               type="tel"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
               :class="{ 'border-red-500': errors.phone }"
               :placeholder="$t('profile.phonePlaceholder')"
             />
@@ -261,18 +219,17 @@
 
           <!-- Default Address -->
           <div class="flex items-center">
-            <input
+            <UiCheckbox
               id="isDefault"
-              v-model="form.isDefault"
-              type="checkbox"
-              class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              :checked="form.isDefault"
+              @update:checked="form.isDefault = $event"
             />
-            <label
+            <UiLabel
               for="isDefault"
-              class="ml-2 text-sm text-gray-700 dark:text-gray-300"
+              class="ml-2"
             >
               {{ $t('profile.setAsDefault') }}
-            </label>
+            </UiLabel>
           </div>
         </form>
       </div>
@@ -320,6 +277,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
 import type { Address } from '~/types/address'
 import type { ToastPlugin } from '~/types/plugins'
 

@@ -39,62 +39,42 @@
         <!-- Desktop: Centered button group -->
         <div class="hidden justify-center md:flex">
           <div class="inline-flex flex-wrap justify-center gap-2 rounded-full bg-white p-1.5 shadow-lg">
-            <button
-              class="rounded-full px-6 py-2.5 text-sm font-semibold transition-all"
-              :class="[
-                activeFilter === 'all'
-                  ? 'bg-primary text-white shadow-md'
-                  : 'text-slate-600 hover:bg-slate-100',
-              ]"
+            <UiButton
+              :class="[activeFilter === 'all' ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100']"
               @click="setFilter('all')"
             >
               {{ t('wineStory.pairings.filters.all') }}
-            </button>
+            </UiButton>
 
-            <button
+            <UiButton
               v-for="type in wineTypes"
               :key="type"
-              class="rounded-full px-6 py-2.5 text-sm font-semibold transition-all"
-              :class="[
-                activeFilter === type
-                  ? 'bg-primary text-white shadow-md'
-                  : 'text-slate-600 hover:bg-slate-100',
-              ]"
+              :class="[activeFilter === type ? 'bg-primary text-white shadow-md' : 'text-slate-600 hover:bg-slate-100']"
               @click="setFilter(type)"
             >
               {{ t(`wineStory.pairings.wineTypes.${type}`) }}
-            </button>
+            </UiButton>
           </div>
         </div>
 
         <!-- Mobile: Horizontal scroll -->
         <div class="md:hidden">
           <div class="scrollbar-hide -mx-4 flex gap-2 overflow-x-auto px-4 pb-2">
-            <button
-              class="flex-shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition-all"
-              :class="[
-                activeFilter === 'all'
-                  ? 'bg-primary text-white shadow-md'
-                  : 'bg-white text-slate-600 shadow-sm',
-              ]"
+            <UiButton
+              :class="[activeFilter === 'all' ? 'bg-primary text-white shadow-md' : 'bg-white text-slate-600 shadow-sm']"
               @click="setFilter('all')"
             >
               {{ t('wineStory.pairings.filters.all') }}
-            </button>
+            </UiButton>
 
-            <button
+            <UiButton
               v-for="type in wineTypes"
               :key="type"
-              class="flex-shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition-all"
-              :class="[
-                activeFilter === type
-                  ? 'bg-primary text-white shadow-md'
-                  : 'bg-white text-slate-600 shadow-sm',
-              ]"
+              :class="[activeFilter === type ? 'bg-primary text-white shadow-md' : 'bg-white text-slate-600 shadow-sm']"
               @click="setFilter(type)"
             >
               {{ t(`wineStory.pairings.wineTypes.${type}`) }}
-            </button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -160,16 +140,13 @@
         <p class="mt-4 text-lg font-medium text-slate-600">
           {{ t('wineStory.pairings.noResults') }}
         </p>
-        <button
-          class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/90"
-          @click="clearFilters"
-        >
+        <UiButton @click="clearFilters">
           {{ t('wineStory.pairings.filters.all') }}
           <commonIcon
             name="lucide:x"
             class="h-4 w-4"
           />
-        </button>
+        </UiButton>
       </div>
 
       <!-- View All Button -->

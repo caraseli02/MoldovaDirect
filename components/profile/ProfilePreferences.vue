@@ -49,15 +49,13 @@ const currencyOptions = [
   { value: 'MDL', label: 'MDL (L)' },
 ] as const
 
-function updateLanguage(event: Event) {
-  const value = (event.target as HTMLSelectElement).value as 'es' | 'en' | 'ro' | 'ru'
-  emit('update:language', value)
+function updateLanguage(value: any) {
+  emit('update:language', value as 'es' | 'en' | 'ro' | 'ru')
   emit('change')
 }
 
-function updateCurrency(event: Event) {
-  const value = (event.target as HTMLSelectElement).value as 'EUR' | 'USD' | 'MDL'
-  emit('update:currency', value)
+function updateCurrency(value: any) {
+  emit('update:currency', value as 'EUR' | 'USD' | 'MDL')
   emit('change')
 }
 
@@ -69,54 +67,52 @@ const selectArrowIcon = 'url(\'data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27
   <div class="space-y-4">
     <!-- Language Select -->
     <div>
-      <label
-        for="profile-language"
-        class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
-      >
+      <UiLabel for="profile-language">
         {{ $t('auth.labels.language') }}
-      </label>
-      <select
-        id="profile-language"
+      </UiLabel>
+      <UiSelect
         :value="preferredLanguage"
-        class="w-full px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-white transition-all duration-200 appearance-none bg-[length:1.25rem_1.25rem] bg-[right_0.75rem_center] bg-no-repeat pr-10"
-        :style="{ backgroundImage: selectArrowIcon }"
         data-testid="profile-language-select"
-        @change="updateLanguage"
+        @update:model-value="updateLanguage"
       >
-        <option
-          v-for="option in languageOptions"
-          :key="option.value"
-          :value="option.value"
-        >
-          {{ $t(option.labelKey) }}
-        </option>
-      </select>
+        <UiSelectTrigger>
+          <UiSelectValue />
+        </UiSelectTrigger>
+        <UiSelectContent>
+          <UiSelectItem
+            v-for="option in languageOptions"
+            :key="option.value"
+            :value="option.value"
+          >
+            {{ $t(option.labelKey) }}
+          </UiSelectItem>
+        </UiSelectContent>
+      </UiSelect>
     </div>
 
     <!-- Currency Select -->
     <div>
-      <label
-        for="profile-currency"
-        class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
-      >
+      <UiLabel for="profile-currency">
         {{ $t('profile.sections.currency') }}
-      </label>
-      <select
-        id="profile-currency"
+      </UiLabel>
+      <UiSelect
         :value="preferredCurrency"
-        class="w-full px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-zinc-700 dark:text-white transition-all duration-200 appearance-none bg-[length:1.25rem_1.25rem] bg-[right_0.75rem_center] bg-no-repeat pr-10"
-        :style="{ backgroundImage: selectArrowIcon }"
         data-testid="profile-currency-select"
-        @change="updateCurrency"
+        @update:model-value="updateCurrency"
       >
-        <option
-          v-for="option in currencyOptions"
-          :key="option.value"
-          :value="option.value"
-        >
-          {{ option.label }}
-        </option>
-      </select>
+        <UiSelectTrigger>
+          <UiSelectValue />
+        </UiSelectTrigger>
+        <UiSelectContent>
+          <UiSelectItem
+            v-for="option in currencyOptions"
+            :key="option.value"
+            :value="option.value"
+          >
+            {{ option.label }}
+          </UiSelectItem>
+        </UiSelectContent>
+      </UiSelect>
     </div>
   </div>
 </template>

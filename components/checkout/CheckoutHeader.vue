@@ -50,8 +50,7 @@
           </svg>
 
           <!-- Mobile Menu Button -->
-          <button
-            class="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+          <UiButton
             :aria-expanded="showMobileMenu"
             aria-label="Toggle menu"
             @click="showMobileMenu = !showMobileMenu"
@@ -69,7 +68,7 @@
                 d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
-          </button>
+          </UiButton>
         </div>
       </div>
 

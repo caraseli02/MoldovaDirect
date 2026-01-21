@@ -35,12 +35,11 @@
             : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
           @click="updatePaymentType('cash')"
         >
-          <label class="flex items-center cursor-pointer">
-            <input
+          <UiLabel>
+            <UiInput
               :checked="modelValue.type === 'cash'"
               type="radio"
               value="cash"
-              class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
               @change="updatePaymentType('cash')"
             />
             <div class="ml-3 flex items-center">
@@ -54,7 +53,7 @@
                 </p>
               </div>
             </div>
-          </label>
+          </UiLabel>
         </div>
 
         <!-- Credit Card Payment (Stripe) -->
@@ -65,12 +64,11 @@
             : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
           @click="updatePaymentType('credit_card')"
         >
-          <label class="flex items-center cursor-pointer">
-            <input
+          <UiLabel>
+            <UiInput
               :checked="modelValue.type === 'credit_card'"
               type="radio"
               value="credit_card"
-              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
               @change="updatePaymentType('credit_card')"
             />
             <div class="ml-3 flex items-center">
@@ -84,7 +82,7 @@
                 </p>
               </div>
             </div>
-          </label>
+          </UiLabel>
         </div>
       </div>
 

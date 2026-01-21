@@ -86,9 +86,7 @@
             v-if="confirmDialog.status === 'shipped'"
             class="space-y-2"
           >
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Tracking Information (Optional)
-            </label>
+            <UiLabel>Tracking Information (Optional)</UiLabel>
             <Textarea
               v-model="confirmDialog.notes"
               placeholder="Enter tracking numbers or shipping notes..."

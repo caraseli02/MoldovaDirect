@@ -61,7 +61,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
           <!-- Status Filter -->
           <div class="space-y-2">
-            <label class="text-xs font-medium text-muted-foreground">Order Status</label>
+            <UiLabel>Order Status</UiLabel>
             <Select
               :model-value="statusValue"
               @update:model-value="updateStatusFilter"
@@ -91,7 +91,7 @@
 
           <!-- Payment Status Filter -->
           <div class="space-y-2">
-            <label class="text-xs font-medium text-muted-foreground">Payment Status</label>
+            <UiLabel>Payment Status</UiLabel>
             <Select
               :model-value="paymentStatusValue"
               @update:model-value="updatePaymentStatusFilter"
@@ -118,7 +118,7 @@
 
           <!-- Date Start -->
           <div class="space-y-2">
-            <label class="text-xs font-medium text-muted-foreground">Start Date</label>
+            <UiLabel>Start Date</UiLabel>
             <Input
               type="date"
               :value="dateRange?.start"
@@ -128,7 +128,7 @@
 
           <!-- Date End -->
           <div class="space-y-2">
-            <label class="text-xs font-medium text-muted-foreground">End Date</label>
+            <UiLabel>End Date</UiLabel>
             <Input
               type="date"
               :value="dateRange?.end"
@@ -345,8 +345,8 @@ const formatDateRange = (range: { start: string, end: string }) => {
 // Event handlers with debouncing for search
 let searchTimeout: NodeJS.Timeout | null = null
 
-const updateSearch = (value: string | number) => {
-  const searchValue = String(value)
+const updateSearch = (value: string | number | null | undefined) => {
+  const searchValue = String(value ?? '')
   if (searchTimeout) {
     clearTimeout(searchTimeout)
   }

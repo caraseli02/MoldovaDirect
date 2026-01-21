@@ -20,11 +20,10 @@
               />
             </svg>
           </div>
-          <input
+          <UiInput
             :value="search"
             type="text"
             placeholder="Search by name, SKU, or category..."
-            class="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
             @input="updateSearch(($event.target as HTMLInputElement)?.value || '')"
           />
           <div
@@ -55,59 +54,71 @@
         </div>
 
         <!-- Category Filter -->
-        <select
+        <UiSelect
           :value="categoryId || ''"
-          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          @change="updateCategoryFilter(($event.target as HTMLSelectElement)?.value || '')"
+          @update:model-value="updateCategoryFilter($event as string)"
         >
-          <option value="">
-            All Categories
-          </option>
-          <option
-            v-for="category in categories"
-            :key="category.id"
-            :value="category.id"
-          >
-            {{ getLocalizedText(category.name) }}
-          </option>
-        </select>
+          <UiSelectTrigger>
+            <UiSelectValue placeholder="All Categories" />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem value="">
+              All Categories
+            </UiSelectItem>
+            <UiSelectItem
+              v-for="category in categories"
+              :key="category.id"
+              :value="category.id"
+            >
+              {{ getLocalizedText(category.name) }}
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
 
         <!-- Status Filter -->
-        <select
+        <UiSelect
           :value="status"
-          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          @change="updateStatusFilter(($event.target as HTMLSelectElement)?.value || '')"
+          @update:model-value="updateStatusFilter($event as string)"
         >
-          <option value="">
-            All Status
-          </option>
-          <option value="active">
-            Active
-          </option>
-          <option value="inactive">
-            Inactive
-          </option>
-        </select>
+          <UiSelectTrigger>
+            <UiSelectValue />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem value="">
+              All Status
+            </UiSelectItem>
+            <UiSelectItem value="active">
+              Active
+            </UiSelectItem>
+            <UiSelectItem value="inactive">
+              Inactive
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
 
         <!-- Stock Level Filter -->
-        <select
+        <UiSelect
           :value="stockLevel"
-          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          @change="updateStockFilter(($event.target as HTMLSelectElement)?.value || '')"
+          @update:model-value="updateStockFilter($event as string)"
         >
-          <option value="">
-            All Stock Levels
-          </option>
-          <option value="in-stock">
-            In Stock
-          </option>
-          <option value="low-stock">
-            Low Stock
-          </option>
-          <option value="out-of-stock">
-            Out of Stock
-          </option>
-        </select>
+          <UiSelectTrigger>
+            <UiSelectValue />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem value="">
+              All Stock Levels
+            </UiSelectItem>
+            <UiSelectItem value="in-stock">
+              In Stock
+            </UiSelectItem>
+            <UiSelectItem value="low-stock">
+              Low Stock
+            </UiSelectItem>
+            <UiSelectItem value="out-of-stock">
+              Out of Stock
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
       </div>
 
       <!-- Active Filters and Actions Row -->

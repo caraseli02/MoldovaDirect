@@ -120,16 +120,13 @@
       </div>
 
       <!-- View Details Button -->
-      <button
-        class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary/5 px-3 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/10 md:mt-4 md:px-4 md:py-2.5"
-        @click.stop="$emit('click', pairing)"
-      >
+      <UiButton @click.stop="$emit('click', pairing)">
         {{ t('wineStory.pairings.viewPairing') }}
         <commonIcon
           name="lucide:arrow-right"
           class="h-4 w-4 transition-transform group-hover:translate-x-1"
         />
-      </button>
+      </UiButton>
     </div>
 
     <!-- Intensity Indicator -->

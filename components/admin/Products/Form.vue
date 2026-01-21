@@ -5,9 +5,8 @@
   >
     <!-- Basic Information -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-      <button
+      <UiButton
         type="button"
-        class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
         @click="toggleSection('basic')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
@@ -28,7 +27,7 @@
             d="M19 9l-7 7-7-7"
           />
         </svg>
-      </button>
+      </UiButton>
 
       <div
         v-show="expandedSections.basic"
@@ -37,22 +36,17 @@
         <div class="grid grid-cols-1 gap-4 md:gap-6">
           <!-- Product Name -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Product Name *
-            </label>
+            <UiLabel>Product Name *</UiLabel>
             <div class="space-y-3">
               <div
                 v-for="locale in locales"
                 :key="locale.code"
               >
-                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-                  {{ locale.name }}
-                </label>
-                <input
+                <UiLabel>{{ locale.name }}</UiLabel>
+                <UiInput
                   v-model="form.name[locale.code]"
                   type="text"
                   :placeholder="`Product name in ${locale.name}`"
-                  class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   :class="{ 'border-red-500': errors.name?.[locale.code] }"
                 />
                 <p
@@ -67,14 +61,11 @@
 
           <!-- SKU -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              SKU *
-            </label>
-            <input
+            <UiLabel>SKU *</UiLabel>
+            <UiInput
               v-model="form.sku"
               type="text"
               placeholder="Product SKU"
-              class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :class="{ 'border-red-500': errors.sku }"
             />
             <p
@@ -87,25 +78,24 @@
 
           <!-- Category -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Category *
-            </label>
-            <select
+            <UiLabel>Category *</UiLabel>
+            <UiSelect
               v-model="form.categoryId"
-              class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :class="{ 'border-red-500': errors.categoryId }"
             >
-              <option value="">
-                Select a category
-              </option>
-              <option
-                v-for="category in categories"
-                :key="category.id"
-                :value="category.id"
-              >
-                {{ getLocalizedText(category.name) }}
-              </option>
-            </select>
+              <UiSelectTrigger>
+                <UiSelectValue placeholder="Select a category" />
+              </UiSelectTrigger>
+              <UiSelectContent>
+                <UiSelectItem
+                  v-for="category in categories"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  {{ getLocalizedText(category.name) }}
+                </UiSelectItem>
+              </UiSelectContent>
+            </UiSelect>
             <p
               v-if="errors.categoryId"
               class="mt-1 text-sm text-red-600"
@@ -119,9 +109,8 @@
 
     <!-- Description -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-      <button
+      <UiButton
         type="button"
-        class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
         @click="toggleSection('description')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
@@ -142,7 +131,7 @@
             d="M19 9l-7 7-7-7"
           />
         </svg>
-      </button>
+      </UiButton>
 
       <div
         v-show="expandedSections.description"
@@ -152,16 +141,13 @@
           v-for="locale in locales"
           :key="locale.code"
         >
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Description ({{ locale.name }})
-          </label>
-          <textarea
+          <UiLabel>Description ({{ locale.name }})</UiLabel>
+          <UiTextarea
             v-model="form.description[locale.code]"
             rows="4"
             :placeholder="`Product description in ${locale.name}`"
-            class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             :class="{ 'border-red-500': errors.description?.[locale.code] }"
-          ></textarea>
+          />
           <p
             v-if="errors.description?.[locale.code]"
             class="mt-1 text-sm text-red-600"
@@ -174,9 +160,8 @@
 
     <!-- Pricing -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-      <button
+      <UiButton
         type="button"
-        class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
         @click="toggleSection('pricing')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
@@ -197,7 +182,7 @@
             d="M19 9l-7 7-7-7"
           />
         </svg>
-      </button>
+      </UiButton>
 
       <div
         v-show="expandedSections.pricing"
@@ -206,21 +191,18 @@
         <div class="grid grid-cols-1 gap-4 md:gap-6">
           <!-- Price -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Price (EUR) *
-            </label>
+            <UiLabel>Price (EUR) *</UiLabel>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-4 md:pl-3 flex items-center pointer-events-none">
                 <span class="text-gray-500 dark:text-gray-400">€</span>
               </div>
-              <input
+              <UiInput
                 v-model.number="form.price"
                 type="number"
                 step="0.01"
                 min="0"
                 inputmode="decimal"
                 placeholder="0.00"
-                class="w-full pl-9 md:pl-8 pr-4 md:pr-3 py-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 :class="{ 'border-red-500': errors.price }"
               />
             </div>
@@ -234,21 +216,18 @@
 
           <!-- Compare Price -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Compare at Price (EUR)
-            </label>
+            <UiLabel>Compare at Price (EUR)</UiLabel>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-4 md:pl-3 flex items-center pointer-events-none">
                 <span class="text-gray-500 dark:text-gray-400">€</span>
               </div>
-              <input
+              <UiInput
                 v-model.number="form.comparePrice"
                 type="number"
                 step="0.01"
                 min="0"
                 inputmode="decimal"
                 placeholder="0.00"
-                class="w-full pl-9 md:pl-8 pr-4 md:pr-3 py-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 :class="{ 'border-red-500': errors.comparePrice }"
               />
             </div>
@@ -265,9 +244,8 @@
 
     <!-- Inventory -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-      <button
+      <UiButton
         type="button"
-        class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
         @click="toggleSection('inventory')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
@@ -288,7 +266,7 @@
             d="M19 9l-7 7-7-7"
           />
         </svg>
-      </button>
+      </UiButton>
 
       <div
         v-show="expandedSections.inventory"
@@ -297,16 +275,13 @@
         <div class="grid grid-cols-1 gap-4 md:gap-6">
           <!-- Stock Quantity -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Stock Quantity *
-            </label>
-            <input
+            <UiLabel>Stock Quantity *</UiLabel>
+            <UiInput
               v-model.number="form.stockQuantity"
               type="number"
               min="0"
               inputmode="numeric"
               placeholder="0"
-              class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :class="{ 'border-red-500': errors.stockQuantity }"
             />
             <p
@@ -319,16 +294,13 @@
 
           <!-- Low Stock Threshold -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Low Stock Threshold
-            </label>
-            <input
+            <UiLabel>Low Stock Threshold</UiLabel>
+            <UiInput
               v-model.number="form.lowStockThreshold"
               type="number"
               min="0"
               inputmode="numeric"
               placeholder="5"
-              class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               :class="{ 'border-red-500': errors.lowStockThreshold }"
             />
             <p
@@ -344,9 +316,8 @@
 
     <!-- Images -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-      <button
+      <UiButton
         type="button"
-        class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
         @click="toggleSection('images')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
@@ -367,7 +338,7 @@
             d="M19 9l-7 7-7-7"
           />
         </svg>
-      </button>
+      </UiButton>
 
       <div
         v-show="expandedSections.images"
@@ -391,9 +362,8 @@
 
     <!-- Product Attributes -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-      <button
+      <UiButton
         type="button"
-        class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
         @click="toggleSection('attributes')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
@@ -414,7 +384,7 @@
             d="M19 9l-7 7-7-7"
           />
         </svg>
-      </button>
+      </UiButton>
 
       <div
         v-show="expandedSections.attributes"
@@ -423,38 +393,30 @@
         <div class="grid grid-cols-1 gap-4 md:gap-6">
           <!-- Origin -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Origin
-            </label>
-            <input
+            <UiLabel>Origin</UiLabel>
+            <UiInput
               v-model="form.attributes.origin"
               type="text"
               placeholder="e.g., Moldova"
-              class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
           </div>
 
           <!-- Volume -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Volume (ml)
-            </label>
-            <input
+            <UiLabel>Volume (ml)</UiLabel>
+            <UiInput
               v-model.number="form.attributes.volume"
               type="number"
               min="0"
               inputmode="numeric"
               placeholder="750"
-              class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
           </div>
 
           <!-- Alcohol Content -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Alcohol Content (%)
-            </label>
-            <input
+            <UiLabel>Alcohol Content (%)</UiLabel>
+            <UiInput
               v-model.number="form.attributes.alcoholContent"
               type="number"
               step="0.1"
@@ -462,7 +424,6 @@
               max="100"
               inputmode="decimal"
               placeholder="14.5"
-              class="w-full px-4 py-3 md:px-3 md:py-2 text-base md:text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
           </div>
         </div>
@@ -471,9 +432,8 @@
 
     <!-- Status and Visibility -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-      <button
+      <UiButton
         type="button"
-        class="w-full px-4 py-4 md:px-6 md:py-5 flex items-center justify-between text-left"
         @click="toggleSection('status')"
       >
         <h3 class="text-base md:text-lg font-medium text-gray-900 dark:text-white flex items-center">
@@ -494,7 +454,7 @@
             d="M19 9l-7 7-7-7"
           />
         </svg>
-      </button>
+      </UiButton>
 
       <div
         v-show="expandedSections.status"
@@ -503,37 +463,35 @@
         <!-- Active Status -->
         <div class="flex items-start">
           <div class="flex items-center h-5">
-            <input
+            <UiCheckbox
               id="is-active"
-              v-model="form.isActive"
-              type="checkbox"
-              class="h-5 w-5 md:h-4 md:w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              :checked="form.isActive"
+              @update:checked="form.isActive = $event"
             />
           </div>
-          <label
+          <UiLabel
             for="is-active"
-            class="ml-3 block text-sm md:text-sm text-gray-900 dark:text-white"
+            class="ml-2"
           >
             Product is active and visible to customers
-          </label>
+          </UiLabel>
         </div>
 
         <!-- Featured Status -->
         <div class="flex items-start">
           <div class="flex items-center h-5">
-            <input
+            <UiCheckbox
               id="is-featured"
-              v-model="form.attributes.featured"
-              type="checkbox"
-              class="h-5 w-5 md:h-4 md:w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              :checked="form.attributes.featured"
+              @update:checked="(val: boolean) => form.attributes.featured = val"
             />
           </div>
-          <label
+          <UiLabel
             for="is-featured"
-            class="ml-3 block text-sm md:text-sm text-gray-900 dark:text-white"
+            class="ml-2"
           >
             Feature this product on the homepage
-          </label>
+          </UiLabel>
         </div>
       </div>
     </div>
@@ -575,6 +533,7 @@
 
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
+import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
 import { z } from 'zod'
 import type { CategoryWithChildren } from '~/types/database'
 

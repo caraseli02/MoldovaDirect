@@ -34,14 +34,14 @@
             {{ modelValue.name }} - {{ $t('checkout.shippingMethod.estimatedDelivery', { days: modelValue.estimatedDays }) }}
           </p>
         </div>
-        <button
-          v-if="availableMethods.length > 1"
+        <UiButton
+          v-if="availableMethods.length>1"
           type="button"
           class="text-sm text-green-700 dark:text-green-300 hover:text-green-900 dark:hover:text-green-100 underline"
           @click="showAllMethods = true"
         >
           {{ $t('checkout.shippingMethod.changeMethod') }}
-        </button>
+        </UiButton>
       </div>
     </div>
 
@@ -167,12 +167,9 @@
           :key="method.id"
           class="relative"
         >
-          <label
-            class="flex items-start space-x-3 p-4 border rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+          <UiLabel
             :for="`ship-${method.id}`"
-            :class="selectedMethodId === method.id
-              ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 ring-1 ring-primary-500'
-              : 'border-gray-200 dark:border-gray-600'"
+            :class="selectedMethodId === method.id ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 ring-1 ring-primary-500' : 'border-gray-200 dark:border-gray-600'"
           >
             <RadioGroupItem
               :id="`ship-${method.id}`"
@@ -243,7 +240,7 @@
                 </p>
               </div>
             </div>
-          </label>
+          </UiLabel>
         </div>
       </RadioGroup>
     </div>

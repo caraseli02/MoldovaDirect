@@ -9,20 +9,23 @@
         'pl-12': level >= 3,
       }"
     >
-      <button
-        class="flex items-center flex-1 text-left"
+      <UiButton
+        variant="ghost"
+        class="flex items-center flex-1 justify-start"
         @click="handleCategoryClick"
       >
-        <button
+        <UiButton
           v-if="category.children && category.children.length > 0"
-          class="mr-2 p-1 text-gray-400 hover:text-gray-600 transition-colors"
+          variant="ghost"
+          size="icon"
+          class="mr-2"
           @click.stop="toggleExpanded"
         >
           <commonIcon
             :name="isExpanded ? 'lucide:chevron-down' : 'lucide:chevron-right'"
             class="w-4 h-4"
           />
-        </button>
+        </UiButton>
         <div
           v-else
           class="w-6"
@@ -34,7 +37,7 @@
           class="w-5 h-5 mr-3"
         />
         <span class="font-medium">{{ category.name }}</span>
-      </button>
+      </UiButton>
 
       <div class="flex items-center space-x-2">
         <span

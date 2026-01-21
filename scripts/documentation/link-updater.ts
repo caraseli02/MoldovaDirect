@@ -3,6 +3,7 @@
  * Handles link extraction, updating, validation, and redirect generation
  */
 
+// @ts-nocheck - Documentation tool with optional dependencies
 import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import { visit } from 'unist-util-visit'

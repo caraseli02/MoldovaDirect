@@ -65,13 +65,10 @@
       >
         <!-- Confirmation Input -->
         <div>
-          <label
-            for="confirmation"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-          >
+          <UiLabel for="confirmation">
             {{ $t('profile.deleteConfirmationLabel') }}
-          </label>
-          <input
+          </UiLabel>
+          <UiInput
             id="confirmation"
             ref="confirmationInput"
             v-model="confirmationText"
@@ -79,7 +76,6 @@
             required
             :aria-invalid="!!errors.confirmation"
             :aria-describedby="errors.confirmation ? 'confirmation-error confirmation-hint' : 'confirmation-hint'"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:bg-gray-700 dark:text-white transition-colors"
             :class="{ 'border-red-500': errors.confirmation }"
             :placeholder="$t('profile.deleteConfirmationPlaceholder')"
           />
@@ -101,20 +97,16 @@
 
         <!-- Password Confirmation -->
         <div>
-          <label
-            for="password"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-          >
+          <UiLabel for="password">
             {{ $t('profile.confirmPassword') }}
-          </label>
-          <input
+          </UiLabel>
+          <UiInput
             id="password"
             v-model="password"
             type="password"
             required
             :aria-invalid="!!errors.password"
             :aria-describedby="errors.password ? 'password-error' : undefined"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:bg-gray-700 dark:text-white transition-colors"
             :class="{ 'border-red-500': errors.password }"
             :placeholder="$t('profile.confirmPasswordPlaceholder')"
           />
@@ -130,36 +122,37 @@
 
         <!-- Reason (Optional) -->
         <div>
-          <label
-            for="reason"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-          >
+          <UiLabel for="reason">
             {{ $t('profile.deleteReason') }} ({{ $t('common.optional') }})
-          </label>
-          <select
+          </UiLabel>
+          <UiSelect
             id="reason"
             v-model="reason"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:bg-gray-700 dark:text-white transition-colors"
           >
-            <option value="">
-              {{ $t('profile.selectReason') }}
-            </option>
-            <option value="not_using">
-              {{ $t('profile.deleteReasons.notUsing') }}
-            </option>
-            <option value="privacy_concerns">
-              {{ $t('profile.deleteReasons.privacyConcerns') }}
-            </option>
-            <option value="found_alternative">
-              {{ $t('profile.deleteReasons.foundAlternative') }}
-            </option>
-            <option value="technical_issues">
-              {{ $t('profile.deleteReasons.technicalIssues') }}
-            </option>
-            <option value="other">
-              {{ $t('profile.deleteReasons.other') }}
-            </option>
-          </select>
+            <UiSelectTrigger>
+              <UiSelectValue />
+            </UiSelectTrigger>
+            <UiSelectContent>
+              <UiSelectItem value="">
+                {{ $t('profile.selectReason') }}
+              </UiSelectItem>
+              <UiSelectItem value="not_using">
+                {{ $t('profile.deleteReasons.notUsing') }}
+              </UiSelectItem>
+              <UiSelectItem value="privacy_concerns">
+                {{ $t('profile.deleteReasons.privacyConcerns') }}
+              </UiSelectItem>
+              <UiSelectItem value="found_alternative">
+                {{ $t('profile.deleteReasons.foundAlternative') }}
+              </UiSelectItem>
+              <UiSelectItem value="technical_issues">
+                {{ $t('profile.deleteReasons.technicalIssues') }}
+              </UiSelectItem>
+              <UiSelectItem value="other">
+                {{ $t('profile.deleteReasons.other') }}
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
         </div>
 
         <!-- Action Buttons -->
