@@ -76,6 +76,18 @@ export default withNuxt(
       'vue/require-default-prop': 'off', // Not always needed with TypeScript
 
       // ============================================
+      // UI Components - MANDATORY (enforce shadcn-vue)
+      // ============================================
+      // Use shadcn-vue components instead of raw HTML form elements
+      // See: CLAUDE.md section "UI Components (MANDATORY)"
+      'vue/no-restricted-html-elements': ['error',
+        {
+          element: ['button', 'input', 'select', 'textarea', 'label'],
+          message: 'Use shadcn-vue components instead: UiButton, UiInput, UiSelect, UiTextarea, UiLabel. See CLAUDE.md "UI Components (MANDATORY)"',
+        },
+      ],
+
+      // ============================================
       // General Code Quality
       // ============================================
       'no-console': 'off', // Allow console.log for development

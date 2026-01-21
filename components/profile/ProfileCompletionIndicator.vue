@@ -1,4 +1,3 @@
-<!-- eslint-disable tailwindcss/no-custom-classname -->
 <script setup lang="ts">
 /**
  * Profile Completion Indicator Component
@@ -12,12 +11,17 @@
  * ```
  */
 
+import { Progress } from '~/components/ui/progress'
+
 interface Props {
   /** Completion percentage (0-100) */
   percentage: number
 }
 
 const { percentage } = defineProps<Props>()
+
+// Clamp percentage between 0-100
+const clampedPercentage = computed(() => Math.min(100, Math.max(0, percentage)))
 </script>
 
 <template>
@@ -36,14 +40,11 @@ const { percentage } = defineProps<Props>()
         {{ percentage }}%
       </span>
     </div>
-    <div
-      class="w-full bg-zinc-200 dark:bg-zinc-700 rounded-full h-2"
+    <Progress
+      :model-value="clampedPercentage"
+      class="bg-zinc-200 dark:bg-zinc-700"
+      indicator-class="bg-blue-600"
       data-testid="profile-completion-bar"
-    >
-      <div
-        class="bg-blue-600 h-2 rounded-full transition-all duration-500"
-        :style="{ width: `${Math.min(100, Math.max(0, percentage))}%` }"
-      ></div>
-    </div>
+    />
   </div>
 </template>

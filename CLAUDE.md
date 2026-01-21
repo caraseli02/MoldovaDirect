@@ -215,6 +215,7 @@ pnpm build && pnpm test
 - [ ] TypeScript types correct
 - [ ] Responsive design works
 - [ ] i18n keys in all locales
+- [ ] **UI Components: Used shadcn-vue (UiButton, UiInput, etc.) NOT raw HTML**
 
 ---
 
@@ -305,6 +306,84 @@ When creating or updating documentation:
 **Styling:** TailwindCSS utility classes
 **State:** Pinia stores for shared state
 **API:** Supabase client with RLS policies
+
+---
+
+## 🎨 UI Components (MANDATORY)
+
+### ❌ NEVER: Raw HTML Form Elements
+```vue
+<!-- ❌ FORBIDDEN - Raw HTML elements with manual styling -->
+<button class="rounded-lg border px-4 py-2...">Click</button>
+<input type="text" class="w-full px-4 py-2 border..." />
+<select class="rounded-lg border...">
+  <option value="1">Option 1</option>
+</select>
+<label for="name">Name</label>
+<textarea class="w-full px-4 py-2..."></textarea>
+```
+
+### ✅ ALWAYS: shadcn-vue Components
+```vue
+<!-- ✅ CORRECT - Use components/ui/ components -->
+<UiButton variant="outline">Click</UiButton>
+<UiInput v-model="name" placeholder="Name" />
+<UiSelect v-model="value">
+  <UiSelectTrigger>
+    <UiSelectValue placeholder="Select..." />
+  </UiSelectTrigger>
+  <UiSelectContent>
+    <UiSelectItem value="1">Option 1</UiSelectItem>
+  </UiSelectContent>
+</UiSelect>
+<UiLabel for="name">Name</UiLabel>
+<UiTextarea v-model="description" />
+```
+
+### Available shadcn-vue Components
+Located in `components/ui/`:
+
+| Category | Components |
+|----------|------------|
+| **Forms** | `UiInput`, `UiSelect`, `UiTextarea`, `UiCheckbox`, `UiSwitch`, `UiSlider`, `UiRadioGroup` |
+| **Labels** | `UiLabel` |
+| **Buttons** | `UiButton` (never raw `<button>`) |
+| **Cards** | `UiCard`, `UiCardHeader`, `UiCardContent`, `UiCardFooter`, `UiCardTitle`, `UiCardDescription` |
+| **Dialogs** | `UiDialog`, `UiAlertDialog`, `UiSheet` (side panel) |
+| **Feedback** | `UiAlert`, `UiBadge`, `UiSonner` (toasts), `UiAvatar`, `UiSkeleton`, `UiProgress` |
+| **Navigation** | `UiTabs`, `UiPagination`, `UiDropdownMenu`, `UiPopover`, `UiTooltip` |
+| **Data Display** | `UiTable`, `UiAccordion` |
+
+### When Raw HTML Is Allowed
+```vue
+<!-- ✅ ALLOWED - Layout divs (no semantic meaning) -->
+<div class="grid grid-cols-2 gap-4">
+<div class="flex items-center gap-2">
+<div v-if="condition" class="p-4">
+
+<!-- ✅ ALLOWED - Semantic HTML for structure -->
+<nav>...</nav>
+<main>...</main>
+<section>...</section>
+<article>...</article>
+<header>...</header>
+<footer>...</footer>
+
+<!-- ✅ ALLOWED - SVG icons -->
+<svg xmlns="http://www.w3.org/2000/svg">...</svg>
+```
+
+### ESLint Enforcement
+This rule is **enforced by ESLint**:
+```javascript
+// eslint.config.mjs
+'vue/no-restricted-html-elements': ['error', {
+  elements: ['button', 'input', 'select', 'textarea', 'label'],
+  message: 'Use shadcn-vue components instead...',
+}]
+```
+
+If you see this error, replace the raw HTML with the corresponding `Ui*` component.
 
 ---
 
@@ -402,10 +481,11 @@ Screenshots follow: `[name]-[viewport].png`
 
 ---
 
-**Last Updated:** 2026-01-19
+**Last Updated:** 2026-01-21
 **Admin Status:** All 5 pages working ✅
 **Docs Structure:** Role-based navigation (January 2026 cleanup)
 **Code Design:** Added principles to prevent monolithic components
+**UI Components:** MANDATORY use of shadcn-vue (enforced by ESLint)
 
 
 ---
