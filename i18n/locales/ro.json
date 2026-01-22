@@ -61,6 +61,7 @@
     "showOrderSummary": "Arată rezumatul comenzii",
     "hideOrderSummary": "Ascunde rezumatul comenzii",
     "item": "articol",
+    "proceedToCheckout": "Continuă spre Finalizare",
     "time": {
       "days": "z",
       "hours": "h",
@@ -1862,6 +1863,7 @@
       "addMore": "Adaugă încă {amount} pentru transport gratuit"
     },
     "recommendations": {
+      "frequently_bought_together": "Cumpărate frecvent împreună",
       "boughtTogether": "Cumpărate împreună",
       "similar": "Similar",
       "priceDrop": "Preț redus",
@@ -2946,6 +2948,76 @@
         "title": "Practici sustenabile",
         "description": "Mulți dintre producătorii noștri fac tranziția către agricultura organică și biodinamică, asigurând că viile Moldovei prosperă pentru generațiile viitoare."
       }
+    }
+  },
+  "seo": {
+    "home": {
+      "title": "Moldova Direct – Gustul Moldovei în fiecare livrare",
+      "description": "Cumpărați vinuri moldovenești selecționate, alimente gourmet și coșuri cadou cu livrare rapidă în toată Spania. Descoperiți producători artizani și arome autentice."
+    },
+    "about": {
+      "title": "Despre Noi - Moldova Direct",
+      "description": "Aflați mai multe despre misiunea noastră de a aduce cele mai fine produse moldovenești direct la ușa dumneavoastră din Spania."
+    },
+    "contact": {
+      "title": "Contactați-ne - Moldova Direct",
+      "description": "Luați legătura cu echipa Moldova Direct pentru suport, cereri wholesale sau doar pentru a ne saluta."
+    },
+    "products": {
+      "title": "Magazin Produse - Moldova Direct",
+      "description": "Răsfoiți gama noastră completă de vinuri, băuturi spirtoase și produse alimentare gourmet autentice din Moldova."
+    },
+    "cart": {
+      "title": "Coș de Cumpărături - Moldova Direct",
+      "description": "Revizuiți articolele selectate și continuați către plata securizată."
+    },
+    "account": {
+      "title": "Contul Meu - Moldova Direct",
+      "description": "Gestionați comenzile, adresele și setările contului."
+    }
+  },
+  "aboutPage": {
+    "title": "Bine ați venit la Moldova Direct, poarta dumneavoastră către produsele autentice moldovenești în Spania.",
+    "mission": {
+      "title": "Misiunea Noastră",
+      "description": "Suntem dedicați aducerii aromelor și tradițiilor bogate ale Moldovei direct la ușa dumneavoastră. Misiunea noastră este de a conecta diaspora moldovenească și entuziaștii gastronomiei din Spania cu gusturile autentice ale Moldovei, de la vinurile sale renumite mondial până la conservele și delicatesele tradiționale."
+    },
+    "whyChooseUs": {
+      "title": "De Ce Să Ne Alegeți",
+      "item1": "Parteneriate directe cu producătorii moldoveni",
+      "item2": "Autenticitate și calitate garantate",
+      "item3": "Livrare rapidă și fiabilă în toată Spania",
+      "item4": "Prețuri competitive fără taxe ascunse",
+      "item5": "Suport clienți în mai multe limbi"
+    },
+    "story": {
+      "title": "Povestea Noastră",
+      "p1": "Fondată de expați moldoveni care locuiesc în Spania, Moldova Direct s-a născut dintr-o dorință simplă: de a împărtăși produsele excepționale ale patriei noastre cu noua noastră casă. Înțelegem nostalgia pentru gusturile autentice și dificultatea de a găsi produse moldovenești veritabile în străinătate.",
+      "p2": "De aceea, am stabilit relații directe cu producători de încredere din Moldova, asigurându-ne că fiecare produs pe care îl oferim respectă cele mai înalte standarde de calitate și autenticitate. De la crame de familie la producători artizanali de alimente, lucrăm doar cu parteneri care împărtășesc angajamentul nostru pentru excelență."
+    },
+    "getInTouch": {
+      "title": "Luați Legătura",
+      "description": "Aveți întrebări sau sugestii? Ne-ar plăcea să primim vești de la dumneavoastră!"
+    }
+  },
+  "contactPage": {
+    "title": "Trimiteți-ne un mesaj",
+    "form": {
+      "name": "Nume",
+      "email": "Email",
+      "subject": "Subiect",
+      "message": "Mesaj",
+      "send": "Trimite Mesajul",
+      "success": "Vă mulțumim pentru mesaj! Vă vom răspunde în curând."
+    },
+    "info": {
+      "title": "Luați Legătura",
+      "email": "Email",
+      "phone": "Telefon",
+      "workingHours": "Luni - Vineri: 9:00 - 18:00",
+      "office": "Birou",
+      "address": "Moldova Direct S.L.<br />Madrid, Spania",
+      "followUs": "Urmăriți-ne"
     }
   }
 }

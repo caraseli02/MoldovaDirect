@@ -165,11 +165,10 @@ const structuredData = [
 ]
 
 useLandingSeo({
-  title: 'Moldova Direct – Taste Moldova in Every Delivery',
-  description:
-    'Shop curated Moldovan wines, gourmet foods, and gift hampers with fast delivery across Spain. Discover artisan producers and authentic flavours.',
+  title: t('seo.home.title'),
+  description: t('seo.home.description'),
   image: '/icon.svg',
-  imageAlt: 'Selection of Moldovan delicacies delivered across Spain',
+  imageAlt: t('home.hero.imageAlt'),
   pageType: 'website',
   keywords: [
     'Moldovan wine delivery',

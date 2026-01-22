@@ -1,15 +1,15 @@
 <template>
   <nav
-    class="fixed bottom-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-800/50 safe-area-bottom md:hidden"
+    class="fixed bottom-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-800/50 safe-area-bottom lg:hidden"
     role="navigation"
     aria-label="Primary mobile navigation"
     data-testid="bottom-nav"
   >
-    <div class="flex items-center justify-around h-14 px-2">
+    <div class="flex items-center justify-around h-14 px-1">
       <!-- Home -->
       <NuxtLink
-        to="/"
-        class="flex flex-col items-center justify-center flex-1 h-full transition-colors"
+        :to="localePath('/')"
+        class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors"
         :class="isActive('/') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
         :aria-current="isActive('/') ? 'page' : undefined"
       >
@@ -18,13 +18,14 @@
           :size="20"
           class="mb-0.5"
         />
-        <span class="text-[10px] font-semibold uppercase tracking-wider">{{ $t('common.home') }}</span>
+        <span class="text-[9px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
+          $t('common.home') }}</span>
       </NuxtLink>
 
       <!-- Shop -->
       <NuxtLink
-        to="/products"
-        class="flex flex-col items-center justify-center flex-1 h-full transition-colors"
+        :to="localePath('/products')"
+        class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors"
         :class="isActive('/products') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
         :aria-current="isActive('/products') ? 'page' : undefined"
       >
@@ -33,13 +34,14 @@
           :size="20"
           class="mb-0.5"
         />
-        <span class="text-[10px] font-semibold uppercase tracking-wider">{{ $t('common.shop') }}</span>
+        <span class="text-[9px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
+          $t('common.shop') }}</span>
       </NuxtLink>
 
       <!-- Cart -->
       <NuxtLink
-        to="/cart"
-        class="flex flex-col items-center justify-center flex-1 h-full transition-colors relative"
+        :to="localePath('/cart')"
+        class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors relative"
         :class="isActive('/cart') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
         :aria-current="isActive('/cart') ? 'page' : undefined"
       >
@@ -59,13 +61,14 @@
             </span>
           </ClientOnly>
         </div>
-        <span class="text-[10px] font-semibold uppercase tracking-wider">{{ $t('common.cart') }}</span>
+        <span class="text-[9px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
+          $t('common.cart') }}</span>
       </NuxtLink>
 
       <!-- Search -->
       <NuxtLink
-        to="/products?focus=search"
-        class="flex flex-col items-center justify-center flex-1 h-full transition-colors"
+        :to="localePath('/products') + '?focus=search'"
+        class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors"
         :class="searchActive ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
       >
         <commonIcon
@@ -73,13 +76,14 @@
           :size="20"
           class="mb-0.5"
         />
-        <span class="text-[10px] font-semibold uppercase tracking-wider">{{ $t('common.search') }}</span>
+        <span class="text-[9px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
+          $t('common.search') }}</span>
       </NuxtLink>
 
       <!-- Account -->
       <NuxtLink
-        to="/account"
-        class="flex flex-col items-center justify-center flex-1 h-full transition-colors"
+        :to="localePath('/account')"
+        class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors"
         :class="isActive('/account') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
         :aria-current="isActive('/account') ? 'page' : undefined"
       >
@@ -88,7 +92,8 @@
           :size="20"
           class="mb-0.5"
         />
-        <span class="text-[10px] font-semibold uppercase tracking-wider">{{ $t('common.account') }}</span>
+        <span class="text-[9px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
+          $t('common.account') }}</span>
       </NuxtLink>
     </div>
   </nav>
@@ -98,21 +103,25 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCart } from '@/composables/useCart'
+import { useLocalePath } from '#imports'
 
 const route = useRoute()
+const localePath = useLocalePath()
 const { itemCount } = useCart()
 
-// Check if current route matches
+// Check if current route matches (ignoring locale prefix)
 const isActive = (path: string) => {
+  const localizedPath = localePath(path)
   if (path === '/') {
-    return route.path === '/'
+    return route.path === localizedPath || route.path === localizedPath + '/'
   }
-  return route.path.startsWith(path)
+  return route.path.startsWith(localizedPath)
 }
 
 // Check if search is focused
 const searchActive = computed(() => {
-  return route.path === '/products' && route.query.focus === 'search'
+  const productsPath = localePath('/products')
+  return (route.path === productsPath || route.path === productsPath + '/') && route.query.focus === 'search'
 })
 </script>
 

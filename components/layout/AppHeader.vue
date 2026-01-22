@@ -31,7 +31,7 @@
         </NuxtLink>
 
         <!-- Desktop Navigation with dynamic colors -->
-        <nav class="hidden md:flex items-center space-x-8">
+        <nav class="hidden lg:flex items-center space-x-8">
           <NuxtLink
             :to="localePath('/')"
             :class="navLinkClass"
@@ -61,7 +61,7 @@
         <!-- Right side actions -->
         <div class="flex items-center">
           <!-- Desktop actions -->
-          <div class="hidden md:flex items-center space-x-4">
+          <div class="hidden lg:flex items-center space-x-4">
             <!-- Language Switcher -->
             <ClientOnly>
               <LanguageSwitcher />
@@ -135,7 +135,7 @@
           </div>
 
           <!-- Mobile actions - Language and Theme -->
-          <div class="flex md:hidden items-center space-x-1">
+          <div class="flex lg:hidden items-center space-x-1">
             <ClientOnly>
               <!-- Language Switcher -->
               <LanguageSwitcher />
