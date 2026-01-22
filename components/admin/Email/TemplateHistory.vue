@@ -6,20 +6,20 @@
 -->
 
 <template>
-  <Card>
-    <CardHeader>
+  <UiCard>
+    <UiCardHeader>
       <div class="flex items-center justify-between">
-        <CardTitle>Version History</CardTitle>
-        <Button
+        <UiCardTitle>Version History</UiCardTitle>
+        <UiButton>
           variant="outline"
           size="sm"
           @click="loadHistory"
-        >
+          >
           Refresh
-        </Button>
+        </UiButton>
       </div>
-    </CardHeader>
-    <CardContent>
+    </UiCardHeader>
+    <UiCardContent>
       <div
         v-if="loading"
         class="text-center py-8"
@@ -60,21 +60,21 @@
             </div>
 
             <div class="flex gap-2">
-              <Button
+              <UiButton>
                 variant="outline"
                 size="sm"
                 @click="viewVersion(version)"
-              >
+                >
                 View
-              </Button>
-              <Button
+              </UiButton>
+              <UiButton>
                 variant="outline"
                 size="sm"
                 :disabled="rollingBack"
                 @click="rollbackToVersion(version)"
-              >
+                >
                 Rollback
-              </Button>
+              </UiButton>
             </div>
           </div>
         </div>
@@ -86,16 +86,16 @@
       >
         No version history available
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 
   <!-- Version Details Modal -->
-  <Dialog v-model:open="showVersionModal">
-    <DialogContent class="max-w-4xl max-h-[80vh] overflow-y-auto">
-      <DialogHeader>
-        <DialogTitle>Version {{ selectedVersion?.version }} Details</DialogTitle>
-        <DialogDescription>View details and translations for this archived email template version</DialogDescription>
-      </DialogHeader>
+  <UiDialog v-model:open="showVersionModal">
+    <UiDialogContent class="max-w-4xl max-h-[80vh] overflow-y-auto">
+      <UiDialogHeader>
+        <UiDialogTitle>Version {{ selectedVersion?.version }} Details</UiDialogTitle>
+        <UiDialogDescription>View details and translations for this archived email template version</UiDialogDescription>
+      </UiDialogHeader>
       <div
         v-if="selectedVersion"
         class="space-y-4"
@@ -120,30 +120,30 @@
         </div>
 
         <div class="flex gap-2 pt-4">
-          <Button
+          <UiButton>
             :disabled="rollingBack"
             class="flex-1"
             @click="rollbackToVersion(selectedVersion)"
-          >
+            >
             {{ rollingBack ? 'Rolling back...' : 'Rollback to This Version' }}
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton>
             variant="outline"
             class="flex-1"
             @click="showVersionModal = false"
-          >
+            >
             Close
-          </Button>
+          </UiButton>
         </div>
       </div>
-    </DialogContent>
-  </Dialog>
+    </UiDialogContent>
+  </UiDialog>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
-import { Button } from '~/components/ui/button'
+
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '~/components/ui/dialog'
 
 const props = defineProps<{

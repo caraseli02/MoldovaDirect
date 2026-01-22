@@ -310,7 +310,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
+
 import { useCheckoutStore } from '~/stores/checkout'
 import type { PaymentMethod, SavedPaymentMethod } from '~/types/checkout'
 import { useAuthStore } from '~/stores/auth'

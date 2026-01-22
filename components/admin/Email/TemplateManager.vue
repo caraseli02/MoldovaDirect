@@ -11,11 +11,11 @@
 <template>
   <div class="space-y-6">
     <!-- Template Type Selection -->
-    <Card>
-      <CardHeader>
-        <CardTitle>Select Template Type</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <UiCard>
+      <UiCardHeader>
+        <UiCardTitle>Select Template Type</UiCardTitle>
+      </UiCardHeader>
+      <UiCardContent>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <UiButton
             v-for="type in templateTypes"
@@ -31,15 +31,15 @@
             </div>
           </UiButton>
         </div>
-      </CardContent>
-    </Card>
+      </UiCardContent>
+    </UiCard>
 
     <!-- Locale Selection -->
-    <Card>
-      <CardHeader>
-        <CardTitle>Select Language</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <UiCard>
+      <UiCardHeader>
+        <UiCardTitle>Select Language</UiCardTitle>
+      </UiCardHeader>
+      <UiCardContent>
         <div class="flex gap-2">
           <UiButton
             v-for="locale in supportedLocales"
@@ -50,8 +50,8 @@
             {{ locale.name }}
           </UiButton>
         </div>
-      </CardContent>
-    </Card>
+      </UiCardContent>
+    </UiCard>
 
     <!-- Version History and Synchronization -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -69,29 +69,29 @@
     <!-- Template Editor -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- Editor Panel -->
-      <Card>
-        <CardHeader>
+      <UiCard>
+        <UiCardHeader>
           <div class="flex items-center justify-between">
-            <CardTitle>Template Editor</CardTitle>
+            <UiCardTitle>Template Editor</UiCardTitle>
             <div class="flex gap-2">
-              <Button
+              <UiButton>
                 variant="outline"
                 size="sm"
                 @click="validateTemplate"
-              >
+                >
                 Validate
-              </Button>
-              <Button
+              </UiButton>
+              <UiButton>
                 :disabled="saving || !hasChanges"
                 size="sm"
                 @click="saveTemplate"
-              >
+                >
                 {{ saving ? 'Saving...' : 'Save Changes' }}
-              </Button>
+              </UiButton>
             </div>
           </div>
-        </CardHeader>
-        <CardContent>
+        </UiCardHeader>
+        <UiCardContent>
           <!-- Subject Line -->
           <div class="mb-4">
             <UiLabel>Subject Line</UiLabel>
@@ -127,9 +127,9 @@
             v-if="validationErrors.length > 0"
             class="mt-4"
           >
-            <Alert variant="destructive">
-              <AlertTitle>Validation Errors</AlertTitle>
-              <AlertDescription>
+            <UiAlert variant="destructive">
+              <UiAlertTitle>Validation Errors</UiAlertTitle>
+              <UiAlertDescription>
                 <ul class="list-disc list-inside space-y-1">
                   <li
                     v-for="(error, index) in validationErrors"
@@ -138,17 +138,17 @@
                     {{ error }}
                   </li>
                 </ul>
-              </AlertDescription>
-            </Alert>
+              </UiAlertDescription>
+            </UiAlert>
           </div>
 
           <div
             v-if="validationWarnings.length > 0"
             class="mt-4"
           >
-            <Alert>
-              <AlertTitle>Warnings</AlertTitle>
-              <AlertDescription>
+            <UiAlert>
+              <UiAlertTitle>Warnings</UiAlertTitle>
+              <UiAlertDescription>
                 <ul class="list-disc list-inside space-y-1">
                   <li
                     v-for="(warning, index) in validationWarnings"
@@ -157,27 +157,27 @@
                     {{ warning }}
                   </li>
                 </ul>
-              </AlertDescription>
-            </Alert>
+              </UiAlertDescription>
+            </UiAlert>
           </div>
-        </CardContent>
-      </Card>
+        </UiCardContent>
+      </UiCard>
 
       <!-- Preview Panel -->
-      <Card>
-        <CardHeader>
+      <UiCard>
+        <UiCardHeader>
           <div class="flex items-center justify-between">
-            <CardTitle>Preview</CardTitle>
-            <Button
+            <UiCardTitle>Preview</UiCardTitle>
+            <UiButton>
               variant="outline"
               size="sm"
               @click="refreshPreview"
-            >
+              >
               Refresh Preview
-            </Button>
+            </UiButton>
           </div>
-        </CardHeader>
-        <CardContent>
+        </UiCardHeader>
+        <UiCardContent>
           <div class="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
             <iframe
               ref="previewFrame"
@@ -186,8 +186,8 @@
               sandbox="allow-same-origin"
             ></iframe>
           </div>
-        </CardContent>
-      </Card>
+        </UiCardContent>
+      </UiCard>
     </div>
   </div>
 </template>
@@ -195,7 +195,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
-import { Button } from '~/components/ui/button'
+
 import { Alert, AlertTitle, AlertDescription } from '~/components/ui/alert'
 
 const templateTypes = [

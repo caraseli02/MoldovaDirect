@@ -36,19 +36,19 @@
             <p class="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
               {{ $t('checkout.payment.stripeLoadFailedMessage') }}
             </p>
-            <Button
+            <UiButton>
               type="button"
               variant="outline"
               size="sm"
               class="mt-3"
               @click="handleRetry"
-            >
+              >
               <commonIcon
                 name="lucide:refresh-cw"
                 class="h-4 w-4 mr-2"
               />
               {{ $t('checkout.payment.retryStripe') }}
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -123,7 +123,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, nextTick, computed } from 'vue'
 import { useStripe, formatStripeError } from '~/composables/useStripe'
-import { Button } from '@/components/ui/button'
 
 const { t } = useI18n()
 

@@ -10,34 +10,34 @@
           Comprehensive insights into order performance and trends
         </p>
       </div>
-      <Button
+      <UiButton>
         :disabled="loading || exporting"
         variant="outline"
         @click="exportToCSV"
-      >
+        >
         <commonIcon
           :name="exporting ? 'lucide:loader-2' : 'lucide:download'"
           :class="['h-4 w-4 mr-2', exporting && 'animate-spin']"
         />
         Export CSV
-      </Button>
+      </UiButton>
     </div>
 
     <!-- Date Range Filter -->
-    <Card class="rounded-2xl">
-      <CardContent class="pt-6">
+    <UiCard class="rounded-2xl">
+      <UiCardContent class="pt-6">
         <div class="flex items-center space-x-4">
           <div class="flex-1">
             <UiLabel>Date Range</UiLabel>
             <div class="flex items-center space-x-2">
-              <Input
+              <UiInput
                 v-model="dateFrom"
                 type="date"
                 :max="dateTo"
                 class="w-48"
               />
               <span class="text-gray-500">to</span>
-              <Input
+              <UiInput
                 v-model="dateTo"
                 type="date"
                 :min="dateFrom"
@@ -47,7 +47,7 @@
             </div>
           </div>
           <div class="flex items-center space-x-2 pt-7">
-            <Button
+            <UiButton
               v-for="preset in datePresets"
               :key="preset.label"
               variant="outline"
@@ -55,8 +55,8 @@
               @click="applyDatePreset(preset.days)"
             >
               {{ preset.label }}
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton
               :disabled="loading"
               @click="fetchAnalytics"
             >
@@ -65,11 +65,11 @@
                 :class="['h-4 w-4 mr-2', loading && 'animate-spin']"
               />
               Refresh
-            </Button>
+            </UiButton>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </UiCardContent>
+    </UiCard>
 
     <!-- Loading State -->
     <div
@@ -89,89 +89,89 @@
     >
       <!-- Summary Metrics -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card class="rounded-2xl">
-          <CardHeader class="pb-3">
-            <CardDescription>Total Orders</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <UiCard class="rounded-2xl">
+          <UiCardHeader class="pb-3">
+            <UiCardDescription>Total Orders</UiCardDescription>
+          </UiCardHeader>
+          <UiCardContent>
             <div class="text-3xl font-bold text-gray-900 dark:text-white">
               {{ analytics.summary.totalOrders.toLocaleString() }}
             </div>
-          </CardContent>
-        </Card>
+          </UiCardContent>
+        </UiCard>
 
-        <Card class="rounded-2xl">
-          <CardHeader class="pb-3">
-            <CardDescription>Total Revenue</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <UiCard class="rounded-2xl">
+          <UiCardHeader class="pb-3">
+            <UiCardDescription>Total Revenue</UiCardDescription>
+          </UiCardHeader>
+          <UiCardContent>
             <div class="text-3xl font-bold text-gray-900 dark:text-white">
               {{ formatCurrency(analytics.summary.totalRevenue) }}
             </div>
-          </CardContent>
-        </Card>
+          </UiCardContent>
+        </UiCard>
 
-        <Card class="rounded-2xl">
-          <CardHeader class="pb-3">
-            <CardDescription>Average Order Value</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <UiCard class="rounded-2xl">
+          <UiCardHeader class="pb-3">
+            <UiCardDescription>Average Order Value</UiCardDescription>
+          </UiCardHeader>
+          <UiCardContent>
             <div class="text-3xl font-bold text-gray-900 dark:text-white">
               {{ formatCurrency(analytics.summary.averageOrderValue) }}
             </div>
-          </CardContent>
-        </Card>
+          </UiCardContent>
+        </UiCard>
 
-        <Card class="rounded-2xl">
-          <CardHeader class="pb-3">
-            <CardDescription>Fulfillment Rate</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <UiCard class="rounded-2xl">
+          <UiCardHeader class="pb-3">
+            <UiCardDescription>Fulfillment Rate</UiCardDescription>
+          </UiCardHeader>
+          <UiCardContent>
             <div class="text-3xl font-bold text-gray-900 dark:text-white">
               {{ analytics.summary.fulfillmentRate.toFixed(1) }}%
             </div>
-          </CardContent>
-        </Card>
+          </UiCardContent>
+        </UiCard>
       </div>
 
       <!-- Performance Metrics -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card class="rounded-2xl">
-          <CardHeader class="pb-3">
-            <CardDescription>Average Fulfillment Time</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <UiCard class="rounded-2xl">
+          <UiCardHeader class="pb-3">
+            <UiCardDescription>Average Fulfillment Time</UiCardDescription>
+          </UiCardHeader>
+          <UiCardContent>
             <div class="text-2xl font-bold text-gray-900 dark:text-white">
               {{ analytics.summary.averageFulfillmentTime.toFixed(1) }} days
             </div>
             <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
               From order creation to shipment
             </p>
-          </CardContent>
-        </Card>
+          </UiCardContent>
+        </UiCard>
 
-        <Card class="rounded-2xl">
-          <CardHeader class="pb-3">
-            <CardDescription>Average Delivery Time</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <UiCard class="rounded-2xl">
+          <UiCardHeader class="pb-3">
+            <UiCardDescription>Average Delivery Time</UiCardDescription>
+          </UiCardHeader>
+          <UiCardContent>
             <div class="text-2xl font-bold text-gray-900 dark:text-white">
               {{ analytics.summary.averageDeliveryTime.toFixed(1) }} days
             </div>
             <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
               From shipment to delivery
             </p>
-          </CardContent>
-        </Card>
+          </UiCardContent>
+        </UiCard>
       </div>
 
       <!-- Status Breakdown -->
-      <Card class="rounded-2xl">
-        <CardHeader>
-          <CardTitle>Order Status Breakdown</CardTitle>
-          <CardDescription>Distribution of orders by current status</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <UiCard class="rounded-2xl">
+        <UiCardHeader>
+          <UiCardTitle>Order Status Breakdown</UiCardTitle>
+          <UiCardDescription>Distribution of orders by current status</UiCardDescription>
+        </UiCardHeader>
+        <UiCardContent>
           <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div
               v-for="(count, status) in analytics.statusBreakdown"
@@ -189,17 +189,17 @@
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </UiCardContent>
+      </UiCard>
 
       <!-- Payment Method Breakdown -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card class="rounded-2xl">
-          <CardHeader>
-            <CardTitle>Payment Methods</CardTitle>
-            <CardDescription>Orders by payment method</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <UiCard class="rounded-2xl">
+          <UiCardHeader>
+            <UiCardTitle>Payment Methods</UiCardTitle>
+            <UiCardDescription>Orders by payment method</UiCardDescription>
+          </UiCardHeader>
+          <UiCardContent>
             <div class="space-y-3">
               <div
                 v-for="(count, method) in analytics.paymentMethodBreakdown"
@@ -219,15 +219,15 @@
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </UiCardContent>
+        </UiCard>
 
-        <Card class="rounded-2xl">
-          <CardHeader>
-            <CardTitle>Revenue Breakdown</CardTitle>
-            <CardDescription>Components of total revenue</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <UiCard class="rounded-2xl">
+          <UiCardHeader>
+            <UiCardTitle>Revenue Breakdown</UiCardTitle>
+            <UiCardDescription>Components of total revenue</UiCardDescription>
+          </UiCardHeader>
+          <UiCardContent>
             <div class="space-y-3">
               <div class="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
                 <span class="text-sm font-medium text-gray-900 dark:text-white">
@@ -262,17 +262,17 @@
                 </span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </UiCardContent>
+        </UiCard>
       </div>
 
       <!-- Revenue Time Series Chart -->
-      <Card class="rounded-2xl">
-        <CardHeader>
-          <CardTitle>Revenue Trend</CardTitle>
-          <CardDescription>Daily revenue and order volume over time</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <UiCard class="rounded-2xl">
+        <UiCardHeader>
+          <UiCardTitle>Revenue Trend</UiCardTitle>
+          <UiCardDescription>Daily revenue and order volume over time</UiCardDescription>
+        </UiCardHeader>
+        <UiCardContent>
           <div
             v-if="analytics.timeSeries.length > 0"
             class="h-64"
@@ -298,8 +298,8 @@
           >
             No data available for the selected date range
           </div>
-        </CardContent>
-      </Card>
+        </UiCardContent>
+      </UiCard>
     </div>
 
     <!-- Error State -->
@@ -317,16 +317,17 @@
       <p class="text-gray-600 dark:text-gray-400 mb-4">
         {{ error }}
       </p>
-      <Button @click="fetchAnalytics">
+      <UiButton>
+        @click="fetchAnalytics">
         Try Again
-      </Button>
+      </UiButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { OrderStatus } from '~/types'
-import { Button } from '@/components/ui/button'
+
 import { Input } from '@/components/ui/input'
 import {
   Card,

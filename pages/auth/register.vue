@@ -42,7 +42,7 @@
           >
             <!-- Alert messages -->
             <Transition name="slide-fade">
-              <Alert
+              <UiAlert
                 v-if="error"
                 variant="destructive"
                 class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
@@ -52,14 +52,14 @@
                   class="h-5 w-5 text-red-500 dark:text-red-400"
                   aria-hidden="true"
                 />
-                <AlertDescription class="text-sm text-red-800 dark:text-red-300">
+                <UiAlertDescription class="text-sm text-red-800 dark:text-red-300">
                   {{ error }}
-                </AlertDescription>
-              </Alert>
+                </UiAlertDescription>
+              </UiAlert>
             </Transition>
 
             <Transition name="slide-fade">
-              <Alert
+              <UiAlert
                 v-if="success"
                 class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
                 data-testid="auth-success"
@@ -68,23 +68,23 @@
                   class="h-5 w-5 text-green-500 dark:text-green-400"
                   aria-hidden="true"
                 />
-                <AlertDescription class="text-sm text-green-800 dark:text-green-300">
+                <UiAlertDescription class="text-sm text-green-800 dark:text-green-300">
                   {{ success }}
-                </AlertDescription>
-              </Alert>
+                </UiAlertDescription>
+              </UiAlert>
             </Transition>
 
             <!-- Input fields with mobile optimization and accessibility -->
             <div class="space-y-4">
               <div class="space-y-2">
-                <Label
+                <UiLabel
                   for="name"
                   class="text-sm font-medium text-gray-700 dark:text-gray-300"
                   :class="{ 'text-red-600 dark:text-red-400': nameError }"
                 >
                   {{ $t('auth.fullName') }}
-                </Label>
-                <Input
+                </UiLabel>
+                <UiInput
                   id="name"
                   v-model="form.name"
                   name="name"
@@ -113,14 +113,14 @@
               </div>
 
               <div class="space-y-2">
-                <Label
+                <UiLabel
                   for="email"
                   class="text-sm font-medium text-gray-700 dark:text-gray-300"
                   :class="{ 'text-red-600 dark:text-red-400': emailError }"
                 >
                   {{ $t('auth.email') }}
-                </Label>
-                <Input
+                </UiLabel>
+                <UiInput
                   id="email"
                   v-model="form.email"
                   name="email"
@@ -150,7 +150,7 @@
               </div>
 
               <div class="space-y-2">
-                <Label
+                <UiLabel
                   for="phone"
                   class="text-sm font-medium text-gray-700 dark:text-gray-300"
                   :class="{ 'text-red-600 dark:text-red-400': phoneError }"
@@ -159,8 +159,8 @@
                   <span class="text-xs font-normal text-gray-500 dark:text-gray-300">
                     ({{ $t('common.optional') }})
                   </span>
-                </Label>
-                <Input
+                </UiLabel>
+                <UiInput
                   id="phone"
                   v-model="form.phone"
                   name="phone"
@@ -195,15 +195,15 @@
               </div>
 
               <div class="space-y-2">
-                <Label
+                <UiLabel
                   for="password"
                   class="text-sm font-medium text-gray-700 dark:text-gray-300"
                   :class="{ 'text-red-600 dark:text-red-400': passwordError }"
                 >
                   {{ $t('auth.password') }}
-                </Label>
+                </UiLabel>
                 <div class="relative">
-                  <Input
+                  <UiInput
                     id="password"
                     v-model="form.password"
                     name="password"
@@ -223,7 +223,7 @@
                     @input="validatePasswordField"
                     @blur="validatePasswordField"
                   />
-                  <Button
+                  <UiButton>
                     type="button"
                     variant="ghost"
                     size="icon"
@@ -232,7 +232,7 @@
                     :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                     :aria-pressed="showPassword"
                     @click="togglePasswordVisibility"
-                  >
+                    >
                     <svg
                       v-if="!showPassword"
                       class="w-5 h-5"
@@ -269,7 +269,7 @@
                         d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
                       />
                     </svg>
-                  </Button>
+                  </UiButton>
                 </div>
 
                 <!-- Password strength meter -->
@@ -296,7 +296,7 @@
               </div>
 
               <div class="space-y-2">
-                <Label
+                <UiLabel
                   for="confirmPassword"
                   class="text-sm font-medium text-gray-700 dark:text-gray-300"
                   :class="{
@@ -305,9 +305,9 @@
                   }"
                 >
                   {{ $t('auth.confirmPassword') }}
-                </Label>
+                </UiLabel>
                 <div class="relative">
-                  <Input
+                  <UiInput
                     id="confirmPassword"
                     v-model="form.confirmPassword"
                     name="confirmPassword"
@@ -331,7 +331,7 @@
                     @input="validateConfirmPasswordField"
                     @blur="validateConfirmPasswordField"
                   />
-                  <Button
+                  <UiButton>
                     type="button"
                     variant="ghost"
                     size="icon"
@@ -340,7 +340,7 @@
                     :aria-label="showConfirmPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                     :aria-pressed="showConfirmPassword"
                     @click="toggleConfirmPasswordVisibility"
-                  >
+                    >
                     <svg
                       v-if="!showConfirmPassword"
                       class="w-5 h-5"
@@ -377,7 +377,7 @@
                         d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
                       />
                     </svg>
-                  </Button>
+                  </UiButton>
                 </div>
 
                 <div
@@ -418,7 +418,7 @@
 
             <!-- Terms checkbox with accessibility improvements -->
             <div class="flex items-start">
-              <Checkbox
+              <UiCheckbox
                 id="terms"
                 v-model:checked="form.acceptTerms"
                 name="terms"
@@ -429,7 +429,7 @@
                 @update:checked="validateTermsField"
               />
               <div class="ml-3 space-y-2">
-                <Label
+                <UiLabel
                   for="terms"
                   class="text-sm text-gray-700 dark:text-gray-100 leading-relaxed"
                 >
@@ -455,7 +455,7 @@
                   >
                     {{ $t('footer.privacy') }}
                   </NuxtLink>
-                </Label>
+                </UiLabel>
                 <div
                   id="terms-desc"
                   class="sr-only"
@@ -474,14 +474,14 @@
             </div>
 
             <!-- Submit button with accessibility improvements -->
-            <Button
+            <UiButton>
               type="submit"
               :disabled="loading || !isFormValid"
               data-testid="register-button"
               class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg"
               :aria-label="loading ? $t('auth.accessibility.creatingAccount') : $t('auth.accessibility.createAccountButton')"
               :aria-describedby="loading ? 'register-status' : undefined"
-            >
+              >
               <svg
                 v-if="loading"
                 class="animate-spin -ml-1 mr-3 h-5 w-5"
@@ -504,7 +504,7 @@
                 />
               </svg>
               {{ loading ? $t('common.loading') : $t('auth.signUp') }}
-            </Button>
+            </UiButton>
             <div
               v-if="loading"
               id="register-status"
@@ -522,7 +522,7 @@
 
 <script setup lang="ts">
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
+
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'

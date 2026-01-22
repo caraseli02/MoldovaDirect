@@ -7,11 +7,11 @@
 -->
 
 <template>
-  <Card>
-    <CardHeader>
-      <CardTitle>{{ $t('admin.emailLogs.title') }}</CardTitle>
-    </CardHeader>
-    <CardContent>
+  <UiCard>
+    <UiCardHeader>
+      <UiCardTitle>{{ $t('admin.emailLogs.title') }}</UiCardTitle>
+    </UiCardHeader>
+    <UiCardContent>
       <!-- Search Filters -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div>
@@ -138,34 +138,34 @@
         v-else-if="logs.length > 0"
         class="overflow-x-auto"
       >
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead class="px-4">
+        <UiTable>
+          <UiTableHeader>
+            <UiTableRow>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.order') }}
-              </TableHead>
-              <TableHead class="px-4">
+              </UiTableHead>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.recipient') }}
-              </TableHead>
-              <TableHead class="px-4">
+              </UiTableHead>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.type') }}
-              </TableHead>
-              <TableHead class="px-4">
+              </UiTableHead>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.status') }}
-              </TableHead>
-              <TableHead class="px-4">
+              </UiTableHead>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.attempts') }}
-              </TableHead>
-              <TableHead class="px-4">
+              </UiTableHead>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.date') }}
-              </TableHead>
-              <TableHead class="px-4">
+              </UiTableHead>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.actions') }}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow
+              </UiTableHead>
+            </UiTableRow>
+          </UiTableHeader>
+          <UiTableBody>
+            <UiTableRow
               v-for="log in logs"
               :key="log.id"
             >
@@ -180,14 +180,14 @@
                 </div>
               </td>
               <td class="px-4 py-4 whitespace-nowrap">
-                <Badge variant="secondary">
+                <UiBadge variant="secondary">
                   {{ formatEmailType(log.emailType) }}
-                </Badge>
+                </UiBadge>
               </td>
               <td class="px-4 py-4 whitespace-nowrap">
-                <Badge :variant="emailStatusVariant(log.status)">
+                <UiBadge :variant="emailStatusVariant(log.status)">
                   {{ formatStatus(log.status) }}
-                </Badge>
+                </UiBadge>
               </td>
               <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                 {{ log.attempts }}
@@ -196,17 +196,17 @@
                 {{ formatDate(log.createdAt) }}
               </td>
               <td class="px-4 py-4 whitespace-nowrap text-sm">
-                <Button
+                <UiButton>
                   variant="outline"
                   size="sm"
                   @click="viewDetails(log)"
-                >
+                  >
                   {{ $t('admin.emailLogs.buttons.view') }}
-                </Button>
+                </UiButton>
               </td>
-            </TableRow>
-          </TableBody>
-        </Table>
+            </UiTableRow>
+          </UiTableBody>
+        </UiTable>
 
         <!-- Pagination -->
         <div class="mt-4 flex items-center justify-between">
@@ -216,22 +216,22 @@
             {{ pagination.total }} results
           </div>
           <div class="flex gap-2">
-            <Button
+            <UiButton>
               :disabled="pagination.page === 1"
               variant="outline"
               size="sm"
               @click="previousPage"
-            >
+              >
               {{ $t('common.previous') }}
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton>
               :disabled="pagination.page >= pagination.totalPages"
               variant="outline"
               size="sm"
               @click="nextPage"
-            >
+              >
               {{ $t('common.next') }}
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -245,16 +245,16 @@
           No email logs found
         </p>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 
   <!-- Details Modal -->
-  <Dialog v-model:open="showDetailsModal">
-    <DialogContent class="max-w-2xl">
-      <DialogHeader>
-        <DialogTitle>Email Log Details</DialogTitle>
-        <DialogDescription>View delivery status, recipient information, and retry options for this email</DialogDescription>
-      </DialogHeader>
+  <UiDialog v-model:open="showDetailsModal">
+    <UiDialogContent class="max-w-2xl">
+      <UiDialogHeader>
+        <UiDialogTitle>Email Log Details</UiDialogTitle>
+        <UiDialogDescription>View delivery status, recipient information, and retry options for this email</UiDialogDescription>
+      </UiDialogHeader>
       <div
         v-if="selectedLog"
         class="space-y-4"
@@ -333,25 +333,23 @@
           v-if="selectedLog.status === 'failed' && selectedLog.attempts < 3"
           class="pt-4"
         >
-          <Button
+          <UiButton>
             :disabled="retrying"
             class="w-full"
             @click="retryEmail(selectedLog.id)"
-          >
+            >
             {{ retrying ? 'Retrying...' : 'Retry Email' }}
-          </Button>
+          </UiButton>
         </div>
       </div>
-    </DialogContent>
-  </Dialog>
+    </UiDialogContent>
+  </UiDialog>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
-import { Button } from '~/components/ui/button'
-import { Table, TableHeader, TableRow, TableHead, TableBody } from '~/components/ui/table'
-import { Badge } from '~/components/ui/badge'
+
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '~/components/ui/dialog'
 import { emailStatusVariant } from '@/lib/uiVariants'
 

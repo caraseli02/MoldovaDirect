@@ -1,27 +1,27 @@
 <template>
-  <Card class="rounded-2xl">
-    <CardHeader>
+  <UiCard class="rounded-2xl">
+    <UiCardHeader>
       <div class="flex items-center justify-between">
         <div>
-          <CardTitle>Order Notes</CardTitle>
-          <CardDescription>
+          <UiCardTitle>Order Notes</UiCardTitle>
+          <UiCardDescription>
             Internal admin notes and customer communications
-          </CardDescription>
+          </UiCardDescription>
         </div>
-        <Button
+        <UiButton>
           v-if="!showComposer"
           size="sm"
           @click="showComposer = true"
-        >
+          >
           <commonIcon
             name="lucide:plus"
             class="h-4 w-4 mr-1"
           />
           Add Note
-        </Button>
+        </UiButton>
       </div>
-    </CardHeader>
-    <CardContent>
+    </UiCardHeader>
+    <UiCardContent>
       <!-- Note Composer -->
       <div
         v-if="showComposer"
@@ -41,45 +41,45 @@
       >
         <!-- Filter Tabs -->
         <div class="flex items-center space-x-2 border-b border-gray-200 dark:border-gray-700">
-          <Button
+          <UiButton>
             variant="ghost"
             size="sm"
             :class="[
-              'border-b-2 rounded-none',
-              filterType === 'all'
-                ? 'border-primary text-primary'
-                : 'border-transparent',
+            'border-b-2 rounded-none',
+            filterType === 'all'
+            ? 'border-primary text-primary'
+            : 'border-transparent',
             ]"
             @click="filterType = 'all'"
-          >
+            >
             All ({{ notes.length }})
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton>
             variant="ghost"
             size="sm"
             :class="[
-              'border-b-2 rounded-none',
-              filterType === 'internal'
-                ? 'border-primary text-primary'
-                : 'border-transparent',
+            'border-b-2 rounded-none',
+            filterType === 'internal'
+            ? 'border-primary text-primary'
+            : 'border-transparent',
             ]"
             @click="filterType = 'internal'"
-          >
+            >
             Internal ({{ internalNotesCount }})
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton>
             variant="ghost"
             size="sm"
             :class="[
-              'border-b-2 rounded-none',
-              filterType === 'customer'
-                ? 'border-primary text-primary'
-                : 'border-transparent',
+            'border-b-2 rounded-none',
+            filterType === 'customer'
+            ? 'border-primary text-primary'
+            : 'border-transparent',
             ]"
             @click="filterType = 'customer'"
-          >
+            >
             Customer ({{ customerNotesCount }})
-          </Button>
+          </UiButton>
         </div>
 
         <!-- Notes -->
@@ -97,7 +97,7 @@
             <!-- Note Header -->
             <div class="flex items-start justify-between mb-2">
               <div class="flex items-center space-x-2">
-                <Badge
+                <UiBadge
                   :variant="note.noteType === 'internal' ? 'secondary' : 'default'"
                   class="text-xs"
                 >
@@ -106,7 +106,7 @@
                     class="h-3 w-3 mr-1"
                   />
                   {{ note.noteType === 'internal' ? 'Internal' : 'Customer' }}
-                </Badge>
+                </UiBadge>
                 <span class="text-xs text-gray-500 dark:text-gray-400">
                   {{ formatTimestamp(note.createdAt) }}
                 </span>
@@ -153,23 +153,22 @@
         <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
           No notes have been added to this order yet.
         </p>
-        <Button
+        <UiButton>
           size="sm"
           @click="showComposer = true"
-        >
+          >
           <commonIcon
             name="lucide:plus"
             class="h-4 w-4 mr-1"
           />
           Add First Note
-        </Button>
+        </UiButton>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
   Card,

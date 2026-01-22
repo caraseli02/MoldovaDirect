@@ -36,10 +36,10 @@
         </div>
 
         <!-- Analytics Button -->
-        <Button
+        <UiButton>
           as-child
           variant="outline"
-        >
+          >
           <nuxt-link to="/admin/orders/analytics">
             <commonIcon
               name="lucide:bar-chart-2"
@@ -47,18 +47,18 @@
             />
             Analytics
           </nuxt-link>
-        </Button>
+        </UiButton>
       </div>
     </div>
 
     <!-- Status Tabs -->
-    <Tabs
+    <UiTabs
       :default-value="activeTab"
       class="mb-6"
       @update:model-value="handleTabChange"
     >
-      <TabsList class="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
-        <TabsTrigger
+      <UiTabsList class="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
+        <UiTabsTrigger
           v-for="statusFilter in statusFilters"
           :key="statusFilter.value"
           :value="statusFilter.value"
@@ -71,15 +71,15 @@
           />
           <span class="hidden sm:inline">{{ statusFilter.label }}</span>
           <span class="sm:hidden">{{ statusFilter.shortLabel }}</span>
-          <Badge
+          <UiBadge
             variant="secondary"
             class="ml-1 px-1.5 py-0 text-xs"
           >
             {{ getStatusCount(statusFilter.value) }}
-          </Badge>
-        </TabsTrigger>
-      </TabsList>
-    </Tabs>
+          </UiBadge>
+        </UiTabsTrigger>
+      </UiTabsList>
+    </UiTabs>
 
     <!-- Filters -->
     <AdminOrdersFilters
@@ -97,7 +97,7 @@
     />
 
     <!-- Orders Table -->
-    <Card class="overflow-hidden">
+    <UiCard class="overflow-hidden">
       <!-- Loading State -->
       <div
         v-if="adminOrdersStore.loading"
@@ -110,8 +110,8 @@
             class="flex space-x-4"
           >
             <div class="flex-1 space-y-2">
-              <Skeleton class="h-4 w-1/4" />
-              <Skeleton class="h-3 w-1/6" />
+              <UiSkeleton class="h-4 w-1/4" />
+              <UiSkeleton class="h-3 w-1/6" />
             </div>
           </div>
         </div>
@@ -134,17 +134,17 @@
         <p class="text-muted-foreground text-center max-w-md mb-6">
           {{ adminOrdersStore.hasActiveFilters ? 'Try adjusting your search or filters to find what you\'re looking for.' : 'Orders will appear here once customers place them.' }}
         </p>
-        <Button
+        <UiButton>
           v-if="adminOrdersStore.hasActiveFilters"
           variant="outline"
           @click="adminOrdersStore.clearFilters"
-        >
+          >
           <commonIcon
             name="lucide:x"
             class="h-4 w-4 mr-2"
           />
           Clear all filters
-        </Button>
+        </UiButton>
       </div>
 
       <!-- Orders Table -->
@@ -159,18 +159,18 @@
         />
 
         <div class="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead class="w-12">
+          <UiTable>
+            <UiTableHeader>
+              <UiTableRow>
+                <UiTableHead class="w-12">
                   <UiInput
                     type="checkbox"
                     :checked="adminOrdersStore.allVisibleSelected"
                     :indeterminate="adminOrdersStore.hasSelectedOrders && !adminOrdersStore.allVisibleSelected"
                     @change="adminOrdersStore.toggleAllVisible"
                   />
-                </TableHead>
-                <TableHead
+                </UiTableHead>
+                <UiTableHead
                   class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   @click="updateSort('created_at')"
                 >
@@ -183,9 +183,9 @@
                       :class="adminOrdersStore.filters.sortOrder === 'asc' ? 'transform rotate-180' : ''"
                     />
                   </div>
-                </TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead
+                </UiTableHead>
+                <UiTableHead>Customer</UiTableHead>
+                <UiTableHead
                   class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   @click="updateSort('created_at')"
                 >
@@ -198,9 +198,9 @@
                       :class="adminOrdersStore.filters.sortOrder === 'asc' ? 'transform rotate-180' : ''"
                     />
                   </div>
-                </TableHead>
-                <TableHead>Items</TableHead>
-                <TableHead
+                </UiTableHead>
+                <UiTableHead>Items</UiTableHead>
+                <UiTableHead
                   class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   @click="updateSort('total_eur')"
                 >
@@ -213,8 +213,8 @@
                       :class="adminOrdersStore.filters.sortOrder === 'asc' ? 'transform rotate-180' : ''"
                     />
                   </div>
-                </TableHead>
-                <TableHead
+                </UiTableHead>
+                <UiTableHead
                   class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                   @click="updateSort('status')"
                 >
@@ -227,12 +227,12 @@
                       :class="adminOrdersStore.filters.sortOrder === 'asc' ? 'transform rotate-180' : ''"
                     />
                   </div>
-                </TableHead>
-                <TableHead>Payment</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+                </UiTableHead>
+                <UiTableHead>Payment</UiTableHead>
+                <UiTableHead>Actions</UiTableHead>
+              </UiTableRow>
+            </UiTableHeader>
+            <UiTableBody>
               <AdminOrdersListItem
                 v-for="order in adminOrdersStore.orders"
                 :key="order.id"
@@ -240,11 +240,11 @@
                 :is-selected="adminOrdersStore.selectedOrders.includes(order.id)"
                 @toggle-selection="adminOrdersStore.toggleOrderSelection"
               />
-            </TableBody>
-          </Table>
+            </UiTableBody>
+          </UiTable>
         </div>
       </div>
-    </Card>
+    </UiCard>
 
     <!-- Pagination -->
     <AdminUtilsPagination
@@ -281,22 +281,6 @@
 </template>
 
 <script setup lang="ts">
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-} from '@/components/ui/tabs'
 import AdminOrdersFilters from '~/components/admin/Orders/Filters.vue'
 import AdminOrdersBulkActions from '~/components/admin/Orders/BulkActions.vue'
 import AdminOrdersListItem from '~/components/admin/Orders/ListItem.vue'

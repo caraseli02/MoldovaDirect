@@ -168,13 +168,13 @@
       :aria-label="$t('orders.accessibility.orderActions')"
     >
       <!-- Track Button for Active Orders -->
-      <Button
+      <UiButton>
         v-if="isActiveOrder"
         variant="default"
         :aria-label="$t('orders.accessibility.trackButton')"
         class="flex-1 px-3 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
         @click.stop="handleViewDetails"
-      >
+        >
         <svg
           class="w-4 h-4 mr-1.5 inline"
           fill="none"
@@ -196,16 +196,16 @@
           />
         </svg>
         {{ $t('orders.track') }}
-      </Button>
+      </UiButton>
 
       <!-- Reorder Button -->
-      <Button
+      <UiButton>
         v-if="canReorder"
         variant="outline"
         :aria-label="$t('orders.accessibility.reorderButton')"
         class="flex-1 px-3 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 border border-blue-600 dark:border-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
         @click.stop="handleReorder"
-      >
+        >
         <svg
           class="w-4 h-4 mr-1.5 inline"
           fill="none"
@@ -221,25 +221,25 @@
           />
         </svg>
         {{ $t('orders.reorder') }}
-      </Button>
+      </UiButton>
 
       <!-- View Details Button -->
-      <Button
+      <UiButton>
         v-if="!isActiveOrder"
         variant="outline"
         :aria-label="$t('orders.accessibility.viewDetailsButton')"
         class="flex-1 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
         @click.stop="handleViewDetails"
-      >
+        >
         {{ $t('orders.viewDetails') }}
-      </Button>
+      </UiButton>
     </div>
   </article>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Button } from '@/components/ui/button'
+
 import type { OrderWithItems } from '~/types'
 
 interface Props {

@@ -289,17 +289,17 @@
             {{ $t('profile.confirmDeleteAddress') }}
           </p>
           <div class="flex gap-3 justify-end">
-            <Button
+            <UiButton>
               variant="outline"
               @click="showDeleteAddressConfirm = false"
-            >
+              >
               {{ $t('common.cancel') }}
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton>
               variant="destructive"
               :disabled="deletingAddressId !== null"
               @click="executeDeleteAddress"
-            >
+              >
               <commonIcon
                 v-if="deletingAddressId !== null"
                 name="lucide:loader-2"
@@ -307,7 +307,7 @@
                 aria-hidden="true"
               />
               {{ $t('common.delete') }}
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -317,7 +317,7 @@
 
 <script setup lang="ts">
 // Component imports
-import { Button } from '@/components/ui/button'
+
 import AddressFormModal from '~/components/profile/AddressFormModal.vue'
 import DeleteAccountModal from '~/components/profile/DeleteAccountModal.vue'
 import PasswordChangeModal from '~/components/profile/PasswordChangeModal.vue'
@@ -378,8 +378,8 @@ let hideStatusTimeout: ReturnType<typeof setTimeout> | null = null
 const passwordModalRef = ref<HTMLElement>()
 const twoFAModalRef = ref<HTMLElement>()
 const deleteAddressModalRef = ref<HTMLElement>()
-const passwordModalCloseBtn = ref<InstanceType<typeof Button>>()
-const twoFAModalCloseBtn = ref<InstanceType<typeof Button>>()
+const passwordModalCloseBtn = ref<HTMLElement>()
+const twoFAModalCloseBtn = ref<HTMLElement>()
 
 // Accordion refs for keyboard navigation using Vue 3.5+ useTemplateRef
 type AccordionKey = 'personal' | 'preferences' | 'addresses' | 'security'

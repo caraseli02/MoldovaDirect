@@ -32,7 +32,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8">
           <!-- Message display using new components -->
           <Transition name="slide-fade">
-            <Alert
+            <UiAlert
               v-if="successMessage"
               class="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
             >
@@ -40,26 +40,26 @@
                 class="h-5 w-5 text-green-500 dark:text-green-400"
                 aria-hidden="true"
               />
-              <AlertDescription class="text-sm text-green-800 dark:text-green-300">
+              <UiAlertDescription class="text-sm text-green-800 dark:text-green-300">
                 {{ successMessage }}
-              </AlertDescription>
-              <Button
+              </UiAlertDescription>
+              <UiButton>
                 variant="ghost"
                 size="icon"
                 class="absolute right-2 top-2 text-green-500 hover:text-green-600 dark:text-green-300 dark:hover:text-green-200"
                 @click="successMessage = null"
-              >
+                >
                 <X
                   class="h-4 w-4"
                   aria-hidden="true"
                 />
                 <span class="sr-only">{{ $t('common.dismiss') }}</span>
-              </Button>
-            </Alert>
+              </UiButton>
+            </UiAlert>
           </Transition>
 
           <Transition name="slide-fade">
-            <Alert
+            <UiAlert
               v-if="errorMessage"
               variant="destructive"
               class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
@@ -69,31 +69,31 @@
                 aria-hidden="true"
               />
               <div class="flex flex-col gap-2">
-                <AlertDescription class="text-sm text-red-800 dark:text-red-300">
+                <UiAlertDescription class="text-sm text-red-800 dark:text-red-300">
                   {{ errorMessage }}
-                </AlertDescription>
-                <Button
+                </UiAlertDescription>
+                <UiButton>
                   variant="link"
                   size="sm"
                   class="p-0 text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300"
                   @click="handleResendVerification"
-                >
+                  >
                   {{ $t('auth.buttons.tryAgain') }}
-                </Button>
+                </UiButton>
               </div>
-              <Button
+              <UiButton>
                 variant="ghost"
                 size="icon"
                 class="absolute right-2 top-2 text-red-500 hover:text-red-600 dark:text-red-300 dark:hover:text-red-200"
                 @click="errorMessage = null"
-              >
+                >
                 <X
                   class="h-4 w-4"
                   aria-hidden="true"
                 />
                 <span class="sr-only">{{ $t('common.dismiss') }}</span>
-              </Button>
-            </Alert>
+              </UiButton>
+            </UiAlert>
           </Transition>
 
           <div class="space-y-5">
@@ -119,13 +119,13 @@
                 v-if="!email"
                 class="space-y-2"
               >
-                <Label
+                <UiLabel
                   for="email"
                   class="text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   {{ $t('auth.labels.email') }}
-                </Label>
-                <Input
+                </UiLabel>
+                <UiInput
                   id="email"
                   v-model="form.email"
                   name="email"
@@ -199,7 +199,7 @@
 
 <script setup lang="ts">
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
+
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { AlertCircle, CheckCircle2, X } from 'lucide-vue-next'

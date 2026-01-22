@@ -260,7 +260,7 @@
       </div>
 
       <!-- Add to Cart Button -->
-      <Button
+      <UiButton
         :disabled="product.stockQuantity <= 0 || cartLoading"
         :aria-label="getCartButtonAriaLabel()"
         :aria-live="cartLoading ? 'polite' : undefined"
@@ -342,7 +342,7 @@
                 : $t('products.addToCart')
           }}
         </span>
-      </Button>
+      </UiButton>
     </div>
   </article>
 </template>

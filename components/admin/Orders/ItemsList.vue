@@ -1,32 +1,32 @@
 <template>
-  <Card class="rounded-2xl">
-    <CardHeader>
-      <CardTitle>Order Items</CardTitle>
-    </CardHeader>
-    <CardContent>
+  <UiCard class="rounded-2xl">
+    <UiCardHeader>
+      <UiCardTitle>Order Items</UiCardTitle>
+    </UiCardHeader>
+    <UiCardContent>
       <div class="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Product</TableHead>
-              <TableHead class="text-right">
+        <UiTable>
+          <UiTableHeader>
+            <UiTableRow>
+              <UiTableHead>Product</UiTableHead>
+              <UiTableHead class="text-right">
                 Price
-              </TableHead>
-              <TableHead class="text-center">
+              </UiTableHead>
+              <UiTableHead class="text-center">
                 Quantity
-              </TableHead>
-              <TableHead class="text-right">
+              </UiTableHead>
+              <UiTableHead class="text-right">
                 Total
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow
+              </UiTableHead>
+            </UiTableRow>
+          </UiTableHeader>
+          <UiTableBody>
+            <UiTableRow
               v-for="item in items"
               :key="item.id"
             >
               <!-- Product Info -->
-              <TableCell>
+              <UiTableCell>
                 <div class="flex items-center space-x-3">
                   <!-- Product Image -->
                   <div class="flex-shrink-0 w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-md overflow-hidden">
@@ -60,31 +60,31 @@
                     </p>
                   </div>
                 </div>
-              </TableCell>
+              </UiTableCell>
 
               <!-- Price -->
-              <TableCell class="text-right">
+              <UiTableCell class="text-right">
                 <span class="text-sm text-gray-900 dark:text-white">
                   €{{ formatPrice(item.price_eur) }}
                 </span>
-              </TableCell>
+              </UiTableCell>
 
               <!-- Quantity -->
-              <TableCell class="text-center">
+              <UiTableCell class="text-center">
                 <span class="text-sm font-medium text-gray-900 dark:text-white">
                   {{ item.quantity }}
                 </span>
-              </TableCell>
+              </UiTableCell>
 
               <!-- Total -->
-              <TableCell class="text-right">
+              <UiTableCell class="text-right">
                 <span class="text-sm font-semibold text-gray-900 dark:text-white">
                   €{{ formatPrice(item.total_eur) }}
                 </span>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+              </UiTableCell>
+            </UiTableRow>
+          </UiTableBody>
+        </UiTable>
       </div>
 
       <!-- Empty State -->
@@ -100,8 +100,8 @@
           No items in this order
         </p>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">

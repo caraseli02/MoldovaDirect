@@ -1,16 +1,16 @@
 <template>
-  <Card>
-    <CardHeader>
-      <CardTitle class="flex items-center gap-2">
+  <UiCard>
+    <UiCardHeader>
+      <UiCardTitle class="flex items-center gap-2">
         <commonIcon
           name="lucide:users"
           class="h-5 w-5"
         />
         User Simulation
-      </CardTitle>
-      <CardDescription>Create test users with realistic profiles</CardDescription>
-    </CardHeader>
-    <CardContent class="space-y-4">
+      </UiCardTitle>
+      <UiCardDescription>Create test users with realistic profiles</UiCardDescription>
+    </UiCardHeader>
+    <UiCardContent class="space-y-4">
       <div class="space-y-2">
         <UiLabel>Number of Users</UiLabel>
         <UiInput
@@ -70,11 +70,11 @@
         </UiLabel>
       </div>
 
-      <Button
+      <UiButton>
         :disabled="loading || !isFormValid"
         class="w-full"
         @click="handleCreateUsers"
-      >
+        >
         <commonIcon
           v-if="!loading"
           name="lucide:user-plus"
@@ -86,15 +86,13 @@
           class="h-4 w-4 mr-2 animate-spin"
         />
         Create Users
-      </Button>
-    </CardContent>
-  </Card>
+      </UiButton>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
 
 defineProps<{
   loading: boolean

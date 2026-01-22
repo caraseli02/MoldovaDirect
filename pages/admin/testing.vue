@@ -11,7 +11,7 @@
     </div>
 
     <!-- Warning Banner -->
-    <Alert
+    <UiAlert
       v-if="showWarning"
       variant="destructive"
     >
@@ -19,12 +19,12 @@
         name="lucide:alert-triangle"
         class="h-4 w-4"
       />
-      <AlertTitle>Testing Mode</AlertTitle>
-      <AlertDescription>
+      <UiAlertTitle>Testing Mode</UiAlertTitle>
+      <UiAlertDescription>
         This page allows you to modify database content. Use with caution.
         All test data will be marked appropriately.
-      </AlertDescription>
-    </Alert>
+      </UiAlertDescription>
+    </UiAlert>
 
     <!-- Database Statistics -->
     <DatabaseStatsCard

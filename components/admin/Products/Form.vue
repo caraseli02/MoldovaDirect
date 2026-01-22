@@ -504,13 +504,13 @@
       >
         Cancel
       </nuxt-link>
-      <Button
+      <UiButton>
         type="submit"
         :disabled="submitting"
         class="flex-1 px-4 py-3"
-      >
+        >
         {{ submitting ? 'Saving...' : (isEditing ? 'Update' : 'Create') }}
-      </Button>
+      </UiButton>
     </div>
 
     <!-- Desktop Form Actions -->
@@ -521,19 +521,17 @@
       >
         Cancel
       </nuxt-link>
-      <Button
+      <UiButton>
         type="submit"
         :disabled="submitting"
-      >
+        >
         {{ submitting ? 'Saving...' : (isEditing ? 'Update Product' : 'Create Product') }}
-      </Button>
+      </UiButton>
     </div>
   </form>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
 import { z } from 'zod'
 import type { CategoryWithChildren } from '~/types/database'
 

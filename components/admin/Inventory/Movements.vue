@@ -149,33 +149,33 @@
       v-else
       class="overflow-x-auto"
     >
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead class="px-6">
+      <UiTable>
+        <UiTableHeader>
+          <UiTableRow>
+            <UiTableHead class="px-6">
               Date
-            </TableHead>
-            <TableHead class="px-6">
+            </UiTableHead>
+            <UiTableHead class="px-6">
               Product
-            </TableHead>
-            <TableHead class="px-6">
+            </UiTableHead>
+            <UiTableHead class="px-6">
               Type
-            </TableHead>
-            <TableHead class="px-6">
+            </UiTableHead>
+            <UiTableHead class="px-6">
               Quantity
-            </TableHead>
-            <TableHead class="px-6">
+            </UiTableHead>
+            <UiTableHead class="px-6">
               Before/After
-            </TableHead>
-            <TableHead class="px-6">
+            </UiTableHead>
+            <UiTableHead class="px-6">
               Reason
-            </TableHead>
-            <TableHead class="px-6">
+            </UiTableHead>
+            <UiTableHead class="px-6">
               Performed By
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            </UiTableHead>
+          </UiTableRow>
+        </UiTableHeader>
+        <UiTableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
           <tr
             v-for="movement in movements"
             :key="movement.id"
@@ -253,8 +253,8 @@
               {{ movement.performedBy?.name || 'System' }}
             </td>
           </tr>
-        </TableBody>
-      </Table>
+        </UiTableBody>
+      </UiTable>
     </div>
 
     <!-- Pagination -->
@@ -274,8 +274,6 @@
 </template>
 
 <script setup lang="ts">
-import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table'
-
 interface InventoryMovement {
   id: number
   productId: number

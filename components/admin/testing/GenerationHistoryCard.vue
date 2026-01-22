@@ -1,15 +1,15 @@
 <template>
-  <Card v-if="history.length > 0">
-    <CardHeader>
-      <CardTitle class="flex items-center gap-2">
+  <UiCard v-if="history.length > 0">
+    <UiCardHeader>
+      <UiCardTitle class="flex items-center gap-2">
         <commonIcon
           name="lucide:history"
           class="h-5 w-5"
         />
         Recent Generations
-      </CardTitle>
-    </CardHeader>
-    <CardContent>
+      </UiCardTitle>
+    </UiCardHeader>
+    <UiCardContent>
       <div class="space-y-2">
         <div
           v-for="item in history.slice(0, 5)"
@@ -29,8 +29,8 @@
           </div>
         </div>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">

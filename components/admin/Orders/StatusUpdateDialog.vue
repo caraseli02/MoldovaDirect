@@ -1,27 +1,27 @@
 <template>
-  <Dialog v-model:open="isOpen">
+  <UiDialog v-model:open="isOpen">
     <DialogTrigger as-child>
       <slot name="trigger">
-        <Button
+        <UiButton>
           variant="outline"
           size="sm"
-        >
+          >
           <commonIcon
             name="lucide:edit"
             class="h-4 w-4 mr-2"
           />
           Update Status
-        </Button>
+        </UiButton>
       </slot>
     </DialogTrigger>
 
-    <DialogContent class="sm:max-w-[500px]">
-      <DialogHeader>
-        <DialogTitle>Update Order Status</DialogTitle>
-        <DialogDescription>
+    <UiDialogContent class="sm:max-w-[500px]">
+      <UiDialogHeader>
+        <UiDialogTitle>Update Order Status</UiDialogTitle>
+        <UiDialogDescription>
           Change the status of order #{{ orderNumber }}. Status transitions are validated.
-        </DialogDescription>
-      </DialogHeader>
+        </UiDialogDescription>
+      </UiDialogHeader>
 
       <form
         class="space-y-4 mt-4"
@@ -36,23 +36,23 @@
         <!-- New Status Selection -->
         <div class="space-y-2">
           <UiLabel>New Status <span class="text-red-500">*</span></UiLabel>
-          <Select
+          <UiSelect
             v-model="formData.status"
             :disabled="loading"
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Select new status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem
+            <UiSelectTrigger>
+              <UiSelectValue placeholder="Select new status" />
+            </UiSelectTrigger>
+            <UiSelectContent>
+              <UiSelectItem
                 v-for="status in availableStatuses"
                 :key="status.value"
                 :value="status.value"
               >
                 {{ status.label }}
-              </SelectItem>
-            </SelectContent>
-          </Select>
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
           <p
             v-if="!isValidTransition && formData.status"
             class="text-xs text-red-600 dark:text-red-400"
@@ -91,7 +91,7 @@
 
           <div class="space-y-2">
             <UiLabel>Tracking Number <span class="text-red-500">*</span></UiLabel>
-            <Input
+            <UiInput
               v-model="formData.trackingNumber"
               type="text"
               placeholder="Enter tracking number"
@@ -102,41 +102,41 @@
 
           <div class="space-y-2">
             <UiLabel>Carrier <span class="text-red-500">*</span></UiLabel>
-            <Select
+            <UiSelect
               v-model="formData.carrier"
               :disabled="loading"
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Select carrier" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="DHL">
+              <UiSelectTrigger>
+                <UiSelectValue placeholder="Select carrier" />
+              </UiSelectTrigger>
+              <UiSelectContent>
+                <UiSelectItem value="DHL">
                   DHL
-                </SelectItem>
-                <SelectItem value="FedEx">
+                </UiSelectItem>
+                <UiSelectItem value="FedEx">
                   FedEx
-                </SelectItem>
-                <SelectItem value="UPS">
+                </UiSelectItem>
+                <UiSelectItem value="UPS">
                   UPS
-                </SelectItem>
-                <SelectItem value="USPS">
+                </UiSelectItem>
+                <UiSelectItem value="USPS">
                   USPS
-                </SelectItem>
-                <SelectItem value="Posta Moldovei">
+                </UiSelectItem>
+                <UiSelectItem value="Posta Moldovei">
                   Posta Moldovei
-                </SelectItem>
-                <SelectItem value="Other">
+                </UiSelectItem>
+                <UiSelectItem value="Other">
                   Other
-                </SelectItem>
-              </SelectContent>
-            </Select>
+                </UiSelectItem>
+              </UiSelectContent>
+            </UiSelect>
           </div>
         </div>
 
         <!-- Admin Notes -->
         <div class="space-y-2">
           <UiLabel>Admin Notes (Optional)</UiLabel>
-          <Textarea
+          <UiTextarea
             v-model="formData.adminNotes"
             rows="3"
             placeholder="Add internal notes about this status change..."
@@ -155,30 +155,30 @@
         </div>
 
         <!-- Dialog Footer -->
-        <DialogFooter>
-          <Button
+        <UiDialogFooter>
+          <UiButton>
             type="button"
             variant="outline"
             :disabled="loading"
             @click="handleCancel"
-          >
+            >
             Cancel
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton>
             type="submit"
             :disabled="loading || !isValidTransition || !formData.status"
-          >
+            >
             <commonIcon
               v-if="loading"
               name="lucide:loader-2"
               class="h-4 w-4 mr-2 animate-spin"
             />
             <span>{{ loading ? 'Updating...' : 'Update Status' }}</span>
-          </Button>
-        </DialogFooter>
+          </UiButton>
+        </UiDialogFooter>
       </form>
-    </DialogContent>
-  </Dialog>
+    </UiDialogContent>
+  </UiDialog>
 </template>
 
 <script setup lang="ts">
@@ -191,7 +191,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import {

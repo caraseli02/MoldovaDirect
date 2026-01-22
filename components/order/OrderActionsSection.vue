@@ -6,11 +6,11 @@
 
     <div class="space-y-3">
       <!-- Reorder Button -->
-      <Button
+      <UiButton>
         v-if="canReorder"
         class="w-full inline-flex items-center justify-center px-4 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
         @click="$emit('reorder')"
-      >
+        >
         <svg
           class="w-5 h-5 mr-2"
           fill="none"
@@ -25,15 +25,15 @@
           />
         </svg>
         {{ $t('orders.actions.reorder', 'Reorder') }}
-      </Button>
+      </UiButton>
 
       <!-- Return Button -->
-      <Button
+      <UiButton>
         v-if="canReturn"
         variant="outline"
         class="w-full inline-flex items-center justify-center px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
         @click="$emit('return')"
-      >
+        >
         <svg
           class="w-5 h-5 mr-2"
           fill="none"
@@ -48,14 +48,14 @@
           />
         </svg>
         {{ $t('orders.actions.return', 'Return Items') }}
-      </Button>
+      </UiButton>
 
       <!-- Contact Support Button -->
-      <Button
+      <UiButton>
         variant="outline"
         class="w-full inline-flex items-center justify-center px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
         @click="$emit('support')"
-      >
+        >
         <svg
           class="w-5 h-5 mr-2"
           fill="none"
@@ -70,14 +70,14 @@
           />
         </svg>
         {{ $t('orders.actions.support', 'Contact Support') }}
-      </Button>
+      </UiButton>
 
       <!-- Print Invoice Button -->
-      <Button
+      <UiButton>
         variant="outline"
         class="w-full inline-flex items-center justify-center px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
         @click="handlePrint"
-      >
+        >
         <svg
           class="w-5 h-5 mr-2"
           fill="none"
@@ -92,28 +92,27 @@
           />
         </svg>
         {{ $t('orders.actions.printInvoice', 'Print Invoice') }}
-      </Button>
+      </UiButton>
     </div>
 
     <!-- Help Text -->
     <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
       <p class="text-xs text-gray-500 dark:text-gray-400">
         {{ $t('orders.needHelp', 'Need help with your order?') }}
-        <Button
+        <UiButton>
           variant="link"
           size="sm"
           class="text-blue-600 dark:text-blue-400 hover:underline p-0 h-auto"
           @click="$emit('support')"
-        >
+          >
           {{ $t('orders.contactUs', 'Contact us') }}
-        </Button>
+        </UiButton>
       </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import type { OrderWithItems } from '~/types'
 
 interface Props {

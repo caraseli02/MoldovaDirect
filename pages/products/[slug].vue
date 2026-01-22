@@ -724,7 +724,7 @@
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useHead } from '#imports'
-import { Button } from '@/components/ui/button'
+
 import ProductCard from '~/components/product/Card.vue'
 import type { ProductWithRelations, Translations } from '~/types/database'
 import type { Product } from '~/stores/cart/types'

@@ -101,12 +101,12 @@
             </p>
           </div>
           <div class="ml-auto pl-3">
-            <Button
+            <UiButton>
               variant="ghost"
               size="icon"
               class="text-green-400 hover:text-green-600"
               @click="successMessage = ''"
-            >
+              >
               <svg
                 class="h-5 w-5"
                 fill="none"
@@ -120,7 +120,7 @@
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -152,12 +152,12 @@
             </p>
           </div>
           <div class="ml-auto pl-3">
-            <Button
+            <UiButton>
               variant="ghost"
               size="icon"
               class="text-red-400 hover:text-red-600"
               @click="errorMessage = ''"
-            >
+              >
               <svg
                 class="h-5 w-5"
                 fill="none"
@@ -171,7 +171,7 @@
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -189,7 +189,6 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import type { CategoryWithChildren } from '~/types/database'
 
 definePageMeta({

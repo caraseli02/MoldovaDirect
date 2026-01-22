@@ -1,36 +1,36 @@
 <template>
-  <Card v-if="result">
-    <CardHeader>
+  <UiCard v-if="result">
+    <UiCardHeader>
       <div class="flex items-center justify-between">
-        <CardTitle class="flex items-center gap-2">
+        <UiCardTitle class="flex items-center gap-2">
           <commonIcon
             :name="result.success ? 'lucide:check-circle' : 'lucide:alert-circle'"
             :class="result.success ? 'text-green-500' : 'text-red-500'"
             class="h-5 w-5"
           />
           {{ result.success ? 'Success' : 'Error' }}
-        </CardTitle>
-        <Button
+        </UiCardTitle>
+        <UiButton>
           v-if="result.users && result.users.length > 0"
           variant="outline"
           size="sm"
           @click="$emit('export-credentials')"
-        >
+          >
           <commonIcon
             name="lucide:download"
             class="h-4 w-4 mr-2"
           />
           Export CSV
-        </Button>
+        </UiButton>
       </div>
-    </CardHeader>
-    <CardContent>
+    </UiCardHeader>
+    <UiCardContent>
       <div class="space-y-4">
         <p class="text-sm">
           {{ result.message }}
         </p>
 
-        <Alert
+        <UiAlert
           v-if="result.suggestion"
           variant="default"
         >
@@ -38,9 +38,9 @@
             name="lucide:lightbulb"
             class="h-4 w-4"
           />
-          <AlertTitle>Suggestion</AlertTitle>
-          <AlertDescription>{{ result.suggestion }}</AlertDescription>
-        </Alert>
+          <UiAlertTitle>Suggestion</UiAlertTitle>
+          <UiAlertDescription>{{ result.suggestion }}</UiAlertDescription>
+        </UiAlert>
 
         <!-- Summary -->
         <div
@@ -128,22 +128,22 @@
           </ul>
         </div>
 
-        <Button
+        <UiButton>
           variant="outline"
           class="w-full"
           @click="$emit('close')"
-        >
+          >
           Close
-        </Button>
+        </UiButton>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
+
 import type { TestResult } from '~/types/admin-testing'
 
 defineProps<{

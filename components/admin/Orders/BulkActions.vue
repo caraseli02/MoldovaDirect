@@ -8,73 +8,73 @@
         <span class="text-sm font-medium text-blue-900 dark:text-blue-100">
           {{ selectedCount }} {{ selectedCount === 1 ? 'order' : 'orders' }} selected
         </span>
-        <Button
+        <UiButton>
           variant="link"
           class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
           @click="$emit('clear-selection')"
-        >
+          >
           Clear selection
-        </Button>
+        </UiButton>
       </div>
       <div class="flex items-center space-x-2">
-        <Button
+        <UiButton>
           :disabled="disabled"
           size="sm"
           variant="secondary"
           class="dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
           @click="handleBulkStatusUpdate('processing')"
-        >
+          >
           <commonIcon
             name="lucide:clock"
             class="w-4 h-4 mr-1"
           />
           Mark Processing
-        </Button>
-        <Button
+        </UiButton>
+        <UiButton>
           :disabled="disabled"
           size="sm"
           class="text-blue-700 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-100 dark:hover:bg-blue-800"
           @click="handleBulkStatusUpdate('shipped')"
-        >
+          >
           <commonIcon
             name="lucide:truck"
             class="w-4 h-4 mr-1"
           />
           Mark Shipped
-        </Button>
-        <Button
+        </UiButton>
+        <UiButton>
           :disabled="disabled"
           size="sm"
           class="text-green-700 bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:text-green-100 dark:hover:bg-green-800"
           @click="handleBulkStatusUpdate('delivered')"
-        >
+          >
           <commonIcon
             name="lucide:check-circle"
             class="w-4 h-4 mr-1"
           />
           Mark Delivered
-        </Button>
+        </UiButton>
       </div>
     </div>
 
     <!-- Confirmation Dialog -->
-    <Dialog
+    <UiDialog
       :open="confirmDialog.show"
       @update:open="handleDialogOpen"
     >
-      <DialogContent class="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle class="flex items-center gap-2">
+      <UiDialogContent class="sm:max-w-md">
+        <UiDialogHeader>
+          <UiDialogTitle class="flex items-center gap-2">
             <commonIcon
               name="lucide:alert-circle"
               class="w-5 h-5 text-blue-600 dark:text-blue-400"
             />
             Confirm Bulk Status Update
-          </DialogTitle>
-          <DialogDescription>
+          </UiDialogTitle>
+          <UiDialogDescription>
             {{ confirmDialog.message }}
-          </DialogDescription>
-        </DialogHeader>
+          </UiDialogDescription>
+        </UiDialogHeader>
 
         <div class="space-y-4">
           <p class="text-sm text-gray-600 dark:text-gray-300">
@@ -87,7 +87,7 @@
             class="space-y-2"
           >
             <UiLabel>Tracking Information (Optional)</UiLabel>
-            <Textarea
+            <UiTextarea
               v-model="confirmDialog.notes"
               placeholder="Enter tracking numbers or shipping notes..."
               rows="3"
@@ -96,33 +96,32 @@
           </div>
         </div>
 
-        <DialogFooter class="mt-6 flex justify-end gap-3">
-          <Button
+        <UiDialogFooter class="mt-6 flex justify-end gap-3">
+          <UiButton>
             variant="outline"
             :disabled="confirmDialog.loading"
             @click="cancelBulkUpdate"
-          >
+            >
             Cancel
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton>
             :disabled="confirmDialog.loading"
             @click="confirmBulkUpdate"
-          >
+            >
             <commonIcon
               v-if="confirmDialog.loading"
               name="lucide:refresh-ccw"
               class="w-4 h-4 mr-2 animate-spin"
             />
             {{ confirmDialog.loading ? 'Updating...' : 'Confirm Update' }}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </UiButton>
+        </UiDialogFooter>
+      </UiDialogContent>
+    </UiDialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,

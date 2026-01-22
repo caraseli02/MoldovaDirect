@@ -1,6 +1,6 @@
 <template>
-  <Card v-if="progress.active">
-    <CardContent class="pt-6">
+  <UiCard v-if="progress.active">
+    <UiCardContent class="pt-6">
       <div class="space-y-2">
         <div class="flex items-center justify-between">
           <span class="text-sm font-medium">{{ progress.message }}</span>
@@ -13,8 +13,8 @@
           ></div>
         </div>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">

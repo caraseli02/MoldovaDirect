@@ -4,30 +4,30 @@
     <div class="flex items-center space-x-4">
       <UiLabel>Note Type:</UiLabel>
       <div class="flex items-center space-x-2">
-        <Button
+        <UiButton>
           :variant="noteType === 'internal' ? 'default' : 'outline'"
           size="sm"
           type="button"
           @click="noteType = 'internal'"
-        >
+          >
           <commonIcon
             name="lucide:lock"
             class="h-4 w-4 mr-1"
           />
           Internal
-        </Button>
-        <Button
+        </UiButton>
+        <UiButton>
           :variant="noteType === 'customer' ? 'default' : 'outline'"
           size="sm"
           type="button"
           @click="noteType = 'customer'"
-        >
+          >
           <commonIcon
             name="lucide:user"
             class="h-4 w-4 mr-1"
           />
           Customer
-        </Button>
+        </UiButton>
       </div>
     </div>
 
@@ -50,7 +50,7 @@
       <UiLabel for="note-content">
         Note Content
       </UiLabel>
-      <Textarea
+      <UiTextarea
         id="note-content"
         v-model="content"
         :placeholder="noteType === 'internal'
@@ -67,21 +67,21 @@
 
     <!-- Actions -->
     <div class="flex items-center justify-end space-x-2">
-      <Button
+      <UiButton>
         variant="outline"
         size="sm"
         :disabled="submitting"
         type="button"
         @click="handleCancel"
-      >
+        >
         Cancel
-      </Button>
-      <Button
+      </UiButton>
+      <UiButton>
         size="sm"
         :disabled="!canSubmit || submitting"
         type="button"
         @click="handleSubmit"
-      >
+        >
         <commonIcon
           v-if="submitting"
           name="lucide:loader-2"
@@ -93,13 +93,12 @@
           class="h-4 w-4 mr-1"
         />
         {{ submitting ? 'Adding...' : 'Add Note' }}
-      </Button>
+      </UiButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
 interface Props {

@@ -1,17 +1,17 @@
 <template>
-  <Dialog
+  <UiDialog
     :open="true"
     @update:open="handleOpenChange"
   >
     <DialogScrollContent class="sm:max-w-md max-h-[95vh]">
-      <DialogHeader class="pb-4 border-b border-gray-200 dark:border-gray-700">
-        <DialogTitle>
+      <UiDialogHeader class="pb-4 border-b border-gray-200 dark:border-gray-700">
+        <UiDialogTitle>
           {{ address?.id ? $t('profile.editAddress') : $t('profile.addAddress') }}
-        </DialogTitle>
-        <DialogDescription>
+        </UiDialogTitle>
+        <UiDialogDescription>
           {{ address?.id ? $t('profile.editAddressDescription') : $t('profile.addAddressDescription') }}
-        </DialogDescription>
-      </DialogHeader>
+        </UiDialogDescription>
+      </UiDialogHeader>
 
       <!-- Scrollable form content -->
       <div class="overflow-y-auto flex-1 py-4">
@@ -235,15 +235,15 @@
       </div>
 
       <!-- Dialog Footer with action buttons -->
-      <DialogFooter class="pt-4 border-t border-gray-200 dark:border-gray-700">
-        <Button
+      <UiDialogFooter class="pt-4 border-t border-gray-200 dark:border-gray-700">
+        <UiButton
           type="button"
           variant="outline"
           @click="$emit('close')"
         >
           {{ $t('common.cancel') }}
-        </Button>
-        <Button
+        </UiButton>
+        <UiButton
           type="submit"
           form="addressForm"
           :disabled="isLoading"
@@ -261,10 +261,10 @@
           <span v-else>
             {{ address?.id ? $t('profile.updateAddress') : $t('profile.saveAddress') }}
           </span>
-        </Button>
-      </DialogFooter>
+        </UiButton>
+      </UiDialogFooter>
     </DialogScrollContent>
-  </Dialog>
+  </UiDialog>
 </template>
 
 <script setup lang="ts">
@@ -277,7 +277,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
+
 import type { Address } from '~/types/address'
 import type { ToastPlugin } from '~/types/plugins'
 

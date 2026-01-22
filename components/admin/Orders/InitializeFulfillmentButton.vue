@@ -1,10 +1,10 @@
 <template>
-  <Button
+  <UiButton>
     :disabled="loading"
     variant="outline"
     size="sm"
     @click="initializeTasks"
-  >
+    >
     <commonIcon
       v-if="loading"
       name="lucide:loader-2"
@@ -16,12 +16,10 @@
       class="h-4 w-4 mr-2"
     />
     {{ loading ? 'Creating Tasks...' : 'Initialize Fulfillment Tasks' }}
-  </Button>
+  </UiButton>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-
 interface Props {
   orderId: number
 }

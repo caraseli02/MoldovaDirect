@@ -6,11 +6,11 @@
 -->
 
 <template>
-  <Card>
-    <CardHeader>
-      <CardTitle>Template Synchronization</CardTitle>
-    </CardHeader>
-    <CardContent>
+  <UiCard>
+    <UiCardHeader>
+      <UiCardTitle>Template Synchronization</UiCardTitle>
+    </UiCardHeader>
+    <UiCardContent>
       <div class="space-y-4">
         <p class="text-sm text-gray-600 dark:text-gray-400">
           Synchronize template structure across all languages. This will update all locales to have the same keys,
@@ -85,30 +85,28 @@
         </div>
 
         <div class="flex gap-2">
-          <Button
+          <UiButton>
             variant="outline"
             :disabled="targetLocales.length === 0 || previewing"
             @click="previewSync"
-          >
+            >
             {{ previewing ? 'Previewing...' : 'Preview Changes' }}
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton>
             :disabled="targetLocales.length === 0 || !syncPreview || synchronizing"
             @click="synchronizeTemplates"
-          >
+            >
             {{ synchronizing ? 'Synchronizing...' : 'Synchronize Templates' }}
-          </Button>
+          </UiButton>
         </div>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
-import { Button } from '~/components/ui/button'
-import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
 
 const props = defineProps<{
   templateType: string

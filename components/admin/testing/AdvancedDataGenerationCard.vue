@@ -1,14 +1,16 @@
 <template>
-  <Card>
-    <CardHeader>
-      <CardTitle>Advanced Test Data Generation</CardTitle>
-      <CardDescription>Custom data generation with full control</CardDescription>
-    </CardHeader>
-    <CardContent>
+  <UiCard>
+    <UiCardHeader>
+      <UiCardTitle>Advanced Test Data Generation</UiCardTitle>
+      <UiCardDescription>Custom data generation with full control</UiCardDescription>
+    </UiCardHeader>
+    <UiCardContent>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div class="space-y-2">
-          <Label for="products-input">Products</Label>
-          <Input
+          <UiLabel for="products-input">
+            Products
+          </UiLabel>
+          <UiInput
             id="products-input"
             v-model.number="localProducts"
             type="number"
@@ -18,8 +20,10 @@
         </div>
 
         <div class="space-y-2">
-          <Label for="users-input">Users</Label>
-          <Input
+          <UiLabel for="users-input">
+            Users
+          </UiLabel>
+          <UiInput
             id="users-input"
             v-model.number="localUsers"
             type="number"
@@ -29,8 +33,10 @@
         </div>
 
         <div class="space-y-2">
-          <Label for="orders-input">Orders</Label>
-          <Input
+          <UiLabel for="orders-input">
+            Orders
+          </UiLabel>
+          <UiInput
             id="orders-input"
             v-model.number="localOrders"
             type="number"
@@ -41,23 +47,23 @@
       </div>
 
       <div class="flex items-center space-x-2 mb-4">
-        <Checkbox
+        <UiCheckbox
           id="clear-existing"
           v-model:checked="localClearExisting"
         />
-        <Label
+        <UiLabel
           for="clear-existing"
           class="text-sm cursor-pointer"
         >
           Clear existing data first
-        </Label>
+        </UiLabel>
       </div>
 
-      <Button
+      <UiButton>
         :disabled="loading"
         class="w-full"
         @click="handleGenerate"
-      >
+        >
         <commonIcon
           v-if="!loading"
           name="lucide:play"
@@ -69,17 +75,17 @@
           class="h-4 w-4 mr-2 animate-spin"
         />
         Generate Custom Data
-      </Button>
-    </CardContent>
-  </Card>
+      </UiButton>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Checkbox } from '@/components/ui/checkbox'
+
 import type { CustomDataConfig } from '~/types/admin-testing'
 
 const props = defineProps<{

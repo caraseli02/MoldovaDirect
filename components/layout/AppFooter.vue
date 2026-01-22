@@ -156,11 +156,11 @@
               :aria-label="$t('footer.newsletter.placeholder')"
               required
             />
-            <Button
+            <UiButton>
               type="submit"
               :disabled="isSubmitting"
               class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+              >
               <span v-if="!isSubmitting">{{ isSubmitting ? $t('footer.newsletter.submitting') : $t('footer.newsletter.button') }}</span>
               <span
                 v-else
@@ -187,7 +187,7 @@
                 </svg>
                 {{ $t('footer.newsletter.subscribing') || 'Subscribing...' }}
               </span>
-            </Button>
+            </UiButton>
           </form>
         </div>
       </div>
@@ -289,7 +289,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Button } from '@/components/ui/button'
+
 import { toast } from 'vue-sonner'
 
 const { t } = useI18n()

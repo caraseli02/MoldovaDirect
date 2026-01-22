@@ -1,29 +1,29 @@
 <template>
-  <TableRow
+  <UiTableRow
     class="hover:bg-gray-50 dark:hover:bg-gray-700"
     :class="{ 'bg-blue-50 dark:bg-blue-900/20': isSelected }"
   >
     <!-- Selection Checkbox -->
-    <TableCell class="w-12">
+    <UiTableCell class="w-12">
       <UiInput
         type="checkbox"
         :checked="isSelected"
         @change="$emit('toggle-selection', order.id)"
       />
-    </TableCell>
+    </UiTableCell>
 
     <!-- Order Number -->
-    <TableCell class="font-medium">
+    <UiTableCell class="font-medium">
       <nuxt-link
         :to="`/admin/orders/${order.id}`"
         class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline"
       >
         #{{ order.order_number }}
       </nuxt-link>
-    </TableCell>
+    </UiTableCell>
 
     <!-- Customer -->
-    <TableCell>
+    <UiTableCell>
       <div class="flex flex-col">
         <span class="text-sm font-medium text-gray-900 dark:text-white">
           {{ customerName }}
@@ -32,46 +32,46 @@
           {{ customerEmail }}
         </span>
       </div>
-    </TableCell>
+    </UiTableCell>
 
     <!-- Date -->
-    <TableCell class="text-sm text-gray-600 dark:text-gray-300">
+    <UiTableCell class="text-sm text-gray-600 dark:text-gray-300">
       {{ formatDate(order.created_at) }}
       <div class="text-xs text-gray-500 dark:text-gray-400">
         {{ daysSinceOrder }} {{ daysSinceOrder === 1 ? 'day' : 'days' }} ago
       </div>
-    </TableCell>
+    </UiTableCell>
 
     <!-- Items -->
-    <TableCell class="text-sm text-gray-600 dark:text-gray-300">
+    <UiTableCell class="text-sm text-gray-600 dark:text-gray-300">
       {{ itemCount }} {{ itemCount === 1 ? 'item' : 'items' }}
-    </TableCell>
+    </UiTableCell>
 
     <!-- Total -->
-    <TableCell class="font-medium text-gray-900 dark:text-white">
+    <UiTableCell class="font-medium text-gray-900 dark:text-white">
       €{{ formatPrice(order.total_eur) }}
-    </TableCell>
+    </UiTableCell>
 
     <!-- Status -->
-    <TableCell>
+    <UiTableCell>
       <AdminOrdersStatusBadge :status="order.status" />
-    </TableCell>
+    </UiTableCell>
 
     <!-- Payment Status -->
-    <TableCell>
-      <Badge :variant="getPaymentStatusVariant(order.payment_status || '')">
+    <UiTableCell>
+      <UiBadge :variant="getPaymentStatusVariant(order.payment_status || '')">
         {{ getPaymentStatusLabel(order.payment_status || '') }}
-      </Badge>
-    </TableCell>
+      </UiBadge>
+    </UiTableCell>
 
     <!-- Actions -->
-    <TableCell>
+    <UiTableCell>
       <div class="flex items-center space-x-2">
-        <Button
+        <UiButton>
           variant="ghost"
           size="icon"
           as-child
-        >
+          >
           <nuxt-link
             :to="`/admin/orders/${order.id}`"
             title="View Order"
@@ -81,15 +81,15 @@
               class="h-4 w-4"
             />
           </nuxt-link>
-        </Button>
+        </UiButton>
       </div>
-    </TableCell>
-  </TableRow>
+    </UiTableCell>
+  </UiTableRow>
 </template>
 
 <script setup lang="ts">
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+
 import {
   TableCell,
   TableRow,

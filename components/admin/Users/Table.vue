@@ -53,13 +53,13 @@
         />
         {{ error }}
       </div>
-      <Button
+      <UiButton>
         :class="{ 'min-h-[44px]': isMobile }"
         @click="retry"
         @touchstart="isMobile && vibrate('tap')"
-      >
+        >
         {{ $t('admin.users.retry') }}
-      </Button>
+      </UiButton>
     </div>
 
     <!-- Users Content -->
@@ -69,76 +69,76 @@
         v-if="!isMobile"
         class="overflow-x-auto"
       >
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead class="px-6">
-                <Button
+        <UiTable>
+          <UiTableHeader>
+            <UiTableRow>
+              <UiTableHead class="px-6">
+                <UiButton>
                   variant="ghost"
                   class="flex items-center gap-1 h-auto p-0 font-normal"
                   @click="updateSort('name')"
-                >
+                  >
                   {{ $t('admin.users.columns.user') }}
                   <commonIcon
                     :name="getSortIcon('name')"
                     class="w-4 h-4"
                   />
-                </Button>
-              </TableHead>
-              <TableHead class="px-6">
-                <Button
+                </UiButton>
+              </UiTableHead>
+              <UiTableHead class="px-6">
+                <UiButton>
                   variant="ghost"
                   class="flex items-center gap-1 h-auto p-0 font-normal"
                   @click="updateSort('email')"
-                >
+                  >
                   {{ $t('admin.users.columns.email') }}
                   <commonIcon
                     :name="getSortIcon('email')"
                     class="w-4 h-4"
                   />
-                </Button>
-              </TableHead>
-              <TableHead class="px-6">
+                </UiButton>
+              </UiTableHead>
+              <UiTableHead class="px-6">
                 {{ $t('admin.users.columns.status') }}
-              </TableHead>
-              <TableHead class="px-6">
+              </UiTableHead>
+              <UiTableHead class="px-6">
                 {{ $t('admin.users.columns.orders') }}
-              </TableHead>
-              <TableHead class="px-6">
+              </UiTableHead>
+              <UiTableHead class="px-6">
                 {{ $t('admin.users.columns.totalSpent') }}
-              </TableHead>
-              <TableHead class="px-6">
-                <Button
+              </UiTableHead>
+              <UiTableHead class="px-6">
+                <UiButton>
                   variant="ghost"
                   class="flex items-center gap-1 h-auto p-0 font-normal"
                   @click="updateSort('created_at')"
-                >
+                  >
                   {{ $t('admin.users.columns.registered') }}
                   <commonIcon
                     :name="getSortIcon('created_at')"
                     class="w-4 h-4"
                   />
-                </Button>
-              </TableHead>
-              <TableHead class="px-6">
-                <Button
+                </UiButton>
+              </UiTableHead>
+              <UiTableHead class="px-6">
+                <UiButton>
                   variant="ghost"
                   class="flex items-center gap-1 h-auto p-0 font-normal"
                   @click="updateSort('last_login')"
-                >
+                  >
                   {{ $t('admin.users.columns.lastLogin') }}
                   <commonIcon
                     :name="getSortIcon('last_login')"
                     class="w-4 h-4"
                   />
-                </Button>
-              </TableHead>
-              <TableHead class="px-6 text-right">
+                </UiButton>
+              </UiTableHead>
+              <UiTableHead class="px-6 text-right">
                 {{ $t('admin.users.columns.actions') }}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
+              </UiTableHead>
+            </UiTableRow>
+          </UiTableHeader>
+          <UiTableBody>
             <AdminUtilsUserTableRow
               v-for="user in usersWithDisplayData"
               :key="user.id"
@@ -149,8 +149,8 @@
               @action="handleUserAction"
               @select="handleSelectUser"
             />
-          </TableBody>
-        </Table>
+          </UiTableBody>
+        </UiTable>
       </div>
 
       <!-- Mobile List -->
@@ -198,9 +198,6 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table'
-
 // Import VueUse utilities
 import { useDebounceFn } from '@vueuse/core'
 

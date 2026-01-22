@@ -1,12 +1,12 @@
 <template>
-  <Card class="rounded-2xl">
-    <CardHeader>
-      <CardTitle>Order Timeline</CardTitle>
-      <CardDescription>
+  <UiCard class="rounded-2xl">
+    <UiCardHeader>
+      <UiCardTitle>Order Timeline</UiCardTitle>
+      <UiCardDescription>
         Complete history of status changes and key events
-      </CardDescription>
-    </CardHeader>
-    <CardContent>
+      </UiCardDescription>
+    </UiCardHeader>
+    <UiCardContent>
       <div
         v-if="timelineEvents.length === 0"
         class="text-center py-8"
@@ -134,8 +134,8 @@
           </div>
         </div>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">

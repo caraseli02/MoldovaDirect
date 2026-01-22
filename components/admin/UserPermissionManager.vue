@@ -25,7 +25,7 @@
           </p>
         </div>
 
-        <Button
+        <UiButton
           v-if="hasChanges"
           :disabled="saving"
           class="px-4 py-2"
@@ -37,7 +37,7 @@
             class="w-4 h-4 animate-spin mr-2"
           />
           Save Changes
-        </Button>
+        </UiButton>
       </div>
     </div>
 
@@ -67,12 +67,12 @@
         />
         {{ error }}
       </div>
-      <Button
+      <UiButton
         class="px-4 py-2"
         @click="fetchPermissions"
       >
         Retry
-      </Button>
+      </UiButton>
     </div>
 
     <!-- Permission Content -->

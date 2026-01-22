@@ -1,5 +1,5 @@
 <template>
-  <Badge
+  <UiBadge
     :variant="statusVariant"
     :class="cn('transition-colors', props.class)"
   >
@@ -9,7 +9,7 @@
       class="h-3 w-3"
     />
     <span>{{ statusLabel }}</span>
-  </Badge>
+  </UiBadge>
 </template>
 
 <script setup lang="ts">

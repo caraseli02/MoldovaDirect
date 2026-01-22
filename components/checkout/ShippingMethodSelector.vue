@@ -140,14 +140,14 @@
             {{ $t('checkout.shippingMethod.fallbackWarning.description') }}
           </p>
           <div class="mt-3">
-            <Button
+            <UiButton
               variant="link"
               size="sm"
               class="text-sm font-medium text-yellow-800 dark:text-yellow-200 hover:text-yellow-900 dark:hover:text-yellow-100 p-0 h-auto"
               @click="$emit('retry')"
             >
               {{ $t('checkout.shippingMethod.fallbackWarning.retry') }}
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -158,7 +158,7 @@
       v-else-if="availableMethods.length > 0 && (!autoSelected || showAllMethods)"
       class="space-y-3"
     >
-      <RadioGroup
+      <UiRadioGroup
         v-model="selectedMethodId"
         :aria-label="$t('checkout.shippingMethod.title')"
       >
@@ -171,7 +171,7 @@
             :for="`ship-${method.id}`"
             :class="selectedMethodId === method.id ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 ring-1 ring-primary-500' : 'border-gray-200 dark:border-gray-600'"
           >
-            <RadioGroupItem
+            <UiRadioGroupItem
               :id="`ship-${method.id}`"
               :value="method.id"
               class="mt-1"
@@ -242,7 +242,7 @@
             </div>
           </UiLabel>
         </div>
-      </RadioGroup>
+      </UiRadioGroup>
     </div>
 
     <!-- No Methods Available -->
@@ -298,14 +298,14 @@
             {{ error }}
           </p>
           <div class="mt-3">
-            <Button
+            <UiButton
               variant="link"
               size="sm"
               class="text-sm font-medium text-red-800 dark:text-red-200 hover:text-red-900 dark:hover:text-red-100 p-0 h-auto"
               @click="$emit('retry')"
             >
               {{ $t('common.retry') }}
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -323,8 +323,6 @@
 
 <script setup lang="ts">
 import type { ShippingMethod } from '~/types/checkout'
-import { Button } from '@/components/ui/button'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 interface Props {
   modelValue: ShippingMethod | null
