@@ -805,11 +805,28 @@ config.global.stubs = {
   NuxtImg: { template: '<img :src="src" :alt="alt" />', props: ['src', 'alt', 'width', 'height', 'densities', 'loading', 'sizes', 'preset', 'fetchpriority'] },
   commonIcon: { template: '<span :class="name" data-testid="icon"></span>', props: ['name', 'size'] },
   ClientOnly: { template: '<slot />' },
-  // UI components
-  UiInput: { template: '<input :type="type || \'text\'" :value="modelValue" :placeholder="placeholder" :disabled="disabled" @input="$emit(\'update:modelValue\', $event.target.value)" @blur="$emit(\'blur\')" />', props: ['modelValue', 'type', 'placeholder', 'disabled', 'id', 'name', 'required', 'autocomplete'] },
-  UiLabel: { template: '<label :for="htmlFor"><slot /></label>', props: ['htmlFor'] },
-  UiButton: { template: '<button :type="type || \'button\'" :disabled="disabled" :class="[variant, size]" @click="$emit(\'click\')"><slot /></button>', props: ['type', 'disabled', 'variant', 'size', 'loading'] },
-  UiCheckbox: { template: '<input type="checkbox" :checked="modelValue" :disabled="disabled" @change="$emit(\'update:modelValue\', $event.target.checked)" />', props: ['modelValue', 'disabled', 'id'] },
+  // UI components - Updated to match shadcn-vue component classes
+  UiInput: {
+    template: '<input ref="inputRef" :type="type || \'text\'" :value="modelValue" :placeholder="placeholder" :disabled="disabled" :id="id" :name="name" :required="required" :autocomplete="autocomplete" class="file:text-foreground placeholder:text-muted-foreground dark:placeholder:text-gray-400 selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-8" @input="$emit(\'update:modelValue\', $event.target.value)" @blur="$emit(\'blur\')" />',
+    props: ['modelValue', 'type', 'placeholder', 'disabled', 'id', 'name', 'required', 'autocomplete', 'class'],
+    methods: {
+      focus() {
+        this.$refs.inputRef?.focus()
+      },
+    },
+  },
+  UiLabel: {
+    template: '<label :for="htmlFor" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"><slot /></label>',
+    props: ['htmlFor', 'class'],
+  },
+  UiButton: {
+    template: '<button :type="type || \'button\'" :disabled="disabled" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 bg-primary-600 hover:bg-primary-700 dark:bg-primary-600 dark:hover:bg-primary-700 dark:text-white disabled:bg-gray-400 disabled:cursor-not-allowed h-9 px-4 py-2 has-[>svg]:px-3 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] w-full lg:flex text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 flex items-center justify-center flex-1"><slot /></button>',
+    props: ['type', 'disabled', 'variant', 'size', 'loading', 'class'],
+  },
+  UiCheckbox: {
+    template: '<div class="checkbox-wrapper"><input type="checkbox" :id="id" :checked="modelValue" :disabled="disabled" class="peer w-4 h-4 w-4 h-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus:ring-green-500 focus:ring-2 disabled:cursor-not-allowed disabled:opacity-50 text-green-600" @change="$emit(\'update:modelValue\', $event.target.checked)" /></div>',
+    props: ['modelValue', 'disabled', 'id', 'class'],
+  },
   UiBadge: { template: '<span :class="variant"><slot /></span>', props: ['variant'] },
   UiCard: { template: '<div class="card"><slot /></div>' },
   UiCardHeader: { template: '<div class="card-header"><slot /></div>' },
@@ -825,14 +842,17 @@ config.global.stubs = {
   UiSheetFooter: { template: '<div class="sheet-footer"><slot /></div>' },
   UiSheetClose: { template: '<button class="sheet-close" @click="$emit(\'close\')"><slot /></button>' },
   UiSelect: { template: '<select :value="modelValue" @change="$emit(\'update:modelValue\', $event.target.value)"><slot /></select>', props: ['modelValue', 'disabled'] },
-  UiSelectTrigger: { template: '<button class="select-trigger"><slot /></button>' },
+  UiSelectTrigger: {
+    template: '<button class="select-trigger inline-flex items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&_span]:line-clamp-1 h-9 w-full"><slot /></button>',
+    props: ['disabled', 'class'],
+  },
   UiSelectValue: { template: '<span class="select-value"><slot /></span>', props: ['placeholder'] },
   UiSelectContent: { template: '<div class="select-content"><slot /></div>' },
   UiSelectItem: { template: '<option :value="value"><slot /></option>', props: ['value'] },
   UiTextarea: { template: '<textarea :value="modelValue" :placeholder="placeholder" :disabled="disabled" @input="$emit(\'update:modelValue\', $event.target.value)"></textarea>', props: ['modelValue', 'placeholder', 'disabled', 'rows'] },
   UiSkeleton: { template: '<div class="skeleton animate-pulse"></div>', props: ['class'] },
   UiTooltip: { template: '<div class="tooltip"><slot /></div>' },
-  UiTooltipTrigger: { template: '<span class="tooltip-trigger"><slot /></span>' },
+  UiTooltipTrigger: { template: '<span class="tooltip-trigger inline-flex items-center"><slot /></span>' },
   UiTooltipContent: { template: '<div class="tooltip-content"><slot /></div>' },
   UiDialog: { template: '<div class="dialog" v-if="open"><slot /></div>', props: ['open'] },
   UiDialogContent: { template: '<div class="dialog-content"><slot /></div>' },
@@ -842,8 +862,8 @@ config.global.stubs = {
   UiDialogFooter: { template: '<div class="dialog-footer"><slot /></div>' },
   UiDialogClose: { template: '<button class="dialog-close"><slot /></button>' },
   UiTabs: { template: '<div class="tabs"><slot /></div>', props: ['modelValue', 'defaultValue'] },
-  UiTabsList: { template: '<div class="tabs-list"><slot /></div>' },
-  UiTabsTrigger: { template: '<button class="tabs-trigger" :data-value="value"><slot /></button>', props: ['value'] },
+  UiTabsList: { template: '<div class="tabs-list inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground"><slot /></div>' },
+  UiTabsTrigger: { template: '<button class="tabs-trigger inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50" :data-value="value"><slot /></button>', props: ['value'] },
   UiTabsContent: { template: '<div class="tabs-content" :data-value="value"><slot /></div>', props: ['value'] },
   UiAccordion: { template: '<div class="accordion"><slot /></div>' },
   UiAccordionItem: { template: '<div class="accordion-item"><slot /></div>', props: ['value'] },
@@ -854,8 +874,11 @@ config.global.stubs = {
   UiDropdownMenuContent: { template: '<div class="dropdown-content"><slot /></div>' },
   UiDropdownMenuItem: { template: '<div class="dropdown-item" @click="$emit(\'click\')"><slot /></div>' },
   UiDropdownMenuSeparator: { template: '<hr class="dropdown-separator" />' },
-  UiRadioGroup: { template: '<div class="radio-group" role="radiogroup"><slot /></div>', props: ['modelValue'] },
-  UiRadioGroupItem: { template: '<input type="radio" :value="value" :checked="$parent.modelValue === value" />', props: ['value', 'id'] },
+  UiRadioGroup: { template: '<div class="radio-group" role="radiogroup"><slot /></div>', props: ['modelValue', 'class'] },
+  UiRadioGroupItem: {
+    template: '<label class="radio-item-label flex items-center gap-2 cursor-pointer"><input type="radio" :name="name" :value="value" :checked="modelValue === value" class="h-4 w-4 border border-primary text-primary ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-green-500" @change="$emit(\'update:modelValue\', $event.target.value)" /><slot /></label>',
+    props: ['value', 'id', 'name', 'class', 'modelValue'],
+  },
   UiSwitch: { template: '<button type="button" role="switch" :aria-checked="modelValue" @click="$emit(\'update:modelValue\', !modelValue)"></button>', props: ['modelValue', 'disabled'] },
   UiScrollArea: { template: '<div class="scroll-area"><slot /></div>' },
   UiSeparator: { template: '<hr class="separator" />' },

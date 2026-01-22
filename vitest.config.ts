@@ -30,6 +30,9 @@ export default defineConfig({
       '**/tests/fixtures/**',
       '**/tests/templates/**',
       '**/tests/utils/**',
+      // Documentation tests have their own vitest config (scripts/documentation/vitest.config.ts)
+      'scripts/documentation/**/*.test.ts',
+      'scripts/documentation/**/*.spec.ts',
       'tests/server/api/admin/__tests__/**/*.test.ts',
       'tests/server/api/admin/orders/__tests__/**/*.test.ts',
       'tests/server/api/admin/products/__tests__/**/*.test.ts',

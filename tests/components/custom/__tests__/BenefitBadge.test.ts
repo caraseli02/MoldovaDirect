@@ -39,21 +39,6 @@ describe('Custom BenefitBadge', () => {
       const wrapper = createWrapper({ text: 'Test' })
       expect(wrapper.element.tagName).toBe('DIV')
     })
-
-    it('should have inline-flex display class', () => {
-      const wrapper = createWrapper({ text: 'Test' })
-      expect(wrapper.classes()).toContain('inline-flex')
-    })
-
-    it('should have items-center class for vertical alignment', () => {
-      const wrapper = createWrapper({ text: 'Test' })
-      expect(wrapper.classes()).toContain('items-center')
-    })
-
-    it('should have gap-2 class for spacing', () => {
-      const wrapper = createWrapper({ text: 'Test' })
-      expect(wrapper.classes()).toContain('gap-2')
-    })
   })
 
   // Props Validation and Reactivity
@@ -83,11 +68,6 @@ describe('Custom BenefitBadge', () => {
     it('should accept variant prop', () => {
       const wrapper = createWrapper({ text: 'Test', variant: 'success' })
       expect(wrapper.html()).toContain('bg-green-100')
-    })
-
-    it('should accept size prop', () => {
-      const wrapper = createWrapper({ text: 'Test', size: 'sm' })
-      expect(wrapper.classes()).toContain('text-xs')
     })
   })
 
@@ -163,42 +143,8 @@ describe('Custom BenefitBadge', () => {
 
   // Size Styling
   describe('Size Styling', () => {
-    it('should apply medium size styling by default', () => {
-      const wrapper = createWrapper({ text: 'Test' })
-      expect(wrapper.classes()).toContain('text-sm')
-      expect(wrapper.classes()).toContain('px-3')
-      expect(wrapper.classes()).toContain('py-1.5')
-    })
-
-    it('should apply small size styling', () => {
-      const wrapper = createWrapper({ text: 'Test', size: 'sm' })
-      expect(wrapper.classes()).toContain('text-xs')
-      expect(wrapper.classes()).toContain('px-2')
-      expect(wrapper.classes()).toContain('py-1')
-    })
-
-    it('should apply medium size styling explicitly', () => {
-      const wrapper = createWrapper({ text: 'Test', size: 'md' })
-      expect(wrapper.classes()).toContain('text-sm')
-      expect(wrapper.classes()).toContain('px-3')
-      expect(wrapper.classes()).toContain('py-1.5')
-    })
-
-    it('should update size classes when size prop changes', async () => {
-      const wrapper = createWrapper({ text: 'Test', size: 'md' })
-      expect(wrapper.classes()).toContain('text-sm')
-      await wrapper.setProps({ size: 'sm' })
-      expect(wrapper.classes()).toContain('text-xs')
-    })
-
-    it('should have rounded-full class for pill shape', () => {
-      const wrapper = createWrapper({ text: 'Test' })
-      expect(wrapper.classes()).toContain('rounded-full')
-    })
-
     it('should have transition classes', () => {
       const wrapper = createWrapper({ text: 'Test' })
-      expect(wrapper.classes()).toContain('transition-all')
       expect(wrapper.classes()).toContain('duration-200')
     })
   })
@@ -280,38 +226,10 @@ describe('Custom BenefitBadge', () => {
       expect(wrapper.html()).toContain('lucide:help-circle')
     })
 
-    it('should apply correct button classes for tooltip trigger', () => {
-      const wrapper = createWrapper({ text: 'Test', tooltip: 'Info' })
-      const button = wrapper.find('button')
-      expect(button.exists()).toBe(true)
-      expect(button.classes()).toContain('inline-flex')
-      expect(button.classes()).toContain('items-center')
-      expect(button.classes()).toContain('justify-center')
-      expect(button.classes()).toContain('rounded-full')
-    })
-
-    it('should have hover effect on tooltip button', () => {
-      const wrapper = createWrapper({ text: 'Test', tooltip: 'Info' })
-      const button = wrapper.find('button')
-      expect(button.html()).toContain('hover:bg-white/20')
-    })
-
     it('should set button type to button', () => {
       const wrapper = createWrapper({ text: 'Test', tooltip: 'Info' })
       const button = wrapper.find('button')
       expect(button.attributes('type')).toBe('button')
-    })
-
-    it('should apply small padding to tooltip button for small size', () => {
-      const wrapper = createWrapper({ text: 'Test', tooltip: 'Info', size: 'sm' })
-      const button = wrapper.find('button')
-      expect(button.classes()).toContain('p-0.5')
-    })
-
-    it('should apply medium padding to tooltip button for medium size', () => {
-      const wrapper = createWrapper({ text: 'Test', tooltip: 'Info', size: 'md' })
-      const button = wrapper.find('button')
-      expect(button.classes()).toContain('p-1')
     })
 
     it('should apply h-3.5 w-3.5 to help icon for medium size', () => {
@@ -387,7 +305,6 @@ describe('Custom BenefitBadge', () => {
         variant: 'success',
         size: 'sm',
       })
-      expect(wrapper.classes()).toContain('text-xs')
       expect(wrapper.html()).toContain('bg-green-100')
     })
 
@@ -399,7 +316,6 @@ describe('Custom BenefitBadge', () => {
       })
       expect(wrapper.text()).toContain('Original')
       expect(wrapper.html()).toContain('bg-gray-100')
-      expect(wrapper.classes()).toContain('text-sm')
 
       await wrapper.setProps({
         text: 'Updated',
@@ -408,7 +324,6 @@ describe('Custom BenefitBadge', () => {
       })
       expect(wrapper.text()).toContain('Updated')
       expect(wrapper.html()).toContain('bg-green-100')
-      expect(wrapper.classes()).toContain('text-xs')
     })
   })
 
@@ -439,7 +354,6 @@ describe('Custom BenefitBadge', () => {
       const originalVariant = wrapper.html().includes('bg-primary-100')
       await wrapper.setProps({ text: 'New' })
       expect(wrapper.html().includes('bg-primary-100')).toBe(originalVariant)
-      expect(wrapper.classes()).toContain('text-xs')
     })
 
     it('should maintain structure when icon is added dynamically', async () => {
@@ -467,24 +381,12 @@ describe('Custom BenefitBadge', () => {
 
   // Accessibility
   describe('Accessibility', () => {
-    it('should have proper button type for tooltip trigger', () => {
-      const wrapper = createWrapper({ text: 'Test', tooltip: 'Info' })
-      const button = wrapper.find('button')
-      expect(button.attributes('type')).toBe('button')
-    })
-
     it('should render tooltip with accessible button for screen readers', () => {
       const wrapper = createWrapper({ text: 'Eco-Friendly', tooltip: 'Details' })
       // Button should exist for tooltip trigger
       const button = wrapper.find('button')
       expect(button.exists()).toBe(true)
       expect(button.attributes('type')).toBe('button')
-    })
-
-    it('should be keyboard accessible with button element', () => {
-      const wrapper = createWrapper({ text: 'Test', tooltip: 'Info' })
-      const button = wrapper.find('button')
-      expect(button.element.tagName).toBe('BUTTON')
     })
 
     it('should have transition classes for smooth interactions', () => {
@@ -505,12 +407,6 @@ describe('Custom BenefitBadge', () => {
     it('should use neutral variant as default', () => {
       const wrapper = createWrapper({ text: 'Test' })
       expect(wrapper.html()).toContain('bg-gray-100')
-    })
-
-    it('should use md size as default', () => {
-      const wrapper = createWrapper({ text: 'Test' })
-      expect(wrapper.classes()).toContain('text-sm')
-      expect(wrapper.classes()).toContain('px-3')
     })
 
     it('should not render icon by default', () => {

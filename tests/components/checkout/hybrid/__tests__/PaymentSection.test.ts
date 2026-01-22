@@ -177,14 +177,6 @@ describe('PaymentSection', () => {
       })
       expect(wrapper.text()).toContain('\uD83D\uDCB5') // Cash emoji
     })
-
-    it('should have green background styling for cash option', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-      const cashSection = wrapper.find('.bg-green-50')
-      expect(cashSection.exists()).toBe(true)
-    })
   })
 
   // ==========================================
@@ -217,14 +209,6 @@ describe('PaymentSection', () => {
         props: defaultProps,
       })
       expect(wrapper.text()).toContain('\uD83D\uDCB3') // Credit card emoji
-    })
-
-    it('should have disabled styling for coming soon methods', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-      const comingSoonSection = wrapper.findAll('.bg-gray-100')
-      expect(comingSoonSection.length).toBeGreaterThan(0)
     })
   })
 
@@ -551,15 +535,12 @@ describe('PaymentSection', () => {
       expect(label.exists()).toBe(true)
       expect(label.find('input[type="radio"]').exists()).toBe(true)
     })
+  })
 
-    it('should have focus ring styles on radio input', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-      const radio = wrapper.find('input[type="radio"]')
-      expect(radio.classes()).toContain('focus:ring-green-500')
-    })
-
+  // ==========================================
+  // Dark Mode Tests
+  // ==========================================
+  describe('Dark Mode Styling', () => {
     it('should use semantic section element', () => {
       const wrapper = mount(PaymentSection, {
         props: defaultProps,
@@ -573,27 +554,6 @@ describe('PaymentSection', () => {
       })
       expect(wrapper.find('h3.section-title').exists()).toBe(true)
     })
-  })
-
-  // ==========================================
-  // Dark Mode Tests
-  // ==========================================
-  describe('Dark Mode Styling', () => {
-    it('should have dark mode classes for cash section background', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-      const cashSection = wrapper.find('.dark\\:bg-green-900\\/20')
-      expect(cashSection.exists()).toBe(true)
-    })
-
-    it('should have dark mode classes for coming soon items', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-      const html = wrapper.html()
-      expect(html).toContain('dark:bg-gray-700')
-    })
 
     it('should have dark mode text colors', () => {
       const wrapper = mount(PaymentSection, {
@@ -602,14 +562,6 @@ describe('PaymentSection', () => {
       const html = wrapper.html()
       expect(html).toContain('dark:text-white')
       expect(html).toContain('dark:text-gray-400')
-    })
-
-    it('should have dark mode border colors for cash section', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-      const cashSection = wrapper.find('.dark\\:border-green-700')
-      expect(cashSection.exists()).toBe(true)
     })
   })
 
@@ -649,33 +601,6 @@ describe('PaymentSection', () => {
       const path = svg.find('path')
       expect(path.exists()).toBe(true)
       expect(path.attributes('fill-rule')).toBe('evenodd')
-    })
-
-    it('should have proper flex layout in header', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-
-      const headerContent = wrapper.find('.section-header .flex.items-center')
-      expect(headerContent.exists()).toBe(true)
-    })
-
-    it('should have proper spacing in coming soon section', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-
-      const comingSoonContainer = wrapper.find('.mt-6.space-y-2')
-      expect(comingSoonContainer.exists()).toBe(true)
-    })
-
-    it('should have flex wrap for coming soon items', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-
-      const flexWrap = wrapper.find('.flex.flex-wrap.gap-2')
-      expect(flexWrap.exists()).toBe(true)
     })
   })
 

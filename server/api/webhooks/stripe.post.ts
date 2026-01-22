@@ -20,7 +20,7 @@ let stripeInstance: Stripe | null = null
 function getStripe(secretKey: string): Stripe {
   if (!stripeInstance) {
     stripeInstance = new Stripe(secretKey, {
-      apiVersion: '2025-08-27.basil',
+      apiVersion: '2025-12-15.clover',
     })
   }
   return stripeInstance

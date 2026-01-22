@@ -301,14 +301,14 @@ describe('ReviewPaymentSection', () => {
   })
 
   describe('User interactions', () => {
-    it('should emit lucide:square-pen event when edit button is clicked', async () => {
+    it('should emit edit event when edit button is clicked', async () => {
       const wrapper = mountComponent()
       const editButton = wrapper.find('button')
 
       await editButton.trigger('click')
 
-      expect(wrapper.emitted('lucide:square-pen')).toBeTruthy()
-      expect(wrapper.emitted('lucide:square-pen')?.length).toBe(1)
+      expect(wrapper.emitted('edit')).toBeTruthy()
+      expect(wrapper.emitted('edit')?.length).toBe(1)
     })
 
     it('should emit event on each click', async () => {
@@ -319,7 +319,7 @@ describe('ReviewPaymentSection', () => {
       await editButton.trigger('click')
       await editButton.trigger('click')
 
-      expect(wrapper.emitted('lucide:square-pen')?.length).toBe(3)
+      expect(wrapper.emitted('edit')?.length).toBe(3)
     })
   })
 
