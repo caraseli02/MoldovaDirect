@@ -1,26 +1,6 @@
 <template>
   <div class="text-gray-900 dark:text-gray-100">
-    <!-- Promotional announcement bar -->
-    <HomeAnnouncementBar
-      v-if="isSectionEnabled('announcementBar')"
-      :show-cta="true"
-    />
-
-    <!--
-      Hero Section - Random Video Background
-
-      Videos are randomly selected on each page load from the hero video library.
-      Configuration: composables/useHeroVideos.ts
-      Video assets: public/videos/hero/
-
-      Features:
-      - Random video selection per session
-      - Automatic mobile detection (shows poster on mobile)
-      - Multiple format support (WebM + MP4)
-      - Seamless loop for background ambiance
-
-      To add videos: See public/videos/hero/README.md
-    -->
+    <!-- Hero Section - Random Video Background -->
     <HomeVideoHero
       v-if="isSectionEnabled('videoHero')"
       :show-video="heroVideoConfig.showVideo.value"

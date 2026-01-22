@@ -50,12 +50,26 @@
         />
         <div
           v-else
-          class="h-full w-full flex flex-col items-center justify-center bg-gray-50 dark:bg-slate-900"
+          class="h-full w-full flex flex-col items-center justify-center bg-gray-50 dark:bg-slate-900 group-hover:scale-110 transition-transform duration-500"
           role="img"
           :aria-label="$t('products.noImageAvailable')"
         >
+          <!-- Smart fallback images for categories -->
+          <img
+            v-if="product.name?.en?.toLowerCase().includes('wine') || product.category?.slug === 'wine'"
+            src="/images/products/wine.png"
+            class="h-full w-full object-cover opacity-80"
+          />
+          <img
+            v-else-if="product.name?.en?.toLowerCase().includes('carpet') || product.name?.en?.toLowerCase().includes('rug')"
+            src="/images/products/rug.png"
+            class="h-full w-full object-cover opacity-80"
+          />
           <!-- Elegant placeholder that matches premium theme -->
-          <div class="relative flex flex-col items-center justify-center gap-3 p-4 text-center">
+          <div
+            v-else
+            class="relative flex flex-col items-center justify-center gap-3 p-4 text-center"
+          >
             <div
               class="absolute inset-0 blur-3xl rounded-full opacity-20 pointer-events-none"
               :class="placeholderConfig.blurColor"

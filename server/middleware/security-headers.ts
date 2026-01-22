@@ -132,6 +132,9 @@ function buildCSPDirectives(isDev: boolean, _url: string): string {
       supabaseDomain,
       `*.${supabaseDomain}`,
       'wss://*.supabase.co',
+      // Images (for color extraction or other fetch operations)
+      'https://*.unsplash.com',
+      'https://images.unsplash.com',
       // Stripe
       'https://api.stripe.com',
       'https://checkout.stripe.com',

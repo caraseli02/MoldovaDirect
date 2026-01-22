@@ -3,6 +3,7 @@
     class="fixed bottom-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-800/50 safe-area-bottom md:hidden"
     role="navigation"
     aria-label="Primary mobile navigation"
+    data-testid="bottom-nav"
   >
     <div class="flex items-center justify-around h-14 px-2">
       <!-- Home -->
@@ -51,6 +52,7 @@
           <ClientOnly>
             <span
               v-if="itemCount > 0"
+              data-testid="cart-count"
               class="absolute -top-1.5 -right-2 flex items-center justify-center min-w-[14px] h-[14px] px-1 text-[8px] font-bold text-white bg-primary-600 rounded-full"
             >
               {{ itemCount > 99 ? '99+' : itemCount }}

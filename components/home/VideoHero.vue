@@ -2,8 +2,8 @@
   <section class="relative flex items-center overflow-hidden bg-brand-dark">
     <!-- Optimized min-height for mobile-first with aspect ratio to prevent CLS -->
     <div
-      class="hero-container relative flex w-full items-center"
-      style="aspect-ratio: 16/9; min-height: 60vh;"
+      class="hero-container relative flex w-full items-center min-h-[60vh] md:min-h-[75vh]"
+      style="aspect-ratio: 16/9;"
     >
       <!-- Video Background (Optional - controlled by showVideo prop) -->
       <div
@@ -37,7 +37,7 @@
         </video>
         <!-- Gradient overlay for visual contrast -->
         <!-- Black mask overlay for text contrast -->
-        <div class="absolute inset-0 bg-black/40"></div>
+        <div class="absolute inset-0 bg-black/50"></div>
       </div>
 
       <!-- Fallback background: Image or Gradient -->
@@ -136,7 +136,7 @@
               y: 0,
               transition: { delay: 300 },
             }"
-            class="mb-4 text-5xl font-bold leading-[1.15] tracking-[-0.02em] text-brand-light drop-shadow-2xl md:mb-6 md:text-7xl md:leading-[1.1] lg:text-8xl"
+            class="mb-4 text-4xl font-bold leading-[1.15] tracking-[-0.02em] text-brand-light drop-shadow-2xl sm:text-5xl md:mb-6 md:text-7xl md:leading-[1.1] lg:text-8xl"
             style="text-shadow: 0 4px 16px rgba(0,0,0,0.85), 0 2px 6px rgba(0,0,0,0.7)"
           >
             {{ title }}
@@ -368,11 +368,4 @@ video {
 }
 
 /* Hide video on mobile to save bandwidth - poster will show instead */
-
-/* Responsive hero container min-height */
-@media (min-width: 768px) {
-  .hero-container {
-    min-height: 75vh;
-  }
-}
 </style>

@@ -1,12 +1,16 @@
 <template>
   <header
     :class="[
-      'sticky top-0 z-50 transition-all duration-300 will-change-transform',
+      'fixed top-0 w-full z-50 transition-all duration-300 will-change-transform',
       scrolled
         ? 'bg-brand-light/95 backdrop-blur-md shadow-elevated-sm dark:bg-brand-dark/95 dark:shadow-brand-light/5'
         : 'bg-transparent dark:bg-transparent',
     ]"
   >
+    <HomeAnnouncementBar
+      v-if="hasDarkHero"
+      :show-cta="true"
+    />
     <div class="container">
       <div class="flex items-center justify-between h-16">
         <!-- Logo with dynamic color based on scroll state -->
@@ -59,10 +63,14 @@
           <!-- Desktop actions -->
           <div class="hidden md:flex items-center space-x-4">
             <!-- Language Switcher -->
-            <LanguageSwitcher />
+            <ClientOnly>
+              <LanguageSwitcher />
+            </ClientOnly>
 
             <!-- Theme Toggle -->
-            <ThemeToggle />
+            <ClientOnly>
+              <ThemeToggle />
+            </ClientOnly>
 
             <!-- Search with dynamic color -->
             <Button

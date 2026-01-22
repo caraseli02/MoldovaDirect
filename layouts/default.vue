@@ -1,7 +1,10 @@
 <template>
   <div>
     <LayoutAppHeader />
-    <main class="flex-1 text-gray-900 dark:text-white pb-16 md:pb-0">
+    <main
+      class="flex-1 text-gray-900 dark:text-white pb-16 md:pb-0"
+      :class="{ 'pt-16': !hasDarkHero }"
+    >
       <div id="layout-content-wrapper">
         <ClientOnly>
           <TooltipProvider :delay-duration="300">
@@ -38,6 +41,12 @@ import { TooltipProvider } from 'reka-ui'
 const { registerShortcut } = useKeyboardShortcuts()
 const localePath = useLocalePath()
 const router = useRouter()
+const route = useRoute()
+
+// Logic tailored to match AppHeader.vue for consistency
+const currentPath = computed(() => route.path?.replace(/\/(en|ro|ru)/, '') || '/')
+const pagesWithDarkHero = ['/']
+const hasDarkHero = computed(() => pagesWithDarkHero.includes(currentPath.value))
 
 // Register global search shortcut (Ctrl/Cmd + K)
 registerShortcut('k', () => {
