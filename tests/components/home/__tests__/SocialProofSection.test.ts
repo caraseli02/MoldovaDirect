@@ -379,7 +379,7 @@ describe('Home SocialProofSection', () => {
   describe('Responsive Behavior', () => {
     it('should have responsive grid for stats', () => {
       const statsGrid = wrapper.find('.mt-8.grid')
-      expect(statsGrid.classes()).toContain('sm:grid-cols-2')
+      expect(statsGrid.classes()).toContain('md:grid-cols-2')
     })
 
     it('should have responsive grid for logos', () => {

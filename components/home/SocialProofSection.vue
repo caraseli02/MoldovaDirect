@@ -5,43 +5,70 @@
       <div class="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
         <div class="max-w-xl">
           <!-- Badge with animation -->
-          <div v-motion :initial="{ opacity: 0, x: -20 }" :visible-once="{
-            opacity: 1,
-            x: 0,
-            transition: { duration: 500 },
-          }"
-            class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium ring-1 ring-white/20 backdrop-blur-sm">
-            <commonIcon name="lucide:star" class="h-5 w-5" />
+          <div
+            v-motion
+            :initial="{ opacity: 0, x: -20 }"
+            :visible-once="{
+              opacity: 1,
+              x: 0,
+              transition: { duration: 500 },
+            }"
+            class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium ring-1 ring-white/20 backdrop-blur-sm"
+          >
+            <commonIcon
+              name="lucide:star"
+              class="h-5 w-5"
+            />
             <span>{{ t('home.socialProof.badge') }}</span>
           </div>
 
           <!-- Title with animation -->
-          <h2 v-motion :initial="{ opacity: 0, x: -20 }" :visible-once="{
-            opacity: 1,
-            x: 0,
-            transition: { duration: 500, delay: 100 },
-          }" class="mt-6 text-3xl font-bold md:text-4xl">
+          <h2
+            v-motion
+            :initial="{ opacity: 0, x: -20 }"
+            :visible-once="{
+              opacity: 1,
+              x: 0,
+              transition: { duration: 500, delay: 100 },
+            }"
+            class="mt-6 text-3xl font-bold md:text-4xl"
+          >
             {{ t('home.socialProof.title') }}
           </h2>
 
           <!-- Subtitle with animation -->
-          <p v-motion :initial="{ opacity: 0, x: -20 }" :visible-once="{
-            opacity: 1,
-            x: 0,
-            transition: { duration: 500, delay: 200 },
-          }" class="mt-4 text-lg text-primary-100">
+          <p
+            v-motion
+            :initial="{ opacity: 0, x: -20 }"
+            :visible-once="{
+              opacity: 1,
+              x: 0,
+              transition: { duration: 500, delay: 200 },
+            }"
+            class="mt-4 text-lg text-primary-100"
+          >
             {{ t('home.socialProof.subtitle') }}
           </p>
 
           <!-- Animated stats with counter -->
           <div class="mt-8 grid gap-6 md:grid-cols-2">
-            <div v-for="(stat, index) in animatedStats" :key="stat.label" v-motion :initial="{ opacity: 0, scale: 0.9 }"
+            <div
+              v-for="(stat, index) in animatedStats"
+              :key="stat.label"
+              v-motion
+              :initial="{ opacity: 0, scale: 0.9 }"
               :visible-once="{
                 opacity: 1,
                 scale: 1,
                 transition: { duration: 400, delay: 300 + index * 100 },
-              }" class="rounded-xl bg-white/10 p-6 backdrop-blur-sm ring-1 ring-white/10">
-              <p class="text-3xl font-bold" aria-live="polite" aria-atomic="true">
+              }"
+              class="rounded-xl bg-white/10 p-6 backdrop-blur-sm ring-1 ring-white/10"
+            >
+              <p
+                class="text-3xl font-bold"
+                aria-live="polite"
+                aria-atomic="true"
+              >
                 {{ stat.displayValue }}
               </p>
               <p class="mt-2 text-sm text-primary-100 break-words">
@@ -51,14 +78,25 @@
           </div>
 
           <!-- Partner logos with animation -->
-          <div v-motion :initial="{ opacity: 0, y: 20 }" :visible-once="{
-            opacity: 1,
-            y: 0,
-            transition: { duration: 500, delay: 600 },
-          }" class="mt-10 grid gap-4 sm:grid-cols-2">
-            <div v-for="logo in logos" :key="logo"
-              class="flex items-center gap-3 rounded-xl bg-white/5 px-5 py-4 text-sm font-semibold backdrop-blur-sm transition hover:bg-white/10">
-              <commonIcon name="lucide:sparkles" class="h-5 w-5 text-primary-100" />
+          <div
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :visible-once="{
+              opacity: 1,
+              y: 0,
+              transition: { duration: 500, delay: 600 },
+            }"
+            class="mt-10 grid gap-4 sm:grid-cols-2"
+          >
+            <div
+              v-for="logo in logos"
+              :key="logo"
+              class="flex items-center gap-3 rounded-xl bg-white/5 px-5 py-4 text-sm font-semibold backdrop-blur-sm transition hover:bg-white/10"
+            >
+              <commonIcon
+                name="lucide:sparkles"
+                class="h-5 w-5 text-primary-100"
+              />
               <span>{{ logo }}</span>
             </div>
           </div>
@@ -67,18 +105,33 @@
         <!-- Testimonials - Carousel on mobile, Grid on desktop -->
         <!-- Mobile: Horizontal carousel -->
         <div class="lg:hidden">
-          <Swiper :modules="[SwiperPagination]" :slides-per-view="1" :space-between="20"
-            :pagination="{ clickable: true, dynamicBullets: true }" class="testimonials-carousel">
-            <SwiperSlide v-for="testimonial in testimonials" :key="testimonial.name">
+          <Swiper
+            :modules="[SwiperPagination]"
+            :slides-per-view="1"
+            :space-between="20"
+            :pagination="{ clickable: true, dynamicBullets: true }"
+            class="testimonials-carousel"
+          >
+            <SwiperSlide
+              v-for="testimonial in testimonials"
+              :key="testimonial.name"
+            >
               <article class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-primary-950/20">
                 <!-- Star rating at top -->
                 <div class="mb-4 flex items-center justify-between">
-                  <CustomStarRating :rating="5" size="sm" />
+                  <CustomStarRating
+                    :rating="5"
+                    size="sm"
+                  />
 
                   <!-- Verified badge -->
                   <span
-                    class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
-                    <commonIcon name="lucide:check-circle" class="h-3 w-3" />
+                    class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700"
+                  >
+                    <commonIcon
+                      name="lucide:check-circle"
+                      class="h-3 w-3"
+                    />
                     {{ t('home.socialProof.verified') }}
                   </span>
                 </div>
@@ -106,20 +159,33 @@
 
         <!-- Desktop: Grid with animations -->
         <div class="hidden gap-6 lg:grid lg:max-w-xl">
-          <article v-for="(testimonial, index) in testimonials" :key="testimonial.name" v-motion
-            :initial="{ opacity: 0, x: 40 }" :visible-once="{
+          <article
+            v-for="(testimonial, index) in testimonials"
+            :key="testimonial.name"
+            v-motion
+            :initial="{ opacity: 0, x: 40 }"
+            :visible-once="{
               opacity: 1,
               x: 0,
               transition: { duration: 500, delay: 400 + index * 150 },
-            }" class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-primary-950/20">
+            }"
+            class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-primary-950/20"
+          >
             <!-- Star rating at top -->
             <div class="mb-4 flex items-center justify-between">
-              <CustomStarRating :rating="5" size="sm" />
+              <CustomStarRating
+                :rating="5"
+                size="sm"
+              />
 
               <!-- Verified badge -->
               <span
-                class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
-                <commonIcon name="lucide:check-circle" class="h-3 w-3" />
+                class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700"
+              >
+                <commonIcon
+                  name="lucide:check-circle"
+                  class="h-3 w-3"
+                />
                 {{ t('home.socialProof.verified') }}
               </span>
             </div>
