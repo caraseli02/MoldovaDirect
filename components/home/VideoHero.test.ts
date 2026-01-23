@@ -67,7 +67,7 @@ describe('VideoHero', () => {
     })
 
     it('logs source errors without crashing', () => {
-      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
       const wrapper = mount(VideoHero, {
         props: {
           title: 'Test Title',
@@ -80,7 +80,7 @@ describe('VideoHero', () => {
 
       const sources = wrapper.findAll('source')
       sources[0].trigger('error')
-      expect(consoleWarnSpy).toHaveBeenCalled()
+      expect(consoleErrorSpy).toHaveBeenCalled()
     })
 
     it('handles autoplay rejection gracefully', async () => {
@@ -244,8 +244,8 @@ describe('VideoHero', () => {
       expect(wrapper.text()).toContain('4.9/5')
       expect(wrapper.text()).toContain('Rating')
 
-      // Check grid layout
-      const grid = wrapper.find('.grid.grid-cols-3')
+      // Check grid layout (mobile-first: grid-cols-1, md:grid-cols-3)
+      const grid = wrapper.find('.grid.grid-cols-1')
       expect(grid.exists()).toBe(true)
     })
 
@@ -258,7 +258,7 @@ describe('VideoHero', () => {
         ...createGlobalStubs(),
       })
 
-      const grid = wrapper.find('.grid.grid-cols-3')
+      const grid = wrapper.find('.grid.grid-cols-1')
       expect(grid.exists()).toBe(false)
     })
   })
@@ -305,7 +305,7 @@ describe('VideoHero', () => {
         ...createGlobalStubs(),
       })
 
-      const container = wrapper.find('.min-h-\\[60vh\\]')
+      const container = wrapper.find('.min-h-\\[80vh\\]')
       expect(container.exists()).toBe(true)
       expect(container.classes()).toContain('md:min-h-[75vh]')
     })
