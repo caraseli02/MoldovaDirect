@@ -36,7 +36,7 @@ export interface TestFixtures {
 }
 
 export const test = base.extend<TestFixtures>({
-  locale: async ({ _ }, use, testInfo) => {
+  locale: async (use, testInfo) => {
     const projectName = testInfo.project.name
     const locale = projectName.split('-')[1] || 'es'
     await use(locale)
@@ -53,7 +53,7 @@ export const test = base.extend<TestFixtures>({
     await use(user)
   },
 
-  adminUser: async ({ _ }, use) => {
+  adminUser: async (use) => {
     const admin: AdminUser = {
       email: process.env.TEST_ADMIN_EMAIL || 'admin@example.test',
       password: process.env.TEST_ADMIN_PASSWORD || generateSecurePassword(),
@@ -63,7 +63,7 @@ export const test = base.extend<TestFixtures>({
     await use(admin)
   },
 
-  testProducts: async ({ _ }, use) => {
+  testProducts: async (use) => {
     const products: TestProduct[] = [
       {
         id: 'prod-1',
