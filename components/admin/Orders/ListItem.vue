@@ -5,10 +5,9 @@
   >
     <!-- Selection Checkbox -->
     <UiTableCell class="w-12">
-      <UiInput
-        type="checkbox"
+      <UiCheckbox
         :checked="isSelected"
-        @change="$emit('toggle-selection', order.id)"
+        @update:checked="$emit('toggle-selection', order.id)"
       />
     </UiTableCell>
 

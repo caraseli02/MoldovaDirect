@@ -21,56 +21,61 @@
       <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('checkout.addressForm.savedAddresses') }}
       </h4>
-      <div class="space-y-3">
-        <div
-          v-for="address in savedAddresses"
-          :key="address.id"
-          class="relative"
-        >
-          <UiLabel :class="selectedSavedAddressId === address.id ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-600'">
-            <UiInput
-              v-model="selectedSavedAddressId"
-              type="radio"
-              :name="`saved-address-${type}`"
-              :value="address.id"
-              @change="selectSavedAddress(address)"
-            />
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between">
-                <p class="text-sm font-medium text-gray-900 dark:text-white">
-                  {{ address.firstName }} {{ address.lastName }}
-                </p>
-                <span
-                  v-if="address.isDefault"
-                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200"
-                >
-                  {{ $t('checkout.addressForm.default') }}
-                </span>
+      <UiRadioGroup
+        v-model="selectedSavedAddressId"
+        :name="`saved-address-${type}`"
+      >
+        <div class="space-y-3">
+          <div
+            v-for="address in savedAddresses"
+            :key="address.id"
+            class="relative"
+          >
+            <div :class="selectedSavedAddressId === address.id ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 rounded-lg p-3 border' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border'">
+              <div class="flex items-start gap-3">
+                <UiRadioGroupItem
+                  :value="address.id"
+                  class="shrink-0 mt-0.5"
+                  @click="selectSavedAddress(address)"
+                />
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <p class="text-sm font-medium text-gray-900 dark:text-white">
+                      {{ address.firstName }} {{ address.lastName }}
+                    </p>
+                    <span
+                      v-if="address.isDefault"
+                      class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200"
+                    >
+                      {{ $t('checkout.addressForm.default') }}
+                    </span>
+                  </div>
+                  <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    {{ address.street }}
+                  </p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">
+                    {{ address.city }}, {{ address.postalCode }} {{ address.country }}
+                  </p>
+                </div>
               </div>
-              <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                {{ address.street }}
-              </p>
-              <p class="text-sm text-gray-600 dark:text-gray-400">
-                {{ address.city }}, {{ address.postalCode }} {{ address.country }}
-              </p>
             </div>
-          </UiLabel>
+          </div>
         </div>
-      </div>
 
-      <!-- Use New Address Option -->
-      <UiLabel :class="selectedSavedAddressId === null ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-600'">
-        <UiInput
-          v-model="selectedSavedAddressId"
-          type="radio"
-          :name="`saved-address-${type}`"
-          :value="null"
-          @change="useNewAddress"
-        />
-        <span class="text-sm font-medium text-gray-900 dark:text-white">
-          {{ $t('checkout.addressForm.useNewAddress') }}
-        </span>
-      </UiLabel>
+        <!-- Use New Address Option -->
+        <div :class="selectedSavedAddressId === null ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 rounded-lg p-3 border mt-3' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border mt-3'">
+          <div class="flex items-center gap-3">
+            <UiRadioGroupItem
+              :value="null"
+              class="shrink-0"
+              @click="useNewAddress"
+            />
+            <span class="text-sm font-medium text-gray-900 dark:text-white">
+              {{ $t('checkout.addressForm.useNewAddress') }}
+            </span>
+          </div>
+        </div>
+      </UiRadioGroup>
     </div>
 
     <!-- Address Form -->
@@ -277,15 +282,17 @@
       <!-- Save Address Option (for authenticated users) -->
       <div
         v-if="showSaveOption && user"
-        class="flex items-center space-x-2 pt-2"
+        class="flex items-center gap-2 pt-2"
       >
-        <UiInput
-          id="saveAddress"
+        <UiCheckbox
           :checked="localAddress.saveForFuture"
-          type="checkbox"
-          @change="updateField('saveForFuture', ($event.target as HTMLInputElement).checked)"
+          class="shrink-0"
+          @update:checked="updateField('saveForFuture', $event)"
         />
-        <UiLabel for="saveAddress">
+        <UiLabel
+          for="saveAddress"
+          class="cursor-pointer"
+        >
           {{ $t('checkout.addressForm.saveAddress') }}
         </UiLabel>
       </div>

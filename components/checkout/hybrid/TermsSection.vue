@@ -4,12 +4,10 @@
       <!-- Terms Checkboxes -->
       <div class="space-y-3 mb-6">
         <div class="flex items-start gap-2">
-          <UiInput
-            id="checkout-terms"
+          <UiCheckbox
             :checked="termsAccepted"
-            type="checkbox"
-            class="mt-0.5"
-            @change="$emit('update:termsAccepted', ($event.target as HTMLInputElement).checked)"
+            class="mt-0.5 shrink-0"
+            @update:checked="$emit('update:termsAccepted', $event)"
           />
           <UiLabel
             for="checkout-terms"
@@ -32,12 +30,10 @@
         </div>
 
         <div class="flex items-start gap-2">
-          <UiInput
-            id="checkout-privacy"
+          <UiCheckbox
             :checked="privacyAccepted"
-            type="checkbox"
-            class="mt-0.5"
-            @change="$emit('update:privacyAccepted', ($event.target as HTMLInputElement).checked)"
+            class="mt-0.5 shrink-0"
+            @update:checked="$emit('update:privacyAccepted', $event)"
           />
           <UiLabel
             for="checkout-privacy"
@@ -60,12 +56,10 @@
         </div>
 
         <div class="flex items-start gap-2">
-          <UiInput
-            id="checkout-marketing"
+          <UiCheckbox
             :checked="marketingConsent"
-            type="checkbox"
-            class="mt-0.5"
-            @change="$emit('update:marketingConsent', ($event.target as HTMLInputElement).checked)"
+            class="mt-0.5 shrink-0"
+            @update:checked="$emit('update:marketingConsent', $event)"
           />
           <UiLabel
             for="checkout-marketing"

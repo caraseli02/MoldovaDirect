@@ -23,28 +23,29 @@
           <!-- Address Type -->
           <div>
             <UiLabel>{{ $t('profile.addressType.label') }} *</UiLabel>
-            <div class="flex space-x-2">
-              <UiLabel>
-                <UiInput
-                  v-model="form.type"
-                  type="radio"
+            <UiRadioGroup
+              v-model="form.type"
+              class="flex gap-4"
+            >
+              <div class="flex items-center gap-2">
+                <UiRadioGroupItem
                   value="shipping"
+                  class="shrink-0"
                 />
-                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                <span class="text-sm text-gray-700 dark:text-gray-300">
                   {{ $t('profile.addressType.shipping') }}
                 </span>
-              </UiLabel>
-              <UiLabel>
-                <UiInput
-                  v-model="form.type"
-                  type="radio"
+              </div>
+              <div class="flex items-center gap-2">
+                <UiRadioGroupItem
                   value="billing"
+                  class="shrink-0"
                 />
-                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                <span class="text-sm text-gray-700 dark:text-gray-300">
                   {{ $t('profile.addressType.billing') }}
                 </span>
-              </UiLabel>
-            </div>
+              </div>
+            </UiRadioGroup>
           </div>
 
           <!-- First Name and Last Name -->

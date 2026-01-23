@@ -100,11 +100,11 @@
                       class="group rounded-lg border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900"
                     >
                       <div class="flex items-start gap-3">
-                        <UiInput
+                        <UiCheckbox
                           :id="`step-${index}`"
-                          type="checkbox"
                           :checked="isStepCompleted(index)"
-                          @change="handleToggleStep(index)"
+                          class="shrink-0 mt-0.5"
+                          @update:checked="handleToggleStep(index)"
                         />
                         <UiLabel
                           :for="`step-${index}`"

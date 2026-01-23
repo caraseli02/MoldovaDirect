@@ -21,49 +21,50 @@
           {{ $t('checkout.payment.savedMethods') }}
         </h3>
 
-        <div class="space-y-3">
-          <div
-            v-for="savedMethod in savedPaymentMethods"
-            :key="savedMethod.id"
-            class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer transition-colors"
-            :class="{
-              'border-blue-500 bg-blue-50 dark:bg-blue-900/20': selectedSavedMethod === savedMethod.id,
-              'hover:border-gray-300 dark:hover:border-gray-600': selectedSavedMethod !== savedMethod.id,
-            }"
-            @click="selectSavedMethod(savedMethod)"
-          >
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-3">
-                <UiInput
-                  :id="`saved-${savedMethod.id}`"
-                  v-model="selectedSavedMethod"
-                  type="radio"
-                  :value="savedMethod.id"
-                />
-                <div>
-                  <div class="flex items-center space-x-2">
-                    <commonIcon
-                      :name="getPaymentMethodIcon(savedMethod.type)"
-                      class="h-6 w-6"
-                    />
-                    <span class="font-medium text-gray-900 dark:text-white">
-                      {{ getPaymentMethodLabel(savedMethod) }}
-                    </span>
+        <UiRadioGroup v-model="selectedSavedMethod">
+          <div class="space-y-3">
+            <div
+              v-for="savedMethod in savedPaymentMethods"
+              :key="savedMethod.id"
+              class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer transition-colors"
+              :class="{
+                'border-blue-500 bg-blue-50 dark:bg-blue-900/20': selectedSavedMethod === savedMethod.id,
+                'hover:border-gray-300 dark:hover:border-gray-600': selectedSavedMethod !== savedMethod.id,
+              }"
+              @click="selectSavedMethod(savedMethod)"
+            >
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                  <UiRadioGroupItem
+                    :id="`saved-${savedMethod.id}`"
+                    :value="savedMethod.id"
+                    class="shrink-0"
+                  />
+                  <div>
+                    <div class="flex items-center space-x-2">
+                      <commonIcon
+                        :name="getPaymentMethodIcon(savedMethod.type)"
+                        class="h-6 w-6"
+                      />
+                      <span class="font-medium text-gray-900 dark:text-white">
+                        {{ getPaymentMethodLabel(savedMethod) }}
+                      </span>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                      {{ getPaymentMethodDescription(savedMethod) }}
+                    </p>
                   </div>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">
-                    {{ getPaymentMethodDescription(savedMethod) }}
-                  </p>
                 </div>
+                <span
+                  v-if="savedMethod.isDefault"
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                >
+                  {{ $t('checkout.payment.default') }}
+                </span>
               </div>
-              <span
-                v-if="savedMethod.isDefault"
-                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-              >
-                {{ $t('checkout.payment.default') }}
-              </span>
             </div>
           </div>
-        </div>
+        </UiRadioGroup>
 
         <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
           <UiButton
@@ -90,33 +91,34 @@
         <div class="space-y-4 mb-6">
           <div class="grid grid-cols-1 gap-4">
             <!-- Cash Payment (Only Available Option) -->
-            <div
-              class="border border-green-200 dark:border-green-700 rounded-lg p-4 bg-green-50 dark:bg-green-900/20"
-            >
-              <div class="flex items-center space-x-3">
-                <UiInput
-                  id="cash"
-                  v-model="paymentMethod.type"
-                  type="radio"
-                  value="cash"
-                  checked
-                />
-                <div>
-                  <div class="flex items-center space-x-2">
-                    <commonIcon
-                      name="lucide:banknote"
-                      class="h-6 w-6 text-green-600 dark:text-green-400"
-                    />
-                    <span class="font-medium text-gray-900 dark:text-white">
-                      {{ $t('checkout.payment.cash.label') }}
-                    </span>
+            <UiRadioGroup v-model="paymentMethod.type">
+              <div
+                class="border border-green-200 dark:border-green-700 rounded-lg p-4 bg-green-50 dark:bg-green-900/20 cursor-pointer"
+                @click="paymentMethod.type = 'cash'"
+              >
+                <div class="flex items-center space-x-3">
+                  <UiRadioGroupItem
+                    id="cash"
+                    value="cash"
+                    class="shrink-0"
+                  />
+                  <div>
+                    <div class="flex items-center space-x-2">
+                      <commonIcon
+                        name="lucide:banknote"
+                        class="h-6 w-6 text-green-600 dark:text-green-400"
+                      />
+                      <span class="font-medium text-gray-900 dark:text-white">
+                        {{ $t('checkout.payment.cash.label') }}
+                      </span>
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                      {{ $t('checkout.payment.cash.summary') }}
+                    </p>
                   </div>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ $t('checkout.payment.cash.summary') }}
-                  </p>
                 </div>
               </div>
-            </div>
+            </UiRadioGroup>
 
             <!-- Disabled Online Payment Methods -->
             <div class="space-y-3">
@@ -128,10 +130,7 @@
               <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-800/50">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-3">
-                    <UiInput
-                      type="radio"
-                      disabled
-                    />
+                    <div class="size-4 rounded-full border border-gray-300 bg-gray-100 shrink-0"></div>
                     <div>
                       <div class="flex items-center space-x-2">
                         <commonIcon
@@ -157,10 +156,7 @@
               <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-800/50">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-3">
-                    <UiInput
-                      type="radio"
-                      disabled
-                    />
+                    <div class="size-4 rounded-full border border-gray-300 bg-gray-100 shrink-0"></div>
                     <div>
                       <div class="flex items-center space-x-2">
                         <commonIcon
@@ -186,10 +182,7 @@
               <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-800/50">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-3">
-                    <UiInput
-                      type="radio"
-                      disabled
-                    />
+                    <div class="size-4 rounded-full border border-gray-300 bg-gray-100 shrink-0"></div>
                     <div>
                       <div class="flex items-center space-x-2">
                         <commonIcon

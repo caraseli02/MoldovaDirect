@@ -163,11 +163,9 @@
             <UiTableHeader>
               <UiTableRow>
                 <UiTableHead class="w-12">
-                  <UiInput
-                    type="checkbox"
+                  <UiCheckbox
                     :checked="adminOrdersStore.allVisibleSelected"
-                    :indeterminate="adminOrdersStore.hasSelectedOrders && !adminOrdersStore.allVisibleSelected"
-                    @change="adminOrdersStore.toggleAllVisible"
+                    @update:checked="adminOrdersStore.toggleAllVisible"
                   />
                 </UiTableHead>
                 <UiTableHead

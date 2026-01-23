@@ -5,12 +5,11 @@
     </h3>
 
     <div class="space-y-4">
-      <UiLabel>
-        <UiInput
-          id="accept-terms"
-          type="checkbox"
+      <div class="flex items-start gap-3">
+        <UiCheckbox
           :checked="termsAccepted"
-          @change="updateTermsAccepted(($event.target as HTMLInputElement)?.checked ?? false)"
+          class="mt-0.5 shrink-0"
+          @update:checked="updateTermsAccepted($event)"
         />
         <div class="text-sm">
           <p class="text-gray-700 dark:text-gray-300">
@@ -36,14 +35,13 @@
             {{ $t('checkout.terms.termsRequired') }}
           </p>
         </div>
-      </UiLabel>
+      </div>
 
-      <UiLabel>
-        <UiInput
-          id="accept-privacy"
-          type="checkbox"
+      <div class="flex items-start gap-3">
+        <UiCheckbox
           :checked="privacyAccepted"
-          @change="updatePrivacyAccepted(($event.target as HTMLInputElement)?.checked ?? false)"
+          class="mt-0.5 shrink-0"
+          @update:checked="updatePrivacyAccepted($event)"
         />
         <div class="text-sm">
           <p class="text-gray-700 dark:text-gray-300">
@@ -56,14 +54,13 @@
             {{ $t('checkout.terms.privacyRequired') }}
           </p>
         </div>
-      </UiLabel>
+      </div>
 
-      <UiLabel>
-        <UiInput
-          id="marketing-consent"
-          type="checkbox"
+      <div class="flex items-start gap-3">
+        <UiCheckbox
           :checked="marketingConsent"
-          @change="updateMarketingConsent(($event.target as HTMLInputElement)?.checked ?? false)"
+          class="mt-0.5 shrink-0"
+          @update:checked="updateMarketingConsent($event)"
         />
         <div class="text-sm">
           <p class="text-gray-700 dark:text-gray-300">
@@ -74,7 +71,7 @@
             {{ $t('checkout.terms.marketingDescription') }}
           </p>
         </div>
-      </UiLabel>
+      </div>
     </div>
   </section>
 </template>

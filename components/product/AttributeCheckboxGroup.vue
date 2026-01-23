@@ -1,22 +1,23 @@
 <template>
   <div class="attribute-checkbox-group">
     <div class="space-y-2 max-h-48 overflow-y-auto">
-      <UiLabel
+      <div
         v-for="option in options"
         :key="option.value"
+        class="flex items-center gap-2"
       >
-        <UiInput
+        <UiCheckbox
           :checked="selected.includes(option.value)"
-          type="checkbox"
-          @change="toggleOption(option.value)"
+          class="shrink-0"
+          @update:checked="toggleOption(option.value)"
         />
-        <span class="ml-2 text-sm text-gray-700 flex-1">
+        <span class="text-sm text-gray-700 flex-1">
           {{ option.label }}
         </span>
-        <span class="text-xs text-gray-500 ml-2">
+        <span class="text-xs text-gray-500">
           ({{ option.count }})
         </span>
-      </UiLabel>
+      </div>
     </div>
 
     <!-- Show More/Less for long lists -->

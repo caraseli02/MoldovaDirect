@@ -22,20 +22,24 @@
         class="w-6"
       ></div>
 
-      <UiLabel>
-        <UiInput
-          :checked="isSelected"
-          type="radio"
-          :name="'category-' + level"
-          @change="handleSelection"
-        />
-        <span class="ml-2 text-sm text-gray-700 dark:text-gray-300 flex-1">
+      <div
+        class="flex items-center gap-2 flex-1 cursor-pointer"
+        @click="handleSelection"
+      >
+        <!-- Custom radio button styling -->
+        <div class="size-4 rounded-full border border-input shrink-0 flex items-center justify-center relative">
+          <div
+            v-if="isSelected"
+            class="size-2 rounded-full bg-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          ></div>
+        </div>
+        <span class="text-sm text-gray-700 dark:text-gray-300 flex-1">
           {{ category.name }}
         </span>
-        <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
+        <span class="text-xs text-gray-500 dark:text-gray-400">
           ({{ category.count }})
         </span>
-      </UiLabel>
+      </div>
     </div>
 
     <div
