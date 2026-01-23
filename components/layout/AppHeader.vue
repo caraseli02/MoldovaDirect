@@ -1,59 +1,37 @@
 <template>
-  <header
-    :class="[
-      'fixed top-0 w-full z-50 transition-all duration-300 will-change-transform',
-      scrolled
-        ? 'bg-brand-light/95 backdrop-blur-md shadow-elevated-sm dark:bg-brand-dark/95 dark:shadow-brand-light/5'
-        : 'bg-transparent dark:bg-transparent',
-    ]"
-  >
-    <HomeAnnouncementBar
-      v-if="hasDarkHero"
-      :show-cta="true"
-    />
+  <header :class="[
+    'fixed top-0 w-full z-50 transition-all duration-300 will-change-transform',
+    scrolled
+      ? 'bg-brand-light/95 backdrop-blur-md shadow-elevated-sm dark:bg-brand-dark/95 dark:shadow-brand-light/5'
+      : 'bg-transparent dark:bg-transparent',
+  ]">
+    <HomeAnnouncementBar v-if="hasDarkHero" :show-cta="true" />
     <div class="container">
       <div class="flex items-center justify-between h-16">
         <!-- Logo with dynamic color based on scroll state -->
-        <NuxtLink
-          :to="localePath('/')"
-          class="flex items-center space-x-2"
-        >
-          <span
-            :class="[
-              'text-xl font-bold tracking-tight transition-colors duration-300',
-              scrolled
-                ? 'text-brand-dark dark:text-brand-light'
-                : 'text-brand-light dark:text-brand-light drop-shadow-lg',
-            ]"
-          >
+        <NuxtLink :to="localePath('/')" class="flex items-center space-x-2">
+          <span :class="[
+            'text-xl font-bold tracking-tight transition-colors duration-300',
+            scrolled
+              ? 'text-brand-dark dark:text-brand-light'
+              : 'text-brand-light dark:text-brand-light drop-shadow-lg',
+          ]">
             Moldova Direct
           </span>
         </NuxtLink>
 
         <!-- Desktop Navigation with dynamic colors -->
         <nav class="hidden lg:flex items-center space-x-8">
-          <NuxtLink
-            :to="localePath('/')"
-            :class="navLinkClass"
-          >
+          <NuxtLink :to="localePath('/')" :class="navLinkClass">
             {{ $t('common.home') }}
           </NuxtLink>
-          <NuxtLink
-            :to="localePath('/products')"
-            :class="navLinkClass"
-          >
+          <NuxtLink :to="localePath('/products')" :class="navLinkClass">
             {{ $t('common.shop') }}
           </NuxtLink>
-          <NuxtLink
-            :to="localePath('/about')"
-            :class="navLinkClass"
-          >
+          <NuxtLink :to="localePath('/about')" :class="navLinkClass">
             {{ $t('common.about') }}
           </NuxtLink>
-          <NuxtLink
-            :to="localePath('/contact')"
-            :class="navLinkClass"
-          >
+          <NuxtLink :to="localePath('/contact')" :class="navLinkClass">
             {{ $t('common.contact') }}
           </NuxtLink>
         </nav>
@@ -73,61 +51,33 @@
             </ClientOnly>
 
             <!-- Search with dynamic color -->
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              :aria-label="`${t('common.search')} (Ctrl+K)`"
-              :class="iconButtonClass"
-              @click="goToSearch"
-            >
-              <commonIcon
-                name="search"
-                :size="20"
-              />
+            <Button type="button" variant="ghost" size="icon" :aria-label="`${t('common.search')} (Ctrl+K)`"
+              :class="iconButtonClass" @click="goToSearch">
+              <commonIcon name="search" :size="20" />
               <!-- Keyboard shortcut hint - client only to prevent hydration mismatch -->
               <ClientOnly>
                 <span
-                  class="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap bg-gray-900 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded pointer-events-none"
-                >
+                  class="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap bg-gray-900 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded pointer-events-none">
                   {{ searchShortcut }}
                 </span>
               </ClientOnly>
             </Button>
 
             <!-- Account with dynamic color -->
-            <NuxtLink
-              :to="localePath('/account')"
-              :aria-label="accountLabel"
-              :class="iconButtonClass"
-              data-testid="user-menu"
-            >
-              <commonIcon
-                name="user"
-                :size="20"
-              />
+            <NuxtLink :to="localePath('/account')" :aria-label="accountLabel" :class="iconButtonClass"
+              data-testid="user-menu">
+              <commonIcon name="user" :size="20" />
               <span class="sr-only">{{ accountLabel }}</span>
             </NuxtLink>
 
             <!-- Cart with dynamic color -->
-            <NuxtLink
-              :to="localePath('/cart')"
-              :aria-label="cartAriaLabel"
-              :class="iconButtonClass"
-            >
-              <commonIcon
-                name="shopping-cart"
-                :size="20"
-              />
+            <NuxtLink :to="localePath('/cart')" :aria-label="cartAriaLabel" :class="iconButtonClass">
+              <commonIcon name="shopping-cart" :size="20" />
               <!-- Cart count badge - client only to prevent hydration mismatch -->
               <ClientOnly>
-                <span
-                  v-if="cartItemsCount > 0"
-                  data-testid="cart-count"
+                <span v-if="cartItemsCount > 0" data-testid="cart-count"
                   class="absolute -top-1 -right-1 bg-primary-600 dark:bg-primary-500 text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-sm"
-                  style="width: 20px; height: 20px; min-width: 20px; min-height: 20px;"
-                  aria-hidden="true"
-                >
+                  style="width: 20px; height: 20px; min-width: 20px; min-height: 20px;" aria-hidden="true">
                   {{ cartItemsCount }}
                 </span>
               </ClientOnly>
@@ -135,7 +85,7 @@
           </div>
 
           <!-- Mobile actions - Language and Theme -->
-          <div class="flex lg:hidden items-center space-x-1">
+          <div class="flex lg:hidden items-center space-x-3">
             <ClientOnly>
               <!-- Language Switcher -->
               <LanguageSwitcher />
