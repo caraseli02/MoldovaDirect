@@ -53,18 +53,18 @@
       </div>
 
       <UiDialogFooter>
-        <UiButton>
+        <UiButton
           variant="outline"
           type="button"
           @click="handleClose"
-          >
+        >
           Cancel
         </UiButton>
-        <UiButton>
+        <UiButton
           :disabled="!isFormValid"
           type="submit"
           @click="handleSave"
-          >
+        >
           Save Scenario
         </UiButton>
       </UiDialogFooter>

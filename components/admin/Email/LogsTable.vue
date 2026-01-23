@@ -196,11 +196,11 @@
                 {{ formatDate(log.createdAt) }}
               </td>
               <td class="px-4 py-4 whitespace-nowrap text-sm">
-                <UiButton>
+                <UiButton
                   variant="outline"
                   size="sm"
                   @click="viewDetails(log)"
-                  >
+                >
                   {{ $t('admin.emailLogs.buttons.view') }}
                 </UiButton>
               </td>
@@ -216,20 +216,20 @@
             {{ pagination.total }} results
           </div>
           <div class="flex gap-2">
-            <UiButton>
+            <UiButton
               :disabled="pagination.page === 1"
               variant="outline"
               size="sm"
               @click="previousPage"
-              >
+            >
               {{ $t('common.previous') }}
             </UiButton>
-            <UiButton>
+            <UiButton
               :disabled="pagination.page >= pagination.totalPages"
               variant="outline"
               size="sm"
               @click="nextPage"
-              >
+            >
               {{ $t('common.next') }}
             </UiButton>
           </div>
@@ -333,11 +333,11 @@
           v-if="selectedLog.status === 'failed' && selectedLog.attempts < 3"
           class="pt-4"
         >
-          <UiButton>
+          <UiButton
             :disabled="retrying"
             class="w-full"
             @click="retryEmail(selectedLog.id)"
-            >
+          >
             {{ retrying ? 'Retrying...' : 'Retry Email' }}
           </UiButton>
         </div>

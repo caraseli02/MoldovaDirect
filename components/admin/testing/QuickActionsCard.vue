@@ -6,12 +6,12 @@
     </UiCardHeader>
     <UiCardContent>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <UiButton>
+        <UiButton
           :disabled="loading"
           variant="outline"
           class="h-auto py-4 flex flex-col items-start gap-2"
           @click="$emit('run-action', 'minimal')"
-          >
+        >
           <commonIcon
             name="lucide:zap"
             class="h-5 w-5"
@@ -26,12 +26,12 @@
           </div>
         </UiButton>
 
-        <UiButton>
+        <UiButton
           :disabled="loading"
           variant="outline"
           class="h-auto py-4 flex flex-col items-start gap-2"
           @click="$emit('run-action', 'development')"
-          >
+        >
           <commonIcon
             name="lucide:code"
             class="h-5 w-5"
@@ -46,12 +46,12 @@
           </div>
         </UiButton>
 
-        <UiButton>
+        <UiButton
           :disabled="loading"
           variant="outline"
           class="h-auto py-4 flex flex-col items-start gap-2"
           @click="$emit('run-action', 'demo')"
-          >
+        >
           <commonIcon
             name="lucide:presentation"
             class="h-5 w-5"
@@ -66,12 +66,12 @@
           </div>
         </UiButton>
 
-        <UiButton>
+        <UiButton
           :disabled="loading"
           variant="outline"
           class="h-auto py-4 flex flex-col items-start gap-2"
           @click="$emit('run-action', 'low-stock')"
-          >
+        >
           <commonIcon
             name="lucide:package-x"
             class="h-5 w-5 text-orange-500"
@@ -86,12 +86,12 @@
           </div>
         </UiButton>
 
-        <UiButton>
+        <UiButton
           :disabled="loading"
           variant="outline"
           class="h-auto py-4 flex flex-col items-start gap-2"
           @click="$emit('run-action', 'holiday-rush')"
-          >
+        >
           <commonIcon
             name="lucide:trending-up"
             class="h-5 w-5 text-green-500"
@@ -106,12 +106,12 @@
           </div>
         </UiButton>
 
-        <UiButton>
+        <UiButton
           :disabled="loading"
           variant="outline"
           class="h-auto py-4 flex flex-col items-start gap-2"
           @click="$emit('run-action', 'new-store')"
-          >
+        >
           <commonIcon
             name="lucide:store"
             class="h-5 w-5 text-blue-500"
@@ -133,48 +133,48 @@
           Quick Delete
         </h4>
         <div class="flex flex-wrap gap-2">
-          <UiButton>
+          <UiButton
             variant="outline"
             size="sm"
             :disabled="loading"
             @click="$emit('quick-delete', 'clear-test-users')"
-            >
+          >
             <commonIcon
               name="lucide:users-2"
               class="h-3 w-3 mr-1"
             />
             Test Users
           </UiButton>
-          <UiButton>
+          <UiButton
             variant="outline"
             size="sm"
             :disabled="loading"
             @click="$emit('quick-delete', 'clear-orders')"
-            >
+          >
             <commonIcon
               name="lucide:shopping-cart"
               class="h-3 w-3 mr-1"
             />
             All Orders
           </UiButton>
-          <UiButton>
+          <UiButton
             variant="outline"
             size="sm"
             :disabled="loading"
             @click="$emit('quick-delete', 'clear-products')"
-            >
+          >
             <commonIcon
               name="lucide:package"
               class="h-3 w-3 mr-1"
             />
             All Products
           </UiButton>
-          <UiButton>
+          <UiButton
             variant="outline"
             size="sm"
             :disabled="loading"
             @click="$emit('quick-delete', 'clear-old-carts')"
-            >
+          >
             <commonIcon
               name="lucide:shopping-basket"
               class="h-3 w-3 mr-1"

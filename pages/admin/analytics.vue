@@ -13,11 +13,11 @@
             </p>
           </div>
           <div class="flex items-center gap-4">
-            <UiButton>
+            <UiButton
               :disabled="loading"
               variant="outline"
               @click="refreshData"
-              >
+            >
               <RefreshCcw
                 :class="['w-4 h-4 mr-2', loading ? 'animate-spin' : '']"
               />
@@ -192,11 +192,11 @@
             <p class="text-sm text-red-700 dark:text-red-300 mt-1">
               {{ error }}
             </p>
-            <UiButton>
+            <UiButton
               variant="link"
               class="mt-2 text-sm text-red-600 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300"
               @click="refreshData"
-              >
+            >
               Try again
             </UiButton>
           </div>

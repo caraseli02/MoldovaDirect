@@ -102,17 +102,17 @@
             />
           </div>
           <div class="flex justify-end space-x-3">
-            <UiButton>
+            <UiButton
               variant="outline"
               @click="closeStockEditModal"
-              >
+            >
               Cancel
             </UiButton>
-            <UiButton>
+            <UiButton
               :disabled="stockEditModal.saving"
               type="submit"
               @click="saveStockEdit"
-              >
+            >
               {{ stockEditModal.saving ? 'Saving...' : 'Save' }}
             </UiButton>
           </div>
@@ -144,18 +144,18 @@
         </p>
 
         <UiDialogFooter class="mt-6 flex justify-end gap-3">
-          <UiButton>
+          <UiButton
             variant="outline"
             :disabled="deleteDialog.loading"
             @click="cancelDelete"
-            >
+          >
             Cancel
           </UiButton>
-          <UiButton>
+          <UiButton
             variant="destructive"
             :disabled="deleteDialog.loading"
             @click="confirmDelete"
-            >
+          >
             <commonIcon
               v-if="deleteDialog.loading"
               name="lucide:refresh-ccw"

@@ -2,10 +2,10 @@
   <UiDialog v-model:open="isOpen">
     <DialogTrigger as-child>
       <slot name="trigger">
-        <UiButton>
+        <UiButton
           variant="outline"
           size="sm"
-          >
+        >
           <commonIcon
             name="lucide:edit"
             class="h-4 w-4 mr-2"
@@ -156,18 +156,18 @@
 
         <!-- Dialog Footer -->
         <UiDialogFooter>
-          <UiButton>
+          <UiButton
             type="button"
             variant="outline"
             :disabled="loading"
             @click="handleCancel"
-            >
+          >
             Cancel
           </UiButton>
-          <UiButton>
+          <UiButton
             type="submit"
             :disabled="loading || !isValidTransition || !formData.status"
-            >
+          >
             <commonIcon
               v-if="loading"
               name="lucide:loader-2"

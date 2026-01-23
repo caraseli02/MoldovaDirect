@@ -223,7 +223,7 @@
                     @input="validatePasswordField"
                     @blur="validatePasswordField"
                   />
-                  <UiButton>
+                  <UiButton
                     type="button"
                     variant="ghost"
                     size="icon"
@@ -232,7 +232,7 @@
                     :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                     :aria-pressed="showPassword"
                     @click="togglePasswordVisibility"
-                    >
+                  >
                     <svg
                       v-if="!showPassword"
                       class="w-5 h-5"
@@ -331,7 +331,7 @@
                     @input="validateConfirmPasswordField"
                     @blur="validateConfirmPasswordField"
                   />
-                  <UiButton>
+                  <UiButton
                     type="button"
                     variant="ghost"
                     size="icon"
@@ -340,7 +340,7 @@
                     :aria-label="showConfirmPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                     :aria-pressed="showConfirmPassword"
                     @click="toggleConfirmPasswordVisibility"
-                    >
+                  >
                     <svg
                       v-if="!showConfirmPassword"
                       class="w-5 h-5"
@@ -474,14 +474,14 @@
             </div>
 
             <!-- Submit button with accessibility improvements -->
-            <UiButton>
+            <UiButton
               type="submit"
               :disabled="loading || !isFormValid"
               data-testid="register-button"
               class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg"
               :aria-label="loading ? $t('auth.accessibility.creatingAccount') : $t('auth.accessibility.createAccountButton')"
               :aria-describedby="loading ? 'register-status' : undefined"
-              >
+            >
               <svg
                 v-if="loading"
                 class="animate-spin -ml-1 mr-3 h-5 w-5"

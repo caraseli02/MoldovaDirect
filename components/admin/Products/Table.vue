@@ -10,21 +10,21 @@
           <span class="text-sm font-medium text-blue-900 dark:text-blue-100">
             {{ selectedCount }} {{ selectedCount === 1 ? 'product' : 'products' }} selected
           </span>
-          <UiButton>
+          <UiButton
             variant="link"
             class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
             @click="clearSelection"
-            >
+          >
             Clear selection
           </UiButton>
         </div>
         <div class="flex items-center space-x-2">
-          <UiButton>
+          <UiButton
             :disabled="bulkOperationInProgress"
             size="sm"
             class="text-green-700 bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:text-green-100 dark:hover:bg-green-800"
             @click="$emit('bulk-activate')"
-            >
+          >
             <svg
               class="h-4 w-4 mr-1"
               fill="none"
@@ -40,13 +40,13 @@
             </svg>
             Activate
           </UiButton>
-          <UiButton>
+          <UiButton
             :disabled="bulkOperationInProgress"
             variant="secondary"
             size="sm"
             class="dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
             @click="$emit('bulk-deactivate')"
-            >
+          >
             <svg
               class="h-4 w-4 mr-1"
               fill="none"
@@ -62,13 +62,13 @@
             </svg>
             Deactivate
           </UiButton>
-          <UiButton>
+          <UiButton
             :disabled="bulkOperationInProgress"
             variant="destructive"
             size="sm"
             class="bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:text-red-100 dark:hover:bg-red-800 text-red-700"
             @click="$emit('bulk-delete')"
-            >
+          >
             <svg
               class="h-4 w-4 mr-1"
               fill="none"
@@ -401,13 +401,13 @@
                   />
                 </svg>
               </nuxt-link>
-              <UiButton>
+              <UiButton
                 variant="ghost"
                 size="icon"
                 class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                 title="Delete Product"
                 @click="$emit('delete-product', product.id)"
-                >
+              >
                 <svg
                   class="h-5 w-5"
                   fill="none"

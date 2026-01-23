@@ -11,12 +11,12 @@
       <UiCardDescription>Remove test data from the database</UiCardDescription>
     </UiCardHeader>
     <UiCardContent class="space-y-3">
-      <UiButton>
+      <UiButton
         :disabled="loading"
         variant="outline"
         class="w-full justify-start"
         @click="$emit('cleanup', 'clear-orders')"
-        >
+      >
         <commonIcon
           name="lucide:shopping-cart"
           class="h-4 w-4 mr-2"
@@ -24,12 +24,12 @@
         Clear All Orders
       </UiButton>
 
-      <UiButton>
+      <UiButton
         :disabled="loading"
         variant="outline"
         class="w-full justify-start"
         @click="$emit('cleanup', 'clear-products')"
-        >
+      >
         <commonIcon
           name="lucide:package"
           class="h-4 w-4 mr-2"
@@ -37,12 +37,12 @@
         Clear All Products
       </UiButton>
 
-      <UiButton>
+      <UiButton
         :disabled="loading"
         variant="outline"
         class="w-full justify-start"
         @click="$emit('cleanup', 'clear-test-users')"
-        >
+      >
         <commonIcon
           name="lucide:users-2"
           class="h-4 w-4 mr-2"
@@ -50,12 +50,12 @@
         Clear Test Users
       </UiButton>
 
-      <UiButton>
+      <UiButton
         :disabled="loading"
         variant="outline"
         class="w-full justify-start"
         @click="$emit('cleanup', 'clear-old-carts')"
-        >
+      >
         <commonIcon
           name="lucide:shopping-basket"
           class="h-4 w-4 mr-2"
@@ -64,12 +64,12 @@
       </UiButton>
 
       <div class="pt-2 border-t">
-        <UiButton>
+        <UiButton
           :disabled="loading"
           variant="destructive"
           class="w-full"
           @click="$emit('cleanup', 'reset-database')"
-          >
+        >
           <commonIcon
             name="lucide:alert-triangle"
             class="h-4 w-4 mr-2"

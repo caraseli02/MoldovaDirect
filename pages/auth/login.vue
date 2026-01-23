@@ -190,7 +190,7 @@
                         @input="validatePasswordField"
                         @blur="validatePasswordField"
                       />
-                      <UiButton>
+                      <UiButton
                         type="button"
                         variant="ghost"
                         size="icon"
@@ -199,7 +199,7 @@
                         :aria-label="showPassword ? $t('auth.accessibility.hidePassword') : $t('auth.accessibility.showPassword')"
                         :aria-pressed="showPassword"
                         @click="togglePasswordVisibility"
-                        >
+                      >
                         <svg
                           v-if="!showPassword"
                           class="w-5 h-5"
@@ -288,7 +288,7 @@
                 </div>
 
                 <!-- Primary action button with mobile optimization and accessibility -->
-                <UiButton>
+                <UiButton
                   type="submit"
                   :disabled="isLoginDisabled"
                   :aria-disabled="isLoginDisabled"
@@ -297,7 +297,7 @@
                   :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isLoginDisabled }"
                   :aria-label="loading ? $t('auth.accessibility.signingIn') : $t('auth.accessibility.signInButton')"
                   :aria-describedby="loading ? 'login-status' : undefined"
-                  >
+                >
                   <svg
                     v-if="loading"
                     class="animate-spin -ml-1 mr-3 h-5 w-5"
@@ -404,7 +404,7 @@
                 </div>
 
                 <!-- Send Magic Link button -->
-                <UiButton>
+                <UiButton
                   type="submit"
                   :disabled="isMagicLinkDisabled"
                   :aria-disabled="isMagicLinkDisabled"
@@ -413,7 +413,7 @@
                   :class="{ 'opacity-60 cursor-not-allowed pointer-events-none': isMagicLinkDisabled }"
                   :aria-label="loadingMagic ? $t('auth.accessibility.sendingMagicLink') : $t('auth.accessibility.magicLinkButton')"
                   :aria-describedby="loadingMagic ? 'magic-link-status' : 'magic-link-desc'"
-                  >
+                >
                   <svg
                     v-if="loadingMagic"
                     class="animate-spin -ml-1 mr-3 h-5 w-5"
@@ -505,13 +505,13 @@
           <!-- Social Login Buttons -->
           <div class="mt-6 grid grid-cols-2 gap-3">
             <!-- Google Sign In -->
-            <UiButton>
+            <UiButton
               type="button"
               variant="outline"
               :disabled="loadingSocial === 'google'"
               class="h-11 border-2 border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
               @click="handleSocialLogin('google')"
-              >
+            >
               <svg
                 v-if="loadingSocial === 'google'"
                 class="animate-spin h-5 w-5 mr-2"
@@ -559,13 +559,13 @@
             </UiButton>
 
             <!-- Apple Sign In -->
-            <UiButton>
+            <UiButton
               type="button"
               variant="outline"
               :disabled="loadingSocial === 'apple'"
               class="h-11 border-2 border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
               @click="handleSocialLogin('apple')"
-              >
+            >
               <svg
                 v-if="loadingSocial === 'apple'"
                 class="animate-spin h-5 w-5 mr-2"

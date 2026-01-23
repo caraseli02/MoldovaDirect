@@ -175,12 +175,12 @@
             class="gap-1"
           >
             Status: {{ getStatusLabel(status[0]) }}
-            <UiButton>
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1 h-4 w-4 rounded-full hover:bg-muted"
               @click="clearStatusFilter"
-              >
+            >
               <commonIcon
                 name="lucide:x"
                 class="h-3 w-3"
@@ -194,12 +194,12 @@
             class="gap-1"
           >
             Payment: {{ getPaymentStatusLabel(paymentStatus[0]) }}
-            <UiButton>
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1 h-4 w-4 rounded-full hover:bg-muted"
               @click="clearPaymentStatusFilter"
-              >
+            >
               <commonIcon
                 name="lucide:x"
                 class="h-3 w-3"
@@ -213,12 +213,12 @@
             class="gap-1"
           >
             {{ formatDateRange(dateRange) }}
-            <UiButton>
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1 h-4 w-4 rounded-full hover:bg-muted"
               @click="clearDateRange"
-              >
+            >
               <commonIcon
                 name="lucide:x"
                 class="h-3 w-3"

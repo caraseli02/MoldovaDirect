@@ -85,17 +85,17 @@
         </div>
 
         <div class="flex gap-2">
-          <UiButton>
+          <UiButton
             variant="outline"
             :disabled="targetLocales.length === 0 || previewing"
             @click="previewSync"
-            >
+          >
             {{ previewing ? 'Previewing...' : 'Preview Changes' }}
           </UiButton>
-          <UiButton>
+          <UiButton
             :disabled="targetLocales.length === 0 || !syncPreview || synchronizing"
             @click="synchronizeTemplates"
-            >
+          >
             {{ synchronizing ? 'Synchronizing...' : 'Synchronize Templates' }}
           </UiButton>
         </div>

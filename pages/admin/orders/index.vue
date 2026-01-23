@@ -36,10 +36,10 @@
         </div>
 
         <!-- Analytics Button -->
-        <UiButton>
+        <UiButton
           as-child
           variant="outline"
-          >
+        >
           <nuxt-link to="/admin/orders/analytics">
             <commonIcon
               name="lucide:bar-chart-2"
@@ -134,11 +134,11 @@
         <p class="text-muted-foreground text-center max-w-md mb-6">
           {{ adminOrdersStore.hasActiveFilters ? 'Try adjusting your search or filters to find what you\'re looking for.' : 'Orders will appear here once customers place them.' }}
         </p>
-        <UiButton>
+        <UiButton
           v-if="adminOrdersStore.hasActiveFilters"
           variant="outline"
           @click="adminOrdersStore.clearFilters"
-          >
+        >
           <commonIcon
             name="lucide:x"
             class="h-4 w-4 mr-2"

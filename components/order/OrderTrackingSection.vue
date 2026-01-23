@@ -4,13 +4,13 @@
       <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
         {{ $t('orders.tracking', 'Order Tracking') }}
       </h2>
-      <UiButton>
+      <UiButton
         variant="ghost"
         size="icon"
         class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
         :aria-label="$t('common.refresh')"
         @click="$emit('refresh')"
-        >
+      >
         <svg
           class="w-5 h-5"
           fill="none"

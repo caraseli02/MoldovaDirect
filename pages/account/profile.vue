@@ -289,17 +289,17 @@
             {{ $t('profile.confirmDeleteAddress') }}
           </p>
           <div class="flex gap-3 justify-end">
-            <UiButton>
+            <UiButton
               variant="outline"
               @click="showDeleteAddressConfirm = false"
-              >
+            >
               {{ $t('common.cancel') }}
             </UiButton>
-            <UiButton>
+            <UiButton
               variant="destructive"
               :disabled="deletingAddressId !== null"
               @click="executeDeleteAddress"
-              >
+            >
               <commonIcon
                 v-if="deletingAddressId !== null"
                 name="lucide:loader-2"

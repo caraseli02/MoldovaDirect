@@ -504,11 +504,11 @@
       >
         Cancel
       </nuxt-link>
-      <UiButton>
+      <UiButton
         type="submit"
         :disabled="submitting"
         class="flex-1 px-4 py-3"
-        >
+      >
         {{ submitting ? 'Saving...' : (isEditing ? 'Update' : 'Create') }}
       </UiButton>
     </div>
@@ -521,10 +521,10 @@
       >
         Cancel
       </nuxt-link>
-      <UiButton>
+      <UiButton
         type="submit"
         :disabled="submitting"
-        >
+      >
         {{ submitting ? 'Saving...' : (isEditing ? 'Update Product' : 'Create Product') }}
       </UiButton>
     </div>

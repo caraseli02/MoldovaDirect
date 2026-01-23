@@ -65,14 +65,14 @@
             <ThemeToggle />
 
             <!-- Search with dynamic color -->
-            <UiButton>
+            <UiButton
               type="button"
               variant="ghost"
               size="icon"
               :aria-label="`${t('common.search')} (Ctrl+K)`"
               :class="iconButtonClass"
               @click="goToSearch"
-              >
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5"

@@ -70,11 +70,11 @@
         </UiLabel>
       </div>
 
-      <UiButton>
+      <UiButton
         :disabled="loading || !isFormValid"
         class="w-full"
         @click="handleCreateUsers"
-        >
+      >
         <commonIcon
           v-if="!loading"
           name="lucide:user-plus"

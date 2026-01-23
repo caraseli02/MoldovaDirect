@@ -30,12 +30,12 @@
             v-if="search"
             class="absolute inset-y-0 right-0 pr-3 flex items-center"
           >
-            <UiButton>
+            <UiButton
               variant="ghost"
               size="icon"
               class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               @click="clearSearch"
-              >
+            >
               <svg
                 class="h-5 w-5"
                 fill="none"
@@ -138,12 +138,12 @@
             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
           >
             Search: "{{ search }}"
-            <UiButton>
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1.5 w-4 h-4 rounded-full text-blue-400 hover:bg-blue-200 hover:text-blue-600 dark:hover:bg-blue-800"
               @click="clearSearch"
-              >
+            >
               <svg
                 class="w-2 h-2"
                 stroke="currentColor"
@@ -165,12 +165,12 @@
             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
           >
             Category: {{ getCategoryName(categoryId) }}
-            <UiButton>
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1.5 w-4 h-4 rounded-full text-green-400 hover:bg-green-200 hover:text-green-600 dark:hover:bg-green-800"
               @click="clearCategoryFilter"
-              >
+            >
               <svg
                 class="w-2 h-2"
                 stroke="currentColor"
@@ -192,12 +192,12 @@
             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
           >
             Status: {{ status === 'active' ? 'Active' : 'Inactive' }}
-            <UiButton>
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1.5 w-4 h-4 rounded-full text-purple-400 hover:bg-purple-200 hover:text-purple-600 dark:hover:bg-purple-800"
               @click="clearStatusFilter"
-              >
+            >
               <svg
                 class="w-2 h-2"
                 stroke="currentColor"
@@ -219,12 +219,12 @@
             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
           >
             Stock: {{ getStockLevelLabel(stockLevel) }}
-            <UiButton>
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1.5 w-4 h-4 rounded-full text-orange-400 hover:bg-orange-200 hover:text-orange-600 dark:hover:bg-orange-800"
               @click="clearStockFilter"
-              >
+            >
               <svg
                 class="w-2 h-2"
                 stroke="currentColor"
@@ -241,12 +241,12 @@
           </span>
 
           <!-- Clear All Filters -->
-          <UiButton>
+          <UiButton
             v-if="hasActiveFilters"
             variant="link"
             class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             @click="clearAllFilters"
-            >
+          >
             Clear all
           </UiButton>
         </div>

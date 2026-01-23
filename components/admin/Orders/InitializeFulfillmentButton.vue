@@ -1,10 +1,10 @@
 <template>
-  <UiButton>
+  <UiButton
     :disabled="loading"
     variant="outline"
     size="sm"
     @click="initializeTasks"
-    >
+  >
     <commonIcon
       v-if="loading"
       name="lucide:loader-2"

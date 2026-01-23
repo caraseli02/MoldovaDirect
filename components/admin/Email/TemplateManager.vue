@@ -74,18 +74,18 @@
           <div class="flex items-center justify-between">
             <UiCardTitle>Template Editor</UiCardTitle>
             <div class="flex gap-2">
-              <UiButton>
+              <UiButton
                 variant="outline"
                 size="sm"
                 @click="validateTemplate"
-                >
+              >
                 Validate
               </UiButton>
-              <UiButton>
+              <UiButton
                 :disabled="saving || !hasChanges"
                 size="sm"
                 @click="saveTemplate"
-                >
+              >
                 {{ saving ? 'Saving...' : 'Save Changes' }}
               </UiButton>
             </div>
@@ -168,11 +168,11 @@
         <UiCardHeader>
           <div class="flex items-center justify-between">
             <UiCardTitle>Preview</UiCardTitle>
-            <UiButton>
+            <UiButton
               variant="outline"
               size="sm"
               @click="refreshPreview"
-              >
+            >
               Refresh Preview
             </UiButton>
           </div>

@@ -10,12 +10,12 @@
           />
           {{ result.success ? 'Success' : 'Error' }}
         </UiCardTitle>
-        <UiButton>
+        <UiButton
           v-if="result.users && result.users.length > 0"
           variant="outline"
           size="sm"
           @click="$emit('export-credentials')"
-          >
+        >
           <commonIcon
             name="lucide:download"
             class="h-4 w-4 mr-2"
@@ -128,11 +128,11 @@
           </ul>
         </div>
 
-        <UiButton>
+        <UiButton
           variant="outline"
           class="w-full"
           @click="$emit('close')"
-          >
+        >
           Close
         </UiButton>
       </div>

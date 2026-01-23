@@ -89,12 +89,12 @@
             </div>
           </div>
 
-          <UiButton>
+          <UiButton
             variant="ghost"
             size="icon"
             class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
             @click="$emit('close')"
-            >
+          >
             <svg
               class="h-5 w-5"
               fill="none"
@@ -143,19 +143,19 @@
           </div>
 
           <div class="flex items-center space-x-2">
-            <UiButton>
+            <UiButton
               size="sm"
               class="text-red-700 bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:text-red-200 dark:hover:bg-red-800"
               @click="$emit('retry')"
-              >
+            >
               Retry
             </UiButton>
-            <UiButton>
+            <UiButton
               variant="ghost"
               size="icon"
               class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               @click="$emit('close')"
-              >
+            >
               <svg
                 class="h-5 w-5"
                 fill="none"

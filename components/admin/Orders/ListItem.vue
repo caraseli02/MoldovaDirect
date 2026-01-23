@@ -67,11 +67,11 @@
     <!-- Actions -->
     <UiTableCell>
       <div class="flex items-center space-x-2">
-        <UiButton>
+        <UiButton
           variant="ghost"
           size="icon"
           as-child
-          >
+        >
           <nuxt-link
             :to="`/admin/orders/${order.id}`"
             title="View Order"

@@ -89,11 +89,11 @@
 
         <!-- Action buttons -->
         <div class="mt-4 flex flex-wrap gap-3">
-          <UiButton>
+          <UiButton
             v-if="canReorder"
             class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors"
             @click="handleReorder"
-            >
+          >
             <svg
               class="w-4 h-4 mr-2"
               fill="none"
@@ -110,12 +110,12 @@
             {{ $t('orders.actions.reorder') }}
           </UiButton>
 
-          <UiButton>
+          <UiButton
             v-if="canReturn"
             variant="outline"
             class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-green-700 dark:text-green-300 text-sm font-medium rounded-lg border-2 border-green-600 dark:border-green-500 transition-colors"
             @click="handleReturn"
-            >
+          >
             <svg
               class="w-4 h-4 mr-2"
               fill="none"
@@ -132,11 +132,11 @@
             {{ $t('orders.actions.return') }}
           </UiButton>
 
-          <UiButton>
+          <UiButton
             variant="outline"
             class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-green-700 dark:text-green-300 text-sm font-medium rounded-lg border-2 border-green-600 dark:border-green-500 transition-colors"
             @click="handleContactSupport"
-            >
+          >
             <svg
               class="w-4 h-4 mr-2"
               fill="none"

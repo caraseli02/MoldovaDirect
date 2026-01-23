@@ -10,11 +10,11 @@
           Comprehensive insights into order performance and trends
         </p>
       </div>
-      <UiButton>
+      <UiButton
         :disabled="loading || exporting"
         variant="outline"
         @click="exportToCSV"
-        >
+      >
         <commonIcon
           :name="exporting ? 'lucide:loader-2' : 'lucide:download'"
           :class="['h-4 w-4 mr-2', exporting && 'animate-spin']"

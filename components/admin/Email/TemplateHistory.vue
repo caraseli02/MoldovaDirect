@@ -10,11 +10,11 @@
     <UiCardHeader>
       <div class="flex items-center justify-between">
         <UiCardTitle>Version History</UiCardTitle>
-        <UiButton>
+        <UiButton
           variant="outline"
           size="sm"
           @click="loadHistory"
-          >
+        >
           Refresh
         </UiButton>
       </div>
@@ -60,19 +60,19 @@
             </div>
 
             <div class="flex gap-2">
-              <UiButton>
+              <UiButton
                 variant="outline"
                 size="sm"
                 @click="viewVersion(version)"
-                >
+              >
                 View
               </UiButton>
-              <UiButton>
+              <UiButton
                 variant="outline"
                 size="sm"
                 :disabled="rollingBack"
                 @click="rollbackToVersion(version)"
-                >
+              >
                 Rollback
               </UiButton>
             </div>
@@ -120,18 +120,18 @@
         </div>
 
         <div class="flex gap-2 pt-4">
-          <UiButton>
+          <UiButton
             :disabled="rollingBack"
             class="flex-1"
             @click="rollbackToVersion(selectedVersion)"
-            >
+          >
             {{ rollingBack ? 'Rolling back...' : 'Rollback to This Version' }}
           </UiButton>
-          <UiButton>
+          <UiButton
             variant="outline"
             class="flex-1"
             @click="showVersionModal = false"
-            >
+          >
             Close
           </UiButton>
         </div>

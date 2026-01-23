@@ -59,11 +59,11 @@
         </UiLabel>
       </div>
 
-      <UiButton>
+      <UiButton
         :disabled="loading"
         class="w-full"
         @click="handleGenerate"
-        >
+      >
         <commonIcon
           v-if="!loading"
           name="lucide:play"

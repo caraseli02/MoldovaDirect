@@ -32,23 +32,23 @@
           </div>
         </div>
         <div class="flex gap-2">
-          <UiButton>
+          <UiButton
             size="sm"
             variant="outline"
             :aria-label="`Load scenario: ${scenario.name}`"
             @click="$emit('load', scenario)"
-            >
+          >
             <commonIcon
               name="lucide:play"
               class="h-3 w-3"
             />
           </UiButton>
-          <UiButton>
+          <UiButton
             size="sm"
             variant="ghost"
             :aria-label="`Delete scenario: ${scenario.name}`"
             @click="$emit('delete', scenario.id)"
-            >
+          >
             <commonIcon
               name="lucide:trash-2"
               class="h-3 w-3"
@@ -57,11 +57,11 @@
         </div>
       </div>
 
-      <UiButton>
+      <UiButton
         variant="outline"
         class="w-full mt-4"
         @click="$emit('open-dialog')"
-        >
+      >
         <commonIcon
           name="lucide:plus"
           class="h-4 w-4 mr-2"

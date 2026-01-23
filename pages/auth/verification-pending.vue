@@ -43,12 +43,12 @@
               <UiAlertDescription class="text-sm text-green-800 dark:text-green-300">
                 {{ successMessage }}
               </UiAlertDescription>
-              <UiButton>
+              <UiButton
                 variant="ghost"
                 size="icon"
                 class="absolute right-2 top-2 text-green-500 hover:text-green-600 dark:text-green-300 dark:hover:text-green-200"
                 @click="successMessage = null"
-                >
+              >
                 <X
                   class="h-4 w-4"
                   aria-hidden="true"
@@ -72,21 +72,21 @@
                 <UiAlertDescription class="text-sm text-red-800 dark:text-red-300">
                   {{ errorMessage }}
                 </UiAlertDescription>
-                <UiButton>
+                <UiButton
                   variant="link"
                   size="sm"
                   class="p-0 text-red-600 hover:text-red-500 dark:text-red-400 dark:hover:text-red-300"
                   @click="handleResendVerification"
-                  >
+                >
                   {{ $t('auth.buttons.tryAgain') }}
                 </UiButton>
               </div>
-              <UiButton>
+              <UiButton
                 variant="ghost"
                 size="icon"
                 class="absolute right-2 top-2 text-red-500 hover:text-red-600 dark:text-red-300 dark:hover:text-red-200"
                 @click="errorMessage = null"
-                >
+              >
                 <X
                   class="h-4 w-4"
                   aria-hidden="true"

@@ -4,24 +4,24 @@
     <div class="flex items-center space-x-4">
       <UiLabel>Note Type:</UiLabel>
       <div class="flex items-center space-x-2">
-        <UiButton>
+        <UiButton
           :variant="noteType === 'internal' ? 'default' : 'outline'"
           size="sm"
           type="button"
           @click="noteType = 'internal'"
-          >
+        >
           <commonIcon
             name="lucide:lock"
             class="h-4 w-4 mr-1"
           />
           Internal
         </UiButton>
-        <UiButton>
+        <UiButton
           :variant="noteType === 'customer' ? 'default' : 'outline'"
           size="sm"
           type="button"
           @click="noteType = 'customer'"
-          >
+        >
           <commonIcon
             name="lucide:user"
             class="h-4 w-4 mr-1"
@@ -67,21 +67,21 @@
 
     <!-- Actions -->
     <div class="flex items-center justify-end space-x-2">
-      <UiButton>
+      <UiButton
         variant="outline"
         size="sm"
         :disabled="submitting"
         type="button"
         @click="handleCancel"
-        >
+      >
         Cancel
       </UiButton>
-      <UiButton>
+      <UiButton
         size="sm"
         :disabled="!canSubmit || submitting"
         type="button"
         @click="handleSubmit"
-        >
+      >
         <commonIcon
           v-if="submitting"
           name="lucide:loader-2"

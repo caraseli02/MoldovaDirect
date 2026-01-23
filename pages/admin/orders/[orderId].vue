@@ -44,11 +44,11 @@
       <div class="mb-8">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center space-x-4">
-            <UiButton>
+            <UiButton
               variant="ghost"
               size="icon"
               as-child
-              >
+            >
               <nuxt-link to="/admin/orders">
                 <commonIcon
                   name="lucide:arrow-left"

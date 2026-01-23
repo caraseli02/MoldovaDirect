@@ -8,11 +8,11 @@
             Internal admin notes and customer communications
           </UiCardDescription>
         </div>
-        <UiButton>
+        <UiButton
           v-if="!showComposer"
           size="sm"
           @click="showComposer = true"
-          >
+        >
           <commonIcon
             name="lucide:plus"
             class="h-4 w-4 mr-1"
@@ -153,10 +153,10 @@
         <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
           No notes have been added to this order yet.
         </p>
-        <UiButton>
+        <UiButton
           size="sm"
           @click="showComposer = true"
-          >
+        >
           <commonIcon
             name="lucide:plus"
             class="h-4 w-4 mr-1"

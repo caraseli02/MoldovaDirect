@@ -59,12 +59,12 @@
           </p>
         </div>
         <div class="ml-auto pl-3">
-          <UiButton>
+          <UiButton
             variant="ghost"
             size="icon"
             class="text-green-400 hover:text-green-600"
             @click="successMessage = ''"
-            >
+          >
             <svg
               class="h-5 w-5"
               fill="none"
@@ -110,12 +110,12 @@
           </p>
         </div>
         <div class="ml-auto pl-3">
-          <UiButton>
+          <UiButton
             variant="ghost"
             size="icon"
             class="text-red-400 hover:text-red-600"
             @click="errorMessage = ''"
-            >
+          >
             <svg
               class="h-5 w-5"
               fill="none"

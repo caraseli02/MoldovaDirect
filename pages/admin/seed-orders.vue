@@ -23,11 +23,11 @@
             <li>Different payment statuses</li>
           </ul>
 
-          <UiButton>
+          <UiButton
             class="w-full"
             size="lg"
             @click="seedOrders"
-            >
+          >
             <commonIcon
               name="lucide:database"
               class="h-5 w-5 mr-2"
@@ -88,21 +88,21 @@
           </div>
 
           <div class="flex gap-2">
-            <UiButton>
+            <UiButton
               class="flex-1"
               @click="goToOrders"
-              >
+            >
               <commonIcon
                 name="lucide:arrow-right"
                 class="h-4 w-4 mr-2"
               />
               View Orders
             </UiButton>
-            <UiButton>
+            <UiButton
               variant="outline"
               class="flex-1"
               @click="reset"
-              >
+            >
               <commonIcon
                 name="lucide:refresh-cw"
                 class="h-4 w-4 mr-2"
@@ -131,11 +131,11 @@
             </p>
           </div>
 
-          <UiButton>
+          <UiButton
             variant="outline"
             class="w-full"
             @click="reset"
-            >
+          >
             <commonIcon
               name="lucide:refresh-cw"
               class="h-4 w-4 mr-2"

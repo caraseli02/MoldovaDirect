@@ -95,12 +95,12 @@
         </UiAlertDescription>
       </UiAlert>
 
-      <UiButton>
+      <UiButton
         v-if="!isActive"
         :disabled="loading || !isFormValid"
         class="w-full"
         @click="handleStart"
-        >
+      >
         <commonIcon
           v-if="!loading"
           name="lucide:user-check"
@@ -114,13 +114,13 @@
         Start Impersonation
       </UiButton>
 
-      <UiButton>
+      <UiButton
         v-else
         :disabled="loading"
         variant="destructive"
         class="w-full"
         @click="handleStop"
-        >
+      >
         <commonIcon
           v-if="!loading"
           name="lucide:user-x"

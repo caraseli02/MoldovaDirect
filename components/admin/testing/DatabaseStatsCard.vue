@@ -6,12 +6,12 @@
           <UiCardTitle>Current Database State</UiCardTitle>
           <UiCardDescription>Real-time overview of your database</UiCardDescription>
         </div>
-        <UiButton>
+        <UiButton
           variant="outline"
           size="sm"
           :disabled="loadingStats"
           @click="$emit('refresh')"
-          >
+        >
           <commonIcon
             :name="loadingStats ? 'lucide:loader-2' : 'lucide:refresh-cw'"
             :class="loadingStats ? 'animate-spin' : ''"

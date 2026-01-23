@@ -87,13 +87,13 @@
         <!-- Actions Overlay - Always visible on mobile, hover on desktop -->
         <div class="absolute inset-0 bg-black bg-opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-2 md:space-x-2">
           <!-- Set as Primary -->
-          <UiButton>
+          <UiButton
             v-if="!image.isPrimary"
             size="icon"
             class="p-3 md:p-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors touch-manipulation"
             title="Set as primary image"
             @click="setPrimary(index)"
-            >
+          >
             <svg
               class="h-5 w-5 md:h-4 md:w-4"
               fill="none"
@@ -110,12 +110,12 @@
           </UiButton>
 
           <!-- Edit Alt Text -->
-          <UiButton>
+          <UiButton
             size="icon"
             class="p-3 md:p-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors touch-manipulation"
             title="Edit alt text"
             @click="editAltText(index)"
-            >
+          >
             <svg
               class="h-5 w-5 md:h-4 md:w-4"
               fill="none"
@@ -132,12 +132,12 @@
           </UiButton>
 
           <!-- Remove -->
-          <UiButton>
+          <UiButton
             size="icon"
             class="p-3 md:p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors touch-manipulation"
             title="Remove image"
             @click="removeImage(index)"
-            >
+          >
             <svg
               class="h-5 w-5 md:h-4 md:w-4"
               fill="none"
@@ -201,10 +201,10 @@
         </div>
 
         <UiDialogFooter>
-          <UiButton>
+          <UiButton
             variant="outline"
             @click="closeAltTextModal"
-            >
+          >
             {{ $t('common.cancel') }}
           </UiButton>
           <UiButton>

@@ -53,11 +53,11 @@
         />
         {{ error }}
       </div>
-      <UiButton>
+      <UiButton
         :class="{ 'min-h-[44px]': isMobile }"
         @click="retry"
         @touchstart="isMobile && vibrate('tap')"
-        >
+      >
         {{ $t('admin.users.retry') }}
       </UiButton>
     </div>
@@ -73,11 +73,11 @@
           <UiTableHeader>
             <UiTableRow>
               <UiTableHead class="px-6">
-                <UiButton>
+                <UiButton
                   variant="ghost"
                   class="flex items-center gap-1 h-auto p-0 font-normal"
                   @click="updateSort('name')"
-                  >
+                >
                   {{ $t('admin.users.columns.user') }}
                   <commonIcon
                     :name="getSortIcon('name')"
@@ -86,11 +86,11 @@
                 </UiButton>
               </UiTableHead>
               <UiTableHead class="px-6">
-                <UiButton>
+                <UiButton
                   variant="ghost"
                   class="flex items-center gap-1 h-auto p-0 font-normal"
                   @click="updateSort('email')"
-                  >
+                >
                   {{ $t('admin.users.columns.email') }}
                   <commonIcon
                     :name="getSortIcon('email')"
@@ -108,11 +108,11 @@
                 {{ $t('admin.users.columns.totalSpent') }}
               </UiTableHead>
               <UiTableHead class="px-6">
-                <UiButton>
+                <UiButton
                   variant="ghost"
                   class="flex items-center gap-1 h-auto p-0 font-normal"
                   @click="updateSort('created_at')"
-                  >
+                >
                   {{ $t('admin.users.columns.registered') }}
                   <commonIcon
                     :name="getSortIcon('created_at')"
@@ -121,11 +121,11 @@
                 </UiButton>
               </UiTableHead>
               <UiTableHead class="px-6">
-                <UiButton>
+                <UiButton
                   variant="ghost"
                   class="flex items-center gap-1 h-auto p-0 font-normal"
                   @click="updateSort('last_login')"
-                  >
+                >
                   {{ $t('admin.users.columns.lastLogin') }}
                   <commonIcon
                     :name="getSortIcon('last_login')"
