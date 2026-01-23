@@ -31,9 +31,12 @@
         'aspect-[3/2]': variant === 'featured',
       }"
     >
-      <nuxt-link :to="productDetailPath">
+      <nuxt-link
+        :to="productDetailPath"
+        class="block h-full w-full"
+      >
         <NuxtImg
-          v-if="primaryImage"
+          v-if="primaryImage && !imageError"
           preset="productThumbnail"
           :src="primaryImage.url"
           :alt="(primaryImage.altText ? getLocalizedText(primaryImage.altText) : '') || getLocalizedText(product.name)"
@@ -43,17 +46,20 @@
           placeholder
           :placeholder-class="'blur-xl'"
           class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          @error="handleImageError"
         />
         <div
           v-else
-          class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br"
-          :class="placeholderConfig.bgGradient"
+          class="h-full w-full flex flex-col items-center justify-center bg-gray-50 dark:bg-slate-900 group-hover:scale-110 transition-transform duration-500"
           role="img"
           :aria-label="$t('products.noImageAvailable')"
         >
-          <div class="relative">
+          <!-- Elegant placeholder that matches premium theme -->
+          <div
+            class="relative flex flex-col items-center justify-center gap-3 p-4 text-center"
+          >
             <div
-              class="absolute inset-0 blur-2xl rounded-full"
+              class="absolute inset-0 blur-3xl rounded-full opacity-20 pointer-events-none"
               :class="placeholderConfig.blurColor"
             ></div>
             <commonIcon
@@ -62,6 +68,9 @@
               :class="placeholderConfig.iconColor"
               aria-hidden="true"
             />
+            <span class="relative text-[10px] font-bold tracking-[0.2em] uppercase opacity-40">
+              {{ product.category?.nameTranslations ? getLocalizedText(product.category.nameTranslations) : '' }}
+            </span>
           </div>
         </div>
       </nuxt-link>
@@ -131,7 +140,9 @@
         v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
         class="absolute top-3 right-3"
       >
-        <span class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
+        <span
+          class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg"
+        >
           <commonIcon
             name="lucide:tag"
             class="h-3 w-3"
@@ -337,11 +348,8 @@
         <span>
           {{
             cartLoading ? $t('products.adding')
-            : product.stockQuantity <= 0 ? $t('products.outOfStock')
-              : isInCart(String(product.id)) ? $t('products.inCart')
-                : $t('products.addToCart')
-          }}
-        </span>
+            : product.stockQuantity <= 0 ? $t('products.outOfStock') : isInCart(String(product.id))
+              ? $t('products.inCart') : $t('products.addToCart') }} </span>
       </Button>
     </div>
   </article>
@@ -384,6 +392,11 @@ const { getPlaceholderConfig } = useProductPlaceholder()
 const cardRef = ref<HTMLElement>()
 
 // Local state
+const imageError = ref(false)
+
+const handleImageError = () => {
+  imageError.value = true
+}
 
 // Computed properties
 const primaryImage = computed(() => {

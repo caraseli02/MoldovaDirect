@@ -1,30 +1,37 @@
 <template>
-  <!-- TooltipProvider wrapped conditionally to avoid CE crash on SSR while preserving SSR for content -->
-  <component
-    :is="tooltipWrapper"
-    v-bind="tooltipProps"
-  >
-    <div class="min-h-screen flex flex-col">
-      <LayoutAppHeader />
-      <main class="flex-1 bg-white dark:bg-gray-950 text-gray-900 dark:text-white pb-16 md:pb-0">
-        <slot></slot>
-      </main>
-      <LayoutAppFooter />
-      <!-- Bottom Navigation for Mobile -->
-      <LayoutBottomNav />
+  <div>
+    <LayoutAppHeader />
+    <main
+      class="flex-1 text-gray-900 dark:text-white pb-16 md:pb-0"
+      :class="{ 'pt-16': !hasDarkHero }"
+    >
+      <div id="layout-content-wrapper">
+        <ClientOnly>
+          <TooltipProvider :delay-duration="300">
+            <slot></slot>
+          </TooltipProvider>
+
+          <!-- Fallback for SSR: same content without tooltip functionality -->
+          <template #fallback>
+            <slot></slot>
+          </template>
+        </ClientOnly>
+      </div>
+    </main>
+    <LayoutAppFooter />
+    <LayoutBottomNav />
+    <div id="layout-client-portals">
       <ClientOnly>
-        <!-- Sonner toaster (shadcn-vue) -->
         <Sonner
           position="top-right"
           :rich-colors="true"
         />
-        <!-- PWA Components -->
         <MobilePWAInstallPrompt />
         <MobilePWAUpdatePrompt />
         <MobileOfflineIndicator />
       </ClientOnly>
     </div>
-  </component>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -34,11 +41,12 @@ import { TooltipProvider } from 'reka-ui'
 const { registerShortcut } = useKeyboardShortcuts()
 const localePath = useLocalePath()
 const router = useRouter()
+const route = useRoute()
 
-// Use TooltipProvider on client, plain div on server to avoid CE crash during SSR
-const tooltipWrapper = import.meta.client ? TooltipProvider : 'div'
-// Only pass TooltipProvider props when using the actual component (not plain div)
-const tooltipProps = import.meta.client ? { delayDuration: 300 } : {}
+// Logic tailored to match AppHeader.vue for consistency
+const currentPath = computed(() => route.path?.replace(/\/(en|ro|ru)/, '') || '/')
+const pagesWithDarkHero = ['/']
+const hasDarkHero = computed(() => pagesWithDarkHero.includes(currentPath.value))
 
 // Register global search shortcut (Ctrl/Cmd + K)
 registerShortcut('k', () => {

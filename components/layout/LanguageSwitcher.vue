@@ -6,9 +6,9 @@
         variant="outline"
         data-testid="locale-switcher-trigger"
         :aria-label="t('common.language')"
-        class="min-w-[100px] flex items-center justify-between gap-2 px-3 py-2 text-sm font-medium"
+        class="flex items-center justify-center md:justify-between gap-2 px-2 md:px-3 py-2 text-sm font-medium transition-all duration-300 min-w-[44px] md:min-w-[100px]"
       >
-        <!-- Globe icon for better visual indication -->
+        <!-- Globe icon -->
         <svg
           class="h-4 w-4 flex-shrink-0"
           fill="none"
@@ -23,9 +23,9 @@
             d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
           />
         </svg>
-        <span class="flex-1 text-left">{{ currentLocale?.name }}</span>
+        <span class="hidden md:inline-block flex-1 text-left">{{ currentLocale?.name }}</span>
         <svg
-          class="h-4 w-4 flex-shrink-0"
+          class="hidden md:block h-3 w-3 flex-shrink-0 opacity-50"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

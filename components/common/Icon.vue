@@ -1,7 +1,12 @@
 <template>
   <component
     :is="resolvedIcon"
+    :size="size"
+    :width="size"
+    :height="size"
+    :style="{ width: `${size}px`, height: `${size}px`, minWidth: `${size}px`, minHeight: `${size}px` }"
     v-bind="$attrs"
+    class="shrink-0 overflow-hidden"
   />
 </template>
 
@@ -111,7 +116,12 @@ import {
   Zap,
 } from 'lucide-vue-next'
 
-const props = defineProps<{ name: string }>()
+const props = withDefaults(defineProps<{
+  name: string
+  size?: string | number
+}>(), {
+  size: 20,
+})
 
 const ICONS: Record<string, Component> = {
   'alert-circle': AlertCircle,

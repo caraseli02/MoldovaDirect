@@ -571,6 +571,12 @@ watch(user, (newUser) => {
 })
 
 useHead({
-  title: t('common.account'),
+  title: t('seo.account.title'),
+  meta: [
+    {
+      name: 'description',
+      content: t('seo.account.description'),
+    },
+  ],
 })
 </script>

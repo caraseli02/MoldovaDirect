@@ -1,12 +1,16 @@
 <template>
   <header
     :class="[
-      'sticky top-0 z-50 transition-all duration-300 will-change-transform',
+      'fixed top-0 w-full z-50 transition-all duration-300 will-change-transform',
       scrolled
         ? 'bg-brand-light/95 backdrop-blur-md shadow-elevated-sm dark:bg-brand-dark/95 dark:shadow-brand-light/5'
         : 'bg-transparent dark:bg-transparent',
     ]"
   >
+    <HomeAnnouncementBar
+      v-if="hasDarkHero"
+      :show-cta="true"
+    />
     <div class="container">
       <div class="flex items-center justify-between h-16">
         <!-- Logo with dynamic color based on scroll state -->
@@ -27,7 +31,7 @@
         </NuxtLink>
 
         <!-- Desktop Navigation with dynamic colors -->
-        <nav class="hidden md:flex items-center space-x-8">
+        <nav class="hidden lg:flex items-center space-x-8">
           <NuxtLink
             :to="localePath('/')"
             :class="navLinkClass"
@@ -57,12 +61,16 @@
         <!-- Right side actions -->
         <div class="flex items-center">
           <!-- Desktop actions -->
-          <div class="hidden md:flex items-center space-x-4">
+          <div class="hidden lg:flex items-center space-x-4">
             <!-- Language Switcher -->
-            <LanguageSwitcher />
+            <ClientOnly>
+              <LanguageSwitcher />
+            </ClientOnly>
 
             <!-- Theme Toggle -->
-            <ThemeToggle />
+            <ClientOnly>
+              <ThemeToggle />
+            </ClientOnly>
 
             <!-- Search with dynamic color -->
             <Button
@@ -73,24 +81,15 @@
               :class="iconButtonClass"
               @click="goToSearch"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
+              <commonIcon
+                name="search"
+                :size="20"
+              />
               <!-- Keyboard shortcut hint - client only to prevent hydration mismatch -->
               <ClientOnly>
-                <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap bg-gray-900 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded pointer-events-none">
+                <span
+                  class="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap bg-gray-900 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded pointer-events-none"
+                >
                   {{ searchShortcut }}
                 </span>
               </ClientOnly>
@@ -103,21 +102,10 @@
               :class="iconButtonClass"
               data-testid="user-menu"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
+              <commonIcon
+                name="user"
+                :size="20"
+              />
               <span class="sr-only">{{ accountLabel }}</span>
             </NuxtLink>
 
@@ -127,27 +115,17 @@
               :aria-label="cartAriaLabel"
               :class="iconButtonClass"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
+              <commonIcon
+                name="shopping-cart"
+                :size="20"
+              />
               <!-- Cart count badge - client only to prevent hydration mismatch -->
               <ClientOnly>
                 <span
                   v-if="cartItemsCount > 0"
                   data-testid="cart-count"
-                  class="absolute -top-1 -right-1 bg-primary-600 dark:bg-primary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+                  class="absolute -top-1 -right-1 bg-primary-600 dark:bg-primary-500 text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-sm"
+                  style="width: 20px; height: 20px; min-width: 20px; min-height: 20px;"
                   aria-hidden="true"
                 >
                   {{ cartItemsCount }}
@@ -157,12 +135,16 @@
           </div>
 
           <!-- Mobile actions - Language and Theme -->
-          <div class="flex md:hidden items-center space-x-1">
-            <!-- Language Switcher -->
-            <LanguageSwitcher />
+          <div class="flex lg:hidden items-center space-x-3">
+            <ClientOnly>
+              <!-- Language Switcher -->
+              <LanguageSwitcher />
+            </ClientOnly>
 
-            <!-- Theme Toggle -->
-            <ThemeToggle />
+            <ClientOnly>
+              <!-- Theme Toggle -->
+              <ThemeToggle />
+            </ClientOnly>
           </div>
         </div>
       </div>
@@ -182,31 +164,31 @@ const localePath = useLocalePath()
 const route = useRoute()
 
 // Scroll detection for luxury header transparency
-// Initialize as true to prevent hydration mismatch
-// We'll update it immediately on client side in onMounted
-const scrolled = ref(true)
+// SSR-safe initialization based on route
+const currentPath = computed(() => route.path?.replace(/\/(en|ro|ru)/, '') || '/')
+const pagesWithDarkHero = ['/']
+const hasDarkHero = computed(() => pagesWithDarkHero.includes(currentPath.value))
+
+// Initialize scrolled based on route - same on server and client
+// Homepage starts transparent (false), other pages start solid (true)
+const scrolled = ref(!hasDarkHero.value)
 const SCROLL_THRESHOLD = 20 // px - threshold for header transparency
 
-// Pages that have dark hero sections and support transparent header
-const pagesWithDarkHero = ['/']
-
 const handleScroll = useThrottleFn(() => {
-  const currentPath = route.path?.replace(/\/(en|ro|ru)/, '') || '/'
-  const hasDarkHero = pagesWithDarkHero.includes(currentPath)
-
   // Only allow transparent header on pages with dark hero sections
-  scrolled.value = hasDarkHero
-    ? window.scrollY > SCROLL_THRESHOLD
-    : true
+  if (hasDarkHero.value) {
+    scrolled.value = window.scrollY > SCROLL_THRESHOLD
+  }
+  else {
+    scrolled.value = true
+  }
 }, 50) // Throttle to 50ms (20 updates/second) for optimal performance
 
 onMounted(() => {
   if (typeof window !== 'undefined') {
-    // Wait for next tick to avoid hydration mismatch
-    nextTick(() => {
-      window.addEventListener('scroll', handleScroll, { passive: true })
-      handleScroll() // Initial check after hydration
-    })
+    // Initial state is already correct from SSR
+    // Just attach scroll listener
+    window.addEventListener('scroll', handleScroll, { passive: true })
   }
 })
 

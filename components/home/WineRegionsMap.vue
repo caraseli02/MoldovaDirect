@@ -41,7 +41,9 @@
             >
               <commonIcon
                 name="lucide:loader-2"
-                class="h-8 w-8 animate-spin text-primary"
+                :size="32"
+                class="h-8 w-8 animate-spin text-primary shrink-0"
+                style="width: 32px; height: 32px; min-width: 32px; min-height: 32px;"
               />
             </div>
 

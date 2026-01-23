@@ -54,14 +54,16 @@
     <div class="container space-y-12">
       <nav class="flex flex-wrap items-center text-sm text-gray-600 dark:text-gray-400">
         <nuxt-link
-          to="/"
+          :to="localePath('/')"
           class="transition hover:text-gray-900 dark:hover:text-gray-200"
-        >{{ $t('common.home') }}</nuxt-link>
+        >{{
+          $t('common.home') }}</nuxt-link>
         <span class="mx-2">/</span>
         <nuxt-link
-          to="/products"
+          :to="localePath('/products')"
           class="transition hover:text-gray-900 dark:hover:text-gray-200"
-        >{{ $t('common.shop') }}</nuxt-link>
+        >{{
+          $t('common.shop') }}</nuxt-link>
         <template v-if="product.category?.breadcrumb?.length">
           <span class="mx-2">/</span>
           <template
@@ -69,7 +71,7 @@
             :key="`crumb-${crumb.id}`"
           >
             <nuxt-link
-              :to="`/products?category=${crumb.slug}`"
+              :to="localePath(`/products?category=${crumb.slug}`)"
               class="transition hover:text-gray-900 dark:hover:text-gray-200"
             >
               {{ crumb.name }}
@@ -81,7 +83,8 @@
           </template>
         </template>
         <span class="mx-2">/</span>
-        <span class="text-gray-900 dark:text-white">{{ getLocalizedText(product.name as Record<string, string>) }}</span>
+        <span class="text-gray-900 dark:text-white">{{ getLocalizedText(product.name as Record<string, string>)
+        }}</span>
       </nav>
 
       <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
@@ -204,7 +207,8 @@
                 </div>
                 <div class="flex flex-col items-start gap-2 text-right">
                   <div class="flex items-center gap-3">
-                    <span class="text-3xl font-bold text-gray-900 dark:text-white">€{{ formatPrice(product.price) }}</span>
+                    <span class="text-3xl font-bold text-gray-900 dark:text-white">€{{ formatPrice(product.price)
+                    }}</span>
                     <span
                       v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
                       class="text-lg text-gray-600 line-through"
@@ -216,7 +220,9 @@
                     v-if="product.comparePrice && Number(product.comparePrice) > Number(product.price)"
                     class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-600 dark:bg-red-900/30 dark:text-red-200"
                   >
-                    {{ Math.round((1 - Number(product.price) / Number(product.comparePrice)) * 100) }}% {{ $t('products.off') }}
+                    {{ Math.round((1 - Number(product.price) / Number(product.comparePrice)) * 100) }}% {{
+                      $t('products.off')
+                    }}
                   </span>
                 </div>
               </div>
@@ -294,7 +300,9 @@
                   <UiCardTitle>{{ $t('products.socialProof.title') }}</UiCardTitle>
                   <UiCardDescription>{{ $t('products.socialProof.subtitle') }}</UiCardDescription>
                 </div>
-                <div class="flex items-center gap-2 rounded-full bg-yellow-100 px-4 py-2 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200">
+                <div
+                  class="flex items-center gap-2 rounded-full bg-yellow-100 px-4 py-2 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200"
+                >
                   <span class="text-lg font-semibold">{{ reviewSummary.rating }}</span>
                   <div class="flex items-center">
                     <svg
@@ -306,7 +314,9 @@
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                      />
                     </svg>
                   </div>
                 </div>
@@ -431,7 +441,9 @@
                   class="group pb-4 border-b border-gray-200 dark:border-gray-800 last:border-0 last:pb-0"
                   :open="item.defaultOpen"
                 >
-                  <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 transition dark:text-white">
+                  <summary
+                    class="flex cursor-pointer items-center justify-between text-sm font-semibold text-gray-900 transition dark:text-white"
+                  >
                     {{ item.question }}
                     <span class="text-xl leading-none transition group-open:rotate-45">+</span>
                   </summary>
@@ -593,7 +605,9 @@
               </div>
             </UiCardContent>
             <UiCardFooter>
-              <Button class="w-full justify-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-900/40 dark:bg-blue-900/20 dark:text-blue-200">
+              <Button
+                class="w-full justify-center rounded-xl border border-blue-200 bg-blue-50 px-5 py-2.5 text-sm font-semibold text-blue-700 hover:bg-blue-100 dark:border-blue-900/40 dark:bg-blue-900/20 dark:text-blue-200"
+              >
                 {{ $t('products.bundle.cta') }}
               </Button>
             </UiCardFooter>
@@ -760,6 +774,7 @@ const slug = route.params.slug as string
 const { data: product, pending, error } = await useLazyFetch<ProductDetailResponse>(`/api/products/${slug}`)
 
 const { t } = useI18n()
+const localePath = useLocalePath()
 
 // UI state
 const selectedImageIndex = ref(0)
