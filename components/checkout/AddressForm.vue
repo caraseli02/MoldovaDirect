@@ -237,7 +237,7 @@
           @update:model-value="updateField('country', $event as string); clearFieldError('country')"
           @blur="validateField('country')"
         >
-          <UiSelectTrigger>
+          <UiSelectTrigger class="w-full">
             <UiSelectValue :placeholder="$t('checkout.addressForm.selectCountry')" />
           </UiSelectTrigger>
           <UiSelectContent>

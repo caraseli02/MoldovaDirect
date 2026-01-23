@@ -75,7 +75,10 @@ const selectArrowIcon = 'url(\'data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27
         data-testid="profile-language-select"
         @update:model-value="updateLanguage"
       >
-        <UiSelectTrigger>
+        <UiSelectTrigger
+          class="!w-full !px-4 !py-2.5 !border-zinc-300 dark:!border-zinc-600 !rounded-lg !shadow-sm focus:!outline-none focus:!ring-2 focus:!ring-blue-500 focus:!border-blue-500 dark:!bg-zinc-700 dark:!text-white"
+          style="width: 100%; padding-top: 0.625rem; padding-bottom: 0.625rem; border-color: rgb(212 212 216); border-radius: 0.5rem;"
+        >
           <UiSelectValue />
         </UiSelectTrigger>
         <UiSelectContent>
@@ -100,7 +103,10 @@ const selectArrowIcon = 'url(\'data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27
         data-testid="profile-currency-select"
         @update:model-value="updateCurrency"
       >
-        <UiSelectTrigger>
+        <UiSelectTrigger
+          class="!w-full !px-4 !py-2.5 !border-zinc-300 dark:!border-zinc-600 !rounded-lg !shadow-sm focus:!outline-none focus:!ring-2 focus:!ring-blue-500 focus:!border-blue-500 dark:!bg-zinc-700 dark:!text-white"
+          style="width: 100%; padding-top: 0.625rem; padding-bottom: 0.625rem; border-color: rgb(212 212 216); border-radius: 0.5rem;"
+        >
           <UiSelectValue />
         </UiSelectTrigger>
         <UiSelectContent>

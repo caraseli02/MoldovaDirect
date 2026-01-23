@@ -129,7 +129,7 @@
             id="reason"
             v-model="reason"
           >
-            <UiSelectTrigger>
+            <UiSelectTrigger class="w-full">
               <UiSelectValue />
             </UiSelectTrigger>
             <UiSelectContent>

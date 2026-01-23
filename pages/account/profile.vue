@@ -37,8 +37,8 @@
             :title="$t('profile.sections.personalInfo')"
             :subtitle="$t('profile.sections.personalInfoSubtitle')"
             icon="lucide:user"
-            icon-bg="bg-rose-50 dark:bg-rose-900/30"
-            icon-color="text-rose-600 dark:text-rose-400"
+            icon-bg="bg-blue-50 dark:bg-blue-900/30"
+            icon-color="text-blue-600 dark:text-blue-400"
             :expanded="expandedSection === 'personal'"
             data-testid="profile-personal-section"
             @toggle="toggleSection('personal')"
@@ -222,7 +222,7 @@
             <UiButton
               type="button"
               variant="destructive"
-              class="w-full"
+              class="max-w-xs mx-auto w-full"
               data-testid="profile-delete-account-btn"
               @click="showDeleteConfirmation = true"
             >

@@ -182,7 +182,7 @@
                 {{ $t('profile.country') }} *
               </UiLabel>
               <UiSelect v-model="form.country">
-                <UiSelectTrigger>
+                <UiSelectTrigger class="w-full">
                   <UiSelectValue />
                 </UiSelectTrigger>
                 <UiSelectContent>
