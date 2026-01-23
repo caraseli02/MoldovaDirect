@@ -152,14 +152,6 @@
             v-if="isAddressValid && selectedMethod"
             class="checkout-section fade-in"
           >
-            <div class="section-header">
-              <div class="flex items-center">
-                <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {{ $t('checkout.shippingInstructions.title') }}
-                  <span class="text-gray-500 text-xs ml-1">({{ $t('common.optional') }})</span>
-                </h3>
-              </div>
-            </div>
             <div class="section-content">
               <ShippingInstructions v-model="shippingInstructions" />
             </div>

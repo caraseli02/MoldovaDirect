@@ -3,18 +3,24 @@
     <div class="section-content">
       <!-- Terms Checkboxes -->
       <div class="space-y-3 mb-6">
-        <UiLabel>
+        <div class="flex items-start gap-2">
           <UiInput
+            id="checkout-terms"
             :checked="termsAccepted"
             type="checkbox"
+            class="mt-0.5"
             @change="$emit('update:termsAccepted', ($event.target as HTMLInputElement).checked)"
           />
-          <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+          <UiLabel
+            for="checkout-terms"
+            class="text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
+          >
             {{ $t('checkout.review.acceptTerms') }}
             <a
               href="/terms"
               target="_blank"
               class="text-primary-600 hover:text-primary-700 underline"
+              @click.stop
             >
               {{ $t('checkout.review.termsOfService') }}
             </a>
@@ -22,21 +28,27 @@
               v-if="showTermsError"
               class="text-red-500 text-xs ml-1"
             >*</span>
-          </span>
-        </UiLabel>
+          </UiLabel>
+        </div>
 
-        <UiLabel>
+        <div class="flex items-start gap-2">
           <UiInput
+            id="checkout-privacy"
             :checked="privacyAccepted"
             type="checkbox"
+            class="mt-0.5"
             @change="$emit('update:privacyAccepted', ($event.target as HTMLInputElement).checked)"
           />
-          <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+          <UiLabel
+            for="checkout-privacy"
+            class="text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
+          >
             {{ $t('checkout.review.acceptPrivacy') }}
             <a
               href="/privacy"
               target="_blank"
               class="text-primary-600 hover:text-primary-700 underline"
+              @click.stop
             >
               {{ $t('checkout.review.privacyPolicy') }}
             </a>
@@ -44,19 +56,24 @@
               v-if="showPrivacyError"
               class="text-red-500 text-xs ml-1"
             >*</span>
-          </span>
-        </UiLabel>
+          </UiLabel>
+        </div>
 
-        <UiLabel>
+        <div class="flex items-start gap-2">
           <UiInput
+            id="checkout-marketing"
             :checked="marketingConsent"
             type="checkbox"
+            class="mt-0.5"
             @change="$emit('update:marketingConsent', ($event.target as HTMLInputElement).checked)"
           />
-          <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
+          <UiLabel
+            for="checkout-marketing"
+            class="text-sm text-gray-600 dark:text-gray-400 cursor-pointer"
+          >
             {{ $t('checkout.review.marketingConsent') }}
-          </span>
-        </UiLabel>
+          </UiLabel>
+        </div>
       </div>
 
       <!-- Place Order Button (Desktop) -->
