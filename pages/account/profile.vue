@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-zinc-50 dark:bg-zinc-900">
-    <div class="container py-6 md:py-12">
+    <div class="container py-4 md:py-12 pb-24 md:pb-12">
       <div class="max-w-2xl mx-auto">
         <!-- Header -->
         <div class="mb-6 md:mb-8">
@@ -37,8 +37,8 @@
             :title="$t('profile.sections.personalInfo')"
             :subtitle="$t('profile.sections.personalInfoSubtitle')"
             icon="lucide:user"
-            icon-bg="bg-blue-50 dark:bg-blue-900/30"
-            icon-color="text-blue-600 dark:text-blue-400"
+            icon-bg="bg-rose-50 dark:bg-rose-900/30"
+            icon-color="text-rose-600 dark:text-rose-400"
             :expanded="expandedSection === 'personal'"
             data-testid="profile-personal-section"
             @toggle="toggleSection('personal')"

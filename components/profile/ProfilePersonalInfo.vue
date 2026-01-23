@@ -51,25 +51,25 @@ function updatePhone(event: Event) {
 </script>
 
 <template>
-  <div class="space-y-4">
+  <div class="space-y-5">
     <!-- Name Input -->
     <div>
       <UiLabel for="profile-name">
-        {{ $t('auth.labels.fullName') }} *
+        {{ $t('auth.labels.fullName') }} <span class="text-rose-500">*</span>
       </UiLabel>
       <UiInput
         id="profile-name"
         :value="form.name"
         type="text"
         required
-        :class="{ 'border-red-500 focus:ring-red-500': errors.name }"
+        :class="{ 'border-rose-500 focus:ring-rose-500': errors.name }"
         :placeholder="$t('auth.placeholders.fullName')"
         data-testid="profile-name-input"
         @input="updateName"
       />
       <p
         v-if="errors.name"
-        class="mt-1 text-sm text-red-600 dark:text-red-400"
+        class="mt-1 text-sm text-rose-600 dark:text-rose-400"
         data-testid="profile-name-error"
       >
         {{ errors.name }}
@@ -79,7 +79,7 @@ function updatePhone(event: Event) {
     <!-- Email Input (Disabled) -->
     <div>
       <UiLabel for="profile-email">
-        {{ $t('auth.labels.email') }} *
+        {{ $t('auth.labels.email') }} <span class="text-rose-500">*</span>
       </UiLabel>
       <UiInput
         id="profile-email"
@@ -105,14 +105,14 @@ function updatePhone(event: Event) {
         :value="form.phone"
         type="tel"
         inputmode="tel"
-        :class="{ 'border-red-500 focus:ring-red-500': errors.phone }"
+        :class="{ 'border-rose-500 focus:ring-rose-500': errors.phone }"
         :placeholder="$t('auth.placeholders.phone')"
         data-testid="profile-phone-input"
         @input="updatePhone"
       />
       <p
         v-if="errors.phone"
-        class="mt-1 text-sm text-red-600 dark:text-red-400"
+        class="mt-1 text-sm text-rose-600 dark:text-rose-400"
         data-testid="profile-phone-error"
       >
         {{ errors.phone }}

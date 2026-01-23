@@ -30,7 +30,7 @@
         class="grid grid-cols-1 lg:grid-cols-3 gap-8"
       >
         <!-- Left Column: Form Sections -->
-        <div class="lg:col-span-2 space-y-6">
+        <div class="lg:col-span-2 space-y-4">
           <!-- Guest Email Section -->
           <section
             v-if="!user && showGuestForm"
@@ -838,14 +838,14 @@ onMounted(async () => {
 }
 
 .checkout-section-highlight {
-  border-color: rgb(191 219 254);
-  background-color: rgb(239 246 255 / 0.5);
+  border-color: rgb(254 205 211);
+  background-color: rgb(255 241 242 / 0.5);
 }
 
 :root.dark .checkout-section-highlight,
 .dark .checkout-section-highlight {
-  border-color: rgb(30 64 175);
-  background-color: rgb(30 58 138 / 0.1);
+  border-color: rgb(159 18 57);
+  background-color: rgb(145 26 48 / 0.1);
 }
 
 .section-header {
@@ -865,7 +865,7 @@ onMounted(async () => {
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 9999px;
-  background-color: rgb(79 70 229);
+  background-color: rgb(225 29 72);
   color: white;
   display: flex;
   align-items: center;

@@ -111,7 +111,7 @@ defineExpose({ triggerFileUpload })
         @keydown.space.prevent="triggerFileUpload"
       >
         <div
-          class="h-full w-full rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 flex items-center justify-center overflow-hidden transition-transform duration-200 group-hover:scale-105"
+          class="h-full w-full rounded-full bg-gradient-to-br from-rose-100 to-rose-200 dark:from-rose-900 dark:to-rose-800 flex items-center justify-center overflow-hidden transition-transform duration-200 group-hover:scale-105"
           :class="{ 'opacity-75': isDragging }"
         >
           <img
@@ -123,12 +123,31 @@ defineExpose({ triggerFileUpload })
           />
           <span
             v-else
-            class="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-300"
+            class="text-3xl md:text-4xl font-bold text-rose-600 dark:text-rose-300"
             data-testid="profile-avatar-initials"
           >
             {{ initials }}
           </span>
         </div>
+
+        <!-- Camera Button (absolute positioned) -->
+        <UiButton
+          type="button"
+          size="icon"
+          :aria-label="$t('profile.changePicture')"
+          :disabled="isLoading"
+          class="absolute -bottom-1 -right-1 w-8 h-8 min-w-8 rounded-full bg-white dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-600 shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors"
+          data-testid="profile-avatar-camera-btn"
+          @click.stop="triggerFileUpload"
+          @keydown.enter.stop="triggerFileUpload"
+          @keydown.space.prevent.stop="triggerFileUpload"
+        >
+          <commonIcon
+            name="lucide:camera"
+            class="h-3.5 w-3.5 text-zinc-600 dark:text-zinc-400"
+            aria-hidden="true"
+          />
+        </UiButton>
 
         <!-- Drop zone overlay -->
         <Transition
@@ -139,7 +158,7 @@ defineExpose({ triggerFileUpload })
         >
           <div
             v-if="isDragging"
-            class="absolute inset-0 flex items-center justify-center bg-blue-600/90 rounded-full pointer-events-none"
+            class="absolute inset-0 flex items-center justify-center bg-rose-600/90 rounded-full pointer-events-none"
           >
             <commonIcon
               name="lucide:upload"
@@ -148,25 +167,9 @@ defineExpose({ triggerFileUpload })
             />
           </div>
         </Transition>
-
-        <UiButton
-          type="button"
-          :aria-label="$t('profile.changePicture')"
-          :disabled="isLoading"
-          data-testid="profile-avatar-camera-btn"
-          @click.stop="triggerFileUpload"
-          @keydown.enter.stop="triggerFileUpload"
-          @keydown.space.prevent.stop="triggerFileUpload"
-        >
-          <commonIcon
-            name="lucide:camera"
-            class="h-5 w-5"
-            aria-hidden="true"
-          />
-        </UiButton>
       </div>
 
-      <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-2">
+      <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-3 mt-4">
         {{ $t('profile.dragDropHint') }}
       </p>
 

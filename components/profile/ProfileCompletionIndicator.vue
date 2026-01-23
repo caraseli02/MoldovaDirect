@@ -26,7 +26,7 @@ const clampedPercentage = computed(() => Math.min(100, Math.max(0, percentage)))
 
 <template>
   <div
-    class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800"
+    class="mt-4 p-3 bg-rose-50 dark:bg-rose-900/20 rounded-lg border border-rose-200 dark:border-rose-800"
     data-testid="profile-completion"
   >
     <div class="flex items-center justify-between mb-2">
@@ -34,7 +34,7 @@ const clampedPercentage = computed(() => Math.min(100, Math.max(0, percentage)))
         {{ $t('profile.completion') || 'Profile Completion' }}
       </span>
       <span
-        class="text-sm font-semibold text-blue-600 dark:text-blue-400"
+        class="text-sm font-semibold text-rose-600 dark:text-rose-400"
         data-testid="profile-completion-percentage"
       >
         {{ percentage }}%
@@ -43,7 +43,7 @@ const clampedPercentage = computed(() => Math.min(100, Math.max(0, percentage)))
     <Progress
       :model-value="clampedPercentage"
       class="bg-zinc-200 dark:bg-zinc-700"
-      indicator-class="bg-blue-600"
+      indicator-class="bg-rose-600"
       data-testid="profile-completion-bar"
     />
   </div>
