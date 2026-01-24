@@ -1,11 +1,16 @@
-import type { SupabaseClient, User } from '@supabase/supabase-js'
+import type { SupabaseClient, User, JwtPayload } from '@supabase/supabase-js'
+
+/**
+ * Union type for auth redirect - accepts both User and JwtPayload
+ */
+type AuthUser = User | JwtPayload
 
 /**
  * Determines the appropriate redirect path based on user role
  * @returns The redirect path or null if no special redirect needed
  */
 export async function getUserRoleRedirectPath(
-  user: User | null,
+  user: AuthUser | null,
   supabase: SupabaseClient,
   localePath: (path: string) => string,
 ): Promise<string | null> {
@@ -38,7 +43,7 @@ export async function getUserRoleRedirectPath(
  */
 export async function handleAuthRedirect(
   redirect: string | undefined,
-  user: User | null,
+  user: AuthUser | null,
   supabase: SupabaseClient,
   localePath: (path: string) => string,
   navigateTo: (...args: any[]) => any,

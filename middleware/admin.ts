@@ -28,7 +28,7 @@ export default defineNuxtRouteMiddleware(async (_to, _from) => {
 
   // Check if user is authenticated
   // Wait for session to load if we're on the client
-  let userId: string | undefined
+  let userId: string
   if (!user.value) {
     // Double-check with getSession to handle hydration timing
     const { data: { session } } = await supabase.auth.getSession()

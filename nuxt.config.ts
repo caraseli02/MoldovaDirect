@@ -84,7 +84,7 @@ export default defineNuxtConfig({
   },
 
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss() as any],
     build: {
       chunkSizeWarningLimit: 1000, // Nuxt handles chunking, allow larger sizes
       sourcemap: process.env.NODE_ENV !== 'production',
@@ -211,7 +211,7 @@ export default defineNuxtConfig({
 
   image: {
     domains: ['images.unsplash.com'],
-    formats: ['webp', 'avif'],
+    format: ['webp', 'avif'],
     quality: 80,
     screens: {
       xs: 320,

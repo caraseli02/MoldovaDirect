@@ -237,13 +237,13 @@
             {{ $t('profile.confirmDeleteAddress') }}
           </p>
           <div class="flex gap-3 justify-end">
-            <Button
+            <UiButton
               variant="outline"
               @click="showDeleteAddressConfirm = false"
             >
               {{ $t('common.cancel') }}
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton
               variant="destructive"
               :disabled="deletingAddressId !== null"
               @click="executeDeleteAddress"
@@ -255,7 +255,7 @@
                 aria-hidden="true"
               />
               {{ $t('common.delete') }}
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -265,7 +265,6 @@
 
 <script setup lang="ts">
 // Component imports
-import { Button } from '@/components/ui/button'
 import AddressFormModal from '~/components/profile/AddressFormModal.vue'
 import DeleteAccountModal from '~/components/profile/DeleteAccountModal.vue'
 import PasswordChangeModal from '~/components/profile/PasswordChangeModal.vue'
