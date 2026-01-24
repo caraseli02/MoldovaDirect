@@ -19,34 +19,7 @@
         <div
           class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden"
         >
-          <!-- Profile Picture Section (Always Visible) -->
-          <ProfilePictureSection
-            :picture-url="profilePictureUrl"
-            :initials="getUserInitials()"
-            :is-dragging="isDraggingAvatar"
-            :is-loading="isLoading"
-            @upload="handlePictureUpload"
-            @remove="removePicture"
-            @drag-over="handleDragOver"
-            @drag-leave="handleDragLeave"
-          />
-
-          <!-- Personal Info Section (Expanded by Default) -->
-          <ProfileAccordionSection
-            ref="personalAccordion"
-            :title="$t('profile.sections.personalInfo')"
-            :subtitle="$t('profile.sections.personalInfoSubtitle')"
-            icon="lucide:user"
-            icon-bg="bg-blue-50 dark:bg-blue-900/30"
-            icon-color="text-blue-600 dark:text-blue-400"
-            :expanded="expandedSection === 'personal'"
-            data-testid="profile-personal-section"
-            @toggle="toggleSection('personal')"
-            @navigate-first="focusAccordion('personal')"
-            @navigate-last="focusAccordion('security')"
-            @navigate-next="focusAccordion('preferences')"
-            @navigate-prev="focusAccordion('security')"
-          >
+          <div class="p-6">
             <ProfilePersonalInfo
               :form="form"
               :errors="errors"
@@ -54,32 +27,11 @@
               @update:phone="form.phone = $event"
               @input="debouncedSave"
             />
-          </ProfileAccordionSection>
+          </div>
 
-          <!-- Preferences Section -->
-          <ProfileAccordionSection
-            ref="preferencesAccordion"
-            :title="$t('profile.sections.preferences')"
-            :subtitle="$t('profile.sections.preferencesSubtitle')"
-            icon="lucide:settings"
-            icon-bg="bg-zinc-100 dark:bg-zinc-700"
-            icon-color="text-zinc-600 dark:text-zinc-400"
-            :expanded="expandedSection === 'preferences'"
-            data-testid="profile-preferences-section"
-            @toggle="toggleSection('preferences')"
-            @navigate-first="focusAccordion('personal')"
-            @navigate-last="focusAccordion('security')"
-            @navigate-next="focusAccordion('addresses')"
-            @navigate-prev="focusAccordion('personal')"
-          >
-            <ProfilePreferences
-              :preferred-language="form.preferredLanguage"
-              :preferred-currency="form.preferredCurrency"
-              @update:language="form.preferredLanguage = $event"
-              @update:currency="form.preferredCurrency = $event"
-              @change="handleSave"
-            />
-          </ProfileAccordionSection>
+          <div class="bg-gray-50 dark:bg-zinc-700/50 px-6 py-4 border-t border-gray-100 dark:border-zinc-700">
+            <!-- Placeholder for future sections if needed -->
+          </div>
 
           <!-- Addresses Section -->
           <ProfileAccordionSection
@@ -319,8 +271,6 @@ import PasswordChangeModal from '~/components/profile/PasswordChangeModal.vue'
 import ProfileAccordionSection from '~/components/profile/ProfileAccordionSection.vue'
 import ProfileCompletionIndicator from '~/components/profile/ProfileCompletionIndicator.vue'
 import ProfilePersonalInfo from '~/components/profile/ProfilePersonalInfo.vue'
-import ProfilePictureSection from '~/components/profile/ProfilePictureSection.vue'
-import ProfilePreferences from '~/components/profile/ProfilePreferences.vue'
 import ProfileSecuritySection from '~/components/profile/ProfileSecuritySection.vue'
 import TwoFAModal from '~/components/profile/TwoFAModal.vue'
 import AutoSaveIndicator from '~/components/profile/AutoSaveIndicator.vue'
@@ -344,14 +294,12 @@ definePageMeta({
 // Composables and utilities
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
-const { t, setLocale } = useI18n()
+const { t } = useI18n()
 const nuxtApp = useNuxtApp()
 const $toast = nuxtApp.$toast as ToastPlugin
 
 // Reactive state
 const isLoading = ref(false)
-const profilePictureUrl = ref<string | null>(null)
-const fileInput = ref<HTMLInputElement>()
 const showAddressForm = ref(false)
 const showDeleteConfirmation = ref(false)
 const showPasswordModal = ref(false)
@@ -360,8 +308,7 @@ const showDeleteAddressConfirm = ref(false)
 const addressToDelete = ref<number | null>(null)
 const editingAddress = ref<Address | null>(null)
 const addresses = ref<Address[]>([])
-const isDraggingAvatar = ref(false)
-const expandedSection = ref<string | null>('personal')
+const expandedSection = ref<string | null>('addresses')
 const saveStatus = ref<'idle' | 'saving' | 'saved' | 'error'>('idle')
 const savingAddressId = ref<number | null>(null)
 const deletingAddressId = ref<number | null>(null)
@@ -372,20 +319,14 @@ let hideStatusTimeout: ReturnType<typeof setTimeout> | null = null
 const passwordModalRef = ref<HTMLElement>()
 const twoFAModalRef = ref<HTMLElement>()
 const deleteAddressModalRef = ref<HTMLElement>()
-const passwordModalCloseBtn = ref<InstanceType<typeof Button>>()
-const twoFAModalCloseBtn = ref<InstanceType<typeof Button>>()
 
 // Accordion refs for keyboard navigation using Vue 3.5+ useTemplateRef
-type AccordionKey = 'personal' | 'preferences' | 'addresses' | 'security'
-const personalAccordionRef = useTemplateRef<InstanceType<typeof ProfileAccordionSection>>('personalAccordion')
-const preferencesAccordionRef = useTemplateRef<InstanceType<typeof ProfileAccordionSection>>('preferencesAccordion')
+type AccordionKey = 'addresses' | 'security'
 const addressesAccordionRef = useTemplateRef<InstanceType<typeof ProfileAccordionSection>>('addressesAccordion')
 const securityAccordionRef = useTemplateRef<InstanceType<typeof ProfileAccordionSection>>('securityAccordion')
 
 // Map for easy lookup
 const accordionRefs: Record<AccordionKey, Ref<InstanceType<typeof ProfileAccordionSection> | null>> = {
-  personal: personalAccordionRef,
-  preferences: preferencesAccordionRef,
   addresses: addressesAccordionRef,
   security: securityAccordionRef,
 }
@@ -402,8 +343,6 @@ const focusAccordion = (section: AccordionKey) => {
 const hasUnsavedChanges = computed(() => {
   return form.name !== originalForm.value.name
     || form.phone !== originalForm.value.phone
-    || form.preferredLanguage !== originalForm.value.preferredLanguage
-    || form.preferredCurrency !== originalForm.value.preferredCurrency
 })
 
 // Form data
@@ -448,17 +387,11 @@ const saveStatusText = computed(() => {
 // Profile completion percentage
 const profileCompletionPercentage = computed(() => {
   let completed = 0
-  const total = 5 // Total checkpoints
+  const total = 3 // Simplified MVP Total
 
   if (form.name && form.name.length >= 2) completed++
   if (form.phone && /^[+]?[0-9\s\-()]{9,}$/.test(form.phone)) completed++
-  if (profilePictureUrl.value) completed++
   if (addresses.value.length > 0) completed++
-  // CRITICAL FIX: Only count preferences if user has explicitly saved them (not using defaults)
-  // Check if preferences exist in user metadata (set via handleSave)
-  const hasExplicitPreferences = user.value?.user_metadata?.preferred_language
-    && user.value?.user_metadata?.preferred_currency
-  if (hasExplicitPreferences) completed++
 
   return Math.round((completed / total) * 100)
 })
@@ -487,15 +420,6 @@ const trapFocus = (event: KeyboardEvent, modal: HTMLElement | undefined) => {
   }
 }
 
-// Handle drag events for avatar
-const handleDragOver = () => {
-  isDraggingAvatar.value = true
-}
-
-const handleDragLeave = () => {
-  isDraggingAvatar.value = false
-}
-
 // Toggle accordion section
 const toggleSection = (section: string) => {
   expandedSection.value = expandedSection.value === section ? null : section
@@ -508,17 +432,12 @@ const initializeForm = () => {
       name: user.value.user_metadata?.name || user.value.user_metadata?.full_name || '',
       email: user.value.email || '',
       phone: user.value.user_metadata?.phone || '',
-      preferredLanguage: (user.value.user_metadata?.preferred_language || 'es') as 'es' | 'en' | 'ro' | 'ru',
-      preferredCurrency: (user.value.user_metadata?.preferred_currency || 'EUR') as 'EUR' | 'USD' | 'MDL',
+      preferredLanguage: 'es', // Default for MVP
+      preferredCurrency: 'EUR', // Default for MVP
     }
 
     Object.assign(form, userData)
     originalForm.value = { ...userData }
-
-    // Load profile picture if exists
-    if (user.value.user_metadata?.avatar_url) {
-      profilePictureUrl.value = user.value.user_metadata.avatar_url
-    }
   }
 }
 
@@ -665,148 +584,7 @@ const handleSave = async () => {
   }
 }
 
-// Profile picture handling
-const triggerFileUpload = () => {
-  fileInput.value?.click()
-}
-
-const handleAvatarDrop = async (event: DragEvent) => {
-  isDraggingAvatar.value = false
-  const file = event.dataTransfer?.files?.[0]
-  if (file) {
-    await uploadAvatar(file)
-  }
-}
-
-const handleFileUpload = async (event: Event) => {
-  const file = (event.target as HTMLInputElement).files?.[0]
-  if (file) {
-    await uploadAvatar(file)
-  }
-}
-
-// Handler for ProfilePictureSection component (accepts File directly)
-const handlePictureUpload = async (file: File) => {
-  await uploadAvatar(file)
-}
-
-const uploadAvatar = async (file: File) => {
-  if (!user.value) return
-
-  // Validate file
-  if (!file.type.startsWith('image/')) {
-    $toast.error(t('profile.errors.invalidFileType'))
-    return
-  }
-
-  if (file.size > 5 * 1024 * 1024) { // 5MB limit
-    $toast.error(t('profile.errors.fileTooLarge'))
-    return
-  }
-
-  try {
-    isLoading.value = true
-    saveStatus.value = 'saving'
-
-    // Upload to Supabase Storage
-    const fileExt = file.name.split('.').pop()
-    const fileName = `${user.value.id}/avatar.${fileExt}`
-
-    const { error: uploadError } = await supabase.storage
-      .from('avatars')
-      .upload(fileName, file, { upsert: true })
-
-    if (uploadError) throw uploadError
-
-    // Get public URL
-    const { data } = supabase.storage
-      .from('avatars')
-      .getPublicUrl(fileName)
-
-    const avatarUrl = data.publicUrl
-
-    // Update user metadata
-    const { error: updateError } = await supabase.auth.updateUser({
-      data: { avatar_url: avatarUrl },
-    })
-
-    if (updateError) throw updateError
-
-    profilePictureUrl.value = avatarUrl
-    saveStatus.value = 'saved'
-    $toast.success(t('profile.success.pictureUpdated'))
-
-    setTimeout(() => {
-      saveStatus.value = 'idle'
-    }, 2000)
-  }
-  catch (error: unknown) {
-    console.error('Error uploading profile picture:', getErrorMessage(error))
-    saveStatus.value = 'error'
-    const errorMessage = error instanceof Error ? getErrorMessage(error) : 'An error occurred'
-    $toast.error(t('profile.errors.uploadFailed') + ': ' + errorMessage)
-
-    setTimeout(() => {
-      saveStatus.value = 'idle'
-    }, 3000)
-  }
-  finally {
-    isLoading.value = false
-  }
-}
-
-const removePicture = async () => {
-  if (!user.value) return
-
-  try {
-    isLoading.value = true
-    saveStatus.value = 'saving'
-
-    // Remove from storage - get filename from stored URL to handle any extension
-    const avatarUrl = user.value.user_metadata?.avatar_url
-    if (avatarUrl) {
-      const urlParts = avatarUrl.split('/')
-      const fileName = urlParts[urlParts.length - 1]
-
-      // FIX: Check storage deletion errors
-      const { error: storageError } = await supabase.storage
-        .from('avatars')
-        .remove([`${user.value.id}/${fileName}`])
-
-      if (storageError) {
-        // Log but don't throw - proceed with metadata update
-        console.warn('Storage deletion warning:', storageError)
-      }
-    }
-
-    // Update user metadata
-    const { error } = await supabase.auth.updateUser({
-      data: { avatar_url: null },
-    })
-
-    if (error) throw error
-
-    profilePictureUrl.value = null
-    saveStatus.value = 'saved'
-    $toast.success(t('profile.success.pictureRemoved'))
-
-    setTimeout(() => {
-      saveStatus.value = 'idle'
-    }, 2000)
-  }
-  catch (error: unknown) {
-    console.error('Error removing profile picture:', getErrorMessage(error))
-    saveStatus.value = 'error'
-    $toast.error(t('profile.errors.removeFailed'))
-
-    setTimeout(() => {
-      saveStatus.value = 'idle'
-    }, 3000)
-  }
-  finally {
-    isLoading.value = false
-  }
-}
+// Profile picture methods removed for MVP simplification
 
 // Address management
 const closeAddressForm = () => {

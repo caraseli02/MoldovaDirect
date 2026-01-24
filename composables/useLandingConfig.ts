@@ -18,26 +18,16 @@ interface LandingPageConfig {
   categoryGrid: boolean
   featuredProducts: boolean
 
-  // Tier 2: High Value - Strong engagement and trust
-  producerStories: boolean
+  // Tier 2: High Value - Strong engagement and trust builders
   collectionsShowcase: boolean
-  pairingGuides: boolean
-  wineStoryCta: boolean
   socialProof: boolean
-  mediaMentions: boolean
   trustBadges: boolean
-  certificationBar: boolean
 
   // Tier 3: Support - Additional context
   howItWorks: boolean
   services: boolean
   faqPreview: boolean
   newsletter: boolean
-
-  // Disabled - Non-functional or problematic sections
-  productQuiz: boolean
-  ugcGallery: boolean
-  realtimeNotification: boolean
 }
 
 export const useLandingConfig = () => {
@@ -49,30 +39,15 @@ export const useLandingConfig = () => {
     featuredProducts: true,
 
     // Tier 2: High Value
-    producerStories: false, // Moved to /wine-story page to avoid duplication
     collectionsShowcase: true,
-    pairingGuides: false, // Moved to /wine-story page to avoid duplication
-    wineStoryCta: true,
     socialProof: true,
-    mediaMentions: true,
     trustBadges: true,
-    certificationBar: true,
 
     // Tier 3: Support
     howItWorks: true,
     services: true,
     faqPreview: true,
     newsletter: true,
-
-    // Disabled - Issues identified in KISS principle analysis:
-    // - ProducerStories: Moved to /wine-story to avoid content duplication
-    // - PairingGuides: Moved to /wine-story to avoid content duplication
-    // - ProductQuiz: No backend, shows skeleton placeholders (components/home/ProductQuiz.vue:222-233)
-    // - UgcGallery: 100% fabricated content, legal/trust violation (components/home/UgcGallery.vue:138-205)
-    // - RealtimeNotification: Fake purchase notifications, EU consumer protection violations
-    productQuiz: false,
-    ugcGallery: false,
-    realtimeNotification: false,
   }
 
   /**
@@ -100,7 +75,7 @@ export const useLandingConfig = () => {
    */
   const getSectionStats = () => {
     const tier1 = ['announcementBar', 'videoHero', 'categoryGrid', 'featuredProducts']
-    const tier2 = ['producerStories', 'collectionsShowcase', 'pairingGuides', 'wineStoryCta', 'socialProof', 'mediaMentions', 'trustBadges', 'certificationBar']
+    const tier2 = ['collectionsShowcase', 'socialProof', 'trustBadges']
     const tier3 = ['howItWorks', 'services', 'faqPreview', 'newsletter']
 
     return {

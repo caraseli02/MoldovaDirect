@@ -284,10 +284,10 @@ export default defineNuxtConfig({
       callback: '/auth/confirm',
       exclude: [
         '/', '/products', '/products/*', '/cart',
-        '/about', '/contact', '/faq', '/privacy', '/returns', '/shipping', '/terms', '/track-order', '/wine-story',
+        '/about', '/contact', '/faq', '/privacy', '/returns', '/shipping', '/terms', '/track-order',
         '/checkout', '/checkout/*', // Guest checkout
         '/api/**',
-        '/es', '/es/*', '/en', '/ro', '/ru', '/en/*', '/ro/*', '/ru/*',
+        '/es', '/es/*', '/en', '/en/*', '/ro', '/ru', '/ro/*', '/ru/*',
         '/auth/register', '/auth/forgot-password', '/auth/reset-password', '/auth/verify-email',
         '/test-users', '/test-users/*',
       ],
