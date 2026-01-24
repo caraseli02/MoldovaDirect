@@ -8,13 +8,12 @@
       <h3 class="font-semibold text-zinc-900 dark:text-white text-base">
         {{ $t('cart.recommendedProducts') }}
       </h3>
-      <button
+      <UiButton
         v-if="!recommendationsLoading"
-        class="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors"
         @click="handleLoadRecommendations"
       >
         {{ $t('common.refresh') }}
-      </button>
+      </UiButton>
       <div
         v-else
         class="w-4 h-4 animate-spin rounded-full border-2 border-zinc-300 border-t-primary-600"
@@ -38,12 +37,9 @@
       <p class="text-sm text-red-500 dark:text-red-400 mb-2">
         {{ $t('cart.recommendations.loadFailed') }}
       </p>
-      <button
-        class="text-sm text-primary-600 dark:text-primary-400 hover:underline"
-        @click="handleLoadRecommendations"
-      >
+      <UiButton @click="handleLoadRecommendations">
         {{ $t('actions.retry', 'Retry') }}
-      </button>
+      </UiButton>
     </div>
 
     <!-- Empty State -->
@@ -86,13 +82,10 @@
           <span class="font-bold text-zinc-900 dark:text-white">
             {{ formatPrice(recommendation.product.price) }}
           </span>
-          <button
+          <UiButton
             :disabled="isInCart(recommendation.product.id)"
             :aria-label="isInCart(recommendation.product.id) ? $t('cart.inCart') : $t('cart.addToCart')"
-            class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            :class="isInCart(recommendation.product.id)
-              ? 'bg-zinc-100 dark:bg-zinc-700 text-zinc-400'
-              : 'bg-primary-600 text-white hover:bg-primary-700'"
+            :class="isInCart(recommendation.product.id) ? 'bg-zinc-100 dark:bg-zinc-700 text-zinc-400' : 'bg-primary-600 text-white hover:bg-primary-700'"
             @click="handleAddToCart(recommendation.product)"
           >
             <svg
@@ -123,7 +116,7 @@
                 d="M12 6v12m6-6H6"
               />
             </svg>
-          </button>
+          </UiButton>
         </div>
 
         <!-- Reason Badge -->
@@ -166,16 +159,13 @@
           <span class="font-bold text-zinc-900 dark:text-white text-lg">
             {{ formatPrice(recommendation.product.price) }}
           </span>
-          <button
+          <UiButton
             :disabled="isInCart(recommendation.product.id)"
-            class="px-4 py-2 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            :class="isInCart(recommendation.product.id)
-              ? 'bg-zinc-100 dark:bg-zinc-700 text-zinc-500'
-              : 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100'"
+            :class="isInCart(recommendation.product.id) ? 'bg-zinc-100 dark:bg-zinc-700 text-zinc-500' : 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-100'"
             @click="handleAddToCart(recommendation.product)"
           >
             {{ isInCart(recommendation.product.id) ? $t('cart.inCart') : $t('cart.add') }}
-          </button>
+          </UiButton>
         </div>
       </div>
     </div>

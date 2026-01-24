@@ -5,23 +5,25 @@
         Product Performance
       </h3>
       <div class="flex items-center gap-2">
-        <select
-          v-model="selectedMetric"
-          class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-        >
-          <option value="views">
-            Views
-          </option>
-          <option value="cartAdditions">
-            Cart Additions
-          </option>
-          <option value="purchases">
-            Purchases
-          </option>
-          <option value="revenue">
-            Revenue
-          </option>
-        </select>
+        <UiSelect v-model="selectedMetric">
+          <UiSelectTrigger>
+            <UiSelectValue />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem value="views">
+              Views
+            </UiSelectItem>
+            <UiSelectItem value="cartAdditions">
+              Cart Additions
+            </UiSelectItem>
+            <UiSelectItem value="purchases">
+              Purchases
+            </UiSelectItem>
+            <UiSelectItem value="revenue">
+              Revenue
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
       </div>
     </div>
 

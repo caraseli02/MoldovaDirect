@@ -8,7 +8,7 @@
           class="h-5 w-5 text-muted-foreground"
         />
       </div>
-      <Input
+      <UiInput
         :model-value="search"
         type="text"
         placeholder="Search orders by number, customer name, or email..."
@@ -19,7 +19,7 @@
         v-if="search"
         class="absolute inset-y-0 right-0 pr-3 flex items-center"
       >
-        <Button
+        <UiButton
           variant="ghost"
           size="icon"
           class="h-8 w-8 hover:bg-muted"
@@ -29,20 +29,20 @@
             name="lucide:x"
             class="h-4 w-4"
           />
-        </Button>
+        </UiButton>
       </div>
     </div>
 
     <!-- Filters Card -->
-    <Card>
-      <CardContent class="p-4">
+    <UiCard>
+      <UiCardContent class="p-4">
         <div class="flex items-center gap-2 mb-4">
           <commonIcon
             name="lucide:filter"
             class="h-4 w-4 text-muted-foreground"
           />
           <span class="text-sm font-medium text-foreground">Filters</span>
-          <Button
+          <UiButton
             v-if="hasActiveFilters"
             variant="ghost"
             size="sm"
@@ -54,72 +54,72 @@
               class="h-3 w-3 mr-1"
             />
             Clear all
-          </Button>
+          </UiButton>
         </div>
 
         <!-- Filter Controls -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
           <!-- Status Filter -->
           <div class="space-y-2">
-            <label class="text-xs font-medium text-muted-foreground">Order Status</label>
-            <Select
+            <UiLabel>Order Status</UiLabel>
+            <UiSelect
               :model-value="statusValue"
               @update:model-value="updateStatusFilter"
             >
-              <SelectTrigger class="w-full">
-                <SelectValue placeholder="All Statuses" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="pending">
+              <UiSelectTrigger class="w-full">
+                <UiSelectValue placeholder="All Statuses" />
+              </UiSelectTrigger>
+              <UiSelectContent>
+                <UiSelectItem value="pending">
                   Pending
-                </SelectItem>
-                <SelectItem value="processing">
+                </UiSelectItem>
+                <UiSelectItem value="processing">
                   Processing
-                </SelectItem>
-                <SelectItem value="shipped">
+                </UiSelectItem>
+                <UiSelectItem value="shipped">
                   Shipped
-                </SelectItem>
-                <SelectItem value="delivered">
+                </UiSelectItem>
+                <UiSelectItem value="delivered">
                   Delivered
-                </SelectItem>
-                <SelectItem value="cancelled">
+                </UiSelectItem>
+                <UiSelectItem value="cancelled">
                   Cancelled
-                </SelectItem>
-              </SelectContent>
-            </Select>
+                </UiSelectItem>
+              </UiSelectContent>
+            </UiSelect>
           </div>
 
           <!-- Payment Status Filter -->
           <div class="space-y-2">
-            <label class="text-xs font-medium text-muted-foreground">Payment Status</label>
-            <Select
+            <UiLabel>Payment Status</UiLabel>
+            <UiSelect
               :model-value="paymentStatusValue"
               @update:model-value="updatePaymentStatusFilter"
             >
-              <SelectTrigger class="w-full">
-                <SelectValue placeholder="All Payment Statuses" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="pending">
+              <UiSelectTrigger class="w-full">
+                <UiSelectValue placeholder="All Payment Statuses" />
+              </UiSelectTrigger>
+              <UiSelectContent>
+                <UiSelectItem value="pending">
                   Pending
-                </SelectItem>
-                <SelectItem value="paid">
+                </UiSelectItem>
+                <UiSelectItem value="paid">
                   Paid
-                </SelectItem>
-                <SelectItem value="failed">
+                </UiSelectItem>
+                <UiSelectItem value="failed">
                   Failed
-                </SelectItem>
-                <SelectItem value="refunded">
+                </UiSelectItem>
+                <UiSelectItem value="refunded">
                   Refunded
-                </SelectItem>
-              </SelectContent>
-            </Select>
+                </UiSelectItem>
+              </UiSelectContent>
+            </UiSelect>
           </div>
 
           <!-- Date Start -->
           <div class="space-y-2">
-            <label class="text-xs font-medium text-muted-foreground">Start Date</label>
-            <Input
+            <UiLabel>Start Date</UiLabel>
+            <UiInput
               type="date"
               :value="dateRange?.start"
               @input="updateDateRangeStart($event.target.value)"
@@ -128,8 +128,8 @@
 
           <!-- Date End -->
           <div class="space-y-2">
-            <label class="text-xs font-medium text-muted-foreground">End Date</label>
-            <Input
+            <UiLabel>End Date</UiLabel>
+            <UiInput
               type="date"
               :value="dateRange?.end"
               @input="updateDateRangeEnd($event.target.value)"
@@ -139,7 +139,7 @@
 
         <!-- Quick Date Filters -->
         <div class="flex flex-wrap gap-2">
-          <Button
+          <UiButton
             v-for="preset in datePresets"
             :key="preset.label"
             variant="outline"
@@ -148,8 +148,8 @@
             @click="applyDatePreset(preset.days)"
           >
             {{ preset.label }}
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton
             v-if="dateRange"
             variant="ghost"
             size="sm"
@@ -161,7 +161,7 @@
               class="h-3 w-3 mr-1"
             />
             Clear dates
-          </Button>
+          </UiButton>
         </div>
 
         <!-- Active Filter Badges -->
@@ -169,13 +169,13 @@
           v-if="hasActiveFilters"
           class="flex items-center gap-2 pt-3 border-t"
         >
-          <Badge
+          <UiBadge
             v-if="status && status.length > 0 && status[0]"
             variant="secondary"
             class="gap-1"
           >
             Status: {{ getStatusLabel(status[0]) }}
-            <Button
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1 h-4 w-4 rounded-full hover:bg-muted"
@@ -185,16 +185,16 @@
                 name="lucide:x"
                 class="h-3 w-3"
               />
-            </Button>
-          </Badge>
+            </UiButton>
+          </UiBadge>
 
-          <Badge
+          <UiBadge
             v-if="paymentStatus && paymentStatus.length > 0 && paymentStatus[0]"
             variant="secondary"
             class="gap-1"
           >
             Payment: {{ getPaymentStatusLabel(paymentStatus[0]) }}
-            <Button
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1 h-4 w-4 rounded-full hover:bg-muted"
@@ -204,16 +204,16 @@
                 name="lucide:x"
                 class="h-3 w-3"
               />
-            </Button>
-          </Badge>
+            </UiButton>
+          </UiBadge>
 
-          <Badge
+          <UiBadge
             v-if="dateRange"
             variant="secondary"
             class="gap-1"
           >
             {{ formatDateRange(dateRange) }}
-            <Button
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1 h-4 w-4 rounded-full hover:bg-muted"
@@ -223,21 +223,20 @@
                 name="lucide:x"
                 class="h-3 w-3"
               />
-            </Button>
-          </Badge>
+            </UiButton>
+          </UiBadge>
         </div>
 
         <!-- Results Count -->
         <div class="text-sm text-muted-foreground pt-3 border-t">
           <span class="font-medium text-foreground">{{ total }}</span> {{ total === 1 ? 'order' : 'orders' }} found
         </div>
-      </CardContent>
-    </Card>
+      </UiCardContent>
+    </UiCard>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -345,8 +344,8 @@ const formatDateRange = (range: { start: string, end: string }) => {
 // Event handlers with debouncing for search
 let searchTimeout: NodeJS.Timeout | null = null
 
-const updateSearch = (value: string | number) => {
-  const searchValue = String(value)
+const updateSearch = (value: string | number | null | undefined) => {
+  const searchValue = String(value ?? '')
   if (searchTimeout) {
     clearTimeout(searchTimeout)
   }

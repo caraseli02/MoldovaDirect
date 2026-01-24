@@ -148,16 +148,15 @@
             class="flex flex-col space-y-2"
             @submit.prevent="subscribeNewsletter"
           >
-            <input
+            <UiInput
               v-model="email"
               type="email"
               :placeholder="$t('footer.newsletter.placeholder')"
               :disabled="isSubmitting"
               :aria-label="$t('footer.newsletter.placeholder')"
-              class="px-4 py-2 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
               required
             />
-            <Button
+            <UiButton
               type="submit"
               :disabled="isSubmitting"
               class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -188,7 +187,7 @@
                 </svg>
                 {{ $t('footer.newsletter.subscribing') || 'Subscribing...' }}
               </span>
-            </Button>
+            </UiButton>
           </form>
         </div>
       </div>
@@ -290,7 +289,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Button } from '@/components/ui/button'
+
 import { toast } from 'vue-sonner'
 
 const { t } = useI18n()
@@ -328,7 +327,8 @@ const subscribeNewsletter = async () => {
     )
     email.value = ''
   }
-  catch {
+  catch (error: unknown) {
+    console.error('Newsletter subscription failed:', error)
     toast.error(
       t('footer.newsletter.error.title') || 'Subscription failed',
       {

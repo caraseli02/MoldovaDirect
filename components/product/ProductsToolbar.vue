@@ -16,12 +16,11 @@
     <!-- Right Side Controls -->
     <div class="flex items-center gap-3 sm:gap-4">
       <!-- Filter Button -->
-      <button
+      <UiButton
         type="button"
         :aria-label="t('products.filters.title')"
         :aria-expanded="showFilterPanel"
         aria-controls="filter-panel"
-        class="relative inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-750"
         @click="$emit('openFilters')"
       >
         <CommonIcon
@@ -36,39 +35,40 @@
         >
           {{ activeFilterCount }}
         </span>
-      </button>
+      </UiButton>
 
       <!-- Sort Dropdown -->
       <div class="relative">
-        <label
-          for="product-sort"
-          class="sr-only"
-        >
+        <UiLabel for="product-sort">
           {{ t('products.sortLabel') }}
-        </label>
-        <select
+        </UiLabel>
+        <UiSelect
           id="product-sort"
           :model-value="sortBy"
           :aria-label="t('products.sortLabel')"
-          class="h-10 appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-10 text-sm font-medium text-gray-700 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-          @change="$emit('sortChange', ($event.target as HTMLSelectElement).value)"
+          @update:model-value="$emit('sortChange', $event as string)"
         >
-          <option value="created">
-            {{ t('products.sortNewest') }}
-          </option>
-          <option value="name">
-            {{ t('products.sortName') }}
-          </option>
-          <option value="price_asc">
-            {{ t('products.sortPriceLowHigh') }}
-          </option>
-          <option value="price_desc">
-            {{ t('products.sortPriceHighLow') }}
-          </option>
-          <option value="featured">
-            {{ t('products.sortFeatured') }}
-          </option>
-        </select>
+          <UiSelectTrigger>
+            <UiSelectValue />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem value="created">
+              {{ t('products.sortNewest') }}
+            </UiSelectItem>
+            <UiSelectItem value="name">
+              {{ t('products.sortName') }}
+            </UiSelectItem>
+            <UiSelectItem value="price_asc">
+              {{ t('products.sortPriceLowHigh') }}
+            </UiSelectItem>
+            <UiSelectItem value="price_desc">
+              {{ t('products.sortPriceHighLow') }}
+            </UiSelectItem>
+            <UiSelectItem value="featured">
+              {{ t('products.sortFeatured') }}
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
         <CommonIcon
           name="lucide:chevron-down"
           class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600"

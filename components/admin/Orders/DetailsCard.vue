@@ -1,9 +1,9 @@
 <template>
-  <Card class="rounded-2xl">
-    <CardHeader>
-      <CardTitle>Order Summary</CardTitle>
-    </CardHeader>
-    <CardContent>
+  <UiCard class="rounded-2xl">
+    <UiCardHeader>
+      <UiCardTitle>Order Summary</UiCardTitle>
+    </UiCardHeader>
+    <UiCardContent>
       <div class="space-y-4">
         <!-- Order Totals -->
         <div class="space-y-2">
@@ -88,9 +88,9 @@
               Priority Level
             </p>
             <div class="flex items-center space-x-2 mt-1">
-              <Badge :variant="getPriorityVariant(order.priority_level)">
+              <UiBadge :variant="getPriorityVariant(order.priority_level)">
                 {{ getPriorityLabel(order.priority_level) }}
-              </Badge>
+              </UiBadge>
             </div>
           </div>
 
@@ -122,8 +122,8 @@
           </div>
         </div>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">

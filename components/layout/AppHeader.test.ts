@@ -200,9 +200,9 @@ describe('AppHeader', () => {
         global: createGlobalConfig(),
       })
 
-      // Cart badge should not be visible
-      const badges = wrapper.findAll('.bg-primary-600')
-      expect(badges.length).toBe(0)
+      // Cart badge should not be visible - use data-testid selector
+      const badge = wrapper.find('[data-testid="cart-count"]')
+      expect(badge.exists()).toBe(false)
     })
 
     it('shows cart badge with count when cart has items', () => {
@@ -213,10 +213,9 @@ describe('AppHeader', () => {
       })
 
       // Cart badge should be visible with count
-      const badges = wrapper.findAll('span').filter(span =>
-        span.text() === '3',
-      )
-      expect(badges.length).toBeGreaterThan(0)
+      const badge = wrapper.find('[data-testid="cart-count"]')
+      expect(badge.exists()).toBe(true)
+      expect(badge.text()).toBe('3')
     })
   })
 

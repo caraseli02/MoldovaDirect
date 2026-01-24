@@ -34,14 +34,13 @@ const emit = defineEmits<{
           ••••••••
         </p>
       </div>
-      <button
+      <UiButton
         type="button"
-        class="text-sm text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
         data-testid="profile-change-password-btn"
         @click="emit('change-password')"
       >
         {{ $t('profile.sections.change') }}
-      </button>
+      </UiButton>
     </div>
 
     <!-- 2FA Card -->
@@ -54,14 +53,13 @@ const emit = defineEmits<{
           {{ $t('profile.sections.twoFactorDisabled') }}
         </p>
       </div>
-      <button
+      <UiButton
         type="button"
-        class="text-sm text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
         data-testid="profile-enable-2fa-btn"
         @click="emit('enable-2fa')"
       >
         {{ $t('profile.sections.enable') }}
-      </button>
+      </UiButton>
     </div>
   </div>
 </template>

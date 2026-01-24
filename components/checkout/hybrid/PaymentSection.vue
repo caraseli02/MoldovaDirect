@@ -35,14 +35,16 @@
             : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
           @click="updatePaymentType('cash')"
         >
-          <label class="flex items-center cursor-pointer">
-            <input
-              :checked="modelValue.type === 'cash'"
-              type="radio"
-              value="cash"
-              class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
-              @change="updatePaymentType('cash')"
-            />
+          <div class="flex items-center cursor-pointer">
+            <div
+              class="size-4 rounded-full border-2 border-gray-300 flex items-center justify-center shrink-0"
+              :class="modelValue.type === 'cash' ? 'border-green-600 bg-green-50' : ''"
+            >
+              <div
+                v-if="modelValue.type === 'cash'"
+                class="size-2 rounded-full bg-green-600"
+              ></div>
+            </div>
             <div class="ml-3 flex items-center">
               <span class="text-xl mr-2">💵</span>
               <div>
@@ -54,7 +56,7 @@
                 </p>
               </div>
             </div>
-          </label>
+          </div>
         </div>
 
         <!-- Credit Card Payment (Stripe) -->
@@ -65,14 +67,16 @@
             : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
           @click="updatePaymentType('credit_card')"
         >
-          <label class="flex items-center cursor-pointer">
-            <input
-              :checked="modelValue.type === 'credit_card'"
-              type="radio"
-              value="credit_card"
-              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-              @change="updatePaymentType('credit_card')"
-            />
+          <div class="flex items-center cursor-pointer">
+            <div
+              class="size-4 rounded-full border-2 border-gray-300 flex items-center justify-center shrink-0"
+              :class="modelValue.type === 'credit_card' ? 'border-blue-600 bg-blue-50' : ''"
+            >
+              <div
+                v-if="modelValue.type === 'credit_card'"
+                class="size-2 rounded-full bg-blue-600"
+              ></div>
+            </div>
             <div class="ml-3 flex items-center">
               <span class="text-xl mr-2">💳</span>
               <div>
@@ -84,7 +88,7 @@
                 </p>
               </div>
             </div>
-          </label>
+          </div>
         </div>
       </div>
 

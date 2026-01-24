@@ -243,7 +243,8 @@ const updatePriceRange = (range: number[]) => {
   })
 }
 
-const updateMinPrice = (value: string | number) => {
+const updateMinPrice = (value: string | number | null | undefined) => {
+  if (value === null || value === undefined) return
   const numValue = typeof value === 'string' ? Number.parseFloat(value) : value
   if (Number.isNaN(numValue)) return
 
@@ -253,7 +254,8 @@ const updateMinPrice = (value: string | number) => {
   })
 }
 
-const updateMaxPrice = (value: string | number) => {
+const updateMaxPrice = (value: string | number | null | undefined) => {
+  if (value === null || value === undefined) return
   const numValue = typeof value === 'string' ? Number.parseFloat(value) : value
   if (Number.isNaN(numValue)) return
 

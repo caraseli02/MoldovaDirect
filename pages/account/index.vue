@@ -71,10 +71,7 @@
               </NuxtLink>
             </div>
           </div>
-          <button
-            class="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-lg transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
-            aria-label="Notifications"
-          >
+          <UiButton aria-label="Notifications">
             <svg
               class="w-6 h-6 text-zinc-600 dark:text-zinc-400"
               fill="none"
@@ -88,7 +85,7 @@
                 d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
               />
             </svg>
-          </button>
+          </UiButton>
         </div>
       </div>
 
@@ -222,12 +219,9 @@
           <p class="text-sm text-red-700 dark:text-red-300 mb-4">
             {{ orderStats.error }}
           </p>
-          <button
-            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
-            @click="fetchOrderSummary"
-          >
+          <UiButton @click="fetchOrderSummary">
             {{ $t('common.tryAgain') }}
-          </button>
+          </UiButton>
         </div>
 
         <!-- Recent Orders List -->
@@ -366,9 +360,8 @@
           </NuxtLink>
 
           <!-- Payment Methods Button -->
-          <button
+          <UiButton
             data-testid="quick-payment"
-            class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 hover:border-zinc-300 dark:hover:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
             disabled
           >
             <div class="flex flex-col items-center text-center">
@@ -391,7 +384,7 @@
                 {{ $t('account.paymentMethods') }}
               </span>
             </div>
-          </button>
+          </UiButton>
 
           <!-- Returns Button -->
           <NuxtLink
@@ -424,15 +417,14 @@
       </div>
 
       <!-- Logout Button -->
-      <button
-        class="w-full bg-white dark:bg-zinc-800 border-2 border-primary-200 dark:border-primary-900 rounded-lg p-4 hover:bg-primary-50 dark:hover:bg-primary-950/30 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
+      <UiButton
         data-testid="logout-button"
         @click="handleLogout"
       >
         <span class="text-base font-semibold text-primary-600 dark:text-primary-400">
           {{ $t('common.logout') }}
         </span>
-      </button>
+      </UiButton>
     </div>
   </div>
 </template>

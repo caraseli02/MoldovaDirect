@@ -15,86 +15,73 @@
         @submit.prevent="handleSubmit"
       >
         <div>
-          <label
-            for="email"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-          >
+          <UiLabel for="email">
             Recipient Email
-          </label>
-          <input
+          </UiLabel>
+          <UiInput
             id="email"
             v-model="email"
             type="email"
             placeholder="qa@example.com"
-            class="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
             required
           />
         </div>
 
         <div>
-          <label
-            for="emailType"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-          >
+          <UiLabel for="emailType">
             Email Type
-          </label>
-          <select
-            id="emailType"
-            v-model="selectedType"
-            class="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-          >
-            <option
-              v-for="option in emailTypeOptions"
-              :key="option.value"
-              :value="option.value"
-            >
-              {{ option.label }}
-            </option>
-          </select>
+          </UiLabel>
+          <UiSelect v-model="selectedType">
+            <UiSelectTrigger class="w-full">
+              <UiSelectValue />
+            </UiSelectTrigger>
+            <UiSelectContent>
+              <UiSelectItem
+                v-for="option in emailTypeOptions"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
         </div>
 
         <div v-if="selectedType === 'order_issue'">
-          <label
-            for="issueDescription"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-          >
+          <UiLabel for="issueDescription">
             Issue Description
-          </label>
-          <textarea
+          </UiLabel>
+          <UiTextarea
             id="issueDescription"
             v-model="issueDescription"
             rows="3"
-            class="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
             placeholder="Optional context for the issue email"
-          ></textarea>
+          />
         </div>
 
         <div>
-          <label
-            for="locale"
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-          >
+          <UiLabel for="locale">
             Locale
-          </label>
-          <select
-            id="locale"
-            v-model="locale"
-            class="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-          >
-            <option
-              v-for="option in localeOptions"
-              :key="option.value"
-              :value="option.value"
-            >
-              {{ option.label }}
-            </option>
-          </select>
+          </UiLabel>
+          <UiSelect v-model="locale">
+            <UiSelectTrigger class="w-full">
+              <UiSelectValue />
+            </UiSelectTrigger>
+            <UiSelectContent>
+              <UiSelectItem
+                v-for="option in localeOptions"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
         </div>
 
         <div class="flex items-center justify-between">
-          <button
+          <UiButton
             type="submit"
-            class="inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-60 disabled:cursor-not-allowed"
             :disabled="loading"
           >
             <span v-if="!loading">Send Test Email</span>
@@ -105,7 +92,7 @@
               <span class="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
               <span>Sending…</span>
             </span>
-          </button>
+          </UiButton>
           <p class="text-xs text-gray-500 dark:text-gray-400">
             Generates temporary orders tagged as <strong>TEST</strong> and deletes them afterwards.
           </p>

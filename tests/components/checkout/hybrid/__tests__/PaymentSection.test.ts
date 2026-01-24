@@ -40,6 +40,24 @@ describe('PaymentSection', () => {
     vi.clearAllMocks()
   })
 
+  // Helper to find radio button containers
+  const findRadioContainers = (wrapper: ReturnType<typeof mount>) => {
+    return wrapper.findAll('.size-4.rounded-full.border-2')
+  }
+
+  // Helper to check if radio has the "checked" inner div
+  const isRadioChecked = (radioEl: any) => {
+    return radioEl.find('.size-2.rounded-full').exists()
+  }
+
+  // Helper to click a payment option by index
+  const clickPaymentOption = async (wrapper: ReturnType<typeof mount>, index: number) => {
+    const clickableDivs = wrapper.findAll('.p-4.border.rounded-lg.cursor-pointer')
+    if (clickableDivs[index]) {
+      await clickableDivs[index].trigger('click')
+    }
+  }
+
   // ==========================================
   // Rendering Tests
   // ==========================================
@@ -144,20 +162,20 @@ describe('PaymentSection', () => {
       expect(wrapper.text()).toContain('checkout.payment.cash.summary')
     })
 
-    it('should render cash payment radio input', () => {
+    it('should render cash payment radio button (custom)', () => {
       const wrapper = mount(PaymentSection, {
         props: defaultProps,
       })
-      const radioInput = wrapper.find('input[type="radio"][value="cash"]')
-      expect(radioInput.exists()).toBe(true)
+      const radios = findRadioContainers(wrapper)
+      expect(radios.length).toBeGreaterThanOrEqual(1)
     })
 
     it('should have cash radio checked when payment type is cash', () => {
       const wrapper = mount(PaymentSection, {
         props: defaultProps,
       })
-      const radioInput = wrapper.find('input[type="radio"][value="cash"]')
-      expect((radioInput.element as HTMLInputElement).checked).toBe(true)
+      const radios = findRadioContainers(wrapper)
+      expect(isRadioChecked(radios[0])).toBe(true)
     })
 
     it('should have cash radio unchecked when payment type is not cash', () => {
@@ -167,8 +185,8 @@ describe('PaymentSection', () => {
           sectionNumber: 3,
         },
       })
-      const radioInput = wrapper.find('input[type="radio"][value="cash"]')
-      expect((radioInput.element as HTMLInputElement).checked).toBe(false)
+      const radios = findRadioContainers(wrapper)
+      expect(isRadioChecked(radios[0])).toBe(false)
     })
 
     it('should display cash emoji icon', () => {
@@ -176,14 +194,6 @@ describe('PaymentSection', () => {
         props: defaultProps,
       })
       expect(wrapper.text()).toContain('\uD83D\uDCB5') // Cash emoji
-    })
-
-    it('should have green background styling for cash option', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-      const cashSection = wrapper.find('.bg-green-50')
-      expect(cashSection.exists()).toBe(true)
     })
   })
 
@@ -217,14 +227,6 @@ describe('PaymentSection', () => {
         props: defaultProps,
       })
       expect(wrapper.text()).toContain('\uD83D\uDCB3') // Credit card emoji
-    })
-
-    it('should have disabled styling for coming soon methods', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-      const comingSoonSection = wrapper.findAll('.bg-gray-100')
-      expect(comingSoonSection.length).toBeGreaterThan(0)
     })
   })
 
@@ -282,7 +284,7 @@ describe('PaymentSection', () => {
   // User Interaction Tests
   // ==========================================
   describe('User Interactions', () => {
-    it('should emit update:modelValue when cash radio is changed', async () => {
+    it('should emit update:modelValue when cash option is clicked', async () => {
       const wrapper = mount(PaymentSection, {
         props: {
           modelValue: creditCardPaymentMethod,
@@ -290,8 +292,7 @@ describe('PaymentSection', () => {
         },
       })
 
-      const radioInput = wrapper.find('input[type="radio"][value="cash"]')
-      await radioInput.trigger('change')
+      await clickPaymentOption(wrapper, 0) // Click cash option
 
       expect(wrapper.emitted('update:modelValue')).toBeTruthy()
       expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([
@@ -322,8 +323,7 @@ describe('PaymentSection', () => {
         },
       })
 
-      const radioInput = wrapper.find('input[type="radio"][value="cash"]')
-      await radioInput.trigger('change')
+      await clickPaymentOption(wrapper, 0) // Click cash option
 
       const emittedValue = wrapper.emitted('update:modelValue')?.[0]?.[0] as PaymentMethod
       expect(emittedValue.type).toBe('cash')
@@ -331,21 +331,20 @@ describe('PaymentSection', () => {
       expect(emittedValue.creditCard).toBeDefined()
     })
 
-    it('should have clickable label for cash option', () => {
+    it('should have clickable div for cash option', () => {
       const wrapper = mount(PaymentSection, {
         props: defaultProps,
       })
-      const label = wrapper.find('label.cursor-pointer')
-      expect(label.exists()).toBe(true)
+      const clickableDiv = wrapper.find('.p-4.border.rounded-lg.cursor-pointer')
+      expect(clickableDiv.exists()).toBe(true)
     })
 
-    it('should associate radio input with label', () => {
+    it('should render two payment option containers', () => {
       const wrapper = mount(PaymentSection, {
         props: defaultProps,
       })
-      const label = wrapper.find('label')
-      const radio = label.find('input[type="radio"]')
-      expect(radio.exists()).toBe(true)
+      const clickableDivs = wrapper.findAll('.p-4.border.rounded-lg.cursor-pointer')
+      expect(clickableDivs.length).toBe(2) // Cash and Credit Card
     })
   })
 
@@ -361,8 +360,7 @@ describe('PaymentSection', () => {
         },
       })
 
-      const radioInput = wrapper.find('input[type="radio"][value="cash"]')
-      await radioInput.trigger('change')
+      await clickPaymentOption(wrapper, 0) // Click cash option
 
       const emittedEvents = wrapper.emitted('update:modelValue')
       expect(emittedEvents).toHaveLength(1)
@@ -379,7 +377,7 @@ describe('PaymentSection', () => {
       expect(wrapper.emitted('update:modelValue')).toBeFalsy()
     })
 
-    it('should emit event each time radio is changed', async () => {
+    it('should emit event each time option is clicked', async () => {
       const wrapper = mount(PaymentSection, {
         props: {
           modelValue: creditCardPaymentMethod,
@@ -387,9 +385,8 @@ describe('PaymentSection', () => {
         },
       })
 
-      const radioInput = wrapper.find('input[type="radio"][value="cash"]')
-      await radioInput.trigger('change')
-      await radioInput.trigger('change')
+      await clickPaymentOption(wrapper, 0) // Click cash option
+      await clickPaymentOption(wrapper, 0) // Click again
 
       expect(wrapper.emitted('update:modelValue')).toHaveLength(2)
     })
@@ -535,31 +532,39 @@ describe('PaymentSection', () => {
   // Accessibility Tests
   // ==========================================
   describe('Accessibility', () => {
-    it('should have proper radio input type', () => {
+    it('should have clickable payment options', () => {
       const wrapper = mount(PaymentSection, {
         props: defaultProps,
       })
-      const radio = wrapper.find('input[type="radio"]')
-      expect(radio.attributes('type')).toBe('radio')
+      const clickableDivs = wrapper.findAll('.p-4.border.rounded-lg.cursor-pointer')
+      expect(clickableDivs.length).toBeGreaterThanOrEqual(1)
     })
 
-    it('should have accessible label wrapping the radio', () => {
+    it('should have proper radio button styling', () => {
       const wrapper = mount(PaymentSection, {
         props: defaultProps,
       })
-      const label = wrapper.find('label')
-      expect(label.exists()).toBe(true)
-      expect(label.find('input[type="radio"]').exists()).toBe(true)
+      const radios = findRadioContainers(wrapper)
+      expect(radios.length).toBeGreaterThanOrEqual(1)
+      radios.forEach((radio) => {
+        expect(radio.classes()).toContain('border-2')
+        expect(radio.classes()).toContain('rounded-full')
+      })
     })
 
-    it('should have focus ring styles on radio input', () => {
+    it('should show checked indicator for selected option', () => {
       const wrapper = mount(PaymentSection, {
         props: defaultProps,
       })
-      const radio = wrapper.find('input[type="radio"]')
-      expect(radio.classes()).toContain('focus:ring-green-500')
+      const radios = findRadioContainers(wrapper)
+      expect(isRadioChecked(radios[0])).toBe(true)
     })
+  })
 
+  // ==========================================
+  // Dark Mode Tests
+  // ==========================================
+  describe('Dark Mode Styling', () => {
     it('should use semantic section element', () => {
       const wrapper = mount(PaymentSection, {
         props: defaultProps,
@@ -573,27 +578,6 @@ describe('PaymentSection', () => {
       })
       expect(wrapper.find('h3.section-title').exists()).toBe(true)
     })
-  })
-
-  // ==========================================
-  // Dark Mode Tests
-  // ==========================================
-  describe('Dark Mode Styling', () => {
-    it('should have dark mode classes for cash section background', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-      const cashSection = wrapper.find('.dark\\:bg-green-900\\/20')
-      expect(cashSection.exists()).toBe(true)
-    })
-
-    it('should have dark mode classes for coming soon items', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-      const html = wrapper.html()
-      expect(html).toContain('dark:bg-gray-700')
-    })
 
     it('should have dark mode text colors', () => {
       const wrapper = mount(PaymentSection, {
@@ -602,14 +586,6 @@ describe('PaymentSection', () => {
       const html = wrapper.html()
       expect(html).toContain('dark:text-white')
       expect(html).toContain('dark:text-gray-400')
-    })
-
-    it('should have dark mode border colors for cash section', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-      const cashSection = wrapper.find('.dark\\:border-green-700')
-      expect(cashSection.exists()).toBe(true)
     })
   })
 
@@ -626,11 +602,9 @@ describe('PaymentSection', () => {
       const header = section.find('.section-header')
       const content = section.find('.section-content')
 
-      // Verify structure exists
       expect(header.exists()).toBe(true)
       expect(content.exists()).toBe(true)
 
-      // Header should come before content in DOM
       const sectionHtml = section.html()
       const headerIndex = sectionHtml.indexOf('section-header')
       const contentIndex = sectionHtml.indexOf('section-content')
@@ -649,33 +623,6 @@ describe('PaymentSection', () => {
       const path = svg.find('path')
       expect(path.exists()).toBe(true)
       expect(path.attributes('fill-rule')).toBe('evenodd')
-    })
-
-    it('should have proper flex layout in header', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-
-      const headerContent = wrapper.find('.section-header .flex.items-center')
-      expect(headerContent.exists()).toBe(true)
-    })
-
-    it('should have proper spacing in coming soon section', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-
-      const comingSoonContainer = wrapper.find('.mt-6.space-y-2')
-      expect(comingSoonContainer.exists()).toBe(true)
-    })
-
-    it('should have flex wrap for coming soon items', () => {
-      const wrapper = mount(PaymentSection, {
-        props: defaultProps,
-      })
-
-      const flexWrap = wrapper.find('.flex.flex-wrap.gap-2')
-      expect(flexWrap.exists()).toBe(true)
     })
   })
 

@@ -4,18 +4,33 @@
  * Provides security enhancements for cart operations including:
  * - Data validation schemas
  * - Rate limiting utilities
- * - CSRF token management
+ * - CSRF token management (imported from csrfProtection.ts)
  * - Input sanitization
+ *
+ * NOTE: CSRF functions (generateCSRFToken, validateCSRFToken, cleanupExpiredCSRFTokens)
+ * are imported from csrfProtection.ts to avoid duplication
  */
 
 import { z } from 'zod'
 import crypto from 'crypto'
+import {
+  validateCSRFToken as validateCSRFTokenImport,
+  cleanupExpiredCSRFTokens as cleanupExpiredCSRFTokensImport,
+} from './csrfProtection'
+
+// Re-export CSRF functions from csrfProtection.ts for backward compatibility
+export { generateCSRFToken, cleanupExpiredCSRFTokens } from './csrfProtection'
+
+// Wrapper for validateCSRFToken to maintain API compatibility
+// The csrfProtection version returns { valid: boolean, reason?: string }
+// but cart code expects a boolean
+export function validateCSRFToken(sessionId: string, token: string): boolean {
+  const result = validateCSRFTokenImport(sessionId, token)
+  return result.valid
+}
 
 // Rate limiting storage (in-memory for simplicity, could be Redis in production)
 const rateLimitStore = new Map<string, { count: number, resetTime: number }>()
-
-// CSRF token storage (in-memory for simplicity, could be Redis in production)
-const csrfTokenStore = new Map<string, { token: string, expires: number }>()
 
 // Cart operation validation schemas
 export const cartValidationSchemas = {
@@ -107,66 +122,6 @@ export function checkRateLimit(
     allowed: true,
     resetTime: existing.resetTime,
     remaining: config.maxRequests - existing.count,
-  }
-}
-
-/**
- * Generate CSRF token for session
- */
-export function generateCSRFToken(sessionId: string): string {
-  const token = crypto.randomBytes(32).toString('hex')
-  const expires = Date.now() + (24 * 60 * 60 * 1000) // 24 hours
-
-  csrfTokenStore.set(sessionId, { token, expires })
-
-  return token
-}
-
-/**
- * Validate CSRF token using timing-safe comparison
- *
- * SECURITY: Uses crypto.timingSafeEqual to prevent timing attacks.
- * Timing attacks can leak token characters by measuring response times.
- */
-export function validateCSRFToken(sessionId: string, token: string): boolean {
-  const stored = csrfTokenStore.get(sessionId)
-
-  if (!stored) {
-    return false
-  }
-
-  if (Date.now() > stored.expires) {
-    // Token expired, remove it
-    csrfTokenStore.delete(sessionId)
-    return false
-  }
-
-  // Use timing-safe comparison to prevent timing attacks
-  // Both tokens must be converted to Buffers of equal length
-  const storedBuffer = Buffer.from(stored.token, 'utf8')
-  const providedBuffer = Buffer.from(token, 'utf8')
-
-  // If lengths differ, we still need to do a constant-time comparison
-  // to avoid leaking length information. Compare against stored token twice.
-  if (storedBuffer.length !== providedBuffer.length) {
-    // Perform comparison with self to maintain constant time
-    crypto.timingSafeEqual(storedBuffer, storedBuffer)
-    return false
-  }
-
-  return crypto.timingSafeEqual(storedBuffer, providedBuffer)
-}
-
-/**
- * Clean up expired CSRF tokens (should be called periodically)
- */
-export function cleanupExpiredCSRFTokens(): void {
-  const now = Date.now()
-
-  for (const [sessionId, data] of csrfTokenStore.entries()) {
-    if (now > data.expires) {
-      csrfTokenStore.delete(sessionId)
-    }
   }
 }
 
@@ -266,7 +221,7 @@ export const securityHeaders = {
  * Periodic cleanup function (should be called by a cron job or similar)
  */
 export function performSecurityCleanup(): void {
-  cleanupExpiredCSRFTokens()
+  cleanupExpiredCSRFTokensImport()
   cleanupExpiredRateLimits()
 }
 

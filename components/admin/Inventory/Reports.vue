@@ -21,15 +21,10 @@
       </h3>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <button
+        <UiButton
           v-for="reportType in reportTypes"
           :key="reportType.value"
-          :class="[
-            'p-4 border-2 rounded-lg text-left transition-colors',
-            selectedReportType === reportType.value
-              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-              : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500',
-          ]"
+          :class="['p-4 border-2 rounded-lg text-left transition-colors', selectedReportType === reportType.value ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500']"
           @click="selectedReportType = reportType.value; generateReport()"
         >
           <div class="flex items-center mb-2">
@@ -51,7 +46,7 @@
           <p class="text-sm text-gray-600 dark:text-gray-400">
             {{ reportType.description }}
           </p>
-        </button>
+        </UiButton>
       </div>
 
       <!-- Date Range Filter (for movements summary) -->
@@ -60,33 +55,26 @@
         class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4"
       >
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Start Date
-          </label>
-          <input
+          <UiLabel>Start Date</UiLabel>
+          <UiInput
             v-model="dateRange.startDate"
             type="date"
-            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm"
           />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            End Date
-          </label>
-          <input
+          <UiLabel>End Date</UiLabel>
+          <UiInput
             v-model="dateRange.endDate"
             type="date"
-            class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm"
           />
         </div>
         <div class="flex items-end">
-          <button
+          <UiButton
             :disabled="loading"
-            class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
             @click="generateReport"
           >
             Update Report
-          </button>
+          </UiButton>
         </div>
       </div>
     </div>
@@ -219,24 +207,24 @@
             </h4>
           </div>
           <div class="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead class="px-6">
+            <UiTable>
+              <UiTableHeader>
+                <UiTableRow>
+                  <UiTableHead class="px-6">
                     {{ $t('admin.inventory.reports.headers.product') }}
-                  </TableHead>
-                  <TableHead class="px-6">
+                  </UiTableHead>
+                  <UiTableHead class="px-6">
                     {{ $t('admin.inventory.reports.headers.type') }}
-                  </TableHead>
-                  <TableHead class="px-6">
+                  </UiTableHead>
+                  <UiTableHead class="px-6">
                     {{ $t('admin.inventory.reports.headers.quantity') }}
-                  </TableHead>
-                  <TableHead class="px-6">
+                  </UiTableHead>
+                  <UiTableHead class="px-6">
                     {{ $t('admin.inventory.reports.headers.date') }}
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                  </UiTableHead>
+                </UiTableRow>
+              </UiTableHeader>
+              <UiTableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 <tr
                   v-for="movement in reportData.recentMovements"
                   :key="movement.id"
@@ -245,9 +233,9 @@
                     {{ getLocalizedText(movement.productName) }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <Badge :variant="movementVariant(movement.movementType)">
+                    <UiBadge :variant="movementVariant(movement.movementType)">
                       {{ getMovementTypeLabel(movement.movementType) }}
-                    </Badge>
+                    </UiBadge>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                     {{ movement.quantity }}
@@ -256,8 +244,8 @@
                     {{ formatDate(movement.createdAt) }}
                   </td>
                 </tr>
-              </TableBody>
-            </Table>
+              </UiTableBody>
+            </UiTable>
           </div>
         </div>
       </div>
@@ -278,23 +266,23 @@
           </div>
 
           <div class="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead class="px-6">
+            <UiTable>
+              <UiTableHeader>
+                <UiTableRow>
+                  <UiTableHead class="px-6">
                     {{ $t('admin.inventory.reports.headers.product') }}
-                  </TableHead>
-                  <TableHead class="px-6">
+                  </UiTableHead>
+                  <UiTableHead class="px-6">
                     {{ $t('admin.inventory.reports.headers.currentStock') }}
-                  </TableHead>
-                  <TableHead class="px-6">
+                  </UiTableHead>
+                  <UiTableHead class="px-6">
                     {{ $t('admin.inventory.reports.headers.threshold') }}
-                  </TableHead>
-                  <TableHead class="px-6">
+                  </UiTableHead>
+                  <UiTableHead class="px-6">
                     {{ $t('admin.inventory.reports.headers.stockValue') }}
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
+                  </UiTableHead>
+                </UiTableRow>
+              </UiTableHeader>
               <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 <tr
                   v-for="product in reportData.products"
@@ -323,7 +311,7 @@
                   </td>
                 </tr>
               </tbody>
-            </Table>
+            </UiTable>
           </div>
         </div>
       </div>
@@ -375,35 +363,35 @@
           </div>
 
           <div class="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead class="px-6">
+            <UiTable>
+              <UiTableHeader>
+                <UiTableRow>
+                  <UiTableHead class="px-6">
                     {{ $t('admin.inventory.reports.headers.priority') }}
-                  </TableHead>
-                  <TableHead class="px-6">
+                  </UiTableHead>
+                  <UiTableHead class="px-6">
                     {{ $t('admin.inventory.reports.headers.product') }}
-                  </TableHead>
-                  <TableHead class="px-6">
+                  </UiTableHead>
+                  <UiTableHead class="px-6">
                     {{ $t('admin.inventory.reports.headers.currentStock') }}
-                  </TableHead>
-                  <TableHead class="px-6">
+                  </UiTableHead>
+                  <UiTableHead class="px-6">
                     {{ $t('admin.inventory.reports.headers.recommendedOrder') }}
-                  </TableHead>
-                  <TableHead class="px-6">
+                  </UiTableHead>
+                  <UiTableHead class="px-6">
                     {{ $t('admin.inventory.reports.headers.estimatedCost') }}
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                  </UiTableHead>
+                </UiTableRow>
+              </UiTableHeader>
+              <UiTableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 <tr
                   v-for="product in reportData.products"
                   :key="product.productId"
                 >
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <Badge :variant="priorityVariant(product.priority)">
+                    <UiBadge :variant="priorityVariant(product.priority)">
                       {{ product.priority.charAt(0).toUpperCase() + product.priority.slice(1) }}
-                    </Badge>
+                    </UiBadge>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm font-medium text-gray-900 dark:text-white">
@@ -427,8 +415,8 @@
                     €{{ formatCurrency(product.estimatedCost) }}
                   </td>
                 </tr>
-              </TableBody>
-            </Table>
+              </UiTableBody>
+            </UiTable>
           </div>
         </div>
       </div>
@@ -437,7 +425,6 @@
 </template>
 
 <script setup lang="ts">
-import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { movementVariant, priorityVariant } from '@/lib/uiVariants'
 // Composables

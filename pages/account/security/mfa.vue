@@ -62,14 +62,13 @@
             </div>
           </div>
 
-          <button
+          <UiButton
             v-if="!authStore.hasMFAEnabled && !showEnrollment"
             type="button"
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             @click="startEnrollment"
           >
             {{ $t('auth.mfa.settings.enableButton') }}
-          </button>
+          </UiButton>
         </div>
 
         <!-- MFA Enrollment Flow -->
@@ -100,35 +99,30 @@
 
                   <!-- Manual entry option -->
                   <div class="text-center">
-                    <button
+                    <UiButton
                       type="button"
-                      class="text-sm text-indigo-600 hover:text-indigo-500"
                       @click="showManualEntry = !showManualEntry"
                     >
                       {{ showManualEntry ? $t('auth.mfa.settings.hideManualEntry') : $t('auth.mfa.settings.showManualEntry') }}
-                    </button>
+                    </UiButton>
                   </div>
 
                   <div
                     v-if="showManualEntry"
                     class="w-full max-w-md"
                   >
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                      {{ $t('auth.mfa.settings.secretKey') }}
-                    </label>
+                    <UiLabel>{{ $t('auth.mfa.settings.secretKey') }}</UiLabel>
                     <div class="flex items-center space-x-2">
-                      <input
+                      <UiInput
                         :value="authStore.mfaEnrollment?.secret"
                         readonly
-                        class="flex-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-sm font-mono"
                       />
-                      <button
+                      <UiButton
                         type="button"
-                        class="px-3 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50"
                         @click="copySecret"
                       >
                         {{ $t('auth.mfa.settings.copy') }}
-                      </button>
+                      </UiButton>
                     </div>
                   </div>
 
@@ -158,13 +152,10 @@
                 >
                   <div class="space-y-4">
                     <div>
-                      <label
-                        for="verification-code"
-                        class="block text-sm font-medium text-gray-700 mb-2"
-                      >
+                      <UiLabel for="verification-code">
                         {{ $t('auth.mfa.settings.verificationCodeLabel') }}
-                      </label>
-                      <input
+                      </UiLabel>
+                      <UiInput
                         id="verification-code"
                         v-model="verificationCode"
                         type="text"
@@ -173,11 +164,7 @@
                         maxlength="6"
                         autocomplete="off"
                         required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-center text-xl tracking-widest"
-                        :class="{
-                          'border-red-500': enrollmentError,
-                          'border-gray-300': !enrollmentError,
-                        }"
+                        :class="{ 'border-red-500': enrollmentError, 'border-gray-300': !enrollmentError }"
                         placeholder="000000"
                         :disabled="authStore.mfaLoading"
                       />
@@ -193,10 +180,9 @@
                     </div>
 
                     <div class="flex space-x-3">
-                      <button
+                      <UiButton
                         type="submit"
                         :disabled="authStore.mfaLoading || verificationCode.length !== 6"
-                        class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <span v-if="!authStore.mfaLoading">{{ $t('auth.mfa.settings.verifyButton') }}</span>
                         <span
@@ -224,15 +210,14 @@
                           </svg>
                           {{ $t('auth.mfa.settings.verifying') }}
                         </span>
-                      </button>
+                      </UiButton>
 
-                      <button
+                      <UiButton
                         type="button"
-                        class="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50"
                         @click="cancelEnrollment"
                       >
                         {{ $t('auth.mfa.settings.cancelButton') }}
-                      </button>
+                      </UiButton>
                     </div>
                   </div>
                 </form>
@@ -282,13 +267,12 @@
                 </div>
               </div>
 
-              <button
+              <UiButton
                 type="button"
-                class="text-sm text-red-600 hover:text-red-500"
                 @click="confirmDisable(factor.id)"
               >
                 {{ $t('auth.mfa.settings.removeButton') }}
-              </button>
+              </UiButton>
             </div>
           </div>
         </div>
@@ -368,20 +352,18 @@
             </div>
           </div>
           <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-            <button
+            <UiButton
               type="button"
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
               @click="disableMFA"
             >
               {{ $t('auth.mfa.settings.disableConfirmButton') }}
-            </button>
-            <button
+            </UiButton>
+            <UiButton
               type="button"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
               @click="showDisableConfirm = false"
             >
               {{ $t('auth.mfa.settings.disableCancelButton') }}
-            </button>
+            </UiButton>
           </div>
         </div>
       </div>

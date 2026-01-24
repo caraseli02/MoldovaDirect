@@ -1,40 +1,31 @@
 <template>
   <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
     <div class="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
-      <label class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
-        Date Range:
-      </label>
+      <UiLabel>Date Range:</UiLabel>
       <div class="flex gap-2 items-center">
-        <input
+        <UiInput
           v-model="localStartDate"
           type="date"
-          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           @change="updateDateRange"
         />
         <span class="text-gray-500 dark:text-gray-400">to</span>
-        <input
+        <UiInput
           v-model="localEndDate"
           type="date"
-          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           @change="updateDateRange"
         />
       </div>
     </div>
 
     <div class="flex gap-2">
-      <button
+      <UiButton
         v-for="preset in presets"
         :key="preset.label"
-        :class="[
-          'px-3 py-2 text-sm rounded-md border transition-colors',
-          isActivePreset(preset)
-            ? 'bg-blue-600 text-white border-blue-600'
-            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700',
-        ]"
+        :class="['px-3 py-2 text-sm rounded-md border transition-colors', isActivePreset(preset) ? 'bg-blue-600 text-white border-blue-600' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700']"
         @click="applyPreset(preset)"
       >
         {{ preset.label }}
-      </button>
+      </UiButton>
     </div>
   </div>
 </template>

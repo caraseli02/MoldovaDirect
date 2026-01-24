@@ -1,13 +1,13 @@
 <template>
   <div class="max-w-2xl mx-auto py-12 px-4">
-    <Card>
-      <CardHeader>
-        <CardTitle>Seed Mock Orders</CardTitle>
-        <CardDescription>
+    <UiCard>
+      <UiCardHeader>
+        <UiCardTitle>Seed Mock Orders</UiCardTitle>
+        <UiCardDescription>
           Create 20 mock orders for testing the admin orders UI
-        </CardDescription>
-      </CardHeader>
-      <CardContent class="space-y-4">
+        </UiCardDescription>
+      </UiCardHeader>
+      <UiCardContent class="space-y-4">
         <div
           v-if="!loading && !result"
           class="space-y-4"
@@ -23,7 +23,7 @@
             <li>Different payment statuses</li>
           </ul>
 
-          <Button
+          <UiButton
             class="w-full"
             size="lg"
             @click="seedOrders"
@@ -33,7 +33,7 @@
               class="h-5 w-5 mr-2"
             />
             Create Mock Orders
-          </Button>
+          </UiButton>
         </div>
 
         <div
@@ -88,7 +88,7 @@
           </div>
 
           <div class="flex gap-2">
-            <Button
+            <UiButton
               class="flex-1"
               @click="goToOrders"
             >
@@ -97,8 +97,8 @@
                 class="h-4 w-4 mr-2"
               />
               View Orders
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton
               variant="outline"
               class="flex-1"
               @click="reset"
@@ -108,7 +108,7 @@
                 class="h-4 w-4 mr-2"
               />
               Create More
-            </Button>
+            </UiButton>
           </div>
         </div>
 
@@ -131,7 +131,7 @@
             </p>
           </div>
 
-          <Button
+          <UiButton
             variant="outline"
             class="w-full"
             @click="reset"
@@ -141,15 +141,14 @@
               class="h-4 w-4 mr-2"
             />
             Try Again
-          </Button>
+          </UiButton>
         </div>
-      </CardContent>
-    </Card>
+      </UiCardContent>
+    </UiCard>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 definePageMeta({

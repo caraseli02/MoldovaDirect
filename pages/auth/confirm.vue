@@ -104,13 +104,12 @@
             >
               {{ $t('auth.backToLogin') }}
             </NuxtLink>
-            <button
+            <UiButton
               v-if="canRetry"
-              class="flex-1 inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
               @click="retryConfirmation"
             >
               {{ $t('auth.retry') }}
-            </button>
+            </UiButton>
           </div>
         </div>
       </div>

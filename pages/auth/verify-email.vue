@@ -86,11 +86,10 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 
           <div class="mt-4 space-y-2">
             <div class="flex space-x-2">
-              <input
+              <UiInput
                 v-model="email"
                 type="email"
                 :placeholder="$t('auth.email')"
-                class="flex-1 px-3 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
               />
               <UiButton
                 :disabled="resendLoading || !email"

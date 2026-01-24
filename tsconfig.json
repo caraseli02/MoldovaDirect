@@ -9,6 +9,7 @@
     "checkout-ux-testing/**/*",
     "**/*.test.ts",
     "**/*.spec.ts",
-    "tests/**/*"
+    "tests/**/*",
+    "scripts/documentation/link-updater.ts"
   ]
 }

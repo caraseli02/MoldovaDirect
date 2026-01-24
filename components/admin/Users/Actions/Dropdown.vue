@@ -14,8 +14,8 @@
 
 <template>
   <div>
-    <DropdownMenu>
-      <DropdownMenuTrigger as-child>
+    <UiDropdownMenu>
+      <UiDropdownMenuTrigger as-child>
         <UiButton
           variant="ghost"
           size="icon"
@@ -27,34 +27,33 @@
             class="h-4 w-4"
           />
         </UiButton>
-      </DropdownMenuTrigger>
-
-      <DropdownMenuContent
+      </UiDropdownMenuTrigger>
+      <UiDropdownMenuContent
         align="end"
         class="w-48"
       >
         <!-- View Details -->
-        <DropdownMenuItem @click="handleAction('view')">
+        <UiDropdownMenuItem @click="handleAction('view')">
           <commonIcon
             name="lucide:eye"
             class="w-4 h-4"
           />
           <span>{{ $t('admin.users.actions.viewDetails') }}</span>
-        </DropdownMenuItem>
+        </UiDropdownMenuItem>
 
         <!-- Edit Profile -->
-        <DropdownMenuItem @click="handleAction('edit')">
+        <UiDropdownMenuItem @click="handleAction('edit')">
           <commonIcon
             name="lucide:pencil"
             class="w-4 h-4"
           />
           <span>{{ $t('admin.users.actions.editProfile') }}</span>
-        </DropdownMenuItem>
+        </UiDropdownMenuItem>
 
-        <DropdownMenuSeparator />
+        <UiDropdownMenuSeparator />
 
         <!-- Email Actions -->
-        <DropdownMenuItem
+        <UiDropdownMenuItem
           v-if="!user.email_confirmed_at"
           @click="handleAction('verify_email')"
         >
@@ -63,31 +62,31 @@
             class="w-4 h-4"
           />
           <span>{{ $t('admin.users.actions.verifyEmail') }}</span>
-        </DropdownMenuItem>
+        </UiDropdownMenuItem>
 
-        <DropdownMenuItem @click="handleAction('reset_password')">
+        <UiDropdownMenuItem @click="handleAction('reset_password')">
           <commonIcon
             name="lucide:key"
             class="w-4 h-4"
           />
           <span>{{ $t('admin.users.actions.resetPassword') }}</span>
-        </DropdownMenuItem>
+        </UiDropdownMenuItem>
 
-        <DropdownMenuSeparator />
+        <UiDropdownMenuSeparator />
 
         <!-- Role Management -->
-        <DropdownMenuItem @click="handleAction('update_role')">
+        <UiDropdownMenuItem @click="handleAction('update_role')">
           <commonIcon
             name="lucide:shield-check"
             class="w-4 h-4"
           />
           <span>{{ $t('admin.users.actions.manageRole') }}</span>
-        </DropdownMenuItem>
+        </UiDropdownMenuItem>
 
-        <DropdownMenuSeparator />
+        <UiDropdownMenuSeparator />
 
         <!-- Account Status Actions -->
-        <DropdownMenuItem
+        <UiDropdownMenuItem
           v-if="!isSuspended"
           class="text-yellow-700 dark:text-yellow-400 focus:text-yellow-700 dark:focus:text-yellow-400 focus:bg-yellow-50 dark:focus:bg-yellow-900/20"
           @click="handleAction('suspend')"
@@ -97,9 +96,9 @@
             class="w-4 h-4"
           />
           <span>{{ $t('admin.users.actions.suspendAccount') }}</span>
-        </DropdownMenuItem>
+        </UiDropdownMenuItem>
 
-        <DropdownMenuItem
+        <UiDropdownMenuItem
           v-if="isSuspended"
           class="text-green-700 dark:text-green-400 focus:text-green-700 dark:focus:text-green-400 focus:bg-green-50 dark:focus:bg-green-900/20"
           @click="handleAction('unsuspend')"
@@ -109,9 +108,9 @@
             class="w-4 h-4"
           />
           <span>{{ $t('admin.users.actions.unsuspendAccount') }}</span>
-        </DropdownMenuItem>
+        </UiDropdownMenuItem>
 
-        <DropdownMenuItem
+        <UiDropdownMenuItem
           v-if="!isBanned"
           class="text-red-700 dark:text-red-400 focus:text-red-700 dark:focus:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20"
           @click="handleAction('ban')"
@@ -121,9 +120,9 @@
             class="w-4 h-4"
           />
           <span>{{ $t('admin.users.actions.banAccount') }}</span>
-        </DropdownMenuItem>
+        </UiDropdownMenuItem>
 
-        <DropdownMenuItem
+        <UiDropdownMenuItem
           v-if="isBanned"
           class="text-green-700 dark:text-green-400 focus:text-green-700 dark:focus:text-green-400 focus:bg-green-50 dark:focus:bg-green-900/20"
           @click="handleAction('unban')"
@@ -133,18 +132,18 @@
             class="w-4 h-4"
           />
           <span>{{ $t('admin.users.actions.unbanAccount') }}</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </UiDropdownMenuItem>
+      </UiDropdownMenuContent>
 
-    <!-- Confirmation Modals -->
-    <AdminUsersActionsModal
-      v-if="showActionModal"
-      :action="selectedAction"
-      :user="user"
-      @confirm="confirmAction"
-      @cancel="cancelAction"
-    />
+      <!-- Confirmation Modals -->
+      <AdminUsersActionsModal
+        v-if="showActionModal"
+        :action="selectedAction"
+        :user="user"
+        @confirm="confirmAction"
+        @cancel="cancelAction"
+      />
+    </UiDropdownMenu>
   </div>
 </template>
 

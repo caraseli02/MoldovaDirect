@@ -34,14 +34,14 @@
             {{ modelValue.name }} - {{ $t('checkout.shippingMethod.estimatedDelivery', { days: modelValue.estimatedDays }) }}
           </p>
         </div>
-        <button
-          v-if="availableMethods.length > 1"
+        <UiButton
+          v-if="availableMethods.length>1"
           type="button"
           class="text-sm text-green-700 dark:text-green-300 hover:text-green-900 dark:hover:text-green-100 underline"
           @click="showAllMethods = true"
         >
           {{ $t('checkout.shippingMethod.changeMethod') }}
-        </button>
+        </UiButton>
       </div>
     </div>
 
@@ -51,9 +51,9 @@
       class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4"
     >
       <div class="flex items-center gap-3">
-        <div class="flex-shrink-0 w-10 h-10 bg-primary-100 dark:bg-primary-800 rounded-full flex items-center justify-center">
+        <div class="flex-shrink-0 w-10 h-10 bg-rose-100 dark:bg-rose-800 rounded-full flex items-center justify-center">
           <svg
-            class="w-5 h-5 text-primary-600 dark:text-primary-400"
+            class="w-5 h-5 text-rose-600 dark:text-rose-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -140,14 +140,14 @@
             {{ $t('checkout.shippingMethod.fallbackWarning.description') }}
           </p>
           <div class="mt-3">
-            <Button
+            <UiButton
               variant="link"
               size="sm"
               class="text-sm font-medium text-yellow-800 dark:text-yellow-200 hover:text-yellow-900 dark:hover:text-yellow-100 p-0 h-auto"
               @click="$emit('retry')"
             >
               {{ $t('checkout.shippingMethod.fallbackWarning.retry') }}
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -158,7 +158,7 @@
       v-else-if="availableMethods.length > 0 && (!autoSelected || showAllMethods)"
       class="space-y-3"
     >
-      <RadioGroup
+      <UiRadioGroup
         v-model="selectedMethodId"
         :aria-label="$t('checkout.shippingMethod.title')"
       >
@@ -167,85 +167,87 @@
           :key="method.id"
           class="relative"
         >
-          <label
-            class="flex items-start space-x-3 p-4 border rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-            :for="`ship-${method.id}`"
+          <div
+            class="p-4 border rounded-lg cursor-pointer transition-all"
             :class="selectedMethodId === method.id
-              ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 ring-1 ring-primary-500'
-              : 'border-gray-200 dark:border-gray-600'"
+              ? 'border-rose-500 bg-rose-50 dark:bg-rose-900/20 ring-1 ring-rose-500'
+              : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
+            @click="selectedMethodId = method.id"
           >
-            <RadioGroupItem
-              :id="`ship-${method.id}`"
-              :value="method.id"
-              class="mt-1"
-            />
+            <div class="flex items-start gap-3">
+              <UiRadioGroupItem
+                :id="`ship-${method.id}`"
+                :value="method.id"
+                class="mt-0.5 flex-shrink-0"
+              />
 
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between">
-                <h4 class="text-sm font-medium text-gray-900 dark:text-white">
-                  {{ method.name }}
-                </h4>
-                <div class="flex items-center space-x-2">
-                  <!-- Free shipping badge -->
-                  <span
-                    v-if="method.price === 0"
-                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <h4 class="text-sm font-medium text-gray-900 dark:text-white">
+                    {{ method.name }}
+                  </h4>
+                  <div class="flex items-center gap-2 flex-shrink-0">
+                    <!-- Free shipping badge -->
+                    <span
+                      v-if="method.price === 0"
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                    >
+                      {{ $t('checkout.shippingMethod.free.label') }}
+                    </span>
+
+                    <!-- Express shipping badge -->
+                    <span
+                      v-else-if="method.estimatedDays <= 2"
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200"
+                    >
+                      {{ $t('checkout.shippingMethod.express.label') }}
+                    </span>
+
+                    <!-- Price -->
+                    <span class="text-sm font-semibold text-gray-900 dark:text-white">
+                      {{ formatPrice(method.price) }}
+                    </span>
+                  </div>
+                </div>
+
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  {{ method.description }}
+                </p>
+
+                <!-- Delivery estimate -->
+                <div class="flex items-center gap-1.5 mt-2">
+                  <svg
+                    class="w-4 h-4 text-gray-400 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    {{ $t('checkout.shippingMethod.free.label') }}
-                  </span>
-
-                  <!-- Express shipping badge -->
-                  <span
-                    v-else-if="method.estimatedDays <= 2"
-                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                  >
-                    {{ $t('checkout.shippingMethod.express.label') }}
-                  </span>
-
-                  <!-- Price -->
-                  <span class="text-sm font-semibold text-gray-900 dark:text-white">
-                    {{ formatPrice(method.price) }}
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span class="text-xs text-gray-500 dark:text-gray-400">
+                    {{ getDeliveryEstimate(method.estimatedDays) }}
                   </span>
                 </div>
-              </div>
 
-              <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                {{ method.description }}
-              </p>
-
-              <!-- Delivery estimate -->
-              <div class="flex items-center space-x-2 mt-2">
-                <svg
-                  class="w-4 h-4 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+                <!-- Special conditions -->
+                <div
+                  v-if="getMethodConditions(method)"
+                  class="mt-2"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <span class="text-xs text-gray-500 dark:text-gray-400">
-                  {{ getDeliveryEstimate(method.estimatedDays) }}
-                </span>
-              </div>
-
-              <!-- Special conditions -->
-              <div
-                v-if="getMethodConditions(method)"
-                class="mt-2"
-              >
-                <p class="text-xs text-gray-500 dark:text-gray-400 italic">
-                  {{ getMethodConditions(method) }}
-                </p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 italic">
+                    {{ getMethodConditions(method) }}
+                  </p>
+                </div>
               </div>
             </div>
-          </label>
+          </div>
         </div>
-      </RadioGroup>
+      </UiRadioGroup>
     </div>
 
     <!-- No Methods Available -->
@@ -277,12 +279,12 @@
     <!-- Error State -->
     <div
       v-if="error"
-      class="rounded-md bg-red-50 dark:bg-red-900/20 p-4 border border-red-200 dark:border-red-800"
+      class="rounded-md bg-rose-50 dark:bg-rose-900/20 p-4 border border-rose-200 dark:border-rose-800"
     >
       <div class="flex">
         <div class="flex-shrink-0">
           <svg
-            class="h-5 w-5 text-red-400"
+            class="h-5 w-5 text-rose-400"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -294,21 +296,21 @@
           </svg>
         </div>
         <div class="ml-3">
-          <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
+          <h3 class="text-sm font-medium text-rose-800 dark:text-rose-200">
             {{ $t('checkout.shippingMethod.error') }}
           </h3>
-          <p class="mt-1 text-sm text-red-700 dark:text-red-300">
+          <p class="mt-1 text-sm text-rose-700 dark:text-rose-300">
             {{ error }}
           </p>
           <div class="mt-3">
-            <Button
+            <UiButton
               variant="link"
               size="sm"
-              class="text-sm font-medium text-red-800 dark:text-red-200 hover:text-red-900 dark:hover:text-red-100 p-0 h-auto"
+              class="text-sm font-medium text-rose-800 dark:text-rose-200 hover:text-rose-900 dark:hover:text-rose-100 p-0 h-auto"
               @click="$emit('retry')"
             >
               {{ $t('common.retry') }}
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -317,7 +319,7 @@
     <!-- Validation Error -->
     <p
       v-if="validationError"
-      class="mt-2 text-sm text-red-600 dark:text-red-400"
+      class="mt-2 text-sm text-rose-600 dark:text-rose-400"
     >
       {{ validationError }}
     </p>
@@ -326,8 +328,6 @@
 
 <script setup lang="ts">
 import type { ShippingMethod } from '~/types/checkout'
-import { Button } from '@/components/ui/button'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 interface Props {
   modelValue: ShippingMethod | null

@@ -6,11 +6,11 @@
 -->
 
 <template>
-  <Card>
-    <CardHeader>
-      <CardTitle>Template Synchronization</CardTitle>
-    </CardHeader>
-    <CardContent>
+  <UiCard>
+    <UiCardHeader>
+      <UiCardTitle>Template Synchronization</UiCardTitle>
+    </UiCardHeader>
+    <UiCardContent>
       <div class="space-y-4">
         <p class="text-sm text-gray-600 dark:text-gray-400">
           Synchronize template structure across all languages. This will update all locales to have the same keys,
@@ -18,48 +18,44 @@
         </p>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Source Language
-          </label>
-          <select
-            v-model="sourceLocale"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-          >
-            <option value="en">
-              English
-            </option>
-            <option value="es">
-              Español
-            </option>
-            <option value="ro">
-              Română
-            </option>
-            <option value="ru">
-              Русский
-            </option>
-          </select>
+          <UiLabel>Source Language</UiLabel>
+          <UiSelect v-model="sourceLocale">
+            <UiSelectTrigger>
+              <UiSelectValue />
+            </UiSelectTrigger>
+            <UiSelectContent>
+              <UiSelectItem value="en">
+                English
+              </UiSelectItem>
+              <UiSelectItem value="es">
+                Español
+              </UiSelectItem>
+              <UiSelectItem value="ro">
+                Română
+              </UiSelectItem>
+              <UiSelectItem value="ru">
+                Русский
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Target Languages
-          </label>
+          <UiLabel>Target Languages</UiLabel>
           <div class="space-y-2">
-            <label
+            <UiLabel
               v-for="locale in availableLocales.filter(l => l !== sourceLocale)"
               :key="locale"
               class="flex items-center gap-2"
             >
-              <input
-                v-model="targetLocales"
-                type="checkbox"
-                :value="locale"
-                class="rounded border-gray-300 dark:border-gray-600"
+              <UiCheckbox
+                :checked="targetLocales.includes(locale)"
+                @update:checked="(val: boolean) => toggleTargetLocale(locale, val)"
               />
               <span class="text-sm text-gray-900 dark:text-white">
                 {{ getLocaleName(locale) }}
               </span>
-            </label>
+            </UiLabel>
           </div>
         </div>
 
@@ -89,29 +85,28 @@
         </div>
 
         <div class="flex gap-2">
-          <Button
+          <UiButton
             variant="outline"
             :disabled="targetLocales.length === 0 || previewing"
             @click="previewSync"
           >
             {{ previewing ? 'Previewing...' : 'Preview Changes' }}
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton
             :disabled="targetLocales.length === 0 || !syncPreview || synchronizing"
             @click="synchronizeTemplates"
           >
             {{ synchronizing ? 'Synchronizing...' : 'Synchronize Templates' }}
-          </Button>
+          </UiButton>
         </div>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
-import { Button } from '~/components/ui/button'
 
 const props = defineProps<{
   templateType: string
@@ -136,6 +131,18 @@ function getLocaleName(locale: string): string {
     ru: 'Русский',
   }
   return names[locale] || locale
+}
+
+function toggleTargetLocale(locale: string, checked: boolean) {
+  if (checked) {
+    targetLocales.value.push(locale)
+  }
+  else {
+    const index = targetLocales.value.indexOf(locale)
+    if (index > -1) {
+      targetLocales.value.splice(index, 1)
+    }
+  }
 }
 
 async function previewSync() {

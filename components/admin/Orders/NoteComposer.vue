@@ -2,11 +2,9 @@
   <div class="space-y-4">
     <!-- Note Type Selector -->
     <div class="flex items-center space-x-4">
-      <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-        Note Type:
-      </label>
+      <UiLabel>Note Type:</UiLabel>
       <div class="flex items-center space-x-2">
-        <Button
+        <UiButton
           :variant="noteType === 'internal' ? 'default' : 'outline'"
           size="sm"
           type="button"
@@ -17,8 +15,8 @@
             class="h-4 w-4 mr-1"
           />
           Internal
-        </Button>
-        <Button
+        </UiButton>
+        <UiButton
           :variant="noteType === 'customer' ? 'default' : 'outline'"
           size="sm"
           type="button"
@@ -29,7 +27,7 @@
             class="h-4 w-4 mr-1"
           />
           Customer
-        </Button>
+        </UiButton>
       </div>
     </div>
 
@@ -49,13 +47,10 @@
 
     <!-- Note Content -->
     <div>
-      <label
-        for="note-content"
-        class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
-      >
+      <UiLabel for="note-content">
         Note Content
-      </label>
-      <Textarea
+      </UiLabel>
+      <UiTextarea
         id="note-content"
         v-model="content"
         :placeholder="noteType === 'internal'
@@ -72,7 +67,7 @@
 
     <!-- Actions -->
     <div class="flex items-center justify-end space-x-2">
-      <Button
+      <UiButton
         variant="outline"
         size="sm"
         :disabled="submitting"
@@ -80,8 +75,8 @@
         @click="handleCancel"
       >
         Cancel
-      </Button>
-      <Button
+      </UiButton>
+      <UiButton
         size="sm"
         :disabled="!canSubmit || submitting"
         type="button"
@@ -98,13 +93,12 @@
           class="h-4 w-4 mr-1"
         />
         {{ submitting ? 'Adding...' : 'Add Note' }}
-      </Button>
+      </UiButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
 interface Props {

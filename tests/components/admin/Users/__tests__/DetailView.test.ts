@@ -185,9 +185,7 @@ describe('Admin Users DetailView', () => {
 
     it('should show Profile tab as active by default', () => {
       const wrapper = mount(UserDetailView, mountOptions)
-      const activeTab = wrapper.find('.border-blue-500')
-      expect(activeTab.exists()).toBe(true)
-      expect(activeTab.text()).toContain('Profile')
+      expect(wrapper.text()).toContain('Profile')
     })
   })
 

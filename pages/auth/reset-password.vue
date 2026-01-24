@@ -63,7 +63,7 @@
             <!-- Input fields with mobile optimization -->
             <div class="space-y-4">
               <div class="relative">
-                <input
+                <UiInput
                   id="password"
                   v-model="form.password"
                   name="password"
@@ -76,19 +76,17 @@
                   minlength="8"
                   :aria-invalid="passwordError ? 'true' : 'false'"
                   :aria-describedby="passwordError ? 'password-error' : 'password-requirements'"
-                  class="peer w-full px-4 py-3 pr-12 min-h-[44px] border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-transparent focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all bg-white dark:bg-gray-700"
                   :class="{ 'border-red-500 dark:border-red-400': passwordError }"
                   placeholder="New Password"
                   @input="validatePasswordField"
                   @blur="validatePasswordField"
                 />
-                <label
+                <UiLabel
                   for="password"
-                  class="absolute left-3 -top-2.5 bg-gray-50 dark:bg-gray-900 px-2 text-sm text-gray-600 dark:text-gray-300 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
                   :class="{ 'text-red-600 dark:text-red-400': passwordError }"
                 >
                   {{ $t('auth.newPassword') }}
-                </label>
+                </UiLabel>
                 <UiButton
                   type="button"
                   variant="ghost"
@@ -134,7 +132,7 @@
               </div>
 
               <div class="relative">
-                <input
+                <UiInput
                   id="confirmPassword"
                   v-model="form.confirmPassword"
                   name="confirmPassword"
@@ -146,25 +144,17 @@
                   required
                   :aria-invalid="confirmPasswordError ? 'true' : 'false'"
                   :aria-describedby="confirmPasswordError ? 'confirm-password-error' : 'confirm-password-desc'"
-                  class="peer w-full px-4 py-3 pr-12 min-h-[44px] border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-transparent focus:border-primary-500 dark:focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all bg-white dark:bg-gray-700"
-                  :class="{
-                    'border-red-500 dark:border-red-400': confirmPasswordError,
-                    'border-green-500 dark:border-green-400': form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword,
-                  }"
+                  :class="{ 'border-red-500 dark:border-red-400': confirmPasswordError, 'border-green-500 dark:border-green-400': form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword }"
                   placeholder="Confirm Password"
                   @input="validateConfirmPasswordField"
                   @blur="validateConfirmPasswordField"
                 />
-                <label
+                <UiLabel
                   for="confirmPassword"
-                  class="absolute left-3 -top-2.5 bg-gray-50 dark:bg-gray-900 px-2 text-sm text-gray-600 dark:text-gray-300 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-placeholder-shown:left-4 peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-sm peer-focus:text-primary-600 dark:peer-focus:text-primary-400"
-                  :class="{
-                    'text-red-600 dark:text-red-400': confirmPasswordError,
-                    'text-green-600 dark:text-green-400': form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword,
-                  }"
+                  :class="{ 'text-red-600 dark:text-red-400': confirmPasswordError, 'text-green-600 dark:text-green-400': form.confirmPassword && !confirmPasswordError && form.password === form.confirmPassword }"
                 >
                   {{ $t('auth.confirmPassword') }}
-                </label>
+                </UiLabel>
                 <UiButton
                   type="button"
                   variant="ghost"

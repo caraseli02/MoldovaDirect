@@ -11,21 +11,16 @@
 <template>
   <div class="space-y-6">
     <!-- Template Type Selection -->
-    <Card>
-      <CardHeader>
-        <CardTitle>Select Template Type</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <UiCard>
+      <UiCardHeader>
+        <UiCardTitle>Select Template Type</UiCardTitle>
+      </UiCardHeader>
+      <UiCardContent>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button
+          <UiButton
             v-for="type in templateTypes"
             :key="type.value"
-            :class="[
-              'p-4 border-2 rounded-lg text-left transition-all',
-              selectedType === type.value
-                ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
-                : 'border-gray-200 dark:border-gray-700 hover:border-gray-300',
-            ]"
+            :class="['p-4 border-2 rounded-lg text-left transition-all', selectedType === type.value ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300']"
             @click="selectedType = type.value"
           >
             <div class="font-semibold text-gray-900 dark:text-white">
@@ -34,34 +29,29 @@
             <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
               {{ type.description }}
             </div>
-          </button>
+          </UiButton>
         </div>
-      </CardContent>
-    </Card>
+      </UiCardContent>
+    </UiCard>
 
     <!-- Locale Selection -->
-    <Card>
-      <CardHeader>
-        <CardTitle>Select Language</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <UiCard>
+      <UiCardHeader>
+        <UiCardTitle>Select Language</UiCardTitle>
+      </UiCardHeader>
+      <UiCardContent>
         <div class="flex gap-2">
-          <button
+          <UiButton
             v-for="locale in supportedLocales"
             :key="locale.code"
-            :class="[
-              'px-4 py-2 rounded-lg font-medium transition-all',
-              selectedLocale === locale.code
-                ? 'bg-red-500 text-white'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200',
-            ]"
+            :class="['px-4 py-2 rounded-lg font-medium transition-all', selectedLocale === locale.code ? 'bg-red-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200']"
             @click="selectedLocale = locale.code"
           >
             {{ locale.name }}
-          </button>
+          </UiButton>
         </div>
-      </CardContent>
-    </Card>
+      </UiCardContent>
+    </UiCard>
 
     <!-- Version History and Synchronization -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -79,66 +69,57 @@
     <!-- Template Editor -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- Editor Panel -->
-      <Card>
-        <CardHeader>
+      <UiCard>
+        <UiCardHeader>
           <div class="flex items-center justify-between">
-            <CardTitle>Template Editor</CardTitle>
+            <UiCardTitle>Template Editor</UiCardTitle>
             <div class="flex gap-2">
-              <Button
+              <UiButton
                 variant="outline"
                 size="sm"
                 @click="validateTemplate"
               >
                 Validate
-              </Button>
-              <Button
+              </UiButton>
+              <UiButton
                 :disabled="saving || !hasChanges"
                 size="sm"
                 @click="saveTemplate"
               >
                 {{ saving ? 'Saving...' : 'Save Changes' }}
-              </Button>
+              </UiButton>
             </div>
           </div>
-        </CardHeader>
-        <CardContent>
+        </UiCardHeader>
+        <UiCardContent>
           <!-- Subject Line -->
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Subject Line
-            </label>
-            <input
+            <UiLabel>Subject Line</UiLabel>
+            <UiInput
               v-model="templateData.subject"
               type="text"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               placeholder="Order Confirmation #{orderNumber}"
             />
           </div>
 
           <!-- Preheader Text -->
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Preheader Text
-            </label>
-            <input
+            <UiLabel>Preheader Text</UiLabel>
+            <UiInput
               v-model="templateData.preheader"
               type="text"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
               placeholder="Thank you for your order"
             />
           </div>
 
           <!-- Template Content -->
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Template Content (JSON)
-            </label>
-            <textarea
+            <UiLabel>Template Content (JSON)</UiLabel>
+            <UiTextarea
               v-model="templateContent"
               rows="20"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono text-sm"
               placeholder="Enter template translations JSON"
-            ></textarea>
+            />
           </div>
 
           <!-- Validation Messages -->
@@ -146,9 +127,9 @@
             v-if="validationErrors.length > 0"
             class="mt-4"
           >
-            <Alert variant="destructive">
-              <AlertTitle>Validation Errors</AlertTitle>
-              <AlertDescription>
+            <UiAlert variant="destructive">
+              <UiAlertTitle>Validation Errors</UiAlertTitle>
+              <UiAlertDescription>
                 <ul class="list-disc list-inside space-y-1">
                   <li
                     v-for="(error, index) in validationErrors"
@@ -157,17 +138,17 @@
                     {{ error }}
                   </li>
                 </ul>
-              </AlertDescription>
-            </Alert>
+              </UiAlertDescription>
+            </UiAlert>
           </div>
 
           <div
             v-if="validationWarnings.length > 0"
             class="mt-4"
           >
-            <Alert>
-              <AlertTitle>Warnings</AlertTitle>
-              <AlertDescription>
+            <UiAlert>
+              <UiAlertTitle>Warnings</UiAlertTitle>
+              <UiAlertDescription>
                 <ul class="list-disc list-inside space-y-1">
                   <li
                     v-for="(warning, index) in validationWarnings"
@@ -176,27 +157,27 @@
                     {{ warning }}
                   </li>
                 </ul>
-              </AlertDescription>
-            </Alert>
+              </UiAlertDescription>
+            </UiAlert>
           </div>
-        </CardContent>
-      </Card>
+        </UiCardContent>
+      </UiCard>
 
       <!-- Preview Panel -->
-      <Card>
-        <CardHeader>
+      <UiCard>
+        <UiCardHeader>
           <div class="flex items-center justify-between">
-            <CardTitle>Preview</CardTitle>
-            <Button
+            <UiCardTitle>Preview</UiCardTitle>
+            <UiButton
               variant="outline"
               size="sm"
               @click="refreshPreview"
             >
               Refresh Preview
-            </Button>
+            </UiButton>
           </div>
-        </CardHeader>
-        <CardContent>
+        </UiCardHeader>
+        <UiCardContent>
           <div class="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
             <iframe
               ref="previewFrame"
@@ -205,8 +186,8 @@
               sandbox="allow-same-origin"
             ></iframe>
           </div>
-        </CardContent>
-      </Card>
+        </UiCardContent>
+      </UiCard>
     </div>
   </div>
 </template>
@@ -214,7 +195,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
-import { Button } from '~/components/ui/button'
+
 import { Alert, AlertTitle, AlertDescription } from '~/components/ui/alert'
 
 const templateTypes = [

@@ -38,17 +38,13 @@
       class="flex items-center space-x-2"
     >
       <div class="relative">
-        <input
+        <UiInput
           ref="inputRef"
           v-model="editValue"
           type="number"
           min="0"
           step="1"
-          :class="[
-            'w-20 px-2 py-1 text-sm border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
-            hasError ? 'border-red-300 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600',
-            'dark:bg-gray-700 dark:text-white',
-          ]"
+          :class="['w-20 px-2 py-1 text-sm border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500', hasError ? 'border-red-300 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600', 'dark:bg-gray-700 dark:text-white']"
           :disabled="isUpdating"
           @keydown.enter="saveChanges"
           @keydown.escape="cancelEditing"

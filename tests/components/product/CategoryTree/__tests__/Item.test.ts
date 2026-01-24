@@ -54,6 +54,10 @@ describe('ProductCategoryTreeItem', () => {
             template: '<button type="button" :class="[variant, size]" :aria-label="ariaLabel" @click="$emit(\'click\')"><slot /></button>',
             props: ['variant', 'size', 'ariaLabel'],
           },
+          commonIcon: {
+            template: '<span data-testid="icon" :class="name ? name.replace(\'lucide:\', \'icon-\') : \'\'" />',
+            props: ['name'],
+          },
         },
       },
     })
@@ -96,13 +100,13 @@ describe('ProductCategoryTreeItem', () => {
       expect(wrapper.find('.category-tree-item').exists()).toBe(true)
     })
 
-    it('should render radio input for selection', () => {
+    it('should render custom radio button for selection', () => {
       // Arrange & Act
       wrapper = createWrapper()
 
-      // Assert
-      const radio = wrapper.find('input[type="radio"]')
-      expect(radio.exists()).toBe(true)
+      // Assert - custom radio div
+      const radioContainer = wrapper.find('.size-4.rounded-full.border')
+      expect(radioContainer.exists()).toBe(true)
     })
   })
 
@@ -132,7 +136,7 @@ describe('ProductCategoryTreeItem', () => {
 
       // Assert - icon name prop is passed to the stubbed commonIcon
       const icon = wrapper.find('[data-testid="icon"]')
-      expect(icon.classes().join(' ')).toContain('chevron-right')
+      expect(icon.classes().join(' ')).toContain('icon-chevron-right')
     })
 
     it('should toggle icon when expanded', async () => {
@@ -202,27 +206,27 @@ describe('ProductCategoryTreeItem', () => {
       // Arrange & Act
       wrapper = createWrapper({ selected: [] })
 
-      // Assert
-      const radio = wrapper.find('input[type="radio"]')
-      expect((radio.element as HTMLInputElement).checked).toBe(false)
+      // Assert - no inner check indicator div
+      const checkIndicator = wrapper.find('.size-2.rounded-full.bg-primary')
+      expect(checkIndicator.exists()).toBe(false)
     })
 
     it('should show checked radio when selected', () => {
       // Arrange & Act
       wrapper = createWrapper({ selected: ['1'] })
 
-      // Assert
-      const radio = wrapper.find('input[type="radio"]')
-      expect((radio.element as HTMLInputElement).checked).toBe(true)
+      // Assert - inner check indicator div is present
+      const checkIndicator = wrapper.find('.size-2.rounded-full.bg-primary')
+      expect(checkIndicator.exists()).toBe(true)
     })
 
-    it('should emit update:selected when radio is clicked', async () => {
+    it('should emit update:selected when clickable area is clicked', async () => {
       // Arrange
       wrapper = createWrapper({ selected: [] })
-      const radio = wrapper.find('input[type="radio"]')
+      const clickableArea = wrapper.find('.flex.items-center.gap-2.flex-1.cursor-pointer')
 
       // Act
-      await radio.trigger('change')
+      await clickableArea.trigger('click')
       await flushPromises()
 
       // Assert
@@ -232,10 +236,10 @@ describe('ProductCategoryTreeItem', () => {
     it('should select category when clicking unchecked radio', async () => {
       // Arrange
       wrapper = createWrapper({ selected: [] })
-      const radio = wrapper.find('input[type="radio"]')
+      const clickableArea = wrapper.find('.flex.items-center.gap-2.flex-1.cursor-pointer')
 
       // Act
-      await radio.trigger('change')
+      await clickableArea.trigger('click')
       await flushPromises()
 
       // Assert
@@ -246,10 +250,10 @@ describe('ProductCategoryTreeItem', () => {
     it('should deselect category when clicking checked radio', async () => {
       // Arrange
       wrapper = createWrapper({ selected: ['1'] })
-      const radio = wrapper.find('input[type="radio"]')
+      const clickableArea = wrapper.find('.flex.items-center.gap-2.flex-1.cursor-pointer')
 
       // Act
-      await radio.trigger('change')
+      await clickableArea.trigger('click')
       await flushPromises()
 
       // Assert
@@ -409,32 +413,31 @@ describe('ProductCategoryTreeItem', () => {
   })
 
   describe('Accessibility', () => {
-    it('should have label wrapping radio input', () => {
+    it('should have clickable area with proper styling', () => {
       // Arrange & Act
       wrapper = createWrapper()
 
       // Assert
-      const label = wrapper.find('label')
-      expect(label.exists()).toBe(true)
-      expect(label.find('input[type="radio"]').exists()).toBe(true)
+      const clickableArea = wrapper.find('.flex.items-center.gap-2.flex-1.cursor-pointer')
+      expect(clickableArea.exists()).toBe(true)
     })
 
-    it('should have cursor-pointer on label', () => {
+    it('should have cursor-pointer on clickable area', () => {
       // Arrange & Act
       wrapper = createWrapper()
 
       // Assert
-      const label = wrapper.find('label')
-      expect(label.classes()).toContain('cursor-pointer')
+      const clickableArea = wrapper.find('.flex.items-center.gap-2.flex-1.cursor-pointer')
+      expect(clickableArea.classes()).toContain('cursor-pointer')
     })
 
-    it('should have name attribute on radio for grouping', () => {
+    it('should have accessible aria-label on expand button', () => {
       // Arrange & Act
-      wrapper = createWrapper({ level: 0 })
+      wrapper = createWrapper({ category: mockCategoryWithChildren })
+      const button = wrapper.find('button')
 
       // Assert
-      const radio = wrapper.find('input[type="radio"]')
-      expect(radio.attributes('name')).toBe('category-0')
+      expect(button.attributes('aria-label')).toBeTruthy()
     })
   })
 })

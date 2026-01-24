@@ -4,12 +4,9 @@
       <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
         {{ $t('checkout.review.shippingInfo') }}
       </h3>
-      <button
-        class="text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium"
-        @click="$emit('edit')"
-      >
+      <UiButton @click="$emit('edit')">
         {{ $t('checkout.review.editShipping') }}
-      </button>
+      </UiButton>
     </header>
 
     <div

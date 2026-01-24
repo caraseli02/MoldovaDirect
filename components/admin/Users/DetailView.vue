@@ -41,12 +41,9 @@
         />
         {{ error }}
       </div>
-      <button
-        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        @click="retry"
-      >
+      <UiButton @click="retry">
         Retry
-      </button>
+      </UiButton>
     </div>
 
     <!-- User Detail Content -->
@@ -94,16 +91,13 @@
 
           <!-- Quick Actions -->
           <div class="flex items-center gap-2">
-            <button
-              class="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-              @click="editUser"
-            >
+            <UiButton @click="editUser">
               <commonIcon
                 name="lucide:pencil"
                 class="w-4 h-4 mr-1"
               />
               Edit
-            </button>
+            </UiButton>
             <AdminUsersActionsDropdown
               :user="user"
               @action="handleUserAction"
@@ -153,15 +147,10 @@
       <!-- Tabs -->
       <div class="px-6">
         <nav class="flex space-x-8">
-          <button
+          <UiButton
             v-for="tab in tabs"
             :key="tab.id"
-            :class="[
-              'py-2 px-1 border-b-2 font-medium text-sm',
-              activeTab === tab.id
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-            ]"
+            :class="['py-2 px-1 border-b-2 font-medium text-sm', activeTab === tab.id ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300']"
             @click="activeTab = tab.id"
           >
             {{ tab.name }}
@@ -171,7 +160,7 @@
             >
               {{ tab.count }}
             </span>
-          </button>
+          </UiButton>
         </nav>
       </div>
 
@@ -189,37 +178,37 @@
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700">Name</label>
+                <UiLabel>Name</UiLabel>
                 <div class="mt-1 text-sm text-gray-900">
                   {{ user.profile?.name || 'Not provided' }}
                 </div>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700">Email</label>
+                <UiLabel>Email</UiLabel>
                 <div class="mt-1 text-sm text-gray-900">
                   {{ user.email }}
                 </div>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700">Phone</label>
+                <UiLabel>Phone</UiLabel>
                 <div class="mt-1 text-sm text-gray-900">
                   {{ user.profile?.phone || 'Not provided' }}
                 </div>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700">Preferred Language</label>
+                <UiLabel>Preferred Language</UiLabel>
                 <div class="mt-1 text-sm text-gray-900">
                   {{ user.profile?.preferred_language || 'Not set' }}
                 </div>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700">Registration Date</label>
+                <UiLabel>Registration Date</UiLabel>
                 <div class="mt-1 text-sm text-gray-900">
                   {{ formatDate(user.created_at) }}
                 </div>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700">Last Login</label>
+                <UiLabel>Last Login</UiLabel>
                 <div class="mt-1 text-sm text-gray-900">
                   {{ user.last_sign_in_at ? formatDate(user.last_sign_in_at) : 'Never' }}
                 </div>
@@ -319,12 +308,9 @@
                   <div class="font-medium text-gray-900">
                     {{ formatCurrency(order.total_eur) }}
                   </div>
-                  <button
-                    class="text-sm text-blue-600 hover:text-blue-800 mt-1"
-                    @click="viewOrder(order.id)"
-                  >
+                  <UiButton @click="viewOrder(order.id)">
                     View Details
-                  </button>
+                  </UiButton>
                 </div>
               </div>
             </div>

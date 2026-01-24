@@ -26,7 +26,8 @@
       <p class="text-gray-600 dark:text-gray-400 mb-4">
         The order you're looking for doesn't exist or has been deleted.
       </p>
-      <Button as-child>
+      <UiButton>
+        as-child>
         <nuxt-link to="/admin/orders">
           <commonIcon
             name="lucide:arrow-left"
@@ -34,7 +35,7 @@
           />
           Back to Orders
         </nuxt-link>
-      </Button>
+      </UiButton>
     </div>
 
     <!-- Order Detail -->
@@ -43,7 +44,7 @@
       <div class="mb-8">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center space-x-4">
-            <Button
+            <UiButton
               variant="ghost"
               size="icon"
               as-child
@@ -54,7 +55,7 @@
                   class="h-5 w-5"
                 />
               </nuxt-link>
-            </Button>
+            </UiButton>
             <div>
               <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
                 Order #{{ order.order_number }}
@@ -68,9 +69,9 @@
           <!-- Quick Actions -->
           <div class="flex items-center space-x-2">
             <AdminOrdersStatusBadge :status="order.status" />
-            <Badge :variant="getPaymentStatusVariant(order.payment_status)">
+            <UiBadge :variant="getPaymentStatusVariant(order.payment_status)">
               {{ getPaymentStatusLabel(order.payment_status) }}
-            </Badge>
+            </UiBadge>
             <AdminOrdersStatusUpdateDialog
               :order-id="order.id"
               :order-number="order.order_number"
@@ -119,11 +120,11 @@
           <AdminOrdersDetailsCard :order="order" />
 
           <!-- Customer Information -->
-          <Card class="rounded-2xl">
-            <CardHeader>
-              <CardTitle>Customer Information</CardTitle>
-            </CardHeader>
-            <CardContent>
+          <UiCard class="rounded-2xl">
+            <UiCardHeader>
+              <UiCardTitle>Customer Information</UiCardTitle>
+            </UiCardHeader>
+            <UiCardContent>
               <div class="space-y-3">
                 <div>
                   <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -150,18 +151,18 @@
                   </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </UiCardContent>
+          </UiCard>
 
           <!-- Shipping Address -->
-          <Card
+          <UiCard
             v-if="order.shipping_address"
             class="rounded-2xl"
           >
-            <CardHeader>
-              <CardTitle>Shipping Address</CardTitle>
-            </CardHeader>
-            <CardContent>
+            <UiCardHeader>
+              <UiCardTitle>Shipping Address</UiCardTitle>
+            </UiCardHeader>
+            <UiCardContent>
               <div class="text-sm text-gray-900 dark:text-white space-y-1">
                 <p>{{ order.shipping_address.street }}</p>
                 <p>{{ order.shipping_address.city }}, {{ order.shipping_address.postalCode }}</p>
@@ -170,18 +171,18 @@
                 </p>
                 <p>{{ order.shipping_address.country }}</p>
               </div>
-            </CardContent>
-          </Card>
+            </UiCardContent>
+          </UiCard>
 
           <!-- Billing Address -->
-          <Card
+          <UiCard
             v-if="order.billing_address"
             class="rounded-2xl"
           >
-            <CardHeader>
-              <CardTitle>Billing Address</CardTitle>
-            </CardHeader>
-            <CardContent>
+            <UiCardHeader>
+              <UiCardTitle>Billing Address</UiCardTitle>
+            </UiCardHeader>
+            <UiCardContent>
               <div class="text-sm text-gray-900 dark:text-white space-y-1">
                 <p>{{ order.billing_address.street }}</p>
                 <p>{{ order.billing_address.city }}, {{ order.billing_address.postalCode }}</p>
@@ -190,15 +191,15 @@
                 </p>
                 <p>{{ order.billing_address.country }}</p>
               </div>
-            </CardContent>
-          </Card>
+            </UiCardContent>
+          </UiCard>
 
           <!-- Payment Details -->
-          <Card class="rounded-2xl">
-            <CardHeader>
-              <CardTitle>Payment Details</CardTitle>
-            </CardHeader>
-            <CardContent>
+          <UiCard class="rounded-2xl">
+            <UiCardHeader>
+              <UiCardTitle>Payment Details</UiCardTitle>
+            </UiCardHeader>
+            <UiCardContent>
               <div class="space-y-3">
                 <div>
                   <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -212,12 +213,12 @@
                   <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
                     Payment Status
                   </p>
-                  <Badge
+                  <UiBadge
                     :variant="getPaymentStatusVariant(order.payment_status)"
                     class="mt-1"
                   >
                     {{ getPaymentStatusLabel(order.payment_status) }}
-                  </Badge>
+                  </UiBadge>
                 </div>
                 <div v-if="order.payment_intent_id">
                   <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -228,18 +229,18 @@
                   </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </UiCardContent>
+          </UiCard>
 
           <!-- Tracking Information (if available) -->
-          <Card
+          <UiCard
             v-if="order.tracking_number"
             class="rounded-2xl"
           >
-            <CardHeader>
-              <CardTitle>Tracking Information</CardTitle>
-            </CardHeader>
-            <CardContent>
+            <UiCardHeader>
+              <UiCardTitle>Tracking Information</UiCardTitle>
+            </UiCardHeader>
+            <UiCardContent>
               <div class="space-y-3">
                 <div v-if="order.carrier">
                   <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
@@ -258,38 +259,38 @@
                   </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </UiCardContent>
+          </UiCard>
 
           <!-- Customer Notes (if available) -->
-          <Card
+          <UiCard
             v-if="order.customer_notes"
             class="rounded-2xl"
           >
-            <CardHeader>
-              <CardTitle>Customer Notes</CardTitle>
-            </CardHeader>
-            <CardContent>
+            <UiCardHeader>
+              <UiCardTitle>Customer Notes</UiCardTitle>
+            </UiCardHeader>
+            <UiCardContent>
               <p class="text-sm text-gray-900 dark:text-white">
                 {{ order.customer_notes }}
               </p>
-            </CardContent>
-          </Card>
+            </UiCardContent>
+          </UiCard>
 
           <!-- Admin Notes (if available) -->
-          <Card
+          <UiCard
             v-if="order.admin_notes"
             class="rounded-2xl"
           >
-            <CardHeader>
-              <CardTitle>Admin Notes</CardTitle>
-            </CardHeader>
-            <CardContent>
+            <UiCardHeader>
+              <UiCardTitle>Admin Notes</UiCardTitle>
+            </UiCardHeader>
+            <UiCardContent>
               <p class="text-sm text-gray-900 dark:text-white">
                 {{ order.admin_notes }}
               </p>
-            </CardContent>
-          </Card>
+            </UiCardContent>
+          </UiCard>
         </div>
       </div>
     </div>
@@ -297,7 +298,6 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
   Card,

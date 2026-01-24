@@ -1,17 +1,17 @@
 <template>
-  <Card class="rounded-2xl">
-    <CardHeader>
+  <UiCard class="rounded-2xl">
+    <UiCardHeader>
       <div class="flex items-center justify-between">
-        <CardTitle>Fulfillment Checklist</CardTitle>
-        <Badge :variant="getProgressVariant(progressPercentage)">
+        <UiCardTitle>Fulfillment Checklist</UiCardTitle>
+        <UiBadge :variant="getProgressVariant(progressPercentage)">
           {{ progressPercentage }}% Complete
-        </Badge>
+        </UiBadge>
       </div>
       <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
         Track order fulfillment progress through picking, packing, and shipping stages
       </p>
-    </CardHeader>
-    <CardContent>
+    </UiCardHeader>
+    <UiCardContent>
       <!-- Loading State -->
       <div
         v-if="loading"
@@ -57,7 +57,7 @@
               :key="task.id"
               class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
-              <Checkbox
+              <UiCheckbox
                 :id="`task-${task.id}`"
                 :checked="task.completed"
                 :disabled="updating || isTaskDisabled(task)"
@@ -65,13 +65,12 @@
                 @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
-                <label
+                <UiLabel
                   :for="`task-${task.id}`"
-                  class="text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
                   :class="{ 'line-through text-gray-500': task.completed }"
                 >
                   {{ task.task_name }}
-                </label>
+                </UiLabel>
                 <p
                   v-if="task.description"
                   class="text-xs text-gray-600 dark:text-gray-400 mt-1"
@@ -82,7 +81,7 @@
                   v-if="task.completed && task.completed_at"
                   class="flex items-center space-x-2 mt-1"
                 >
-                  <Badge
+                  <UiBadge
                     variant="secondary"
                     class="text-xs"
                   >
@@ -91,16 +90,16 @@
                       class="h-3 w-3 mr-1"
                     />
                     Completed {{ formatDate(task.completed_at) }}
-                  </Badge>
+                  </UiBadge>
                 </div>
               </div>
-              <Badge
+              <UiBadge
                 v-if="task.required"
                 variant="outline"
                 class="text-xs"
               >
                 Required
-              </Badge>
+              </UiBadge>
             </div>
           </div>
         </div>
@@ -120,7 +119,7 @@
               :key="task.id"
               class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
-              <Checkbox
+              <UiCheckbox
                 :id="`task-${task.id}`"
                 :checked="task.completed"
                 :disabled="updating || isTaskDisabled(task)"
@@ -128,13 +127,12 @@
                 @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
-                <label
+                <UiLabel
                   :for="`task-${task.id}`"
-                  class="text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
                   :class="{ 'line-through text-gray-500': task.completed }"
                 >
                   {{ task.task_name }}
-                </label>
+                </UiLabel>
                 <p
                   v-if="task.description"
                   class="text-xs text-gray-600 dark:text-gray-400 mt-1"
@@ -145,7 +143,7 @@
                   v-if="task.completed && task.completed_at"
                   class="flex items-center space-x-2 mt-1"
                 >
-                  <Badge
+                  <UiBadge
                     variant="secondary"
                     class="text-xs"
                   >
@@ -154,16 +152,16 @@
                       class="h-3 w-3 mr-1"
                     />
                     Completed {{ formatDate(task.completed_at) }}
-                  </Badge>
+                  </UiBadge>
                 </div>
               </div>
-              <Badge
+              <UiBadge
                 v-if="task.required"
                 variant="outline"
                 class="text-xs"
               >
                 Required
-              </Badge>
+              </UiBadge>
             </div>
           </div>
         </div>
@@ -183,7 +181,7 @@
               :key="task.id"
               class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
-              <Checkbox
+              <UiCheckbox
                 :id="`task-${task.id}`"
                 :checked="task.completed"
                 :disabled="updating || isTaskDisabled(task)"
@@ -191,13 +189,12 @@
                 @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
-                <label
+                <UiLabel
                   :for="`task-${task.id}`"
-                  class="text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
                   :class="{ 'line-through text-gray-500': task.completed }"
                 >
                   {{ task.task_name }}
-                </label>
+                </UiLabel>
                 <p
                   v-if="task.description"
                   class="text-xs text-gray-600 dark:text-gray-400 mt-1"
@@ -208,7 +205,7 @@
                   v-if="task.completed && task.completed_at"
                   class="flex items-center space-x-2 mt-1"
                 >
-                  <Badge
+                  <UiBadge
                     variant="secondary"
                     class="text-xs"
                   >
@@ -217,16 +214,16 @@
                       class="h-3 w-3 mr-1"
                     />
                     Completed {{ formatDate(task.completed_at) }}
-                  </Badge>
+                  </UiBadge>
                 </div>
               </div>
-              <Badge
+              <UiBadge
                 v-if="task.required"
                 variant="outline"
                 class="text-xs"
               >
                 Required
-              </Badge>
+              </UiBadge>
             </div>
           </div>
         </div>
@@ -246,7 +243,7 @@
               :key="task.id"
               class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
-              <Checkbox
+              <UiCheckbox
                 :id="`task-${task.id}`"
                 :checked="task.completed"
                 :disabled="updating || isTaskDisabled(task)"
@@ -254,13 +251,12 @@
                 @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
-                <label
+                <UiLabel
                   :for="`task-${task.id}`"
-                  class="text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
                   :class="{ 'line-through text-gray-500': task.completed }"
                 >
                   {{ task.task_name }}
-                </label>
+                </UiLabel>
                 <p
                   v-if="task.description"
                   class="text-xs text-gray-600 dark:text-gray-400 mt-1"
@@ -271,7 +267,7 @@
                   v-if="task.completed && task.completed_at"
                   class="flex items-center space-x-2 mt-1"
                 >
-                  <Badge
+                  <UiBadge
                     variant="secondary"
                     class="text-xs"
                   >
@@ -280,16 +276,16 @@
                       class="h-3 w-3 mr-1"
                     />
                     Completed {{ formatDate(task.completed_at) }}
-                  </Badge>
+                  </UiBadge>
                 </div>
               </div>
-              <Badge
+              <UiBadge
                 v-if="task.required"
                 variant="outline"
                 class="text-xs"
               >
                 Required
-              </Badge>
+              </UiBadge>
             </div>
           </div>
         </div>
@@ -309,7 +305,7 @@
               :key="task.id"
               class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
-              <Checkbox
+              <UiCheckbox
                 :id="`task-${task.id}`"
                 :checked="task.completed"
                 :disabled="updating"
@@ -317,13 +313,12 @@
                 @update:checked="(checked: boolean | string) => handleTaskToggle(task, checked)"
               />
               <div class="flex-1 min-w-0">
-                <label
+                <UiLabel
                   :for="`task-${task.id}`"
-                  class="text-sm font-medium text-gray-900 dark:text-white cursor-pointer"
                   :class="{ 'line-through text-gray-500': task.completed }"
                 >
                   {{ task.task_name }}
-                </label>
+                </UiLabel>
                 <p
                   v-if="task.description"
                   class="text-xs text-gray-600 dark:text-gray-400 mt-1"
@@ -334,7 +329,7 @@
                   v-if="task.completed && task.completed_at"
                   class="flex items-center space-x-2 mt-1"
                 >
-                  <Badge
+                  <UiBadge
                     variant="secondary"
                     class="text-xs"
                   >
@@ -343,16 +338,16 @@
                       class="h-3 w-3 mr-1"
                     />
                     Completed {{ formatDate(task.completed_at) }}
-                  </Badge>
+                  </UiBadge>
                 </div>
               </div>
-              <Badge
+              <UiBadge
                 v-if="task.required"
                 variant="outline"
                 class="text-xs"
               >
                 Required
-              </Badge>
+              </UiBadge>
             </div>
           </div>
         </div>
@@ -394,12 +389,11 @@
           </div>
         </div>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">
-import { Checkbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
 import {
   Card,

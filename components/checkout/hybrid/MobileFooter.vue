@@ -1,14 +1,14 @@
 <template>
   <div
-    class="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 z-50 shadow-lg"
+    class="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 pb-safe z-50 shadow-lg"
   >
     <div class="flex items-center justify-between mb-3">
       <span class="text-sm text-gray-600 dark:text-gray-400">{{ $t('common.total') }}</span>
-      <span class="text-lg font-bold text-gray-900 dark:text-white">{{ formattedTotal }}</span>
+      <span class="text-lg font-bold text-rose-600 dark:text-rose-400">{{ formattedTotal }}</span>
     </div>
-    <button
+    <UiButton
+      class="bg-rose-600 hover:bg-rose-700 text-white w-full min-h-[48px]"
       :disabled="!canPlaceOrder || processingOrder"
-      class="w-full flex items-center justify-center px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
       @click="$emit('place-order')"
     >
       <span
@@ -37,7 +37,7 @@
         {{ $t('checkout.processing') }}
       </span>
       <span v-else>{{ $t('checkout.placeOrder') }}</span>
-    </button>
+    </UiButton>
   </div>
 </template>
 

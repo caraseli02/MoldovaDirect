@@ -6,23 +6,25 @@
           {{ title }}
         </h3>
         <div class="flex items-center gap-2">
-          <select
-            v-model="sortBy"
-            class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-          >
-            <option value="views">
-              Most Viewed
-            </option>
-            <option value="revenue">
-              Best Selling
-            </option>
-            <option value="conversionRate">
-              Best Converting
-            </option>
-            <option value="cartAdditions">
-              Most Added to Cart
-            </option>
-          </select>
+          <UiSelect v-model="sortBy">
+            <UiSelectTrigger>
+              <UiSelectValue />
+            </UiSelectTrigger>
+            <UiSelectContent>
+              <UiSelectItem value="views">
+                Most Viewed
+              </UiSelectItem>
+              <UiSelectItem value="revenue">
+                Best Selling
+              </UiSelectItem>
+              <UiSelectItem value="conversionRate">
+                Best Converting
+              </UiSelectItem>
+              <UiSelectItem value="cartAdditions">
+                Most Added to Cart
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
         </div>
       </div>
     </div>

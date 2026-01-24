@@ -1,6 +1,6 @@
 <template>
-  <DropdownMenu>
-    <DropdownMenuTrigger as-child>
+  <UiDropdownMenu>
+    <UiDropdownMenuTrigger as-child>
       <UiButton
         type="button"
         variant="outline"
@@ -39,14 +39,14 @@
           />
         </svg>
       </UiButton>
-    </DropdownMenuTrigger>
+    </UiDropdownMenuTrigger>
 
-    <DropdownMenuContent
+    <UiDropdownMenuContent
       align="end"
       data-testid="locale-switcher"
       class="w-48"
     >
-      <DropdownMenuItem
+      <UiDropdownMenuItem
         v-for="localeOption in locales"
         :key="localeOption.code"
         :data-testid="`locale-${localeOption.code}`"
@@ -74,19 +74,13 @@
             />
           </svg>
         </span>
-      </DropdownMenuItem>
-    </DropdownMenuContent>
-  </DropdownMenu>
+      </UiDropdownMenuItem>
+    </UiDropdownMenuContent>
+  </UiDropdownMenu>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 
 const { t, locale, locales } = useI18n()
 const switchLocalePath = useSwitchLocalePath()

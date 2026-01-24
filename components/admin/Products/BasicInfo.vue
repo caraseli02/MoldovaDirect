@@ -20,27 +20,19 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Product Name -->
       <div class="md:col-span-2">
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          {{ $t('admin.products.fields.name') }} *
-        </label>
+        <UiLabel>{{ $t('admin.products.fields.name') }} *</UiLabel>
         <div class="space-y-3">
           <div
             v-for="localeItem in locales"
             :key="localeItem.code"
           >
-            <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-              {{ localeItem.name }}
-            </label>
-            <input
+            <UiLabel>{{ localeItem.name }}</UiLabel>
+            <UiInput
               ref="nameInputs"
               v-model="localForm.name[localeItem.code]"
               type="text"
               :placeholder="$t('admin.products.placeholders.productName', { language: localeItem.name })"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"
-              :class="{
-                'border-red-500': errors?.name?.[localeItem.code],
-                'min-h-[44px]': isMobile,
-              }"
+              :class="{ 'border-red-500': errors?.name?.[localeItem.code], 'min-h-[44px]': isMobile }"
               @input="handleNameInput(localeItem.code)"
               @focus="handleInputFocus"
               @blur="handleInputBlur"
@@ -57,21 +49,14 @@
 
       <!-- SKU -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          {{ $t('admin.products.fields.sku') }} *
-        </label>
+        <UiLabel>{{ $t('admin.products.fields.sku') }} *</UiLabel>
         <div class="relative">
-          <input
+          <UiInput
             ref="skuInput"
             v-model="localForm.sku"
             type="text"
             :placeholder="$t('admin.products.placeholders.sku')"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"
-            :class="{
-              'border-red-500': errors?.sku,
-              'min-h-[44px]': isMobile,
-              'pr-10': isGeneratingSku,
-            }"
+            :class="{ 'border-red-500': errors?.sku, 'min-h-[44px]': isMobile, 'pr-10': isGeneratingSku }"
             @input="handleSkuInput"
             @focus="handleInputFocus"
             @blur="handleInputBlur"
@@ -119,30 +104,29 @@
 
       <!-- Category -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          {{ $t('admin.products.fields.category') }} *
-        </label>
-        <select
+        <UiLabel>{{ $t('admin.products.fields.category') }} *</UiLabel>
+        <UiSelect
           v-model="localForm.categoryId"
-          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"
           :class="{
             'border-red-500': errors?.categoryId,
             'min-h-[44px]': isMobile,
           }"
-          @change="handleCategoryChange"
+          @update:model-value="handleCategoryChange"
           @focus="handleInputFocus"
         >
-          <option value="">
-            {{ $t('admin.products.placeholders.selectCategory') }}
-          </option>
-          <option
-            v-for="category in categories"
-            :key="category.id"
-            :value="category.id"
-          >
-            {{ getLocalizedText(category.name) }}
-          </option>
-        </select>
+          <UiSelectTrigger>
+            <UiSelectValue :placeholder="$t('admin.products.placeholders.selectCategory')" />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem
+              v-for="category in categories"
+              :key="category.id"
+              :value="category.id"
+            >
+              {{ getLocalizedText(category.name) }}
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
         <p
           v-if="errors?.categoryId"
           class="mt-1 text-sm text-red-600"
@@ -178,8 +162,7 @@
             <li>{{ $t('admin.products.hints.mobile3') }}</li>
           </ul>
         </div>
-        <button
-          class="text-blue-600 dark:text-blue-400 touch-manipulation p-1"
+        <UiButton
           @click="showMobileHints = false"
           @touchstart="vibrate('tap')"
         >
@@ -187,7 +170,7 @@
             name="lucide:x"
             class="w-4 h-4"
           />
-        </button>
+        </UiButton>
       </div>
     </div>
   </div>

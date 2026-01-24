@@ -271,7 +271,7 @@
       </div>
 
       <!-- Add to Cart Button -->
-      <Button
+      <UiButton
         :disabled="product.stockQuantity <= 0 || cartLoading"
         :aria-label="getCartButtonAriaLabel()"
         :aria-live="cartLoading ? 'polite' : undefined"
@@ -348,9 +348,12 @@
         <span>
           {{
             cartLoading ? $t('products.adding')
-            : product.stockQuantity <= 0 ? $t('products.outOfStock') : isInCart(String(product.id))
-              ? $t('products.inCart') : $t('products.addToCart') }} </span>
-      </Button>
+            : product.stockQuantity <= 0 ? $t('products.outOfStock')
+              : isInCart(String(product.id)) ? $t('products.inCart')
+                : $t('products.addToCart')
+          }}
+        </span>
+      </UiButton>
     </div>
   </article>
 </template>

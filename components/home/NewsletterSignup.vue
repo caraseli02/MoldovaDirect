@@ -21,11 +21,10 @@
           aria-labelledby="newsletter-heading"
           @submit.prevent="submitNewsletter"
         >
-          <label
-            for="newsletter-email"
-            class="sr-only"
-          >{{ t('home.newsletter.placeholder') }}</label>
-          <input
+          <UiLabel for="newsletter-email">
+            {{ t('home.newsletter.placeholder') }}
+          </UiLabel>
+          <UiInput
             id="newsletter-email"
             v-model="email"
             type="email"
@@ -35,7 +34,6 @@
             :aria-describedby="submitted ? 'newsletter-success' : error ? 'newsletter-error' : undefined"
             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
             title="Please enter a valid email address"
-            class="w-full rounded-full border border-gray-300 bg-white px-6 py-3 text-base text-gray-900 outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-200 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
             :placeholder="t('home.newsletter.placeholder')"
           />
           <UiButton

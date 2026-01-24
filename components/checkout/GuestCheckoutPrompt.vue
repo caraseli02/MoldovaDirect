@@ -93,7 +93,7 @@
             </svg>
             {{ $t('checkout.guestCheckout.loginButton') }}
           </NuxtLink>
-          <Button
+          <UiButton
             variant="outline"
             class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
             @click="$emit('continue-as-guest')"
@@ -112,7 +112,7 @@
                 d="M17 8l4 4m0 0l-4 4m4-4H3"
               />
             </svg>
-          </Button>
+          </UiButton>
         </div>
       </div>
     </div>
@@ -120,8 +120,6 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-
 interface Props {
   show: boolean
 }

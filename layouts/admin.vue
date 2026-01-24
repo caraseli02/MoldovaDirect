@@ -97,9 +97,8 @@
               ref="userMenuRef"
               class="relative"
             >
-              <button
+              <UiButton
                 data-testid="admin-user-menu"
-                class="flex items-center space-x-3 rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 :aria-expanded="userMenuOpen"
                 aria-haspopup="true"
                 @click="toggleUserMenu"
@@ -123,7 +122,7 @@
                   class="h-4 w-4 text-gray-500 transition-transform"
                   :class="{ 'rotate-180': userMenuOpen }"
                 />
-              </button>
+              </UiButton>
 
               <!-- Dropdown Menu -->
               <Transition
@@ -162,10 +161,9 @@
                       <span>{{ $t('account.profile') }}</span>
                     </NuxtLink>
                     <div class="my-1 h-px bg-gray-200 dark:bg-gray-700"></div>
-                    <button
+                    <UiButton
                       data-testid="logout-button"
                       aria-label="Logout"
-                      class="flex w-full items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
                       @click="handleLogout"
                     >
                       <commonIcon
@@ -173,7 +171,7 @@
                         class="h-4 w-4"
                       />
                       <span>{{ $t('common.logout') }}</span>
-                    </button>
+                    </UiButton>
                   </div>
                 </div>
               </Transition>

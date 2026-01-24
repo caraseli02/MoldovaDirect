@@ -29,14 +29,13 @@
             {{ messageText }}
           </p>
           <div class="mt-3 flex gap-2">
-            <button
+            <UiButton
               v-if="fallbackAction"
               type="button"
-              class="inline-flex items-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
               @click="fallbackAction"
             >
               {{ fallbackActionText || 'Retry' }}
-            </button>
+            </UiButton>
           </div>
         </div>
       </div>

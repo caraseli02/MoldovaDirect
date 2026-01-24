@@ -21,50 +21,50 @@
           {{ $t('checkout.payment.savedMethods') }}
         </h3>
 
-        <div class="space-y-3">
-          <div
-            v-for="savedMethod in savedPaymentMethods"
-            :key="savedMethod.id"
-            class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer transition-colors"
-            :class="{
-              'border-blue-500 bg-blue-50 dark:bg-blue-900/20': selectedSavedMethod === savedMethod.id,
-              'hover:border-gray-300 dark:hover:border-gray-600': selectedSavedMethod !== savedMethod.id,
-            }"
-            @click="selectSavedMethod(savedMethod)"
-          >
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-3">
-                <input
-                  :id="`saved-${savedMethod.id}`"
-                  v-model="selectedSavedMethod"
-                  type="radio"
-                  :value="savedMethod.id"
-                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                />
-                <div>
-                  <div class="flex items-center space-x-2">
-                    <commonIcon
-                      :name="getPaymentMethodIcon(savedMethod.type)"
-                      class="h-6 w-6"
-                    />
-                    <span class="font-medium text-gray-900 dark:text-white">
-                      {{ getPaymentMethodLabel(savedMethod) }}
-                    </span>
+        <UiRadioGroup v-model="selectedSavedMethod">
+          <div class="space-y-3">
+            <div
+              v-for="savedMethod in savedPaymentMethods"
+              :key="savedMethod.id"
+              class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer transition-colors"
+              :class="{
+                'border-blue-500 bg-blue-50 dark:bg-blue-900/20': selectedSavedMethod === savedMethod.id,
+                'hover:border-gray-300 dark:hover:border-gray-600': selectedSavedMethod !== savedMethod.id,
+              }"
+              @click="selectSavedMethod(savedMethod)"
+            >
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                  <UiRadioGroupItem
+                    :id="`saved-${savedMethod.id}`"
+                    :value="savedMethod.id"
+                    class="shrink-0"
+                  />
+                  <div>
+                    <div class="flex items-center space-x-2">
+                      <commonIcon
+                        :name="getPaymentMethodIcon(savedMethod.type)"
+                        class="h-6 w-6"
+                      />
+                      <span class="font-medium text-gray-900 dark:text-white">
+                        {{ getPaymentMethodLabel(savedMethod) }}
+                      </span>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                      {{ getPaymentMethodDescription(savedMethod) }}
+                    </p>
                   </div>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">
-                    {{ getPaymentMethodDescription(savedMethod) }}
-                  </p>
                 </div>
+                <span
+                  v-if="savedMethod.isDefault"
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                >
+                  {{ $t('checkout.payment.default') }}
+                </span>
               </div>
-              <span
-                v-if="savedMethod.isDefault"
-                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-              >
-                {{ $t('checkout.payment.default') }}
-              </span>
             </div>
           </div>
-        </div>
+        </UiRadioGroup>
 
         <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
           <UiButton
@@ -91,34 +91,34 @@
         <div class="space-y-4 mb-6">
           <div class="grid grid-cols-1 gap-4">
             <!-- Cash Payment (Only Available Option) -->
-            <div
-              class="border border-green-200 dark:border-green-700 rounded-lg p-4 bg-green-50 dark:bg-green-900/20"
-            >
-              <div class="flex items-center space-x-3">
-                <input
-                  id="cash"
-                  v-model="paymentMethod.type"
-                  type="radio"
-                  value="cash"
-                  class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
-                  checked
-                />
-                <div>
-                  <div class="flex items-center space-x-2">
-                    <commonIcon
-                      name="lucide:banknote"
-                      class="h-6 w-6 text-green-600 dark:text-green-400"
-                    />
-                    <span class="font-medium text-gray-900 dark:text-white">
-                      {{ $t('checkout.payment.cash.label') }}
-                    </span>
+            <UiRadioGroup v-model="paymentMethod.type">
+              <div
+                class="border border-green-200 dark:border-green-700 rounded-lg p-4 bg-green-50 dark:bg-green-900/20 cursor-pointer"
+                @click="paymentMethod.type = 'cash'"
+              >
+                <div class="flex items-center space-x-3">
+                  <UiRadioGroupItem
+                    id="cash"
+                    value="cash"
+                    class="shrink-0"
+                  />
+                  <div>
+                    <div class="flex items-center space-x-2">
+                      <commonIcon
+                        name="lucide:banknote"
+                        class="h-6 w-6 text-green-600 dark:text-green-400"
+                      />
+                      <span class="font-medium text-gray-900 dark:text-white">
+                        {{ $t('checkout.payment.cash.label') }}
+                      </span>
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                      {{ $t('checkout.payment.cash.summary') }}
+                    </p>
                   </div>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ $t('checkout.payment.cash.summary') }}
-                  </p>
                 </div>
               </div>
-            </div>
+            </UiRadioGroup>
 
             <!-- Disabled Online Payment Methods -->
             <div class="space-y-3">
@@ -130,11 +130,7 @@
               <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-800/50">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-3">
-                    <input
-                      type="radio"
-                      disabled
-                      class="h-4 w-4 text-gray-400 border-gray-300"
-                    />
+                    <div class="size-4 rounded-full border border-gray-300 bg-gray-100 shrink-0"></div>
                     <div>
                       <div class="flex items-center space-x-2">
                         <commonIcon
@@ -160,11 +156,7 @@
               <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-800/50">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-3">
-                    <input
-                      type="radio"
-                      disabled
-                      class="h-4 w-4 text-gray-400 border-gray-300"
-                    />
+                    <div class="size-4 rounded-full border border-gray-300 bg-gray-100 shrink-0"></div>
                     <div>
                       <div class="flex items-center space-x-2">
                         <commonIcon
@@ -190,11 +182,7 @@
               <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 opacity-50 cursor-not-allowed bg-gray-50 dark:bg-gray-800/50">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-3">
-                    <input
-                      type="radio"
-                      disabled
-                      class="h-4 w-4 text-gray-400 border-gray-300"
-                    />
+                    <div class="size-4 rounded-full border border-gray-300 bg-gray-100 shrink-0"></div>
                     <div>
                       <div class="flex items-center space-x-2">
                         <commonIcon
@@ -239,16 +227,15 @@
           v-if="isAuthenticated && paymentMethod.type !== 'bank_transfer'"
           class="mt-4"
         >
-          <label class="flex items-center space-x-2">
-            <input
-              v-model="paymentMethod.saveForFuture"
-              type="checkbox"
-              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          <div class="flex items-center gap-2">
+            <UiCheckbox
+              :checked="paymentMethod.saveForFuture"
+              @update:checked="(val: boolean) => paymentMethod.saveForFuture = val"
             />
             <span class="text-sm text-gray-700 dark:text-gray-300">
               {{ $t('checkout.payment.saveForFuture') }}
             </span>
-          </label>
+          </div>
         </div>
       </div>
 
@@ -316,6 +303,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+
 import { useCheckoutStore } from '~/stores/checkout'
 import type { PaymentMethod, SavedPaymentMethod } from '~/types/checkout'
 import { useAuthStore } from '~/stores/auth'
@@ -351,9 +339,9 @@ const paymentMethod = ref<PaymentMethod>({
 // =============================================
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
-const savedPaymentMethods = computed(() => (checkoutStore as Record<string, any>).savedPaymentMethods ?? [])
-const loading = computed(() => (checkoutStore as Record<string, any>).loading ?? false)
-const errors = computed(() => (checkoutStore as Record<string, any>).errors ?? {})
+const savedPaymentMethods = computed(() => checkoutStore.savedPaymentMethods ?? [])
+const loading = computed(() => checkoutStore.loading ?? false)
+const errors = computed(() => checkoutStore.errors ?? {})
 
 const canProceed = computed(() => {
   if (selectedSavedMethod.value) {
@@ -465,7 +453,7 @@ const getPaymentMethodDescription = (savedMethod: SavedPaymentMethod) => {
 }
 
 const goBack = async () => {
-  const previousStep = (checkoutStore as Record<string, any>).goToPreviousStep?.()
+  const previousStep = checkoutStore.goToPreviousStep?.()
   if (previousStep) {
     const localePath = useLocalePath()
     const stepPath = previousStep === 'shipping' ? '/checkout' : `/checkout/${previousStep}`
@@ -492,10 +480,10 @@ const proceedToReview = async () => {
       methodToSave = paymentMethod.value
     }
 
-    await (checkoutStore as Record<string, any>).updatePaymentMethod?.(methodToSave)
+    await checkoutStore.updatePaymentMethod?.(methodToSave)
 
     // Get the next step and navigate to it
-    const nextStep = await (checkoutStore as Record<string, any>).proceedToNextStep?.()
+    const nextStep = await checkoutStore.proceedToNextStep?.()
     if (nextStep) {
       const localePath = useLocalePath()
       const stepPath = nextStep === 'shipping' ? '/checkout' : `/checkout/${nextStep}`
@@ -518,8 +506,8 @@ const proceedToReview = async () => {
 // =============================================
 
 // Initialize with existing payment method if available
-if ((checkoutStore as Record<string, any>).paymentMethod) {
-  paymentMethod.value = { ...(checkoutStore as Record<string, any>).paymentMethod }
+if (checkoutStore.paymentMethod) {
+  paymentMethod.value = { ...checkoutStore.paymentMethod }
 }
 
 // Watch for changes in saved payment methods

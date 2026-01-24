@@ -21,27 +21,21 @@
             name="lucide:search"
             class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5"
           />
-          <input
+          <UiInput
             ref="searchInput"
             v-model="localSearchQuery"
             type="text"
             :placeholder="$t('admin.users.searchPlaceholder')"
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 touch-manipulation"
-            :class="{
-              'min-h-[44px]': isMobile, // Ensure minimum touch target size
-            }"
+            :class="{ 'min-h-[44px]': isMobile }"
             @input="handleSearchInput"
             @focus="handleSearchFocus"
             @blur="handleSearchBlur"
             @keydown="handleKeydown"
           />
           <!-- Clear search button -->
-          <button
+          <UiButton
             v-if="localSearchQuery"
-            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 touch-manipulation"
-            :class="{
-              'p-2': isMobile, // Larger touch target
-            }"
+            :class="{ 'p-2': isMobile }"
             type="button"
             @click="clearSearch"
             @touchstart="isMobile && vibrate('tap')"
@@ -50,32 +44,34 @@
               name="lucide:x"
               class="w-4 h-4"
             />
-          </button>
+          </UiButton>
         </div>
       </div>
 
       <!-- Filter Controls -->
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         <!-- Status Filter -->
-        <select
+        <UiSelect
           v-model="localStatusFilter"
-          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 touch-manipulation"
-          :class="{
-            'min-h-[44px]': isMobile,
-          }"
-          @change="handleStatusFilterChange"
+          :class="{ 'min-h-[44px]': isMobile }"
+          @update:model-value="handleStatusFilterChange"
           @focus="isMobile && vibrate('tap')"
         >
-          <option value="">
-            {{ $t('admin.users.filters.allStatus') }}
-          </option>
-          <option value="active">
-            {{ $t('admin.users.filters.active') }}
-          </option>
-          <option value="inactive">
-            {{ $t('admin.users.filters.inactive') }}
-          </option>
-        </select>
+          <UiSelectTrigger>
+            <UiSelectValue />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem value="">
+              {{ $t('admin.users.filters.allStatus') }}
+            </UiSelectItem>
+            <UiSelectItem value="active">
+              {{ $t('admin.users.filters.active') }}
+            </UiSelectItem>
+            <UiSelectItem value="inactive">
+              {{ $t('admin.users.filters.inactive') }}
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
 
         <!-- Date Range Filter -->
         <AdminUtilsUserDateRangePicker
@@ -88,24 +84,19 @@
         />
 
         <!-- Clear Filters Button -->
-        <button
+        <UiButton
           v-if="hasActiveFilters"
-          class="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors touch-manipulation active:scale-95"
-          :class="{
-            'min-h-[44px] px-4': isMobile,
-            'active:bg-gray-100 dark:active:bg-gray-600': isMobile,
-          }"
+          :class="{ 'min-h-[44px] px-4': isMobile, 'active:bg-gray-100 dark:active:bg-gray-600': isMobile }"
           type="button"
           @click="clearAllFilters"
           @touchstart="isMobile && vibrate('tap')"
         >
           {{ $t('admin.users.filters.clear') }}
-        </button>
+        </UiButton>
 
         <!-- Mobile Filter Toggle -->
-        <button
+        <UiButton
           v-if="isMobile && (localStatusFilter || localDateFrom || localDateTo)"
-          class="sm:hidden px-3 py-2 text-sm bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 rounded-lg touch-manipulation active:scale-95 min-h-[44px]"
           type="button"
           @click="toggleMobileFilters"
           @touchstart="vibrate('tap')"
@@ -115,7 +106,7 @@
             class="w-4 h-4 mr-1"
           />
           {{ $t('admin.users.filters.toggle') }}
-        </button>
+        </UiButton>
       </div>
     </div>
 
@@ -133,32 +124,26 @@
           class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200"
         >
           {{ $t(`admin.users.filters.${localStatusFilter}`) }}
-          <button
-            class="ml-2 text-blue-600 hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-100"
+          <UiButton
             @click="localStatusFilter = ''; handleStatusFilterChange()"
             @touchstart="vibrate('tap')"
-          >
-            <commonIcon
-              name="lucide:x"
-              class="w-3 h-3"
-            />
-          </button>
+          ><commonIcon
+            name="lucide:x"
+            class="w-3 h-3"
+          /></UiButton>
         </span>
         <span
           v-if="localDateFrom || localDateTo"
           class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200"
         >
           {{ formatDateRange(localDateFrom, localDateTo) }}
-          <button
-            class="ml-2 text-green-600 hover:text-green-800 dark:text-green-300 dark:hover:text-green-100"
+          <UiButton
             @click="clearDateRange"
             @touchstart="vibrate('tap')"
-          >
-            <commonIcon
-              name="lucide:x"
-              class="w-3 h-3"
-            />
-          </button>
+          ><commonIcon
+            name="lucide:x"
+            class="w-3 h-3"
+          /></UiButton>
         </span>
       </div>
     </div>

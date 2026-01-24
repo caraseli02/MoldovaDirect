@@ -14,15 +14,15 @@
 -->
 
 <template>
-  <Dialog
+  <UiDialog
     :open="true"
     @update:open="handleClose"
   >
-    <DialogContent class="sm:max-w-md">
-      <DialogHeader>
-        <DialogTitle>{{ getActionTitle() }}</DialogTitle>
-        <DialogDescription>{{ getActionDescription() }}</DialogDescription>
-      </DialogHeader>
+    <UiDialogContent class="sm:max-w-md">
+      <UiDialogHeader>
+        <UiDialogTitle>{{ getActionTitle() }}</UiDialogTitle>
+        <UiDialogDescription>{{ getActionDescription() }}</UiDialogDescription>
+      </UiDialogHeader>
 
       <!-- Content -->
       <div class="space-y-4">
@@ -44,26 +44,26 @@
               {{ $t('admin.users.modal.suspensionDuration') }}
             </UiLabel>
             <UiSelect v-model="formData.duration">
-              <SelectTrigger>
-                <SelectValue :placeholder="$t('admin.users.modal.selectDuration')" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="0">
+              <UiSelectTrigger>
+                <UiSelectValue :placeholder="$t('admin.users.modal.selectDuration')" />
+              </UiSelectTrigger>
+              <UiSelectContent>
+                <UiSelectItem value="0">
                   {{ $t('admin.users.modal.durations.indefinite') }}
-                </SelectItem>
-                <SelectItem value="1">
+                </UiSelectItem>
+                <UiSelectItem value="1">
                   {{ $t('admin.users.modal.durations.oneDay') }}
-                </SelectItem>
-                <SelectItem value="3">
+                </UiSelectItem>
+                <UiSelectItem value="3">
                   {{ $t('admin.users.modal.durations.threeDays') }}
-                </SelectItem>
-                <SelectItem value="7">
+                </UiSelectItem>
+                <UiSelectItem value="7">
                   {{ $t('admin.users.modal.durations.oneWeek') }}
-                </SelectItem>
-                <SelectItem value="30">
+                </UiSelectItem>
+                <UiSelectItem value="30">
                   {{ $t('admin.users.modal.durations.oneMonth') }}
-                </SelectItem>
-              </SelectContent>
+                </UiSelectItem>
+              </UiSelectContent>
             </UiSelect>
           </div>
 
@@ -73,20 +73,20 @@
               {{ $t('admin.users.modal.newRole') }}
             </UiLabel>
             <UiSelect v-model="formData.role">
-              <SelectTrigger>
-                <SelectValue :placeholder="$t('admin.users.modal.selectRole')" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="user">
+              <UiSelectTrigger>
+                <UiSelectValue :placeholder="$t('admin.users.modal.selectRole')" />
+              </UiSelectTrigger>
+              <UiSelectContent>
+                <UiSelectItem value="user">
                   {{ $t('admin.users.modal.roles.user') }}
-                </SelectItem>
-                <SelectItem value="moderator">
+                </UiSelectItem>
+                <UiSelectItem value="moderator">
                   {{ $t('admin.users.modal.roles.moderator') }}
-                </SelectItem>
-                <SelectItem value="admin">
+                </UiSelectItem>
+                <UiSelectItem value="admin">
                   {{ $t('admin.users.modal.roles.admin') }}
-                </SelectItem>
-              </SelectContent>
+                </UiSelectItem>
+              </UiSelectContent>
             </UiSelect>
           </div>
 
@@ -121,7 +121,7 @@
               name="lucide:alert-triangle"
               class="h-4 w-4"
             />
-            <AlertDescription>{{ getWarningMessage() }}</AlertDescription>
+            <UiAlertDescription>{{ getWarningMessage() }}</UiAlertDescription>
           </UiAlert>
 
           <!-- Danger Messages -->
@@ -133,12 +133,12 @@
               name="lucide:alert-triangle"
               class="h-4 w-4"
             />
-            <AlertDescription>{{ getDangerMessage() }}</AlertDescription>
+            <UiAlertDescription>{{ getDangerMessage() }}</UiAlertDescription>
           </UiAlert>
         </div>
       </div>
 
-      <DialogFooter>
+      <UiDialogFooter>
         <UiButton
           variant="outline"
           @click="$emit('cancel')"
@@ -152,9 +152,9 @@
         >
           {{ getActionButtonText() }}
         </UiButton>
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>
+      </UiDialogFooter>
+    </UiDialogContent>
+  </UiDialog>
 </template>
 
 <script setup lang="ts">

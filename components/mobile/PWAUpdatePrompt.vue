@@ -36,7 +36,7 @@
 
         <!-- Actions -->
         <div class="flex items-center space-x-2">
-          <Button
+          <UiButton
             :disabled="updating"
             size="sm"
             class="inline-flex items-center px-3 py-1.5 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-md text-xs font-medium transition-colors disabled:opacity-50"
@@ -64,9 +64,9 @@
               />
             </svg>
             {{ updating ? $t('pwa.updating') : $t('pwa.update') }}
-          </Button>
+          </UiButton>
 
-          <Button
+          <UiButton
             variant="ghost"
             size="icon"
             class="text-white hover:text-gray-200 p-1"
@@ -85,7 +85,7 @@
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-          </Button>
+          </UiButton>
         </div>
       </div>
     </div>
@@ -93,8 +93,6 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-
 const pwa = usePWA()
 const { vibrate } = useHapticFeedback()
 

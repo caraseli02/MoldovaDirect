@@ -487,6 +487,13 @@
           "description": "Complete custom component coverage validation",
           "implemented": false,
           "tested": false
+        },
+        {
+          "id": "ui-7",
+          "description": "Enforce shadcn-vue UI components across all files",
+          "implemented": true,
+          "tested": true,
+          "github_issue": 360
         }
       ]
     },
@@ -1246,12 +1253,12 @@
   ],
   "metadata": {
     "version": "1.5.0",
-    "last_updated": "2026-01-05",
+    "last_updated": "2026-01-21",
     "project": "Moldova Direct E-commerce Platform",
     "total_features": 22,
     "completed_features": 4,
     "in_progress_features": 4,
     "planned_features": 14,
-    "notes": "PR #336: Performance cleanup - N+1 queries fixed (#227), bundle splitting (#229), dead code removal (#231), database indexes migration (#175). PR #346: Replaced shadcn-vue/Reka UI with custom components. Added checkout-enhancements, admin-enhancements, product-enhancements, and ux-improvements feature groups from open GitHub issues."
+    "notes": "PR #336: Performance cleanup - N+1 queries fixed (#227), bundle splitting (#229), dead code removal (#231), database indexes migration (#175). PR #346: Replaced shadcn-vue/Reka UI with custom components. PR #360: Enforced shadcn-vue UI components - 342 replacements across 84 files, ESLint rule for restricted HTML elements. Added checkout-enhancements, admin-enhancements, product-enhancements, and ux-improvements feature groups from open GitHub issues."
   }
 }

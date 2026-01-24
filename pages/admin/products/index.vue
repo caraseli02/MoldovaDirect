@@ -94,67 +94,64 @@
             Edit Stock for {{ stockEditModal.product?.name ? getLocalizedText(stockEditModal.product.name) : '' }}
           </h3>
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Stock Quantity
-            </label>
-            <input
+            <UiLabel>Stock Quantity</UiLabel>
+            <UiInput
               v-model.number="stockEditModal.quantity"
               type="number"
               min="0"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
           </div>
           <div class="flex justify-end space-x-3">
-            <Button
+            <UiButton
               variant="outline"
               @click="closeStockEditModal"
             >
               Cancel
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton
               :disabled="stockEditModal.saving"
               type="submit"
               @click="saveStockEdit"
             >
               {{ stockEditModal.saving ? 'Saving...' : 'Save' }}
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Delete Confirmation Dialog -->
-    <Dialog
+    <UiDialog
       :open="deleteDialog.show"
       @update:open="handleDeleteDialogOpen"
     >
-      <DialogContent class="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle class="text-red-600 dark:text-red-400 flex items-center gap-2">
+      <UiDialogContent class="sm:max-w-md">
+        <UiDialogHeader>
+          <UiDialogTitle class="text-red-600 dark:text-red-400 flex items-center gap-2">
             <commonIcon
               name="lucide:alert-triangle"
               class="w-5 h-5"
             />
             {{ deleteDialog.title }}
-          </DialogTitle>
-          <DialogDescription>
+          </UiDialogTitle>
+          <UiDialogDescription>
             {{ deleteDialog.message }}
-          </DialogDescription>
-        </DialogHeader>
+          </UiDialogDescription>
+        </UiDialogHeader>
 
         <p class="text-sm text-gray-600 dark:text-gray-300">
           {{ deleteDialog.details }}
         </p>
 
-        <DialogFooter class="mt-6 flex justify-end gap-3">
-          <Button
+        <UiDialogFooter class="mt-6 flex justify-end gap-3">
+          <UiButton
             variant="outline"
             :disabled="deleteDialog.loading"
             @click="cancelDelete"
           >
             Cancel
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton
             variant="destructive"
             :disabled="deleteDialog.loading"
             @click="confirmDelete"
@@ -165,10 +162,10 @@
               class="w-4 h-4 mr-2 animate-spin"
             />
             {{ deleteDialog.loading ? 'Deleting...' : 'Delete' }}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </UiButton>
+        </UiDialogFooter>
+      </UiDialogContent>
+    </UiDialog>
 
     <!-- Bulk Operations Progress Bar -->
     <AdminUtilsBulkOperationsBar
@@ -190,7 +187,6 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
