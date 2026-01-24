@@ -1,5 +1,7 @@
 <template>
-  <section class="border-y border-brand-light/15 bg-brand-light/5 py-12 backdrop-blur-sm dark:border-brand-dark/30 dark:bg-brand-dark/20">
+  <section
+    class="border-y border-brand-light/15 bg-brand-light/5 py-12 backdrop-blur-sm dark:border-brand-dark/30 dark:bg-brand-dark/20"
+  >
     <div class="container">
       <!-- Header -->
       <div
@@ -12,7 +14,7 @@
         }"
         class="mb-10 text-center"
       >
-        <p class="text-sm font-medium uppercase tracking-[0.15em] text-brand-dark/70 dark:text-brand-light/70">
+        <p class="text-sm font-bold uppercase tracking-[0.2em] text-brand-dark dark:text-brand-light/90">
           {{ t('home.mediaMentions.title') }}
         </p>
       </div>
@@ -63,7 +65,7 @@
               <!-- If no image, show text with luxury styling -->
               <span
                 v-else
-                class="text-lg font-semibold tracking-tight text-brand-dark/50 transition-colors duration-300 group-hover:text-brand-dark group-focus-visible:text-brand-dark dark:text-brand-light/50 dark:group-hover:text-brand-light dark:group-focus-visible:text-brand-light"
+                class="text-xl font-bold tracking-tight text-brand-dark transition-colors duration-300 group-hover:text-brand-accent dark:text-brand-light dark:group-hover:text-brand-accent"
               >
                 {{ mention.name }}
               </span>
@@ -89,7 +91,7 @@
               <!-- If no image, show text with luxury styling -->
               <span
                 v-else
-                class="text-lg font-semibold tracking-tight text-brand-dark/50 dark:text-brand-light/50"
+                class="text-xl font-bold tracking-tight text-brand-dark dark:text-brand-light"
               >
                 {{ mention.name }}
               </span>
@@ -105,7 +107,10 @@
               <p class="italic leading-relaxed">
                 "{{ mention.quote }}"
               </p>
-              <div class="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 border-l border-t border-brand-light/10 bg-brand-dark dark:border-brand-dark/20 dark:bg-brand-light"></div>
+              <div
+                class="absolute -top-2 left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 border-l border-t border-brand-light/10 bg-brand-dark dark:border-brand-dark/20 dark:bg-brand-light"
+              >
+              </div>
             </div>
           </div>
         </div>
@@ -218,6 +223,7 @@ const { t } = useI18n()
     opacity: 0;
     transform: translate(-50%, calc(100% + 10px));
   }
+
   to {
     opacity: 1;
     transform: translate(-50%, 100%);

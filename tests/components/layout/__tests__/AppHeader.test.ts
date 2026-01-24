@@ -136,12 +136,12 @@ describe('Layout AppHeader', () => {
     expect(wrapper.exists()).toBe(true)
   })
 
-  it('should have sticky header with proper classes', () => {
+  it('should have fixed header with proper classes', () => {
     const wrapper = mountComponent()
     const header = wrapper.find('header')
     if (header.exists()) {
       const classes = header.classes()
-      expect(classes).toContain('sticky')
+      expect(classes).toContain('fixed')
     }
     else {
       // If header element not found directly, component still exists

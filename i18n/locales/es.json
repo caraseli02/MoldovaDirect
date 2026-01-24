@@ -264,6 +264,7 @@
       "addMore": "Añade {amount} más para envío gratis"
     },
     "recommendations": {
+      "frequently_bought_together": "Comprados frecuentemente juntos",
       "boughtTogether": "Comprados juntos",
       "similar": "Similar",
       "priceDrop": "Precio rebajado",
@@ -3341,6 +3342,76 @@
       "secondary": "Ver FAQ",
       "noteTitle": "Horario de Atención",
       "noteDescription": "Lunes a viernes, 9:00 - 18:00 CET"
+    }
+  },
+  "seo": {
+    "home": {
+      "title": "Moldova Direct – El sabor de Moldavia en cada entrega",
+      "description": "Compre vinos moldavos seleccionados, alimentos gourmet y cestas de regalo con entrega rápida en toda España. Descubra productores artesanales y sabores auténticos."
+    },
+    "about": {
+      "title": "Sobre Nosotros - Moldova Direct",
+      "description": "Conozca nuestra misión de llevar los mejores productos moldavos directamente a su puerta en España."
+    },
+    "contact": {
+      "title": "Contáctenos - Moldova Direct",
+      "description": "Póngase en contacto con el equipo de Moldova Direct para soporte, consultas al por mayor o simplemente para saludar."
+    },
+    "products": {
+      "title": "Comprar Productos - Moldova Direct",
+      "description": "Explore nuestra gama completa de vinos, licores y productos alimenticios gourmet auténticos de Moldavia."
+    },
+    "cart": {
+      "title": "Carrito de Compras - Moldova Direct",
+      "description": "Revise sus artículos seleccionados y proceda al pago seguro."
+    },
+    "account": {
+      "title": "Mi Cuenta - Moldova Direct",
+      "description": "Gestione sus pedidos, direcciones y ajustes de cuenta."
+    }
+  },
+  "aboutPage": {
+    "title": "Bienvenido a Moldova Direct, su puerta de entrada a los productos auténticos de Moldavia en España.",
+    "mission": {
+      "title": "Nuestra Misión",
+      "description": "Nos dedicamos a llevar los ricos sabores y tradiciones de Moldavia directamente a su puerta. Nuestra misión es conectar a la diáspora moldava y a los entusiastas de la comida en España con los sabores auténticos de Moldavia, desde sus vinos de renombre mundial hasta conservas y delicias tradicionales."
+    },
+    "whyChooseUs": {
+      "title": "Por Qué Elegirnos",
+      "item1": "Alianzas directas con productores moldavos",
+      "item2": "Autenticidad y calidad garantizadas",
+      "item3": "Entrega rápida y fiable en toda España",
+      "item4": "Precios competitivos sin cargos ocultos",
+      "item5": "Atención al cliente en varios idiomas"
+    },
+    "story": {
+      "title": "Nuestra Historia",
+      "p1": "Fundado por expatriados moldavos que viven en España, Moldova Direct nació de un deseo sencillo: compartir los productos excepcionales de nuestra patria con nuestro nuevo hogar. Entendemos la nostalgia por los sabores auténticos y la dificultad de encontrar productos moldavos genuinos en el extranjero.",
+      "p2": "Por eso hemos establecido relaciones directas con productores de confianza en Moldavia, asegurando que cada producto que ofrecemos cumpla con los más altos estándares de calidad y autenticidad. Desde bodegas familiares hasta productores de alimentos artesanales, trabajamos solo con socios que comparten nuestro compromiso con la excelencia."
+    },
+    "getInTouch": {
+      "title": "Ponerse en Contacto",
+      "description": "¿Tiene preguntas o sugerencias? ¡Nos encantaría saber de usted!"
+    }
+  },
+  "contactPage": {
+    "title": "Envíenos un mensaje",
+    "form": {
+      "name": "Nombre",
+      "email": "Correo",
+      "subject": "Asunto",
+      "message": "Mensaje",
+      "send": "Enviar Mensaje",
+      "success": "¡Gracias por su mensaje! Le responderemos pronto."
+    },
+    "info": {
+      "title": "Ponerse en Contacto",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "workingHours": "Lunes - Viernes: 9:00 - 18:00",
+      "office": "Oficina",
+      "address": "Moldova Direct S.L.\nMadrid, España",
+      "followUs": "Síganos"
     }
   }
 }

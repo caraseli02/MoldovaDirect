@@ -60,7 +60,9 @@
           data-testid="empty-cart-message"
           role="status"
         >
-          <div class="w-20 h-20 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div
+            class="w-20 h-20 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-6"
+          >
             <svg
               class="h-10 w-10 text-zinc-400 dark:text-zinc-500"
               fill="none"
@@ -149,7 +151,9 @@
 
           <!-- Right Column: Order Summary (Desktop) -->
           <div class="hidden lg:block lg:col-span-1">
-            <div class="bg-white dark:bg-zinc-800/60 rounded-2xl border border-zinc-200 dark:border-zinc-700/50 p-6 sticky top-24">
+            <div
+              class="bg-white dark:bg-zinc-800/60 rounded-2xl border border-zinc-200 dark:border-zinc-700/50 p-6 sticky top-24"
+            >
               <h2 class="text-lg font-semibold text-zinc-900 dark:text-white mb-6">
                 {{ $t('common.orderSummary') }}
               </h2>
@@ -310,7 +314,9 @@
               {{ formattedSubtotal }}
             </p>
           </div>
-          <div class="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/20 px-2.5 py-1.5 rounded-full">
+          <div
+            class="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/20 px-2.5 py-1.5 rounded-full"
+          >
             <svg
               class="w-3.5 h-3.5"
               fill="none"
@@ -612,11 +618,11 @@ onBeforeUnmount(() => {
 
 // SEO Meta
 useHead({
-  title: 'Shopping Cart - Moldova Direct',
+  title: t('seo.cart.title'),
   meta: [
     {
       name: 'description',
-      content: 'Review your selected Moldovan products and proceed to checkout.',
+      content: t('seo.cart.description'),
     },
   ],
 })

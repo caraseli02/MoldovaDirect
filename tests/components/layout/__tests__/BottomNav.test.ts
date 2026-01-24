@@ -67,7 +67,7 @@ describe('Layout BottomNav', () => {
   it('should be hidden on desktop', () => {
     const wrapper = mountComponent()
     const nav = wrapper.find('nav')
-    expect(nav.classes()).toContain('md:hidden')
+    expect(nav.classes()).toContain('lg:hidden')
   })
 
   it('should have proper ARIA labels', () => {

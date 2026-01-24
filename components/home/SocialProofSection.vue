@@ -51,7 +51,7 @@
           </p>
 
           <!-- Animated stats with counter -->
-          <div class="mt-8 grid gap-6 sm:grid-cols-2">
+          <div class="mt-8 grid gap-6 md:grid-cols-2">
             <div
               v-for="(stat, index) in animatedStats"
               :key="stat.label"
@@ -71,7 +71,7 @@
               >
                 {{ stat.displayValue }}
               </p>
-              <p class="mt-2 text-sm text-primary-100">
+              <p class="mt-2 text-sm text-primary-100 break-words">
                 {{ stat.label }}
               </p>
             </div>
@@ -125,7 +125,9 @@
                   />
 
                   <!-- Verified badge -->
-                  <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
+                  <span
+                    class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700"
+                  >
                     <commonIcon
                       name="lucide:check-circle"
                       class="h-3 w-3"
@@ -177,7 +179,9 @@
               />
 
               <!-- Verified badge -->
-              <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
+              <span
+                class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700"
+              >
                 <commonIcon
                   name="lucide:check-circle"
                   class="h-3 w-3"
@@ -320,11 +324,13 @@ const animatedStats = computed(() => {
 }
 
 :deep(.testimonials-carousel .swiper-pagination-bullet) {
-  background-color: rgb(255 255 255 / 0.5); /* white with 50% opacity */
+  background-color: rgb(255 255 255 / 0.5);
+  /* white with 50% opacity */
 }
 
 :deep(.testimonials-carousel .swiper-pagination-bullet-active) {
-  background-color: rgb(255 255 255); /* white */
+  background-color: rgb(255 255 255);
+  /* white */
   opacity: 1;
 }
 </style>

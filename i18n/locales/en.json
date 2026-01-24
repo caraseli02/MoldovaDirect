@@ -43,7 +43,6 @@
     "release_to_remove": "Release to remove",
     "help": "Help",
     "each": "each",
-    "items": "items",
     "refresh": "Refresh",
     "tryAgain": "Try Again",
     "error": "Error",
@@ -67,7 +66,8 @@
     "showOrderSummary": "Show order summary",
     "hideOrderSummary": "Hide order summary",
     "item": "item",
-    "items": "items"
+    "items": "items",
+    "proceedToCheckout": "Proceed to Checkout"
   },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculated at checkout",
@@ -264,6 +264,7 @@
       "addMore": "Add {amount} more for free shipping"
     },
     "recommendations": {
+      "frequently_bought_together": "Frequently bought together",
       "boughtTogether": "Bought together",
       "similar": "Similar",
       "priceDrop": "Price drop",
@@ -2939,6 +2940,76 @@
       "secondary": "View FAQ",
       "noteTitle": "Business Hours",
       "noteDescription": "Monday to Friday, 9 AM - 6 PM CET"
+    }
+  },
+  "seo": {
+    "home": {
+      "title": "Moldova Direct – Taste Moldova in Every Delivery",
+      "description": "Shop curated Moldovan wines, gourmet foods, and gift hampers with fast delivery across Spain. Discover artisan producers and authentic flavours."
+    },
+    "about": {
+      "title": "About Us - Moldova Direct",
+      "description": "Learn about our mission to bring the finest Moldovan products directly to your doorstep in Spain."
+    },
+    "contact": {
+      "title": "Contact Us - Moldova Direct",
+      "description": "Get in touch with the Moldova Direct team for support, wholesale inquiries, or just to say hi."
+    },
+    "products": {
+      "title": "Shop Products - Moldova Direct",
+      "description": "Browse our full range of authentic Moldovan wines, spirits, and gourmet food products."
+    },
+    "cart": {
+      "title": "Shopping Cart - Moldova Direct",
+      "description": "Review your selected items and proceed to secure checkout."
+    },
+    "account": {
+      "title": "My Account - Moldova Direct",
+      "description": "Manage your orders, addresses, and account settings."
+    }
+  },
+  "aboutPage": {
+    "title": "Welcome to Moldova Direct, your gateway to authentic Moldovan products in Spain.",
+    "mission": {
+      "title": "Our Mission",
+      "description": "We are dedicated to bringing the rich flavors and traditions of Moldova directly to your doorstep. Our mission is to connect the Moldovan diaspora and food enthusiasts in Spain with the authentic tastes of Moldova, from its world-renowned wines to traditional preserves and delicacies."
+    },
+    "whyChooseUs": {
+      "title": "Why Choose Us",
+      "item1": "Direct partnerships with Moldovan producers",
+      "item2": "Guaranteed authenticity and quality",
+      "item3": "Fast and reliable delivery across Spain",
+      "item4": "Competitive prices with no hidden fees",
+      "item5": "Customer support in multiple languages"
+    },
+    "story": {
+      "title": "Our Story",
+      "p1": "Founded by Moldovan expats living in Spain, Moldova Direct was born from a simple desire: to share the exceptional products of our homeland with our new home. We understand the nostalgia for authentic flavors and the difficulty in finding genuine Moldovan products abroad.",
+      "p2": "That's why we've established direct relationships with trusted producers in Moldova, ensuring that every product we offer meets the highest standards of quality and authenticity. From family-owned wineries to artisanal food producers, we work only with partners who share our commitment to excellence."
+    },
+    "getInTouch": {
+      "title": "Get in Touch",
+      "description": "Have questions or suggestions? We'd love to hear from you!"
+    }
+  },
+  "contactPage": {
+    "title": "Send us a message",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send Message",
+      "success": "Thank you for your message! We will get back to you soon."
+    },
+    "info": {
+      "title": "Get in Touch",
+      "email": "Email",
+      "phone": "Phone",
+      "workingHours": "Monday - Friday: 9:00 - 18:00",
+      "office": "Office",
+      "address": "Moldova Direct S.L.\nMadrid, Spain",
+      "followUs": "Follow Us"
     }
   }
 }

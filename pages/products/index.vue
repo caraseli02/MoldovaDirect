@@ -303,5 +303,22 @@ onUnmounted(onUnmountedHook)
 
 // Setup structured data watchers for SEO
 setupStructuredDataWatchers()
+
+useLandingSeo({
+  title: t('seo.products.title'),
+  description: t('seo.products.description'),
+  image: '/icon.svg',
+  imageAlt: 'Moldova Direct product catalog',
+  pageType: 'website',
+  keywords: ['Moldovan wine catalog', 'buy Moldovan food online', 'Moldovan products Spain'],
+  breadcrumbs: [
+    { name: t('common.home'), path: '/' },
+    { name: t('common.shop'), path: '/products' },
+  ],
+})
+
+useHead({
+  title: t('seo.products.title'),
+})
 </script>
 // Force HMR update

@@ -112,7 +112,7 @@ describe('Home HeroSection', () => {
       })
       const h1 = wrapper.find('h1')
       expect(h1.exists()).toBe(true)
-      expect(h1.classes()).toContain('text-4xl')
+      expect(h1.classes()).toContain('text-3xl')
       expect(h1.classes()).toContain('font-bold')
       expect(h1.classes()).toContain('tracking-tight')
       expect(h1.text()).toBe('home.hero.title')
@@ -123,9 +123,9 @@ describe('Home HeroSection', () => {
         ...mountOptions,
         props: { highlights: mockHighlights },
       })
-      const subtitle = wrapper.find('p.mx-auto.mt-6')
+      const subtitle = wrapper.find('p.mx-auto.mt-4')
       expect(subtitle.exists()).toBe(true)
-      expect(subtitle.classes()).toContain('text-lg')
+      expect(subtitle.classes()).toContain('text-base')
       expect(subtitle.classes()).toContain('text-white/80')
       expect(subtitle.text()).toBe('home.hero.subtitle')
     })
@@ -307,7 +307,7 @@ describe('Home HeroSection', () => {
         props: { highlights: mockHighlights },
       })
       const container = wrapper.find('.container')
-      expect(container.classes()).toContain('py-16')
+      expect(container.classes()).toContain('py-12')
       expect(container.classes()).toContain('md:py-20')
     })
 
@@ -317,7 +317,8 @@ describe('Home HeroSection', () => {
         props: { highlights: mockHighlights },
       })
       const h1 = wrapper.find('h1')
-      expect(h1.classes()).toContain('text-4xl')
+      expect(h1.classes()).toContain('text-3xl')
+      expect(h1.classes()).toContain('sm:text-4xl')
       expect(h1.classes()).toContain('md:text-5xl')
       expect(h1.classes()).toContain('lg:text-6xl')
     })
