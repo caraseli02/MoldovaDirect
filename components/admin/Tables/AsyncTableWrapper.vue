@@ -62,13 +62,13 @@
         <!-- Default table rendering -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
           <div class="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow
+            <UiTable>
+              <UiTableHeader>
+                <UiTableRow
                   v-for="headerGroup in tableInstance.getHeaderGroups()"
                   :key="headerGroup.id"
                 >
-                  <TableHead
+                  <UiTableHead
                     v-for="header in headerGroup.headers"
                     :key="header.id"
                     :class="(header.column.columnDef.meta as Record<string, any>)?.headerClass"
@@ -79,18 +79,18 @@
                         header.getContext(),
                       )"
                     />
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+                  </UiTableHead>
+                </UiTableRow>
+              </UiTableHeader>
+              <UiTableBody>
                 <template v-if="tableInstance.getRowModel().rows?.length">
-                  <TableRow
+                  <UiTableRow
                     v-for="row in tableInstance.getRowModel().rows"
                     :key="row.id"
                     :data-state="row.getIsSelected() ? 'selected' : undefined"
                     @click="$emit('row-click', row.original)"
                   >
-                    <TableCell
+                    <UiTableCell
                       v-for="cell in row.getVisibleCells()"
                       :key="cell.id"
                       :class="(cell.column.columnDef.meta as Record<string, any>)?.cellClass"
@@ -101,11 +101,11 @@
                           cell.getContext(),
                         )"
                       />
-                    </TableCell>
-                  </TableRow>
+                    </UiTableCell>
+                  </UiTableRow>
                 </template>
-                <TableRow v-else>
-                  <TableCell
+                <UiTableRow v-else>
+                  <UiTableCell
                     :colspan="columns.length"
                     class="h-24 text-center"
                   >
@@ -114,10 +114,10 @@
                         {{ emptyMessage }}
                       </div>
                     </slot>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+                  </UiTableCell>
+                </UiTableRow>
+              </UiTableBody>
+            </UiTable>
           </div>
         </div>
       </slot>
@@ -126,7 +126,6 @@
 </template>
 
 <script setup lang="ts" generic="TData extends Record<string, any>">
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table'
 import type { ColumnDef, TableOptions, Table as TanStackTable } from '@tanstack/vue-table'
 
 interface Props {

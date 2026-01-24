@@ -3,12 +3,11 @@
     <div class="section-content">
       <!-- Terms Checkboxes -->
       <div class="space-y-3 mb-6">
-        <label class="flex items-start cursor-pointer">
-          <input
+        <div class="flex items-start">
+          <UiCheckbox
             :checked="termsAccepted"
-            type="checkbox"
-            class="h-4 w-4 mt-0.5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-            @change="$emit('update:termsAccepted', ($event.target as HTMLInputElement).checked)"
+            class="mt-0.5"
+            @update:checked="$emit('update:termsAccepted', $event)"
           />
           <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
             {{ $t('checkout.review.acceptTerms') }}
@@ -24,14 +23,13 @@
               class="text-red-500 text-xs ml-1"
             >*</span>
           </span>
-        </label>
+        </div>
 
-        <label class="flex items-start cursor-pointer">
-          <input
+        <div class="flex items-start">
+          <UiCheckbox
             :checked="privacyAccepted"
-            type="checkbox"
-            class="h-4 w-4 mt-0.5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-            @change="$emit('update:privacyAccepted', ($event.target as HTMLInputElement).checked)"
+            class="mt-0.5"
+            @update:checked="$emit('update:privacyAccepted', $event)"
           />
           <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
             {{ $t('checkout.review.acceptPrivacy') }}
@@ -47,25 +45,24 @@
               class="text-red-500 text-xs ml-1"
             >*</span>
           </span>
-        </label>
+        </div>
 
-        <label class="flex items-start cursor-pointer">
-          <input
+        <div class="flex items-start">
+          <UiCheckbox
             :checked="marketingConsent"
-            type="checkbox"
-            class="h-4 w-4 mt-0.5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-            @change="$emit('update:marketingConsent', ($event.target as HTMLInputElement).checked)"
+            class="mt-0.5"
+            @update:checked="$emit('update:marketingConsent', $event)"
           />
           <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
             {{ $t('checkout.review.marketingConsent') }}
           </span>
-        </label>
+        </div>
       </div>
 
       <!-- Place Order Button (Desktop) -->
-      <button
+      <UiButton
         :disabled="!canPlaceOrder || processingOrder"
-        class="hidden lg:flex w-full items-center justify-center px-6 py-4 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors"
+        class="hidden lg:flex w-full"
         @click="$emit('place-order')"
       >
         <span
@@ -112,7 +109,7 @@
             />
           </svg>
         </span>
-      </button>
+      </UiButton>
     </div>
   </section>
 </template>

@@ -110,15 +110,10 @@
 
             <!-- Legend -->
             <div class="mt-6 flex flex-wrap items-center justify-center gap-4">
-              <button
+              <UiButton
                 v-for="region in regions"
                 :key="`legend-${region.id}`"
-                class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all"
-                :class="[
-                  selectedRegion === region.id
-                    ? 'bg-primary text-white shadow-lg'
-                    : 'bg-white text-slate-700 hover:bg-slate-100',
-                ]"
+                :class="[selectedRegion === region.id ? 'bg-primary text-white shadow-lg' : 'bg-white text-slate-700 hover:bg-slate-100']"
                 @click="selectRegion(region.id)"
               >
                 <span
@@ -126,11 +121,10 @@
                   :style="{ backgroundColor: getRegionColor(region.id) }"
                 ></span>
                 {{ getLocalizedText(region.name) }}
-              </button>
+              </UiButton>
 
-              <button
+              <UiButton
                 v-if="selectedRegion"
-                class="inline-flex items-center gap-2 rounded-full bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-300"
                 @click="clearSelection"
               >
                 <commonIcon
@@ -138,7 +132,7 @@
                   class="h-3 w-3"
                 />
                 {{ t('wineStory.regions.clearFilter') }}
-              </button>
+              </UiButton>
             </div>
           </div>
         </div>

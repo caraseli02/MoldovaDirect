@@ -80,16 +80,13 @@
       </p>
 
       <!-- Read More Button -->
-      <button
-        class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary/90"
-        @click.stop="$emit('click', producer)"
-      >
+      <UiButton @click.stop="$emit('click', producer)">
         {{ t('wineStory.producers.readMore') }}
         <commonIcon
           name="lucide:arrow-right"
           class="h-4 w-4 transition-transform group-hover:translate-x-1"
         />
-      </button>
+      </UiButton>
     </div>
 
     <!-- Certifications Badge (if organic/certified) -->

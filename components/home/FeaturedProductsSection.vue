@@ -34,7 +34,7 @@
         aria-label="Product filters"
         @keydown="handleTabKeydown"
       >
-        <button
+        <UiButton
           v-for="(filter, index) in filters"
           :key="filter.value"
           :ref="el => { if (el) tabRefs[index] = el as HTMLButtonElement }"
@@ -52,7 +52,7 @@
           @click="activeFilter = filter.value"
         >
           {{ filter.label }}
-        </button>
+        </UiButton>
       </div>
 
       <!-- Loading state - Carousel on mobile, Grid on desktop -->
@@ -154,9 +154,8 @@
         <p class="text-red-500 dark:text-red-400">
           {{ t('home.featuredProducts.error') }}
         </p>
-        <button
+        <UiButton
           type="button"
-          class="mt-4 inline-flex items-center gap-2 rounded-full bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700"
           @click="emit('retry')"
         >
           <commonIcon
@@ -164,7 +163,7 @@
             class="h-5 w-5"
           />
           {{ t('common.retry') }}
-        </button>
+        </UiButton>
       </div>
     </div>
   </section>

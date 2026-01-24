@@ -77,9 +77,8 @@
               />
             </li>
             <li>
-              <button
+              <UiButton
                 type="button"
-                class="flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                 :aria-label="t('products.breadcrumbNav.showAll')"
                 @click="toggleExpanded"
               >
@@ -87,7 +86,7 @@
                   name="lucide:more-horizontal"
                   class="h-4 w-4"
                 />
-              </button>
+              </UiButton>
             </li>
 
             <!-- Separator -->

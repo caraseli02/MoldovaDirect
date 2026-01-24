@@ -21,25 +21,19 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Price -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          {{ $t('admin.products.fields.price') }} *
-        </label>
+        <UiLabel>{{ $t('admin.products.fields.price') }} *</UiLabel>
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <span class="text-gray-500 dark:text-gray-400">€</span>
           </div>
-          <input
+          <UiInput
             ref="priceInput"
             v-model.number="localForm.price"
             type="number"
             step="0.01"
             min="0"
             :placeholder="$t('admin.products.placeholders.price')"
-            class="w-full pl-8 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"
-            :class="{
-              'border-red-500': errors?.price,
-              'min-h-[44px]': isMobile,
-            }"
+            :class="{ 'border-red-500': errors?.price, 'min-h-[44px]': isMobile }"
             @input="handlePriceInput"
             @focus="handleInputFocus"
             @blur="handleInputBlur"
@@ -61,25 +55,18 @@
 
       <!-- Compare Price -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          {{ $t('admin.products.fields.comparePrice') }}
-        </label>
+        <UiLabel>{{ $t('admin.products.fields.comparePrice') }}</UiLabel>
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <span class="text-gray-500 dark:text-gray-400">€</span>
           </div>
-          <input
+          <UiInput
             v-model.number="localForm.comparePrice"
             type="number"
             step="0.01"
             min="0"
             :placeholder="$t('admin.products.placeholders.comparePrice')"
-            class="w-full pl-8 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"
-            :class="{
-              'border-red-500': errors?.comparePrice,
-              'min-h-[44px]': isMobile,
-              'border-orange-300 bg-orange-50 dark:bg-orange-900/20': comparePriceWarning,
-            }"
+            :class="{ 'border-red-500': errors?.comparePrice, 'min-h-[44px]': isMobile, 'border-orange-300 bg-orange-50 dark:bg-orange-900/20': comparePriceWarning }"
             @input="handleComparePriceInput"
             @focus="handleInputFocus"
             @blur="handleInputBlur"
@@ -251,8 +238,7 @@
             <li>{{ $t('admin.products.tips.pricing3') }}</li>
           </ul>
         </div>
-        <button
-          class="text-green-600 dark:text-green-400 touch-manipulation p-1"
+        <UiButton
           @click="showPricingTips = false"
           @touchstart="vibrate('tap')"
         >
@@ -260,7 +246,7 @@
             name="lucide:x"
             class="w-4 h-4"
           />
-        </button>
+        </UiButton>
       </div>
     </div>
   </div>

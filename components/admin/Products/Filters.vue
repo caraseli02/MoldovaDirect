@@ -20,18 +20,17 @@
               />
             </svg>
           </div>
-          <input
+          <UiInput
             :value="search"
             type="text"
             placeholder="Search by name, SKU, or category..."
-            class="pl-10 pr-4 py-2 w-full border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
             @input="updateSearch(($event.target as HTMLInputElement)?.value || '')"
           />
           <div
             v-if="search"
             class="absolute inset-y-0 right-0 pr-3 flex items-center"
           >
-            <Button
+            <UiButton
               variant="ghost"
               size="icon"
               class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -50,64 +49,76 @@
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </Button>
+            </UiButton>
           </div>
         </div>
 
         <!-- Category Filter -->
-        <select
+        <UiSelect
           :value="categoryId || ''"
-          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          @change="updateCategoryFilter(($event.target as HTMLSelectElement)?.value || '')"
+          @update:model-value="updateCategoryFilter($event as string)"
         >
-          <option value="">
-            All Categories
-          </option>
-          <option
-            v-for="category in categories"
-            :key="category.id"
-            :value="category.id"
-          >
-            {{ getLocalizedText(category.name) }}
-          </option>
-        </select>
+          <UiSelectTrigger>
+            <UiSelectValue placeholder="All Categories" />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem value="">
+              All Categories
+            </UiSelectItem>
+            <UiSelectItem
+              v-for="category in categories"
+              :key="category.id"
+              :value="category.id"
+            >
+              {{ getLocalizedText(category.name) }}
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
 
         <!-- Status Filter -->
-        <select
+        <UiSelect
           :value="status"
-          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          @change="updateStatusFilter(($event.target as HTMLSelectElement)?.value || '')"
+          @update:model-value="updateStatusFilter($event as string)"
         >
-          <option value="">
-            All Status
-          </option>
-          <option value="active">
-            Active
-          </option>
-          <option value="inactive">
-            Inactive
-          </option>
-        </select>
+          <UiSelectTrigger>
+            <UiSelectValue />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem value="">
+              All Status
+            </UiSelectItem>
+            <UiSelectItem value="active">
+              Active
+            </UiSelectItem>
+            <UiSelectItem value="inactive">
+              Inactive
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
 
         <!-- Stock Level Filter -->
-        <select
+        <UiSelect
           :value="stockLevel"
-          class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          @change="updateStockFilter(($event.target as HTMLSelectElement)?.value || '')"
+          @update:model-value="updateStockFilter($event as string)"
         >
-          <option value="">
-            All Stock Levels
-          </option>
-          <option value="in-stock">
-            In Stock
-          </option>
-          <option value="low-stock">
-            Low Stock
-          </option>
-          <option value="out-of-stock">
-            Out of Stock
-          </option>
-        </select>
+          <UiSelectTrigger>
+            <UiSelectValue />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem value="">
+              All Stock Levels
+            </UiSelectItem>
+            <UiSelectItem value="in-stock">
+              In Stock
+            </UiSelectItem>
+            <UiSelectItem value="low-stock">
+              Low Stock
+            </UiSelectItem>
+            <UiSelectItem value="out-of-stock">
+              Out of Stock
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
       </div>
 
       <!-- Active Filters and Actions Row -->
@@ -127,7 +138,7 @@
             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
           >
             Search: "{{ search }}"
-            <Button
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1.5 w-4 h-4 rounded-full text-blue-400 hover:bg-blue-200 hover:text-blue-600 dark:hover:bg-blue-800"
@@ -145,7 +156,7 @@
                   d="m1 1 6 6m0-6-6 6"
                 />
               </svg>
-            </Button>
+            </UiButton>
           </span>
 
           <!-- Category Filter Badge -->
@@ -154,7 +165,7 @@
             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
           >
             Category: {{ getCategoryName(categoryId) }}
-            <Button
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1.5 w-4 h-4 rounded-full text-green-400 hover:bg-green-200 hover:text-green-600 dark:hover:bg-green-800"
@@ -172,7 +183,7 @@
                   d="m1 1 6 6m0-6-6 6"
                 />
               </svg>
-            </Button>
+            </UiButton>
           </span>
 
           <!-- Status Filter Badge -->
@@ -181,7 +192,7 @@
             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
           >
             Status: {{ status === 'active' ? 'Active' : 'Inactive' }}
-            <Button
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1.5 w-4 h-4 rounded-full text-purple-400 hover:bg-purple-200 hover:text-purple-600 dark:hover:bg-purple-800"
@@ -199,7 +210,7 @@
                   d="m1 1 6 6m0-6-6 6"
                 />
               </svg>
-            </Button>
+            </UiButton>
           </span>
 
           <!-- Stock Level Filter Badge -->
@@ -208,7 +219,7 @@
             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200"
           >
             Stock: {{ getStockLevelLabel(stockLevel) }}
-            <Button
+            <UiButton
               variant="ghost"
               size="icon"
               class="ml-1.5 w-4 h-4 rounded-full text-orange-400 hover:bg-orange-200 hover:text-orange-600 dark:hover:bg-orange-800"
@@ -226,18 +237,18 @@
                   d="m1 1 6 6m0-6-6 6"
                 />
               </svg>
-            </Button>
+            </UiButton>
           </span>
 
           <!-- Clear All Filters -->
-          <Button
+          <UiButton
             v-if="hasActiveFilters"
             variant="link"
             class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             @click="clearAllFilters"
           >
             Clear all
-          </Button>
+          </UiButton>
         </div>
 
         <!-- Results Count -->
@@ -250,7 +261,6 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import type { CategoryWithChildren } from '~/types/database'
 
 interface Props {

@@ -73,7 +73,7 @@
             </ClientOnly>
 
             <!-- Search with dynamic color -->
-            <Button
+            <UiButton
               type="button"
               variant="ghost"
               size="icon"
@@ -93,7 +93,7 @@
                   {{ searchShortcut }}
                 </span>
               </ClientOnly>
-            </Button>
+            </UiButton>
 
             <!-- Account with dynamic color -->
             <NuxtLink
@@ -155,7 +155,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed, nextTick } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
-import { Button } from '@/components/ui/button'
+
 import LanguageSwitcher from './LanguageSwitcher.vue'
 import ThemeToggle from './ThemeToggle.vue'
 

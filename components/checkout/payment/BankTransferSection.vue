@@ -68,7 +68,7 @@
       </div>
 
       <!-- Copy Button -->
-      <Button
+      <UiButton
         type="button"
         variant="outline"
         :aria-label="$t('checkout.payment.copyBankDetails')"
@@ -81,7 +81,7 @@
           aria-hidden="true"
         />
         {{ $t('checkout.payment.copyDetails') }}
-      </Button>
+      </UiButton>
     </div>
 
     <!-- Bank Transfer Instructions -->
@@ -115,7 +115,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { Button } from '@/components/ui/button'
+
 import { useToast } from '~/composables/useToast'
 
 const { t } = useI18n()

@@ -30,13 +30,12 @@
             {{ $t('admin.dashboard.errors.loadingData') }}
           </p>
           <p>{{ error }}</p>
-          <button
+          <UiButton
             type="button"
-            class="text-sm font-medium text-red-600 underline hover:text-red-700"
             @click="clearError"
           >
             Dismiss alert
-          </button>
+          </UiButton>
         </div>
       </div>
     </div>

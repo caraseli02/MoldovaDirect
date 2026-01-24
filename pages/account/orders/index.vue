@@ -132,20 +132,18 @@
               />
             </svg>
           </div>
-          <input
+          <UiInput
             v-model="searchQuery"
             type="search"
             :placeholder="$t('orders.search.placeholder')"
-            class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             @input="handleSearchInput"
           />
           <div
             v-if="searchQuery"
             class="absolute inset-y-0 right-0 pr-3 flex items-center"
           >
-            <button
+            <UiButton
               type="button"
-              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none"
               :aria-label="$t('orders.accessibility.clearSearch')"
               @click="clearSearch"
             >
@@ -162,7 +160,7 @@
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
-            </button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -189,13 +187,8 @@
         </div>
 
         <div class="hidden md:flex items-center space-x-2">
-          <button
-            :class="[
-              'p-2 rounded-lg transition-colors',
-              viewMode === 'grid'
-                ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
-                : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300',
-            ]"
+          <UiButton
+            :class="['p-2 rounded-lg transition-colors', viewMode === 'grid' ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300']"
             :aria-label="$t('orders.gridView')"
             @click="viewMode = 'grid'"
           >
@@ -212,14 +205,9 @@
                 d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
               />
             </svg>
-          </button>
-          <button
-            :class="[
-              'p-2 rounded-lg transition-colors',
-              viewMode === 'list'
-                ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
-                : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300',
-            ]"
+          </UiButton>
+          <UiButton
+            :class="['p-2 rounded-lg transition-colors', viewMode === 'list' ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300']"
             :aria-label="$t('orders.listView')"
             @click="viewMode = 'list'"
           >
@@ -236,7 +224,7 @@
                 d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
-          </button>
+          </UiButton>
         </div>
       </div>
 
@@ -280,12 +268,9 @@
         <p class="text-red-700 dark:text-red-300 mb-4">
           {{ errorValue }}
         </p>
-        <button
-          class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-          @click="refreshOrders"
-        >
+        <UiButton @click="refreshOrders">
           {{ $t('common.tryAgain') }}
-        </button>
+        </UiButton>
       </div>
 
       <!-- Empty State -->
@@ -366,14 +351,9 @@
             class="flex items-center space-x-2"
             aria-label="Pagination"
           >
-            <button
+            <UiButton
               :disabled="paginationValue.page === 1"
-              :class="[
-                'px-3 py-2 rounded-lg border transition-colors',
-                paginationValue.page === 1
-                  ? 'border-gray-200 dark:border-gray-700 text-gray-400 cursor-not-allowed'
-                  : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700',
-              ]"
+              :class="['px-3 py-2 rounded-lg border transition-colors', paginationValue.page === 1 ? 'border-gray-200 dark:border-gray-700 text-gray-400 cursor-not-allowed' : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700']"
               :aria-label="$t('common.previous')"
               @click="goToPage(paginationValue.page - 1)"
             >
@@ -390,26 +370,21 @@
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-            </button>
+            </UiButton>
 
             <template
               v-for="page in visiblePages"
               :key="page"
             >
-              <button
+              <UiButton
                 v-if="page !== '...'"
-                :class="[
-                  'px-4 py-2 rounded-lg border transition-colors',
-                  page === paginationValue.page
-                    ? 'bg-blue-600 border-blue-600 text-white'
-                    : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700',
-                ]"
+                :class="['px-4 py-2 rounded-lg border transition-colors', page === paginationValue.page ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700']"
                 :aria-label="$t('orders.goToPage', { page })"
                 :aria-current="page === paginationValue.page ? 'page' : undefined"
                 @click="goToPage(page as number)"
               >
                 {{ page }}
-              </button>
+              </UiButton>
               <span
                 v-else
                 class="px-2 text-gray-500"
@@ -417,14 +392,9 @@
               >...</span>
             </template>
 
-            <button
+            <UiButton
               :disabled="paginationValue.page === paginationValue.totalPages"
-              :class="[
-                'px-3 py-2 rounded-lg border transition-colors',
-                paginationValue.page === paginationValue.totalPages
-                  ? 'border-gray-200 dark:border-gray-700 text-gray-400 cursor-not-allowed'
-                  : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700',
-              ]"
+              :class="['px-3 py-2 rounded-lg border transition-colors', paginationValue.page === paginationValue.totalPages ? 'border-gray-200 dark:border-gray-700 text-gray-400 cursor-not-allowed' : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700']"
               :aria-label="$t('common.next')"
               @click="goToPage(paginationValue.page + 1)"
             >
@@ -441,7 +411,7 @@
                   d="M9 5l7 7-7 7"
                 />
               </svg>
-            </button>
+            </UiButton>
           </nav>
         </div>
       </div>

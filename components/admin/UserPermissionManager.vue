@@ -25,7 +25,7 @@
           </p>
         </div>
 
-        <Button
+        <UiButton
           v-if="hasChanges"
           :disabled="saving"
           class="px-4 py-2"
@@ -37,7 +37,7 @@
             class="w-4 h-4 animate-spin mr-2"
           />
           Save Changes
-        </Button>
+        </UiButton>
       </div>
     </div>
 
@@ -67,12 +67,12 @@
         />
         {{ error }}
       </div>
-      <Button
+      <UiButton
         class="px-4 py-2"
         @click="fetchPermissions"
       >
         Retry
-      </Button>
+      </UiButton>
     </div>
 
     <!-- Permission Content -->
@@ -86,19 +86,23 @@
           Current Role
         </h4>
         <div class="flex items-center gap-4">
-          <select
+          <UiSelect
             v-model="selectedRole"
-            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            @change="onRoleChange"
+            @update:model-value="onRoleChange"
           >
-            <option
-              v-for="role in availableRoles"
-              :key="role.id"
-              :value="role.id"
-            >
-              {{ role.name }}
-            </option>
-          </select>
+            <UiSelectTrigger>
+              <UiSelectValue />
+            </UiSelectTrigger>
+            <UiSelectContent>
+              <UiSelectItem
+                v-for="role in availableRoles"
+                :key="role.id"
+                :value="role.id"
+              >
+                {{ role.name }}
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
 
           <div class="text-sm text-gray-600">
             {{ getRoleDescription(selectedRole) }}
@@ -136,12 +140,10 @@
                   {{ permission.name }}
                 </td>
                 <td class="px-4 py-3 text-center">
-                  <input
+                  <UiCheckbox
                     v-model="permission.granted"
-                    type="checkbox"
                     :disabled="permission.inherited"
-                    class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded disabled:opacity-50"
-                    @change="onPermissionChange"
+                    @update:model-value="onPermissionChange"
                   />
                   <div
                     v-if="permission.inherited"
@@ -192,13 +194,12 @@
         <h4 class="text-md font-medium text-gray-900 mb-3">
           Notes
         </h4>
-        <textarea
+        <UiTextarea
           v-model="permissionNotes"
           rows="3"
-          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           placeholder="Add notes about permission changes..."
           @input="onNotesChange"
-        ></textarea>
+        />
       </div>
     </div>
   </div>

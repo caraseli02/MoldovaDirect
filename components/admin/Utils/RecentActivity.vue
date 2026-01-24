@@ -19,16 +19,15 @@
         <h3 class="text-lg font-medium text-gray-900">
           {{ $t('admin.dashboard.recentActivity.title') }}
         </h3>
-        <button
+        <UiButton
           :disabled="isLoading"
-          class="text-sm text-blue-600 hover:text-blue-700 disabled:opacity-50"
           @click="refresh"
         >
           <commonIcon
             name="lucide:refresh-ccw"
             :class="`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`"
           />
-        </button>
+        </UiButton>
       </div>
     </div>
 

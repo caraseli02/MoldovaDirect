@@ -38,7 +38,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-none dark:border dark:border-gray-700 p-6 sm:p-8">
           <!-- Alert messages with improved mobile styling -->
           <Transition name="slide-fade">
-            <Alert
+            <UiAlert
               v-if="displayError"
               variant="destructive"
               class="mb-5 border-red-200 bg-red-50 dark:border-red-600"
@@ -48,14 +48,14 @@
                 class="h-5 w-5 text-red-500 dark:text-red-300"
                 aria-hidden="true"
               />
-              <AlertDescription :class="cn('text-sm text-red-800 dark:text-white')">
+              <UiAlertDescription :class="cn('text-sm text-red-800 dark:text-white')">
                 {{ displayError }}
-              </AlertDescription>
-            </Alert>
+              </UiAlertDescription>
+            </UiAlert>
           </Transition>
 
           <Transition name="slide-fade">
-            <Alert
+            <UiAlert
               v-if="success"
               class="mb-5 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20"
               data-testid="auth-success"
@@ -64,19 +64,19 @@
                 class="h-5 w-5 text-green-500 dark:text-green-400"
                 aria-hidden="true"
               />
-              <AlertDescription class="text-sm text-green-800 dark:text-green-300">
+              <UiAlertDescription class="text-sm text-green-800 dark:text-green-300">
                 {{ success }}
-              </AlertDescription>
-            </Alert>
+              </UiAlertDescription>
+            </UiAlert>
           </Transition>
 
           <!-- Tabbed Interface for Auth Methods -->
-          <Tabs
+          <UiTabs
             v-model="activeTab"
             class="w-full"
           >
-            <TabsList class="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger
+            <UiTabsList class="grid w-full grid-cols-2 mb-6">
+              <UiTabsTrigger
                 value="password"
                 class="text-base"
               >
@@ -94,8 +94,8 @@
                   />
                 </svg>
                 {{ $t('auth.withPassword') }}
-              </TabsTrigger>
-              <TabsTrigger
+              </UiTabsTrigger>
+              <UiTabsTrigger
                 value="magiclink"
                 class="text-base"
               >
@@ -113,11 +113,11 @@
                   />
                 </svg>
                 {{ $t('auth.withMagicLink') }}
-              </TabsTrigger>
-            </TabsList>
+              </UiTabsTrigger>
+            </UiTabsList>
 
             <!-- Password Tab Content -->
-            <TabsContent value="password">
+            <UiTabsContent value="password">
               <form
                 class="space-y-5"
                 @submit.prevent="handleLogin"
@@ -125,14 +125,14 @@
                 <!-- Modern input fields with mobile optimization and accessibility -->
                 <div class="space-y-4">
                   <div class="space-y-2">
-                    <Label
+                    <UiLabel
                       for="email"
                       class="text-sm font-medium text-gray-700 dark:text-gray-300"
                       :class="{ 'text-red-600 dark:text-red-400': emailError }"
                     >
                       {{ $t('auth.email') }}
-                    </Label>
-                    <Input
+                    </UiLabel>
+                    <UiInput
                       id="email"
                       v-model="form.email"
                       name="email"
@@ -162,15 +162,15 @@
                   </div>
 
                   <div class="space-y-2">
-                    <Label
+                    <UiLabel
                       for="password"
                       class="text-sm font-medium text-gray-700 dark:text-gray-300"
                       :class="{ 'text-red-600 dark:text-red-400': passwordError }"
                     >
                       {{ $t('auth.password') }}
-                    </Label>
+                    </UiLabel>
                     <div class="relative">
-                      <Input
+                      <UiInput
                         id="password"
                         v-model="form.password"
                         name="password"
@@ -190,7 +190,7 @@
                         @input="validatePasswordField"
                         @blur="validatePasswordField"
                       />
-                      <Button
+                      <UiButton
                         type="button"
                         variant="ghost"
                         size="icon"
@@ -236,7 +236,7 @@
                             d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
                           />
                         </svg>
-                      </Button>
+                      </UiButton>
                     </div>
                     <div
                       id="password-toggle-desc"
@@ -258,18 +258,18 @@
                 <!-- Remember me and forgot password with mobile-optimized layout -->
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
                   <div class="flex items-center">
-                    <Checkbox
+                    <UiCheckbox
                       id="remember"
                       v-model:checked="rememberMe"
                       :aria-describedby="'remember-desc'"
                       class="h-5 w-5"
                     />
-                    <Label
+                    <UiLabel
                       for="remember"
                       class="ml-3 text-sm text-gray-700 dark:text-gray-100 select-none"
                     >
                       {{ $t('auth.rememberMe') }}
-                    </Label>
+                    </UiLabel>
                     <div
                       id="remember-desc"
                       class="sr-only"
@@ -288,7 +288,7 @@
                 </div>
 
                 <!-- Primary action button with mobile optimization and accessibility -->
-                <Button
+                <UiButton
                   type="submit"
                   :disabled="isLoginDisabled"
                   :aria-disabled="isLoginDisabled"
@@ -320,7 +320,7 @@
                     />
                   </svg>
                   {{ loading ? $t('common.loading') : $t('auth.signIn') }}
-                </Button>
+                </UiButton>
                 <div
                   v-if="loading"
                   id="login-status"
@@ -330,24 +330,24 @@
                   {{ $t('auth.accessibility.processingLogin') }}
                 </div>
               </form>
-            </TabsContent>
+            </UiTabsContent>
 
             <!-- Magic Link Tab Content -->
-            <TabsContent value="magiclink">
+            <UiTabsContent value="magiclink">
               <form
                 class="space-y-5"
                 @submit.prevent="handleMagicLink"
               >
                 <!-- Email field only -->
                 <div class="space-y-2">
-                  <Label
+                  <UiLabel
                     for="email-magic"
                     class="text-sm font-medium text-gray-700 dark:text-gray-300"
                     :class="{ 'text-red-600 dark:text-red-400': emailError }"
                   >
                     {{ $t('auth.email') }}
-                  </Label>
-                  <Input
+                  </UiLabel>
+                  <UiInput
                     id="email-magic"
                     v-model="form.email"
                     name="email"
@@ -404,7 +404,7 @@
                 </div>
 
                 <!-- Send Magic Link button -->
-                <Button
+                <UiButton
                   type="submit"
                   :disabled="isMagicLinkDisabled"
                   :aria-disabled="isMagicLinkDisabled"
@@ -471,7 +471,7 @@
                   <template v-else>
                     {{ loadingMagic ? $t('common.loading') : $t('auth.sendMagicLink') }}
                   </template>
-                </Button>
+                </UiButton>
                 <div
                   id="magic-link-desc"
                   class="sr-only"
@@ -487,8 +487,8 @@
                   {{ $t('auth.accessibility.sendingMagicLink') }}
                 </div>
               </form>
-            </TabsContent>
-          </Tabs>
+            </UiTabsContent>
+          </UiTabs>
 
           <!-- Social Login Divider -->
           <div class="relative mt-6">
@@ -505,7 +505,7 @@
           <!-- Social Login Buttons -->
           <div class="mt-6 grid grid-cols-2 gap-3">
             <!-- Google Sign In -->
-            <Button
+            <UiButton
               type="button"
               variant="outline"
               :disabled="loadingSocial === 'google'"
@@ -556,10 +556,10 @@
                 />
               </svg>
               {{ $t('auth.continueWithGoogle') }}
-            </Button>
+            </UiButton>
 
             <!-- Apple Sign In -->
-            <Button
+            <UiButton
               type="button"
               variant="outline"
               :disabled="loadingSocial === 'apple'"
@@ -596,7 +596,7 @@
                 <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
               </svg>
               {{ $t('auth.continueWithApple') }}
-            </Button>
+            </UiButton>
           </div>
 
           <!-- Social Login Note -->
@@ -611,7 +611,7 @@
 
 <script setup lang="ts">
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
+
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'

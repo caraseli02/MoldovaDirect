@@ -27,7 +27,7 @@
       </div>
 
       <div class="flex items-center space-x-2">
-        <Button
+        <UiButton
           variant="link"
           size="sm"
           :disabled="bulkOperationInProgress"
@@ -35,9 +35,9 @@
           @click="handleMoveToSavedForLater"
         >
           {{ $t('cart.saveForLater') }}
-        </Button>
+        </UiButton>
 
-        <Button
+        <UiButton
           variant="link"
           size="sm"
           :disabled="bulkOperationInProgress"
@@ -45,7 +45,7 @@
           @click="handleRemoveSelected"
         >
           {{ $t('cart.removeSelected') }}
-        </Button>
+        </UiButton>
       </div>
     </div>
 
@@ -61,8 +61,6 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-
 const toast = useToast()
 
 // Cart functionality

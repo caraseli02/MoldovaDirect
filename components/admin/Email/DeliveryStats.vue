@@ -7,8 +7,8 @@
 
 <template>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-    <Card>
-      <CardContent class="pt-6">
+    <UiCard>
+      <UiCardContent class="pt-6">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -34,11 +34,11 @@
             </svg>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </UiCardContent>
+    </UiCard>
 
-    <Card>
-      <CardContent class="pt-6">
+    <UiCard>
+      <UiCardContent class="pt-6">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -67,11 +67,11 @@
             </svg>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </UiCardContent>
+    </UiCard>
 
-    <Card>
-      <CardContent class="pt-6">
+    <UiCard>
+      <UiCardContent class="pt-6">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -97,11 +97,11 @@
             </svg>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </UiCardContent>
+    </UiCard>
 
-    <Card>
-      <CardContent class="pt-6">
+    <UiCard>
+      <UiCardContent class="pt-6">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -130,8 +130,8 @@
             </svg>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </UiCardContent>
+    </UiCard>
   </div>
 </template>
 

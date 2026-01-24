@@ -27,55 +27,63 @@
 
         <!-- Activity Filter -->
         <div class="flex items-center gap-3">
-          <select
+          <UiSelect
             v-model="activityFilter"
-            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-            @change="filterActivities"
+            @update:model-value="filterActivities"
           >
-            <option value="">
-              All Activities
-            </option>
-            <option value="login">
-              Logins
-            </option>
-            <option value="logout">
-              Logouts
-            </option>
-            <option value="password_change">
-              Password Changes
-            </option>
-            <option value="profile_update">
-              Profile Updates
-            </option>
-            <option value="order_create">
-              Orders
-            </option>
-            <option value="cart_add">
-              Cart Actions
-            </option>
-          </select>
+            <UiSelectTrigger>
+              <UiSelectValue />
+            </UiSelectTrigger>
+            <UiSelectContent>
+              <UiSelectItem value="">
+                All Activities
+              </UiSelectItem>
+              <UiSelectItem value="login">
+                Logins
+              </UiSelectItem>
+              <UiSelectItem value="logout">
+                Logouts
+              </UiSelectItem>
+              <UiSelectItem value="password_change">
+                Password Changes
+              </UiSelectItem>
+              <UiSelectItem value="profile_update">
+                Profile Updates
+              </UiSelectItem>
+              <UiSelectItem value="order_create">
+                Orders
+              </UiSelectItem>
+              <UiSelectItem value="cart_add">
+                Cart Actions
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
 
-          <select
+          <UiSelect
             v-model="timeFilter"
-            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
-            @change="filterActivities"
+            @update:model-value="filterActivities"
           >
-            <option value="all">
-              All Time
-            </option>
-            <option value="today">
-              Today
-            </option>
-            <option value="week">
-              This Week
-            </option>
-            <option value="month">
-              This Month
-            </option>
-            <option value="quarter">
-              Last 3 Months
-            </option>
-          </select>
+            <UiSelectTrigger>
+              <UiSelectValue />
+            </UiSelectTrigger>
+            <UiSelectContent>
+              <UiSelectItem value="all">
+                All Time
+              </UiSelectItem>
+              <UiSelectItem value="today">
+                Today
+              </UiSelectItem>
+              <UiSelectItem value="week">
+                This Week
+              </UiSelectItem>
+              <UiSelectItem value="month">
+                This Month
+              </UiSelectItem>
+              <UiSelectItem value="quarter">
+                Last 3 Months
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
         </div>
       </div>
     </div>
@@ -106,12 +114,9 @@
         />
         {{ error }}
       </div>
-      <button
-        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        @click="fetchActivity"
-      >
+      <UiButton @click="fetchActivity">
         Retry
-      </button>
+      </UiButton>
     </div>
 
     <!-- Activity Timeline -->
@@ -267,25 +272,23 @@
           </div>
 
           <div class="flex items-center gap-2">
-            <button
+            <UiButton
               :disabled="currentPage === 1"
-              class="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               @click="currentPage--"
             >
               Previous
-            </button>
+            </UiButton>
 
             <span class="text-sm text-gray-600">
               Page {{ currentPage }} of {{ totalPages }}
             </span>
 
-            <button
+            <UiButton
               :disabled="currentPage === totalPages"
-              class="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               @click="currentPage++"
             >
               Next
-            </button>
+            </UiButton>
           </div>
         </div>
       </div>

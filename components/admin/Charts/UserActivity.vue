@@ -5,26 +5,28 @@
         User Activity Trends
       </h3>
       <div class="flex items-center gap-4">
-        <select
-          v-model="selectedMetric"
-          class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-        >
-          <option value="activeUsers">
-            Active Users
-          </option>
-          <option value="logins">
-            Logins
-          </option>
-          <option value="pageViews">
-            Page Views
-          </option>
-          <option value="productViews">
-            Product Views
-          </option>
-          <option value="cartAdditions">
-            Cart Additions
-          </option>
-        </select>
+        <UiSelect v-model="selectedMetric">
+          <UiSelectTrigger>
+            <UiSelectValue />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem value="activeUsers">
+              Active Users
+            </UiSelectItem>
+            <UiSelectItem value="logins">
+              Logins
+            </UiSelectItem>
+            <UiSelectItem value="pageViews">
+              Page Views
+            </UiSelectItem>
+            <UiSelectItem value="productViews">
+              Product Views
+            </UiSelectItem>
+            <UiSelectItem value="cartAdditions">
+              Cart Additions
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
       </div>
     </div>
 

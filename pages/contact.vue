@@ -17,67 +17,51 @@
               @submit.prevent="handleSubmit"
             >
               <div>
-                <label
-                  for="name"
-                  class="block text-sm font-medium text-gray-700 mb-1"
-                >
+                <UiLabel for="name">
                   {{ $t('contactPage.form.name') }}
-                </label>
-                <input
+                </UiLabel>
+                <UiInput
                   id="name"
                   v-model="form.name"
                   type="text"
                   required
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
 
               <div>
-                <label
-                  for="email"
-                  class="block text-sm font-medium text-gray-700 mb-1"
-                >
+                <UiLabel for="email">
                   {{ $t('contactPage.form.email') }}
-                </label>
-                <input
+                </UiLabel>
+                <UiInput
                   id="email"
                   v-model="form.email"
                   type="email"
                   required
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
 
               <div>
-                <label
-                  for="subject"
-                  class="block text-sm font-medium text-gray-700 mb-1"
-                >
+                <UiLabel for="subject">
                   {{ $t('contactPage.form.subject') }}
-                </label>
-                <input
+                </UiLabel>
+                <UiInput
                   id="subject"
                   v-model="form.subject"
                   type="text"
                   required
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
 
               <div>
-                <label
-                  for="message"
-                  class="block text-sm font-medium text-gray-700 mb-1"
-                >
+                <UiLabel for="message">
                   {{ $t('contactPage.form.message') }}
-                </label>
-                <textarea
+                </UiLabel>
+                <UiTextarea
                   id="message"
                   v-model="form.message"
                   rows="6"
                   required
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                ></textarea>
+                />
               </div>
 
               <UiButton

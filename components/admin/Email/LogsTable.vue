@@ -7,124 +7,116 @@
 -->
 
 <template>
-  <Card>
-    <CardHeader>
-      <CardTitle>{{ $t('admin.emailLogs.title') }}</CardTitle>
-    </CardHeader>
-    <CardContent>
+  <UiCard>
+    <UiCardHeader>
+      <UiCardTitle>{{ $t('admin.emailLogs.title') }}</UiCardTitle>
+    </UiCardHeader>
+    <UiCardContent>
       <!-- Search Filters -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Order Number
-          </label>
-          <input
+          <UiLabel>Order Number</UiLabel>
+          <UiInput
             v-model="filters.orderNumber"
             type="text"
             placeholder="ORD-2024-001"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             @input="debouncedSearch"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Customer Email
-          </label>
-          <input
+          <UiLabel>Customer Email</UiLabel>
+          <UiInput
             v-model="filters.recipientEmail"
             type="email"
             placeholder="customer@example.com"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             @input="debouncedSearch"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Email Type
-          </label>
-          <select
+          <UiLabel>Email Type</UiLabel>
+          <UiSelect
             v-model="filters.emailType"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-            @change="searchLogs"
+            @update:model-value="searchLogs"
           >
-            <option value="">
-              All Types
-            </option>
-            <option value="order_confirmation">
-              Order Confirmation
-            </option>
-            <option value="order_processing">
-              Order Processing
-            </option>
-            <option value="order_shipped">
-              Order Shipped
-            </option>
-            <option value="order_delivered">
-              Order Delivered
-            </option>
-            <option value="order_cancelled">
-              Order Cancelled
-            </option>
-            <option value="order_issue">
-              Order Issue
-            </option>
-          </select>
+            <UiSelectTrigger>
+              <UiSelectValue />
+            </UiSelectTrigger>
+            <UiSelectContent>
+              <UiSelectItem value="">
+                All Types
+              </UiSelectItem>
+              <UiSelectItem value="order_confirmation">
+                Order Confirmation
+              </UiSelectItem>
+              <UiSelectItem value="order_processing">
+                Order Processing
+              </UiSelectItem>
+              <UiSelectItem value="order_shipped">
+                Order Shipped
+              </UiSelectItem>
+              <UiSelectItem value="order_delivered">
+                Order Delivered
+              </UiSelectItem>
+              <UiSelectItem value="order_cancelled">
+                Order Cancelled
+              </UiSelectItem>
+              <UiSelectItem value="order_issue">
+                Order Issue
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Status
-          </label>
-          <select
+          <UiLabel>Status</UiLabel>
+          <UiSelect
             v-model="filters.status"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-            @change="searchLogs"
+            @update:model-value="searchLogs"
           >
-            <option value="">
-              All Statuses
-            </option>
-            <option value="pending">
-              Pending
-            </option>
-            <option value="sent">
-              Sent
-            </option>
-            <option value="delivered">
-              Delivered
-            </option>
-            <option value="failed">
-              Failed
-            </option>
-            <option value="bounced">
-              Bounced
-            </option>
-          </select>
+            <UiSelectTrigger>
+              <UiSelectValue />
+            </UiSelectTrigger>
+            <UiSelectContent>
+              <UiSelectItem value="">
+                All Statuses
+              </UiSelectItem>
+              <UiSelectItem value="pending">
+                Pending
+              </UiSelectItem>
+              <UiSelectItem value="sent">
+                Sent
+              </UiSelectItem>
+              <UiSelectItem value="delivered">
+                Delivered
+              </UiSelectItem>
+              <UiSelectItem value="failed">
+                Failed
+              </UiSelectItem>
+              <UiSelectItem value="bounced">
+                Bounced
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
         </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Date From
-          </label>
-          <input
+          <UiLabel>Date From</UiLabel>
+          <UiInput
             v-model="filters.dateFrom"
             type="date"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             @change="searchLogs"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Date To
-          </label>
-          <input
+          <UiLabel>Date To</UiLabel>
+          <UiInput
             v-model="filters.dateTo"
             type="date"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             @change="searchLogs"
           />
         </div>
@@ -146,34 +138,34 @@
         v-else-if="logs.length > 0"
         class="overflow-x-auto"
       >
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead class="px-4">
+        <UiTable>
+          <UiTableHeader>
+            <UiTableRow>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.order') }}
-              </TableHead>
-              <TableHead class="px-4">
+              </UiTableHead>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.recipient') }}
-              </TableHead>
-              <TableHead class="px-4">
+              </UiTableHead>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.type') }}
-              </TableHead>
-              <TableHead class="px-4">
+              </UiTableHead>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.status') }}
-              </TableHead>
-              <TableHead class="px-4">
+              </UiTableHead>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.attempts') }}
-              </TableHead>
-              <TableHead class="px-4">
+              </UiTableHead>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.date') }}
-              </TableHead>
-              <TableHead class="px-4">
+              </UiTableHead>
+              <UiTableHead class="px-4">
                 {{ $t('admin.emailLogs.headers.actions') }}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow
+              </UiTableHead>
+            </UiTableRow>
+          </UiTableHeader>
+          <UiTableBody>
+            <UiTableRow
               v-for="log in logs"
               :key="log.id"
             >
@@ -188,14 +180,14 @@
                 </div>
               </td>
               <td class="px-4 py-4 whitespace-nowrap">
-                <Badge variant="secondary">
+                <UiBadge variant="secondary">
                   {{ formatEmailType(log.emailType) }}
-                </Badge>
+                </UiBadge>
               </td>
               <td class="px-4 py-4 whitespace-nowrap">
-                <Badge :variant="emailStatusVariant(log.status)">
+                <UiBadge :variant="emailStatusVariant(log.status)">
                   {{ formatStatus(log.status) }}
-                </Badge>
+                </UiBadge>
               </td>
               <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                 {{ log.attempts }}
@@ -204,17 +196,17 @@
                 {{ formatDate(log.createdAt) }}
               </td>
               <td class="px-4 py-4 whitespace-nowrap text-sm">
-                <Button
+                <UiButton
                   variant="outline"
                   size="sm"
                   @click="viewDetails(log)"
                 >
                   {{ $t('admin.emailLogs.buttons.view') }}
-                </Button>
+                </UiButton>
               </td>
-            </TableRow>
-          </TableBody>
-        </Table>
+            </UiTableRow>
+          </UiTableBody>
+        </UiTable>
 
         <!-- Pagination -->
         <div class="mt-4 flex items-center justify-between">
@@ -224,22 +216,22 @@
             {{ pagination.total }} results
           </div>
           <div class="flex gap-2">
-            <Button
+            <UiButton
               :disabled="pagination.page === 1"
               variant="outline"
               size="sm"
               @click="previousPage"
             >
               {{ $t('common.previous') }}
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton
               :disabled="pagination.page >= pagination.totalPages"
               variant="outline"
               size="sm"
               @click="nextPage"
             >
               {{ $t('common.next') }}
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -253,29 +245,29 @@
           No email logs found
         </p>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 
   <!-- Details Modal -->
-  <Dialog v-model:open="showDetailsModal">
-    <DialogContent class="max-w-2xl">
-      <DialogHeader>
-        <DialogTitle>Email Log Details</DialogTitle>
-        <DialogDescription>View delivery status, recipient information, and retry options for this email</DialogDescription>
-      </DialogHeader>
+  <UiDialog v-model:open="showDetailsModal">
+    <UiDialogContent class="max-w-2xl">
+      <UiDialogHeader>
+        <UiDialogTitle>Email Log Details</UiDialogTitle>
+        <UiDialogDescription>View delivery status, recipient information, and retry options for this email</UiDialogDescription>
+      </UiDialogHeader>
       <div
         v-if="selectedLog"
         class="space-y-4"
       >
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Order Number</label>
+            <UiLabel>Order Number</UiLabel>
             <p class="text-sm text-gray-900 dark:text-white mt-1">
               {{ selectedLog.order?.orderNumber || 'N/A' }}
             </p>
           </div>
           <div>
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
+            <UiLabel>Status</UiLabel>
             <p class="text-sm mt-1">
               <span :class="getStatusClass(selectedLog.status)">
                 {{ formatStatus(selectedLog.status) }}
@@ -283,25 +275,25 @@
             </p>
           </div>
           <div>
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Recipient</label>
+            <UiLabel>Recipient</UiLabel>
             <p class="text-sm text-gray-900 dark:text-white mt-1">
               {{ selectedLog.recipientEmail }}
             </p>
           </div>
           <div>
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Email Type</label>
+            <UiLabel>Email Type</UiLabel>
             <p class="text-sm text-gray-900 dark:text-white mt-1">
               {{ formatEmailType(selectedLog.emailType) }}
             </p>
           </div>
           <div>
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Attempts</label>
+            <UiLabel>Attempts</UiLabel>
             <p class="text-sm text-gray-900 dark:text-white mt-1">
               {{ selectedLog.attempts }}
             </p>
           </div>
           <div>
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">External ID</label>
+            <UiLabel>External ID</UiLabel>
             <p class="text-sm text-gray-900 dark:text-white mt-1">
               {{ selectedLog.externalId || 'N/A' }}
             </p>
@@ -309,14 +301,14 @@
         </div>
 
         <div>
-          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Subject</label>
+          <UiLabel>Subject</UiLabel>
           <p class="text-sm text-gray-900 dark:text-white mt-1">
             {{ selectedLog.subject }}
           </p>
         </div>
 
         <div v-if="selectedLog.bounceReason">
-          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Bounce Reason</label>
+          <UiLabel>Bounce Reason</UiLabel>
           <p class="text-sm text-red-600 dark:text-red-400 mt-1">
             {{ selectedLog.bounceReason }}
           </p>
@@ -324,13 +316,13 @@
 
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Created At</label>
+            <UiLabel>Created At</UiLabel>
             <p class="text-sm text-gray-900 dark:text-white mt-1">
               {{ formatDate(selectedLog.createdAt) }}
             </p>
           </div>
           <div v-if="selectedLog.deliveredAt">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Delivered At</label>
+            <UiLabel>Delivered At</UiLabel>
             <p class="text-sm text-gray-900 dark:text-white mt-1">
               {{ formatDate(selectedLog.deliveredAt) }}
             </p>
@@ -341,25 +333,23 @@
           v-if="selectedLog.status === 'failed' && selectedLog.attempts < 3"
           class="pt-4"
         >
-          <Button
+          <UiButton
             :disabled="retrying"
             class="w-full"
             @click="retryEmail(selectedLog.id)"
           >
             {{ retrying ? 'Retrying...' : 'Retry Email' }}
-          </Button>
+          </UiButton>
         </div>
       </div>
-    </DialogContent>
-  </Dialog>
+    </UiDialogContent>
+  </UiDialog>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
-import { Button } from '~/components/ui/button'
-import { Table, TableHeader, TableRow, TableHead, TableBody } from '~/components/ui/table'
-import { Badge } from '~/components/ui/badge'
+
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '~/components/ui/dialog'
 import { emailStatusVariant } from '@/lib/uiVariants'
 
@@ -395,17 +385,19 @@ const debouncedSearch = () => {
 async function searchLogs() {
   loading.value = true
   try {
-    const { data } = await useFetch('/api/admin/email-logs/search', {
-      params: {
-        ...filters.value,
-        page: pagination.value.page,
-        limit: pagination.value.limit,
-      },
+    const queryParams = new URLSearchParams({
+      ...filters.value,
+      page: String(pagination.value.page),
+      limit: String(pagination.value.limit),
     })
 
-    if (data.value) {
-      logs.value = data.value.logs
-      pagination.value = data.value.pagination
+    const data = await $fetch<{ logs: typeof logs.value, pagination: typeof pagination.value }>(
+      `/api/admin/email-logs/search?${queryParams.toString()}`,
+    )
+
+    if (data) {
+      logs.value = data.logs
+      pagination.value = data.pagination
     }
   }
   catch (error: unknown) {

@@ -1,19 +1,21 @@
 <template>
-  <Card>
-    <CardHeader>
-      <CardTitle class="flex items-center gap-2">
+  <UiCard>
+    <UiCardHeader>
+      <UiCardTitle class="flex items-center gap-2">
         <commonIcon
           name="lucide:user-check"
           class="h-5 w-5"
         />
         User Impersonation
-      </CardTitle>
-      <CardDescription>Test user experience as another user</CardDescription>
-    </CardHeader>
-    <CardContent class="space-y-4">
+      </UiCardTitle>
+      <UiCardDescription>Test user experience as another user</UiCardDescription>
+    </UiCardHeader>
+    <UiCardContent class="space-y-4">
       <div class="space-y-2">
-        <Label for="user-email">User Email</Label>
-        <Input
+        <UiLabel for="user-email">
+          User Email
+        </UiLabel>
+        <UiInput
           id="user-email"
           v-model="localUserEmail"
           type="email"
@@ -34,12 +36,14 @@
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <Label for="impersonate-reason">Reason (min 10 chars)</Label>
+          <UiLabel for="impersonate-reason">
+            Reason (min 10 chars)
+          </UiLabel>
           <span class="text-xs text-muted-foreground">
             {{ localReason.length }}/500
           </span>
         </div>
-        <Textarea
+        <UiTextarea
           id="impersonate-reason"
           v-model="localReason"
           placeholder="Testing checkout flow..."
@@ -63,8 +67,10 @@
         v-if="!isActive"
         class="space-y-2"
       >
-        <Label for="duration">Duration (minutes)</Label>
-        <Input
+        <UiLabel for="duration">
+          Duration (minutes)
+        </UiLabel>
+        <UiInput
           id="duration"
           v-model.number="localDuration"
           type="number"
@@ -73,7 +79,7 @@
         />
       </div>
 
-      <Alert
+      <UiAlert
         v-if="isActive"
         variant="destructive"
       >
@@ -81,15 +87,15 @@
           name="lucide:user-check"
           class="h-4 w-4"
         />
-        <AlertTitle>Active Impersonation</AlertTitle>
-        <AlertDescription>
+        <UiAlertTitle>Active Impersonation</UiAlertTitle>
+        <UiAlertDescription>
           Acting as: {{ targetName }}
           <br />
           Expires: {{ expiresAt ? new Date(expiresAt).toLocaleTimeString() : 'N/A' }}
-        </AlertDescription>
-      </Alert>
+        </UiAlertDescription>
+      </UiAlert>
 
-      <Button
+      <UiButton
         v-if="!isActive"
         :disabled="loading || !isFormValid"
         class="w-full"
@@ -106,9 +112,9 @@
           class="h-4 w-4 mr-2 animate-spin"
         />
         Start Impersonation
-      </Button>
+      </UiButton>
 
-      <Button
+      <UiButton
         v-else
         :disabled="loading"
         variant="destructive"
@@ -126,15 +132,15 @@
           class="h-4 w-4 mr-2 animate-spin"
         />
         Stop Impersonation
-      </Button>
-    </CardContent>
-  </Card>
+      </UiButton>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Button } from '@/components/ui/button'
+
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'

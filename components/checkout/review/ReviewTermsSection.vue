@@ -5,13 +5,11 @@
     </h3>
 
     <div class="space-y-4">
-      <label class="flex items-start space-x-3">
-        <input
-          id="accept-terms"
-          type="checkbox"
+      <div class="flex items-start gap-3">
+        <UiCheckbox
           :checked="termsAccepted"
-          class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-          @change="updateTermsAccepted(($event.target as HTMLInputElement)?.checked ?? false)"
+          class="mt-0.5 shrink-0"
+          @update:checked="updateTermsAccepted($event)"
         />
         <div class="text-sm">
           <p class="text-gray-700 dark:text-gray-300">
@@ -37,15 +35,13 @@
             {{ $t('checkout.terms.termsRequired') }}
           </p>
         </div>
-      </label>
+      </div>
 
-      <label class="flex items-start space-x-3">
-        <input
-          id="accept-privacy"
-          type="checkbox"
+      <div class="flex items-start gap-3">
+        <UiCheckbox
           :checked="privacyAccepted"
-          class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-          @change="updatePrivacyAccepted(($event.target as HTMLInputElement)?.checked ?? false)"
+          class="mt-0.5 shrink-0"
+          @update:checked="updatePrivacyAccepted($event)"
         />
         <div class="text-sm">
           <p class="text-gray-700 dark:text-gray-300">
@@ -58,15 +54,13 @@
             {{ $t('checkout.terms.privacyRequired') }}
           </p>
         </div>
-      </label>
+      </div>
 
-      <label class="flex items-start space-x-3">
-        <input
-          id="marketing-consent"
-          type="checkbox"
+      <div class="flex items-start gap-3">
+        <UiCheckbox
           :checked="marketingConsent"
-          class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-          @change="updateMarketingConsent(($event.target as HTMLInputElement)?.checked ?? false)"
+          class="mt-0.5 shrink-0"
+          @update:checked="updateMarketingConsent($event)"
         />
         <div class="text-sm">
           <p class="text-gray-700 dark:text-gray-300">
@@ -77,7 +71,7 @@
             {{ $t('checkout.terms.marketingDescription') }}
           </p>
         </div>
-      </label>
+      </div>
     </div>
   </section>
 </template>

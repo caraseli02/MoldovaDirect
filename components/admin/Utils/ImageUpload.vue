@@ -23,21 +23,17 @@
           />
         </svg>
         <div class="text-sm md:text-sm text-gray-600 dark:text-gray-400">
-          <label
-            for="file-upload"
-            class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 px-2 py-1"
-          >
+          <UiLabel for="file-upload">
             <span class="text-base md:text-sm">Upload images</span>
-            <input
+            <UiInput
               id="file-upload"
               ref="fileInput"
               type="file"
               multiple
               :accept="accept"
-              class="sr-only"
               @change="handleFileSelect"
             />
-          </label>
+          </UiLabel>
           <span class="pl-1 hidden md:inline">or drag and drop</span>
         </div>
         <p class="text-xs text-gray-500 dark:text-gray-400">
@@ -91,7 +87,7 @@
         <!-- Actions Overlay - Always visible on mobile, hover on desktop -->
         <div class="absolute inset-0 bg-black bg-opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-2 md:space-x-2">
           <!-- Set as Primary -->
-          <Button
+          <UiButton
             v-if="!image.isPrimary"
             size="icon"
             class="p-3 md:p-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors touch-manipulation"
@@ -111,10 +107,10 @@
                 d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
               />
             </svg>
-          </Button>
+          </UiButton>
 
           <!-- Edit Alt Text -->
-          <Button
+          <UiButton
             size="icon"
             class="p-3 md:p-2 bg-white text-gray-700 rounded-full hover:bg-gray-100 transition-colors touch-manipulation"
             title="Edit alt text"
@@ -133,10 +129,10 @@
                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
               />
             </svg>
-          </Button>
+          </UiButton>
 
           <!-- Remove -->
-          <Button
+          <UiButton
             size="icon"
             class="p-3 md:p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors touch-manipulation"
             title="Remove image"
@@ -155,7 +151,7 @@
                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
               />
             </svg>
-          </Button>
+          </UiButton>
         </div>
 
         <!-- Upload Progress for Individual Image -->
@@ -174,17 +170,17 @@
     </div>
 
     <!-- Alt Text Edit Modal -->
-    <Dialog
+    <UiDialog
       :open="altTextModal.show"
       @update:open="(open) => !open && closeAltTextModal()"
     >
-      <DialogContent class="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>{{ $t('admin.imageUpload.altTextModal.title') }}</DialogTitle>
-          <DialogDescription>
+      <UiDialogContent class="sm:max-w-md">
+        <UiDialogHeader>
+          <UiDialogTitle>{{ $t('admin.imageUpload.altTextModal.title') }}</UiDialogTitle>
+          <UiDialogDescription>
             {{ $t('admin.imageUpload.altTextModal.description') }}
-          </DialogDescription>
-        </DialogHeader>
+          </UiDialogDescription>
+        </UiDialogHeader>
 
         <div class="space-y-4">
           <img
@@ -204,24 +200,24 @@
           </div>
         </div>
 
-        <DialogFooter>
-          <Button
+        <UiDialogFooter>
+          <UiButton
             variant="outline"
             @click="closeAltTextModal"
           >
             {{ $t('common.cancel') }}
-          </Button>
-          <Button @click="saveAltText">
+          </UiButton>
+          <UiButton>
+            @click="saveAltText">
             {{ $t('common.save') }}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </UiButton>
+        </UiDialogFooter>
+      </UiDialogContent>
+    </UiDialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,

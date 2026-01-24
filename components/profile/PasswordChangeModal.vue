@@ -93,13 +93,13 @@ function trapFocus(event: KeyboardEvent) {
             {{ $t('profile.sections.changePasswordDescription') }}
           </p>
           <div class="flex justify-end">
-            <Button
+            <UiButton
               ref="closeBtnRef"
               variant="outline"
               @click="emit('close')"
             >
               {{ $t('common.close') }}
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>

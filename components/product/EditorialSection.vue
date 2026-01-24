@@ -25,13 +25,10 @@
         <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
           {{ story.description }}
         </p>
-        <button
-          type="button"
-          class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-blue-700 transition hover:text-blue-800 dark:text-blue-200 dark:hover:text-blue-100"
-        >
+        <UiButton type="button">
           {{ t('products.editorial.cta') }}
           <span aria-hidden="true">→</span>
-        </button>
+        </UiButton>
       </article>
     </div>
   </section>

@@ -168,7 +168,7 @@
       :aria-label="$t('orders.accessibility.orderActions')"
     >
       <!-- Track Button for Active Orders -->
-      <Button
+      <UiButton
         v-if="isActiveOrder"
         variant="default"
         :aria-label="$t('orders.accessibility.trackButton')"
@@ -196,10 +196,10 @@
           />
         </svg>
         {{ $t('orders.track') }}
-      </Button>
+      </UiButton>
 
       <!-- Reorder Button -->
-      <Button
+      <UiButton
         v-if="canReorder"
         variant="outline"
         :aria-label="$t('orders.accessibility.reorderButton')"
@@ -221,10 +221,10 @@
           />
         </svg>
         {{ $t('orders.reorder') }}
-      </Button>
+      </UiButton>
 
       <!-- View Details Button -->
-      <Button
+      <UiButton
         v-if="!isActiveOrder"
         variant="outline"
         :aria-label="$t('orders.accessibility.viewDetailsButton')"
@@ -232,14 +232,14 @@
         @click.stop="handleViewDetails"
       >
         {{ $t('orders.viewDetails') }}
-      </Button>
+      </UiButton>
     </div>
   </article>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Button } from '@/components/ui/button'
+
 import type { OrderWithItems } from '~/types'
 
 interface Props {

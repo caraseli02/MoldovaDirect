@@ -36,7 +36,9 @@ export interface TestFixtures {
 }
 
 export const test = base.extend<TestFixtures>({
-  locale: async (_fixtures, use, testInfo) => {
+  // eslint-disable-next-line no-empty-pattern -- Playwright requires object destructuring pattern
+  // oxlint-disable-next-line no-empty-pattern -- Playwright requires object destructuring pattern
+  locale: async ({}, use, testInfo) => {
     const projectName = testInfo.project.name
     const locale = projectName.split('-')[1] || 'es'
     await use(locale)
@@ -53,7 +55,9 @@ export const test = base.extend<TestFixtures>({
     await use(user)
   },
 
-  adminUser: async (_fixtures, use) => {
+  // eslint-disable-next-line no-empty-pattern -- Playwright requires object destructuring pattern
+  // oxlint-disable-next-line no-empty-pattern -- Playwright requires object destructuring pattern
+  adminUser: async ({}, use) => {
     const admin: AdminUser = {
       email: process.env.TEST_ADMIN_EMAIL || 'admin@example.test',
       password: process.env.TEST_ADMIN_PASSWORD || generateSecurePassword(),
@@ -63,7 +67,9 @@ export const test = base.extend<TestFixtures>({
     await use(admin)
   },
 
-  testProducts: async (_fixtures, use) => {
+  // eslint-disable-next-line no-empty-pattern -- Playwright requires object destructuring pattern
+  // oxlint-disable-next-line no-empty-pattern -- Playwright requires object destructuring pattern
+  testProducts: async ({}, use) => {
     const products: TestProduct[] = [
       {
         id: 'prod-1',

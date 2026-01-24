@@ -4,12 +4,9 @@
       <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
         {{ $t('checkout.review.paymentMethod') }}
       </h3>
-      <button
-        class="text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium"
-        @click="$emit('lucide:square-pen')"
-      >
+      <UiButton @click="$emit('edit')">
         {{ $t('checkout.review.editPayment') }}
-      </button>
+      </UiButton>
     </header>
 
     <div
@@ -131,6 +128,6 @@ interface Props {
 defineProps<Props>()
 
 defineEmits<{
-  (e: 'lucide:square-pen'): void
+  (e: 'edit'): void
 }>()
 </script>

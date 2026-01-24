@@ -21,17 +21,17 @@ describe('TemplateHistory Accessibility (a11y-3)', () => {
       usesDialogDescription: boolean
       hasDescriptionContent: boolean
     } {
-      // Check import
+      // Check import - handles both DialogDescription and UiDialogDescription
       const hasImport = /DialogDescription/.test(source)
         && /from\s+['"][@/~].*components\/ui\/dialog['"]/.test(source)
 
-      // Check usage in template
-      const usesInTemplate = /<DialogDescription[\s>]/.test(source)
+      // Check usage in template - handles both DialogDescription and UiDialogDescription
+      const usesInTemplate = /<Ui?DialogDescription[\s>]/.test(source)
 
-      // Check that description has content (not empty)
-      const hasContent = /<DialogDescription[^>]*>[^<]+<\/DialogDescription>/.test(source)
-        || /<DialogDescription[^>]*>\s*\{\{[^}]+\}\}\s*<\/DialogDescription>/.test(source)
-        || /<DialogDescription[^>]*>\s*<[^>]+>[^<]+/.test(source)
+      // Check that description has content (not empty) - handles both prefixes
+      const hasContent = /<(?:Ui)?DialogDescription[^>]*>[^<]+<\/(?:Ui)?DialogDescription>/.test(source)
+        || /<(?:Ui)?DialogDescription[^>]*>\s*\{\{[^}]+\}\}\s*<\/(?:Ui)?DialogDescription>/.test(source)
+        || /<(?:Ui)?DialogDescription[^>]*>\s*<[^>]+>[^<]+/.test(source)
 
       return {
         importsDialogDescription: hasImport,
@@ -62,8 +62,8 @@ describe('TemplateHistory Accessibility (a11y-3)', () => {
   describe('Dialog Structure', () => {
     it('should have DialogTitle before DialogDescription', () => {
       const source = readFileSync(componentPath, 'utf-8')
-      const titleMatch = source.match(/<DialogTitle/)
-      const descMatch = source.match(/<DialogDescription/)
+      const titleMatch = source.match(/<Ui?DialogTitle/)
+      const descMatch = source.match(/<Ui?DialogDescription/)
 
       if (titleMatch && descMatch) {
         expect(titleMatch.index).toBeLessThan(descMatch.index!)
@@ -76,10 +76,10 @@ describe('TemplateHistory Accessibility (a11y-3)', () => {
 
     it('should have DialogDescription inside DialogHeader', () => {
       const source = readFileSync(componentPath, 'utf-8')
-      // Check that DialogDescription appears between DialogHeader tags
-      const headerMatch = source.match(/<DialogHeader>([\s\S]*?)<\/DialogHeader>/)
+      // Check that DialogDescription appears between DialogHeader tags - handles Ui prefix
+      const headerMatch = source.match(/<Ui?DialogHeader>([\s\S]*?)<\/Ui?DialogHeader>/)
       expect(headerMatch).not.toBeNull()
-      expect(headerMatch?.[1]).toMatch(/<DialogDescription/)
+      expect(headerMatch?.[1]).toMatch(/<Ui?DialogDescription/)
     })
   })
 })

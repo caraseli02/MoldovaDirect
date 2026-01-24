@@ -40,22 +40,15 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Stock Quantity -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          {{ $t('admin.products.fields.stockQuantity') }} *
-        </label>
+        <UiLabel>{{ $t('admin.products.fields.stockQuantity') }} *</UiLabel>
         <div class="relative">
-          <input
+          <UiInput
             ref="stockInput"
             v-model.number="localForm.stockQuantity"
             type="number"
             min="0"
             :placeholder="$t('admin.products.placeholders.stockQuantity')"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"
-            :class="{
-              'border-red-500': errors?.stockQuantity,
-              'min-h-[44px]': isMobile,
-              'pr-16': isLowStock || isOutOfStock,
-            }"
+            :class="{ 'border-red-500': errors?.stockQuantity, 'min-h-[44px]': isMobile, 'pr-16': isLowStock || isOutOfStock }"
             @input="handleStockQuantityInput"
             @focus="handleInputFocus"
             @blur="handleInputBlur"
@@ -78,9 +71,8 @@
             v-if="isMobile"
             class="flex mt-2 space-x-2"
           >
-            <button
+            <UiButton
               :disabled="localForm.stockQuantity <= 0"
-              class="flex-1 px-3 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg touch-manipulation active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
               type="button"
               @click="adjustStock(-1)"
               @touchstart="vibrate('tap')"
@@ -89,9 +81,8 @@
                 name="lucide:minus"
                 class="w-4 h-4 mx-auto"
               />
-            </button>
-            <button
-              class="flex-1 px-3 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-lg touch-manipulation active:scale-95"
+            </UiButton>
+            <UiButton
               type="button"
               @click="adjustStock(1)"
               @touchstart="vibrate('tap')"
@@ -100,9 +91,8 @@
                 name="lucide:plus"
                 class="w-4 h-4 mx-auto"
               />
-            </button>
-            <button
-              class="flex-1 px-3 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg touch-manipulation active:scale-95"
+            </UiButton>
+            <UiButton
               type="button"
               @click="showQuickStockModal = true"
               @touchstart="vibrate('tap')"
@@ -111,7 +101,7 @@
                 name="lucide:square-pen"
                 class="w-4 h-4 mx-auto"
               />
-            </button>
+            </UiButton>
           </div>
         </div>
 
@@ -139,19 +129,13 @@
 
       <!-- Low Stock Threshold -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          {{ $t('admin.products.fields.lowStockThreshold') }}
-        </label>
-        <input
+        <UiLabel>{{ $t('admin.products.fields.lowStockThreshold') }}</UiLabel>
+        <UiInput
           v-model.number="localForm.lowStockThreshold"
           type="number"
           min="0"
           :placeholder="$t('admin.products.placeholders.lowStockThreshold')"
-          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white touch-manipulation"
-          :class="{
-            'border-red-500': errors?.lowStockThreshold,
-            'min-h-[44px]': isMobile,
-          }"
+          :class="{ 'border-red-500': errors?.lowStockThreshold, 'min-h-[44px]': isMobile }"
           @input="handleLowStockThresholdInput"
           @focus="handleInputFocus"
           @blur="handleInputBlur"
@@ -252,8 +236,7 @@
             <li>{{ $t('admin.products.tips.inventory3') }}</li>
           </ul>
         </div>
-        <button
-          class="text-indigo-600 dark:text-indigo-400 touch-manipulation p-1"
+        <UiButton
           @click="showInventoryTips = false"
           @touchstart="vibrate('tap')"
         >
@@ -261,7 +244,7 @@
             name="lucide:x"
             class="w-4 h-4"
           />
-        </button>
+        </UiButton>
       </div>
     </div>
 
@@ -276,8 +259,7 @@
           <h3 class="text-lg font-medium text-gray-900 dark:text-white">
             {{ $t('admin.products.modal.quickStock') }}
           </h3>
-          <button
-            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 touch-manipulation p-2"
+          <UiButton
             @click="showQuickStockModal = false"
             @touchstart="vibrate('tap')"
           >
@@ -285,57 +267,50 @@
               name="lucide:x"
               class="w-5 h-5"
             />
-          </button>
+          </UiButton>
         </div>
 
         <div class="space-y-4">
           <!-- Quick Stock Input -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {{ $t('admin.products.fields.newStock') }}
-            </label>
-            <input
+            <UiLabel>{{ $t('admin.products.fields.newStock') }}</UiLabel>
+            <UiInput
               v-model.number="quickStockValue"
               type="number"
               min="0"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white min-h-[44px]"
               @focus="vibrate('tap')"
             />
           </div>
 
           <!-- Quick Actions -->
           <div class="grid grid-cols-3 gap-2">
-            <button
-              class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg touch-manipulation active:scale-95 min-h-[44px]"
+            <UiButton
               @click="setQuickStock(10)"
               @touchstart="vibrate('tap')"
             >
               10
-            </button>
-            <button
-              class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg touch-manipulation active:scale-95 min-h-[44px]"
+            </UiButton>
+            <UiButton
               @click="setQuickStock(50)"
               @touchstart="vibrate('tap')"
             >
               50
-            </button>
-            <button
-              class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg touch-manipulation active:scale-95 min-h-[44px]"
+            </UiButton>
+            <UiButton
               @click="setQuickStock(100)"
               @touchstart="vibrate('tap')"
             >
               100
-            </button>
+            </UiButton>
           </div>
 
           <!-- Apply Button -->
-          <button
-            class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg touch-manipulation active:scale-95 min-h-[44px]"
+          <UiButton
             @click="applyQuickStock"
             @touchstart="vibrate('tap')"
           >
             {{ $t('admin.products.actions.applyStock') }}
-          </button>
+          </UiButton>
         </div>
       </div>
     </div>

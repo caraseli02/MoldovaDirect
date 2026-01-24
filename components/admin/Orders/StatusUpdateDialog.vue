@@ -1,8 +1,8 @@
 <template>
-  <Dialog v-model:open="isOpen">
+  <UiDialog v-model:open="isOpen">
     <DialogTrigger as-child>
       <slot name="trigger">
-        <Button
+        <UiButton
           variant="outline"
           size="sm"
         >
@@ -11,17 +11,17 @@
             class="h-4 w-4 mr-2"
           />
           Update Status
-        </Button>
+        </UiButton>
       </slot>
     </DialogTrigger>
 
-    <DialogContent class="sm:max-w-[500px]">
-      <DialogHeader>
-        <DialogTitle>Update Order Status</DialogTitle>
-        <DialogDescription>
+    <UiDialogContent class="sm:max-w-[500px]">
+      <UiDialogHeader>
+        <UiDialogTitle>Update Order Status</UiDialogTitle>
+        <UiDialogDescription>
           Change the status of order #{{ orderNumber }}. Status transitions are validated.
-        </DialogDescription>
-      </DialogHeader>
+        </UiDialogDescription>
+      </UiDialogHeader>
 
       <form
         class="space-y-4 mt-4"
@@ -35,26 +35,24 @@
 
         <!-- New Status Selection -->
         <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-            New Status <span class="text-red-500">*</span>
-          </label>
-          <Select
+          <UiLabel>New Status <span class="text-red-500">*</span></UiLabel>
+          <UiSelect
             v-model="formData.status"
             :disabled="loading"
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Select new status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem
+            <UiSelectTrigger>
+              <UiSelectValue placeholder="Select new status" />
+            </UiSelectTrigger>
+            <UiSelectContent>
+              <UiSelectItem
                 v-for="status in availableStatuses"
                 :key="status.value"
                 :value="status.value"
               >
                 {{ status.label }}
-              </SelectItem>
-            </SelectContent>
-          </Select>
+              </UiSelectItem>
+            </UiSelectContent>
+          </UiSelect>
           <p
             v-if="!isValidTransition && formData.status"
             class="text-xs text-red-600 dark:text-red-400"
@@ -92,10 +90,8 @@
           </p>
 
           <div class="space-y-2">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Tracking Number <span class="text-red-500">*</span>
-            </label>
-            <Input
+            <UiLabel>Tracking Number <span class="text-red-500">*</span></UiLabel>
+            <UiInput
               v-model="formData.trackingNumber"
               type="text"
               placeholder="Enter tracking number"
@@ -105,46 +101,42 @@
           </div>
 
           <div class="space-y-2">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Carrier <span class="text-red-500">*</span>
-            </label>
-            <Select
+            <UiLabel>Carrier <span class="text-red-500">*</span></UiLabel>
+            <UiSelect
               v-model="formData.carrier"
               :disabled="loading"
             >
-              <SelectTrigger>
-                <SelectValue placeholder="Select carrier" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="DHL">
+              <UiSelectTrigger>
+                <UiSelectValue placeholder="Select carrier" />
+              </UiSelectTrigger>
+              <UiSelectContent>
+                <UiSelectItem value="DHL">
                   DHL
-                </SelectItem>
-                <SelectItem value="FedEx">
+                </UiSelectItem>
+                <UiSelectItem value="FedEx">
                   FedEx
-                </SelectItem>
-                <SelectItem value="UPS">
+                </UiSelectItem>
+                <UiSelectItem value="UPS">
                   UPS
-                </SelectItem>
-                <SelectItem value="USPS">
+                </UiSelectItem>
+                <UiSelectItem value="USPS">
                   USPS
-                </SelectItem>
-                <SelectItem value="Posta Moldovei">
+                </UiSelectItem>
+                <UiSelectItem value="Posta Moldovei">
                   Posta Moldovei
-                </SelectItem>
-                <SelectItem value="Other">
+                </UiSelectItem>
+                <UiSelectItem value="Other">
                   Other
-                </SelectItem>
-              </SelectContent>
-            </Select>
+                </UiSelectItem>
+              </UiSelectContent>
+            </UiSelect>
           </div>
         </div>
 
         <!-- Admin Notes -->
         <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Admin Notes (Optional)
-          </label>
-          <Textarea
+          <UiLabel>Admin Notes (Optional)</UiLabel>
+          <UiTextarea
             v-model="formData.adminNotes"
             rows="3"
             placeholder="Add internal notes about this status change..."
@@ -163,16 +155,16 @@
         </div>
 
         <!-- Dialog Footer -->
-        <DialogFooter>
-          <Button
+        <UiDialogFooter>
+          <UiButton
             type="button"
             variant="outline"
             :disabled="loading"
             @click="handleCancel"
           >
             Cancel
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton
             type="submit"
             :disabled="loading || !isValidTransition || !formData.status"
           >
@@ -182,11 +174,11 @@
               class="h-4 w-4 mr-2 animate-spin"
             />
             <span>{{ loading ? 'Updating...' : 'Update Status' }}</span>
-          </Button>
-        </DialogFooter>
+          </UiButton>
+        </UiDialogFooter>
       </form>
-    </DialogContent>
-  </Dialog>
+    </UiDialogContent>
+  </UiDialog>
 </template>
 
 <script setup lang="ts">
@@ -199,7 +191,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import {
@@ -345,11 +337,23 @@ const handleSubmit = async () => {
   }
   catch (err: unknown) {
     console.error('Error updating order status:', err)
-    const errorData = err as Record<string, any>
-    const dataObj = errorData.data as Record<string, any> | undefined
-    const message = (err as Error).message
-    error.value = (dataObj?.statusMessage as string) || message || 'Failed to update order status'
-    toast.error('Error', error.value ?? 'Failed to update order status')
+
+    // Type-safe error extraction
+    let errorMessage = 'Failed to update order status'
+
+    if (err instanceof Error) {
+      errorMessage = err.message
+    }
+    else if (typeof err === 'string') {
+      errorMessage = err
+    }
+    else if (err && typeof err === 'object' && 'data' in err) {
+      const errorData = err as { data?: { statusMessage?: string } }
+      errorMessage = errorData.data?.statusMessage || errorMessage
+    }
+
+    error.value = errorMessage
+    toast.error('Error', errorMessage)
   }
   finally {
     loading.value = false

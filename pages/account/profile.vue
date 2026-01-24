@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-zinc-50 dark:bg-zinc-900">
-    <div class="container py-6 md:py-12">
+    <div class="container py-4 md:py-12 pb-24 md:pb-12">
       <div class="max-w-2xl mx-auto">
         <!-- Header -->
         <div class="mb-6 md:mb-8">
@@ -125,10 +125,11 @@
                       </span>
                     </div>
                     <div class="flex gap-2">
-                      <button
+                      <UiButton
                         type="button"
+                        variant="ghost"
+                        size="icon"
                         :aria-label="`${$t('profile.editAddress')} ${address.firstName} ${address.lastName}`"
-                        class="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         :disabled="savingAddressId === address.id || deletingAddressId === address.id"
                         :data-testid="`profile-address-edit-${address.id}`"
                         @click="editAddress(address)"
@@ -138,11 +139,12 @@
                           class="h-5 w-5"
                           aria-hidden="true"
                         />
-                      </button>
-                      <button
+                      </UiButton>
+                      <UiButton
                         type="button"
+                        variant="ghost"
+                        size="icon"
                         :aria-label="`${$t('profile.deleteAddress')} ${address.firstName} ${address.lastName}`"
-                        class="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-zinc-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-red-500"
                         :disabled="savingAddressId === address.id || deletingAddressId === address.id"
                         :data-testid="`profile-address-delete-${address.id}`"
                         @click="address.id && confirmDeleteAddress(address.id)"
@@ -159,7 +161,7 @@
                           class="h-5 w-5"
                           aria-hidden="true"
                         />
-                      </button>
+                      </UiButton>
                     </div>
                   </div>
                   <div class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
@@ -180,14 +182,15 @@
               </div>
 
               <!-- Add Address Button -->
-              <button
+              <UiButton
                 type="button"
-                class="w-full py-3 border-2 border-dashed border-zinc-300 dark:border-zinc-600 rounded-lg text-sm text-zinc-600 dark:text-zinc-400 font-medium hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50/50 dark:hover:border-blue-400 dark:hover:text-blue-400 dark:hover:bg-blue-900/20 transition-all duration-200"
+                variant="outline"
+                class="w-full border-dashed"
                 data-testid="profile-add-address-btn"
                 @click="showAddressForm = true"
               >
                 + {{ addresses.length > 0 ? $t('profile.addAddress') : $t('profile.addFirstAddress') }}
-              </button>
+              </UiButton>
             </div>
           </ProfileAccordionSection>
 
@@ -216,14 +219,15 @@
 
           <!-- Delete Account Section (Always Visible) -->
           <div class="p-4 md:p-6 bg-zinc-50 dark:bg-zinc-800/50">
-            <button
+            <UiButton
               type="button"
-              class="w-full py-3 text-red-600 dark:text-red-400 text-sm font-medium hover:bg-white dark:hover:bg-zinc-700 rounded-lg border border-red-200 dark:border-red-900 transition-all duration-200"
+              variant="destructive"
+              class="max-w-xs mx-auto w-full"
               data-testid="profile-delete-account-btn"
               @click="showDeleteConfirmation = true"
             >
               {{ $t('profile.deleteAccount') }}
-            </button>
+            </UiButton>
           </div>
         </div>
 
@@ -235,6 +239,7 @@
     <!-- Address Form Modal -->
     <AddressFormModal
       v-if="showAddressForm"
+      v-model:loading="addressFormLoading"
       :address="editingAddress"
       @save="handleAddressSave"
       @close="closeAddressForm"
@@ -284,13 +289,13 @@
             {{ $t('profile.confirmDeleteAddress') }}
           </p>
           <div class="flex gap-3 justify-end">
-            <Button
+            <UiButton
               variant="outline"
               @click="showDeleteAddressConfirm = false"
             >
               {{ $t('common.cancel') }}
-            </Button>
-            <Button
+            </UiButton>
+            <UiButton
               variant="destructive"
               :disabled="deletingAddressId !== null"
               @click="executeDeleteAddress"
@@ -302,7 +307,7 @@
                 aria-hidden="true"
               />
               {{ $t('common.delete') }}
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -312,7 +317,7 @@
 
 <script setup lang="ts">
 // Component imports
-import { Button } from '@/components/ui/button'
+
 import AddressFormModal from '~/components/profile/AddressFormModal.vue'
 import DeleteAccountModal from '~/components/profile/DeleteAccountModal.vue'
 import PasswordChangeModal from '~/components/profile/PasswordChangeModal.vue'
@@ -365,6 +370,7 @@ const expandedSection = ref<string | null>('personal')
 const saveStatus = ref<'idle' | 'saving' | 'saved' | 'error'>('idle')
 const savingAddressId = ref<number | null>(null)
 const deletingAddressId = ref<number | null>(null)
+const addressFormLoading = ref(false)
 let saveTimeout: ReturnType<typeof setTimeout> | null = null
 let hideStatusTimeout: ReturnType<typeof setTimeout> | null = null
 
@@ -372,8 +378,8 @@ let hideStatusTimeout: ReturnType<typeof setTimeout> | null = null
 const passwordModalRef = ref<HTMLElement>()
 const twoFAModalRef = ref<HTMLElement>()
 const deleteAddressModalRef = ref<HTMLElement>()
-const passwordModalCloseBtn = ref<InstanceType<typeof Button>>()
-const twoFAModalCloseBtn = ref<InstanceType<typeof Button>>()
+const passwordModalCloseBtn = ref<HTMLElement>()
+const twoFAModalCloseBtn = ref<HTMLElement>()
 
 // Accordion refs for keyboard navigation using Vue 3.5+ useTemplateRef
 type AccordionKey = 'personal' | 'preferences' | 'addresses' | 'security'
@@ -812,6 +818,7 @@ const removePicture = async () => {
 const closeAddressForm = () => {
   showAddressForm.value = false
   editingAddress.value = null
+  addressFormLoading.value = false
 }
 
 const editAddress = (address: Address) => {
@@ -821,6 +828,7 @@ const editAddress = (address: Address) => {
 
 const handleAddressSave = async (addressData: Address) => {
   if (!user.value?.id) {
+    addressFormLoading.value = false
     $toast.error(t('profile.errors.notAuthenticated'))
     return
   }
@@ -841,6 +849,7 @@ const handleAddressSave = async (addressData: Address) => {
   })
 
   if (isDuplicate) {
+    addressFormLoading.value = false
     $toast.error(t('profile.errors.addressExists') || 'Address already exists')
     return
   }
@@ -891,6 +900,7 @@ const handleAddressSave = async (addressData: Address) => {
   }
   catch (error: unknown) {
     console.error('Error saving address:', getErrorMessage(error))
+    addressFormLoading.value = false
     $toast.error(t('profile.errors.addressSaveFailed'))
   }
 }

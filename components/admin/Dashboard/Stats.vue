@@ -4,9 +4,8 @@
       <h2 class="text-xs font-semibold uppercase tracking-wide text-gray-500">
         {{ statsSectionTitle }}
       </h2>
-      <button
+      <UiButton
         :disabled="isLoading"
-        class="inline-flex items-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-gray-300 hover:text-gray-900 disabled:opacity-50"
         @click="refresh"
       >
         <commonIcon
@@ -14,7 +13,7 @@
           :class="['h-4 w-4', isLoading ? 'animate-spin text-blue-500' : 'text-gray-400']"
         />
         <span>{{ t('admin.dashboard.refresh') }}</span>
-      </button>
+      </UiButton>
     </header>
 
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

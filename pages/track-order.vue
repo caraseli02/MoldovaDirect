@@ -36,34 +36,26 @@
           @submit.prevent="trackOrder"
         >
           <div>
-            <label
-              for="orderNumber"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
+            <UiLabel for="orderNumber">
               {{ $t('trackOrder.orderNumber') }}
-            </label>
-            <input
+            </UiLabel>
+            <UiInput
               id="orderNumber"
               v-model="orderNumber"
               type="text"
               :placeholder="$t('trackOrder.orderNumberPlaceholder')"
-              class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               required
             />
           </div>
           <div>
-            <label
-              for="email"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
+            <UiLabel for="email">
               {{ $t('trackOrder.email') }}
-            </label>
-            <input
+            </UiLabel>
+            <UiInput
               id="email"
               v-model="email"
               type="email"
               :placeholder="$t('trackOrder.emailPlaceholder')"
-              class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               required
             />
           </div>
@@ -89,10 +81,9 @@
             </div>
           </div>
 
-          <button
+          <UiButton
             type="submit"
             :disabled="loading"
-            class="w-full py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
           >
             <svg
               v-if="loading"
@@ -115,7 +106,7 @@
               />
             </svg>
             {{ loading ? $t('common.loading') : $t('trackOrder.trackButton') }}
-          </button>
+          </UiButton>
         </form>
       </div>
 
@@ -125,9 +116,8 @@
         class="space-y-6"
       >
         <!-- Back Button -->
-        <button
+        <UiButton
           type="button"
-          class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           @click="resetSearch"
         >
           <svg
@@ -144,7 +134,7 @@
             />
           </svg>
           {{ $t('trackOrder.trackAnother') }}
-        </button>
+        </UiButton>
 
         <!-- Order Summary Card -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">

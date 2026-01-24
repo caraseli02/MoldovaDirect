@@ -27,12 +27,9 @@
         <p class="text-gray-600 dark:text-gray-400 mb-6">
           {{ $t('checkout.errors.pleaseTryAgain') }}
         </p>
-        <button
-          class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-          @click="retryLoad"
-        >
+        <UiButton @click="retryLoad">
           {{ $t('common.retry') }}
-        </button>
+        </UiButton>
       </div>
 
       <!-- Normal checkout flow -->

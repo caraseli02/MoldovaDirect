@@ -13,7 +13,7 @@
             </p>
           </div>
           <div class="flex items-center gap-4">
-            <Button
+            <UiButton
               :disabled="loading"
               variant="outline"
               @click="refreshData"
@@ -22,7 +22,7 @@
                 :class="['w-4 h-4 mr-2', loading ? 'animate-spin' : '']"
               />
               Refresh
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@
           class="flex space-x-8"
           aria-label="Tabs"
         >
-          <Button
+          <UiButton
             v-for="tab in tabs"
             :key="tab.id"
             :class="[
@@ -53,7 +53,7 @@
               class="w-5 h-5 mr-2 inline"
             />
             {{ tab.name }}
-          </Button>
+          </UiButton>
         </nav>
       </div>
 
@@ -192,13 +192,13 @@
             <p class="text-sm text-red-700 dark:text-red-300 mt-1">
               {{ error }}
             </p>
-            <Button
+            <UiButton
               variant="link"
               class="mt-2 text-sm text-red-600 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300"
               @click="refreshData"
             >
               Try again
-            </Button>
+            </UiButton>
           </div>
         </div>
       </div>
@@ -207,7 +207,6 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
 import {
   AlertTriangle,
   BarChart2,

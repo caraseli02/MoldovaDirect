@@ -63,16 +63,15 @@
         role="tablist"
         aria-label="Carousel navigation"
       >
-        <button
+        <UiButton
           v-for="(card, idx) in cards"
           :key="idx"
           :aria-label="`Go to slide ${idx + 1}: ${card.title}`"
           :aria-selected="currentSlide === idx"
           role="tab"
-          class="h-2 w-2 rounded-full bg-gray-300 transition-all duration-300 dark:bg-gray-600 hover:bg-gray-500 dark:hover:bg-gray-500"
           :class="{ 'w-8 bg-gray-800 dark:bg-gray-400': currentSlide === idx }"
           @click="goToSlide(idx)"
-        ></button>
+        />
       </div>
     </div>
   </div>

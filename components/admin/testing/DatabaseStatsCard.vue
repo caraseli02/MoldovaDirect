@@ -1,12 +1,12 @@
 <template>
-  <Card>
-    <CardHeader>
+  <UiCard>
+    <UiCardHeader>
       <div class="flex items-center justify-between">
         <div>
-          <CardTitle>Current Database State</CardTitle>
-          <CardDescription>Real-time overview of your database</CardDescription>
+          <UiCardTitle>Current Database State</UiCardTitle>
+          <UiCardDescription>Real-time overview of your database</UiCardDescription>
         </div>
-        <Button
+        <UiButton
           variant="outline"
           size="sm"
           :disabled="loadingStats"
@@ -18,10 +18,10 @@
             class="h-4 w-4 mr-2"
           />
           Refresh
-        </Button>
+        </UiButton>
       </div>
-    </CardHeader>
-    <CardContent>
+    </UiCardHeader>
+    <UiCardContent>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="space-y-1 p-4 rounded-lg border bg-card">
           <div class="text-2xl font-bold">
@@ -74,13 +74,13 @@
           </div>
         </div>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 </template>
 
 <script setup lang="ts">
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+
 import type { DatabaseStats } from '~/types/admin-testing'
 
 defineProps<{

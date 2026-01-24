@@ -10,16 +10,16 @@
           <span class="text-sm font-medium text-blue-900 dark:text-blue-100">
             {{ selectedCount }} {{ selectedCount === 1 ? 'product' : 'products' }} selected
           </span>
-          <Button
+          <UiButton
             variant="link"
             class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
             @click="clearSelection"
           >
             Clear selection
-          </Button>
+          </UiButton>
         </div>
         <div class="flex items-center space-x-2">
-          <Button
+          <UiButton
             :disabled="bulkOperationInProgress"
             size="sm"
             class="text-green-700 bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:text-green-100 dark:hover:bg-green-800"
@@ -39,8 +39,8 @@
               />
             </svg>
             Activate
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton
             :disabled="bulkOperationInProgress"
             variant="secondary"
             size="sm"
@@ -61,8 +61,8 @@
               />
             </svg>
             Deactivate
-          </Button>
-          <Button
+          </UiButton>
+          <UiButton
             :disabled="bulkOperationInProgress"
             variant="destructive"
             size="sm"
@@ -83,7 +83,7 @@
               />
             </svg>
             Delete
-          </Button>
+          </UiButton>
         </div>
       </div>
     </div>
@@ -147,18 +147,18 @@
       v-else
       class="overflow-x-auto"
     >
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead class="px-6">
+      <UiTable>
+        <UiTableHeader>
+          <UiTableRow>
+            <UiTableHead class="px-6">
               <UiCheckbox
                 id="products-select-all"
                 :checked="allVisibleSelected ? true : (hasSelectedProducts && !allVisibleSelected ? 'indeterminate' : false)"
                 :aria-label="$t('admin.products.selectAll')"
                 @update:checked="toggleAllVisible"
               />
-            </TableHead>
-            <TableHead
+            </UiTableHead>
+            <UiTableHead
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
               @click="updateSort('name')"
             >
@@ -180,11 +180,11 @@
                   />
                 </svg>
               </div>
-            </TableHead>
-            <TableHead class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            </UiTableHead>
+            <UiTableHead class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               Category
-            </TableHead>
-            <TableHead
+            </UiTableHead>
+            <UiTableHead
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
               @click="updateSort('price')"
             >
@@ -206,8 +206,8 @@
                   />
                 </svg>
               </div>
-            </TableHead>
-            <TableHead
+            </UiTableHead>
+            <UiTableHead
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
               @click="updateSort('stock')"
             >
@@ -229,11 +229,11 @@
                   />
                 </svg>
               </div>
-            </TableHead>
-            <TableHead class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            </UiTableHead>
+            <UiTableHead class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               {{ $t('admin.products.headers.status') }}
-            </TableHead>
-            <TableHead
+            </UiTableHead>
+            <UiTableHead
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
               @click="updateSort('created_at')"
             >
@@ -255,13 +255,13 @@
                   />
                 </svg>
               </div>
-            </TableHead>
-            <TableHead class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            </UiTableHead>
+            <UiTableHead class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
               {{ $t('admin.products.headers.actions') }}
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            </UiTableHead>
+          </UiTableRow>
+        </UiTableHeader>
+        <UiTableBody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
           <tr
             v-for="product in products"
             :key="product.id"
@@ -344,9 +344,9 @@
 
             <!-- Status -->
             <td class="px-6 py-4 whitespace-nowrap">
-              <Badge :variant="statusVariant(product.isActive)">
+              <UiBadge :variant="statusVariant(product.isActive)">
                 {{ product.isActive ? 'Active' : 'Inactive' }}
-              </Badge>
+              </UiBadge>
             </td>
 
             <!-- Created Date -->
@@ -401,7 +401,7 @@
                   />
                 </svg>
               </nuxt-link>
-              <Button
+              <UiButton
                 variant="ghost"
                 size="icon"
                 class="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
@@ -421,19 +421,16 @@
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                   />
                 </svg>
-              </Button>
+              </UiButton>
             </td>
           </tr>
-        </TableBody>
-      </Table>
+        </UiTableBody>
+      </UiTable>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { Table, TableHeader, TableRow, TableHead, TableBody } from '@/components/ui/table'
-import { Checkbox as UiCheckbox } from '@/components/ui/checkbox'
 import { Badge } from '@/components/ui/badge'
 import { productStatusVariant } from '@/lib/uiVariants'
 import { useLocalePath, useI18n } from '#imports'

@@ -35,7 +35,7 @@
 
           <!-- Actions -->
           <div class="flex items-center space-x-3 mt-3">
-            <Button
+            <UiButton
               :disabled="installing"
               size="sm"
               class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -63,21 +63,21 @@
                 />
               </svg>
               {{ installing ? $t('pwa.installing') : $t('pwa.install') }}
-            </Button>
+            </UiButton>
 
-            <Button
+            <UiButton
               variant="link"
               size="sm"
               class="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 p-0 h-auto"
               @click="handleDismiss"
             >
               {{ $t('pwa.notNow') }}
-            </Button>
+            </UiButton>
           </div>
         </div>
 
         <!-- Close Button -->
-        <Button
+        <UiButton
           variant="ghost"
           size="icon"
           class="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -96,15 +96,13 @@
               d="M6 18L18 6M6 6l12 12"
             />
           </svg>
-        </Button>
+        </UiButton>
       </div>
     </div>
   </Transition>
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-
 const pwa = usePWA()
 const { vibrate } = useHapticFeedback()
 

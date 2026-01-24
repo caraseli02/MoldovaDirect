@@ -25,16 +25,15 @@
       placement="top"
     >
       <template #trigger>
-        <button
+        <UiButton
           type="button"
-          class="inline-flex items-center justify-center rounded-full hover:bg-white/20 transition-colors"
           :class="size === 'sm' ? 'p-0.5' : 'p-1'"
         >
           <commonIcon
             name="lucide:help-circle"
             :class="size === 'sm' ? 'h-3 w-3' : 'h-3.5 w-3.5'"
           />
-        </button>
+        </UiButton>
       </template>
     </CustomTooltip>
   </div>

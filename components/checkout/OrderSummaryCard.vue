@@ -1,7 +1,7 @@
 <template>
   <div class="order-summary-card bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
     <!-- Header -->
-    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-rose-50 dark:bg-rose-900/20">
       <div class="flex items-center justify-between">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
           {{ $t('common.orderSummary') }}
@@ -42,10 +42,7 @@
     >
       <!-- Cart Items (Collapsed by default) -->
       <div class="mb-4">
-        <button
-          class="w-full flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-          @click="showItems = !showItems"
-        >
+        <UiButton @click="showItems = !showItems">
           <span>{{ showItems ? $t('checkout.hideItems', 'Hide items') : $t('checkout.showItems', 'Show items') }}</span>
           <svg
             class="w-4 h-4 transition-transform"
@@ -61,7 +58,7 @@
               d="M19 9l-7 7-7-7"
             />
           </svg>
-        </button>
+        </UiButton>
 
         <div
           v-show="showItems"
@@ -167,9 +164,9 @@
       <!-- Shipping Estimate (if method selected) -->
       <div
         v-if="shippingMethod?.estimatedDays"
-        class="mt-4 p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg"
+        class="mt-4 p-3 bg-rose-50 dark:bg-rose-900/20 rounded-lg"
       >
-        <div class="flex items-center text-sm text-primary-700 dark:text-primary-300">
+        <div class="flex items-center text-sm text-rose-700 dark:text-rose-300">
           <svg
             class="w-4 h-4 mr-2"
             fill="none"

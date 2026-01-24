@@ -20,33 +20,23 @@
 
       <div class="flex flex-col gap-4 lg:w-auto">
         <div class="flex flex-wrap items-center gap-3">
-          <button
+          <UiButton
             v-for="option in rangeOptions"
             :key="option.value"
             type="button"
-            :class="[
-              'rounded-xl border px-4 py-2 text-sm font-medium transition-colors duration-200',
-              selectedRange === option.value
-                ? 'border-blue-500 bg-blue-50 text-blue-600 shadow-[0_0_0_3px_rgba(59,130,246,0.12)]'
-                : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:text-gray-900',
-            ]"
+            :class="['rounded-xl border px-4 py-2 text-sm font-medium transition-colors duration-200', selectedRange === option.value ? 'border-blue-500 bg-blue-50 text-blue-600 shadow-[0_0_0_3px_rgba(59,130,246,0.12)]' : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:text-gray-900']"
             @click="$emit('select-range', option.value)"
           >
             {{ option.label }}
-          </button>
+          </UiButton>
         </div>
 
         <div class="flex flex-wrap items-center gap-4">
           <div class="flex items-center gap-3">
             <span class="text-sm text-gray-500">{{ $t('admin.dashboard.autoRefresh') }}</span>
-            <button
+            <UiButton
               type="button"
-              :class="[
-                'relative inline-flex h-7 w-14 items-center rounded-full transition-all duration-300',
-                autoRefreshEnabled
-                  ? 'bg-blue-500 shadow-[0_0_0_4px_rgba(59,130,246,0.18)] animate-pulse'
-                  : 'bg-gray-200',
-              ]"
+              :class="['relative inline-flex h-7 w-14 items-center rounded-full transition-all duration-300', autoRefreshEnabled ? 'bg-blue-500 shadow-[0_0_0_4px_rgba(59,130,246,0.18)] animate-pulse' : 'bg-gray-200']"
               @click="$emit('toggle-auto-refresh')"
             >
               <span class="sr-only">Toggle auto refresh</span>
@@ -56,16 +46,13 @@
                   autoRefreshEnabled ? 'translate-x-7 shadow-[0_4px_10px_rgba(59,130,246,0.35)]' : 'translate-x-1',
                 ]"
               ></span>
-            </button>
+            </UiButton>
           </div>
 
-          <button
+          <UiButton
             type="button"
             :disabled="refreshing || isLoading"
-            :class="[
-              'flex items-center gap-2 rounded-xl px-5 py-2 text-sm font-medium text-white transition-all duration-200',
-              refreshing || isLoading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700',
-            ]"
+            :class="['flex items-center gap-2 rounded-xl px-5 py-2 text-sm font-medium text-white transition-all duration-200', refreshing || isLoading ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700']"
             @click="$emit('refresh')"
           >
             <commonIcon
@@ -73,7 +60,7 @@
               :class="['h-4 w-4', refreshing || isLoading ? 'animate-spin text-white' : 'text-white']"
             />
             <span>{{ $t('admin.dashboard.refreshAll') }}</span>
-          </button>
+          </UiButton>
         </div>
       </div>
     </div>

@@ -4,6 +4,44 @@ This document tracks significant changes, updates, and improvements to the Moldo
 
 ---
 
+## January 2026
+
+### shadcn-vue Component Fixes (January 21, 2026)
+
+**Critical bug fix and alignment with official shadcn-vue patterns.**
+
+#### Issue Identified
+- ❌ **Infinite Recursion Bug:** Input.vue and Textarea.vue were rendering themselves during SSR
+- ❌ **Root Cause:** Self-referential component tags (`<UiInput>`, `<UiTextarea>`)
+- ❌ **Impact:** Server crash with "Maximum call stack size exceeded" error
+
+#### Verification Process
+- ✅ Fetched official source from `github.com/unovue/shadcn-vue`
+- ✅ Compared Button, Input, and Textarea component implementations
+- ✅ Identified pattern: simple form elements use raw HTML, polymorphic components use `<Primitive>`
+
+#### Fix Applied
+| Component | Before | After | Matches Official |
+|-----------|--------|-------|------------------|
+| Input.vue | `<Primitive as="input">` (incorrect) | Raw `<input>` | ✅ Yes |
+| Textarea.vue | `<Primitive as="textarea">` (incorrect) | Raw `<textarea>` | ✅ Yes |
+| Button.vue | `<Primitive>` | `<Primitive>` | ✅ Yes (was correct) |
+
+#### Changes Made
+1. **Input.vue** - Updated to raw `<input>` element, `passive: true`, removed `null | undefined` types
+2. **Textarea.vue** - Updated to raw `<textarea>` element, `passive: true`
+3. **Removed** - `Primitive` import from both components
+4. **Removed** - `inheritAttrs: false` from Input.vue (not needed for raw HTML)
+
+#### Verification
+- ✅ Server starts successfully (HTTP 200)
+- ✅ Homepage loads correctly
+- ✅ Admin redirect works (HTTP 302)
+
+**Related:** PR #360, `docs/reports/shadcn-vue-refactor-test-report.md`
+
+---
+
 ## November 2025
 
 ### Security & GDPR Compliance (November 16, 2025)

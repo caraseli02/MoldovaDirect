@@ -1,20 +1,22 @@
 <template>
-  <Dialog
+  <UiDialog
     :open="show"
     @update:open="(val) => !val && handleClose()"
   >
-    <DialogContent class="sm:max-w-md">
-      <DialogHeader>
-        <DialogTitle>Save Scenario</DialogTitle>
-        <DialogDescription>
+    <UiDialogContent class="sm:max-w-md">
+      <UiDialogHeader>
+        <UiDialogTitle>Save Scenario</UiDialogTitle>
+        <UiDialogDescription>
           Save your current configuration as a reusable scenario template
-        </DialogDescription>
-      </DialogHeader>
+        </UiDialogDescription>
+      </UiDialogHeader>
 
       <div class="space-y-4 py-4">
         <div class="space-y-2">
-          <Label for="scenario-name">Scenario Name</Label>
-          <Input
+          <UiLabel for="scenario-name">
+            Scenario Name
+          </UiLabel>
+          <UiInput
             id="scenario-name"
             v-model="localName"
             type="text"
@@ -34,8 +36,10 @@
         </div>
 
         <div class="space-y-2">
-          <Label for="scenario-description">Description</Label>
-          <Textarea
+          <UiLabel for="scenario-description">
+            Description
+          </UiLabel>
+          <UiTextarea
             id="scenario-description"
             v-model="localDescription"
             placeholder="Describe this scenario configuration..."
@@ -48,24 +52,24 @@
         </div>
       </div>
 
-      <DialogFooter>
-        <Button
+      <UiDialogFooter>
+        <UiButton
           variant="outline"
           type="button"
           @click="handleClose"
         >
           Cancel
-        </Button>
-        <Button
+        </UiButton>
+        <UiButton
           :disabled="!isFormValid"
           type="submit"
           @click="handleSave"
         >
           Save Scenario
-        </Button>
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>
+        </UiButton>
+      </UiDialogFooter>
+    </UiDialogContent>
+  </UiDialog>
 </template>
 
 <script setup lang="ts">
@@ -77,7 +81,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
