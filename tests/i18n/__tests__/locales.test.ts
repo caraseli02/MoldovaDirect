@@ -52,7 +52,8 @@ describe('i18n Locales Completeness', () => {
   const enKeys = getAllKeys(en as TranslationObject)
 
   it('English (en) should be the reference with all keys', () => {
-    expect(enKeys.length).toBeGreaterThan(2000)
+    // After MVP simplification (removed charts, wine-story, and other features), ~1900 keys remain
+    expect(enKeys.length).toBeGreaterThan(1800)
   })
 
   it('Spanish (es) should have all English keys', () => {

@@ -9,23 +9,34 @@ import { describe, expect, it } from 'vitest'
 import { execSync } from 'node:child_process'
 
 describe('TypeScript Catch Block Safety (ts-5)', () => {
-  it('should NOT use "catch (error: any)" pattern in source files', { timeout: 30000 }, () => {
-    // Use grep to find all occurrences in source files (excluding tests, node_modules, and .nuxt)
+  // Directories to exclude from search (speeds up grep significantly)
+  const excludeDirs = [
+    'node_modules',
+    '.nuxt',
+    'dist',
+    'output',
+    '.git',
+    'coverage',
+    '.vitest',
+    'tests',
+  ]
+
+  const baseExclude = excludeDirs.map(d => `--exclude-dir=${d}`).join(' ')
+
+  it('should NOT use "catch (error: any)" pattern in source files', { timeout: 60000 }, () => {
     let result = ''
     try {
       result = execSync(
-        `grep -r "catch (error: any)" --include="*.ts" --include="*.vue" . 2>/dev/null | grep -v node_modules | grep -v .nuxt | grep -v ".test.ts" | grep -v "__tests__" || true`,
+        `grep -r "catch (error: any)" --include="*.ts" --include="*.vue" ${baseExclude} . 2>/dev/null || true`,
         { cwd: process.cwd(), encoding: 'utf-8' },
       )
     }
     catch {
-      // grep returns exit code 1 when no matches found
       result = ''
     }
 
     const lines = result.trim().split('\n').filter(Boolean)
 
-    // Filter out this test file and the audit file
     const violations = lines.filter(line =>
       !line.includes('catchErrorAny.test.ts')
       && !line.includes('skill_audit_refactor.json')
@@ -40,11 +51,11 @@ describe('TypeScript Catch Block Safety (ts-5)', () => {
     expect(violations.length).toBe(0)
   })
 
-  it('should NOT use "catch (err: any)" pattern in source files', { timeout: 30000 }, () => {
+  it('should NOT use "catch (err: any)" pattern in source files', { timeout: 60000 }, () => {
     let result = ''
     try {
       result = execSync(
-        `grep -r "catch (err: any)" --include="*.ts" --include="*.vue" . 2>/dev/null | grep -v node_modules | grep -v .nuxt | grep -v ".test.ts" | grep -v "__tests__" || true`,
+        `grep -r "catch (err: any)" --include="*.ts" --include="*.vue" ${baseExclude} . 2>/dev/null || true`,
         { cwd: process.cwd(), encoding: 'utf-8' },
       )
     }
@@ -68,11 +79,11 @@ describe('TypeScript Catch Block Safety (ts-5)', () => {
     expect(violations.length).toBe(0)
   })
 
-  it('should NOT use "catch (e: any)" pattern in source files', { timeout: 30000 }, () => {
+  it('should NOT use "catch (e: any)" pattern in source files', { timeout: 60000 }, () => {
     let result = ''
     try {
       result = execSync(
-        `grep -r "catch (e: any)" --include="*.ts" --include="*.vue" . 2>/dev/null | grep -v node_modules | grep -v .nuxt | grep -v ".test.ts" | grep -v "__tests__" || true`,
+        `grep -r "catch (e: any)" --include="*.ts" --include="*.vue" ${baseExclude} . 2>/dev/null || true`,
         { cwd: process.cwd(), encoding: 'utf-8' },
       )
     }
