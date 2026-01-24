@@ -44,10 +44,8 @@
             :expanded="expandedSection === 'addresses'"
             data-testid="profile-addresses-section"
             @toggle="toggleSection('addresses')"
-            @navigate-first="focusAccordion('personal')"
             @navigate-last="focusAccordion('security')"
             @navigate-next="focusAccordion('security')"
-            @navigate-prev="focusAccordion('preferences')"
           >
             <div class="space-y-4">
               <!-- Address List -->
@@ -77,12 +75,13 @@
                       </span>
                     </div>
                     <div class="flex gap-2">
-                      <button
-                        type="button"
+                      <UiButton
+                        variant="ghost"
+                        size="icon"
                         :aria-label="`${$t('profile.editAddress')} ${address.firstName} ${address.lastName}`"
-                        class="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         :disabled="savingAddressId === address.id || deletingAddressId === address.id"
                         :data-testid="`profile-address-edit-${address.id}`"
+                        class="text-zinc-400 hover:text-blue-600 hover:bg-zinc-100 dark:hover:bg-zinc-700 dark:hover:text-blue-400 h-11 w-11"
                         @click="editAddress(address)"
                       >
                         <commonIcon
@@ -90,13 +89,14 @@
                           class="h-5 w-5"
                           aria-hidden="true"
                         />
-                      </button>
-                      <button
-                        type="button"
+                      </UiButton>
+                      <UiButton
+                        variant="ghost"
+                        size="icon"
                         :aria-label="`${$t('profile.deleteAddress')} ${address.firstName} ${address.lastName}`"
-                        class="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center text-zinc-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-red-500"
                         :disabled="savingAddressId === address.id || deletingAddressId === address.id"
                         :data-testid="`profile-address-delete-${address.id}`"
+                        class="text-zinc-400 hover:text-red-600 hover:bg-zinc-100 dark:hover:bg-zinc-700 dark:hover:text-red-400 h-11 w-11"
                         @click="address.id && confirmDeleteAddress(address.id)"
                       >
                         <commonIcon
@@ -111,7 +111,7 @@
                           class="h-5 w-5"
                           aria-hidden="true"
                         />
-                      </button>
+                      </UiButton>
                     </div>
                   </div>
                   <div class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
@@ -132,14 +132,15 @@
               </div>
 
               <!-- Add Address Button -->
-              <button
+              <UiButton
+                variant="outline"
                 type="button"
-                class="w-full py-3 border-2 border-dashed border-zinc-300 dark:border-zinc-600 rounded-lg text-sm text-zinc-600 dark:text-zinc-400 font-medium hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50/50 dark:hover:border-blue-400 dark:hover:text-blue-400 dark:hover:bg-blue-900/20 transition-all duration-200"
+                class="w-full border-dashed hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50/50 dark:hover:border-blue-400 dark:hover:text-blue-400 dark:hover:bg-blue-900/20"
                 data-testid="profile-add-address-btn"
                 @click="showAddressForm = true"
               >
                 + {{ addresses.length > 0 ? $t('profile.addAddress') : $t('profile.addFirstAddress') }}
-              </button>
+              </UiButton>
             </div>
           </ProfileAccordionSection>
 
@@ -155,9 +156,8 @@
             :is-last="true"
             data-testid="profile-security-section"
             @toggle="toggleSection('security')"
-            @navigate-first="focusAccordion('personal')"
             @navigate-last="focusAccordion('security')"
-            @navigate-next="focusAccordion('personal')"
+            @navigate-next="focusAccordion('addresses')"
             @navigate-prev="focusAccordion('addresses')"
           >
             <ProfileSecuritySection
@@ -168,14 +168,15 @@
 
           <!-- Delete Account Section (Always Visible) -->
           <div class="p-4 md:p-6 bg-zinc-50 dark:bg-zinc-800/50">
-            <button
+            <UiButton
+              variant="destructive"
               type="button"
-              class="w-full py-3 text-red-600 dark:text-red-400 text-sm font-medium hover:bg-white dark:hover:bg-zinc-700 rounded-lg border border-red-200 dark:border-red-900 transition-all duration-200"
+              class="w-full hover:bg-white dark:hover:bg-zinc-700"
               data-testid="profile-delete-account-btn"
               @click="showDeleteConfirmation = true"
             >
               {{ $t('profile.deleteAccount') }}
-            </button>
+            </UiButton>
           </div>
         </div>
 
@@ -428,7 +429,7 @@ const toggleSection = (section: string) => {
 // Initialize form with user data
 const initializeForm = () => {
   if (user.value) {
-    const userData = {
+    const userData: ProfileForm = {
       name: user.value.user_metadata?.name || user.value.user_metadata?.full_name || '',
       email: user.value.email || '',
       phone: user.value.user_metadata?.phone || '',
@@ -556,11 +557,6 @@ const handleSave = async () => {
 
     // Update original form to reflect saved state
     originalForm.value = { ...form }
-
-    // Switch locale if language changed
-    if (form.preferredLanguage) {
-      setLocale(form.preferredLanguage)
-    }
 
     saveStatus.value = 'saved'
 
