@@ -63,6 +63,9 @@ export const useProductCatalog = () => {
   const sortBy = useState<string>('sortBy', () => 'created')
   const showFilterPanel = useState<boolean>('showFilterPanel', () => false)
 
+  // Get current locale from i18n
+  const { locale } = useI18n()
+
   // Initialize the catalog
   const initialize = async () => {
     // Fetch categories if not already loaded
@@ -98,6 +101,11 @@ export const useProductCatalog = () => {
           })
         })
       }
+
+      if (productFilters.limit) params.append('limit', productFilters.limit.toString())
+
+      // Add current locale
+      params.append('locale', locale.value)
 
       const response = await $fetch<{
         products: ProductWithRelations[]
@@ -200,6 +208,9 @@ export const useProductCatalog = () => {
       if (searchFilters.page) params.append('page', searchFilters.page?.toString() || '1')
       if (searchFilters.limit) params.append('limit', searchFilters.limit?.toString() || '12')
 
+      // Add current locale
+      params.append('locale', locale.value)
+
       const response = await $fetch<{
         products: ProductWithRelations[]
         pagination: {
@@ -271,21 +282,21 @@ export const useProductCatalog = () => {
     error.value = null
 
     try {
-      const response = await $fetch<{ categories: CategoryWithChildren[] }>('/api/categories')
-      categories.value = response.categories
+      const response = await $fetch<{ categories: CategoryWithChildren[] }>(`/api/categories?locale=${locale.value}`)
 
-      // Build categories tree
-      const buildTree = (parentId?: number): CategoryWithChildren[] => {
-        return response.categories
-          .filter(cat => cat.parentId === parentId)
-          .map(cat => ({
-            ...cat,
-            children: buildTree(cat.id),
-          }))
-          .sort((a, b) => a.sortOrder - b.sortOrder)
+      // The API returns a tree if no parent is specified.
+      // We store the tree in categoriesTree.value and flatten it for categories.value
+      categoriesTree.value = response.categories
+
+      // Recursive function to flatten the category tree
+      const flattenCategories = (nodes: CategoryWithChildren[]): CategoryWithChildren[] => {
+        return nodes.reduce((acc: CategoryWithChildren[], node) => {
+          // We keep the node as is (with children) but also add its flattened children to the accumulator
+          return [...acc, node, ...flattenCategories(node.children || [])]
+        }, [])
       }
 
-      categoriesTree.value = buildTree()
+      categories.value = flattenCategories(response.categories)
     }
     catch (err: unknown) {
       error.value = err instanceof Error ? getErrorMessage(err) : 'Failed to fetch categories'
