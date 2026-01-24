@@ -3,76 +3,66 @@
     <div class="section-content">
       <!-- Terms Checkboxes -->
       <div class="space-y-3 mb-6">
-        <div class="flex items-start gap-2">
+        <div class="flex items-start">
           <UiCheckbox
             :checked="termsAccepted"
-            class="mt-0.5 shrink-0"
+            class="mt-0.5"
             @update:checked="$emit('update:termsAccepted', $event)"
           />
-          <UiLabel
-            for="checkout-terms"
-            class="text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
-          >
+          <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
             {{ $t('checkout.review.acceptTerms') }}
             <a
               href="/terms"
               target="_blank"
-              class="text-rose-600 hover:text-rose-700 underline"
-              @click.stop
+              class="text-primary-600 hover:text-primary-700 underline"
             >
               {{ $t('checkout.review.termsOfService') }}
             </a>
             <span
               v-if="showTermsError"
-              class="text-rose-500 text-xs ml-1"
+              class="text-red-500 text-xs ml-1"
             >*</span>
-          </UiLabel>
+          </span>
         </div>
 
-        <div class="flex items-start gap-2">
+        <div class="flex items-start">
           <UiCheckbox
             :checked="privacyAccepted"
-            class="mt-0.5 shrink-0"
+            class="mt-0.5"
             @update:checked="$emit('update:privacyAccepted', $event)"
           />
-          <UiLabel
-            for="checkout-privacy"
-            class="text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
-          >
+          <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
             {{ $t('checkout.review.acceptPrivacy') }}
             <a
               href="/privacy"
               target="_blank"
-              class="text-rose-600 hover:text-rose-700 underline"
-              @click.stop
+              class="text-primary-600 hover:text-primary-700 underline"
             >
               {{ $t('checkout.review.privacyPolicy') }}
             </a>
             <span
               v-if="showPrivacyError"
-              class="text-rose-500 text-xs ml-1"
+              class="text-red-500 text-xs ml-1"
             >*</span>
-          </UiLabel>
+          </span>
         </div>
 
-        <div class="flex items-start gap-2">
+        <div class="flex items-start">
           <UiCheckbox
             :checked="marketingConsent"
-            class="mt-0.5 shrink-0"
+            class="mt-0.5"
             @update:checked="$emit('update:marketingConsent', $event)"
           />
-          <UiLabel
-            for="checkout-marketing"
-            class="text-sm text-gray-600 dark:text-gray-400 cursor-pointer"
-          >
+          <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
             {{ $t('checkout.review.marketingConsent') }}
-          </UiLabel>
+          </span>
         </div>
       </div>
 
       <!-- Place Order Button (Desktop) -->
       <UiButton
         :disabled="!canPlaceOrder || processingOrder"
+        class="hidden lg:flex w-full"
         @click="$emit('place-order')"
       >
         <span
@@ -166,14 +156,14 @@ defineEmits<Emits>()
 }
 
 .checkout-section-highlight {
-  border-color: rgb(254 205 211);
-  background-color: rgb(255 241 242 / 0.5);
+  border-color: rgb(191 219 254);
+  background-color: rgb(239 246 255 / 0.5);
 }
 
 :root.dark .checkout-section-highlight,
 .dark .checkout-section-highlight {
-  border-color: rgb(159 18 57);
-  background-color: rgb(145 26 42 / 0.1);
+  border-color: rgb(30 64 175);
+  background-color: rgb(30 58 138 / 0.1);
 }
 
 .section-content {

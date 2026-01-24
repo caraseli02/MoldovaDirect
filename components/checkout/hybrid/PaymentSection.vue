@@ -26,72 +26,75 @@
     </div>
     <div class="section-content">
       <!-- Payment Method Selection -->
-      <UiRadioGroup
-        v-model="paymentType"
-        name="payment-type"
-      >
-        <div class="space-y-3">
-          <!-- Cash Payment -->
-          <div
-            class="p-4 border rounded-lg cursor-pointer transition-colors"
-            :class="paymentType === 'cash'
-              ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700'
-              : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
-            @click="updatePaymentType('cash')"
-          >
-            <div class="flex items-start">
-              <UiRadioGroupItem
-                id="payment-cash"
-                value="cash"
-                class="mt-1 shrink-0"
-              />
-              <div class="ml-3 flex items-center">
-                <span class="text-xl mr-2">💵</span>
-                <div>
-                  <p class="font-medium text-gray-900 dark:text-white">
-                    {{ $t('checkout.payment.cash.label') }}
-                  </p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ $t('checkout.payment.cash.summary') }}
-                  </p>
-                </div>
-              </div>
+      <div class="space-y-3">
+        <!-- Cash Payment -->
+        <div
+          class="p-4 border rounded-lg cursor-pointer transition-colors"
+          :class="modelValue.type === 'cash'
+            ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700'
+            : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
+          @click="updatePaymentType('cash')"
+        >
+          <div class="flex items-center cursor-pointer">
+            <div
+              class="size-4 rounded-full border-2 border-gray-300 flex items-center justify-center shrink-0"
+              :class="modelValue.type === 'cash' ? 'border-green-600 bg-green-50' : ''"
+            >
+              <div
+                v-if="modelValue.type === 'cash'"
+                class="size-2 rounded-full bg-green-600"
+              ></div>
             </div>
-          </div>
-
-          <!-- Credit Card Payment (Stripe) -->
-          <div
-            class="p-4 border rounded-lg cursor-pointer transition-colors"
-            :class="paymentType === 'credit_card'
-              ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700'
-              : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
-            @click="updatePaymentType('credit_card')"
-          >
-            <div class="flex items-start">
-              <UiRadioGroupItem
-                id="payment-credit-card"
-                value="credit_card"
-                class="mt-1 shrink-0"
-              />
-              <div class="ml-3 flex items-center">
-                <span class="text-xl mr-2">💳</span>
-                <div>
-                  <p class="font-medium text-gray-900 dark:text-white">
-                    {{ $t('checkout.payment.creditCard.label') }}
-                  </p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ $t('checkout.payment.creditCard.summary') }}
-                  </p>
-                </div>
+            <div class="ml-3 flex items-center">
+              <span class="text-xl mr-2">💵</span>
+              <div>
+                <p class="font-medium text-gray-900 dark:text-white">
+                  {{ $t('checkout.payment.cash.label') }}
+                </p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  {{ $t('checkout.payment.cash.summary') }}
+                </p>
               </div>
             </div>
           </div>
         </div>
-      </UiRadioGroup>
+
+        <!-- Credit Card Payment (Stripe) -->
+        <div
+          class="p-4 border rounded-lg cursor-pointer transition-colors"
+          :class="modelValue.type === 'credit_card'
+            ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700'
+            : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
+          @click="updatePaymentType('credit_card')"
+        >
+          <div class="flex items-center cursor-pointer">
+            <div
+              class="size-4 rounded-full border-2 border-gray-300 flex items-center justify-center shrink-0"
+              :class="modelValue.type === 'credit_card' ? 'border-blue-600 bg-blue-50' : ''"
+            >
+              <div
+                v-if="modelValue.type === 'credit_card'"
+                class="size-2 rounded-full bg-blue-600"
+              ></div>
+            </div>
+            <div class="ml-3 flex items-center">
+              <span class="text-xl mr-2">💳</span>
+              <div>
+                <p class="font-medium text-gray-900 dark:text-white">
+                  {{ $t('checkout.payment.creditCard.label') }}
+                </p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">
+                  {{ $t('checkout.payment.creditCard.summary') }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Payment Form for Selected Method -->
       <div
-        v-if="paymentType !== 'cash'"
+        v-if="modelValue.type !== 'cash'"
         class="mt-6"
       >
         <PaymentForm
@@ -149,17 +152,6 @@ const emit = defineEmits<Emits>()
 
 // Refs
 const paymentFormRef = ref<{ validateForm: () => boolean, getStripeCardElement: () => any } | null>(null)
-
-// Computed for v-model compatibility (avoids prop mutation)
-const paymentType = computed({
-  get: () => props.modelValue.type,
-  set: (value: PaymentMethodType['type']) => {
-    emit('update:modelValue', {
-      ...props.modelValue,
-      type: value,
-    })
-  },
-})
 
 const isPaymentValid = computed(() => {
   if (props.modelValue.type === 'cash') {
