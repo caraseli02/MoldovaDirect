@@ -50,10 +50,10 @@ function usesRekaUIDialog(source: string): {
     importsDialogTitle: /DialogTitle/.test(source),
     // Check for DialogDescription usage (accessibility requirement)
     importsDialogDescription: /DialogDescription/.test(source),
-    // Check template uses Dialog component
-    usesDialogComponent: /<Dialog[\s/>]/.test(source),
-    // Check uses DialogScrollContent for scrollable content
-    usesDialogScrollContent: /<DialogScrollContent[\s/>]/.test(source),
+    // Check template uses Dialog component - handles Ui prefix
+    usesDialogComponent: /<Ui?Dialog[\s/>]/.test(source),
+    // Check uses DialogScrollContent for scrollable content - handles Ui prefix
+    usesDialogScrollContent: /<Ui?DialogScrollContent[\s/>]/.test(source),
   }
 }
 
