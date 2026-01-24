@@ -86,13 +86,9 @@ Read these 3 documents before writing any code:
 
 | Priority | Document | Why It Matters |
 |----------|----------|----------------|
-| 1 | [Code Conventions](../development/code-conventions.md) | How to write code that matches the project style |
-| 2 | [Project Structure](../development/structure.md) | Where files go and naming conventions |
-| 3 | [Project Status](../status/PROJECT_STATUS.md) | Current state, what's done, what's in progress |
-
-**Optional but helpful:**
-- [Tech Stack](../development/tech.md) - Technology choices and rationale
-- [Patterns to Preserve](../development/PATTERNS_TO_PRESERVE.md) - Existing patterns to follow
+| 1 | [Code Conventions](../reference/configuration/code-conventions.md) | How to write code that matches the project style |
+| 2 | [Project Status](../project/status/project-status.md) | Current state, what's done, what's in progress |
+| 3 | [Tech Stack](../explanation/concepts/tech-stack.md) | Technology choices and rationale |
 
 ---
 
@@ -246,13 +242,11 @@ pnpm install
 
 ### Documentation
 - [Main README](../../README.md)
-- [Documentation Index](../uncategorized/README.md)
-- [Project Status](../status/PROJECT_STATUS.md)
+- [Documentation Index](../README.md)
+- [Project Status](../project/status/project-status.md)
 
 ### Key Guides
-- [Testing Strategy](../guides/TESTING_STRATEGY.md)
-- [Troubleshooting Components](../development/troubleshooting-components.md)
-- [i18n Configuration](../features/I18N_CONFIGURATION.md)
+- [Testing Strategy](../how-to/testing/testing-strategy.md)
 
 ---
 

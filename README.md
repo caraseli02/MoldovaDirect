@@ -19,7 +19,7 @@ pnpm dev
 http://localhost:3000
 ```
 
-**New to the project?** See [Quick Start Guide](./docs/getting-started/QUICK_START_GUIDE.md) for a comprehensive getting started guide with Day 1 Checklist.
+**New to the project?** See [Quick Start Guide](./docs/tutorials/quick-start-guide.md) for a comprehensive getting started guide with Day 1 Checklist.
 
 ## 🔧 Development Setup
 
@@ -63,8 +63,6 @@ For detailed setup instructions, see [SUPABASE_SETUP.md](./docs/getting-started/
 ### Internationalization Setup
 The application uses lazy-loaded translations for optimal performance. Translation files are automatically loaded when users switch languages, reducing initial bundle size by ~75%.
 
-For detailed i18n configuration, see [I18N_CONFIGURATION.md](./docs/features/I18N_CONFIGURATION.md).
-
 ### Database Management
 With Supabase, database management is handled through the Supabase dashboard:
 
@@ -88,23 +86,23 @@ pnpm deploy:preview
 
 **Quick Links:**
 - **[Documentation Hub](./docs/README.md)** - Start here for all documentation
-- **[Quick Start Guide](./docs/getting-started/QUICK_START_GUIDE.md)** - Get started in 30 minutes
-- **[Code Conventions](./docs/development/code-conventions.md)** - How we write code
-- **[Project Status](./docs/status/PROJECT_STATUS.md)** - Current state and priorities
+- **[Quick Start Guide](./docs/tutorials/quick-start-guide.md)** - Get started in 30 minutes
+- **[Code Conventions](./docs/reference/configuration/code-conventions.md)** - How we write code
+- **[Project Status](./docs/project/status/project-status.md)** - Current state and priorities
 
 **Project Status & Planning:**
-- **[Project Status](docs/status/PROJECT_STATUS.md)** - Current state and health
-- **[Roadmap](docs/status/ROADMAP.md)** - Development timeline
-- **[Progress](docs/status/PROGRESS.md)** - Completed milestones
-- **[Feature Specifications](docs/specs/)** - Feature requirements and designs
-- **[Troubleshooting Components](docs/development/troubleshooting-components.md)** - Fix for duplicate component names, auto-imports, and casing
+- **[Project Status](docs/project/status/project-status.md)** - Current state and health
+- **[Roadmap](docs/project/roadmap/roadmap.md)** - Development timeline
+- **[Progress](docs/project/status/progress.md)** - Completed milestones
+- **[Feature Specifications](docs/archive/specs/)** - Feature requirements and designs
+- **[Troubleshooting Components](docs/how-to/debugging/troubleshooting-components.md)** - Fix for duplicate component names, auto-imports, and casing
 
 ### QA & Simulation Utilities
 
 Use the built-in QA dashboards to simulate user activity without touching production data:
 
-- **[Test Users & Persona Simulator](docs/guides/TEST_USER_SIMULATION.md)** – Walkthrough for the `/test-users` page, including persona catalog, auth store helpers, and environment flag requirements.
-- **[Admin Testing Dashboard](docs/guides/ADMIN_TESTING.md)** – Guide to the `/admin/testing` workspace for seeding data presets, impersonating users, and cleaning up after manual QA sessions.
+- **[Test Users & Persona Simulator](docs/how-to/testing/test-user-simulation.md)** – Walkthrough for the `/test-users` page, including persona catalog, auth store helpers, and environment flag requirements.
+- **[Admin Testing Dashboard](docs/how-to/testing/admin-testing.md)** – Guide to the `/admin/testing` workspace for seeding data presets, impersonating users, and cleaning up after manual QA sessions.
 
 ## 🎯 Current Status
 
