@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-zinc-50 dark:bg-zinc-900">
-    <div class="container py-4 md:py-12 pb-24 md:pb-12">
+    <div class="container py-6 md:py-12">
       <div class="max-w-2xl mx-auto">
         <!-- Header -->
         <div class="mb-6 md:mb-8">
@@ -19,34 +19,7 @@
         <div
           class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden"
         >
-          <!-- Profile Picture Section (Always Visible) -->
-          <ProfilePictureSection
-            :picture-url="profilePictureUrl"
-            :initials="getUserInitials()"
-            :is-dragging="isDraggingAvatar"
-            :is-loading="isLoading"
-            @upload="handlePictureUpload"
-            @remove="removePicture"
-            @drag-over="handleDragOver"
-            @drag-leave="handleDragLeave"
-          />
-
-          <!-- Personal Info Section (Expanded by Default) -->
-          <ProfileAccordionSection
-            ref="personalAccordion"
-            :title="$t('profile.sections.personalInfo')"
-            :subtitle="$t('profile.sections.personalInfoSubtitle')"
-            icon="lucide:user"
-            icon-bg="bg-blue-50 dark:bg-blue-900/30"
-            icon-color="text-blue-600 dark:text-blue-400"
-            :expanded="expandedSection === 'personal'"
-            data-testid="profile-personal-section"
-            @toggle="toggleSection('personal')"
-            @navigate-first="focusAccordion('personal')"
-            @navigate-last="focusAccordion('security')"
-            @navigate-next="focusAccordion('preferences')"
-            @navigate-prev="focusAccordion('security')"
-          >
+          <div class="p-6">
             <ProfilePersonalInfo
               :form="form"
               :errors="errors"
@@ -54,32 +27,11 @@
               @update:phone="form.phone = $event"
               @input="debouncedSave"
             />
-          </ProfileAccordionSection>
+          </div>
 
-          <!-- Preferences Section -->
-          <ProfileAccordionSection
-            ref="preferencesAccordion"
-            :title="$t('profile.sections.preferences')"
-            :subtitle="$t('profile.sections.preferencesSubtitle')"
-            icon="lucide:settings"
-            icon-bg="bg-zinc-100 dark:bg-zinc-700"
-            icon-color="text-zinc-600 dark:text-zinc-400"
-            :expanded="expandedSection === 'preferences'"
-            data-testid="profile-preferences-section"
-            @toggle="toggleSection('preferences')"
-            @navigate-first="focusAccordion('personal')"
-            @navigate-last="focusAccordion('security')"
-            @navigate-next="focusAccordion('addresses')"
-            @navigate-prev="focusAccordion('personal')"
-          >
-            <ProfilePreferences
-              :preferred-language="form.preferredLanguage"
-              :preferred-currency="form.preferredCurrency"
-              @update:language="form.preferredLanguage = $event"
-              @update:currency="form.preferredCurrency = $event"
-              @change="handleSave"
-            />
-          </ProfileAccordionSection>
+          <div class="bg-gray-50 dark:bg-zinc-700/50 px-6 py-4 border-t border-gray-100 dark:border-zinc-700">
+            <!-- Placeholder for future sections if needed -->
+          </div>
 
           <!-- Addresses Section -->
           <ProfileAccordionSection
@@ -92,10 +44,8 @@
             :expanded="expandedSection === 'addresses'"
             data-testid="profile-addresses-section"
             @toggle="toggleSection('addresses')"
-            @navigate-first="focusAccordion('personal')"
             @navigate-last="focusAccordion('security')"
             @navigate-next="focusAccordion('security')"
-            @navigate-prev="focusAccordion('preferences')"
           >
             <div class="space-y-4">
               <!-- Address List -->
@@ -126,12 +76,12 @@
                     </div>
                     <div class="flex gap-2">
                       <UiButton
-                        type="button"
                         variant="ghost"
                         size="icon"
                         :aria-label="`${$t('profile.editAddress')} ${address.firstName} ${address.lastName}`"
                         :disabled="savingAddressId === address.id || deletingAddressId === address.id"
                         :data-testid="`profile-address-edit-${address.id}`"
+                        class="text-zinc-400 hover:text-blue-600 hover:bg-zinc-100 dark:hover:bg-zinc-700 dark:hover:text-blue-400 h-11 w-11"
                         @click="editAddress(address)"
                       >
                         <commonIcon
@@ -141,12 +91,12 @@
                         />
                       </UiButton>
                       <UiButton
-                        type="button"
                         variant="ghost"
                         size="icon"
                         :aria-label="`${$t('profile.deleteAddress')} ${address.firstName} ${address.lastName}`"
                         :disabled="savingAddressId === address.id || deletingAddressId === address.id"
                         :data-testid="`profile-address-delete-${address.id}`"
+                        class="text-zinc-400 hover:text-red-600 hover:bg-zinc-100 dark:hover:bg-zinc-700 dark:hover:text-red-400 h-11 w-11"
                         @click="address.id && confirmDeleteAddress(address.id)"
                       >
                         <commonIcon
@@ -183,9 +133,9 @@
 
               <!-- Add Address Button -->
               <UiButton
-                type="button"
                 variant="outline"
-                class="w-full border-dashed"
+                type="button"
+                class="w-full border-dashed hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50/50 dark:hover:border-blue-400 dark:hover:text-blue-400 dark:hover:bg-blue-900/20"
                 data-testid="profile-add-address-btn"
                 @click="showAddressForm = true"
               >
@@ -206,9 +156,8 @@
             :is-last="true"
             data-testid="profile-security-section"
             @toggle="toggleSection('security')"
-            @navigate-first="focusAccordion('personal')"
             @navigate-last="focusAccordion('security')"
-            @navigate-next="focusAccordion('personal')"
+            @navigate-next="focusAccordion('addresses')"
             @navigate-prev="focusAccordion('addresses')"
           >
             <ProfileSecuritySection
@@ -220,9 +169,9 @@
           <!-- Delete Account Section (Always Visible) -->
           <div class="p-4 md:p-6 bg-zinc-50 dark:bg-zinc-800/50">
             <UiButton
-              type="button"
               variant="destructive"
-              class="max-w-xs mx-auto w-full"
+              type="button"
+              class="w-full hover:bg-white dark:hover:bg-zinc-700"
               data-testid="profile-delete-account-btn"
               @click="showDeleteConfirmation = true"
             >
@@ -239,7 +188,6 @@
     <!-- Address Form Modal -->
     <AddressFormModal
       v-if="showAddressForm"
-      v-model:loading="addressFormLoading"
       :address="editingAddress"
       @save="handleAddressSave"
       @close="closeAddressForm"
@@ -317,15 +265,12 @@
 
 <script setup lang="ts">
 // Component imports
-
 import AddressFormModal from '~/components/profile/AddressFormModal.vue'
 import DeleteAccountModal from '~/components/profile/DeleteAccountModal.vue'
 import PasswordChangeModal from '~/components/profile/PasswordChangeModal.vue'
 import ProfileAccordionSection from '~/components/profile/ProfileAccordionSection.vue'
 import ProfileCompletionIndicator from '~/components/profile/ProfileCompletionIndicator.vue'
 import ProfilePersonalInfo from '~/components/profile/ProfilePersonalInfo.vue'
-import ProfilePictureSection from '~/components/profile/ProfilePictureSection.vue'
-import ProfilePreferences from '~/components/profile/ProfilePreferences.vue'
 import ProfileSecuritySection from '~/components/profile/ProfileSecuritySection.vue'
 import TwoFAModal from '~/components/profile/TwoFAModal.vue'
 import AutoSaveIndicator from '~/components/profile/AutoSaveIndicator.vue'
@@ -349,14 +294,12 @@ definePageMeta({
 // Composables and utilities
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
-const { t, setLocale } = useI18n()
+const { t } = useI18n()
 const nuxtApp = useNuxtApp()
 const $toast = nuxtApp.$toast as ToastPlugin
 
 // Reactive state
 const isLoading = ref(false)
-const profilePictureUrl = ref<string | null>(null)
-const fileInput = ref<HTMLInputElement>()
 const showAddressForm = ref(false)
 const showDeleteConfirmation = ref(false)
 const showPasswordModal = ref(false)
@@ -365,12 +308,10 @@ const showDeleteAddressConfirm = ref(false)
 const addressToDelete = ref<number | null>(null)
 const editingAddress = ref<Address | null>(null)
 const addresses = ref<Address[]>([])
-const isDraggingAvatar = ref(false)
-const expandedSection = ref<string | null>('personal')
+const expandedSection = ref<string | null>('addresses')
 const saveStatus = ref<'idle' | 'saving' | 'saved' | 'error'>('idle')
 const savingAddressId = ref<number | null>(null)
 const deletingAddressId = ref<number | null>(null)
-const addressFormLoading = ref(false)
 let saveTimeout: ReturnType<typeof setTimeout> | null = null
 let hideStatusTimeout: ReturnType<typeof setTimeout> | null = null
 
@@ -378,20 +319,14 @@ let hideStatusTimeout: ReturnType<typeof setTimeout> | null = null
 const passwordModalRef = ref<HTMLElement>()
 const twoFAModalRef = ref<HTMLElement>()
 const deleteAddressModalRef = ref<HTMLElement>()
-const passwordModalCloseBtn = ref<HTMLElement>()
-const twoFAModalCloseBtn = ref<HTMLElement>()
 
 // Accordion refs for keyboard navigation using Vue 3.5+ useTemplateRef
-type AccordionKey = 'personal' | 'preferences' | 'addresses' | 'security'
-const personalAccordionRef = useTemplateRef<InstanceType<typeof ProfileAccordionSection>>('personalAccordion')
-const preferencesAccordionRef = useTemplateRef<InstanceType<typeof ProfileAccordionSection>>('preferencesAccordion')
+type AccordionKey = 'addresses' | 'security'
 const addressesAccordionRef = useTemplateRef<InstanceType<typeof ProfileAccordionSection>>('addressesAccordion')
 const securityAccordionRef = useTemplateRef<InstanceType<typeof ProfileAccordionSection>>('securityAccordion')
 
 // Map for easy lookup
 const accordionRefs: Record<AccordionKey, Ref<InstanceType<typeof ProfileAccordionSection> | null>> = {
-  personal: personalAccordionRef,
-  preferences: preferencesAccordionRef,
   addresses: addressesAccordionRef,
   security: securityAccordionRef,
 }
@@ -408,8 +343,6 @@ const focusAccordion = (section: AccordionKey) => {
 const hasUnsavedChanges = computed(() => {
   return form.name !== originalForm.value.name
     || form.phone !== originalForm.value.phone
-    || form.preferredLanguage !== originalForm.value.preferredLanguage
-    || form.preferredCurrency !== originalForm.value.preferredCurrency
 })
 
 // Form data
@@ -454,17 +387,11 @@ const saveStatusText = computed(() => {
 // Profile completion percentage
 const profileCompletionPercentage = computed(() => {
   let completed = 0
-  const total = 5 // Total checkpoints
+  const total = 3 // Simplified MVP Total
 
   if (form.name && form.name.length >= 2) completed++
   if (form.phone && /^[+]?[0-9\s\-()]{9,}$/.test(form.phone)) completed++
-  if (profilePictureUrl.value) completed++
   if (addresses.value.length > 0) completed++
-  // CRITICAL FIX: Only count preferences if user has explicitly saved them (not using defaults)
-  // Check if preferences exist in user metadata (set via handleSave)
-  const hasExplicitPreferences = user.value?.user_metadata?.preferred_language
-    && user.value?.user_metadata?.preferred_currency
-  if (hasExplicitPreferences) completed++
 
   return Math.round((completed / total) * 100)
 })
@@ -493,15 +420,6 @@ const trapFocus = (event: KeyboardEvent, modal: HTMLElement | undefined) => {
   }
 }
 
-// Handle drag events for avatar
-const handleDragOver = () => {
-  isDraggingAvatar.value = true
-}
-
-const handleDragLeave = () => {
-  isDraggingAvatar.value = false
-}
-
 // Toggle accordion section
 const toggleSection = (section: string) => {
   expandedSection.value = expandedSection.value === section ? null : section
@@ -510,21 +428,16 @@ const toggleSection = (section: string) => {
 // Initialize form with user data
 const initializeForm = () => {
   if (user.value) {
-    const userData = {
+    const userData: ProfileForm = {
       name: user.value.user_metadata?.name || user.value.user_metadata?.full_name || '',
       email: user.value.email || '',
       phone: user.value.user_metadata?.phone || '',
-      preferredLanguage: (user.value.user_metadata?.preferred_language || 'es') as 'es' | 'en' | 'ro' | 'ru',
-      preferredCurrency: (user.value.user_metadata?.preferred_currency || 'EUR') as 'EUR' | 'USD' | 'MDL',
+      preferredLanguage: 'es', // Default for MVP
+      preferredCurrency: 'EUR', // Default for MVP
     }
 
     Object.assign(form, userData)
     originalForm.value = { ...userData }
-
-    // Load profile picture if exists
-    if (user.value.user_metadata?.avatar_url) {
-      profilePictureUrl.value = user.value.user_metadata.avatar_url
-    }
   }
 }
 
@@ -644,11 +557,6 @@ const handleSave = async () => {
     // Update original form to reflect saved state
     originalForm.value = { ...form }
 
-    // Switch locale if language changed
-    if (form.preferredLanguage) {
-      setLocale(form.preferredLanguage)
-    }
-
     saveStatus.value = 'saved'
 
     // Hide the indicator after 2 seconds
@@ -671,154 +579,12 @@ const handleSave = async () => {
   }
 }
 
-// Profile picture handling
-const triggerFileUpload = () => {
-  fileInput.value?.click()
-}
-
-const handleAvatarDrop = async (event: DragEvent) => {
-  isDraggingAvatar.value = false
-  const file = event.dataTransfer?.files?.[0]
-  if (file) {
-    await uploadAvatar(file)
-  }
-}
-
-const handleFileUpload = async (event: Event) => {
-  const file = (event.target as HTMLInputElement).files?.[0]
-  if (file) {
-    await uploadAvatar(file)
-  }
-}
-
-// Handler for ProfilePictureSection component (accepts File directly)
-const handlePictureUpload = async (file: File) => {
-  await uploadAvatar(file)
-}
-
-const uploadAvatar = async (file: File) => {
-  if (!user.value) return
-
-  // Validate file
-  if (!file.type.startsWith('image/')) {
-    $toast.error(t('profile.errors.invalidFileType'))
-    return
-  }
-
-  if (file.size > 5 * 1024 * 1024) { // 5MB limit
-    $toast.error(t('profile.errors.fileTooLarge'))
-    return
-  }
-
-  try {
-    isLoading.value = true
-    saveStatus.value = 'saving'
-
-    // Upload to Supabase Storage
-    const fileExt = file.name.split('.').pop()
-    const fileName = `${user.value.id}/avatar.${fileExt}`
-
-    const { error: uploadError } = await supabase.storage
-      .from('avatars')
-      .upload(fileName, file, { upsert: true })
-
-    if (uploadError) throw uploadError
-
-    // Get public URL
-    const { data } = supabase.storage
-      .from('avatars')
-      .getPublicUrl(fileName)
-
-    const avatarUrl = data.publicUrl
-
-    // Update user metadata
-    const { error: updateError } = await supabase.auth.updateUser({
-      data: { avatar_url: avatarUrl },
-    })
-
-    if (updateError) throw updateError
-
-    profilePictureUrl.value = avatarUrl
-    saveStatus.value = 'saved'
-    $toast.success(t('profile.success.pictureUpdated'))
-
-    setTimeout(() => {
-      saveStatus.value = 'idle'
-    }, 2000)
-  }
-  catch (error: unknown) {
-    console.error('Error uploading profile picture:', getErrorMessage(error))
-    saveStatus.value = 'error'
-    const errorMessage = error instanceof Error ? getErrorMessage(error) : 'An error occurred'
-    $toast.error(t('profile.errors.uploadFailed') + ': ' + errorMessage)
-
-    setTimeout(() => {
-      saveStatus.value = 'idle'
-    }, 3000)
-  }
-  finally {
-    isLoading.value = false
-  }
-}
-
-const removePicture = async () => {
-  if (!user.value) return
-
-  try {
-    isLoading.value = true
-    saveStatus.value = 'saving'
-
-    // Remove from storage - get filename from stored URL to handle any extension
-    const avatarUrl = user.value.user_metadata?.avatar_url
-    if (avatarUrl) {
-      const urlParts = avatarUrl.split('/')
-      const fileName = urlParts[urlParts.length - 1]
-
-      // FIX: Check storage deletion errors
-      const { error: storageError } = await supabase.storage
-        .from('avatars')
-        .remove([`${user.value.id}/${fileName}`])
-
-      if (storageError) {
-        // Log but don't throw - proceed with metadata update
-        console.warn('Storage deletion warning:', storageError)
-      }
-    }
-
-    // Update user metadata
-    const { error } = await supabase.auth.updateUser({
-      data: { avatar_url: null },
-    })
-
-    if (error) throw error
-
-    profilePictureUrl.value = null
-    saveStatus.value = 'saved'
-    $toast.success(t('profile.success.pictureRemoved'))
-
-    setTimeout(() => {
-      saveStatus.value = 'idle'
-    }, 2000)
-  }
-  catch (error: unknown) {
-    console.error('Error removing profile picture:', getErrorMessage(error))
-    saveStatus.value = 'error'
-    $toast.error(t('profile.errors.removeFailed'))
-
-    setTimeout(() => {
-      saveStatus.value = 'idle'
-    }, 3000)
-  }
-  finally {
-    isLoading.value = false
-  }
-}
+// Profile picture methods removed for MVP simplification
 
 // Address management
 const closeAddressForm = () => {
   showAddressForm.value = false
   editingAddress.value = null
-  addressFormLoading.value = false
 }
 
 const editAddress = (address: Address) => {
@@ -828,7 +594,6 @@ const editAddress = (address: Address) => {
 
 const handleAddressSave = async (addressData: Address) => {
   if (!user.value?.id) {
-    addressFormLoading.value = false
     $toast.error(t('profile.errors.notAuthenticated'))
     return
   }
@@ -849,7 +614,6 @@ const handleAddressSave = async (addressData: Address) => {
   })
 
   if (isDuplicate) {
-    addressFormLoading.value = false
     $toast.error(t('profile.errors.addressExists') || 'Address already exists')
     return
   }
@@ -900,7 +664,6 @@ const handleAddressSave = async (addressData: Address) => {
   }
   catch (error: unknown) {
     console.error('Error saving address:', getErrorMessage(error))
-    addressFormLoading.value = false
     $toast.error(t('profile.errors.addressSaveFailed'))
   }
 }

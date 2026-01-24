@@ -6,6 +6,24 @@ This document tracks significant changes, updates, and improvements to the Moldo
 
 ## January 2026
 
+### MVP Simplification & Refactoring (January 24, 2026)
+
+**Major cleanup and refactoring to simplify the MVP and improve code quality.**
+
+#### MVP Simplification
+- ✅ **Removed unused pages/features/deps:** Streamlined the project by removing unnecessary code.
+- ✅ **Resolve PR review issues:** Addressed feedback for MVP simplification.
+- ✅ **Merge conflict resolution:** Resolved conflicts during simplification.
+
+#### Products Page Refactor (PR #360)
+- ✅ **Refactored `pages/products/index.vue`:** Split large file into smaller sub-components.
+- ✅ **Refactored `pages/products/[slug].vue`:** Improved maintainability by splitting product detail page.
+- ✅ **Mobile Video:** Enabled background video on mobile and fixed visual regressions (#361).
+
+#### Profile Page Refactor (PR #359)
+- ✅ **Comprehensive test coverage:** Added tests for the profile page.
+- ✅ **Refactored Profile Page:** Improved structure and maintainability.
+
 ### shadcn-vue Component Fixes (January 21, 2026)
 
 **Critical bug fix and alignment with official shadcn-vue patterns.**
@@ -461,9 +479,9 @@ See [CODE_REVIEW_2025.md](../CODE_REVIEW_2025.md) for complete analysis.
 - [.kiro/archive/cleanup/CODE_CLEANUP_REPORT.md](../.kiro/archive/cleanup/CODE_CLEANUP_REPORT.md) - Archived cleanup tracking
 - [.kiro/archive/cleanup/CLEANUP_COMPLETED_2025-10-12.md](../.kiro/archive/cleanup/CLEANUP_COMPLETED_2025-10-12.md) - Archived cleanup summary
 - [.kiro/ROADMAP.md](../.kiro/ROADMAP.md) - Development timeline
-- [.kiro/PROJECT_STATUS.md](../.kiro/PROJECT_STATUS.md) - Current project status
+
 
 ---
 
 **Maintained by:** Development Team
-**Last Updated:** November 16, 2025
+**Last Updated:** January 24, 2026

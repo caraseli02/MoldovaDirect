@@ -250,24 +250,22 @@ The `docs/` folder uses **role-based navigation**. Start with the right path:
 
 | If you are... | Start here |
 |---------------|------------|
-| 🆕 New to project | [Quick Start](docs/getting-started/QUICK_START_GUIDE.md) → [Tech Stack](docs/development/tech.md) → [Code Conventions](docs/development/code-conventions.md) |
-| 🔄 Returning | [CHANGELOG](docs/CHANGELOG.md) → [Project Status](docs/status/PROJECT_STATUS.md) |
-| 🐛 Debugging | [Troubleshooting](docs/development/troubleshooting-components.md) → [Testing Strategy](docs/guides/TESTING_STRATEGY.md) |
-| 🛠️ Building feature | [Code Design Principles](docs/development/CODE_DESIGN_PRINCIPLES.md) → [Patterns](docs/development/PATTERNS_TO_PRESERVE.md) → [Components](docs/development/component-inventory.md) → [i18n](docs/features/I18N_CONFIGURATION.md) |
+| 🆕 New to project | [Quick Start](docs/tutorials/quick-start-guide.md) → [Tech Stack](docs/explanation/concepts/tech-stack.md) → [Code Conventions](docs/reference/configuration/code-conventions.md) |
+| 🔄 Returning | [CHANGELOG](docs/CHANGELOG.md) → [Project Status](docs/project/status/project-status.md) |
+| 🐛 Debugging | [Testing Strategy](docs/how-to/testing/testing-strategy.md) |
+| 🛠️ Building feature | [Code Design Principles](docs/development/CODE_DESIGN_PRINCIPLES.md) |
 
 ### Documentation Guidelines
 
 When creating or updating documentation:
 
 1. **Follow the structure** - Place docs in the appropriate folder:
-   - `getting-started/` - Setup guides
-   - `architecture/` - System design
-   - `features/` - Feature-specific docs
-   - `guides/` - How-to guides
-   - `development/` - Patterns and standards
-   - `testing/` - Test documentation
-   - `status/` - Project progress
-   - `archive/` - Historical/completed work
+   - `tutorials/` - Step-by-step learning guides
+   - `how-to/` - Problem-solving guides
+   - `reference/` - Technical references and APIs
+   - `explanation/` - Concepts and architecture
+   - `project/` - Project management and status
+   - `archive/` - Historical documents
 
 2. **Archive completed work** - Move finished specs to `docs/archive/completed-specs/`
 
@@ -281,7 +279,7 @@ When creating or updating documentation:
 
 **Progress Tracking:**
 - Feature list: `feature_list.json` - Comprehensive feature tracking with testing status
-- Project status: `docs/status/PROJECT_STATUS.md` - Overall project completeness and current phase
+- Project status: `docs/project/status/project-status.md` - Overall project completeness and current phase
 - Initialization script: `init.sh` - Automated setup and testing guide
 
 **Admin Panel Issues & Solutions:**
@@ -293,9 +291,9 @@ When creating or updating documentation:
 - Main README: `README.md`
 
 **Project Status:**
-- Current status: `docs/status/PROJECT_STATUS.md`
-- Roadmap: `docs/status/ROADMAP.md`
-- Feature specs: `docs/specs/`
+- Current status: `docs/project/status/project-status.md`
+- Roadmap: `docs/project/roadmap/roadmap.md`
+- Feature specs: `docs/archive/specs/`
 
 ---
 

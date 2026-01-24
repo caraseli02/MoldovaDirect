@@ -176,8 +176,9 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
         const name = node.name?.[locale.value] || node.name?.es || Object.values(node.name || {})[0] || ''
 
         // Store by both slug and ID for flexible lookup
-        if (node.slug) map.set(node.slug, name)
-        if (node.id) map.set(node.id, name)
+        // Normalize keys to strings for reliable Map lookup
+        if (node.slug) map.set(String(node.slug), name)
+        if (node.id) map.set(String(node.id), name)
 
         // Recursively process children
         if (node.children?.length) {
@@ -194,8 +195,8 @@ export function useProductFilters(categoriesTree?: Ref<CategoryWithChildren[]>) 
    * O(1) category name lookup
    */
   const getCategoryName = (slugOrId: string | number | undefined): string => {
-    if (!slugOrId) return ''
-    return categoriesLookup.value.get(slugOrId) || ''
+    if (slugOrId === undefined || slugOrId === null) return ''
+    return categoriesLookup.value.get(String(slugOrId)) || ''
   }
 
   /**

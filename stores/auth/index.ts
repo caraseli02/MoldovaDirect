@@ -19,7 +19,7 @@
  */
 
 import { defineStore } from 'pinia'
-import type { User as SupabaseUser, Session as SupabaseSession } from '@supabase/supabase-js'
+import type { User, JwtPayload, Session as SupabaseSession } from '@supabase/supabase-js'
 import type { WatchStopHandle } from 'vue'
 import { useAuthMessages } from '~/composables/useAuthMessages'
 import { useAuthValidation } from '~/composables/useAuthValidation'
@@ -63,6 +63,9 @@ import {
 } from './test-users'
 
 import type { AuthUser, LoginCredentials, RegisterData } from './types'
+
+// SupabaseUser accepts both User and JwtPayload (from useSupabaseUser composable)
+type SupabaseUser = User | JwtPayload
 
 type Subscription = { unsubscribe: () => void }
 

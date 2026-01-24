@@ -24,9 +24,6 @@
       :highlights="heroHighlights"
     />
 
-    <!-- Media mentions "brag bar" (Brightland pattern) -->
-    <LazyHomeMediaMentions v-if="isSectionEnabled('mediaMentions')" />
-
     <!-- Quick category navigation for immediate browsing -->
     <LazyHomeCategoryGrid
       v-if="isSectionEnabled('categoryGrid')"
@@ -45,12 +42,6 @@
     <!-- Premium collections showcase -->
     <LazyHomeCollectionsShowcase v-if="isSectionEnabled('collectionsShowcase')" />
 
-    <!-- Product recommendation quiz (Jones Road/Beardbrand pattern) - DISABLED: No backend -->
-    <LazyHomeProductQuiz v-if="isSectionEnabled('productQuiz')" />
-
-    <!-- Wine Story CTA - Link to full heritage page -->
-    <LazyHomeWineStoryCta v-if="isSectionEnabled('wineStoryCta')" />
-
     <!-- Social proof and trust signals -->
     <LazyHomeSocialProofSection
       v-if="isSectionEnabled('socialProof')"
@@ -58,9 +49,6 @@
       :logos="partnerLogos"
       :testimonials="testimonials"
     />
-
-    <!-- User-generated content gallery (Rare Beauty pattern) - DISABLED: 100% fabricated content -->
-    <LazyHomeUgcGallery v-if="isSectionEnabled('ugcGallery')" />
 
     <!-- Process explanation -->
     <LazyHomeHowItWorksSection
@@ -76,9 +64,6 @@
 
     <!-- Trust badges and payment security -->
     <LazyHomeTrustBadges v-if="isSectionEnabled('trustBadges')" />
-
-    <!-- Certification badges (Allbirds pattern) -->
-    <LazyHomeCertificationBar v-if="isSectionEnabled('certificationBar')" />
 
     <!-- Newsletter signup -->
     <LazyHomeNewsletterSignup v-if="isSectionEnabled('newsletter')" />

@@ -135,10 +135,10 @@ describe('Route Naming Convention', () => {
       expect(userApiExists).toBe(true)
     })
 
-    it('email log routes should use [emailLogId]', () => {
-      const emailLogApiExists = existsSync(join(process.cwd(), 'server/api/admin/email-logs/[emailLogId]'))
-
-      expect(emailLogApiExists).toBe(true)
-    })
+    // Email log routes were removed in MVP simplification (PR #363)
+    // it.skip('email log routes should use [emailLogId]', () => {
+    //   const emailLogApiExists = existsSync(join(process.cwd(), 'server/api/admin/email-logs/[emailLogId]'))
+    //   expect(emailLogApiExists).toBe(true)
+    // })
   })
 })

@@ -59,8 +59,52 @@
 </template>
 
 <script setup lang="ts">
-import type { ChartData, ChartOptions } from 'chart.js'
 import type { ProductAnalyticsData } from '~/types/analytics'
+
+// Simple chart types (chart.js removed in MVP simplification)
+interface ChartData {
+  labels: string[]
+  datasets: Array<{
+    label?: string
+    data: number[]
+    backgroundColor?: string
+    borderColor?: string
+    borderWidth?: number
+    borderRadius?: number
+    borderSkipped?: boolean | string
+  }>
+}
+
+interface ChartOptions {
+  responsive?: boolean
+  maintainAspectRatio?: boolean
+  indexAxis?: 'x' | 'y'
+  plugins?: {
+    legend?: { display?: boolean }
+    tooltip?: {
+      callbacks?: {
+        title?: (context: any) => string
+        label?: (context: any) => string
+      }
+    }
+  }
+  scales?: {
+    x?: {
+      beginAtZero?: boolean
+      ticks?: {
+        callback?: (value: any) => string | number
+        maxTicksLimit?: number
+      }
+    }
+    y?: {
+      beginAtZero?: boolean
+      ticks?: {
+        callback?: (value: any) => string | number
+        maxTicksLimit?: number
+      }
+    }
+  }
+}
 
 interface Props {
   data?: ProductAnalyticsData | null

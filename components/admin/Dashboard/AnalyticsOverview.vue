@@ -162,7 +162,6 @@
 </template>
 
 <script setup lang="ts">
-import type { ChartData, ChartOptions } from 'chart.js'
 import type { AnalyticsOverview } from '~/types/analytics'
 import {
   ArrowDown,
@@ -173,6 +172,41 @@ import {
   ShoppingCart,
   Users,
 } from 'lucide-vue-next'
+
+// Simple chart types (chart.js removed in MVP simplification)
+interface ChartData {
+  labels: string[]
+  datasets: Array<{
+    label?: string
+    data: number[]
+    borderColor?: string
+    backgroundColor?: string | string[]
+    borderWidth?: number
+    fill?: boolean
+    tension?: number
+  }>
+}
+
+interface ChartOptions {
+  responsive?: boolean
+  maintainAspectRatio?: boolean
+  plugins?: {
+    legend?: { display?: boolean }
+    tooltip?: {
+      callbacks?: {
+        label?: (context: any) => string
+      }
+    }
+  }
+  scales?: {
+    y?: {
+      beginAtZero?: boolean
+      ticks?: {
+        callback?: (value: any) => string
+      }
+    }
+  }
+}
 
 interface Props {
   data?: AnalyticsOverview | null

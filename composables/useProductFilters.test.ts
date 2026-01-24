@@ -663,9 +663,9 @@ describe('useProductFilters', () => {
       const { categoriesLookup } = useProductFilters(mockCategoriesTree)
 
       expect(categoriesLookup.value.get('electronics')).toBe('Electronics')
-      expect(categoriesLookup.value.get(1)).toBe('Electronics')
+      expect(categoriesLookup.value.get('1')).toBe('Electronics')
       expect(categoriesLookup.value.get('phones')).toBe('Phones')
-      expect(categoriesLookup.value.get(2)).toBe('Phones')
+      expect(categoriesLookup.value.get('2')).toBe('Phones')
     })
 
     it('gets category name by slug', () => {
@@ -678,6 +678,7 @@ describe('useProductFilters', () => {
     it('gets category name by id', () => {
       const { getCategoryName } = useProductFilters(mockCategoriesTree)
 
+      // Numeric IDs are converted to strings internally
       expect(getCategoryName(1)).toBe('Electronics')
       expect(getCategoryName(2)).toBe('Phones')
     })

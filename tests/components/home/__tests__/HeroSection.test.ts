@@ -18,7 +18,6 @@ const defaultStubs = {
   NuxtLink: { template: '<a :href="to" :class="$attrs.class"><slot /></a>', props: ['to'] },
   NuxtImg: { template: '<img :src="src" :alt="alt" />', props: ['src', 'alt'] },
   commonIcon: { template: '<span :data-icon="name" class="icon"></span>', props: ['name'] },
-  HomeHeroCarousel: { template: '<div class="hero-carousel-stub" data-testid="hero-carousel"></div>' },
 }
 
 describe('Home HeroSection', () => {
@@ -50,15 +49,6 @@ describe('Home HeroSection', () => {
       expect(section.classes()).toContain('overflow-hidden')
       expect(section.classes()).toContain('bg-slate-950')
       expect(section.classes()).toContain('text-white')
-    })
-
-    it('should render HeroCarousel component', () => {
-      const wrapper = mount(HeroSection, {
-        ...mountOptions,
-        props: { highlights: mockHighlights },
-      })
-      const carousel = wrapper.find('[data-testid="hero-carousel"]')
-      expect(carousel.exists()).toBe(true)
     })
 
     it('should render container with proper structure', () => {

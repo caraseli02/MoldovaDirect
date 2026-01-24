@@ -142,7 +142,13 @@ export default defineCachedEventHandler(async (event) => {
 
     // Apply category filter
     if (category) {
-      queryBuilder = queryBuilder.eq('categories.slug', category)
+      // If category is a number, it's a category_id; otherwise, it's a slug
+      if (/^\d+$/.test(category)) {
+        queryBuilder = queryBuilder.eq('category_id', parseInt(category))
+      }
+      else {
+        queryBuilder = queryBuilder.eq('categories.slug', category)
+      }
     }
 
     // Apply price filters
