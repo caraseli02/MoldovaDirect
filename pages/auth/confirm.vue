@@ -2,10 +2,10 @@
   <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <div class="text-center">
-        <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-primary-100 dark:bg-primary-900/30 rounded-2xl mb-4">
+        <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-slate-100 dark:bg-slate-900/30 rounded-2xl mb-4">
           <svg
             v-if="loading"
-            class="w-10 h-10 sm:w-12 sm:h-12 text-primary-600 dark:text-primary-400 animate-spin"
+            class="w-10 h-10 sm:w-12 sm:h-12 text-slate-600 dark:text-slate-400 animate-spin"
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -100,7 +100,7 @@
           <div class="flex flex-col sm:flex-row gap-3">
             <NuxtLink
               :to="localePath('/auth/login')"
-              class="flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 transition-colors"
+              class="flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-slate-600 hover:bg-slate-700 dark:bg-slate-500 dark:hover:bg-slate-600 transition-colors"
             >
               {{ $t('auth.backToLogin') }}
             </NuxtLink>

@@ -63,7 +63,7 @@
               v-if="index < steps.length - 1"
               class="hidden lg:block w-16 h-0.5 ml-8 transition-colors duration-200"
               :class="isStepCompleted(step.id)
-                ? 'bg-primary-600 dark:bg-primary-500'
+                ? 'bg-slate-600 dark:bg-slate-500'
                 : 'bg-gray-200 dark:bg-gray-700'"
             ></div>
           </li>
@@ -85,7 +85,7 @@
       <!-- Progress Bar -->
       <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
         <div
-          class="bg-primary-600 dark:bg-primary-500 h-2 rounded-full transition-all duration-300 ease-out"
+          class="bg-slate-600 dark:bg-slate-500 h-2 rounded-full transition-all duration-300 ease-out"
           :style="{ width: `${progressPercentage}%` }"
         ></div>
       </div>
@@ -137,10 +137,10 @@ const isStepCompleted = (stepId: CheckoutStep): boolean => {
 
 const getStepClasses = (stepId: CheckoutStep, _index: number): string => {
   if (isStepCompleted(stepId)) {
-    return 'bg-primary-600 dark:bg-primary-500 border-primary-600 dark:border-primary-500'
+    return 'bg-slate-600 dark:bg-slate-500 border-slate-600 dark:border-slate-500'
   }
   else if (isCurrentStep(stepId)) {
-    return 'bg-primary-600 dark:bg-primary-500 border-primary-600 dark:border-primary-500'
+    return 'bg-slate-600 dark:bg-slate-500 border-slate-600 dark:border-slate-500'
   }
   else {
     return 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600'

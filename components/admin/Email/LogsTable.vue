@@ -351,7 +351,20 @@ import { ref, onMounted } from 'vue'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '~/components/ui/dialog'
-import { emailStatusVariant } from '@/lib/uiVariants'
+import type { BadgeVariants } from '~/components/ui/badge'
+
+// Inline badge variant function
+const emailStatusVariant = (status: string): BadgeVariants['variant'] => {
+  switch (status) {
+    case 'delivered':
+      return 'default'
+    case 'failed':
+    case 'bounced':
+      return 'destructive'
+    default:
+      return 'secondary'
+  }
+}
 
 const logs = ref<Record<string, any>[]>([])
 const loading = ref(false)

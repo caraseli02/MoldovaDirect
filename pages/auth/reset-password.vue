@@ -5,9 +5,9 @@
       <div class="w-full max-w-sm sm:max-w-md space-y-6 sm:space-y-8">
         <!-- Logo/Brand area -->
         <div class="text-center space-y-2">
-          <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-primary-100 dark:bg-primary-900/30 rounded-2xl mb-4">
+          <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-slate-100 dark:bg-slate-900/30 rounded-2xl mb-4">
             <svg
-              class="w-10 h-10 sm:w-12 sm:h-12 text-primary-600 dark:text-primary-400"
+              class="w-10 h-10 sm:w-12 sm:h-12 text-slate-600 dark:text-slate-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -268,7 +268,7 @@
             <div class="text-center">
               <NuxtLink
                 :to="localePath('/auth/login')"
-                class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 font-medium text-primary-600 hover:text-primary-500 dark:text-primary-300 dark:hover:text-primary-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md"
+                class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 font-medium text-slate-600 hover:text-slate-500 dark:text-slate-300 dark:hover:text-slate-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/20 rounded-md"
               >
                 {{ $t('auth.signIn') }} →
               </NuxtLink>

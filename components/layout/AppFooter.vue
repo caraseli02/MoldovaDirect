@@ -159,7 +159,7 @@
             <UiButton
               type="submit"
               :disabled="isSubmitting"
-              class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span v-if="!isSubmitting">{{ isSubmitting ? $t('footer.newsletter.submitting') : $t('footer.newsletter.button') }}</span>
               <span

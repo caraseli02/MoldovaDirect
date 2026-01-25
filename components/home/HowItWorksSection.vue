@@ -16,14 +16,14 @@
           class="step-card relative overflow-hidden rounded-3xl bg-white p-8 text-left shadow-lg transition hover:-translate-y-1 hover:shadow-xl dark:bg-gray-950"
           :class="{ 'has-connector': index < steps.length - 1 }"
         >
-          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100 text-primary-600">
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
             <commonIcon
               :name="step.icon"
               class="h-6 w-6"
             />
           </div>
           <div class="mt-6">
-            <p class="text-sm font-semibold text-primary-600">
+            <p class="text-sm font-semibold text-slate-600">
               {{ formatStep(index + 1) }}
             </p>
             <h3 class="mt-2 text-xl font-semibold">

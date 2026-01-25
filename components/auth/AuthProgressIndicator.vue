@@ -48,7 +48,7 @@
           <div
             v-if="step < totalSteps"
             class="flex-1 h-0.5 mx-2 transition-all duration-300"
-            :class="step < currentStep ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-600'"
+            :class="step < currentStep ? 'bg-slate-600' : 'bg-gray-200 dark:bg-gray-600'"
           ></div>
         </div>
       </div>
@@ -61,7 +61,7 @@
         :key="index"
         class="text-center flex-1"
         :class="{
-          'text-primary-600 dark:text-primary-400 font-medium': index + 1 === currentStep,
+          'text-slate-600 dark:text-slate-400 font-medium': index + 1 === currentStep,
           'text-green-600 dark:text-green-400': index + 1 < currentStep,
         }"
       >
@@ -100,11 +100,11 @@ const { t } = useI18n()
 const getStepClasses = (step: number): string => {
   if (step < props.currentStep) {
     // Completed step
-    return 'bg-primary-600 border-primary-600'
+    return 'bg-slate-600 border-slate-600'
   }
   else if (step === props.currentStep) {
     // Current step
-    return 'bg-primary-600 border-primary-600'
+    return 'bg-slate-600 border-slate-600'
   }
   else {
     // Future step

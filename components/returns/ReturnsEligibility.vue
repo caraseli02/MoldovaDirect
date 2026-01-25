@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
     <div class="flex items-center gap-3">
-      <span class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-50 text-primary-700 dark:bg-primary-900/40 dark:text-primary-100">
+      <span class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-700 dark:bg-slate-900/40 dark:text-slate-100">
         <svg
           class="h-5 w-5"
           fill="none"
@@ -18,7 +18,7 @@
         </svg>
       </span>
       <div>
-        <p class="text-sm font-semibold text-primary-700 dark:text-primary-100">
+        <p class="text-sm font-semibold text-slate-700 dark:text-slate-100">
           {{ t('returns.eligibility.title') }}
         </p>
         <p class="text-gray-700 dark:text-gray-300">
@@ -27,8 +27,8 @@
       </div>
     </div>
     <div class="grid gap-6 md:grid-cols-2">
-      <div class="rounded-xl bg-primary-50/70 p-4 ring-1 ring-primary-100 dark:bg-primary-900/20 dark:ring-primary-800/40">
-        <p class="mb-3 text-sm font-semibold text-primary-800 dark:text-primary-100">
+      <div class="rounded-xl bg-slate-50/70 p-4 ring-1 ring-primary-100 dark:bg-slate-900/20 dark:ring-primary-800/40">
+        <p class="mb-3 text-sm font-semibold text-slate-800 dark:text-slate-100">
           {{ t('returns.eligibility.allowedTitle') }}
         </p>
         <ul class="space-y-2 text-gray-800 dark:text-gray-200">
@@ -37,7 +37,7 @@
             :key="item"
             class="flex gap-2"
           >
-            <span class="mt-1 h-2 w-2 rounded-full bg-primary-500"></span>
+            <span class="mt-1 h-2 w-2 rounded-full bg-slate-500"></span>
             <span>{{ item }}</span>
           </li>
         </ul>

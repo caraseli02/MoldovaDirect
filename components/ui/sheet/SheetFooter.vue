@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
-import { cn } from '~/lib/utils'
+import { cn } from '@/lib/utils'
 
 const props = defineProps<{
   class?: HTMLAttributes['class']
@@ -9,7 +9,12 @@ const props = defineProps<{
 
 <template>
   <div
-    :class="cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:gap-2', props.class)"
+    :class="
+      cn(
+        'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2',
+        props.class,
+      )
+    "
   >
     <slot></slot>
   </div>

@@ -94,7 +94,7 @@
           {{ $t('checkout.trust.needHelp') }}
           <a
             :href="`mailto:${supportEmail}`"
-            class="text-primary-600 hover:underline"
+            class="text-slate-600 hover:underline"
           >
             {{ supportEmail }}
           </a>

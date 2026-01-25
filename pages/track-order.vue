@@ -3,9 +3,9 @@
     <div class="container mx-auto px-4 max-w-2xl">
       <!-- Header -->
       <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full mb-4">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-slate-100 dark:bg-slate-900 rounded-full mb-4">
           <svg
-            class="w-8 h-8 text-primary-600 dark:text-primary-400"
+            class="w-8 h-8 text-slate-600 dark:text-slate-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -185,7 +185,7 @@
               <!-- Progress Line -->
               <div class="absolute top-4 left-0 right-0 h-0.5 bg-gray-200 dark:bg-gray-700"></div>
               <div
-                class="absolute top-4 left-0 h-0.5 bg-primary-500 transition-all duration-500"
+                class="absolute top-4 left-0 h-0.5 bg-slate-500 transition-all duration-500"
                 :style="{ width: `${getProgressWidth(trackingData.status)}%` }"
               ></div>
 
@@ -304,7 +304,7 @@
               <div class="flex flex-col items-center">
                 <div
                   class="w-3 h-3 rounded-full"
-                  :class="index === 0 ? 'bg-primary-500' : 'bg-gray-300 dark:bg-gray-600'"
+                  :class="index === 0 ? 'bg-slate-500' : 'bg-gray-300 dark:bg-gray-600'"
                 ></div>
                 <div
                   v-if="index < trackingData.events.length - 1"
@@ -377,7 +377,7 @@
           </p>
           <NuxtLink
             :to="localePath('/contact')"
-            class="text-primary-600 dark:text-primary-400 hover:underline font-medium"
+            class="text-slate-600 dark:text-slate-400 hover:underline font-medium"
           >
             {{ $t('trackOrder.contactSupport') }}
           </NuxtLink>
@@ -569,7 +569,7 @@ const getStepClasses = (stepKey: string, currentStatus: string): string => {
   const stepIndex = stepOrder.indexOf(stepKey)
 
   if (stepIndex <= currentIndex) {
-    return 'bg-primary-500 text-white'
+    return 'bg-slate-500 text-white'
   }
   return 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
 }

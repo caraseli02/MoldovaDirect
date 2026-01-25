@@ -121,7 +121,7 @@
                 <div class="flex space-x-4">
                   <a
                     href="#"
-                    class="text-gray-600 hover:text-primary-600"
+                    class="text-gray-600 hover:text-slate-600"
                   >
                     <svg
                       class="h-6 w-6"
@@ -135,7 +135,7 @@
                   </a>
                   <a
                     href="#"
-                    class="text-gray-600 hover:text-primary-600"
+                    class="text-gray-600 hover:text-slate-600"
                   >
                     <svg
                       class="h-6 w-6"

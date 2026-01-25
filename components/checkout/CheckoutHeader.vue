@@ -6,7 +6,7 @@
         <div class="flex items-center space-x-4">
           <NuxtLink
             :to="localePath('/')"
-            class="flex items-center space-x-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+            class="flex items-center space-x-2 text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
           >
             <span class="text-xl font-bold">Moldova Direct</span>
           </NuxtLink>
@@ -28,7 +28,7 @@
           <!-- Help Link -->
           <NuxtLink
             :to="localePath('/contact')"
-            class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            class="text-sm text-gray-600 dark:text-gray-400 hover:text-slate-600 dark:hover:text-slate-400 transition-colors"
           >
             {{ $t('common.help') }}
           </NuxtLink>
@@ -95,7 +95,7 @@
 
           <NuxtLink
             :to="localePath('/contact')"
-            class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            class="text-sm text-gray-600 dark:text-gray-400 hover:text-slate-600 dark:hover:text-slate-400 transition-colors"
             @click="showMobileMenu = false"
           >
             {{ $t('common.help') }}

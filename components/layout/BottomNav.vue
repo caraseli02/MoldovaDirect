@@ -10,7 +10,7 @@
       <NuxtLink
         :to="localePath('/')"
         class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors"
-        :class="isActive('/') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
+        :class="isActive('/') ? 'text-slate-600 dark:text-slate-400' : 'text-gray-500 dark:text-gray-400'"
         :aria-current="isActive('/') ? 'page' : undefined"
       >
         <commonIcon
@@ -26,7 +26,7 @@
       <NuxtLink
         :to="localePath('/products')"
         class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors"
-        :class="isActive('/products') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
+        :class="isActive('/products') ? 'text-slate-600 dark:text-slate-400' : 'text-gray-500 dark:text-gray-400'"
         :aria-current="isActive('/products') ? 'page' : undefined"
       >
         <commonIcon
@@ -42,7 +42,7 @@
       <NuxtLink
         :to="localePath('/cart')"
         class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors relative"
-        :class="isActive('/cart') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
+        :class="isActive('/cart') ? 'text-slate-600 dark:text-slate-400' : 'text-gray-500 dark:text-gray-400'"
         :aria-current="isActive('/cart') ? 'page' : undefined"
       >
         <div class="relative">
@@ -55,7 +55,7 @@
             <span
               v-if="itemCount > 0"
               data-testid="cart-count"
-              class="absolute -top-1.5 -right-2 flex items-center justify-center min-w-[14px] h-[14px] px-1 text-[8px] font-bold text-white bg-primary-600 rounded-full"
+              class="absolute -top-1.5 -right-2 flex items-center justify-center min-w-[14px] h-[14px] px-1 text-[8px] font-bold text-white bg-slate-600 rounded-full"
             >
               {{ itemCount > 99 ? '99+' : itemCount }}
             </span>
@@ -69,7 +69,7 @@
       <NuxtLink
         :to="localePath('/products') + '?focus=search'"
         class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors"
-        :class="searchActive ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
+        :class="searchActive ? 'text-slate-600 dark:text-slate-400' : 'text-gray-500 dark:text-gray-400'"
       >
         <commonIcon
           name="search"
@@ -84,7 +84,7 @@
       <NuxtLink
         :to="localePath('/account')"
         class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors"
-        :class="isActive('/account') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
+        :class="isActive('/account') ? 'text-slate-600 dark:text-slate-400' : 'text-gray-500 dark:text-gray-400'"
         :aria-current="isActive('/account') ? 'page' : undefined"
       >
         <commonIcon

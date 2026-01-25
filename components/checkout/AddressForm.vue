@@ -31,7 +31,7 @@
             :key="address.id"
             class="relative"
           >
-            <div :class="selectedSavedAddressId === address.id ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 rounded-lg p-3 border' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border'">
+            <div :class="selectedSavedAddressId === address.id ? 'border-slate-500 bg-slate-50 dark:bg-slate-900/20 rounded-lg p-3 border' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border'">
               <div class="flex items-start gap-3">
                 <UiRadioGroupItem
                   :value="address.id"
@@ -45,7 +45,7 @@
                     </p>
                     <span
                       v-if="address.isDefault"
-                      class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200"
+                      class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-200"
                     >
                       {{ $t('checkout.addressForm.default') }}
                     </span>
@@ -63,7 +63,7 @@
         </div>
 
         <!-- Use New Address Option -->
-        <div :class="selectedSavedAddressId === null ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 rounded-lg p-3 border mt-3' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border mt-3'">
+        <div :class="selectedSavedAddressId === null ? 'border-slate-500 bg-slate-50 dark:bg-slate-900/20 rounded-lg p-3 border mt-3' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border mt-3'">
           <div class="flex items-center gap-3">
             <UiRadioGroupItem
               :value="null"
@@ -134,7 +134,7 @@
             v-if="isLoadingAutocomplete"
             class="absolute right-3 top-1/2 -translate-y-1/2"
           >
-            <div class="w-5 h-5 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+            <div class="w-5 h-5 border-2 border-slate-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
         </div>
 

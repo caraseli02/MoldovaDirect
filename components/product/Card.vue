@@ -101,7 +101,7 @@
         <!-- New Badge -->
         <span
           v-if="isNew"
-          class="inline-flex items-center gap-1 bg-primary-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg"
+          class="inline-flex items-center gap-1 bg-slate-600 text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg"
         >
           <commonIcon
             name="lucide:sparkles"
@@ -279,7 +279,7 @@
         :class="[
           isInCart(String(product.id))
             ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600'
-            : 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-700 dark:hover:bg-primary-600',
+            : 'bg-slate-600 dark:bg-slate-500 text-white hover:bg-slate-700 dark:hover:bg-slate-600',
         ]"
         @click="addToCart"
         @touchstart="isMobile && !cartLoading && vibrate('tap')"

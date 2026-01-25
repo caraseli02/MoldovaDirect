@@ -1,7 +1,7 @@
 <template>
   <div
     data-testid="express-checkout-banner"
-    class="express-checkout-enhanced bg-primary-100/50 dark:bg-primary-900/30 border border-primary-200 dark:border-primary-700 rounded-xl p-6 mb-6"
+    class="express-checkout-enhanced bg-slate-100/50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-700 rounded-xl p-6 mb-6"
   >
     <!-- Header -->
     <div class="flex items-center justify-between mb-4">
@@ -82,7 +82,7 @@
     </div>
 
     <!-- Order Total -->
-    <div class="flex items-center justify-between py-3 border-t border-primary-200 dark:border-primary-700 mb-4">
+    <div class="flex items-center justify-between py-3 border-t border-slate-200 dark:border-slate-700 mb-4">
       <span class="text-gray-700 dark:text-gray-300">{{ $t('common.total') }}</span>
       <span class="text-xl font-bold text-gray-900 dark:text-white">{{ orderTotal }}</span>
     </div>
@@ -145,7 +145,7 @@
     </div>
 
     <!-- Trust Badges -->
-    <div class="flex items-center justify-center gap-4 mt-4 pt-4 border-t border-primary-100 dark:border-primary-800">
+    <div class="flex items-center justify-center gap-4 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
       <span class="flex items-center text-xs text-gray-500 dark:text-gray-400">
         <svg
           class="w-4 h-4 mr-1 text-green-500"

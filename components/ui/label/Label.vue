@@ -1,26 +1,34 @@
 <script setup lang="ts">
-import type { LabelProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
-import { reactiveOmit } from '@vueuse/core'
-import { Label } from 'reka-ui'
 import { cn } from '@/lib/utils'
+import { useVModel } from '@vueuse/core'
 
-const props = defineProps<LabelProps & { class?: HTMLAttributes['class'] }>()
+const props = defineProps<{
+  class?: HTMLAttributes['class']
+  defaultValue?: string
+  modelValue?: string
+}>()
 
-const delegatedProps = reactiveOmit(props, 'class')
+const emits = defineEmits<{
+  (e: 'update:modelValue', payload: string): void
+}>()
+
+const modelValue = useVModel(props, 'modelValue', emits, {
+  passive: true,
+  defaultValue: props.defaultValue,
+})
 </script>
 
 <template>
-  <Label
-    data-slot="label"
-    v-bind="delegatedProps"
+  <label
     :class="
       cn(
-        'flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50',
+        'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
         props.class,
       )
     "
+    for=""
   >
     <slot></slot>
-  </Label>
+  </label>
 </template>
