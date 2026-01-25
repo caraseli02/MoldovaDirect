@@ -488,6 +488,4 @@ function formatDate(dateString: string): string {
 onMounted(() => {
   searchLogs()
 })
-
-// Variant mapping centralized in lib/uiVariants
 </script>

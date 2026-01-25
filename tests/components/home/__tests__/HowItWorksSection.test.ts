@@ -115,7 +115,7 @@ describe('Home HowItWorksSection', () => {
     })
 
     it('should render formatted step numbers', () => {
-      const stepNumbers = wrapper.findAll('.text-sm.font-semibold.text-primary-600')
+      const stepNumbers = wrapper.findAll('.text-sm.font-semibold.text-slate-600')
       expect(stepNumbers).toHaveLength(mockSteps.length)
 
       stepNumbers.forEach((stepNumber, index) => {
@@ -197,7 +197,7 @@ describe('Home HowItWorksSection', () => {
 
   describe('Step Number Formatting', () => {
     it('should format single digit numbers with leading zero', () => {
-      const stepNumbers = wrapper.findAll('.text-sm.font-semibold.text-primary-600')
+      const stepNumbers = wrapper.findAll('.text-sm.font-semibold.text-slate-600')
 
       expect(stepNumbers[0].text()).toBe('01')
       expect(stepNumbers[1].text()).toBe('02')
@@ -226,7 +226,7 @@ describe('Home HowItWorksSection', () => {
         },
       })
 
-      const stepNumbers = manyStepsWrapper.findAll('.text-sm.font-semibold.text-primary-600')
+      const stepNumbers = manyStepsWrapper.findAll('.text-sm.font-semibold.text-slate-600')
       expect(stepNumbers[9].text()).toBe('10')
       expect(stepNumbers[10].text()).toBe('11')
       expect(stepNumbers[11].text()).toBe('12')
@@ -378,7 +378,7 @@ describe('Home HowItWorksSection', () => {
       expect(iconBadges).toHaveLength(mockSteps.length)
       iconBadges.forEach((badge) => {
         expect(badge.classes()).toContain('rounded-xl')
-        expect(badge.classes()).toContain('bg-primary-100')
+        expect(badge.classes()).toContain('bg-slate-100')
       })
     })
 

@@ -142,7 +142,7 @@ describe('ReturnsSteps', () => {
 
     it('should render document list with bullet points', () => {
       const wrapper = createWrapper()
-      const bullets = wrapper.findAll('.bg-primary-500')
+      const bullets = wrapper.findAll('.bg-slate-500')
       expect(bullets.length).toBeGreaterThanOrEqual(4)
     })
   })
@@ -160,7 +160,7 @@ describe('ReturnsSteps', () => {
 
     it('should have packaging section with highlighted background', () => {
       const wrapper = createWrapper()
-      const packagingSection = wrapper.find('.bg-primary-50\\/70')
+      const packagingSection = wrapper.find('.bg-slate-50\\/70')
       expect(packagingSection.exists()).toBe(true)
     })
   })
@@ -227,7 +227,7 @@ describe('ReturnsSteps', () => {
 
     it('should have dark mode classes for step numbers', () => {
       const wrapper = createWrapper()
-      const stepCircles = wrapper.findAll('.dark\\:bg-primary-900\\/30')
+      const stepCircles = wrapper.findAll('.dark\\:bg-slate-900\\/30')
       expect(stepCircles.length).toBeGreaterThan(0)
     })
 

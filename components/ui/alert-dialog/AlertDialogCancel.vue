@@ -1,21 +1,29 @@
 <script setup lang="ts">
-import type { ButtonHTMLAttributes } from 'vue'
+import type { HTMLAttributes } from 'vue'
+import { AlertDialogCancel as AlertDialogCancelRoot, useForwardProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
+import type { ButtonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 
 const props = defineProps<{
-  class?: ButtonHTMLAttributes['class']
+  class?: HTMLAttributes['class']
+  variant?: ButtonVariants['variant']
+  size?: ButtonVariants['size']
 }>()
+
+const delegatedProps = computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+})
+
+const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
-  <button
-    :class="
-      cn(
-        'inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        props.class,
-      )
-    "
+  <AlertDialogCancelRoot
+    v-bind="forwardedProps"
+    :class="cn(buttonVariants({ variant: props.variant ?? 'secondary' }), props.class)"
   >
     <slot></slot>
-  </button>
+  </AlertDialogCancelRoot>
 </template>

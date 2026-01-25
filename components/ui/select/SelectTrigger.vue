@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
-import { SelectTrigger, useForwardProps } from 'reka-ui'
+import { SelectTrigger as SelectTriggerRoot, type SelectTriggerProps, useForwardProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
 
-const props = defineProps<{
-  class?: HTMLAttributes['class']
-}>()
+const props = defineProps<SelectTriggerProps & { class?: HTMLAttributes['class'] }>()
 
-const forwardedProps = useForwardProps(props)
+const delegatedProps = computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+})
+
+const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
-  <SelectTrigger
+  <SelectTriggerRoot
     v-bind="forwardedProps"
     :class="
       cn(
@@ -21,5 +24,5 @@ const forwardedProps = useForwardProps(props)
     "
   >
     <slot></slot>
-  </SelectTrigger>
+  </SelectTriggerRoot>
 </template>

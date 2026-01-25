@@ -197,7 +197,7 @@ describe('ReturnsSummaryCard', () => {
   describe('Color Scheme', () => {
     it('should have primary color for title', () => {
       const wrapper = createWrapper()
-      const title = wrapper.find('.text-primary-700')
+      const title = wrapper.find('.text-slate-700')
       expect(title.exists()).toBe(true)
     })
 
@@ -224,7 +224,7 @@ describe('ReturnsSummaryCard', () => {
     it('should have readable text contrast', () => {
       const wrapper = createWrapper()
       // Primary color for title provides good contrast
-      const title = wrapper.find('.text-primary-700')
+      const title = wrapper.find('.text-slate-700')
       expect(title.exists()).toBe(true)
       // Dark text for metric
       const metric = wrapper.find('.text-gray-900')
@@ -249,7 +249,7 @@ describe('ReturnsSummaryCard', () => {
 
     it('should have dark mode classes for title', () => {
       const wrapper = createWrapper()
-      const title = wrapper.find('.dark\\:text-primary-200')
+      const title = wrapper.find('.dark\\:text-slate-200')
       expect(title.exists()).toBe(true)
     })
 

@@ -5,6 +5,10 @@ import type { HTMLAttributes } from 'vue'
 import { computed } from 'vue'
 import { cn } from '@/lib/utils'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const props = withDefaults(
   defineProps<TooltipContentProps & { class?: HTMLAttributes['class'] }>(),
   {
