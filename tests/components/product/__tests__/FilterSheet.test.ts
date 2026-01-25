@@ -3,33 +3,74 @@ import { mount } from '@vue/test-utils'
 import FilterSheet from '~/components/product/FilterSheet.vue'
 
 describe('Product FilterSheet', () => {
-  // Custom stubs that properly handle v-model:open pattern
+  // Custom stubs that properly handle the new Root/Portal architecture
   const sheetStubs = {
+    DialogRoot: {
+      template: '<div v-if="open" class="dialog-root"><slot /></div>',
+      props: ['open'],
+    },
+    DialogPortal: {
+      template: '<div class="dialog-portal"><slot /></div>',
+    },
+    DialogOverlay: {
+      template: '<div class="dialog-overlay" style="display:none" />',
+    },
+    DialogContent: {
+      template: '<div class="dialog-content"><slot /></div>',
+      props: [],
+    },
+    DialogTitle: {
+      template: '<h2 class="dialog-title"><slot /></h2>',
+      props: [],
+    },
+    DialogDescription: {
+      template: '<p class="dialog-description"><slot /></p>',
+      props: [],
+    },
+    DialogClose: {
+      template: '<button class="dialog-close" style="display:none" />',
+    },
     UiSheet: {
-      template: '<div class="sheet" v-if="open"><slot /></div>',
+      name: 'UiSheet',
+      template: '<div class="sheet"><slot /></div>',
       props: ['open'],
     },
     UiSheetContent: {
+      name: 'UiSheetContent',
       template: '<div class="sheet-content"><slot /></div>',
       props: ['side'],
     },
+    UiSheetPortal: {
+      name: 'UiSheetPortal',
+      template: '<div><slot /></div>',
+    },
     UiSheetHeader: {
+      name: 'UiSheetHeader',
       template: '<div class="sheet-header"><slot /></div>',
     },
     UiSheetTitle: {
+      name: 'UiSheetTitle',
       template: '<h2 class="sheet-title"><slot /></h2>',
     },
     UiSheetDescription: {
+      name: 'UiSheetDescription',
       template: '<p class="sheet-description"><slot /></p>',
     },
     UiSheetFooter: {
+      name: 'UiSheetFooter',
       template: '<div class="sheet-footer"><slot /></div>',
     },
+    UiSheetClose: {
+      name: 'UiSheetClose',
+      template: '<button><slot /></button>',
+    },
     UiBadge: {
+      name: 'UiBadge',
       template: '<span class="badge"><slot /></span>',
       props: ['variant'],
     },
     UiButton: {
+      name: 'UiButton',
       template: '<button type="button" :disabled="disabled" @click="$emit(\'click\')"><slot /></button>',
       props: ['variant', 'disabled', 'type'],
     },
