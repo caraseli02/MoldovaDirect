@@ -1,34 +1,28 @@
 <script setup lang="ts">
+import type { LabelProps } from 'reka-ui'
+import { Label } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
+import { computed } from 'vue'
 import { cn } from '@/lib/utils'
-import { useVModel } from '@vueuse/core'
 
-const props = defineProps<{
-  class?: HTMLAttributes['class']
-  defaultValue?: string
-  modelValue?: string
-}>()
+const props = defineProps<LabelProps & { class?: HTMLAttributes['class'] }>()
 
-const emits = defineEmits<{
-  (e: 'update:modelValue', payload: string): void
-}>()
-
-const modelValue = useVModel(props, 'modelValue', emits, {
-  passive: true,
-  defaultValue: props.defaultValue,
+const delegatedProps = computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
 })
 </script>
 
 <template>
-  <label
+  <Label
+    v-bind="delegatedProps"
     :class="
       cn(
         'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
         props.class,
       )
     "
-    for=""
   >
     <slot></slot>
-  </label>
+  </Label>
 </template>

@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import type { SelectItemProps } from 'reka-ui'
-import { SelectItem, useForwardProps } from 'reka-ui'
+import { Check } from 'lucide-vue-next'
+import { SelectItem, SelectItemIndicator, SelectItemText, useForwardProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
+import { computed } from 'vue'
 import { cn } from '@/lib/utils'
 
 const props = defineProps<SelectItemProps & { class?: HTMLAttributes['class'] }>()
 
-const forwardedProps = useForwardProps(props)
+const delegatedProps = computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+})
+
+const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
@@ -19,6 +26,13 @@ const forwardedProps = useForwardProps(props)
       )
     "
   >
-    <slot></slot>
+    <span class="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
+      <SelectItemIndicator>
+        <Check class="h-4 w-4" />
+      </SelectItemIndicator>
+    </span>
+    <SelectItemText>
+      <slot></slot>
+    </SelectItemText>
   </SelectItem>
 </template>
