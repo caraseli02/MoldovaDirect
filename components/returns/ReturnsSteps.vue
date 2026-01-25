@@ -32,7 +32,7 @@
         :key="step.title"
         class="flex gap-4"
       >
-        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-sm font-semibold text-slate-700 ring-2 ring-primary-100 dark:bg-slate-900/30 dark:text-slate-100 dark:ring-primary-800/40">
+        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-sm font-semibold text-slate-700 ring-2 ring-slate-200 dark:bg-slate-900/30 dark:text-slate-100 dark:ring-slate-700/40">
           {{ index + 1 }}
         </div>
         <div class="space-y-1">
@@ -61,7 +61,7 @@
           </li>
         </ul>
       </div>
-      <div class="rounded-xl bg-slate-50/70 p-4 ring-1 ring-primary-100 dark:bg-slate-900/20 dark:ring-primary-800/40">
+      <div class="rounded-xl bg-slate-50/70 p-4 ring-1 ring-slate-200 dark:bg-slate-900/20 dark:ring-slate-700/40">
         <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">
           {{ t('returns.steps.packagingTitle') }}
         </p>

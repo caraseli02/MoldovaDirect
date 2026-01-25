@@ -196,14 +196,14 @@ onMounted(() => {
 const navLinkClass = computed(() => [
   'font-medium tracking-wide transition-colors duration-300',
   scrolled.value
-    ? 'text-slate-950/80 hover:text-brand-accent dark:text-slate-50/80 dark:hover:text-brand-accent'
+    ? 'text-slate-950/80 hover:text-slate-700 dark:text-slate-50/80 dark:hover:text-slate-300'
     : 'text-slate-50/90 hover:text-slate-50 drop-shadow-md dark:text-slate-50/90 dark:hover:text-slate-50',
 ])
 
 const iconButtonClass = computed(() => [
-  'group relative p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center transition-all duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-accent focus:ring-offset-2',
+  'group relative p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center transition-all duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-700 focus:ring-offset-2 dark:focus:ring-slate-300',
   scrolled.value
-    ? 'text-slate-950/70 hover:text-brand-accent dark:text-slate-50/70 dark:hover:text-brand-accent'
+    ? 'text-slate-950/70 hover:text-slate-700 dark:text-slate-50/70 dark:hover:text-slate-300'
     : 'text-slate-50/80 hover:text-slate-50 drop-shadow-lg dark:text-slate-50/80 dark:hover:text-slate-50',
 ])
 

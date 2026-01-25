@@ -16,7 +16,7 @@
       </UiButton>
       <div
         v-else
-        class="w-4 h-4 animate-spin rounded-full border-2 border-zinc-300 border-t-primary-600"
+        class="w-4 h-4 animate-spin rounded-full border-2 border-zinc-300 border-t-slate-600"
       ></div>
     </div>
 

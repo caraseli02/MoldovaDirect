@@ -85,7 +85,7 @@
           <nuxt-link
             :to="productDetailPath"
             :aria-label="$t('products.quickViewProduct', { name: getLocalizedText(product.name) })"
-            class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium text-gray-900 dark:text-white focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2"
+            class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium text-gray-900 dark:text-white focus-visible:ring-2 focus-visible:ring-slate-600 focus-visible:ring-offset-2"
           >
             <commonIcon
               name="eye"
@@ -163,7 +163,7 @@
       <h3 class="font-semibold text-gray-900 dark:text-slate-100 mb-2 line-clamp-2">
         <nuxt-link
           :to="productDetailPath"
-          class="hover:text-blue-700 dark:hover:text-blue-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 rounded"
+          class="hover:text-blue-700 dark:hover:text-blue-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-600 focus-visible:ring-offset-2 rounded"
           :aria-label="$t('products.viewDetails') + ': ' + getLocalizedText(product.name)"
         >
           {{ getLocalizedText(product.name) }}
@@ -275,7 +275,7 @@
         :disabled="product.stockQuantity <= 0 || cartLoading"
         :aria-label="getCartButtonAriaLabel()"
         :aria-live="cartLoading ? 'polite' : undefined"
-        class="cta-button w-full mt-4 transition-all duration-200 flex items-center justify-center space-x-2 touch-manipulation rounded-full min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2"
+        class="cta-button w-full mt-4 transition-all duration-200 flex items-center justify-center space-x-2 touch-manipulation rounded-full min-h-[44px] focus-visible:ring-2 focus-visible:ring-slate-600 focus-visible:ring-offset-2"
         :class="[
           isInCart(String(product.id))
             ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600'

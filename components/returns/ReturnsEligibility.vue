@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="grid gap-6 md:grid-cols-2">
-      <div class="rounded-xl bg-slate-50/70 p-4 ring-1 ring-primary-100 dark:bg-slate-900/20 dark:ring-primary-800/40">
+      <div class="rounded-xl bg-slate-50/70 p-4 ring-1 ring-slate-200 dark:bg-slate-900/20 dark:ring-slate-700/40">
         <p class="mb-3 text-sm font-semibold text-slate-800 dark:text-slate-100">
           {{ t('returns.eligibility.allowedTitle') }}
         </p>

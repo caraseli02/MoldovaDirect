@@ -116,7 +116,7 @@
               v-for="testimonial in testimonials"
               :key="testimonial.name"
             >
-              <article class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-primary-950/20">
+              <article class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-slate-950/20">
                 <!-- Star rating at top -->
                 <div class="mb-4 flex items-center justify-between">
                   <CustomStarRating
@@ -169,7 +169,7 @@
               x: 0,
               transition: { duration: 500, delay: 400 + index * 150 },
             }"
-            class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-primary-950/20"
+            class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-slate-950/20"
           >
             <!-- Star rating at top -->
             <div class="mb-4 flex items-center justify-between">

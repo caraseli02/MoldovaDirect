@@ -173,6 +173,10 @@
 
 <script setup lang="ts">
 import type { ProductFilters, CategoryFilter, AttributeFilter, PriceRange } from '~/types'
+import { Checkbox as UiCheckbox } from '~/components/ui/checkbox'
+import { Input as UiInput } from '~/components/ui/input'
+import { Label as UiLabel } from '~/components/ui/label'
+import { Slider as UiSlider } from '~/components/ui/slider'
 
 interface Props {
   filters: ProductFilters

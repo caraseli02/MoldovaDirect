@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative overflow-hidden bg-gradient-to-r from-brand-dark via-brand-accent to-brand-dark text-slate-50"
+    class="relative overflow-hidden bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 text-slate-50"
     role="banner"
     aria-label="Promotional announcement"
   >
@@ -30,7 +30,7 @@
     </div>
 
     <!-- Refined luxury overlay -->
-    <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-brand-light/5 to-transparent opacity-40"></div>
+    <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-slate-50/5 to-transparent opacity-40"></div>
   </div>
 </template>
 

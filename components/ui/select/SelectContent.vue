@@ -3,6 +3,8 @@ import type { SelectContentEmits, SelectContentProps } from 'reka-ui'
 import { SelectContent, SelectPortal, SelectViewport, useForwardPropsEmits } from 'reka-ui'
 import { type HTMLAttributes, computed } from 'vue'
 import { cn } from '@/lib/utils'
+import SelectScrollUpButton from './SelectScrollUpButton.vue'
+import SelectScrollDownButton from './SelectScrollDownButton.vue'
 
 const props = withDefaults(
   defineProps<SelectContentProps & { class?: HTMLAttributes['class'] }>(),

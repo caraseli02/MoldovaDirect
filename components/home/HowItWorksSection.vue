@@ -64,13 +64,13 @@ const formatStep = (value: number) => value.toString().padStart(2, '0')
     right: -2rem;
     width: 2rem;
     height: 2px;
-    background: linear-gradient(to right, var(--color-primary-200), transparent);
+    background: linear-gradient(to right, hsl(210 40% 96%), transparent);
     transform: translateY(-50%);
     pointer-events: none;
   }
 
   .dark .step-card.has-connector::after {
-    background: linear-gradient(to right, var(--color-primary-800), transparent);
+    background: linear-gradient(to right, hsl(217.2 32.6% 17.5%), transparent);
   }
 
   /* Arrow tip */
@@ -81,7 +81,7 @@ const formatStep = (value: number) => value.toString().padStart(2, '0')
     right: -2.15rem;
     width: 0;
     height: 0;
-    border-left: 6px solid var(--color-primary-200);
+    border-left: 6px solid hsl(210 40% 96%);
     border-top: 4px solid transparent;
     border-bottom: 4px solid transparent;
     transform: translateY(-50%);
@@ -89,7 +89,7 @@ const formatStep = (value: number) => value.toString().padStart(2, '0')
   }
 
   .dark .step-card.has-connector::before {
-    border-left-color: var(--color-primary-800);
+    border-left-color: hsl(217.2 32.6% 17.5%);
   }
 }
 </style>
