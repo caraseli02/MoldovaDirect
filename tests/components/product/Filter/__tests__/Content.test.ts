@@ -9,8 +9,71 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import type { VueWrapper } from '@vue/test-utils'
 import { mount, flushPromises } from '@vue/test-utils'
+import { defineComponent, h } from 'vue'
 import FilterContent from '~/components/product/Filter/Content.vue'
 import type { ProductFilters, CategoryFilter, AttributeFilter, PriceRange } from '~/types'
+
+// Mock UI components to avoid jsdom rendering issues (especially calc(NaN% + 0px) CSS errors)
+vi.mock('~/components/ui/checkbox', () => ({
+  Checkbox: defineComponent({
+    name: 'Checkbox',
+    props: ['modelValue', 'id', 'name', 'disabled', 'class'],
+    emits: ['update:modelValue'],
+    setup(props, { emit }) {
+      return () => h('input', {
+        type: 'checkbox',
+        checked: !!props.modelValue,
+        class: props.class,
+        id: props.id,
+        name: props.name,
+        disabled: props.disabled,
+        onChange: (e: Event) => emit('update:modelValue', (e.target as HTMLInputElement).checked),
+      })
+    },
+  }),
+}))
+
+vi.mock('~/components/ui/slider', () => ({
+  Slider: defineComponent({
+    name: 'Slider',
+    props: ['modelValue', 'min', 'max', 'step', 'class'],
+    setup(props) {
+      return () => h('div', { 'class': ['slider-stub', props.class], 'data-testid': 'slider' }, `Slider: ${props.modelValue}`)
+    },
+  }),
+}))
+
+vi.mock('~/components/ui/input', () => ({
+  Input: defineComponent({
+    name: 'Input',
+    props: ['modelValue', 'type', 'placeholder', 'disabled', 'name', 'id', 'class', 'min', 'max'],
+    emits: ['update:modelValue'],
+    setup(props, { emit }) {
+      return () => h('input', {
+        type: props.type || 'text',
+        value: props.modelValue,
+        class: props.class,
+        placeholder: props.placeholder,
+        disabled: props.disabled,
+        id: props.id,
+        name: props.name,
+        min: props.min,
+        max: props.max,
+        onInput: (e: Event) => emit('update:modelValue', (e.target as HTMLInputElement).value),
+      })
+    },
+  }),
+}))
+
+vi.mock('~/components/ui/label', () => ({
+  Label: defineComponent({
+    name: 'Label',
+    props: ['class'],
+    setup(props, { slots }) {
+      return () => h('label', { class: props.class }, slots.default?.())
+    },
+  }),
+}))
 
 describe('ProductFilterContent', () => {
   let wrapper: VueWrapper
@@ -70,14 +133,6 @@ describe('ProductFilterContent', () => {
         filters: mockFilters,
         availableFilters: mockAvailableFilters,
         ...props,
-      },
-      global: {
-        stubs: {
-          UiSlider: {
-            template: '<div class="slider" data-testid="slider"></div>',
-            props: ['modelValue', 'min', 'max', 'step'],
-          },
-        },
       },
     })
   }

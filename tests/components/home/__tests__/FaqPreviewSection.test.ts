@@ -243,8 +243,8 @@ describe('Home FaqPreviewSection', () => {
     it('should show open state styling', () => {
       const faqItems = wrapper.findAll('details')
       faqItems.forEach((item) => {
-        expect(item.classes()).toContain('open:border-primary-300')
-        expect(item.classes()).toContain('open:bg-primary-50/30')
+        expect(item.classes()).toContain('open:border-slate-300')
+        expect(item.classes()).toContain('open:bg-slate-50/30')
       })
     })
 
@@ -252,7 +252,7 @@ describe('Home FaqPreviewSection', () => {
       const ctaLink = wrapper.find('a[href="/faq"]')
       expect(ctaLink.exists()).toBe(true)
       expect(ctaLink.classes()).toContain('transition')
-      expect(ctaLink.classes()).toContain('hover:bg-primary-700')
+      expect(ctaLink.classes()).toContain('hover:bg-slate-700')
     })
   })
 
@@ -355,7 +355,7 @@ describe('Home FaqPreviewSection', () => {
 
     it('should have CTA button styling', () => {
       const ctaLink = wrapper.find('a[href="/faq"]')
-      expect(ctaLink.classes()).toContain('bg-primary-600')
+      expect(ctaLink.classes()).toContain('bg-slate-600')
       expect(ctaLink.classes()).toContain('text-white')
       expect(ctaLink.classes()).toContain('rounded-full')
       expect(ctaLink.classes()).toContain('font-semibold')

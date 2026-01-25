@@ -14,7 +14,7 @@
             <a
               href="/terms"
               target="_blank"
-              class="text-primary-600 hover:text-primary-700 underline"
+              class="text-slate-600 hover:text-slate-700 underline"
             >
               {{ $t('checkout.review.termsOfService') }}
             </a>
@@ -36,7 +36,7 @@
             <a
               href="/privacy"
               target="_blank"
-              class="text-primary-600 hover:text-primary-700 underline"
+              class="text-slate-600 hover:text-slate-700 underline"
             >
               {{ $t('checkout.review.privacyPolicy') }}
             </a>

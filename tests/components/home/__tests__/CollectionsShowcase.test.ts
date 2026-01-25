@@ -386,8 +386,8 @@ describe('Home CollectionsShowcase', () => {
     it('badge has primary color scheme', () => {
       const wrapper = createWrapper()
       const badge = wrapper.find('.inline-flex.items-center.gap-2.rounded-full')
-      expect(badge.classes()).toContain('bg-primary-100')
-      expect(badge.classes()).toContain('text-primary-700')
+      expect(badge.classes()).toContain('bg-slate-100')
+      expect(badge.classes()).toContain('text-slate-700')
     })
 
     it('cards have rounded corners', () => {

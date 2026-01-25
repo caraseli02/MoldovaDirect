@@ -3,7 +3,7 @@
     <div class="container mx-auto px-4 py-12">
       <div class="max-w-5xl mx-auto space-y-10">
         <div class="rounded-2xl border border-gray-200 bg-gradient-to-r from-primary-50 to-primary-100/60 p-6 shadow-sm dark:border-gray-800 dark:from-primary-900/20 dark:to-primary-800/10">
-          <p class="mb-2 inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary-700 shadow-sm ring-1 ring-primary-100 dark:bg-gray-900/60 dark:text-primary-100 dark:ring-primary-700/40">
+          <p class="mb-2 inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700 shadow-sm ring-1 ring-primary-100 dark:bg-gray-900/60 dark:text-slate-100 dark:ring-primary-700/40">
             {{ t('returns.badge') }}
           </p>
           <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -17,14 +17,14 @@
               <div class="flex flex-wrap gap-3">
                 <NuxtLink
                   :to="localePath('/contact')"
-                  class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:ring-offset-gray-900"
+                  class="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:ring-offset-gray-900"
                   aria-label="Start a return request by contacting customer support"
                 >
                   {{ t('returns.cta.start') }}
                 </NuxtLink>
                 <NuxtLink
                   :to="localePath('/account/orders')"
-                  class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-900 transition hover:border-primary-200 hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:border-gray-700 dark:text-gray-100 dark:hover:border-primary-700/70 dark:hover:text-primary-100 dark:ring-offset-gray-900"
+                  class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-900 transition hover:border-slate-200 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:border-gray-700 dark:text-gray-100 dark:hover:border-slate-700/70 dark:hover:text-slate-100 dark:ring-offset-gray-900"
                   aria-label="View your order history to select items for return"
                 >
                   {{ t('returns.cta.orders') }}
@@ -64,7 +64,7 @@
                 :key="item"
                 class="flex gap-2"
               >
-                <span class="mt-1 h-2 w-2 rounded-full bg-primary-500"></span>
+                <span class="mt-1 h-2 w-2 rounded-full bg-slate-500"></span>
                 <span>{{ item }}</span>
               </li>
             </ul>
@@ -82,7 +82,7 @@
                 :key="item"
                 class="flex gap-2"
               >
-                <span class="mt-1 h-2 w-2 rounded-full bg-primary-500"></span>
+                <span class="mt-1 h-2 w-2 rounded-full bg-slate-500"></span>
                 <span>{{ item }}</span>
               </li>
             </ul>

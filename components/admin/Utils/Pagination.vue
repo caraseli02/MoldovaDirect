@@ -16,8 +16,8 @@
         :page="internal.page"
         as="nav"
       >
-        <UiPaginationContent>
-          <UiPaginationPrevious
+        <UiPaginationList>
+          <UiPaginationPrev
             :disabled="!internal.hasPrev"
             @click="emitPrev()"
           />
@@ -45,7 +45,7 @@
             :disabled="!internal.hasNext"
             @click="emitNext()"
           />
-        </UiPaginationContent>
+        </UiPaginationList>
       </UiPagination>
     </div>
   </div>
@@ -54,10 +54,10 @@
 <script setup lang="ts">
 import {
   Pagination as UiPagination,
-  PaginationContent as UiPaginationContent,
+  PaginationList as UiPaginationList,
   PaginationEllipsis as UiPaginationEllipsis,
   PaginationNext as UiPaginationNext,
-  PaginationPrevious as UiPaginationPrevious,
+  PaginationPrev as UiPaginationPrev,
   PaginationItem as UiPaginationItem,
 } from '@/components/ui/pagination'
 

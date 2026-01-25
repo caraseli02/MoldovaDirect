@@ -13,7 +13,7 @@
         </div>
         <NuxtLink
           :to="localePath('/products')"
-          class="hidden md:flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors"
+          class="hidden md:flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 font-medium transition-colors"
         >
           <svg
             class="w-5 h-5"
@@ -87,7 +87,7 @@
           <NuxtLink
             :to="localePath('/products')"
             :aria-label="$t('common.continueShopping')"
-            class="inline-flex items-center justify-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors font-medium min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            class="inline-flex items-center justify-center gap-2 bg-slate-600 text-white px-6 py-3 rounded-xl hover:bg-slate-700 transition-colors font-medium min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
           >
             {{ $t('common.continueShopping') }}
             <svg

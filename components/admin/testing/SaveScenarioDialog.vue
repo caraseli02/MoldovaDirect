@@ -1,7 +1,7 @@
 <template>
   <UiDialog
     :open="show"
-    @update:open="(val) => !val && handleClose()"
+    @update:open="(val: boolean) => !val && handleClose()"
   >
     <UiDialogContent class="sm:max-w-md">
       <UiDialogHeader>

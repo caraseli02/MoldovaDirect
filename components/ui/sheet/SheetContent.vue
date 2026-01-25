@@ -1,27 +1,22 @@
 <script setup lang="ts">
 import type { DialogContentEmits, DialogContentProps } from 'reka-ui'
-import type { HTMLAttributes } from 'vue'
-import { reactiveOmit } from '@vueuse/core'
-import { X } from 'lucide-vue-next'
-import {
-  DialogClose,
-  DialogContent,
-  DialogOverlay,
-  DialogPortal,
-  useForwardPropsEmits,
-} from 'reka-ui'
+import { DialogPortal, DialogContent, DialogOverlay, useForwardPropsEmits } from 'reka-ui'
+import { type HTMLAttributes, computed } from 'vue'
 import { cn } from '@/lib/utils'
+import { X } from 'lucide-vue-next'
 
 const props = withDefaults(
-  defineProps<DialogContentProps & { class?: HTMLAttributes['class'], side?: 'top' | 'bottom' | 'left' | 'right' }>(),
+  defineProps<DialogContentProps & { class?: HTMLAttributes['class'], side?: 'left' | 'right' | 'top' | 'bottom' }>(),
   {
-    side: 'bottom',
+    side: 'right',
   },
 )
-
 const emits = defineEmits<DialogContentEmits>()
 
-const delegatedProps = reactiveOmit(props, 'class', 'side')
+const delegatedProps = computed(() => {
+  const { class: _, side, ...delegated } = props
+  return delegated
+})
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
@@ -29,28 +24,26 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 <template>
   <DialogPortal>
     <DialogOverlay
-      class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+      class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
     />
     <DialogContent
-      data-slot="sheet-content"
       v-bind="forwarded"
-      :class="cn(
-        'fixed z-50 bg-white shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500 dark:bg-zinc-950',
-        {
-          'inset-x-0 bottom-0 rounded-t-3xl border-t border-zinc-200 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom dark:border-zinc-800': side === 'bottom',
-          'inset-x-0 top-0 rounded-b-3xl border-b border-zinc-200 data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top dark:border-zinc-800': side === 'top',
-          'inset-y-0 left-0 h-full w-3/4 rounded-r-3xl border-r border-zinc-200 data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left dark:border-zinc-800 sm:max-w-sm': side === 'left',
-          'inset-y-0 right-0 h-full w-3/4 rounded-l-3xl border-l border-zinc-200 data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right dark:border-zinc-800 sm:max-w-sm': side === 'right',
-        },
-        props.class,
-      )"
+      :class="
+        cn(
+          'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out',
+          props.side === 'left' && 'inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',
+          props.side === 'right' && 'inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',
+          props.side === 'top' && 'inset-x-0 top-0 h-auto border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
+          props.side === 'bottom' && 'inset-x-0 bottom-0 h-auto border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
+          props.class,
+        )
+      "
     >
       <slot></slot>
-
       <DialogClose
-        class="absolute right-6 top-6 rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2 disabled:pointer-events-none dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:focus:ring-zinc-300"
+        class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
       >
-        <X class="size-5" />
+        <X class="h-4 w-4" />
         <span class="sr-only">Close</span>
       </DialogClose>
     </DialogContent>

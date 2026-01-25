@@ -16,14 +16,14 @@
           class="step-card relative overflow-hidden rounded-3xl bg-white p-8 text-left shadow-lg transition hover:-translate-y-1 hover:shadow-xl dark:bg-gray-950"
           :class="{ 'has-connector': index < steps.length - 1 }"
         >
-          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100 text-primary-600">
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
             <commonIcon
               :name="step.icon"
               class="h-6 w-6"
             />
           </div>
           <div class="mt-6">
-            <p class="text-sm font-semibold text-primary-600">
+            <p class="text-sm font-semibold text-slate-600">
               {{ formatStep(index + 1) }}
             </p>
             <h3 class="mt-2 text-xl font-semibold">
@@ -64,13 +64,13 @@ const formatStep = (value: number) => value.toString().padStart(2, '0')
     right: -2rem;
     width: 2rem;
     height: 2px;
-    background: linear-gradient(to right, var(--color-primary-200), transparent);
+    background: linear-gradient(to right, hsl(210 40% 96%), transparent);
     transform: translateY(-50%);
     pointer-events: none;
   }
 
   .dark .step-card.has-connector::after {
-    background: linear-gradient(to right, var(--color-primary-800), transparent);
+    background: linear-gradient(to right, hsl(217.2 32.6% 17.5%), transparent);
   }
 
   /* Arrow tip */
@@ -81,7 +81,7 @@ const formatStep = (value: number) => value.toString().padStart(2, '0')
     right: -2.15rem;
     width: 0;
     height: 0;
-    border-left: 6px solid var(--color-primary-200);
+    border-left: 6px solid hsl(210 40% 96%);
     border-top: 4px solid transparent;
     border-bottom: 4px solid transparent;
     transform: translateY(-50%);
@@ -89,7 +89,7 @@ const formatStep = (value: number) => value.toString().padStart(2, '0')
   }
 
   .dark .step-card.has-connector::before {
-    border-left-color: var(--color-primary-800);
+    border-left-color: hsl(217.2 32.6% 17.5%);
   }
 }
 </style>

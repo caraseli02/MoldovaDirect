@@ -457,7 +457,7 @@ describe('ExpressCheckoutBannerEnhanced', () => {
         props: defaultProps,
       })
       const banner = wrapper.find('[data-testid="express-checkout-banner"]')
-      expect(banner.classes().join(' ')).toContain('bg-primary')
+      expect(banner.classes().join(' ')).toContain('bg-slate')
     })
 
     it('should have dark mode classes', () => {

@@ -286,7 +286,7 @@ describe('Home HeroSection', () => {
       })
       const blurElement = wrapper.find('.blur-3xl')
       expect(blurElement.exists()).toBe(true)
-      expect(blurElement.classes()).toContain('bg-primary-500/30')
+      expect(blurElement.classes()).toContain('bg-slate-500/30')
     })
   })
 

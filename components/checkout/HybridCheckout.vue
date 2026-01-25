@@ -205,7 +205,7 @@
     >
       <NuxtLink
         :to="localePath('/cart')"
-        class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+        class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-slate-600 dark:hover:text-slate-400 transition-colors"
       >
         <svg
           class="w-4 h-4 mr-1"

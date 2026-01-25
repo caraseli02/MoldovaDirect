@@ -89,7 +89,7 @@
       v-if="stripeLoading"
       class="flex items-center justify-center py-4"
     >
-      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
+      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-slate-600"></div>
       <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
         {{ $t('checkout.payment.loadingStripe') }}
       </span>

@@ -4,7 +4,7 @@
     <div class="fixed top-0 left-0 right-0 z-[100] h-1 pointer-events-none">
       <ClientOnly>
         <NuxtLoadingIndicator
-          color="repeating-linear-gradient(to right,#800020 0%,#b22222 50%,#800020 100%)"
+          color="repeating-linear-gradient(to right, hsl(222.2 47.4% 11.2%) 0%, hsl(215 20.2% 65.1%) 50%, hsl(222.2 47.4% 11.2%) 100%)"
           :height="3"
         />
       </ClientOnly>

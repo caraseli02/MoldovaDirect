@@ -40,7 +40,7 @@
             {{ $t('aboutPage.story.p2') }}
           </p>
 
-          <div class="bg-primary-50 dark:bg-gray-800 dark:border dark:border-gray-700 p-6 rounded-lg mt-8">
+          <div class="bg-slate-50 dark:bg-gray-800 dark:border dark:border-gray-700 p-6 rounded-lg mt-8">
             <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
               {{ $t('aboutPage.getInTouch.title') }}
             </h3>
@@ -49,7 +49,7 @@
             </p>
             <NuxtLink
               :to="localePath('/contact')"
-              class="inline-block bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors"
+              class="inline-block bg-slate-600 text-white px-6 py-2 rounded-lg hover:bg-slate-700 transition-colors"
             >
               {{ $t('common.contact') }}
             </NuxtLink>

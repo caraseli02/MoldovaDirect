@@ -3,9 +3,9 @@
     <div class="container space-y-10">
       <div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
         <div class="space-y-4 max-w-3xl">
-          <div class="inline-flex items-center gap-2 rounded-full bg-primary-50 px-3 py-1 text-sm font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-100">
+          <div class="inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-1 text-sm font-medium text-slate-700 dark:bg-slate-900/30 dark:text-slate-100">
             <span
-              class="h-2 w-2 rounded-full bg-primary-500"
+              class="h-2 w-2 rounded-full bg-slate-500"
               aria-hidden="true"
             ></span>
             {{ $t('faqPage.badge') }}
@@ -24,7 +24,7 @@
           <div class="flex flex-wrap gap-3">
             <NuxtLink
               :to="localePath('/contact')"
-              class="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-white shadow-sm transition hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+              class="inline-flex items-center gap-2 rounded-lg bg-slate-600 px-4 py-2 text-white shadow-sm transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
             >
               <span
                 class="i-solar-headphones-round-bold-duotone h-5 w-5"
@@ -34,7 +34,7 @@
             </NuxtLink>
             <NuxtLink
               :to="localePath('/track-order')"
-              class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-gray-900 transition hover:border-primary-200 hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:border-gray-700 dark:text-white dark:hover:border-primary-400"
+              class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-gray-900 transition hover:border-slate-200 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:border-gray-700 dark:text-white dark:hover:border-slate-400"
             >
               <span
                 class="i-solar-map-arrow-square-bold-duotone h-5 w-5"
@@ -46,14 +46,14 @@
           <div class="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-300">
             <div class="flex items-center gap-2">
               <span
-                class="i-solar-clock-circle-bold-duotone h-5 w-5 text-primary-500"
+                class="i-solar-clock-circle-bold-duotone h-5 w-5 text-slate-500"
                 aria-hidden="true"
               ></span>
               {{ $t('faqPage.responseTime') }}
             </div>
             <div class="flex items-center gap-2">
               <span
-                class="i-solar-user-chat-round-bold-duotone h-5 w-5 text-primary-500"
+                class="i-solar-user-chat-round-bold-duotone h-5 w-5 text-slate-500"
                 aria-hidden="true"
               ></span>
               {{ $t('faqPage.languages') }}
@@ -72,13 +72,13 @@
                 class="flex items-start gap-3"
               >
                 <span
-                  class="mt-0.5 h-2.5 w-2.5 rounded-full bg-primary-500"
+                  class="mt-0.5 h-2.5 w-2.5 rounded-full bg-slate-500"
                   aria-hidden="true"
                 ></span>
                 <span>{{ highlight }}</span>
               </li>
             </ul>
-            <div class="mt-6 rounded-lg bg-primary-50 px-4 py-3 text-sm text-primary-900 dark:bg-primary-900/30 dark:text-primary-100">
+            <div class="mt-6 rounded-lg bg-slate-50 px-4 py-3 text-sm text-slate-900 dark:bg-slate-900/30 dark:text-slate-100">
               <p class="font-medium">
                 {{ $t('faqPage.highlights.turnaround.title') }}
               </p>
@@ -97,7 +97,7 @@
           >
             <div class="flex items-center gap-3">
               <span
-                class="i-solar-chat-square-2-bold-duotone h-6 w-6 text-primary-500"
+                class="i-solar-chat-square-2-bold-duotone h-6 w-6 text-slate-500"
                 aria-hidden="true"
               ></span>
               <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">
@@ -108,7 +108,7 @@
               <article
                 v-for="item in section.items"
                 :key="item.question"
-                class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
+                class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
               >
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                   {{ item.question }}
@@ -133,11 +133,11 @@
               v-for="link in quickLinks"
               :key="link.to"
               :to="link.to"
-              class="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3 text-gray-900 transition hover:border-primary-200 hover:bg-primary-50/40 hover:text-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:border-gray-800 dark:text-white dark:hover:border-primary-400 dark:hover:bg-primary-900/20"
+              class="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-3 text-gray-900 transition hover:border-slate-200 hover:bg-slate-50/40 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:border-gray-800 dark:text-white dark:hover:border-slate-400 dark:hover:bg-slate-900/20"
             >
               <div class="flex items-center gap-3">
                 <span
-                  class="i-solar-arrow-right-up-bold-duotone h-5 w-5 text-primary-500"
+                  class="i-solar-arrow-right-up-bold-duotone h-5 w-5 text-slate-500"
                   aria-hidden="true"
                 ></span>
                 <span>{{ link.label }}</span>
@@ -148,7 +148,7 @@
               ></span>
             </NuxtLink>
           </div>
-          <div class="rounded-lg bg-primary-50 px-4 py-3 text-sm text-primary-900 dark:bg-primary-900/30 dark:text-primary-100">
+          <div class="rounded-lg bg-slate-50 px-4 py-3 text-sm text-slate-900 dark:bg-slate-900/30 dark:text-slate-100">
             <p class="font-medium">
               {{ $t('faqPage.needMore.commitment.title') }}
             </p>

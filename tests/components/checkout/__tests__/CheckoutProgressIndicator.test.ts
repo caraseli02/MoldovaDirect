@@ -28,8 +28,8 @@ describe('CheckoutProgressIndicator', () => {
     const wrapper = mount(CheckoutProgressIndicator, {
       props: { steps, currentStep: 'payment' },
     })
-    // Component has bg-primary-600 or similar classes for active step
-    expect(wrapper.html()).toContain('bg-primary')
+    // Component has bg-slate-600 or similar classes for active step
+    expect(wrapper.html()).toContain('bg-slate')
   })
 
   it('should mark completed steps', () => {

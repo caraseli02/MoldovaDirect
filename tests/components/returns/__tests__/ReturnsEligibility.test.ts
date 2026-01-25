@@ -72,7 +72,7 @@ describe('ReturnsEligibility', () => {
 
     it('should render bullet points for allowed items', () => {
       const wrapper = createWrapper()
-      const bullets = wrapper.findAll('.bg-primary-500')
+      const bullets = wrapper.findAll('.bg-slate-500')
       expect(bullets.length).toBeGreaterThan(0)
     })
   })

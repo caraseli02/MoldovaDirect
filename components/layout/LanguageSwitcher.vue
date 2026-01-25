@@ -51,7 +51,7 @@
         :key="localeOption.code"
         :data-testid="`locale-${localeOption.code}`"
         :class="{
-          'bg-primary-50 text-primary-600 font-medium dark:bg-primary-500/20 dark:text-primary-100': localeOption.code === currentLocale?.code,
+          'bg-slate-50 text-slate-600 font-medium dark:bg-slate-500/20 dark:text-slate-100': localeOption.code === currentLocale?.code,
         }"
         @click="switchLanguage(localeOption.code)"
       >
@@ -60,7 +60,7 @@
           <!-- Check mark for selected language -->
           <svg
             v-if="localeOption.code === currentLocale?.code"
-            class="h-4 w-4 text-primary-600 dark:text-primary-400"
+            class="h-4 w-4 text-slate-600 dark:text-slate-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

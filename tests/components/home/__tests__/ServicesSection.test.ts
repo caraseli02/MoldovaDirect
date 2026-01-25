@@ -220,7 +220,7 @@ describe('Home ServicesSection', () => {
       serviceCards.forEach((card) => {
         const overlay = card.find('.absolute.inset-0')
         expect(overlay.exists()).toBe(true)
-        expect(overlay.classes()).toContain('group-hover:bg-primary-500/10')
+        expect(overlay.classes()).toContain('group-hover:bg-slate-500/10')
       })
     })
 
@@ -331,7 +331,7 @@ describe('Home ServicesSection', () => {
       const iconBadges = wrapper.findAll('.inline-flex.items-center.justify-center')
       iconBadges.forEach((badge) => {
         expect(badge.classes()).toContain('rounded-xl')
-        expect(badge.classes()).toContain('bg-primary-100')
+        expect(badge.classes()).toContain('bg-slate-100')
       })
     })
   })

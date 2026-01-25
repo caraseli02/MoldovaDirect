@@ -146,13 +146,13 @@ describe('ReturnsSupport', () => {
     it('should have hover states on email link', () => {
       const wrapper = createWrapper()
       const emailLink = wrapper.find('a[href^="mailto:"]')
-      expect(emailLink.classes()).toContain('hover:bg-primary-50')
+      expect(emailLink.classes()).toContain('hover:bg-slate-50')
     })
 
     it('should have hover states on contact link', () => {
       const wrapper = createWrapper()
       const contactLink = wrapper.find('a[href="/contact"]')
-      expect(contactLink.classes()).toContain('hover:bg-primary-100')
+      expect(contactLink.classes()).toContain('hover:bg-slate-100')
     })
   })
 
@@ -206,7 +206,7 @@ describe('ReturnsSupport', () => {
     it('should have dark mode classes for contact link', () => {
       const wrapper = createWrapper()
       const contactLink = wrapper.find('a[href="/contact"]')
-      expect(contactLink.classes()).toContain('dark:bg-primary-900/20')
+      expect(contactLink.classes()).toContain('dark:bg-slate-900/20')
     })
 
     it('should have dark mode classes for badge', () => {

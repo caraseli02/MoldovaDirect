@@ -66,10 +66,10 @@ describe('Home AnnouncementBar', () => {
     it('applies gradient background classes', () => {
       const banner = wrapper.find('[role="banner"]')
       expect(banner.classes()).toContain('bg-gradient-to-r')
-      expect(banner.classes()).toContain('from-brand-dark')
-      expect(banner.classes()).toContain('via-brand-accent')
-      expect(banner.classes()).toContain('to-brand-dark')
-      expect(banner.classes()).toContain('text-brand-light')
+      expect(banner.classes()).toContain('from-slate-900')
+      expect(banner.classes()).toContain('via-slate-700')
+      expect(banner.classes()).toContain('to-slate-900')
+      expect(banner.classes()).toContain('text-slate-50')
     })
 
     it('renders container wrapper', () => {
@@ -273,15 +273,15 @@ describe('Home AnnouncementBar', () => {
 
     it('applies background and border effects to CTA', () => {
       const link = wrapper.findComponent(NuxtLinkStub)
-      expect(link.props('class')).toContain('bg-brand-light/15')
-      expect(link.props('class')).toContain('border-brand-light/25')
+      expect(link.props('class')).toContain('bg-slate-50/15')
+      expect(link.props('class')).toContain('border-slate-50/25')
       expect(link.props('class')).toContain('backdrop-blur-sm')
     })
 
     it('applies hover effects to CTA', () => {
       const link = wrapper.findComponent(NuxtLinkStub)
-      expect(link.props('class')).toContain('hover:bg-brand-light/25')
-      expect(link.props('class')).toContain('hover:border-brand-light/35')
+      expect(link.props('class')).toContain('hover:bg-slate-50/25')
+      expect(link.props('class')).toContain('hover:border-slate-50/35')
     })
 
     it('hides CTA on small screens and shows on medium+', () => {
@@ -336,7 +336,7 @@ describe('Home AnnouncementBar', () => {
       const overlay = wrapper.find('.pointer-events-none.absolute.inset-0')
       expect(overlay.classes()).toContain('bg-gradient-to-r')
       expect(overlay.classes()).toContain('from-transparent')
-      expect(overlay.classes()).toContain('via-brand-light/5')
+      expect(overlay.classes()).toContain('via-slate-50/5')
       expect(overlay.classes()).toContain('to-transparent')
     })
 

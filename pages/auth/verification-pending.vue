@@ -5,9 +5,9 @@
       <div class="w-full max-w-sm sm:max-w-md space-y-6 sm:space-y-8">
         <!-- Logo/Brand area -->
         <div class="text-center space-y-2">
-          <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-primary-100 dark:bg-primary-900/30 rounded-2xl mb-4">
+          <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-slate-100 dark:bg-slate-900/30 rounded-2xl mb-4">
             <svg
-              class="w-10 h-10 sm:w-12 sm:h-12 text-primary-600 dark:text-primary-400"
+              class="w-10 h-10 sm:w-12 sm:h-12 text-slate-600 dark:text-slate-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -172,7 +172,7 @@
             <div class="text-center pt-4">
               <NuxtLink
                 :to="localePath('/auth/login')"
-                class="inline-flex items-center text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors"
+                class="inline-flex items-center text-sm font-medium text-slate-600 hover:text-slate-500 dark:text-slate-400 dark:hover:text-slate-300 transition-colors"
               >
                 <svg
                   class="w-4 h-4 mr-1"

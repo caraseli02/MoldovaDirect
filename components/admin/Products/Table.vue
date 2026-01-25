@@ -431,9 +431,11 @@
 </template>
 
 <script setup lang="ts">
-import { Badge } from '@/components/ui/badge'
-import { productStatusVariant } from '@/lib/uiVariants'
+import { Badge, type BadgeVariants } from '@/components/ui/badge'
 import { useLocalePath, useI18n } from '#imports'
+
+// Inline badge variant function
+const productStatusVariant = (active: boolean): BadgeVariants['variant'] => (active ? 'default' : 'secondary')
 
 interface Props {
   products: Record<string, any>[]

@@ -13,7 +13,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
           v-if="loading"
           class="text-center"
         >
-          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-slate-600"></div>
           <p class="mt-2 text-sm text-gray-600">
             {{ $t('auth.verifying') }}...
           </p>
@@ -49,7 +49,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
           <div class="mt-4">
             <NuxtLink
               :to="localePath('/auth/login')"
-              class="text-sm font-medium text-primary-600 hover:text-primary-500"
+              class="text-sm font-medium text-slate-600 hover:text-slate-500"
             >
               {{ $t('auth.signIn') }} →
             </NuxtLink>

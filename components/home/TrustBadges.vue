@@ -26,7 +26,7 @@
             class="flex flex-col items-center gap-3 rounded-2xl bg-white p-6 text-center shadow-sm transition-all hover:shadow-md dark:bg-gray-900"
           >
             <div
-              class="flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400"
+              class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-600 dark:bg-slate-500/20 dark:text-slate-400"
             >
               <commonIcon
                 :name="badge.icon"
@@ -131,7 +131,7 @@
           </p>
           <NuxtLink
             :to="localePath('/contact')"
-            class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+            class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
           >
             {{ t('home.trustBadges.contactUs') }}
             <commonIcon

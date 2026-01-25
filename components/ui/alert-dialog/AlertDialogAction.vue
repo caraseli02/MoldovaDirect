@@ -1,22 +1,29 @@
 <script setup lang="ts">
-import type { AlertDialogActionProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
-import { reactiveOmit } from '@vueuse/core'
-import { AlertDialogAction, useForwardProps } from 'reka-ui'
+import { AlertDialogAction as AlertDialogActionRoot, useForwardProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
+import type { ButtonVariants } from '@/components/ui/button'
 import { buttonVariants } from '@/components/ui/button'
 
-const props = defineProps<AlertDialogActionProps & { class?: HTMLAttributes['class'] }>()
-const delegatedProps = reactiveOmit(props, 'class')
-const forwarded = useForwardProps(delegatedProps)
+const props = defineProps<{
+  class?: HTMLAttributes['class']
+  variant?: ButtonVariants['variant']
+  size?: ButtonVariants['size']
+}>()
+
+const delegatedProps = computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+})
+
+const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
-  <AlertDialogAction
-    data-slot="alert-dialog-action"
-    v-bind="forwarded"
-    :class="cn(buttonVariants(), props.class)"
+  <AlertDialogActionRoot
+    v-bind="forwardedProps"
+    :class="cn(buttonVariants({ variant: props.variant ?? 'default' }), props.class)"
   >
     <slot></slot>
-  </AlertDialogAction>
+  </AlertDialogActionRoot>
 </template>

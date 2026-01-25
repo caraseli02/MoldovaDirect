@@ -4,13 +4,13 @@
     <div class="sr-only focus-within:not-sr-only">
       <a
         href="#main-content"
-        class="absolute top-0 left-0 z-50 bg-primary-600 text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-white"
+        class="absolute top-0 left-0 z-50 bg-slate-600 text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-white"
       >
         Skip to main content
       </a>
       <a
         href="#product-filters"
-        class="absolute top-0 left-28 z-50 bg-primary-600 text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-white"
+        class="absolute top-0 left-28 z-50 bg-slate-600 text-white px-4 py-2 rounded-br-lg focus:outline-none focus:ring-2 focus:ring-white"
       >
         Skip to filters
       </a>

@@ -1,22 +1,29 @@
 <script setup lang="ts">
-import type { AlertDialogCancelProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
-import { reactiveOmit } from '@vueuse/core'
-import { AlertDialogCancel, useForwardProps } from 'reka-ui'
+import { AlertDialogCancel as AlertDialogCancelRoot, useForwardProps } from 'reka-ui'
 import { cn } from '@/lib/utils'
+import type { ButtonVariants } from '@/components/ui/button'
 import { buttonVariants } from '@/components/ui/button'
 
-const props = defineProps<AlertDialogCancelProps & { class?: HTMLAttributes['class'] }>()
-const delegatedProps = reactiveOmit(props, 'class')
-const forwarded = useForwardProps(delegatedProps)
+const props = defineProps<{
+  class?: HTMLAttributes['class']
+  variant?: ButtonVariants['variant']
+  size?: ButtonVariants['size']
+}>()
+
+const delegatedProps = computed(() => {
+  const { class: _, ...delegated } = props
+  return delegated
+})
+
+const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
-  <AlertDialogCancel
-    data-slot="alert-dialog-cancel"
-    v-bind="forwarded"
-    :class="cn(buttonVariants({ variant: 'outline' }), props.class)"
+  <AlertDialogCancelRoot
+    v-bind="forwardedProps"
+    :class="cn(buttonVariants({ variant: props.variant ?? 'secondary' }), props.class)"
   >
     <slot></slot>
-  </AlertDialogCancel>
+  </AlertDialogCancelRoot>
 </template>

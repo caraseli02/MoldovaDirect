@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import type { SelectValueProps } from 'reka-ui'
-import { SelectValue } from 'reka-ui'
+import { SelectValue, type SelectValueProps } from 'reka-ui'
+import { useForwardProps } from 'reka-ui'
 
 const props = defineProps<SelectValueProps>()
+const forwarded = useForwardProps(props)
 </script>
 
 <template>
-  <SelectValue
-    data-slot="select-value"
-    v-bind="props"
-  >
+  <SelectValue v-bind="forwarded">
     <slot></slot>
   </SelectValue>
 </template>

@@ -323,8 +323,8 @@ describe('MobileFooter', () => {
         props: defaultProps,
       })
       const button = wrapper.find('button')
-      expect(button.classes()).toContain('bg-primary-600')
-      expect(button.classes()).toContain('hover:bg-primary-700')
+      expect(button.classes()).toContain('bg-slate-600')
+      expect(button.classes()).toContain('hover:bg-slate-700')
     })
 
     it('should have disabled styling classes on button', () => {

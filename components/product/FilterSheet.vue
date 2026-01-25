@@ -1,17 +1,9 @@
 <template>
   <UiSheet v-model:open="isOpen">
     <UiSheetContent
-      side="bottom"
-      class="max-h-[90vh] flex flex-col p-0"
+      side="right"
+      class="w-full sm:max-w-lg flex flex-col p-0 bg-white dark:bg-zinc-950"
     >
-      <!-- Drag Handle -->
-      <div class="flex justify-center px-4 pt-4 pb-2">
-        <div
-          class="h-1 w-12 rounded-full bg-zinc-300 dark:bg-zinc-700"
-          aria-hidden="true"
-        ></div>
-      </div>
-
       <!-- Header -->
       <UiSheetHeader class="px-6 pb-4 border-b border-zinc-200 dark:border-zinc-800">
         <div class="flex items-center gap-3">
@@ -64,6 +56,16 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import {
+  Sheet as UiSheet,
+  SheetContent as UiSheetContent,
+  SheetDescription as UiSheetDescription,
+  SheetFooter as UiSheetFooter,
+  SheetHeader as UiSheetHeader,
+  SheetTitle as UiSheetTitle,
+} from '~/components/ui/sheet'
+import { Badge as UiBadge } from '~/components/ui/badge'
+import { Button as UiButton } from '~/components/ui/button'
 
 interface Props {
   modelValue: boolean

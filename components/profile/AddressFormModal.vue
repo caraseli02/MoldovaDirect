@@ -3,7 +3,7 @@
     :open="true"
     @update:open="handleOpenChange"
   >
-    <DialogScrollContent class="sm:max-w-md max-h-[95vh]">
+    <DialogContent class="sm:max-w-md max-h-[95vh]">
       <UiDialogHeader class="pb-4 border-b border-gray-200 dark:border-gray-700">
         <UiDialogTitle>
           {{ address?.id ? $t('profile.editAddress') : $t('profile.addAddress') }}
@@ -264,7 +264,7 @@
           </span>
         </UiButton>
       </UiDialogFooter>
-    </DialogScrollContent>
+    </DialogContent>
   </UiDialog>
 </template>
 
@@ -274,7 +274,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogScrollContent,
+  DialogContent,
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'

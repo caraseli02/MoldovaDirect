@@ -16,7 +16,7 @@
       </UiButton>
       <div
         v-else
-        class="w-4 h-4 animate-spin rounded-full border-2 border-zinc-300 border-t-primary-600"
+        class="w-4 h-4 animate-spin rounded-full border-2 border-zinc-300 border-t-slate-600"
       ></div>
     </div>
 
@@ -25,7 +25,7 @@
       v-if="recommendationsLoading && displayRecommendations.length === 0"
       class="flex items-center justify-center py-8"
     >
-      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
+      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-slate-600"></div>
       <span class="ml-2 text-sm text-zinc-500 dark:text-zinc-400">{{ $t('common.loading') }}</span>
     </div>
 
@@ -85,7 +85,7 @@
           <UiButton
             :disabled="isInCart(recommendation.product.id)"
             :aria-label="isInCart(recommendation.product.id) ? $t('cart.inCart') : $t('cart.addToCart')"
-            :class="isInCart(recommendation.product.id) ? 'bg-zinc-100 dark:bg-zinc-700 text-zinc-400' : 'bg-primary-600 text-white hover:bg-primary-700'"
+            :class="isInCart(recommendation.product.id) ? 'bg-zinc-100 dark:bg-zinc-700 text-zinc-400' : 'bg-slate-600 text-white hover:bg-slate-700'"
             @click="handleAddToCart(recommendation.product)"
           >
             <svg

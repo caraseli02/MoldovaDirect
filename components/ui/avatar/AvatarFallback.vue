@@ -1,20 +1,17 @@
 <script setup lang="ts">
-import type { AvatarFallbackProps } from 'reka-ui'
+import { AvatarFallback, type AvatarFallbackProps } from 'reka-ui'
+import { useForwardProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
-import { reactiveOmit } from '@vueuse/core'
-import { AvatarFallback } from 'reka-ui'
 import { cn } from '@/lib/utils'
 
 const props = defineProps<AvatarFallbackProps & { class?: HTMLAttributes['class'] }>()
-
-const delegatedProps = reactiveOmit(props, 'class')
+const forwarded = useForwardProps(props)
 </script>
 
 <template>
   <AvatarFallback
-    data-slot="avatar-fallback"
-    v-bind="delegatedProps"
-    :class="cn('bg-muted flex size-full items-center justify-center rounded-full', props.class)"
+    v-bind="forwarded"
+    :class="cn('flex h-full w-full items-center justify-center rounded-full bg-muted', props.class)"
   >
     <slot></slot>
   </AvatarFallback>

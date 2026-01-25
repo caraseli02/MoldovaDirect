@@ -1,11 +1,6 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ProductsTable from '~/components/admin/Products/Table.vue'
-
-// Mock lib/uiVariants
-vi.mock('@/lib/uiVariants', () => ({
-  productStatusVariant: (active: boolean) => active ? 'default' : 'secondary',
-}))
 
 // i18n plugin that returns keys
 const mockI18n = {

@@ -1,16 +1,11 @@
 <script setup lang="ts">
-import type { AvatarImageProps } from 'reka-ui'
-import { AvatarImage } from 'reka-ui'
+import { AvatarImage, type AvatarImageProps } from 'reka-ui'
+import { useForwardProps } from 'reka-ui'
 
 const props = defineProps<AvatarImageProps>()
+const forwarded = useForwardProps(props)
 </script>
 
 <template>
-  <AvatarImage
-    data-slot="avatar-image"
-    v-bind="props"
-    class="aspect-square size-full"
-  >
-    <slot></slot>
-  </AvatarImage>
+  <AvatarImage v-bind="forwarded" />
 </template>
