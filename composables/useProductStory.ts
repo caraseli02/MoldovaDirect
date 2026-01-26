@@ -196,14 +196,14 @@ export function useProductStory(
    * Review summary with ratings and highlights.
    * Returns null when no review data exists - UI should display "no reviews yet" state.
    */
-  const reviewSummary = computed((): ReviewSummary | null => {
+  const reviewSummary = computed((): ReviewSummary | undefined => {
     const attrs = productAttributes.value || {}
     const ratingRaw = attrs.rating
     const countRaw = attrs.review_count || attrs.reviewCount
 
-    // Return null when no real review data exists - never fabricate reviews
+    // Return undefined when no real review data exists - never fabricate reviews
     if (ratingRaw === undefined && countRaw === undefined) {
-      return null
+      return undefined
     }
 
     const rating = Number(ratingRaw || 0)
