@@ -21,31 +21,19 @@
           />
         </template>
 
-        <!-- COMPACT BRANDED FALLBACK -->
+        <!-- PREMIUM PLACEHOLDER -->
         <div
           v-else
-          class="flex items-center justify-center py-16"
+          class="h-full w-full bg-gray-50 dark:bg-gray-800"
         >
-          <div class="text-center space-y-4 px-6 max-w-sm">
-            <!-- Brand Identity with subtle glow -->
-            <div class="relative inline-block">
-              <div class="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full scale-150"></div>
-              <CommonIcon
-                name="wine"
-                class="relative h-20 w-20 text-blue-500 dark:text-blue-400 mx-auto"
-              />
-            </div>
-
-            <!-- Message -->
-            <div class="space-y-2">
-              <h3 class="text-base font-semibold text-gray-900 dark:text-white">
-                {{ $t('products.imageFallback.title') }}
-              </h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400">
-                {{ $t('products.imageFallback.subtitle') }}
-              </p>
-            </div>
-          </div>
+          <NuxtImg
+            src="/images/product-placeholder.png"
+            :alt="productName || 'Product placeholder'"
+            sizes="100vw lg:800px"
+            densities="x1 x2"
+            loading="eager"
+            class="h-full w-full object-cover opacity-80"
+          />
         </div>
 
         <!-- Badges (only if image exists) -->

@@ -178,6 +178,7 @@
       </section>
 
       <ProductDetailMobileStickyBar
+        v-model:selected-quantity="selectedQuantity"
         :product-name="getLocalizedText(product.name as Record<string, string>)"
         :price="product.price"
         :stock-quantity="stockQuantity"
@@ -187,7 +188,6 @@
       />
 
       <!-- Image Zoom Modal -->
-      <!-- TODO: Implement ProductImageZoomModal component -->
       <!--
       <ProductImageZoomModal
         v-if="product?.images?.length"
@@ -215,6 +215,9 @@ import { useProductDetailSEO } from '~/composables/useProductDetailSEO'
 import { useProductStockStatus } from '~/composables/useProductStockStatus'
 import { useProductDetail } from '~/composables/useProductDetail'
 import { useCart } from '~/composables/useCart'
+import { useToast } from '~/composables/useToast'
+
+const { t } = useI18n()
 
 // Extended types for API response
 interface BreadcrumbItem {
@@ -247,7 +250,7 @@ const { data: productData, pending, error } = await useLazyFetch<ProductDetailRe
 // API returns ProductDetailResponse directly - convert to ProductWithRelations
 const product = computed(() => (productData.value || null) as unknown as ProductWithRelations | null)
 
-// Use new composable
+// Use composable
 const {
   selectedImageIndex,
   selectedQuantity,

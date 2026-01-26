@@ -10,6 +10,25 @@ import { getErrorMessage } from '~/utils/errorUtils'
 /**
  * Composable for Product Detail Page logic
  * Encapsulates state and business logic from pages/products/[slug].vue
+ *
+ * @param product - Reactive product data from API
+ *
+ * @returns {Object} Product detail state and actions
+ * @returns {Ref<number>} selectedImageIndex - Currently selected gallery image index
+ * @returns {Ref<number>} selectedQuantity - Quantity to add to cart
+ * @returns {Ref<string | null>} shareFeedback - User feedback message after sharing
+ * @returns {Ref<boolean>} showZoomModal - Image zoom modal visibility
+ * @returns {ComputedRef<string | undefined>} selectedImage - Currently selected image URL
+ * @returns {ComputedRef<number>} stockQuantity - Available stock count
+ * @returns {ComputedRef<boolean>} isProductInCart - Whether product is already in cart
+ * @returns {ComputedRef<string | undefined>} categoryLabel - Localized category name
+ * @returns {ComputedRef<ProductWithRelations[]>} relatedProducts - Related products from same category
+ * @returns {ComputedRef<Array<{id, title, price}>>} bundleItems - Bundle product items
+ * @returns {ComputedRef<string[]>} trustPromises - Trust/promises badges text
+ * @returns {ComputedRef<Array<{id, question, answer, defaultOpen}>>} faqItems - FAQ items
+ * @returns {Function} shareProduct - Share product via native API or clipboard
+ * @returns {Function} openZoomModal - Open image zoom modal
+ * @returns {Function} addToCart - Add product to cart with selected quantity
  */
 export function useProductDetail(product: Ref<ProductWithRelations | null>) {
   const { t } = useI18n()
@@ -158,7 +177,11 @@ export function useProductDetail(product: Ref<ProductWithRelations | null>) {
       }, 4000)
     }
     catch (err: unknown) {
-      console.error('Share failed', getErrorMessage(err))
+      // Don't log user cancellations (AbortError) as errors
+      if (err instanceof Error && err.name === 'AbortError') {
+        return
+      }
+      console.warn('[useProductDetail] Share failed:', getErrorMessage(err))
       shareFeedback.value = t('products.actions.shareError')
     }
   }
@@ -168,27 +191,21 @@ export function useProductDetail(product: Ref<ProductWithRelations | null>) {
   }
 
   const addToCart = async () => {
-    if (!product.value) return
-
-    if (import.meta.server || typeof window === 'undefined') {
+    if (!product.value) {
+      console.warn('[useProductDetail] addToCart called without product data')
       return
     }
 
-    // Development-only debug logging
-    if (import.meta.dev) {
-      const _debugInfo = {
-        productId: product.value.id,
-        quantity: selectedQuantity.value,
-        isClient: import.meta.client,
-        hasWindow: typeof window !== 'undefined',
-        addItemType: typeof addItem,
-      }
+    // Guard: Skip cart operations during SSR
+    if (import.meta.server || typeof window === 'undefined') {
+      console.warn('[useProductDetail] addToCart called during SSR - cart operations are client-only')
+      return
     }
 
     try {
       if (typeof addItem !== 'function') {
         const error = `addItem is not a function (type: ${typeof addItem})`
-        console.error('❌', getErrorMessage(error))
+        console.warn('[useProductDetail]', error)
         throw new Error(error)
       }
 
@@ -206,16 +223,16 @@ export function useProductDetail(product: Ref<ProductWithRelations | null>) {
       const productName = getLocalizedText(product.value.name as Record<string, string>)
       toast.success(
         t('cart.success.added'),
-        t('cart.success.productAdded', { product: productName }),
+        { description: t('cart.success.productAdded', { product: productName }) },
       )
     }
     catch (err: unknown) {
       const errorMsg = err instanceof Error ? getErrorMessage(err) : String(err)
-      console.error('Add to cart failed:', errorMsg, err)
+      console.warn('[useProductDetail] Add to cart failed:', errorMsg, err)
 
       toast.error(
         t('cart.error.addFailed'),
-        t('cart.error.addFailedDetails'),
+        { description: t('cart.error.addFailedDetails') },
       )
     }
   }

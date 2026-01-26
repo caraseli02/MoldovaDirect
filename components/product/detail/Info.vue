@@ -16,7 +16,7 @@
             {{ shortDescription }}
           </UiCardDescription>
         </div>
-        <div class="flex flex-col items-start gap-2 text-right">
+        <div class="flex flex-col items-start gap-2 text-right lg:hidden">
           <div class="flex items-center gap-3">
             <span class="text-3xl font-bold text-gray-900 dark:text-white">€{{ formatPrice(price) }}</span>
             <span

@@ -1,8 +1,8 @@
 <template>
   <Teleport to="body">
     <div
-      class="fixed left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-2xl lg:hidden"
-      style="bottom: 57px"
+      class="fixed left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-2xl lg:hidden safe-area-bottom"
+      style="bottom: 0"
     >
       <div class="container mx-auto px-4 py-3">
         <div class="flex items-center gap-3">
@@ -14,6 +14,31 @@
             <p class="text-lg font-bold text-gray-900 dark:text-white">
               €{{ formatPrice(price) }}
             </p>
+          </div>
+
+          <!-- Quantity Selector (Compact) -->
+          <div class="flex items-center rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 h-12">
+            <UiButton
+              variant="ghost"
+              size="icon"
+              class="h-full w-8 rounded-none"
+              :disabled="selectedQuantity <= 1"
+              @click="$emit('update:selectedQuantity', Math.max(1, selectedQuantity - 1))"
+            >
+              <span class="text-gray-500 dark:text-gray-400">-</span>
+            </UiButton>
+            <span class="w-6 text-center text-sm font-semibold text-gray-900 dark:text-white">
+              {{ selectedQuantity }}
+            </span>
+            <UiButton
+              variant="ghost"
+              size="icon"
+              class="h-full w-8 rounded-none"
+              :disabled="selectedQuantity >= stockQuantity"
+              @click="$emit('update:selectedQuantity', Math.min(stockQuantity, selectedQuantity + 1))"
+            >
+              <span class="text-gray-500 dark:text-gray-400">+</span>
+            </UiButton>
           </div>
 
           <!-- Add to Cart Button (Thumb-Friendly) -->
@@ -62,13 +87,21 @@ defineProps<{
   productName: string
   price: number | string
   stockQuantity: number
+  selectedQuantity: number
   cartLoading: boolean
   isProductInCart: boolean
 }>()
 
 defineEmits<{
   (e: 'add-to-cart'): void
+  (e: 'update:selectedQuantity', value: number): void
 }>()
 
 const { formatPrice } = useProductUtils()
 </script>
+
+<style scoped>
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+</style>

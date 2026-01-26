@@ -7,7 +7,7 @@
       >
         {{ categoryLabel }}
       </div>
-      <UiCardTitle class="mt-2">
+      <UiCardTitle class="mt-2 lg:hidden">
         {{ productName }}
       </UiCardTitle>
       <div class="mt-4 flex items-center gap-3">
@@ -44,7 +44,7 @@
         :disabled="stockQuantity <= 0"
         @update:model-value="$emit('update:selectedQuantity', Number($event))"
       >
-        <UiSelectTrigger class="w-full">
+        <UiSelectTrigger class="w-full rounded-xl">
           <UiSelectValue />
         </UiSelectTrigger>
         <UiSelectContent>

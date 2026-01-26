@@ -161,8 +161,8 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
       case 'delivered':
         toast.success(
           t('orders.notifications.delivered.title'),
-          t('orders.notifications.delivered.message', { orderNumber }),
           {
+            description: t('orders.notifications.delivered.message', { orderNumber }),
             duration: 10000,
             actionText: t('orders.viewOrder'),
             actionHandler: () => {
@@ -175,8 +175,8 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
       case 'shipped':
         toast.info(
           t('orders.notifications.shipped.title'),
-          t('orders.notifications.shipped.message', { orderNumber }),
           {
+            description: t('orders.notifications.shipped.message', { orderNumber }),
             duration: 8000,
             actionText: t('orders.trackOrder'),
             actionHandler: () => {
@@ -189,8 +189,8 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
       case 'processing':
         toast.info(
           t('orders.notifications.processing.title'),
-          t('orders.notifications.processing.message', { orderNumber }),
           {
+            description: t('orders.notifications.processing.message', { orderNumber }),
             duration: 6000,
           },
         )
@@ -199,8 +199,8 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
       case 'cancelled':
         toast.warning(
           t('orders.notifications.cancelled.title'),
-          t('orders.notifications.cancelled.message', { orderNumber }),
           {
+            description: t('orders.notifications.cancelled.message', { orderNumber }),
             duration: 8000,
             actionText: t('orders.viewDetails'),
             actionHandler: () => {
@@ -213,11 +213,11 @@ export const useOrderTracking = (): UseOrderTrackingReturn => {
       default:
         toast.info(
           t('orders.notifications.statusChanged.title'),
-          t('orders.notifications.statusChanged.message', {
-            orderNumber,
-            status: getStatusChangeMessage(update.oldStatus, newStatus),
-          }),
           {
+            description: t('orders.notifications.statusChanged.message', {
+              orderNumber,
+              status: getStatusChangeMessage(update.oldStatus, newStatus),
+            }),
             duration: 6000,
           },
         )
