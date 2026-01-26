@@ -38,7 +38,7 @@
 
     <UiCardContent class="grid gap-6 lg:grid-cols-2">
       <div class="space-y-4">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+        <h2 class="text-lg font-semibold uppercase tracking-wide text-gray-900 dark:text-white">
           {{ storyTitle }}
         </h2>
         <p class="text-sm text-gray-600 dark:text-gray-400">

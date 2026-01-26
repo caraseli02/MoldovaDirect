@@ -212,7 +212,10 @@ const {
 
 // Initialize and fetch products (SSR-safe)
 await initialize()
-await fetchProducts({ sort: 'created', page: initialPage, limit: initialLimit })
+await useAsyncData('products-initial-load', async () => {
+  await fetchProducts({ sort: 'created', page: initialPage, limit: initialLimit })
+  return true
+})
 ensureFilterPanelInitialized()
 
 // Filter Management, Pagination, and SEO

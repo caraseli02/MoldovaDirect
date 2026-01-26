@@ -4,11 +4,14 @@
       class="fixed left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-2xl lg:hidden safe-area-bottom"
       style="bottom: 0"
     >
-      <div class="container mx-auto px-4 py-2">
+      <div class="container mx-auto px-4 py-1.5">
         <div class="flex items-center gap-3">
           <!-- Product Info (Compact) -->
-          <div class="flex-1 min-w-0">
-            <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
+          <div
+            class="flex-1 min-w-0"
+            aria-hidden="true"
+          >
+            <p class="text-xs text-gray-600 dark:text-gray-300 truncate">
               {{ productName }}
             </p>
             <p class="text-lg font-bold text-gray-900 dark:text-white">
