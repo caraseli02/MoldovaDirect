@@ -38,25 +38,26 @@
     </UiCardHeader>
 
     <UiCardContent class="space-y-4">
-      <UiLabel>{{ $t('common.quantity') }}</UiLabel>
-      <UiSelect
-        :model-value="String(selectedQuantity)"
-        :disabled="stockQuantity <= 0"
-        @update:model-value="$emit('update:selectedQuantity', Number($event))"
-      >
-        <UiSelectTrigger class="w-full rounded-xl">
-          <UiSelectValue />
-        </UiSelectTrigger>
-        <UiSelectContent>
-          <UiSelectItem
-            v-for="n in Math.min(10, Math.max(1, stockQuantity))"
-            :key="n"
-            :value="n.toString()"
-          >
-            {{ n }}
-          </UiSelectItem>
-        </UiSelectContent>
-      </UiSelect>
+      <div v-if="stockQuantity > 0">
+        <UiLabel>{{ $t('common.quantity') }}</UiLabel>
+        <UiSelect
+          :model-value="String(selectedQuantity)"
+          @update:model-value="$emit('update:selectedQuantity', Number($event))"
+        >
+          <UiSelectTrigger class="w-full rounded-xl">
+            <UiSelectValue />
+          </UiSelectTrigger>
+          <UiSelectContent>
+            <UiSelectItem
+              v-for="n in Math.min(10, stockQuantity)"
+              :key="n"
+              :value="n.toString()"
+            >
+              {{ n }}
+            </UiSelectItem>
+          </UiSelectContent>
+        </UiSelect>
+      </div>
 
       <UiButton
         data-testid="add-to-cart-button"

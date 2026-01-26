@@ -272,7 +272,7 @@ const { getLocalizedText } = useProductUtils()
 const { loading: cartLoading } = useCart()
 
 // Computed properties for composables
-const productAttributes = computed(() => (product.value as any)?.attributes || {})
+const productAttributes = computed(() => product.value?.attributes || {})
 
 // Stock status composable
 const {
@@ -301,7 +301,9 @@ const seoOptions = computed(() => ({
   rating: reviewSummary.value
     ? { rating: reviewSummary.value.rating, count: reviewSummary.value.count }
     : undefined,
-  brand: productAttributes.value?.brand || productAttributes.value?.producer || categoryLabel.value,
+  brand: (productAttributes.value?.brand as string | undefined)
+    || (productAttributes.value?.producer as string | undefined)
+    || categoryLabel.value,
 }))
 
 const { structuredData, metaTags, pageTitle } = useProductDetailSEO(product, seoOptions)
