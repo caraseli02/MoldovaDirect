@@ -160,20 +160,18 @@
       />
 
       <section
-        v-if="product.description"
+        v-if="getLocalizedText(product.description as Record<string, string>)"
         class="space-y-6 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900"
       >
         <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">
           {{ $t('products.description') }}
         </h2>
         <div class="prose prose-lg max-w-none text-gray-600 dark:prose-invert dark:text-gray-300">
-          <p
-            v-for="paragraph in getLocalizedText(product.description as Record<string, string>).split('\n')"
-            :key="paragraph"
-            class="mb-4"
-          >
-            {{ paragraph }}
-          </p>
+          <div class="prose prose-lg max-w-none text-gray-600 dark:prose-invert dark:text-gray-300">
+            <p class="whitespace-pre-line">
+              {{ getLocalizedText(product.description as Record<string, string>) }}
+            </p>
+          </div>
         </div>
       </section>
 
@@ -188,7 +186,6 @@
       />
 
       <!-- Image Zoom Modal -->
-      <!--
       <ProductImageZoomModal
         v-if="product?.images?.length"
         :is-open="showZoomModal"
@@ -200,7 +197,6 @@
         @previous="handlePreviousImage"
         @next="handleNextImage"
       />
-      -->
     </div>
   </div>
 </template>
@@ -266,6 +262,8 @@ const {
   faqItems,
   shareProduct,
   openZoomModal,
+  handlePreviousImage,
+  handleNextImage,
   addToCart,
 } = useProductDetail(product)
 

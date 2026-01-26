@@ -190,6 +190,20 @@ export function useProductDetail(product: Ref<ProductWithRelations | null>) {
     showZoomModal.value = true
   }
 
+  const handlePreviousImage = () => {
+    if (!product.value?.images?.length) return
+    selectedImageIndex.value = selectedImageIndex.value === 0
+      ? product.value.images.length - 1
+      : selectedImageIndex.value - 1
+  }
+
+  const handleNextImage = () => {
+    if (!product.value?.images?.length) return
+    selectedImageIndex.value = selectedImageIndex.value === product.value.images.length - 1
+      ? 0
+      : selectedImageIndex.value + 1
+  }
+
   const addToCart = async () => {
     if (!product.value) {
       console.warn('[useProductDetail] addToCart called without product data')
@@ -267,6 +281,8 @@ export function useProductDetail(product: Ref<ProductWithRelations | null>) {
     // Actions
     shareProduct,
     openZoomModal,
+    handlePreviousImage,
+    handleNextImage,
     addToCart,
   }
 }

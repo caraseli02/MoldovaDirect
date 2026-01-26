@@ -73,7 +73,10 @@
         </div>
       </div>
       <div class="space-y-6">
-        <div class="space-y-2">
+        <div
+          v-if="awards?.length"
+          class="space-y-2"
+        >
           <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
             {{ $t('products.story.awards') }}
           </h3>
@@ -84,12 +87,12 @@
             >
               • {{ award }}
             </li>
-            <li v-if="!awards?.length">
-              {{ $t('products.story.noAwards') }}
-            </li>
           </ul>
         </div>
-        <div class="space-y-2">
+        <div
+          v-if="originStory"
+          class="space-y-2"
+        >
           <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-600 dark:text-gray-400">
             {{ $t('products.story.origin') }}
           </h3>
