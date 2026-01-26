@@ -3,7 +3,10 @@
     <UiCardHeader>
       <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
         <div>
-          <UiCardTitle class="text-3xl">
+          <UiCardTitle
+            as="h1"
+            class="text-3xl"
+          >
             {{ productName }}
           </UiCardTitle>
           <UiCardDescription

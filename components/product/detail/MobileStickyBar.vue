@@ -2,7 +2,7 @@
   <Teleport to="body">
     <div
       class="fixed left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-2xl lg:hidden"
-      style="bottom: 64px"
+      style="bottom: 57px"
     >
       <div class="container mx-auto px-4 py-3">
         <div class="flex items-center gap-3">
@@ -19,7 +19,7 @@
           <!-- Add to Cart Button (Thumb-Friendly) -->
           <UiButton
             :disabled="stockQuantity <= 0 || cartLoading"
-            class="flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition min-h-[48px] min-w-[140px]"
+            class="flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white transition h-12 min-w-[140px]"
             :class="[
               isProductInCart ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700',
               cartLoading ? 'cursor-progress' : '',
