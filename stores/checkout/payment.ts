@@ -213,15 +213,23 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
   }
 
   async function processCreditCardPayment(): Promise<PaymentResult> {
+    if (!paymentIntent.value || !paymentClientSecret.value) {
+      const checkoutError = createPaymentError(
+        'Payment intent not initialized',
+        CheckoutErrorCode.PAYMENT_PROCESSING_ERROR,
+      )
+      logCheckoutError(checkoutError, {
+        sessionId: sessionId.value ?? undefined,
+        step: 'processCreditCardPayment',
+      })
+      throw new Error('Payment intent not initialized')
+    }
+
+    if (!sessionId.value) {
+      session.setSessionId(session.generateSessionId())
+    }
+
     try {
-      if (!paymentIntent.value || !paymentClientSecret.value) {
-        throw new Error('Payment intent not initialized')
-      }
-
-      if (!sessionId.value) {
-        session.setSessionId(session.generateSessionId())
-      }
-
       const response = await confirmPaymentIntent({
         paymentIntentId: paymentIntent.value,
         sessionId: sessionId.value as string,
@@ -238,18 +246,36 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       }
 
       if (response.requiresAction) {
+        const checkoutError = createPaymentError(
+          'Payment requires additional authentication',
+          CheckoutErrorCode.PAYMENT_PROCESSING_ERROR,
+        )
+        logCheckoutError(checkoutError, {
+          sessionId: sessionId.value ?? undefined,
+          step: 'processCreditCardPayment',
+        })
         throw new Error('Payment requires additional authentication')
       }
 
+      const checkoutError = createPaymentError(
+        response.error || 'Payment failed',
+        CheckoutErrorCode.PAYMENT_FAILED,
+      )
+      logCheckoutError(checkoutError, {
+        sessionId: sessionId.value ?? undefined,
+        step: 'processCreditCardPayment',
+      })
       throw new Error(response.error || 'Payment failed')
     }
     catch (error: unknown) {
-      console.error('Credit card payment failed:', getErrorMessage(error))
-      return {
-        success: false,
-        error: error instanceof Error ? getErrorMessage(error) : 'Payment processing failed',
-        paymentMethod: PAYMENT_METHODS.CREDIT_CARD,
-      }
+      const checkoutError = error instanceof Error
+        ? createPaymentError(getErrorMessage(error), CheckoutErrorCode.PAYMENT_PROCESSING_ERROR)
+        : createPaymentError('Payment processing failed', CheckoutErrorCode.PAYMENT_PROCESSING_ERROR)
+      logCheckoutError(checkoutError, {
+        sessionId: sessionId.value ?? undefined,
+        step: 'processCreditCardPayment',
+      }, error)
+      throw error
     }
   }
 

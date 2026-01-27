@@ -11,6 +11,24 @@ import { ref, type Ref } from 'vue'
 import type { Address, PaymentMethod, ShippingInformation, ShippingMethod } from '~/types/checkout'
 import { useCheckoutStore } from '~/stores/checkout'
 import { useCheckoutSessionStore } from '~/stores/checkout/session'
+import {
+  createNetworkError,
+  createPaymentError,
+  createSystemError,
+  createValidationError,
+  CheckoutErrorCode,
+  logCheckoutError,
+  parseApiError,
+} from '~/utils/checkout-errors'
+
+// Form ref interfaces for better type safety
+export interface ValidatableForm {
+  validateForm: () => boolean
+}
+
+export interface PaymentForm extends ValidatableForm {
+  getStripeCardElement: () => unknown | null
+}
 
 export interface CheckoutOrderOptions {
   total: Ref<number>
@@ -20,11 +38,8 @@ export interface CheckoutOrderOptions {
   paymentMethod: Ref<PaymentMethod>
   marketingConsent: Ref<boolean>
   defaultAddress: Ref<Address | null>
-  addressFormRef: Ref<{ validateForm: () => boolean } | null>
-  paymentSectionRef: Ref<{
-    validateForm: () => boolean
-    getStripeCardElement: () => any
-  } | null>
+  addressFormRef: Ref<ValidatableForm | null>
+  paymentSectionRef: Ref<PaymentForm | null>
 }
 
 export function useCheckoutOrder(options: CheckoutOrderOptions) {
@@ -56,13 +71,38 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
     const { useStripe } = await import('~/composables/useStripe')
     const { stripe, initializeStripe } = useStripe()
 
-    // Ensure Stripe is initialized
+    // Ensure Stripe is initialized with proper error handling
     if (!stripe.value) {
-      await initializeStripe()
+      try {
+        await initializeStripe()
+      }
+      catch (initError: unknown) {
+        const checkoutError = createSystemError(
+          'Failed to initialize payment provider',
+          CheckoutErrorCode.PAYMENT_PROCESSING_ERROR,
+        )
+        logCheckoutError(
+          checkoutError,
+          {
+            sessionId: checkoutStore.sessionId ?? undefined,
+            step: 'initializeStripe',
+          },
+          initError,
+        )
+        throw new Error('Payment service is temporarily unavailable. Please try again or use cash payment.', { cause: initError })
+      }
     }
 
     if (!stripe.value) {
-      throw new Error('Stripe not available')
+      const checkoutError = createSystemError(
+        'Payment service not initialized',
+        CheckoutErrorCode.PAYMENT_PROCESSING_ERROR,
+      )
+      logCheckoutError(checkoutError, {
+        sessionId: checkoutStore.sessionId ?? undefined,
+        step: 'processStripePayment',
+      })
+      throw new Error('Payment service is not available. Please refresh the page or try again later.')
     }
 
     // Get the Stripe card element from the payment form
@@ -71,18 +111,44 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
       throw new Error('Card element not available')
     }
 
-    // Create payment intent on server
-    const paymentIntentData = await $fetch('/api/checkout/create-payment-intent', {
-      method: 'POST',
-      body: {
-        amount: Math.round(total.value * 100), // Convert to cents
-        currency: 'eur',
-        sessionId: checkoutStore.sessionId || 'temp-session',
-      },
-    })
+    // Type assertion for Stripe card element - the actual type comes from Stripe.js
+    // We use 'unknown' in the interface to avoid importing Stripe types directly
+    const stripeCardElement = cardElement as {
+      mount: () => void
+      destroy: () => void
+      _elementTag: string
+    }
 
-    if (!paymentIntentData.success || !paymentIntentData.paymentIntent?.client_secret) {
-      throw new Error('Failed to create payment intent')
+    // Create payment intent on server with error handling
+    let paymentIntentData
+    try {
+      paymentIntentData = await $fetch('/api/checkout/create-payment-intent', {
+        method: 'POST',
+        body: {
+          amount: Math.round(total.value * 100), // Convert to cents
+          currency: 'eur',
+          sessionId: checkoutStore.sessionId || 'temp-session',
+        },
+      })
+    }
+    catch (fetchError: unknown) {
+      const checkoutError = createNetworkError(
+        'Failed to connect to payment server',
+        CheckoutErrorCode.NETWORK_ERROR,
+      )
+      logCheckoutError(
+        checkoutError,
+        {
+          sessionId: checkoutStore.sessionId ?? undefined,
+          step: 'createPaymentIntent',
+        },
+        fetchError,
+      )
+      throw new Error('Could not connect to payment server. Please check your connection and try again.', { cause: fetchError })
+    }
+
+    if (!paymentIntentData?.success || !paymentIntentData?.paymentIntent?.client_secret) {
+      throw new Error('Payment initialization failed. Please try again.')
     }
 
     // Confirm payment with Stripe
@@ -90,7 +156,7 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
       paymentIntentData.paymentIntent.client_secret,
       {
         payment_method: {
-          card: cardElement,
+          card: stripeCardElement as any, // Stripe expects its internal element type
           billing_details: {
             name: paymentMethod.value.creditCard?.holderName || '',
             address: {
@@ -150,7 +216,14 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
       }
     }
     catch (paymentError: unknown) {
-      console.error('Payment processing failed:', paymentError)
+      const checkoutError = paymentError instanceof Error
+        ? createPaymentError(getErrorMessage(paymentError), CheckoutErrorCode.PAYMENT_PROCESSING_ERROR)
+        : createPaymentError('Payment processing failed', CheckoutErrorCode.PAYMENT_PROCESSING_ERROR)
+      logCheckoutError(checkoutError, {
+        sessionId: checkoutStore.sessionId ?? undefined,
+        step: 'processOrder',
+        paymentMethod: paymentMethod.value.type,
+      }, paymentError)
       throw paymentError // Re-throw to be handled by caller
     }
 
@@ -160,7 +233,18 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
     }
     catch (navError: unknown) {
       // Payment succeeded but navigation failed - critical scenario
-      console.error('Navigation to confirmation failed after successful payment:', navError)
+      const checkoutError = createSystemError(
+        'Navigation failed after payment',
+        CheckoutErrorCode.SYSTEM_ERROR,
+      )
+      logCheckoutError(
+        checkoutError,
+        {
+          sessionId: checkoutStore.sessionId ?? undefined,
+          step: 'navigation',
+        },
+        navError,
+      )
 
       toast.warning(
         t('checkout.success.orderCompleted'),
@@ -171,6 +255,9 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
       setTimeout(() => {
         window.location.href = localePath('/checkout/confirmation')
       }, 2000)
+
+      // Re-throw so caller knows navigation failed
+      throw new Error('Payment succeeded but navigation failed', { cause: navError })
     }
   }
 
@@ -209,27 +296,40 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
     catch (error: unknown) {
       console.error('Express checkout failed:', error)
 
-      // Provide actionable guidance based on error type
-      const errorMessage = getErrorMessage(error)
-      const isNetworkError = errorMessage.includes('network') || errorMessage.includes('fetch') || errorMessage.includes('Failed to fetch')
-      const isSessionError = errorMessage.includes('session') || errorMessage.includes('expired') || errorMessage.includes('unauthorized')
+      // Use proper error type checking instead of string matching
+      const checkoutError = parseApiError(error)
+      logCheckoutError(
+        checkoutError,
+        {
+          sessionId: checkoutStore.sessionId ?? undefined,
+          step: 'expressCheckout',
+        },
+        error,
+      )
 
-      if (isNetworkError) {
+      // Provide actionable guidance based on error type
+      if (checkoutError.type === 'network') {
         toast.error(
           t('checkout.errors.networkError', 'Connection Error'),
           t('checkout.errors.checkConnection', 'Please check your internet connection and try again.'),
         )
       }
-      else if (isSessionError) {
+      else if (checkoutError.code === CheckoutErrorCode.SESSION_EXPIRED || checkoutError.code === CheckoutErrorCode.UNAUTHORIZED) {
         toast.error(
           t('checkout.errors.sessionExpired', 'Session Expired'),
           t('checkout.errors.refreshPage', 'Your session has expired. Please refresh the page.'),
         )
       }
+      else if (checkoutError.type === 'validation') {
+        toast.error(
+          t('checkout.errors.invalidInformation', 'Please Check Your Information'),
+          checkoutError.userAction || t('checkout.errors.reviewFields'),
+        )
+      }
       else {
         toast.error(
           t('checkout.errors.expressCheckoutFailed', 'Express Checkout Failed'),
-          t('checkout.errors.tryFullCheckout', 'Please use the full checkout form below.'),
+          checkoutError.userAction || t('checkout.errors.tryFullCheckout'),
         )
       }
     }
@@ -272,27 +372,40 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
     catch (error: unknown) {
       console.error('Failed to place order:', error)
 
-      // Provide user-friendly error message without exposing technical details
-      const errorMessage = getErrorMessage(error)
-      const isNetworkError = errorMessage.includes('network') || errorMessage.includes('fetch') || errorMessage.includes('Failed to fetch')
-      const isValidationError = errorMessage.includes('validation') || errorMessage.includes('invalid')
+      // Use proper error type checking instead of string matching
+      const checkoutError = parseApiError(error)
+      logCheckoutError(
+        checkoutError,
+        {
+          sessionId: checkoutStore.sessionId ?? undefined,
+          step: 'placeOrder',
+        },
+        error,
+      )
 
-      if (isNetworkError) {
+      // Provide user-friendly error message based on error type
+      if (checkoutError.type === 'network') {
         toast.error(
           t('checkout.errors.networkError', 'Connection Error'),
           t('checkout.errors.checkConnection', 'Please check your internet connection and try again.'),
         )
       }
-      else if (isValidationError) {
+      else if (checkoutError.type === 'validation') {
         toast.error(
           t('checkout.errors.validationFailed', 'Please Check Your Information'),
-          t('checkout.errors.reviewFields', 'Some fields may need to be corrected.'),
+          checkoutError.userAction || t('checkout.errors.reviewFields'),
+        )
+      }
+      else if (checkoutError.type === 'payment') {
+        toast.error(
+          t('checkout.errors.paymentFailed', 'Payment Failed'),
+          checkoutError.userAction || t('checkout.errors.pleaseTryAgain'),
         )
       }
       else {
         toast.error(
           t('checkout.errors.orderFailed', 'Order Failed'),
-          t('checkout.errors.pleaseTryAgain', 'Please try again or contact support if the issue persists.'),
+          checkoutError.userAction || t('checkout.errors.pleaseTryAgain'),
         )
       }
     }
@@ -307,6 +420,16 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
   const validateForms = async (): Promise<boolean> => {
     // Validate address form
     if (addressFormRef.value && !addressFormRef.value.validateForm()) {
+      const checkoutError = createValidationError(
+        'address',
+        'Address validation failed',
+        CheckoutErrorCode.VALIDATION_FAILED,
+      )
+      logCheckoutError(checkoutError, {
+        sessionId: checkoutStore.sessionId ?? undefined,
+        step: 'validateAddress',
+        address: shippingAddress.value,
+      })
       toast.error(
         t('checkout.validation.error'),
         t('checkout.validation.addressInvalid'),
@@ -316,6 +439,16 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
 
     // Validate payment form (including Stripe validation for credit cards)
     if (paymentSectionRef.value && !paymentSectionRef.value.validateForm()) {
+      const checkoutError = createValidationError(
+        'payment',
+        'Payment validation failed',
+        CheckoutErrorCode.VALIDATION_FAILED,
+      )
+      logCheckoutError(checkoutError, {
+        sessionId: checkoutStore.sessionId ?? undefined,
+        step: 'validatePayment',
+        paymentMethod: paymentMethod.value.type,
+      })
       toast.error(
         t('checkout.validation.error'),
         t('checkout.validation.paymentInvalid'),

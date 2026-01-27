@@ -329,6 +329,7 @@ export interface ErrorLogEntry {
     timestamp: Date
     userAgent?: string
     url?: string
+    [key: string]: unknown // Allow additional context properties
   }
   stackTrace?: string
   additionalData?: unknown

@@ -436,10 +436,7 @@ describe('Checkout Payment Store', () => {
     it('should fail if payment intent not initialized', async () => {
       const store = useCheckoutPaymentStore()
 
-      const result = await store.processCreditCardPayment()
-
-      expect(result.success).toBe(false)
-      expect(result.error).toContain('Payment intent not initialized')
+      await expect(store.processCreditCardPayment()).rejects.toThrow('Payment intent not initialized')
     })
 
     it('should handle requires action response', async () => {
@@ -455,10 +452,7 @@ describe('Checkout Payment Store', () => {
       sessionStore.setPaymentClientSecret('secret_123')
       sessionStore.setSessionId('session-123')
 
-      const result = await store.processCreditCardPayment()
-
-      expect(result.success).toBe(false)
-      expect(result.error).toContain('requires additional authentication')
+      await expect(store.processCreditCardPayment()).rejects.toThrow('requires additional authentication')
     })
 
     it('should handle payment failure', async () => {
@@ -474,10 +468,7 @@ describe('Checkout Payment Store', () => {
       sessionStore.setPaymentClientSecret('secret_123')
       sessionStore.setSessionId('session-123')
 
-      const result = await store.processCreditCardPayment()
-
-      expect(result.success).toBe(false)
-      expect(result.error).toBe('Card declined')
+      await expect(store.processCreditCardPayment()).rejects.toThrow('Card declined')
     })
   })
 

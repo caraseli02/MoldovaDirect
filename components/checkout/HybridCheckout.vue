@@ -228,6 +228,7 @@
 
 <script setup lang="ts">
 import type { PaymentMethod } from '~/types/checkout'
+import type { ValidatableForm, PaymentForm } from '~/composables/useCheckoutOrder'
 import { useCartStore } from '~/stores/cart'
 
 /**
@@ -303,12 +304,9 @@ const cartStore = useCartStore()
 const { t } = useI18n()
 const toast = useToast()
 
-// Component refs
-const addressFormRef = ref<{ validateForm: () => boolean } | null>(null)
-const paymentSectionRef = ref<{
-  validateForm: () => boolean
-  getStripeCardElement: () => any
-} | null>(null)
+// Component refs with proper types
+const addressFormRef = ref<ValidatableForm | null>(null)
+const paymentSectionRef = ref<PaymentForm | null>(null)
 
 // Guest checkout composable
 const {
@@ -397,7 +395,7 @@ const {
   stripeError,
   termsAccepted,
   privacyAccepted,
-  user,
+  isAuthenticated: computed(() => !!user.value),
 })
 
 // Checkout order processing composable

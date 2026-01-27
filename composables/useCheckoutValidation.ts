@@ -8,19 +8,19 @@
  */
 
 import { computed, type Ref } from 'vue'
-import type { PaymentMethod } from '~/types/checkout'
+import type { PaymentMethod, ShippingMethod, Address } from '~/types/checkout'
 
 export interface CheckoutValidationOptions {
   isAddressValid: Ref<boolean>
-  shippingAddress: Ref<{ firstName?: string, street?: string }>
-  selectedMethod: Ref<unknown | null>
+  shippingAddress: Ref<Partial<Pick<Address, 'firstName' | 'street'>>>
+  selectedMethod: Ref<ShippingMethod | null>
   isGuestInfoValid: Ref<boolean>
   paymentMethod: Ref<PaymentMethod>
   stripeReady: Ref<boolean>
   stripeError: Ref<string | null>
   termsAccepted: Ref<boolean>
   privacyAccepted: Ref<boolean>
-  user: Ref<unknown | null>
+  isAuthenticated: Ref<boolean>
 }
 
 export function useCheckoutValidation(options: CheckoutValidationOptions) {
@@ -36,7 +36,7 @@ export function useCheckoutValidation(options: CheckoutValidationOptions) {
     stripeError,
     termsAccepted,
     privacyAccepted,
-    user,
+    isAuthenticated,
   } = options
 
   /**
@@ -88,7 +88,7 @@ export function useCheckoutValidation(options: CheckoutValidationOptions) {
    * Check if all conditions are met to place order
    */
   const canPlaceOrder = computed(() => {
-    const guestCheckPassed = user.value ? true : isGuestInfoValid.value
+    const guestCheckPassed = isAuthenticated.value ? true : isGuestInfoValid.value
     return guestCheckPassed
       && isAddressValid.value
       && selectedMethod.value !== null
