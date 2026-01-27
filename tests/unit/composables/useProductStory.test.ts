@@ -108,8 +108,8 @@ describe('useProductStory', () => {
     expect(sustainabilityBadges.value).toEqual([])
     // Storytelling uses fallback with category param (mock appends :param)
     expect(storytelling.value.producer).toContain('Producer fallback')
-    // Review summary returns null when no data exists
-    expect(reviewSummary.value).toBeNull()
+    // Review summary returns undefined when no data exists
+    expect(reviewSummary.value).toBeUndefined()
   })
 
   describe('tastingNotes and pairingIdeas', () => {
@@ -190,13 +190,13 @@ describe('useProductStory', () => {
   })
 
   describe('reviewSummary', () => {
-    it('returns null when no review data exists', () => {
+    it('returns undefined when no review data exists', () => {
       const product = createProduct({
         attributes: {},
       })
       const { reviewSummary } = useProductStory(product)
 
-      expect(reviewSummary.value).toBeNull()
+      expect(reviewSummary.value).toBeUndefined()
     })
 
     it('returns review data when rating is provided', () => {

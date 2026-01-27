@@ -287,9 +287,9 @@ export const useProductsStore = defineStore('products', {
           return
         }
 
-        const response = await $fetch<ProductDetailResponse>(`/api/products/${trimmedSlug}`)
+        const response = await $fetch<{ product: ProductWithRelations, relatedProducts: ProductWithRelations[] }>(`/api/products/${trimmedSlug}`)
 
-        this.currentProduct = response as ProductWithRelations
+        this.currentProduct = response.product
         this.relatedProducts = response.relatedProducts || []
 
         // Cache the response
