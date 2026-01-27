@@ -9,12 +9,12 @@
             class="mt-0.5"
             @update:checked="$emit('update:termsAccepted', $event)"
           />
-          <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+          <span class="ml-2 text-sm text-gray-700 dark:text-gray-200">
             {{ $t('checkout.review.acceptTerms') }}
             <a
               href="/terms"
               target="_blank"
-              class="text-slate-600 hover:text-slate-700 underline"
+              class="text-slate-600 dark:text-blue-400 hover:text-slate-700 dark:hover:text-blue-300 underline"
             >
               {{ $t('checkout.review.termsOfService') }}
             </a>
@@ -31,12 +31,12 @@
             class="mt-0.5"
             @update:checked="$emit('update:privacyAccepted', $event)"
           />
-          <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+          <span class="ml-2 text-sm text-gray-700 dark:text-gray-200">
             {{ $t('checkout.review.acceptPrivacy') }}
             <a
               href="/privacy"
               target="_blank"
-              class="text-slate-600 hover:text-slate-700 underline"
+              class="text-slate-600 dark:text-blue-400 hover:text-slate-700 dark:hover:text-blue-300 underline"
             >
               {{ $t('checkout.review.privacyPolicy') }}
             </a>
@@ -61,7 +61,7 @@
 
       <!-- Place Order Button (Desktop) -->
       <UiButton
-        :disabled="!canPlaceOrder || processingOrder"
+        :disabled="processingOrder"
         class="hidden lg:flex w-full"
         @click="$emit('place-order')"
       >

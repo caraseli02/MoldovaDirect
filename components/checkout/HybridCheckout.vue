@@ -159,7 +159,7 @@
 
           <!-- Terms & Place Order Section -->
           <CheckoutTermsSection
-            v-if="canShowPlaceOrder"
+            v-if="true"
             v-model:terms-accepted="termsAccepted"
             v-model:privacy-accepted="privacyAccepted"
             v-model:marketing-consent="marketingConsent"
@@ -191,7 +191,7 @@
 
     <!-- Mobile Sticky Footer -->
     <CheckoutMobileFooter
-      v-if="(user || showGuestForm) && canShowPlaceOrder && !showExpressCheckout"
+      v-if="(user || showGuestForm) && !showExpressCheckout"
       :can-place-order="canPlaceOrder"
       :processing-order="processingOrder"
       :formatted-total="formatted"

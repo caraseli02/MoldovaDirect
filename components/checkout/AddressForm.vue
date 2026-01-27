@@ -85,7 +85,10 @@
     >
       <!-- Full Name (Single Field) -->
       <div>
-        <UiLabel for="fullName">
+        <UiLabel
+          for="fullName"
+          class="dark:text-white"
+        >
           {{ $t('checkout.addressForm.fullName') }}
           <span class="text-red-500">*</span>
         </UiLabel>
@@ -96,7 +99,7 @@
           name="name"
           autocomplete="name"
           :placeholder="$t('checkout.addressForm.fullNamePlaceholder')"
-          :class="getFieldClasses('fullName')"
+          :class="[getFieldClasses('fullName'), 'h-12 text-base']"
           @input="handleFullNameInput(($event.target as HTMLInputElement).value)"
           @blur="validateField('fullName')"
           @focus="clearFieldError('fullName')"
@@ -111,7 +114,10 @@
 
       <!-- Street Address with Autocomplete -->
       <div class="relative">
-        <UiLabel for="street">
+        <UiLabel
+          for="street"
+          class="dark:text-white"
+        >
           {{ $t('checkout.addressForm.street') }}
           <span class="text-red-500">*</span>
         </UiLabel>
@@ -124,7 +130,7 @@
             name="street-address"
             autocomplete="street-address"
             :placeholder="$t('checkout.addressForm.streetPlaceholder')"
-            :class="getFieldClasses('street')"
+            :class="[getFieldClasses('street'), 'h-12 text-base']"
             @input="handleStreetInput(($event.target as HTMLInputElement).value)"
             @blur="validateField('street')"
             @focus="handleStreetFocus"
@@ -175,7 +181,10 @@
       <!-- City & Postal Code (Side by Side) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <UiLabel for="city">
+          <UiLabel
+            for="city"
+            class="dark:text-white"
+          >
             {{ $t('checkout.addressForm.city') }}
             <span class="text-red-500">*</span>
           </UiLabel>
@@ -186,7 +195,7 @@
             name="address-level2"
             autocomplete="address-level2"
             :placeholder="$t('checkout.addressForm.cityPlaceholder')"
-            :class="getFieldClasses('city')"
+            :class="[getFieldClasses('city'), 'h-12 text-base']"
             @input="updateField('city', ($event.target as HTMLInputElement).value)"
             @blur="validateField('city')"
             @focus="clearFieldError('city')"
@@ -200,7 +209,10 @@
         </div>
 
         <div>
-          <UiLabel for="postalCode">
+          <UiLabel
+            for="postalCode"
+            class="dark:text-white"
+          >
             {{ $t('checkout.addressForm.postalCode') }}
             <span class="text-red-500">*</span>
           </UiLabel>
@@ -211,7 +223,7 @@
             name="postal-code"
             autocomplete="postal-code"
             :placeholder="$t('checkout.addressForm.postalCodePlaceholder')"
-            :class="getFieldClasses('postalCode')"
+            :class="[getFieldClasses('postalCode'), 'h-12 text-base']"
             @input="updateField('postalCode', ($event.target as HTMLInputElement).value)"
             @blur="validateField('postalCode')"
             @focus="clearFieldError('postalCode')"
@@ -227,13 +239,16 @@
 
       <!-- Country -->
       <div>
-        <UiLabel for="country">
+        <UiLabel
+          for="country"
+          class="dark:text-white"
+        >
           {{ $t('checkout.addressForm.country') }}
           <span class="text-red-500">*</span>
         </UiLabel>
         <UiSelect
           :value="localAddress.country"
-          :class="getFieldClasses('country')"
+          :class="[getFieldClasses('country'), 'h-12 text-base']"
           @update:model-value="updateField('country', $event as string); clearFieldError('country')"
           @blur="validateField('country')"
         >
@@ -260,9 +275,12 @@
 
       <!-- Phone (Optional but Recommended) -->
       <div>
-        <UiLabel for="phone">
+        <UiLabel
+          for="phone"
+          class="dark:text-white"
+        >
           {{ $t('checkout.addressForm.phone') }}
-          <span class="text-gray-500 text-xs ml-1">({{ $t('checkout.addressForm.phoneHelper') }})</span>
+          <span class="text-gray-500 dark:text-gray-400 text-xs ml-1">({{ $t('checkout.addressForm.phoneHelper') }})</span>
         </UiLabel>
         <UiInput
           id="phone"
@@ -272,6 +290,7 @@
           autocomplete="tel"
           inputmode="tel"
           :placeholder="$t('checkout.addressForm.phonePlaceholder')"
+          class="h-12 text-base bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           @input="updateField('phone', ($event.target as HTMLInputElement).value)"
         />
         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">

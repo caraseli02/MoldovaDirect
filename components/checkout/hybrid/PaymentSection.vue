@@ -25,72 +25,69 @@
       </span>
     </div>
     <div class="section-content">
-      <!-- Payment Method Selection -->
-      <div class="space-y-3">
+      <UiRadioGroup
+        :model-value="modelValue.type"
+        class="space-y-3"
+        @update:model-value="(val) => updatePaymentType(val as any)"
+      >
         <!-- Cash Payment -->
         <div
-          class="p-4 border rounded-lg cursor-pointer transition-colors"
-          :class="modelValue.type === 'cash'
-            ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700'
-            : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
-          @click="updatePaymentType('cash')"
+          class="relative"
         >
-          <div class="flex items-center cursor-pointer">
-            <div
-              class="size-4 rounded-full border-2 border-gray-300 flex items-center justify-center shrink-0"
-              :class="modelValue.type === 'cash' ? 'border-green-600 bg-green-50' : ''"
-            >
-              <div
-                v-if="modelValue.type === 'cash'"
-                class="size-2 rounded-full bg-green-600"
-              ></div>
-            </div>
+          <UiLabel
+            class="flex items-center p-4 border rounded-lg cursor-pointer transition-colors"
+            :class="modelValue.type === 'cash'
+              ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700 ring-1 ring-green-200 dark:ring-green-700'
+              : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
+          >
+            <UiRadioGroupItem
+              id="payment-cash"
+              value="cash"
+              class="mt-0.5 flex-shrink-0 border-slate-900 dark:border-slate-100 text-slate-900 dark:text-slate-100"
+            />
             <div class="ml-3 flex items-center">
               <span class="text-xl mr-2">💵</span>
               <div>
-                <p class="font-medium text-gray-900 dark:text-white">
+                <p class="font-medium text-gray-900 dark:text-white cursor-pointer">
                   {{ $t('checkout.payment.cash.label') }}
                 </p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">
+                <p class="text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
                   {{ $t('checkout.payment.cash.summary') }}
                 </p>
               </div>
             </div>
-          </div>
+          </UiLabel>
         </div>
 
         <!-- Credit Card Payment (Stripe) -->
         <div
-          class="p-4 border rounded-lg cursor-pointer transition-colors"
-          :class="modelValue.type === 'credit_card'
-            ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700'
-            : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
-          @click="updatePaymentType('credit_card')"
+          class="relative"
         >
-          <div class="flex items-center cursor-pointer">
-            <div
-              class="size-4 rounded-full border-2 border-gray-300 flex items-center justify-center shrink-0"
-              :class="modelValue.type === 'credit_card' ? 'border-blue-600 bg-blue-50' : ''"
-            >
-              <div
-                v-if="modelValue.type === 'credit_card'"
-                class="size-2 rounded-full bg-blue-600"
-              ></div>
-            </div>
+          <UiLabel
+            class="flex items-center p-4 border rounded-lg cursor-pointer transition-colors"
+            :class="modelValue.type === 'credit_card'
+              ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700 ring-1 ring-blue-200 dark:ring-blue-700'
+              : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
+          >
+            <UiRadioGroupItem
+              id="payment-card"
+              value="credit_card"
+              class="mt-0.5 flex-shrink-0 border-slate-900 dark:border-slate-100 text-slate-900 dark:text-slate-100"
+            />
             <div class="ml-3 flex items-center">
               <span class="text-xl mr-2">💳</span>
               <div>
-                <p class="font-medium text-gray-900 dark:text-white">
+                <p class="font-medium text-gray-900 dark:text-white cursor-pointer">
                   {{ $t('checkout.payment.creditCard.label') }}
                 </p>
-                <p class="text-sm text-gray-600 dark:text-gray-400">
+                <p class="text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
                   {{ $t('checkout.payment.creditCard.summary') }}
                 </p>
               </div>
             </div>
-          </div>
+          </UiLabel>
         </div>
-      </div>
+      </UiRadioGroup>
 
       <!-- Payment Form for Selected Method -->
       <div

@@ -111,55 +111,59 @@
       </div>
 
       <!-- Pricing Breakdown -->
-      <div class="space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <!-- Subtotal -->
-        <div class="flex justify-between text-sm">
-          <span class="text-gray-600 dark:text-gray-400">{{ $t('common.subtotal') }}</span>
-          <span class="text-gray-900 dark:text-white">{{ formatPrice(subtotal) }}</span>
-        </div>
+      <ClientOnly>
+        <div class="space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <!-- Subtotal -->
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600 dark:text-gray-400">{{ $t('common.subtotal') }}</span>
+            <span class="text-gray-900 dark:text-white">{{ formatPrice(subtotal) }}</span>
+          </div>
 
-        <!-- Shipping -->
-        <div class="flex justify-between text-sm">
-          <span class="text-gray-600 dark:text-gray-400">
-            {{ $t('common.shipping') }}
-            <span
-              v-if="shippingMethod"
-              class="text-xs text-gray-500"
-            >
-              ({{ shippingMethod.name }})
+          <!-- Shipping -->
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600 dark:text-gray-400">
+              {{ $t('common.shipping') }}
+              <span
+                v-if="shippingMethod"
+                class="text-xs text-gray-500"
+              >
+                ({{ shippingMethod.name }})
+              </span>
             </span>
-          </span>
-          <span class="text-gray-900 dark:text-white">
-            <template v-if="shippingCost === 0">
-              <span class="text-green-600 dark:text-green-400">{{ $t('checkout.freeShipping', 'Free') }}</span>
-            </template>
-            <template v-else-if="shippingCost > 0">
-              {{ formatPrice(shippingCost) }}
-            </template>
-            <template v-else>
-              <span class="text-gray-400">{{ $t('checkout.calculatedAtNextStep', 'Calculated') }}</span>
-            </template>
-          </span>
-        </div>
+            <span class="text-gray-900 dark:text-white">
+              <template v-if="shippingCost === 0">
+                <span class="text-green-600 dark:text-green-400">{{ $t('checkout.freeShipping', 'Free') }}</span>
+              </template>
+              <template v-else-if="shippingCost > 0">
+                {{ formatPrice(shippingCost) }}
+              </template>
+              <template v-else>
+                <span class="text-gray-400">{{ $t('checkout.calculatedAtNextStep', 'Calculated') }}</span>
+              </template>
+            </span>
+          </div>
 
-        <!-- Tax -->
-        <div class="flex justify-between text-sm">
-          <span class="text-gray-600 dark:text-gray-400">{{ $t('common.tax') }}</span>
-          <span class="text-gray-900 dark:text-white">{{ formatPrice(tax) }}</span>
+          <!-- Tax -->
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600 dark:text-gray-400">{{ $t('common.tax') }}</span>
+            <span class="text-gray-900 dark:text-white">{{ formatPrice(tax) }}</span>
+          </div>
         </div>
-      </div>
+      </ClientOnly>
 
       <!-- Total -->
-      <div class="mt-4 pt-4 border-t-2 border-gray-200 dark:border-gray-700">
-        <div class="flex justify-between items-center">
-          <span class="text-base font-semibold text-gray-900 dark:text-white">
-            {{ $t('common.total') }}
-          </span>
-          <span class="text-xl font-bold text-gray-900 dark:text-white">
-            {{ formatPrice(total) }}
-          </span>
+      <ClientOnly>
+        <div class="mt-4 pt-4 border-t-2 border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-center">
+            <span class="text-base font-semibold text-gray-900 dark:text-white">
+              {{ $t('common.total') }}
+            </span>
+            <span class="text-xl font-bold text-gray-900 dark:text-white">
+              {{ formatPrice(total) }}
+            </span>
+          </div>
         </div>
-      </div>
+      </ClientOnly>
 
       <!-- Shipping Estimate (if method selected) -->
       <div
