@@ -7,7 +7,7 @@
  * @see {CODE_DESIGN_PRINCIPLES.md} Three-layer separation
  */
 
-import { ref, type Ref } from 'vue'
+import { ref, type Ref, onUnmounted } from 'vue'
 import type { Address, PaymentMethod, ShippingInformation, ShippingMethod } from '~/types/checkout'
 import { useCheckoutStore } from '~/stores/checkout'
 import { useCheckoutSessionStore } from '~/stores/checkout/session'
@@ -63,6 +63,7 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
 
   // State
   const processingOrder = ref(false)
+  const navigationTimeout = ref<ReturnType<typeof setTimeout> | null>(null)
 
   /**
    * Process Stripe payment for credit cards
@@ -252,7 +253,7 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
       )
 
       // Attempt recovery by using window.location
-      setTimeout(() => {
+      navigationTimeout.value = setTimeout(() => {
         window.location.href = localePath('/checkout/confirmation')
       }, 2000)
 
@@ -458,6 +459,13 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
 
     return true
   }
+
+  // Cleanup navigation timeout on unmount
+  onUnmounted(() => {
+    if (navigationTimeout.value) {
+      clearTimeout(navigationTimeout.value)
+    }
+  })
 
   return {
     processingOrder,
