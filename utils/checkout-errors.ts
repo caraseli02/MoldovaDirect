@@ -153,50 +153,67 @@ export function createSystemError(
 // ERROR PARSING AND HANDLING
 // =============================================
 
-export function parseApiError(error: any): CheckoutError {
-  // Handle different error formats from API responses
-  if (error?.response?.data) {
-    const apiError = error.response.data
+export function parseApiError(error: unknown): CheckoutError {
+  // Handle null/undefined/primitive errors early
+  if (!error || typeof error !== 'object') {
+    return createSystemError(
+      'An unexpected error occurred',
+      CheckoutErrorCode.SYSTEM_ERROR,
+    )
+  }
 
-    if (apiError.code) {
-      return parseErrorByCode(apiError.code, apiError.message, apiError.field)
+  // Narrow the type for safe property access
+  const err = error as Record<string, unknown>
+
+  // Handle different error formats from API responses
+  if (err.response && typeof err.response === 'object') {
+    const response = err.response as Record<string, unknown>
+    if (response.data && typeof response.data === 'object') {
+      const apiError = response.data as Record<string, unknown>
+      if (typeof apiError.code === 'string') {
+        return parseErrorByCode(
+          apiError.code,
+          typeof apiError.message === 'string' ? apiError.message : 'An error occurred',
+          typeof apiError.field === 'string' ? apiError.field : undefined,
+        )
+      }
     }
   }
 
   // Handle network errors
-  if (error?.code === 'NETWORK_ERROR' || error?.message?.includes('network')) {
+  if (err.code === 'NETWORK_ERROR' || (typeof err.message === 'string' && err.message.includes('network'))) {
     return createNetworkError('Network connection failed')
   }
 
   // Handle timeout errors
-  if (error?.code === 'TIMEOUT' || error?.message?.includes('timeout')) {
+  if (err.code === 'TIMEOUT' || (typeof err.message === 'string' && err.message.includes('timeout'))) {
     return createNetworkError('Request timed out', CheckoutErrorCode.TIMEOUT_ERROR)
   }
 
   // Handle validation errors
-  if (error?.statusCode === 400 || error?.status === 400) {
+  if (err.statusCode === 400 || err.status === 400) {
     return createValidationError(
-      error.field || 'general',
-      error.message || 'Validation failed',
+      (typeof err.field === 'string' && err.field) || 'general',
+      (typeof err.message === 'string' && err.message) || 'Validation failed',
     )
   }
 
   // Handle unauthorized errors
-  if (error?.statusCode === 401 || error?.status === 401) {
+  if (err.statusCode === 401 || err.status === 401) {
     return createSystemError('Session expired', CheckoutErrorCode.SESSION_EXPIRED)
   }
 
   // Handle payment errors
-  if (error?.statusCode === 402 || error?.status === 402) {
+  if (err.statusCode === 402 || err.status === 402) {
     return createPaymentError(
-      error.message || 'Payment failed',
+      (typeof err.message === 'string' && err.message) || 'Payment failed',
       CheckoutErrorCode.PAYMENT_FAILED,
     )
   }
 
   // Default system error
   return createSystemError(
-    error?.message || 'An unexpected error occurred',
+    (typeof err.message === 'string' && err.message) || 'An unexpected error occurred',
   )
 }
 
@@ -272,29 +289,10 @@ export function getErrorRecoveryStrategy(error: CheckoutError): ErrorRecoveryStr
         retryDelay: 5000, // 5 seconds
       }
 
+    // Non-recoverable errors - recovery actions not yet implemented
     case CheckoutErrorCode.SESSION_EXPIRED:
-      return {
-        canRecover: true,
-        maxRetries: 1,
-        retryDelay: 1000,
-        recoveryAction: async () => {
-          // Refresh session
-          await refreshCheckoutSession()
-        },
-      }
-
     case CheckoutErrorCode.INSUFFICIENT_STOCK:
     case CheckoutErrorCode.PRICE_CHANGED:
-      return {
-        canRecover: true,
-        maxRetries: 1,
-        retryDelay: 0,
-        recoveryAction: async () => {
-          // Refresh cart data
-          await refreshCartData()
-        },
-      }
-
     case CheckoutErrorCode.PRODUCT_OUT_OF_STOCK:
     case CheckoutErrorCode.PRODUCT_UNAVAILABLE:
     case CheckoutErrorCode.PAYMENT_DECLINED:
@@ -418,12 +416,17 @@ export function getErrorSeverity(error: CheckoutError): 'low' | 'medium' | 'high
 // UTILITY FUNCTIONS
 // =============================================
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO: Implement in future
 async function refreshCheckoutSession(): Promise<void> {
-  // Implementation would refresh the checkout session
+  // TODO: Implement session refresh
+  // For now, throw to make it clear this is not yet implemented
+  throw new Error('Session refresh not implemented - please refresh the page manually')
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO: Implement in future
 async function refreshCartData(): Promise<void> {
-  // Implementation would refresh cart data
+  // TODO: Implement cart refresh
+  throw new Error('Cart refresh not implemented - please refresh the page manually')
 }
 
 export function isRetryableError(error: CheckoutError): boolean {

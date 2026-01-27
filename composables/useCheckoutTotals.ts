@@ -7,20 +7,24 @@
  * @see {CODE_DESIGN_PRINCIPLES.md} Three-layer separation
  */
 
-import { computed } from 'vue'
+import { computed, type Ref } from 'vue'
 import type { ShippingMethod } from '~/types/checkout'
 import { useCartStore } from '~/stores/cart'
 import { useCheckoutStore } from '~/stores/checkout'
 
+/**
+ * Order totals with readonly properties to prevent external mutation
+ * and ensure consistency between values.
+ */
 export interface CheckoutTotals {
-  subtotal: number
-  shippingCost: number
-  tax: number
-  total: number
-  formatted: string
+  readonly subtotal: number
+  readonly shippingCost: number
+  readonly tax: number
+  readonly total: number
+  readonly formatted: string
 }
 
-export function useCheckoutTotals(selectedMethod: ReturnType<typeof ref<ShippingMethod | null>>) {
+export function useCheckoutTotals(selectedMethod: Ref<ShippingMethod | null>) {
   const cartStore = useCartStore()
   const checkoutStore = useCheckoutStore()
   const { locale } = useI18n()

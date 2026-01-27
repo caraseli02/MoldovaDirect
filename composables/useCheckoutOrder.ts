@@ -26,8 +26,19 @@ export interface ValidatableForm {
   validateForm: () => boolean
 }
 
+/**
+ * Minimal interface for Stripe card element.
+ * The actual Stripe.js type is not imported to avoid dependency on @stripe/stripe-js
+ * but this interface provides type safety for the critical methods we use.
+ */
+export interface StripeCardElement {
+  mount: () => void
+  destroy: () => void
+  _elementTag: string
+}
+
 export interface PaymentForm extends ValidatableForm {
-  getStripeCardElement: () => unknown | null
+  getStripeCardElement: () => StripeCardElement | null
 }
 
 export interface CheckoutOrderOptions {
@@ -109,15 +120,32 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
     // Get the Stripe card element from the payment form
     const cardElement = paymentSectionRef.value?.getStripeCardElement()
     if (!cardElement) {
-      throw new Error('Card element not available')
+      const checkoutError = createSystemError(
+        'Card element not available or invalid',
+        CheckoutErrorCode.PAYMENT_PROCESSING_ERROR,
+      )
+      logCheckoutError(checkoutError, {
+        sessionId: checkoutStore.sessionId ?? undefined,
+        step: 'processStripePayment',
+        hasRef: !!paymentSectionRef.value,
+        hasGetElement: typeof paymentSectionRef.value?.getStripeCardElement === 'function',
+      })
+      throw new Error('Payment form is not ready. Please wait a moment and try again, or refresh the page.')
     }
 
-    // Type assertion for Stripe card element - the actual type comes from Stripe.js
-    // We use 'unknown' in the interface to avoid importing Stripe types directly
-    const stripeCardElement = cardElement as {
-      mount: () => void
-      destroy: () => void
-      _elementTag: string
+    // Validate the element has the expected Stripe structure
+    const stripeCardElement: StripeCardElement = cardElement
+    if (typeof stripeCardElement.mount !== 'function' || typeof stripeCardElement.destroy !== 'function') {
+      const checkoutError = createSystemError(
+        'Card element has invalid structure',
+        CheckoutErrorCode.PAYMENT_PROCESSING_ERROR,
+      )
+      logCheckoutError(checkoutError, {
+        sessionId: checkoutStore.sessionId ?? undefined,
+        step: 'processStripePayment',
+        elementTag: stripeCardElement._elementTag,
+      })
+      throw new Error('Payment element is invalid. Please refresh the page and try again.')
     }
 
     // Create payment intent on server with error handling
@@ -149,15 +177,27 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
     }
 
     if (!paymentIntentData?.success || !paymentIntentData?.paymentIntent?.client_secret) {
-      throw new Error('Payment initialization failed. Please try again.')
+      const checkoutError = createPaymentError(
+        'Payment initialization failed - invalid response from payment server',
+        CheckoutErrorCode.PAYMENT_PROCESSING_ERROR,
+      )
+      logCheckoutError(checkoutError, {
+        sessionId: checkoutStore.sessionId ?? undefined,
+        step: 'createPaymentIntent',
+        apiResponse: paymentIntentData,
+      })
+      throw new Error('Payment initialization failed. Please try again or contact support.')
     }
 
     // Confirm payment with Stripe
+    // Note: Stripe.js expects its internal StripeCardElement type which we cannot
+    // import without @stripe/stripe-js dependency. We validated the element structure
+    // above and use 'as any' here to satisfy Stripe's type requirements.
     const { error: stripeError, paymentIntent } = await stripe.value.confirmCardPayment(
       paymentIntentData.paymentIntent.client_secret,
       {
         payment_method: {
-          card: stripeCardElement as any, // Stripe expects its internal element type
+          card: stripeCardElement as any, // eslint-disable-line @typescript-eslint/no-explicit-any -- Stripe requires internal type
           billing_details: {
             name: paymentMethod.value.creditCard?.holderName || '',
             address: {
@@ -266,7 +306,22 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
    * Handle express checkout placement (for returning users)
    */
   const handleExpressPlaceOrder = async (): Promise<void> => {
-    if (!defaultAddress.value) return
+    if (!defaultAddress.value) {
+      const checkoutError = createValidationError(
+        'address',
+        'Default address not found for express checkout',
+        CheckoutErrorCode.REQUIRED_FIELD_MISSING,
+      )
+      logCheckoutError(checkoutError, {
+        sessionId: checkoutStore.sessionId ?? undefined,
+        step: 'expressCheckout',
+      })
+      toast.error(
+        t('checkout.errors.addressRequired', 'Address Required'),
+        t('checkout.errors.selectAddress', 'Please select a delivery address to continue'),
+      )
+      return
+    }
 
     processingOrder.value = true
 
