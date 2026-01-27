@@ -92,7 +92,7 @@ export default defineCachedEventHandler(async (event) => {
     }
 
     // Get related products from the same category
-    const { data: relatedProducts } = await supabase
+    const { data: relatedProducts, error: relatedError } = await supabase
       .from('products')
       .select(`
         id,
@@ -111,6 +111,15 @@ export default defineCachedEventHandler(async (event) => {
       .eq('is_active', true)
       .neq('id', product.id)
       .limit(4)
+
+    if (relatedError) {
+      console.warn('[Product API] Failed to fetch related products:', {
+        productId: product.id,
+        categoryId: product.categories.id,
+        error: relatedError,
+      })
+      // Continue with empty array - related products section will be empty
+    }
 
     // Build category breadcrumb - fetch all categories in a single query to avoid N+1
     // This fixes the N+1 query pattern where we previously made one query per category

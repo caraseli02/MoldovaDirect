@@ -184,8 +184,10 @@ export const useCheckoutStore = defineStore('checkout', () => {
               if (available) {
                 toast.warning(
                   t('checkout.warnings.concurrentCheckout'),
-                  t('checkout.warnings.concurrentCheckoutDetails'),
-                  { duration: 10000 },
+                  {
+                    description: t('checkout.warnings.concurrentCheckoutDetails'),
+                    duration: 10000,
+                  },
                 )
               }
             }
