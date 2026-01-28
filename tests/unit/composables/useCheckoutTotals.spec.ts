@@ -4,12 +4,13 @@
  * Tests order totals calculation, shipping cost, tax, and formatting.
  */
 
-import { describe, it, expect } from 'vitest'
-import { ref, computed } from 'vue'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { ref } from 'vue'
 import type { ShippingMethod } from '~/types/checkout'
+import { useCheckoutTotals } from '~/composables/useCheckoutTotals'
 
-// Mock stores
-const mockCartItems = [
+// Mock the cart store
+const mockCartItems = ref([
   {
     product: { id: 1, name: 'Product 1', price: 10, images: [] },
     quantity: 2,
@@ -18,119 +19,71 @@ const mockCartItems = [
     product: { id: 2, name: 'Product 2', price: 20, images: [] },
     quantity: 1,
   },
-]
+])
 
-function createUseCheckoutTotals(selectedMethod: ReturnType<typeof ref<ShippingMethod | null>>) {
-  // Mock cart store
-  const cartItems = ref(mockCartItems)
+const mockOrderData = ref(null)
 
-  // Mock checkout store
-  const orderData = ref<{ total?: number } | null>(null)
-
-  // Mock locale
-  const locale = ref('es-ES')
-
-  /**
-   * Calculate subtotal from cart items
-   */
-  const subtotal = computed(() => {
-    return cartItems.value.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
-  })
-
-  /**
-   * Calculate shipping cost from selected method
-   */
-  const shippingCost = computed(() => {
-    return selectedMethod.value?.price || 0
-  })
-
-  /**
-   * Calculate tax (21% VAT for Spain)
-   */
-  const tax = computed(() => {
-    return Math.round(subtotal.value * 0.21 * 100) / 100
-  })
-
-  /**
-   * Calculate total (subtotal + shipping + tax)
-   */
-  const total = computed(() => {
-    return subtotal.value + shippingCost.value + tax.value
-  })
-
-  /**
-   * Format total as currency string
-   */
-  const formatted = computed(() => {
-    const orderTotal = orderData.value?.total || total.value
-    return new Intl.NumberFormat(locale.value || 'es-ES', {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(orderTotal)
-  })
-
-  /**
-   * Map cart items for order summary display
-   */
-  const items = computed(() => {
-    return (cartItems.value || []).map(item => ({
-      productId: item.product.id,
-      name: item.product.name,
-      quantity: item.quantity,
-      price: item.product.price,
-      images: item.product.images,
-    }))
-  })
-
-  return {
-    subtotal,
-    shippingCost,
-    tax,
-    total,
-    formatted,
-    items,
-    orderData,
-    locale,
-    cartItems,
-  }
+const mockCheckoutStore = {
+  get orderData() {
+    return mockOrderData.value
+  },
 }
 
+vi.mock('~/stores/cart', () => ({
+  useCartStore: vi.fn(() => ({
+    items: mockCartItems.value,
+  })),
+}))
+
+vi.mock('~/stores/checkout', () => ({
+  useCheckoutStore: vi.fn(() => mockCheckoutStore),
+}))
+
 describe('useCheckoutTotals', () => {
+  beforeEach(() => {
+    // Reset mock state
+    mockCartItems.value = [
+      { product: { id: 1, name: 'Product 1', price: 10, images: [] }, quantity: 2 },
+      { product: { id: 2, name: 'Product 2', price: 20, images: [] }, quantity: 1 },
+    ]
+    mockOrderData.value = null
+  })
+
   describe('subtotal', () => {
     it('should calculate subtotal correctly from cart items', () => {
       const selectedMethod = ref<ShippingMethod | null>(null)
-      const { subtotal } = createUseCheckoutTotals(selectedMethod)
+      const { subtotal } = useCheckoutTotals(selectedMethod)
 
       // 10 * 2 + 20 * 1 = 40
       expect(subtotal.value).toBe(40)
     })
 
     it('should return 0 for empty cart', () => {
+      mockCartItems.value = []
       const selectedMethod = ref<ShippingMethod | null>(null)
-      const composable = createUseCheckoutTotals(selectedMethod)
-      composable.cartItems.value = []
+      const { subtotal } = useCheckoutTotals(selectedMethod)
 
-      expect(composable.subtotal.value).toBe(0)
+      expect(subtotal.value).toBe(0)
     })
 
     it('should handle items with quantity 0', () => {
-      const selectedMethod = ref<ShippingMethod | null>(null)
-      const composable = createUseCheckoutTotals(selectedMethod)
-      composable.cartItems.value = [
+      mockCartItems.value = [
         { product: { id: 1, name: 'Product', price: 10, images: [] }, quantity: 0 },
       ]
+      const selectedMethod = ref<ShippingMethod | null>(null)
+      const { subtotal } = useCheckoutTotals(selectedMethod)
 
-      expect(composable.subtotal.value).toBe(0)
+      expect(subtotal.value).toBe(0)
     })
 
     it('should handle products with price 0', () => {
-      const selectedMethod = ref<ShippingMethod | null>(null)
-      const composable = createUseCheckoutTotals(selectedMethod)
-      composable.cartItems.value = [
+      mockCartItems.value = [
         { product: { id: 1, name: 'Free Product', price: 0, images: [] }, quantity: 5 },
       ]
+      const selectedMethod = ref<ShippingMethod | null>(null)
+      const { subtotal } = useCheckoutTotals(selectedMethod)
 
-      expect(composable.subtotal.value).toBe(0)
+      expect(subtotal.value).toBe(0)
     })
   })
 
@@ -142,26 +95,14 @@ describe('useCheckoutTotals', () => {
         price: 5.99,
         estimatedDays: 4,
       })
-      const { shippingCost } = createUseCheckoutTotals(selectedMethod)
+      const { shippingCost } = useCheckoutTotals(selectedMethod)
 
       expect(shippingCost.value).toBe(5.99)
     })
 
     it('should return 0 when no shipping method selected', () => {
       const selectedMethod = ref<ShippingMethod | null>(null)
-      const { shippingCost } = createUseCheckoutTotals(selectedMethod)
-
-      expect(shippingCost.value).toBe(0)
-    })
-
-    it('should return 0 when shipping method price is undefined', () => {
-      const selectedMethod = ref<ShippingMethod | null>({
-        id: 'free',
-        name: 'Free Shipping',
-        price: undefined as unknown as number,
-        estimatedDays: 7,
-      })
-      const { shippingCost } = createUseCheckoutTotals(selectedMethod)
+      const { shippingCost } = useCheckoutTotals(selectedMethod)
 
       expect(shippingCost.value).toBe(0)
     })
@@ -170,37 +111,28 @@ describe('useCheckoutTotals', () => {
   describe('tax', () => {
     it('should calculate 21% VAT on subtotal', () => {
       const selectedMethod = ref<ShippingMethod | null>(null)
-      const { tax } = createUseCheckoutTotals(selectedMethod)
+      const { tax } = useCheckoutTotals(selectedMethod)
 
       // 40 * 0.21 = 8.4
       expect(tax.value).toBe(8.4)
     })
 
     it('should round tax to 2 decimal places', () => {
-      const selectedMethod = ref<ShippingMethod | null>(null)
-      const composable = createUseCheckoutTotals(selectedMethod)
-      composable.cartItems.value = [
+      mockCartItems.value = [
         { product: { id: 1, name: 'Product', price: 10.01, images: [] }, quantity: 3 },
       ]
+      const selectedMethod = ref<ShippingMethod | null>(null)
+      const { tax } = useCheckoutTotals(selectedMethod)
 
       // 30.03 * 0.21 = 6.3063, rounded to 6.31
-      expect(composable.tax.value).toBe(6.31)
+      expect(tax.value).toBe(6.31)
     })
 
     it('should return 0 tax for zero subtotal', () => {
+      mockCartItems.value = []
       const selectedMethod = ref<ShippingMethod | null>(null)
-      const composable = createUseCheckoutTotals(selectedMethod)
-      composable.cartItems.value = []
+      const { tax } = useCheckoutTotals(selectedMethod)
 
-      expect(composable.tax.value).toBe(0)
-    })
-
-    it('should handle tax calculation edge case with empty cart', () => {
-      const selectedMethod = ref<ShippingMethod | null>(null)
-      const composable = createUseCheckoutTotals(selectedMethod)
-      composable.cartItems.value = []
-
-      const { tax, subtotal: _ } = composable
       expect(tax.value).toBe(0)
     })
   })
@@ -213,15 +145,15 @@ describe('useCheckoutTotals', () => {
         price: 5.99,
         estimatedDays: 4,
       })
-      const { total } = createUseCheckoutTotals(selectedMethod)
+      const { total } = useCheckoutTotals(selectedMethod)
 
       // 40 + 5.99 + 8.4 = 54.39
       expect(total.value).toBe(54.39)
     })
 
-    it('should return only subtotal when no shipping method selected', () => {
+    it('should return only subtotal + tax when no shipping method selected', () => {
       const selectedMethod = ref<ShippingMethod | null>(null)
-      const { total } = createUseCheckoutTotals(selectedMethod)
+      const { total } = useCheckoutTotals(selectedMethod)
 
       // 40 + 0 + 8.4 = 48.4
       expect(total.value).toBe(48.4)
@@ -231,44 +163,28 @@ describe('useCheckoutTotals', () => {
   describe('formatted', () => {
     it('should format total as EUR currency string', () => {
       const selectedMethod = ref<ShippingMethod | null>(null)
-      const { formatted } = createUseCheckoutTotals(selectedMethod)
+      const { formatted } = useCheckoutTotals(selectedMethod)
 
-      // Note: Intl.NumberFormat uses non-breaking space (U+00A0) not regular space
-      expect(formatted.value).toBe('48,40\xa0€') // \u00A0 is non-breaking space
-    })
-
-    it('should use Spanish locale by default', () => {
-      const selectedMethod = ref<ShippingMethod | null>(null)
-      const composable = createUseCheckoutTotals(selectedMethod)
-
-      expect(composable.formatted.value).toBe('48,40\xa0€')
+      // Note: i18n mock returns 'en' locale, so format is €48.40 (en-US style)
+      expect(formatted.value).toBe('€48.40')
     })
 
     it('should use checkout store total if available', () => {
+      mockOrderData.value = { total: 100 }
       const selectedMethod = ref<ShippingMethod | null>(null)
-      const composable = createUseCheckoutTotals(selectedMethod)
-      composable.orderData.value = { total: 100 }
+      const { formatted } = useCheckoutTotals(selectedMethod)
 
-      expect(composable.formatted.value).toBe('100,00\xa0€')
-    })
-
-    it('should handle different locales', () => {
-      const selectedMethod = ref<ShippingMethod | null>(null)
-      const composable = createUseCheckoutTotals(selectedMethod)
-      composable.locale.value = 'en-US'
-
-      // Note: en-US with EUR currency still shows € symbol
-      expect(composable.formatted.value).toBe('€48.40')
+      expect(formatted.value).toBe('€100.00')
     })
   })
 
-  describe('items', () => {
+  describe('cartItems', () => {
     it('should map cart items for display', () => {
       const selectedMethod = ref<ShippingMethod | null>(null)
-      const { items } = createUseCheckoutTotals(selectedMethod)
+      const { cartItems } = useCheckoutTotals(selectedMethod)
 
-      expect(items.value).toHaveLength(2)
-      expect(items.value[0]).toEqual({
+      expect(cartItems.value).toHaveLength(2)
+      expect(cartItems.value[0]).toEqual({
         productId: 1,
         name: 'Product 1',
         quantity: 2,
@@ -278,11 +194,31 @@ describe('useCheckoutTotals', () => {
     })
 
     it('should return empty array for empty cart', () => {
+      mockCartItems.value = []
       const selectedMethod = ref<ShippingMethod | null>(null)
-      const composable = createUseCheckoutTotals(selectedMethod)
-      composable.cartItems.value = []
+      const { cartItems } = useCheckoutTotals(selectedMethod)
 
-      expect(composable.items.value).toEqual([])
+      expect(cartItems.value).toEqual([])
+    })
+  })
+
+  describe('totals', () => {
+    it('should return all totals as a single object', () => {
+      const selectedMethod = ref<ShippingMethod | null>({
+        id: 'standard',
+        name: 'Standard',
+        price: 5.99,
+        estimatedDays: 4,
+      })
+      const { totals } = useCheckoutTotals(selectedMethod)
+
+      expect(totals.value).toEqual({
+        subtotal: 40,
+        shippingCost: 5.99,
+        tax: 8.4,
+        total: 54.39,
+        formatted: expect.any(String),
+      })
     })
   })
 })

@@ -244,7 +244,7 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
     checkoutStore.setMarketingConsent(marketingConsent.value)
 
     // Set step to review for checkout flow
-    ;(checkoutStore as any).currentStep = 'review'
+    sessionStore.setCurrentStep('review')
 
     try {
       // Handle Stripe payment processing for credit cards
@@ -402,11 +402,30 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
   ): Promise<void> => {
     processingOrder.value = true
 
+    // Validate shipping method is selected
+    if (!selectedMethod.value) {
+      const checkoutError = createValidationError(
+        'shipping',
+        'Shipping method is required',
+        CheckoutErrorCode.REQUIRED_FIELD_MISSING,
+      )
+      logCheckoutError(checkoutError, {
+        sessionId: checkoutStore.sessionId ?? undefined,
+        step: 'handlePlaceOrder',
+      })
+      toast.error(
+        t('checkout.errors.shippingRequired', 'Shipping Required'),
+        t('checkout.errors.selectShippingMethod', 'Please select a shipping method'),
+      )
+      processingOrder.value = false
+      return
+    }
+
     try {
       // Create shipping information
       const shippingInfo: ShippingInformation = {
-        address: shippingAddress.value as Address,
-        method: selectedMethod.value!,
+        address: shippingAddress.value,
+        method: selectedMethod.value,
         instructions: shippingInstructions.value || undefined,
       }
 

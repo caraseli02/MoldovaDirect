@@ -49,6 +49,21 @@ export interface SendConfirmationParams {
   email?: string
 }
 
+function isNetworkError(error: unknown): boolean {
+  // Check for fetch/network errors using type guards and error patterns
+  if (error instanceof TypeError) {
+    // TypeError with fetch-related message indicates network issue
+    const msg = error.message.toLowerCase()
+    return msg.includes('fetch') || msg.includes('network') || msg.includes('connection') || msg.includes('offline')
+  }
+  if (error instanceof Error) {
+    // Check for specific network error codes/messages
+    const msg = error.message.toLowerCase()
+    return msg.includes('enetdown') || msg.includes('econnrefused') || msg.includes('timeout')
+  }
+  return false
+}
+
 export async function fetchShippingMethods(params: FetchShippingMethodsParams): Promise<ShippingMethod[]> {
   try {
     const response = await $fetch<{ success: boolean, methods: ShippingMethod[] }>('/api/checkout/shipping-methods', {
@@ -66,8 +81,7 @@ export async function fetchShippingMethods(params: FetchShippingMethodsParams): 
     return response.methods
   }
   catch (error: unknown) {
-    const message = getErrorMessage(error)
-    if (message.includes('fetch') || message.includes('network')) {
+    if (isNetworkError(error)) {
       throw new Error('Network error: Could not connect to server. Please check your connection.', { cause: error })
     }
     throw error
@@ -101,8 +115,7 @@ export async function createPaymentIntent(params: CreatePaymentIntentParams): Pr
     }
   }
   catch (error: unknown) {
-    const message = getErrorMessage(error)
-    if (message.includes('fetch') || message.includes('network')) {
+    if (isNetworkError(error)) {
       throw new Error('Network error: Could not connect to payment server. Please check your connection.', { cause: error })
     }
     throw error
@@ -121,8 +134,7 @@ export async function confirmPaymentIntent(params: ConfirmPaymentParams): Promis
     }) as any
   }
   catch (error: unknown) {
-    const message = getErrorMessage(error)
-    if (message.includes('fetch') || message.includes('network')) {
+    if (isNetworkError(error)) {
       throw new Error('Network error: Could not confirm payment. Please check your connection.', { cause: error })
     }
     throw error
@@ -160,10 +172,10 @@ export async function createOrder(params: CreateOrderParams): Promise<{
     )
   }
   catch (fetchError: unknown) {
-    const errorMessage = getErrorMessage(fetchError)
-    if (errorMessage.includes('fetch') || errorMessage.includes('network')) {
+    if (isNetworkError(fetchError)) {
       throw new Error('Network error: Could not connect to server. Please check your connection.', { cause: fetchError })
     }
+    const errorMessage = getErrorMessage(fetchError)
     throw new Error(`Order creation failed: ${errorMessage}`, { cause: fetchError })
   }
 
@@ -177,20 +189,21 @@ export async function createOrder(params: CreateOrderParams): Promise<{
   }
 }
 
-export async function sendConfirmationEmail(params: SendConfirmationParams): Promise<void> {
+export async function sendConfirmationEmail(params: SendConfirmationParams): Promise<boolean> {
   try {
-    await $fetch('/api/checkout/send-confirmation', {
+    const response = await $fetch<{ success: boolean }>('/api/checkout/send-confirmation', {
       method: 'POST',
       body: {
         orderId: params.orderId,
         sessionId: params.sessionId,
         email: params.email,
       },
-    }) as any
+    })
+    return response.success === true
   }
-  catch (error: unknown) {
-    // Log but don't throw - email is non-critical
-    console.error('Failed to send confirmation email:', getErrorMessage(error))
+  catch {
+    // Return failure indicator - caller decides how to handle
+    return false
   }
 }
 
