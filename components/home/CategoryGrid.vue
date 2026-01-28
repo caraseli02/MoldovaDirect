@@ -22,7 +22,7 @@
         </div>
         <NuxtLink
           :to="localePath('/products')"
-          class="cta-button inline-flex items-center gap-2 rounded-full border border-primary-200 px-5 py-2 text-sm font-semibold text-primary-700 dark:border-primary-700/40 dark:text-primary-200"
+          class="cta-button inline-flex items-center gap-2 rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 dark:border-slate-700/40 dark:text-slate-200"
         >
           {{ t('home.categories.viewAll') }}
           <commonIcon

@@ -81,8 +81,8 @@ describe('Custom BenefitBadge', () => {
 
     it('should apply primary variant styling', () => {
       const wrapper = createWrapper({ text: 'Primary', variant: 'primary' })
-      expect(wrapper.html()).toContain('bg-primary-100')
-      expect(wrapper.html()).toContain('text-primary-700')
+      expect(wrapper.html()).toContain('bg-slate-100')
+      expect(wrapper.html()).toContain('text-slate-700')
     })
 
     it('should apply success variant styling', () => {
@@ -112,8 +112,8 @@ describe('Custom BenefitBadge', () => {
 
     it('should include dark mode classes for primary variant', () => {
       const wrapper = createWrapper({ text: 'Test', variant: 'primary' })
-      expect(wrapper.html()).toContain('dark:bg-primary-900/30')
-      expect(wrapper.html()).toContain('dark:text-primary-200')
+      expect(wrapper.html()).toContain('dark:bg-slate-900/30')
+      expect(wrapper.html()).toContain('dark:text-slate-200')
     })
 
     it('should include dark mode classes for success variant', () => {
@@ -294,7 +294,7 @@ describe('Custom BenefitBadge', () => {
       expect(wrapper.text()).toContain('Premium')
       expect(wrapper.find('[data-testid="icon"]').exists()).toBe(true)
       expect(wrapper.find('button').exists()).toBe(true)
-      expect(wrapper.html()).toContain('bg-primary-100')
+      expect(wrapper.html()).toContain('bg-slate-100')
     })
 
     it('should work with all props set to small size', () => {
@@ -351,9 +351,9 @@ describe('Custom BenefitBadge', () => {
 
     it('should preserve styling when text changes', async () => {
       const wrapper = createWrapper({ text: 'Old', variant: 'primary', size: 'sm' })
-      const originalVariant = wrapper.html().includes('bg-primary-100')
+      const originalVariant = wrapper.html().includes('bg-slate-100')
       await wrapper.setProps({ text: 'New' })
-      expect(wrapper.html().includes('bg-primary-100')).toBe(originalVariant)
+      expect(wrapper.html().includes('bg-slate-100')).toBe(originalVariant)
     })
 
     it('should maintain structure when icon is added dynamically', async () => {

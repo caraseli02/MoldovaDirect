@@ -1,89 +1,78 @@
 import { toast } from 'vue-sonner'
-import type { ToasterProps } from 'vue-sonner'
 
-type ToastKind = 'success' | 'error' | 'warning' | 'info'
+/**
+ * Toast notification composable wrapping vue-sonner
+ *
+ * Provides a consistent interface for showing notifications:
+ * - success: For successful operations
+ * - error: For errors and failures
+ * - info: For informational messages
+ * - warning: For warnings
+ *
+ * @example
+ * const toast = useToast()
+ * toast.success('Item added', { description: 'Added to cart' })
+ */
+const buildOpts = (descriptionOrOptions?: string | any, options?: any) => {
+  const opts: any = { description: undefined }
 
-export interface LegacyToastOptions {
-  duration?: number
-  actionText?: string
-  actionHandler?: () => void
-}
-
-const show = (
-  kind: ToastKind,
-  title: string,
-  message?: string,
-  options?: LegacyToastOptions,
-) => {
-  const common = {
-    description: message,
-    duration: options?.duration,
-    action: options?.actionText && options?.actionHandler
-      ? { label: options.actionText, onClick: options.actionHandler }
-      : undefined,
-  } as ToasterProps & { description?: string, action?: { label: string, onClick: () => void } }
-
-  switch (kind) {
-    case 'success':
-      return toast.success(title, common)
-    case 'error':
-      return toast.error(title, common)
-    case 'warning':
-      return toast.warning(title, common)
-    case 'info':
-    default:
-      return toast.info(title, common)
+  // Case 1: First argument is description string
+  if (typeof descriptionOrOptions === 'string') {
+    opts.description = descriptionOrOptions
+    // Merge options if provided as third argument
+    if (options && typeof options === 'object') {
+      Object.assign(opts, options)
+    }
   }
+  // Case 2: First argument is options object
+  else if (descriptionOrOptions && typeof descriptionOrOptions === 'object') {
+    Object.assign(opts, descriptionOrOptions)
+  }
+
+  // Handle action transformation
+  if (opts.actionText || opts.actionHandler) {
+    opts.action = {
+      label: opts.actionText,
+      onClick: opts.actionHandler,
+    }
+    delete opts.actionText
+    delete opts.actionHandler
+  }
+  else {
+    opts.action = undefined
+  }
+
+  return opts
 }
 
 export const useToast = () => {
   return {
-    // Legacy API shims (deprecated, kept for compatibility)
-    addToast: () => {
-      console.warn('[Deprecated] useToast().addToast is deprecated. Use success/error/warning/info instead.')
+    toast,
+    success: (title: string, descriptionOrOptions?: string | any, options?: any) => {
+      toast.success(title, buildOpts(descriptionOrOptions, options))
     },
-    removeToast: () => {
-      console.warn('[Deprecated] useToast().removeToast is deprecated. Toast dismissal is now automatic.')
+    error: (title: string, descriptionOrOptions?: string | any, options?: any) => {
+      toast.error(title, buildOpts(descriptionOrOptions, options))
     },
-    clearAll: () => {
-      console.warn('[Deprecated] useToast().clearAll is deprecated. Use toast.dismiss() from vue-sonner instead.')
+    info: (title: string, descriptionOrOptions?: string | any, options?: any) => {
+      toast.info(title, buildOpts(descriptionOrOptions, options))
     },
-
-    // Convenience methods routed to vue-sonner
-    success: (title: string, message?: string, options?: LegacyToastOptions) =>
-      show('success', title, message, options),
-    error: (title: string, message?: string, options?: LegacyToastOptions) =>
-      show('error', title, message, options),
-    warning: (title: string, message?: string, options?: LegacyToastOptions) =>
-      show('warning', title, message, options),
-    info: (title: string, message?: string, options?: LegacyToastOptions) =>
-      show('info', title, message, options),
-
-    // Cart-specific helpers with i18n
-    cartSuccess: (key: string, productName?: string) => {
-      const { t } = useI18n()
-      const title = t(`cart.success.${key}`)
-      const message = productName
-        ? t('cart.success.productAdded', { product: productName })
-        : undefined
-      return show('success', title, message)
+    warning: (title: string, descriptionOrOptions?: string | any, options?: any) => {
+      toast.warning(title, buildOpts(descriptionOrOptions, options))
     },
-    cartError: (key: string, details?: string, recoveryAction?: () => void) => {
-      const { t } = useI18n()
-      const title = t(`cart.error.${key}`)
-      const message = details || t('cart.error.tryAgain')
-      const actionText = recoveryAction ? t('common.retry') : undefined
-      return show('error', title, message, {
-        actionText,
-        actionHandler: recoveryAction,
-        duration: 10000,
-      })
+    // Deprecated methods
+    addToast: () => console.warn('addToast is deprecated'),
+    removeToast: () => console.warn('removeToast is deprecated'),
+    clearAll: () => console.warn('clearAll is deprecated'),
+    // Cart helpers
+    cartSuccess: (title: string, description?: string) => {
+      toast.success(title, { description })
     },
-    cartWarning: (key: string, details?: string) => {
-      const { t } = useI18n()
-      const title = t(`cart.warning.${key}`)
-      const message = details || undefined
-      return show('warning', title, message)
+    cartError: (title: string, description?: string) => {
+      toast.error(title, { description, duration: 10000 })
+    },
+    cartWarning: (title: string, description?: string) => {
+      toast.warning(title, { description })
     },
   }
 }

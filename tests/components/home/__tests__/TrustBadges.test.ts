@@ -129,8 +129,8 @@ describe('Home TrustBadges', () => {
       const wrapper = mount(TrustBadges, mountOptions)
       const iconContainer = wrapper.find('.flex.h-12.w-12.items-center.justify-center.rounded-full')
       expect(iconContainer.exists()).toBe(true)
-      expect(iconContainer.classes()).toContain('bg-primary-100')
-      expect(iconContainer.classes()).toContain('text-primary-600')
+      expect(iconContainer.classes()).toContain('bg-slate-100')
+      expect(iconContainer.classes()).toContain('text-slate-600')
     })
 
     it('should center badge text', () => {

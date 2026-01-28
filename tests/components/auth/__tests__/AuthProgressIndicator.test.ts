@@ -63,15 +63,15 @@ describe('AuthProgressIndicator', () => {
     const wrapper = mountComponent({ currentStep: 2 })
     const stepCircles = wrapper.findAll('.w-8.h-8.rounded-full')
     // Current step (index 1) should have primary color
-    expect(stepCircles[1]?.classes()).toContain('bg-primary-600')
-    expect(stepCircles[1]?.classes()).toContain('border-primary-600')
+    expect(stepCircles[1]?.classes()).toContain('bg-slate-600')
+    expect(stepCircles[1]?.classes()).toContain('border-slate-600')
   })
 
   it('should apply primary color to completed step connector', () => {
     const wrapper = mountComponent({ currentStep: 2 })
     const connectors = wrapper.findAll('.h-0\\.5')
     // First connector should be primary (completed)
-    expect(connectors[0]?.classes()).toContain('bg-primary-600')
+    expect(connectors[0]?.classes()).toContain('bg-slate-600')
   })
 
   it('should apply gray color to future step connectors', () => {
@@ -87,7 +87,7 @@ describe('AuthProgressIndicator', () => {
     const wrapper = mountComponent({ currentStep: 2 })
     const labels = wrapper.findAll('.text-center.flex-1')
     // Current step label should have primary color
-    expect(labels[1]?.classes()).toContain('text-primary-600')
+    expect(labels[1]?.classes()).toContain('text-slate-600')
     expect(labels[1]?.classes()).toContain('font-medium')
   })
 
@@ -126,7 +126,7 @@ describe('AuthProgressIndicator', () => {
     const wrapper = mountComponent({ currentStep: 1 })
     const stepCircles = wrapper.findAll('.w-8.h-8.rounded-full')
     // First step should have primary color
-    expect(stepCircles[0]?.classes()).toContain('bg-primary-600')
+    expect(stepCircles[0]?.classes()).toContain('bg-slate-600')
     // Should show step number, not checkmark
     expect(wrapper.text()).toContain('1')
   })

@@ -529,7 +529,7 @@ export const useAuthStore = defineStore('auth', {
 
           toastStore.success(
             'Inicio de sesión exitoso',
-            `Bienvenido de vuelta, ${data.user.user_metadata?.name || data.user.email}`,
+            { description: `Bienvenido de vuelta, ${data.user.user_metadata?.name || data.user.email}` },
           )
 
           // Handle redirect after successful login
@@ -550,8 +550,8 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.error(
           'Error de inicio de sesión',
-          errorMessage,
           {
+            description: errorMessage,
             actionText: 'Reintentar',
             actionHandler: () => this.login(credentials),
           },
@@ -613,8 +613,8 @@ export const useAuthStore = defineStore('auth', {
             // Provide link to login page
             toastStore.error(
               'Email ya registrado',
-              'Este email ya está registrado. ¿Quieres iniciar sesión?',
               {
+                description: 'Este email ya está registrado. ¿Quieres iniciar sesión?',
                 actionText: 'Ir a login',
                 actionHandler: () => navigateTo('/auth/login'),
               },
@@ -629,7 +629,7 @@ export const useAuthStore = defineStore('auth', {
         if (data.user) {
           toastStore.success(
             'Registro exitoso',
-            'Cuenta creada correctamente. Revisa tu email para verificar tu cuenta.',
+            { description: 'Cuenta creada correctamente. Revisa tu email para verificar tu cuenta.' },
           )
 
           // Redirect to verification pending page
@@ -649,8 +649,8 @@ export const useAuthStore = defineStore('auth', {
         if (!errorMessage.includes('ya registrado')) {
           toastStore.error(
             'Error de registro',
-            errorMessage,
             {
+              description: errorMessage,
               actionText: 'Reintentar',
               actionHandler: () => this.register(userData),
             },
@@ -688,7 +688,7 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.success(
           'Email verificado',
-          'Tu email ha sido verificado correctamente. Ya puedes iniciar sesión.',
+          { description: 'Tu email ha sido verificado correctamente. Ya puedes iniciar sesión.' },
         )
 
         // Redirect to login with success message
@@ -703,8 +703,8 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.error(
           'Error de verificación',
-          errorMessage,
           {
+            description: errorMessage,
             actionText: 'Reenviar email',
             actionHandler: () => this.resendVerification(),
           },
@@ -746,7 +746,7 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.success(
           'Email reenviado',
-          'Se ha enviado un nuevo email de verificación. Revisa tu bandeja de entrada.',
+          { description: 'Se ha enviado un nuevo email de verificación. Revisa tu bandeja de entrada.' },
         )
       }
       catch (error: unknown) {
@@ -755,7 +755,7 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.error(
           'Error al reenviar',
-          errorMessage,
+          { description: errorMessage },
         )
 
         throw error
@@ -795,7 +795,7 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.success(
           'Instrucciones enviadas',
-          'Si el email existe, recibirás instrucciones para restablecer tu contraseña.',
+          { description: 'Si el email existe, recibirás instrucciones para restablecer tu contraseña.' },
         )
       }
       catch (error: unknown) {
@@ -804,8 +804,8 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.error(
           'Error al solicitar restablecimiento',
-          errorMessage,
           {
+            description: errorMessage,
             actionText: 'Reintentar',
             actionHandler: () => this.forgotPassword(email),
           },
@@ -841,7 +841,7 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.success(
           'Contraseña actualizada',
-          'Tu contraseña ha sido actualizada correctamente.',
+          { description: 'Tu contraseña ha sido actualizada correctamente.' },
         )
 
         // Redirect to login with success message
@@ -856,8 +856,8 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.error(
           'Error al restablecer contraseña',
-          errorMessage,
           {
+            description: errorMessage,
             actionText: 'Reintentar',
             actionHandler: () => this.resetPassword(password),
           },
@@ -903,7 +903,7 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.success(
           'Sesión cerrada',
-          'Has cerrado sesión correctamente.',
+          { description: 'Has cerrado sesión correctamente.' },
         )
 
         // Redirect to homepage with logout confirmation
@@ -954,7 +954,7 @@ export const useAuthStore = defineStore('auth', {
 
           toastStore.info(
             'Modo demo',
-            'Los cambios de perfil se han aplicado solo para esta sesión simulada.',
+            { description: 'Los cambios de perfil se han aplicado solo para esta sesión simulada.' },
           )
 
           return
@@ -987,7 +987,7 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.success(
           'Perfil actualizado',
-          'Tu perfil ha sido actualizado correctamente.',
+          { description: 'Tu perfil ha sido actualizado correctamente.' },
         )
       }
       catch (error: unknown) {
@@ -996,8 +996,8 @@ export const useAuthStore = defineStore('auth', {
 
         toastStore.error(
           'Error al actualizar perfil',
-          errorMessage,
           {
+            description: errorMessage,
             actionText: 'Reintentar',
             actionHandler: () => this.updateProfile(profileData),
           },

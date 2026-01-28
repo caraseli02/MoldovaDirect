@@ -2,7 +2,7 @@
   <div class="space-y-4">
     <!-- Stripe Card Element - One field for card number, expiry, CVC -->
     <div>
-      <UiLabel class="mb-2 block text-sm font-medium">
+      <UiLabel class="mb-2 block text-sm font-medium dark:text-white">
         {{ $t('checkout.payment.cardDetails') }}
       </UiLabel>
       <div
@@ -58,7 +58,7 @@
     <div>
       <UiLabel
         for="cardholder-name"
-        class="mb-2 block text-sm font-medium"
+        class="mb-2 block text-sm font-medium dark:text-white"
       >
         {{ $t('checkout.payment.cardholderName') }}
       </UiLabel>
@@ -89,7 +89,7 @@
       v-if="stripeLoading"
       class="flex items-center justify-center py-4"
     >
-      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
+      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-slate-600"></div>
       <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
         {{ $t('checkout.payment.loadingStripe') }}
       </span>

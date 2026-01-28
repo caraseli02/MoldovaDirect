@@ -46,7 +46,7 @@
         <div class="rounded-full bg-white p-2.5 shadow-lg md:p-3">
           <commonIcon
             name="lucide:plus"
-            class="h-4 w-4 text-gold-500 md:h-5 md:w-5"
+            class="h-4 w-4 text-yellow-500 md:h-5 md:w-5"
           />
         </div>
       </div>

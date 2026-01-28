@@ -281,22 +281,19 @@ export const useProductsStore = defineStore('products', {
         const cacheKey = `product-${normalizedSlug}`
         const cached = this.getCache(cacheKey) as ProductDetailResponse | null
         if (cached) {
-          this.currentProduct = cached.product
-          this.relatedProducts = cached.relatedProducts
+          this.currentProduct = cached as ProductWithRelations
+          this.relatedProducts = cached.relatedProducts || []
           this.loading = false
           return
         }
 
-        const response = await $fetch<ProductDetailResponse>(`/api/products/${trimmedSlug}`)
+        const response = await $fetch<{ product: ProductWithRelations, relatedProducts: ProductWithRelations[] }>(`/api/products/${trimmedSlug}`)
 
         this.currentProduct = response.product
-        this.relatedProducts = response.relatedProducts
+        this.relatedProducts = response.relatedProducts || []
 
         // Cache the response
-        this.setCache(cacheKey, {
-          product: response.product,
-          relatedProducts: response.relatedProducts,
-        }, 10 * 60 * 1000) // 10 minutes cache for product details
+        this.setCache(cacheKey, response, 10 * 60 * 1000) // 10 minutes cache for product details
       }
       catch (error: unknown) {
         this.error = error instanceof Error ? getErrorMessage(error) : 'Failed to fetch product'

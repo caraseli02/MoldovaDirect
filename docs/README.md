@@ -24,15 +24,18 @@ Our documentation is organized by **what you want to do**:
 - [Checkout](./how-to/checkout/) - Payment flows, cart management
 - [Deployment](./how-to/deployment/) - Deploy to production
 - [Testing](./how-to/testing/) - Write and run tests
+- **NEW:** [UI Components](./how-to/ui-components/) - shadcn-vue adoption guide
 
 ### 📋 [Reference](./reference/) - Information Lookup
-**You want to:** Look up technical details  
+**You want to:** Look up technical details
 **Start here if:** You need API docs or specifications
 
 - [API Documentation](./reference/api/) - API reference and usage guides
 - [Architecture Specs](./reference/architecture/) - Requirements and implementation specs
 - [Component Library](./reference/components/) - Component inventory and library
 - [Configuration](./reference/configuration/) - Code and documentation conventions
+- **NEW:** [Bug Patterns](./reference/bug-patterns.md) - Anti-patterns to avoid
+- **NEW:** [Refactoring Patterns](./reference/refactoring/patterns.md) - Component decomposition patterns
 
 ### 💡 [Explanation](./explanation/) - Understanding
 **You want to:** Understand why things work the way they do  
@@ -91,12 +94,15 @@ docs/
 │   ├── authentication/
 │   ├── checkout/
 │   ├── deployment/
-│   └── testing/
+│   ├── testing/
+│   └── ui-components/  # NEW: shadcn-vue guides
 ├── reference/         # 📋 Information-oriented (lookup)
 │   ├── api/
 │   ├── architecture/
 │   ├── components/
-│   └── configuration/
+│   ├── configuration/
+│   ├── refactoring/   # NEW: Refactoring patterns
+│   └── bug-patterns.md # NEW: Anti-patterns catalog
 ├── explanation/       # 💡 Understanding-oriented (concepts)
 │   ├── architecture/
 │   ├── decisions/
@@ -228,6 +234,19 @@ Example:
 
 ## 🔄 Recent Changes
 
+### January 27, 2026 - Product Detail Page Refactoring (PR #365)
+- ✅ Split 1,033-line product detail page into 11 sub-components
+- ✅ Created useProductDetail composable (288 lines)
+- ✅ Added E2E tests (products-detail.spec.ts)
+- ✅ Added visual tests (product-detail-visual.spec.ts - 40 tests)
+- ✅ Documentation: test-infrastructure.md, bug-patterns.md, refactoring/patterns.md
+
+### January 25, 2026 - Documentation Expansion
+- ✅ Added [Bug Patterns](reference/bug-patterns.md) - Anti-patterns to avoid
+- ✅ Added [Refactoring Patterns](reference/refactoring/patterns.md) - Component decomposition guide
+- ✅ Added [shadcn-vue Adoption Guide](how-to/ui-components/shadcn-vue-adoption-guide.md) - UI component usage
+- ✅ Added [Test Infrastructure Guide](how-to/testing/test-infrastructure.md) - Project-specific testing patterns
+
 ### January 15, 2026 - Documentation Migration
 - ✅ Migrated to Diátaxis structure
 - ✅ Generated AI context files
@@ -246,6 +265,8 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 - [Code Conventions](reference/configuration/code-conventions.md)
 - [Testing Guide](how-to/testing/quick-reference.md)
 - [Tech Stack](explanation/concepts/tech-stack.md)
+- **NEW:** [Bug Patterns](reference/bug-patterns.md) - Anti-patterns to avoid
+- **NEW:** [Refactoring Patterns](reference/refactoring/patterns.md) - Component decomposition guide
 
 ### For AI Tools
 - [llms.txt](../llms.txt) - Quick overview
@@ -260,9 +281,9 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 
 ---
 
-**Last Updated:** January 15, 2026  
-**Migration Status:** ✅ Complete  
-**Documentation Version:** 2.0 (Diátaxis)
+**Last Updated:** January 27, 2026
+**Migration Status:** ✅ Complete
+**Documentation Version:** 2.1 (Diátaxis + PR #365 updates)
 
 ---
 

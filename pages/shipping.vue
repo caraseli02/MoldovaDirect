@@ -7,7 +7,7 @@
         class="grid gap-10 lg:grid-cols-[1.6fr,1fr] items-start"
       >
         <div>
-          <p class="inline-flex items-center rounded-full bg-primary-100 px-4 py-1.5 text-sm font-semibold text-primary-800 dark:bg-primary-900/40 dark:text-primary-100">
+          <p class="inline-flex items-center rounded-full bg-slate-100 px-4 py-1.5 text-sm font-semibold text-slate-800 dark:bg-slate-900/40 dark:text-slate-100">
             {{ $t('shippingPage.hero.badge') }}
           </p>
           <h1
@@ -24,7 +24,7 @@
             <NuxtLink
               :to="localePath('/track-order')"
               :aria-label="$t('shippingPage.ctas.track')"
-              class="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-5 py-3 text-base font-semibold text-white transition hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
+              class="inline-flex items-center gap-2 rounded-lg bg-slate-600 px-5 py-3 text-base font-semibold text-white transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
             >
               <Icon
                 name="package"
@@ -47,9 +47,9 @@
             </NuxtLink>
           </div>
 
-          <div class="mt-6 flex flex-col gap-4 rounded-xl border border-primary-100 bg-white p-4 text-sm text-gray-700 shadow-sm dark:border-primary-900/40 dark:bg-gray-800 dark:text-gray-200 sm:flex-row sm:items-center sm:justify-between">
+          <div class="mt-6 flex flex-col gap-4 rounded-xl border border-slate-100 bg-white p-4 text-sm text-gray-700 shadow-sm dark:border-slate-900/40 dark:bg-gray-800 dark:text-gray-200 sm:flex-row sm:items-center sm:justify-between">
             <div class="flex items-center gap-3">
-              <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-700 dark:bg-primary-900/40 dark:text-primary-100">
+              <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-slate-50 text-slate-700 dark:bg-slate-900/40 dark:text-slate-100">
                 <Icon
                   name="truck"
                   class="h-6 w-6"
@@ -87,10 +87,10 @@
                 :key="item.title"
                 class="flex gap-4 rounded-xl border border-gray-100 p-4 dark:border-gray-700"
               >
-                <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary-50 dark:bg-primary-900/40">
+                <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-900/40">
                   <Icon
                     :name="item.icon"
-                    class="h-5 w-5 text-primary-700 dark:text-primary-200"
+                    class="h-5 w-5 text-slate-700 dark:text-slate-200"
                     aria-hidden="true"
                   />
                 </div>
@@ -126,7 +126,7 @@
                 {{ $t('shippingPage.methods.subtitle') }}
               </p>
             </div>
-            <span class="rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-800 dark:bg-primary-900/40 dark:text-primary-100">
+            <span class="rounded-full bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-800 dark:bg-slate-900/40 dark:text-slate-100">
               {{ $t('shippingPage.methods.tag') }}
             </span>
           </div>
@@ -137,7 +137,7 @@
               :key="method.title"
               class="flex flex-col gap-3 rounded-xl border border-gray-100 p-4 dark:border-gray-700"
             >
-              <div class="flex items-center gap-2 text-sm font-semibold text-primary-700 dark:text-primary-200">
+              <div class="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-200">
                 <Icon
                   :name="method.icon"
                   class="h-4 w-4"
@@ -167,7 +167,7 @@
           <!-- Coverage Section -->
           <section
             aria-labelledby="coverage-title"
-            class="rounded-2xl bg-primary-50 p-6 shadow-lg dark:bg-primary-900/30"
+            class="rounded-2xl bg-slate-50 p-6 shadow-lg dark:bg-slate-900/30"
           >
             <h3
               id="coverage-title"
@@ -182,11 +182,11 @@
               <li
                 v-for="region in coverage"
                 :key="region.title"
-                class="rounded-xl border border-primary-100 bg-white px-4 py-3 text-sm shadow-sm dark:border-primary-800 dark:bg-gray-800 dark:text-gray-200"
+                class="rounded-xl border border-slate-100 bg-white px-4 py-3 text-sm shadow-sm dark:border-slate-800 dark:bg-gray-800 dark:text-gray-200"
               >
                 <p class="flex items-center justify-between font-semibold text-gray-900 dark:text-white">
                   {{ region.title }}
-                  <span class="text-xs text-primary-700 dark:text-primary-200">{{ region.badge }}</span>
+                  <span class="text-xs text-slate-700 dark:text-slate-200">{{ region.badge }}</span>
                 </p>
                 <p class="mt-1 text-gray-600 dark:text-gray-300">
                   {{ region.description }}
@@ -215,7 +215,7 @@
                 <div class="mt-0.5 flex-shrink-0">
                   <Icon
                     :name="item.icon"
-                    class="h-5 w-5 text-primary-700 dark:text-primary-200"
+                    class="h-5 w-5 text-slate-700 dark:text-slate-200"
                     aria-hidden="true"
                   />
                 </div>
@@ -250,7 +250,7 @@
               {{ $t('shippingPage.timeline.subtitle') }}
             </p>
           </div>
-          <div class="rounded-full bg-primary-50 px-4 py-2 text-sm font-semibold text-primary-800 dark:bg-primary-900/40 dark:text-primary-100">
+          <div class="rounded-full bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-800 dark:bg-slate-900/40 dark:text-slate-100">
             {{ $t('shippingPage.timeline.reminder') }}
           </div>
         </div>
@@ -262,7 +262,7 @@
             class="relative rounded-xl border border-gray-100 p-4 dark:border-gray-700"
           >
             <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-600 text-lg font-bold text-white"
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-600 text-lg font-bold text-white"
               :aria-label="`Step ${index + 1}`"
             >
               {{ index + 1 }}
@@ -297,7 +297,7 @@
               <NuxtLink
                 :to="localePath('/contact')"
                 :aria-label="$t('shippingPage.contactCard.cta')"
-                class="inline-flex items-center rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
+                class="inline-flex items-center rounded-lg bg-slate-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
               >
                 {{ $t('shippingPage.contactCard.cta') }}
               </NuxtLink>
@@ -310,7 +310,7 @@
               </NuxtLink>
             </div>
           </div>
-          <aside class="rounded-xl border border-dashed border-primary-200 bg-white/80 p-4 text-sm text-gray-700 shadow-sm dark:border-primary-800 dark:bg-gray-900/60 dark:text-gray-200">
+          <aside class="rounded-xl border border-dashed border-slate-200 bg-white/80 p-4 text-sm text-gray-700 shadow-sm dark:border-slate-800 dark:bg-gray-900/60 dark:text-gray-200">
             <p class="font-semibold text-gray-900 dark:text-white">
               {{ $t('shippingPage.contactCard.noteTitle') }}
             </p>

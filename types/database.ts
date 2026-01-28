@@ -60,6 +60,7 @@ export interface Category {
   sortOrder: number
   isActive: boolean
   createdAt: string
+  breadcrumb?: Array<{ id: number, slug: string, name: string | Translations }>
 }
 
 export interface CategoryWithChildren extends Category {
@@ -70,13 +71,30 @@ export interface CategoryWithChildren extends Category {
   icon?: string
 }
 
+// For API responses that include breadcrumb
+export interface CategoryWithBreadcrumb {
+  id: number
+  slug: string
+  parentId?: number
+  nameTranslations: Translations
+  descriptionTranslations?: Translations
+  imageUrl?: string
+  sortOrder?: number
+  isActive?: boolean
+  createdAt?: string
+  // Convenience properties
+  name?: Translations
+  description?: string
+  breadcrumb?: Array<{ id: number, slug: string, name: string | Translations }>
+}
+
 // =============================================
 // PRODUCT TYPES
 // =============================================
 export interface ProductImage {
   id?: number
   url: string
-  altText?: Translations
+  altText?: Translations | Record<string, string> | null
   sortOrder: number
   isPrimary: boolean
 }
@@ -120,6 +138,12 @@ export interface ProductWithRelations extends Product {
   stockStatus: 'in_stock' | 'low_stock' | 'out_of_stock'
   formattedPrice: string
   primaryImage?: ProductImage
+  relatedProducts?: ProductWithRelations[]
+  reviewSummary?: {
+    rating: number
+    count: number
+    highlights: string[]
+  }
   // Legacy fields for compatibility with existing components
   tags?: string[]
   origin?: string
@@ -188,9 +212,12 @@ export interface ProductListResponse {
   }
 }
 
-export interface ProductDetailResponse {
-  product: ProductWithRelations
-  relatedProducts: ProductWithRelations[]
+// API response for product detail - includes product data with breadcrumb category and related products
+export type ProductDetailResponse = Omit<ProductWithRelations, 'category'> & {
+  category: CategoryWithBreadcrumb
+  relatedProducts?: ProductWithRelations[]
+  locale?: string
+  availableLocales?: string[]
 }
 
 export interface CategoryListResponse {

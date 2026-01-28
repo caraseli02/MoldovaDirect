@@ -1,35 +1,20 @@
 <script setup lang="ts">
-import type { ProgressRootEmits, ProgressRootProps } from 'reka-ui'
-import { ProgressIndicator, ProgressRoot } from 'reka-ui'
+import { ProgressIndicator, ProgressRoot, type ProgressRootProps } from 'reka-ui'
+import { useForwardProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 import { cn } from '@/lib/utils'
 
-interface Props extends ProgressRootProps {
-  class?: HTMLAttributes['class']
-  indicatorClass?: HTMLAttributes['class']
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  modelValue: 0,
-})
-
-const emits = defineEmits<ProgressRootEmits>()
+const props = defineProps<ProgressRootProps & { class?: HTMLAttributes['class'] }>()
+const forwarded = useForwardProps(props)
 </script>
 
 <template>
   <ProgressRoot
-    v-bind="props"
-    :class="cn(
-      'relative h-2 w-full overflow-hidden rounded-full bg-primary/20',
-      props.class,
-    )"
-    @update:model-value="emits('update:modelValue', $event)"
+    v-bind="forwarded"
+    :class="cn('relative h-4 w-full overflow-hidden rounded-full bg-secondary', props.class)"
   >
     <ProgressIndicator
-      :class="cn(
-        'h-full w-full flex-1 bg-primary transition-all',
-        props.indicatorClass,
-      )"
+      class="h-full w-full flex-1 bg-primary transition-all"
       :style="`transform: translateX(-${100 - (props.modelValue ?? 0)}%)`"
     />
   </ProgressRoot>

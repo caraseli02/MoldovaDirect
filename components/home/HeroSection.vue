@@ -3,7 +3,7 @@
     <!-- Hero content -->
     <div class="relative bg-slate-950">
       <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.12),_rgba(15,23,42,0.05)_65%)]"></div>
-      <div class="absolute inset-y-0 right-[-10%] hidden w-[45%] rounded-full bg-primary-500/30 blur-3xl lg:block"></div>
+      <div class="absolute inset-y-0 right-[-10%] hidden w-[45%] rounded-full bg-slate-500/30 blur-3xl lg:block"></div>
       <div class="container relative py-12 md:py-20">
         <div class="mx-auto max-w-5xl text-center px-4">
           <!-- Trust Badge with fade-in animation -->
@@ -49,7 +49,7 @@
           >
             <NuxtLink
               :to="localePath('/products')"
-              class="cta-button inline-flex min-h-[44px] items-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-primary-700 shadow-lg shadow-primary-900/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              class="cta-button inline-flex min-h-[44px] items-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-slate-700 shadow-lg shadow-slate-900/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
             >
               {{ t('home.hero.primaryCta') }}
               <commonIcon

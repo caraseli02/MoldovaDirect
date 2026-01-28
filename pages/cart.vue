@@ -13,7 +13,7 @@
         </div>
         <NuxtLink
           :to="localePath('/products')"
-          class="hidden md:flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors"
+          class="hidden md:flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 font-medium transition-colors"
         >
           <svg
             class="w-5 h-5"
@@ -87,7 +87,7 @@
           <NuxtLink
             :to="localePath('/products')"
             :aria-label="$t('common.continueShopping')"
-            class="inline-flex items-center justify-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-xl hover:bg-primary-700 transition-colors font-medium min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            class="inline-flex items-center justify-center gap-2 bg-slate-600 text-white px-6 py-3 rounded-xl hover:bg-slate-700 transition-colors font-medium min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
           >
             {{ $t('common.continueShopping') }}
             <svg
@@ -466,13 +466,13 @@ const undoRemoveItem = async () => {
 
     toast.success(
       t('cart.success.productRestored'),
-      t('cart.success.productRestoredDetails', { product: getLocalizedText(itemToRestore.product.name) }),
+      { description: t('cart.success.productRestoredDetails', { product: getLocalizedText(itemToRestore.product.name) }) },
     )
   }
   catch (error: unknown) {
     console.error('Failed to restore item:', getErrorMessage(error))
     // Keep lastRemovedItem so user can retry
-    toast.error(t('cart.error.addFailed'), t('cart.error.addFailedDetails'))
+    toast.error(t('cart.error.addFailed'), { description: t('cart.error.addFailedDetails') })
   }
 }
 
@@ -528,8 +528,8 @@ const safeRemoveItem = async (itemId: string) => {
     // Show toast with undo action only after successful removal
     toast.success(
       t('cart.success.productRemoved'),
-      t('cart.success.productRemovedDetails', { product: getLocalizedText(item.product.name) }),
       {
+        description: t('cart.success.productRemovedDetails', { product: getLocalizedText(item.product.name) }),
         actionText: t('common.undo'),
         actionHandler: undoRemoveItem,
         duration: 8000,
@@ -539,7 +539,7 @@ const safeRemoveItem = async (itemId: string) => {
   catch (error: unknown) {
     console.error('Failed to remove item:', itemId, error)
     // Item is still in cart on error, no cleanup needed
-    toast.error(t('cart.error.removeFailed'), t('cart.error.removeFailedDetails'))
+    toast.error(t('cart.error.removeFailed'), { description: t('cart.error.removeFailedDetails') })
   }
 }
 
@@ -555,7 +555,7 @@ const handleSwipeRemove = async (itemId: string) => {
     if ('vibrate' in navigator) {
       navigator.vibrate([50, 50, 50]) // Error pattern
     }
-    toast.error(t('cart.error.removeFailed'), t('cart.error.removeFailedDetails'))
+    toast.error(t('cart.error.removeFailed'), { description: t('cart.error.removeFailedDetails') })
   }
 }
 
@@ -564,7 +564,7 @@ const handleSaveForLater = async (itemId: string) => {
     const item = items.value.find(i => i.id === itemId)
     if (!item) {
       console.error('Item not found for save-for-later:', itemId)
-      toast.error(t('cart.error.productNotFound'), t('cart.error.productNotFoundDetails'))
+      toast.error(t('cart.error.productNotFound'), { description: t('cart.error.productNotFoundDetails') })
       return
     }
     const mutableProduct = {
@@ -573,11 +573,11 @@ const handleSaveForLater = async (itemId: string) => {
     }
     await addToSavedForLater(mutableProduct, item.quantity)
     await removeItem(itemId)
-    toast.success(t('cart.success.savedForLater'), t('cart.success.savedForLaterDetails', { product: item.product.name }))
+    toast.success(t('cart.success.savedForLater'), { description: t('cart.success.savedForLaterDetails', { product: item.product.name }) })
   }
   catch (error: unknown) {
     console.error('Failed to save item for later:', itemId, error)
-    toast.error(t('cart.error.saveFailed'), t('cart.error.saveFailedDetails'))
+    toast.error(t('cart.error.saveFailed'), { description: t('cart.error.saveFailedDetails') })
   }
 }
 
@@ -593,7 +593,7 @@ const goToCheckout = async () => {
   }
   catch (error: unknown) {
     console.error('Failed to proceed to checkout:', getErrorMessage(error))
-    toast.error(t('common.cartError'), t('cart.error.checkoutFailed'))
+    toast.error(t('common.cartError'), { description: t('cart.error.checkoutFailed') })
   }
 }
 
@@ -604,7 +604,7 @@ onMounted(async () => {
   }
   catch (error: unknown) {
     console.error('Failed to validate cart:', getErrorMessage(error))
-    toast.error(t('common.cartValidationError'), t('cart.error.validationFailedDetails'))
+    toast.error(t('common.cartValidationError'), { description: t('cart.error.validationFailedDetails') })
   }
 })
 

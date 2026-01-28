@@ -15,7 +15,7 @@
     </div>
     <div class="mt-4 space-y-3">
       <a
-        class="flex items-center justify-between rounded-lg bg-gray-50 p-3 text-sm font-semibold text-gray-900 ring-1 ring-gray-100 transition hover:bg-primary-50 hover:text-primary-800 hover:ring-primary-100 dark:bg-gray-950 dark:text-white dark:ring-gray-800 dark:hover:bg-primary-900/20 dark:hover:text-primary-100 dark:hover:ring-primary-800/40"
+        class="flex items-center justify-between rounded-lg bg-gray-50 p-3 text-sm font-semibold text-gray-900 ring-1 ring-gray-100 transition hover:bg-slate-50 hover:text-slate-800 hover:ring-slate-200 dark:bg-gray-950 dark:text-white dark:ring-gray-800 dark:hover:bg-slate-900/20 dark:hover:text-slate-100 dark:hover:ring-slate-700/40"
         :href="`mailto:${supportEmail}?subject=${encodeURIComponent(t('returns.support.emailSubject'))}`"
         aria-label="Email customer support for return assistance"
       >
@@ -37,7 +37,7 @@
       </a>
       <NuxtLink
         :to="localePath('/contact')"
-        class="flex items-center justify-between rounded-lg bg-primary-50 p-3 text-sm font-semibold text-primary-800 ring-1 ring-primary-100 transition hover:bg-primary-100 hover:ring-primary-200 dark:bg-primary-900/20 dark:text-primary-100 dark:ring-primary-800/40 dark:hover:bg-primary-900/30"
+        class="flex items-center justify-between rounded-lg bg-slate-50 p-3 text-sm font-semibold text-slate-800 ring-1 ring-slate-200 transition hover:bg-slate-100 hover:ring-slate-300 dark:bg-slate-900/20 dark:text-slate-100 dark:ring-slate-700/40 dark:hover:bg-slate-900/30"
         aria-label="Navigate to contact form for return inquiries"
       >
         <span>{{ t('returns.support.contactLink') }}</span>

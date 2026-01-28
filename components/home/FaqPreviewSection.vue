@@ -13,7 +13,7 @@
         <details
           v-for="item in items"
           :key="item.question"
-          class="group rounded-3xl border border-gray-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg open:border-primary-300 open:bg-primary-50/30 dark:border-gray-800 dark:bg-gray-900"
+          class="group rounded-3xl border border-gray-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg open:border-slate-300 open:bg-slate-50/30 dark:border-gray-800 dark:bg-gray-900"
         >
           <summary class="flex cursor-pointer items-center justify-between text-left text-lg font-semibold">
             <span>{{ item.question }}</span>
@@ -30,7 +30,7 @@
       <div class="mt-12 text-center">
         <NuxtLink
           :to="localePath('/faq')"
-          class="inline-flex items-center gap-2 rounded-full bg-primary-600 px-6 py-3 font-semibold text-white transition hover:bg-primary-700"
+          class="inline-flex items-center gap-2 rounded-full bg-slate-600 px-6 py-3 font-semibold text-white transition hover:bg-slate-700"
         >
           {{ t('home.faqPreview.cta') }}
           <commonIcon

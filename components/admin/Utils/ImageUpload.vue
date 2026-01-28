@@ -172,7 +172,7 @@
     <!-- Alt Text Edit Modal -->
     <UiDialog
       :open="altTextModal.show"
-      @update:open="(open) => !open && closeAltTextModal()"
+      @update:open="(open: boolean) => !open && closeAltTextModal()"
     >
       <UiDialogContent class="sm:max-w-md">
         <UiDialogHeader>

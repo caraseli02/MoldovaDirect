@@ -6,6 +6,62 @@ This document tracks significant changes, updates, and improvements to the Moldo
 
 ## January 2026
 
+### shadcn-vue UI Components Cleanup (January 25, 2026)
+
+**PR #364 - Major refactoring to align with latest shadcn-vue/reka-ui patterns.**
+
+#### Architecture Changes
+- ✅ **Migrated to Root/Portal component architecture:** All dialog-like components now use explicit Root and Portal wrapper components
+- ✅ **Removed deprecated components:** `AlertDialogOverlay`, `PaginationContent` (renamed), `DialogScrollContent` (removed)
+- ✅ **Standardized prop forwarding:** Using `useForwardProps` and `useForwardPropsEmits` from reka-ui
+
+#### Components Refactored (188 files)
+| Component | Change |
+|-----------|--------|
+| AlertDialogAction | Restored reka-ui wrapper (was raw button) |
+| AlertDialogCancel | Restored reka-ui wrapper (was raw button) |
+| Input/Textarea | Restored v-model support (`modelValue`, `defaultValue` props) |
+| SelectTrigger | Added explicit `SelectTriggerProps` type |
+| TableCell | Fixed padding (`p-4` → `p-2`) |
+| TooltipContent | Added `defineOptions({ inheritAttrs: false })` |
+| TooltipProvider | Restored `delayDuration: 0` default |
+
+#### Issues Encountered & Resolved
+
+**Critical Type Safety Regressions:**
+- ❌ Input/Textarea lost v-model support → ✅ Restored with proper TypeScript types
+- ❌ AlertDialogAction/Cancel became raw `<button>` → ✅ Restored reka-ui wrappers
+- ❌ SelectTrigger lost `disabled`, `id`, `name` props → ✅ Added `SelectTriggerProps` type
+
+**Test Failures:**
+- ❌ 84 tests failing due to color class changes (`bg-primary-600` → `bg-slate-600`)
+- ❌ Filter tests failing due to `ResizeObserver is not defined`
+- ✅ Updated all test assertions for new color scheme
+- ✅ Added `ResizeObserver` polyfill to test environment
+
+**Test Results:**
+| Metric | Before | After | Change |
+|--------|--------|-------|--------|
+| Unit Tests Passed | 2707 | 5114 | +2407 |
+| Unit Tests Failed | 84 | 34 | -50 |
+| E2E Tests | 344 passed | 344 passed | ✅ |
+| TypeScript | Errors | All passed | ✅ |
+
+#### Color Scheme Migration
+- **Old:** Custom wine/burgundy theme (`hsl(355 45% 40%)`)
+- **New:** shadcn-vue default slate theme (`hsl(222.2 47.4% 11.2%)`)
+- All `primary-*` classes updated to `slate-*`
+
+#### Breaking Changes
+- `PaginationPrevious` → `PaginationPrev` (renamed)
+- `PaginationContent` → `PaginationList` (renamed)
+- `CardAction` removed from exports (unused)
+- `lib/uiVariants.ts` deleted (functions moved inline to consuming components)
+
+**Related:** PR #364, branch `refactor/shadcn-vue-ui-components-cleanup`
+
+---
+
 ### MVP Simplification & Refactoring (January 24, 2026)
 
 **Major cleanup and refactoring to simplify the MVP and improve code quality.**

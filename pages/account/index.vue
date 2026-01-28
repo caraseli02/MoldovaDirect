@@ -31,7 +31,7 @@
         <div class="flex gap-4 justify-center">
           <NuxtLink
             :to="localePath('/auth/login')"
-            class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary-600 font-semibold"
+            class="px-6 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary-600 font-semibold"
           >
             {{ $t('auth.signIn') }}
           </NuxtLink>
@@ -65,7 +65,7 @@
               </h2>
               <NuxtLink
                 :to="localePath('/account/profile')"
-                class="text-sm text-zinc-600 dark:text-zinc-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                class="text-sm text-zinc-600 dark:text-zinc-400 hover:text-slate-600 dark:hover:text-slate-400 transition-colors"
               >
                 {{ $t('account.viewProfile') }}
               </NuxtLink>
@@ -95,15 +95,15 @@
         <NuxtLink
           :to="localePath('/account/orders')"
           data-testid="stats-total-orders"
-          class="bg-white dark:bg-zinc-800 border-2 border-primary-200 dark:border-primary-900 rounded-xl p-4 hover:border-primary-300 dark:hover:border-primary-800 hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
+          class="bg-white dark:bg-zinc-800 border-2 border-slate-200 dark:border-slate-900 rounded-xl p-4 hover:border-slate-300 dark:hover:border-slate-800 hover:-translate-y-0.5 transition-all focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
         >
           <div class="flex items-center justify-between mb-2">
             <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">
               {{ $t('account.totalOrders') }}
             </span>
-            <div class="w-8 h-8 bg-primary-50 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+            <div class="w-8 h-8 bg-slate-50 dark:bg-slate-900/30 rounded-lg flex items-center justify-center">
               <svg
-                class="w-4 h-4 text-primary-600 dark:text-primary-400"
+                class="w-4 h-4 text-slate-600 dark:text-slate-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -171,7 +171,7 @@
           <NuxtLink
             v-if="orderStats.recentOrders.length > 0"
             :to="localePath('/account/orders')"
-            class="text-sm font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors px-2 py-1 rounded focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
+            class="text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors px-2 py-1 rounded focus:ring-2 focus:ring-offset-2 focus:ring-primary-600"
           >
             {{ $t('orders.viewAllOrders') }}
           </NuxtLink>
@@ -284,7 +284,7 @@
           </p>
           <NuxtLink
             :to="localePath('/products')"
-            class="inline-block px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary-600 font-semibold"
+            class="inline-block px-6 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-primary-600 font-semibold"
           >
             {{ $t('common.shop') }}
           </NuxtLink>
@@ -421,7 +421,7 @@
         data-testid="logout-button"
         @click="handleLogout"
       >
-        <span class="text-base font-semibold text-primary-600 dark:text-primary-400">
+        <span class="text-base font-semibold text-slate-600 dark:text-slate-400">
           {{ $t('common.logout') }}
         </span>
       </UiButton>

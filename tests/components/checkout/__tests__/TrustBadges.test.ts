@@ -184,7 +184,7 @@ describe('TrustBadges', () => {
     it('should have primary color styling on email link', () => {
       const wrapper = createWrapper({ variant: 'full' })
       const emailLink = wrapper.find('a[href^="mailto:"]')
-      expect(emailLink.classes()).toContain('text-primary-600')
+      expect(emailLink.classes()).toContain('text-slate-600')
     })
 
     it('should have border separator above customer service section', () => {

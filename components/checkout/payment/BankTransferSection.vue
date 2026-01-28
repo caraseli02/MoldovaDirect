@@ -72,7 +72,7 @@
         type="button"
         variant="outline"
         :aria-label="$t('checkout.payment.copyBankDetails')"
-        class="mt-4 w-full inline-flex justify-center items-center min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+        class="mt-4 w-full inline-flex justify-center items-center min-h-[44px] focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2"
         @click="copyBankDetails"
       >
         <commonIcon

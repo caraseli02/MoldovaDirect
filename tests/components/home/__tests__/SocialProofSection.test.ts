@@ -150,7 +150,7 @@ describe('Home SocialProofSection', () => {
 
     it('should render section with correct background classes', () => {
       const section = wrapper.find('section')
-      expect(section.classes()).toContain('bg-primary-900')
+      expect(section.classes()).toContain('bg-slate-900')
       expect(section.classes()).toContain('text-white')
     })
 
@@ -188,7 +188,7 @@ describe('Home SocialProofSection', () => {
 
     it('should render stat labels', () => {
       mockHighlights.forEach((highlight) => {
-        const label = wrapper.findAll('.text-sm.text-primary-100').find(el => el.text() === highlight.label)
+        const label = wrapper.findAll('.text-sm.text-slate-100').find(el => el.text() === highlight.label)
         expect(label).toBeTruthy()
       })
     })
@@ -264,7 +264,7 @@ describe('Home SocialProofSection', () => {
 
     it('should render customer names', () => {
       mockTestimonials.forEach((testimonial) => {
-        const name = wrapper.findAll('.font-semibold.text-primary-600').find(el => el.text() === testimonial.name)
+        const name = wrapper.findAll('.font-semibold.text-slate-600').find(el => el.text() === testimonial.name)
         expect(name).toBeTruthy()
       })
     })
@@ -445,7 +445,7 @@ describe('Home SocialProofSection', () => {
   describe('Styling and Layout', () => {
     it('should have primary background color', () => {
       const section = wrapper.find('section')
-      expect(section.classes()).toContain('bg-primary-900')
+      expect(section.classes()).toContain('bg-slate-900')
     })
 
     it('should have white text color', () => {
@@ -623,7 +623,7 @@ describe('Home SocialProofSection', () => {
         },
       })
 
-      const name = specialCharWrapper.findAll('.font-semibold.text-primary-600').find(el => el.text().includes('María'))
+      const name = specialCharWrapper.findAll('.font-semibold.text-slate-600').find(el => el.text().includes('María'))
       expect(name).toBeTruthy()
     })
 

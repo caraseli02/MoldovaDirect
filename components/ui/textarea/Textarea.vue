@@ -1,41 +1,37 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from 'vue'
-import type { PrimitiveProps } from 'reka-ui'
-import { useVModel, reactiveOmit } from '@vueuse/core'
-import { Primitive } from 'reka-ui'
 import { cn } from '@/lib/utils'
 
-const props = defineProps<PrimitiveProps & {
+const props = defineProps<{
   class?: HTMLAttributes['class']
-  defaultValue?: string | number
-  modelValue?: string | number | null
+  modelValue?: string | null
+  defaultValue?: string | null
+  placeholder?: HTMLAttributes['placeholder']
+  disabled?: boolean
+  name?: string
+  id?: string
+  rows?: number | string
 }>()
 
 const emits = defineEmits<{
-  (e: 'update:modelValue', payload: string | number | null): void
+  (e: 'update:modelValue', payload: string): void
 }>()
-
-const modelValue = useVModel(props, 'modelValue', emits, {
-  passive: true,
-  defaultValue: props.defaultValue,
-})
-
-const delegatedProps = reactiveOmit(props, 'class', 'modelValue', 'defaultValue')
-
-const handleInput = (e: Event) => {
-  const target = e.target as HTMLTextAreaElement | null
-  if (!target) return
-  emits('update:modelValue', target.value)
-}
 </script>
 
 <template>
-  <Primitive
-    v-bind="delegatedProps"
-    :value="modelValue ?? ''"
-    data-slot="textarea"
-    :class="cn('border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm', props.class)"
-    as="textarea"
-    @input="handleInput"
-  />
+  <textarea
+    :id="props.id"
+    :name="props.name"
+    :placeholder="props.placeholder"
+    :disabled="props.disabled"
+    :rows="props.rows"
+    :value="props.modelValue ?? props.defaultValue"
+    :class="
+      cn(
+        'flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+        props.class,
+      )
+    "
+    @input="emits('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
+  ></textarea>
 </template>

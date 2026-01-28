@@ -1,6 +1,7 @@
 <template>
   <nav
-    class="fixed bottom-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-800/50 safe-area-bottom lg:hidden"
+    class="fixed bottom-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-t border-gray-200/50 dark:border-gray-800/50 safe-area-bottom lg:hidden transition-transform duration-300"
+    :class="isHidden ? 'translate-y-full' : 'translate-y-0'"
     role="navigation"
     aria-label="Primary mobile navigation"
     data-testid="bottom-nav"
@@ -10,7 +11,7 @@
       <NuxtLink
         :to="localePath('/')"
         class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors"
-        :class="isActive('/') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
+        :class="isActive('/') ? 'text-slate-600 dark:text-slate-400' : 'text-gray-500 dark:text-gray-400'"
         :aria-current="isActive('/') ? 'page' : undefined"
       >
         <commonIcon
@@ -26,7 +27,7 @@
       <NuxtLink
         :to="localePath('/products')"
         class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors"
-        :class="isActive('/products') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
+        :class="isActive('/products') ? 'text-slate-600 dark:text-slate-400' : 'text-gray-500 dark:text-gray-400'"
         :aria-current="isActive('/products') ? 'page' : undefined"
       >
         <commonIcon
@@ -42,7 +43,7 @@
       <NuxtLink
         :to="localePath('/cart')"
         class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors relative"
-        :class="isActive('/cart') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
+        :class="isActive('/cart') ? 'text-slate-600 dark:text-slate-400' : 'text-gray-500 dark:text-gray-400'"
         :aria-current="isActive('/cart') ? 'page' : undefined"
       >
         <div class="relative">
@@ -55,7 +56,7 @@
             <span
               v-if="itemCount > 0"
               data-testid="cart-count"
-              class="absolute -top-1.5 -right-2 flex items-center justify-center min-w-[14px] h-[14px] px-1 text-[8px] font-bold text-white bg-primary-600 rounded-full"
+              class="absolute -top-1.5 -right-2 flex items-center justify-center min-w-[14px] h-[14px] px-1 text-[8px] font-bold text-white bg-slate-600 rounded-full"
             >
               {{ itemCount > 99 ? '99+' : itemCount }}
             </span>
@@ -69,7 +70,7 @@
       <NuxtLink
         :to="localePath('/products') + '?focus=search'"
         class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors"
-        :class="searchActive ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
+        :class="searchActive ? 'text-slate-600 dark:text-slate-400' : 'text-gray-500 dark:text-gray-400'"
       >
         <commonIcon
           name="search"
@@ -84,7 +85,7 @@
       <NuxtLink
         :to="localePath('/account')"
         class="flex flex-col items-center justify-center flex-1 min-w-0 h-full transition-colors"
-        :class="isActive('/account') ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'"
+        :class="isActive('/account') ? 'text-slate-600 dark:text-slate-400' : 'text-gray-500 dark:text-gray-400'"
         :aria-current="isActive('/account') ? 'page' : undefined"
       >
         <commonIcon
@@ -121,7 +122,22 @@ const isActive = (path: string) => {
 // Check if search is focused
 const searchActive = computed(() => {
   const productsPath = localePath('/products')
+  // Hide on product detail pages (where the path is /products/something but not just /products)
+  // But show on search result page (which is technically /products + query)
+  const isProductDetail = route.path.startsWith(productsPath + '/') && route.path !== productsPath && route.path !== productsPath + '/'
+
+  // If we are on a product detail page, we might want to hide the bottom nav if there is a sticky add-to-cart bar
+  // This helps avoid the "double sticky" issue
   return (route.path === productsPath || route.path === productsPath + '/') && route.query.focus === 'search'
+})
+
+const isHidden = computed(() => {
+  const productsPath = localePath('/products')
+  // Hide strictly on product detail pages (e.g. /products/slug)
+  // But keep visible on /products list
+  return route.path.startsWith(productsPath + '/')
+    && route.path !== productsPath
+    && route.path !== productsPath + '/'
 })
 </script>
 

@@ -12,7 +12,7 @@
         </div>
         <NuxtLink
           :to="localePath('/contact')"
-          class="inline-flex items-center gap-2 rounded-full border border-primary-200 px-6 py-3 text-sm font-bold text-primary-700 transition hover:bg-primary-50 dark:border-primary-700/40 dark:text-primary-200 dark:hover:bg-primary-950/30"
+          class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-6 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700/40 dark:text-slate-200 dark:hover:bg-slate-950/30"
         >
           {{ t('home.services.contactCta') }}
           <commonIcon
@@ -27,9 +27,9 @@
           :key="service.title"
           class="group relative overflow-hidden rounded-3xl border border-gray-200 bg-gray-50 p-8 transition hover:-translate-y-1 hover:shadow-xl dark:border-gray-800 dark:bg-gray-900"
         >
-          <div class="absolute inset-0 bg-primary-500/0 transition group-hover:bg-primary-500/10"></div>
+          <div class="absolute inset-0 bg-slate-500/0 transition group-hover:bg-slate-500/10"></div>
           <div class="relative">
-            <span class="inline-flex items-center justify-center rounded-xl bg-primary-100 p-3 text-primary-600">
+            <span class="inline-flex items-center justify-center rounded-xl bg-slate-100 p-3 text-slate-600">
               <commonIcon
                 :name="service.icon"
                 class="h-6 w-6"
@@ -43,7 +43,7 @@
             </p>
             <NuxtLink
               :to="service.href"
-              class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary-700 transition group-hover:translate-x-1 dark:text-primary-200"
+              class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-700 transition group-hover:translate-x-1 dark:text-slate-200"
             >
               {{ service.cta }}
               <commonIcon

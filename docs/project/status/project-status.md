@@ -147,6 +147,18 @@ feat: complete checkout flow UI
 - Pending: Transactional email notifications
 ```
 
+#### January 2026 - Product Detail Page Refactoring (PR #365)
+```
+feat: product detail page refactoring
+- Split 1,033-line page into 11 sub-components
+- Created useProductDetail composable (288 lines)
+- Components: AddToCartCard, Bundle, FAQ, Gallery, Info, MobileStickyBar,
+              Related, Reviews, Specifications, Sustainability, TrustBadges
+- E2E tests: products-detail.spec.ts
+- Visual tests: product-detail-visual.spec.ts (40 tests, 22 baselines)
+- New documentation added (see Documentation section below)
+```
+
 ### Recent Updates (November 2025)
 
 #### Visual Test Coverage Implementation (November 1, 2025)
@@ -177,7 +189,7 @@ chore: major code cleanup - remove unused features and dependencies
 - **Checkout hardening**: Complete guest checkout edge cases and inventory reservation
 
 #### Code Quality
-- **Code refactoring**: Products page (915 lines) and auth store (1,172 lines) need splitting
+- **Code refactoring**: Auth store (1,172 lines) needs splitting (product pages refactored in PR #365)
 - **Unit test coverage**: Improve composable and component test coverage
 - **E2E test expansion**: Add tests for remaining critical flows
 
@@ -365,7 +377,7 @@ NODE_ENV=production
 
 ### Code Quality (HIGH - Next 2 Weeks)
 
-1. **Refactor Products Page** - Split 915-line component into smaller modules
+1. **Refactor Products Index Page** - Completed ✅ (products/[slug].vue refactored in PR #365)
    - **Phase 1 (2-3 days):** Add safety net tests FIRST
      - Create page integration tests (`tests/pages/products/index.test.ts`)
      - Add composable unit tests for `useProductFilters`, `useProductSearch`, `useProductCatalog`
@@ -389,8 +401,8 @@ NODE_ENV=production
 
 ---
 
-**Last Updated**: 2026-01-20
-**Status**: On Track - Checkout UI complete, Stripe integration pending
-**Health**: Good - Security hardening complete, strong test coverage
+**Last Updated**: 2026-01-27
+**Status**: On Track - Product detail page refactored, Stripe integration pending
+**Health**: Good - Security hardening complete, strong test coverage, new documentation added
 
 This document provides a comprehensive overview of the Moldova Direct project status. It should be updated regularly as development progresses.

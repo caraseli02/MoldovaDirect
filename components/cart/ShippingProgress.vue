@@ -31,7 +31,7 @@
     <div class="h-1.5 bg-zinc-100 dark:bg-zinc-700 rounded-full overflow-hidden">
       <div
         class="h-full rounded-full transition-all duration-500 ease-out"
-        :class="qualifiesForFreeShipping ? 'bg-emerald-500' : 'bg-primary-500'"
+        :class="qualifiesForFreeShipping ? 'bg-emerald-500' : 'bg-slate-500'"
         :style="{ width: `${progressPercentage}%` }"
       ></div>
     </div>
@@ -39,7 +39,7 @@
     <!-- Status Message -->
     <p
       class="text-xs mt-2 font-medium"
-      :class="qualifiesForFreeShipping ? 'text-emerald-600 dark:text-emerald-400' : 'text-primary-600 dark:text-primary-400'"
+      :class="qualifiesForFreeShipping ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-400'"
     >
       <template v-if="qualifiesForFreeShipping">
         <svg

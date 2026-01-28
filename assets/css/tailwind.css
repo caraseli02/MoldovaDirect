@@ -48,100 +48,72 @@
 }
 
 :root {
-  /* Moldova Direct Luxury Brand Colors - To'ak Inspired */
-  --brand-dark: #241405;
-  --brand-light: #FCFAF2;
-  --brand-accent: #722F37;
+  /* Default shadcn-vue slate theme */
+  --background: 0 0% 100%;
+  --foreground: 222.2 47.4% 11.2%;
 
-  --background: hsl(0 0% 100%);
-  --foreground: hsl(222.2 84% 4.9%);
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
 
-  --muted: hsl(210 40% 96.1%);
-  --muted-foreground: hsl(215.4 16.3% 46.9%);
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 47.4% 11.2%;
 
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(222.2 84% 4.9%);
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 47.4% 11.2%;
 
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(222.2 84% 4.9%);
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
 
-  --border: hsl(214.3 31.8% 91.4%);
-  --input: hsl(214.3 31.8% 91.4%);
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
 
-  --primary: hsl(355 45% 40%);
-  --primary-foreground: hsl(355 60% 98%);
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
 
-  --secondary: hsl(210 40% 96.1%);
-  --secondary-foreground: hsl(222.2 47.4% 11.2%);
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
 
-  --accent: hsl(20 60% 55%);
-  --accent-foreground: hsl(0 0% 100%);
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
 
-  --destructive: hsl(0 84.2% 60.2%);
-  --destructive-foreground: hsl(210 40% 98%);
-
-  --ring: hsl(222.2 84% 4.9%);
+  --ring: 215 20.2% 65.1%;
 
   --radius: 0.5rem;
-
-  --highlighted: hsl(355 50% 50%);
-  /* Highlighted color for light theme - Wine accent */
-  --chart-1: hsl(12 76% 61%);
-  --chart-2: hsl(173 58% 39%);
-  --chart-3: hsl(197 37% 24%);
-  --chart-4: hsl(43 74% 66%);
-  --chart-5: hsl(27 87% 67%);
 }
 
 .dark {
-  --background: hsl(222.2 84% 4.9%);
-  --foreground: hsl(210 40% 98%);
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
 
-  --muted: hsl(217.2 32.6% 17.5%);
-  --muted-foreground: hsl(215 20.2% 65.1%);
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
 
-  --popover: hsl(222.2 84% 4.9%);
-  --popover-foreground: hsl(210 40% 98%);
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
 
-  --card: hsl(222.2 84% 4.9%);
-  --card-foreground: hsl(210 40% 98%);
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
 
-  --border: hsl(217.2 32.6% 17.5%);
-  --input: hsl(217.2 32.6% 17.5%);
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
 
-  --primary: hsl(210 40% 98%);
-  --primary-foreground: hsl(222.2 47.4% 11.2%);
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
 
-  --secondary: hsl(217.2 32.6% 17.5%);
-  --secondary-foreground: hsl(210 40% 98%);
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
 
-  --accent: hsl(20 60% 55%);
-  --accent-foreground: hsl(0 0% 100%);
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
 
-  --destructive: hsl(0 62.8% 30.6%);
-  --destructive-foreground: hsl(210 40% 98%);
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
 
-  --ring: hsl(212.7 26.8% 83.9%);
-
-  --highlighted: hsl(355 55% 65%);
-
-  --chart-1: hsl(220 70% 50%);
-
-  --chart-2: hsl(160 60% 45%);
-
-  --chart-3: hsl(30 80% 55%);
-
-  --chart-4: hsl(280 65% 60%);
-
-  --chart-5: hsl(340 75% 55%);
+  --ring: 212.7 26.8% 83.9%;
 }
 
 @theme inline {
-  /* Luxury Brand Colors - To'ak Inspired */
-  --color-brand-dark: var(--brand-dark);
-  --color-brand-light: var(--brand-light);
-  --color-brand-accent: var(--brand-accent);
-
+  /* shadcn-vue default colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
@@ -161,83 +133,6 @@
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-ring: var(--ring);
-  --color-highlighted: var(--highlighted);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-
-  /* Primary color palette - Wine/Burgundy (Moldova wine heritage) */
-  --color-primary-50: hsl(355 60% 95%);
-  --color-primary-100: hsl(355 60% 90%);
-  --color-primary-200: hsl(355 60% 80%);
-  --color-primary-300: hsl(355 55% 65%);
-  --color-primary-400: hsl(355 50% 50%);
-  --color-primary-500: hsl(355 45% 40%);
-  --color-primary-600: hsl(355 50% 32%);
-  --color-primary-700: hsl(355 55% 25%);
-  --color-primary-800: hsl(355 60% 18%);
-  --color-primary-900: hsl(355 65% 12%);
-  --color-primary-950: hsl(355 70% 8%);
-
-  /* Terracotta accent palette (Warmth & earthiness) */
-  --color-terracotta-50: hsl(20 70% 95%);
-  --color-terracotta-100: hsl(20 70% 90%);
-  --color-terracotta-200: hsl(20 65% 80%);
-  --color-terracotta-300: hsl(20 65% 70%);
-  --color-terracotta-400: hsl(20 62% 62%);
-  --color-terracotta-500: hsl(20 60% 55%);
-  --color-terracotta-600: hsl(20 58% 48%);
-  --color-terracotta-700: hsl(20 56% 40%);
-  --color-terracotta-800: hsl(20 54% 32%);
-  --color-terracotta-900: hsl(20 52% 24%);
-  --color-terracotta-950: hsl(20 50% 16%);
-
-  /* Olive/Sage accent palette (Natural & organic) */
-  --color-olive-50: hsl(85 35% 95%);
-  --color-olive-100: hsl(85 35% 90%);
-  --color-olive-200: hsl(85 32% 80%);
-  --color-olive-300: hsl(85 30% 65%);
-  --color-olive-400: hsl(85 28% 55%);
-  --color-olive-500: hsl(85 25% 45%);
-  --color-olive-600: hsl(85 25% 38%);
-  --color-olive-700: hsl(85 25% 30%);
-  --color-olive-800: hsl(85 25% 22%);
-  --color-olive-900: hsl(85 25% 16%);
-  --color-olive-950: hsl(85 25% 10%);
-
-  /* Gold accent palette (Premium & luxury) - Brightland inspired */
-  --color-gold-50: hsl(45 80% 95%);
-  --color-gold-100: hsl(45 75% 88%);
-  --color-gold-200: hsl(45 70% 78%);
-  --color-gold-300: hsl(45 65% 68%);
-  --color-gold-400: hsl(45 60% 58%);
-  --color-gold-500: hsl(43 62% 48%);
-  --color-gold-600: hsl(42 65% 42%);
-  --color-gold-700: hsl(40 68% 35%);
-  --color-gold-800: hsl(38 70% 28%);
-  --color-gold-900: hsl(36 72% 22%);
-  --color-gold-950: hsl(34 75% 15%);
-
-  /* Wine Color Palette (Hero Section Specific) */
-  --color-wine-burgundy-50: hsl(0 35% 97%);
-  --color-wine-burgundy-100: hsl(0 35% 92%);
-  --color-wine-burgundy-200: hsl(0 35% 82%);
-  --color-wine-burgundy-300: hsl(0 35% 72%);
-  --color-wine-burgundy-400: hsl(0 40% 58%);
-  --color-wine-burgundy-500: hsl(0 65% 45%);
-  --color-wine-burgundy-600: hsl(0 70% 38%);
-  --color-wine-burgundy-700: hsl(0 65% 28%);
-  --color-wine-burgundy-800: hsl(0 55% 18%);
-  --color-wine-burgundy-900: hsl(0 50% 12%);
-  --color-wine-burgundy-950: hsl(0 45% 8%);
-
-  --color-wine-gold-500: hsl(43 62% 48%);
-
-  --color-wine-green-50: hsl(145 30% 96%);
-  --color-wine-green-700: hsl(145 40% 35%);
-  --color-wine-green-900: hsl(145 45% 18%);
 
   /* Container configuration */
   --container-center: true;

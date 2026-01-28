@@ -1,5 +1,5 @@
 <template>
-  <section class="relative overflow-hidden bg-primary-900 py-20 text-white md:py-28">
+  <section class="relative overflow-hidden bg-slate-900 py-20 text-white md:py-28">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.12),_transparent_55%)]"></div>
     <div class="container relative">
       <div class="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
@@ -45,7 +45,7 @@
               x: 0,
               transition: { duration: 500, delay: 200 },
             }"
-            class="mt-4 text-lg text-primary-100"
+            class="mt-4 text-lg text-slate-100"
           >
             {{ t('home.socialProof.subtitle') }}
           </p>
@@ -71,7 +71,7 @@
               >
                 {{ stat.displayValue }}
               </p>
-              <p class="mt-2 text-sm text-primary-100 break-words">
+              <p class="mt-2 text-sm text-slate-100 break-words">
                 {{ stat.label }}
               </p>
             </div>
@@ -95,7 +95,7 @@
             >
               <commonIcon
                 name="lucide:sparkles"
-                class="h-5 w-5 text-primary-100"
+                class="h-5 w-5 text-slate-100"
               />
               <span>{{ logo }}</span>
             </div>
@@ -116,7 +116,7 @@
               v-for="testimonial in testimonials"
               :key="testimonial.name"
             >
-              <article class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-primary-950/20">
+              <article class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-slate-950/20">
                 <!-- Star rating at top -->
                 <div class="mb-4 flex items-center justify-between">
                   <CustomStarRating
@@ -144,7 +144,7 @@
                 <!-- Customer info -->
                 <div class="mt-6 flex items-center justify-between border-t border-gray-200 pt-4 text-sm">
                   <div>
-                    <p class="font-semibold text-primary-600">
+                    <p class="font-semibold text-slate-600">
                       {{ testimonial.name }}
                     </p>
                     <p class="text-gray-500">
@@ -169,7 +169,7 @@
               x: 0,
               transition: { duration: 500, delay: 400 + index * 150 },
             }"
-            class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-primary-950/20"
+            class="rounded-3xl bg-white/95 p-8 text-left text-gray-900 shadow-xl shadow-slate-950/20"
           >
             <!-- Star rating at top -->
             <div class="mb-4 flex items-center justify-between">
@@ -198,7 +198,7 @@
             <!-- Customer info -->
             <div class="mt-6 flex items-center justify-between border-t border-gray-200 pt-4 text-sm">
               <div>
-                <p class="font-semibold text-primary-600">
+                <p class="font-semibold text-slate-600">
                   {{ testimonial.name }}
                 </p>
                 <p class="text-gray-500">

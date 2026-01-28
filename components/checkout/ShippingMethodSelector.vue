@@ -178,7 +178,7 @@
               <UiRadioGroupItem
                 :id="`ship-${method.id}`"
                 :value="method.id"
-                class="mt-0.5 flex-shrink-0"
+                class="mt-0.5 flex-shrink-0 border-slate-900 dark:border-slate-100 text-slate-900 dark:text-slate-100"
               />
 
               <div class="flex-1 min-w-0">
@@ -352,7 +352,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 // Local state
 const showAllMethods = ref(false)
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
 // Format price helper
 const formatPrice = (price: number): string => {
@@ -378,29 +378,29 @@ const selectedMethodId = computed({
 })
 
 const getDeliveryEstimate = (days: number): string => {
-  const { t } = useI18n()
   const today = new Date()
   const deliveryDate = new Date(today)
   deliveryDate.setDate(today.getDate() + days)
 
   if (days === 1) {
-    return t('checkout.shippingMethod.deliveryTomorrow')
+    return t('checkout.shippingMethod.deliveryTomorrow', 'Delivery tomorrow')
   }
   else if (days <= 3) {
-    return t('checkout.shippingMethod.deliveryBy', { day: deliveryDate.toLocaleDateString('en-US', { weekday: 'long' }) })
+    const dayName = deliveryDate.toLocaleDateString(locale.value, { weekday: 'long' })
+    return t('checkout.shippingMethod.deliveryBy', { day: dayName }, `Delivery by ${dayName}`)
   }
   else {
-    return t('checkout.shippingMethod.deliveryInDays', { days })
+    return t('checkout.shippingMethod.deliveryInDays', { days }, `Delivery in ${days} business days`)
   }
 }
 
 // Get conditions for a shipping method
 const getMethodConditions = (method: ShippingMethod): string => {
   if (method.id === 'free' && method.price === 0) {
-    return 'Available for orders over €50'
+    return t('checkout.shippingMethod.conditions.freeOver50', 'Available for orders over €50')
   }
   else if (method.id === 'express') {
-    return 'Order before 2 PM for next-day delivery'
+    return t('checkout.shippingMethod.conditions.expressBefore2pm', 'Order before 2 PM for next-day delivery')
   }
   return ''
 }

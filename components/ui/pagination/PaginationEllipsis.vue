@@ -1,25 +1,21 @@
 <script setup lang="ts">
-import type { PaginationEllipsisProps } from 'reka-ui'
+import { PaginationEllipsis, type PaginationEllipsisProps } from 'reka-ui'
+import { useForwardProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
-import { reactiveOmit } from '@vueuse/core'
-import { MoreHorizontal } from 'lucide-vue-next'
-import { PaginationEllipsis } from 'reka-ui'
 import { cn } from '@/lib/utils'
+import { MoreHorizontal } from 'lucide-vue-next'
 
 const props = defineProps<PaginationEllipsisProps & { class?: HTMLAttributes['class'] }>()
-
-const delegatedProps = reactiveOmit(props, 'class')
+const forwarded = useForwardProps(props)
 </script>
 
 <template>
   <PaginationEllipsis
-    data-slot="pagination-ellipsis"
-    v-bind="delegatedProps"
-    :class="cn('flex size-9 items-center justify-center', props.class)"
+    v-bind="forwarded"
+    :class="cn('gap-1', props.class)"
   >
     <slot>
-      <MoreHorizontal class="size-4" />
-      <span class="sr-only">More pages</span>
+      <MoreHorizontal class="h-4 w-4" />
     </slot>
   </PaginationEllipsis>
 </template>

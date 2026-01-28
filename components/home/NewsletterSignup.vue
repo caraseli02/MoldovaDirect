@@ -41,7 +41,7 @@
             :disabled="loading"
             :aria-label="t('home.newsletter.subscribeButton')"
             :aria-busy="loading"
-            class="rounded-full min-h-[44px] focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+            class="rounded-full min-h-[44px] focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2"
           >
             <commonIcon
               v-if="!loading"

@@ -425,10 +425,34 @@
 </template>
 
 <script setup lang="ts">
-import { Badge } from '@/components/ui/badge'
-import { movementVariant, priorityVariant } from '@/lib/uiVariants'
+import { Badge, type BadgeVariants } from '@/components/ui/badge'
 // Composables
 const { getMovementTypeLabel } = useInventory()
+
+// Inline badge variant functions
+const movementVariant = (type: 'in' | 'out' | 'adjustment'): BadgeVariants['variant'] => {
+  switch (type) {
+    case 'in':
+      return 'default'
+    case 'out':
+      return 'destructive'
+    default:
+      return 'secondary'
+  }
+}
+
+const priorityVariant = (priority: 'critical' | 'high' | 'medium' | 'low'): BadgeVariants['variant'] => {
+  switch (priority) {
+    case 'critical':
+      return 'destructive'
+    case 'high':
+      return 'secondary'
+    case 'medium':
+    case 'low':
+    default:
+      return 'default'
+  }
+}
 
 // Reactive state
 const selectedReportType = ref('stock-levels')
@@ -521,8 +545,6 @@ const formatDate = (dateString: string) => {
     day: 'numeric',
   })
 }
-
-// Badge variant mappings centralized in lib/uiVariants
 
 const _getMovementTypeClasses = (type: string) => {
   const baseClasses = 'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium'
