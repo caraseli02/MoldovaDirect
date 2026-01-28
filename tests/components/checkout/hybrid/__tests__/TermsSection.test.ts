@@ -3,9 +3,7 @@ import { mount } from '@vue/test-utils'
 import { h } from 'vue'
 import TermsSection from '~/components/checkout/hybrid/TermsSection.vue'
 
-vi.mock('#imports', () => ({
-  useI18n: vi.fn(() => ({ t: (k: string) => k })),
-}))
+// Use global mocks from vitest.setup.ts - local mock removed to avoid conflicts
 
 // Stub UiCheckbox with data-testid for testing
 const UiCheckboxStub = {
@@ -23,14 +21,15 @@ const UiCheckboxStub = {
   },
 }
 
-// Stub UiButton
+// Stub UiButton - renders actual button element with disabled attribute
 const UiButtonStub = {
   name: 'UiButton',
-  props: ['disabled', 'class'],
+  props: ['disabled', 'class', 'type', 'loading'],
   emits: ['click'],
   render() {
     return h('button', {
-      disabled: this.disabled,
+      type: this.type || 'button',
+      disabled: this.disabled || this.loading,
       class: this.class,
       onClick: () => this.$emit('click'),
     }, this.$slots.default ? this.$slots.default() : undefined)

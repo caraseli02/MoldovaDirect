@@ -378,18 +378,19 @@ const selectedMethodId = computed({
 })
 
 const getDeliveryEstimate = (days: number): string => {
+  const { t } = useI18n()
   const today = new Date()
   const deliveryDate = new Date(today)
   deliveryDate.setDate(today.getDate() + days)
 
   if (days === 1) {
-    return 'Delivery tomorrow'
+    return t('checkout.shippingMethod.deliveryTomorrow')
   }
   else if (days <= 3) {
-    return `Delivery by ${deliveryDate.toLocaleDateString('en-US', { weekday: 'long' })}`
+    return t('checkout.shippingMethod.deliveryBy', { day: deliveryDate.toLocaleDateString('en-US', { weekday: 'long' }) })
   }
   else {
-    return `Delivery in ${days} business days`
+    return t('checkout.shippingMethod.deliveryInDays', { days })
   }
 }
 

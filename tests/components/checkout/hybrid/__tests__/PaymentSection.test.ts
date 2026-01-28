@@ -1,18 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount, shallowMount } from '@vue/test-utils'
-import { ref } from 'vue'
 import PaymentSection from '~/components/checkout/hybrid/PaymentSection.vue'
 import type { PaymentMethod } from '~/types/checkout'
 
-// Mock i18n - return keys to test i18n integration
-vi.mock('#imports', () => ({
-  useI18n: vi.fn(() => ({
-    t: (key: string) => key,
-    locale: ref('en'),
-  })),
-  ref,
-  computed: vi.fn(fn => ({ value: fn() })),
-}))
+// Use global mocks from vitest.setup.ts - local mock removed to avoid conflicts
 
 describe('PaymentSection', () => {
   // Default payment method for tests
