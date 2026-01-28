@@ -2,7 +2,13 @@
  * Admin Authorization Utilities
  *
  * Provides centralized admin authorization and environment checks
- * for admin-only endpoints and operations
+ * for admin-only endpoints and operations.
+ *
+ * @module server/utils/adminAuth
+ *
+ * @remarks
+ * This module uses Nuxt's auto-import for `getServerErrorMessage` from `errorUtils.ts`.
+ * All authentication supports both Bearer token (client-side) and cookie-based (SSR) auth.
  */
 
 import type { H3Event } from 'h3'
@@ -75,9 +81,22 @@ export function requireNonProductionEnvironment(_event: H3Event) {
 /**
  * Verifies that the current user has admin role
  *
- * @param event - H3Event object
- * @returns Promise<UserId> - Returns the admin user ID if authorized
- * @throws Error if user is not authenticated or not an admin
+ * Supports both Bearer token authentication (for client-side requests)
+ * and cookie-based authentication (for SSR requests).
+ *
+ * @param event - H3Event object from the request handler
+ * @returns Promise<UserId> - Returns the admin user ID (branded type) if authorized
+ * @throws {H3Error} 401 if user is not authenticated (missing or invalid token/cookie)
+ * @throws {H3Error} 403 if user profile cannot be retrieved or user is not an admin
+ *
+ * @example
+ * ```typescript
+ * export default defineEventHandler(async (event) => {
+ *   const adminId = await requireAdminRole(event)
+ *   // adminId is now guaranteed to be a valid admin user ID
+ *   return { adminId, data: await fetchAdminData() }
+ * })
+ * ```
  */
 export async function requireAdminRole(event: H3Event): Promise<UserId> {
   const path = event.path || 'unknown'
@@ -175,10 +194,23 @@ export async function requireAdminRole(event: H3Event): Promise<UserId> {
 
 /**
  * Combined check for admin role and non-production environment
- * Use this for admin testing endpoints
+ * Use this for admin testing endpoints that should never be accessible in production.
  *
- * @param event - H3Event object
- * @returns Promise<UserId> - Returns the admin user ID if authorized
+ * @param event - H3Event object from the request handler
+ * @returns Promise<UserId> - Returns the admin user ID (branded type) if authorized
+ * @throws {H3Error} 403 if running in production environment
+ * @throws {H3Error} 401 if user is not authenticated
+ * @throws {H3Error} 403 if user is not an admin
+ *
+ * @example
+ * ```typescript
+ * // Endpoint that resets test data - dangerous in production!
+ * export default defineEventHandler(async (event) => {
+ *   const adminId = await requireAdminTestingAccess(event)
+ *   await resetTestDatabase()
+ *   return { success: true, resetBy: adminId }
+ * })
+ * ```
  */
 export async function requireAdminTestingAccess(event: H3Event): Promise<UserId> {
   // First check environment
@@ -214,16 +246,34 @@ function logAuditToConsole(logEntry: any, errorId: string, dbError?: unknown) {
 
 /**
  * Logs admin actions to an audit trail
- * Stores logs in the database for permanent record and compliance
+ * Stores logs in the database for permanent record and compliance.
  *
  * CRITICAL: Audit logging failures are tracked and logged to console as fallback.
  * Returns success status so callers can warn users about potential audit gaps.
  *
- * @param event - H3Event object (for database access)
+ * @param event - H3Event object (used for database access and request metadata)
  * @param adminId - ID of the admin performing the action
- * @param action - Description of the action
- * @param metadata - Additional metadata about the action
+ * @param action - Human-readable description of the action (e.g., "deleted_user", "updated_order")
+ * @param metadata - Additional context about the action
+ * @param metadata.resource_type - Type of resource affected (e.g., "user", "order", "product")
+ * @param metadata.resource_id - ID of the affected resource
+ * @param metadata.old_values - Previous values before the change (for updates/deletes)
+ * @param metadata.new_values - New values after the change (for creates/updates)
  * @returns Promise<AuditLogResult> - Success status and error details if failed
+ *
+ * @example
+ * ```typescript
+ * // Log a user deletion
+ * const result = await logAdminAction(event, adminId, 'deleted_user', {
+ *   resource_type: 'user',
+ *   resource_id: userId,
+ *   old_values: { email: user.email, role: user.role }
+ * })
+ *
+ * if (!result.success) {
+ *   console.warn(`Audit log failed (${result.errorId}): ${result.error}`)
+ * }
+ * ```
  */
 export async function logAdminAction(
   event: H3Event,

@@ -17,18 +17,26 @@ import type { FetchOptions } from 'ofetch'
  * It gets the session from Supabase and adds the access token to the Authorization header.
  *
  * @param url - API endpoint URL (e.g., '/api/admin/dashboard/stats')
- * @param options - Optional fetch options
- * @returns Promise with the response data
+ * @param options - Optional fetch options (method, query, body, headers, etc.)
+ * @returns Promise with the typed response data
+ * @throws {H3Error} 401 error if no active session exists
+ * @throws {FetchError} Network or server errors from the API endpoint
  *
  * @example
  * ```typescript
  * // In a component setup
- * const stats = await useAdminFetch('/api/admin/dashboard/stats')
+ * const stats = await useAdminFetch<DashboardStats>('/api/admin/dashboard/stats')
  *
  * // With options
- * const users = await useAdminFetch('/api/admin/users', {
+ * const users = await useAdminFetch<UserListResponse>('/api/admin/users', {
  *   method: 'GET',
  *   query: { page: 1, limit: 10 }
+ * })
+ *
+ * // POST request
+ * const result = await useAdminFetch('/api/admin/users', {
+ *   method: 'POST',
+ *   body: { email: 'user@example.com', role: 'admin' }
  * })
  * ```
  */
@@ -67,15 +75,24 @@ export async function useAdminFetch<T = unknown>(
  *
  * This is useful for long-running pages where the user's session might expire.
  * It will attempt to refresh the session and retry the request once.
+ * If refresh fails, the user is redirected to the login page.
  *
  * @param url - API endpoint URL
- * @param options - Optional fetch options
- * @returns Promise with the response data
+ * @param options - Optional fetch options (method, query, body, headers, etc.)
+ * @returns Promise with the typed response data
+ * @throws {H3Error} 401 error if session refresh fails (also triggers redirect to login)
+ * @throws {FetchError} Network or server errors from the API endpoint (non-401 errors)
  *
  * @example
  * ```typescript
  * // In a component that might stay open for a long time
- * const data = await useAdminFetchWithRetry('/api/admin/analytics/users')
+ * const data = await useAdminFetchWithRetry<AnalyticsData>('/api/admin/analytics/users')
+ *
+ * // Long-running dashboard that auto-refreshes
+ * setInterval(async () => {
+ *   const stats = await useAdminFetchWithRetry<DashboardStats>('/api/admin/dashboard/stats')
+ *   updateDashboard(stats)
+ * }, 60000)
  * ```
  */
 export async function useAdminFetchWithRetry<T = unknown>(
@@ -132,30 +149,33 @@ export type BatchResult<T>
  * This is useful for fetching multiple datasets at once (e.g., stats + activity).
  * All requests will include proper authentication headers.
  *
- * Returns structured results so callers can handle individual request failures.
+ * Returns structured results so callers can handle individual request failures
+ * without failing the entire batch. Each result indicates success/failure status.
  *
- * @param requests - Array of request configurations
- * @returns Promise that resolves to an array of batch results
+ * @param requests - Array of request configurations with url and optional fetch options
+ * @returns Promise that resolves to an array of BatchResult objects
+ * @throws {H3Error} 401 error if no active session exists (fails entire batch)
  *
  * @example
  * ```typescript
- * const results = await useAdminFetchBatch([
+ * const results = await useAdminFetchBatch<DashboardData>([
  *   { url: '/api/admin/dashboard/stats' },
  *   { url: '/api/admin/dashboard/activity' },
  *   { url: '/api/admin/users', options: { query: { limit: 10 } } }
  * ])
  *
- * // Handle results
+ * // Handle results with type narrowing
  * results.forEach((result, index) => {
  *   if (result.success) {
+ *     console.log(`Request ${index} succeeded:`, result.data)
  *   } else {
- *     console.error('Failed to fetch', result.url, result.error)
+ *     console.error(`Request ${index} failed:`, result.url, result.error)
  *   }
  * })
  *
- * // Extract successful results only
+ * // Extract successful results only (type-safe)
  * const successfulData = results
- *   .filter((r): r is { success: true; data: unknown } => r.success)
+ *   .filter((r): r is { success: true; data: DashboardData } => r.success)
  *   .map(r => r.data)
  * ```
  */
