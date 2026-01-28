@@ -7,7 +7,7 @@
           <UiCheckbox
             :checked="termsAccepted"
             class="mt-0.5"
-            @update:checked="$emit('update:termsAccepted', $event)"
+            @update:model-value="$emit('update:termsAccepted', toBoolean($event))"
           />
           <span class="ml-2 text-sm text-gray-700 dark:text-gray-200">
             {{ $t('checkout.review.acceptTerms') }}
@@ -29,7 +29,7 @@
           <UiCheckbox
             :checked="privacyAccepted"
             class="mt-0.5"
-            @update:checked="$emit('update:privacyAccepted', $event)"
+            @update:model-value="$emit('update:privacyAccepted', toBoolean($event))"
           />
           <span class="ml-2 text-sm text-gray-700 dark:text-gray-200">
             {{ $t('checkout.review.acceptPrivacy') }}
@@ -51,7 +51,7 @@
           <UiCheckbox
             :checked="marketingConsent"
             class="mt-0.5"
-            @update:checked="$emit('update:marketingConsent', $event)"
+            @update:model-value="$emit('update:marketingConsent', toBoolean($event))"
           />
           <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
             {{ $t('checkout.review.marketingConsent') }}
@@ -138,7 +138,11 @@ withDefaults(defineProps<Props>(), {
   showPrivacyError: false,
 })
 
-defineEmits<Emits>()
+const emit = defineEmits<Emits>()
+
+// Helper to handle checkbox value with proper type casting
+// Reka UI emits string | boolean, but we need boolean
+const toBoolean = (value: string | boolean): boolean => value === true || value === 'true'
 </script>
 
 <style scoped>

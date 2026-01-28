@@ -113,7 +113,10 @@
       </div>
 
       <!-- Street Address with Autocomplete -->
-      <div class="relative">
+      <div
+        ref="streetContainerRef"
+        class="relative"
+      >
         <UiLabel
           for="street"
           class="dark:text-white"
@@ -124,7 +127,6 @@
         <div class="relative">
           <UiInput
             id="street"
-            ref="streetInputRef"
             :value="localAddress.street"
             type="text"
             name="street-address"
@@ -375,7 +377,7 @@ const { t } = useI18n()
 // Local state
 const selectedSavedAddressId = ref<number | null>(null)
 const fieldErrors = ref<Record<string, string>>({})
-const streetInputRef = ref<HTMLInputElement | null>(null)
+const streetContainerRef = ref<HTMLDivElement | null>(null)
 
 // Autocomplete state
 const addressSuggestions = ref<AddressSuggestion[]>([])
@@ -699,9 +701,9 @@ const validateForm = (): boolean => {
   return isValid
 }
 
-// Close suggestions when clicking outside
+// Close suggestions when clicking outside the street input container
 const handleClickOutside = (event: MouseEvent) => {
-  if (streetInputRef.value && !streetInputRef.value.contains(event.target as Node)) {
+  if (streetContainerRef.value && !streetContainerRef.value.contains(event.target as Node)) {
     showSuggestions.value = false
   }
 }

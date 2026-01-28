@@ -1,0 +1,21 @@
+[LOG] 💾 Cart backup saved to localStorage on unload @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[LOG] 💾 Cart saved on visibility hidden @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[DEBUG] [vite] connecting... @ http://localhost:3000/_nuxt/@vite/client:732
+[DEBUG] [vite] connected. @ http://localhost:3000/_nuxt/@vite/client:826
+[LOG] %c🧪 Test User Dev Tools Loaded background: #3b82f6; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold; @ http://localhost:3000/_nuxt/plugins/testUserDevTools.client.ts:232
+[LOG] Type $testUsers.help() for available commands @ http://localhost:3000/_nuxt/plugins/testUserDevTools.client.ts:236
+[INFO] <Suspense> is an experimental feature and its API will likely change. @ http://localhost:3000/_nuxt/node_modules/.pnpm/@vue+runtime-core@3.5.26/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js?v=bea0f8e3:7155
+[LOG] 🚀 Initializing cart... @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[LOG] 📥 Loading cart from storage... @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[LOG]    Cookie data: null @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[LOG]    LocalStorage backup: 1 items @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[LOG]    Using localStorage (cookie empty): 1 items @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[LOG] 🔄 Deserializing 1 items... @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[LOG]    Paused auto-save watch @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[LOG]    Cleared existing items @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[LOG]    Restored 1 items @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[LOG]    Resumed auto-save watch @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[LOG] ✅ Deserialization complete @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[LOG] ✅ Cart loaded successfully @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[LOG] ✅ Cart initialization complete @ http://localhost:3000/_nuxt/stores/cart/index.ts:13
+[WARNING] The resource http://localhost:3000/videos/hero/hero-2-poster.jpg was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/auth/login:0
