@@ -13,7 +13,10 @@ import { test, expect } from '@playwright/test'
 import { CriticalTestHelpers } from './helpers/critical-test-helpers'
 import { SELECTORS, TIMEOUTS, URL_PATTERNS, ERROR_MESSAGES, TEST_DATA } from './constants'
 
-test.describe('Critical Checkout Flows', () => {
+test.describe('Critical Checkout Flows - Guest', () => {
+  // Override storage state to run all tests in this group as guest (no auth)
+  test.use({ storageState: { cookies: [], origins: [] } })
+
   test('guest can access checkout page with items in cart', async ({ page }) => {
     const helpers = new CriticalTestHelpers(page)
 
@@ -310,8 +313,10 @@ test.describe('Critical Checkout Flows', () => {
 
     expect(bannerVisible, ERROR_MESSAGES.EXPRESS_BANNER_UNEXPECTED).toBe(false)
   })
+})
 
-  test('authenticated user with saved address sees express banner', async ({ page }) => {
+test.describe('Critical Checkout Flows - Authenticated', () => {
+  test('authenticated user can access checkout', async ({ page }) => {
     test.skip(
       !process.env.TEST_USER_WITH_ADDRESS,
       'TEST_USER_WITH_ADDRESS not set - need user with saved address',
@@ -347,6 +352,9 @@ test.describe('Critical Checkout Flows', () => {
 })
 
 test.describe('Checkout Form Validation', () => {
+  // Override storage state to run all tests in this group as guest (no auth)
+  test.use({ storageState: { cookies: [], origins: [] } })
+
   test('can fill shipping address fields', async ({ page }) => {
     const helpers = new CriticalTestHelpers(page)
 

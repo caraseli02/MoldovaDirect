@@ -23,7 +23,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : 2, // Limit workers to prevent memory issues
   reporter: [
     ['html'],
     ['json', { outputFile: 'test-results/results.json' }],
@@ -133,7 +133,7 @@ export default defineConfig({
   webServer: process.env.PLAYWRIGHT_TEST_BASE_URL
     ? undefined
     : {
-        command: 'npm run dev',
+        command: 'NODE_OPTIONS="--max-old-space-size=4096" npm run dev',
         url: 'http://localhost:3000/auth/login', // Use /auth/login as root returns 500
         reuseExistingServer: !process.env.CI,
         stdout: 'pipe',

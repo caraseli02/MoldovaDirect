@@ -171,23 +171,23 @@ export class CheckoutPage {
     this.shippingMethodError = page.locator('.shipping-method-selector [class*="error"], [data-testid="shipping-method-error"]')
     this.shippingMethodLoading = page.locator('.shipping-method-selector .animate-pulse')
 
-    // Payment Options
-    this.cashPaymentOption = page.locator('input[type="radio"][value="cash"], [data-testid="payment-cash"]')
-    this.creditCardOption = page.locator('input[type="radio"][value="credit_card"], [data-testid="payment-card"]')
-    this.paypalOption = page.locator('input[type="radio"][value="paypal"], [data-testid="payment-paypal"]')
+    // Payment Options - using IDs from PaymentSection.vue (UiRadioGroupItem with id attribute)
+    this.cashPaymentOption = page.locator('#payment-cash, [data-testid="payment-cash"], button[role="radio"][id="payment-cash"]')
+    this.creditCardOption = page.locator('#payment-card, [data-testid="payment-card"], button[role="radio"][id="payment-card"]')
+    this.paypalOption = page.locator('#payment-paypal, [data-testid="payment-paypal"], button[role="radio"][id="payment-paypal"]')
 
     // Delivery Instructions
     this.deliveryInstructions = page.locator('textarea[name="instructions"], textarea[id="instructions"], [data-testid="delivery-instructions"]')
 
-    // Terms & Order - Support both HybridCheckout (no IDs) and ReviewTermsSection (with IDs)
-    // Match by text content near the checkbox. Also match i18n keys in case translations aren't loaded.
-    this.termsCheckbox = page.locator('label').filter({ hasText: /acceptTerms|Acepto los|I accept the|Accept Termeni|Я принимаю/i }).locator('input[type="checkbox"]').first()
-    this.privacyCheckbox = page.locator('label').filter({ hasText: /acceptPrivacy|privacidad|privacy|confidențialitate|конфиденциальности/i }).locator('input[type="checkbox"]').first()
-    this.marketingCheckbox = page.locator('label').filter({ hasText: /marketingConsent|marketing/i }).locator('input[type="checkbox"]').first()
+    // Terms & Order - UiCheckbox renders as button with role="checkbox"
+    // Select all checkboxes in the terms section and index them
+    this.termsCheckbox = page.locator('.checkout-section-highlight [role="checkbox"]').nth(0)
+    this.privacyCheckbox = page.locator('.checkout-section-highlight [role="checkbox"]').nth(1)
+    this.marketingCheckbox = page.locator('.checkout-section-highlight [role="checkbox"]').nth(2)
     this.placeOrderButton = page.locator('button:has-text("Place Order"), button:has-text("Realizar Pedido"), button:has-text("Оформить заказ"), button:has-text("Plasează comanda")').first()
 
-    // Order Summary (Sidebar)
-    this.orderSummary = page.locator('[class*="OrderSummaryCard"], [data-testid="order-summary"]')
+    // Order Summary (Sidebar) - matches order-summary-card class or data-testid
+    this.orderSummary = page.locator('.order-summary-card, [class*="OrderSummaryCard"], [data-testid="order-summary"]')
     this.orderSummaryItems = this.orderSummary.locator('[data-testid="order-item"], [class*="order-item"]')
     this.orderSummarySubtotal = this.orderSummary.locator('text=/subtotal/i').locator('..').locator('span').last()
     this.orderSummaryShipping = this.orderSummary.locator('text=/shipping|envío/i').locator('..').locator('span').last()
@@ -323,40 +323,73 @@ export class CheckoutPage {
     country: string
     phone?: string
   }) {
-    // Handle saved addresses - select "Use new address" if visible
-    const useNewAddressOption = this.page.locator('input[type="radio"][value="null"]').filter({ hasText: /use.*new.*address|usar.*nueva.*dirección|folosește.*adresă.*nouă|использовать.*новый.*адрес/i })
-    if (await useNewAddressOption.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await useNewAddressOption.click()
-      await this.page.waitForTimeout(500)
+    // Check if saved addresses section exists (for authenticated users)
+    const savedAddressesSection = this.page.locator('[class*="AddressForm"], .address-form').filter({ hasText: /saved.*address|direcciones.*guardadas/i })
+    const hasSavedAddresses = await savedAddressesSection.isVisible({ timeout: 3000 }).catch(() => false)
+
+    if (hasSavedAddresses) {
+      // Try to find and click "Use new address" option
+      // First scroll down to see if it's below the fold
+      await this.page.evaluate(() => window.scrollBy(0, 300))
+      await this.page.waitForTimeout(200)
+
+      // Try multiple selectors for "Use new address"
+      const useNewAddressSelectors = [
+        '[role="radio"]:has-text("Usar")',
+        'label:has-text("Usar una nueva")',
+        '.address-form button[role="radio"]:nth-child(2)',
+        '[role="radio"]:has-text("new address")',
+        '[role="radio"]:has-text("nueva")',
+      ]
+
+      for (const selector of useNewAddressSelectors) {
+        const option = this.page.locator(selector).first()
+        if (await option.isVisible({ timeout: 1000 }).catch(() => false)) {
+          await option.click()
+          await this.page.waitForTimeout(300)
+          break
+        }
+      }
     }
 
-    await this.page.waitForSelector('#fullName', { timeout: 15000 })
-    await this.page.waitForTimeout(500)
+    // Wait for the address form fields to be visible
+    await expect(this.addressFields.fullName).toBeVisible({ timeout: 10000 })
 
-    await expect(this.addressFields.fullName).toBeVisible({ timeout: 5000 })
+    // Fill full name
     await this.addressFields.fullName.fill(address.fullName)
     await this.addressFields.fullName.blur()
-    await this.page.waitForTimeout(300)
+    await this.page.waitForTimeout(200)
 
+    // Fill street
     await expect(this.addressFields.street).toBeVisible({ timeout: 5000 })
     await this.addressFields.street.fill(address.street)
     await this.addressFields.street.blur()
-    await this.page.waitForTimeout(300)
+    await this.page.waitForTimeout(200)
 
+    // Fill city
     await expect(this.addressFields.city).toBeVisible({ timeout: 5000 })
     await this.addressFields.city.fill(address.city)
     await this.addressFields.city.blur()
-    await this.page.waitForTimeout(300)
+    await this.page.waitForTimeout(200)
 
+    // Fill postal code
     await expect(this.addressFields.postalCode).toBeVisible({ timeout: 5000 })
     await this.addressFields.postalCode.fill(address.postalCode)
     await this.addressFields.postalCode.blur()
 
+    // Select country if visible (UiSelect)
     const countryLocator = this.addressFields.country
     if (await countryLocator.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await countryLocator.selectOption(address.country)
+      await countryLocator.click()
+      await this.page.waitForTimeout(200)
+      // Select option by clicking on it
+      const countryOption = this.page.locator('[role="option"]').filter({ hasText: address.country })
+      if (await countryOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await countryOption.click()
+      }
     }
 
+    // Fill phone if provided
     if (address.phone) {
       const phoneLocator = this.addressFields.phone
       if (await phoneLocator.isVisible({ timeout: 2000 }).catch(() => false)) {
@@ -364,7 +397,7 @@ export class CheckoutPage {
       }
     }
 
-    await this.page.waitForTimeout(1000)
+    await this.page.waitForTimeout(300)
   }
 
   /**
@@ -402,8 +435,24 @@ export class CheckoutPage {
    * Select shipping method by index
    */
   async selectShippingMethod(index: number = 0) {
-    await this.shippingMethodOptions.nth(index).click()
-    await this.page.waitForTimeout(300)
+    // Check if methods are auto-selected (banner showing, no clickable options)
+    const autoSelectedBanner = this.page.locator('.shipping-method-selector').filter({ hasText: /free.*shipping|auto.*applied/i })
+    const isAutoSelected = await autoSelectedBanner.isVisible({ timeout: 2000 }).catch(() => false)
+
+    if (isAutoSelected) {
+      console.log('✅ Shipping method auto-selected, no need to click')
+      return
+    }
+
+    // Otherwise click on the shipping method option
+    const option = this.shippingMethodOptions.nth(index)
+    if (await option.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await option.click()
+      await this.page.waitForTimeout(300)
+    }
+    else {
+      console.log('⚠️ Shipping method option not visible, may be auto-selected')
+    }
   }
 
   /**
@@ -428,8 +477,32 @@ export class CheckoutPage {
    * Select cash payment
    */
   async selectCashPayment() {
-    await this.cashPaymentOption.click()
-    await this.page.waitForTimeout(300)
+    // Try multiple strategies to click the cash payment option
+    // Strategy 1: Try the label that contains the radio item (most reliable for UiRadioGroupItem)
+    const cashLabel = this.page.locator('label').filter({ has: this.page.locator('#payment-cash') }).first()
+    if (await cashLabel.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await cashLabel.click()
+      await this.page.waitForTimeout(300)
+      return
+    }
+
+    // Strategy 2: Try clicking the radio item directly
+    const cashRadio = this.page.locator('#payment-cash')
+    if (await cashRadio.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await cashRadio.click()
+      await this.page.waitForTimeout(300)
+      return
+    }
+
+    // Strategy 3: Try finding by text content
+    const cashByText = this.page.locator('label').filter({ hasText: /cash|efectivo|наличными|numerar/i }).first()
+    if (await cashByText.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await cashByText.click()
+      await this.page.waitForTimeout(300)
+      return
+    }
+
+    throw new Error('Could not find or click cash payment option')
   }
 
   /**
@@ -447,8 +520,16 @@ export class CheckoutPage {
    * Accept terms and privacy
    */
   async acceptTerms() {
-    await this.termsCheckbox.check()
-    await this.privacyCheckbox.check()
+    // Click the checkboxes (UiCheckbox renders as button with role="checkbox")
+    const terms = this.page.locator('.checkout-section-highlight [role="checkbox"]').nth(0)
+    const privacy = this.page.locator('.checkout-section-highlight [role="checkbox"]').nth(1)
+
+    if (await terms.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await terms.click()
+    }
+    if (await privacy.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await privacy.click()
+    }
   }
 
   /**

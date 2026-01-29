@@ -218,15 +218,16 @@ test.describe('Authentication Accessibility (WCAG 2.1 Level AA)', () => {
     })
 
     test('should have clear page title and heading', async ({ page }) => {
-      // Page should have descriptive title
-      await expect(page).toHaveTitle(/forgot password/i)
+      // Page should have descriptive title (support both English and Spanish)
+      await expect(page).toHaveTitle(/forgot password|olvidaste/i)
 
       // Should have h1 or main heading
       const heading = page.locator('h1, h2').first()
       await expect(heading).toBeVisible()
 
       const headingText = await heading.textContent()
-      expect(headingText?.toLowerCase()).toContain('forgot')
+      // Support both English and Spanish
+      expect(headingText?.toLowerCase()).toMatch(/forgot|olvid|contraseña/)
     })
 
     test('should have accessible back to login link', async ({ page }) => {

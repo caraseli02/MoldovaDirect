@@ -46,6 +46,9 @@
     ]
   },
   "env": {
-    "ENABLE_TOOL_SEARCH": "true"
-  }
+        "ENABLE_TOOL_SEARCH": "true",
+        "ANTHROPIC_AUTH_TOKEN": "5872fbea27d645f2b5f9474e767d71bb.Leu1xw10NneQ4nWb",
+        "ANTHROPIC_BASE_URL": "https://api.z.ai/api/anthropic",
+        "API_TIMEOUT_MS": "3000000"
+    }
 }
