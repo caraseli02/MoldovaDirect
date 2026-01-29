@@ -139,7 +139,10 @@
         </span>
       </UiButton>
 
-      <UiButton @click="$emit('edit')">
+      <UiButton
+        data-testid="express-edit-button"
+        @click="$emit('edit')"
+      >
         {{ $t('checkout.expressCheckout.editDetails', 'Edit Details') }}
       </UiButton>
     </div>

@@ -1,0 +1,102 @@
+{
+  "common": {
+    "total": "Total",
+    "retry": "Reintentar",
+    "loading": "Cargando..."
+  },
+  "checkout": {
+    "title": "Finalizar Pedido",
+    "backToCart": "Volver al carrito",
+    "placeOrder": "Realizar Pedido",
+    "processing": "Procesando...",
+    "hybrid": {
+      "contact": "Contacto",
+      "shippingAddress": "Dirección de envío",
+      "shippingMethod": "Método de envío"
+    },
+    "addressForm": {
+      "shipping": {
+        "title": "¿Dónde enviamos tu pedido?",
+        "subtitle": "Ingresa los detalles de entrega."
+      },
+      "billing": {
+        "title": "Dirección de facturación",
+        "subtitle": "Ingresa los detalles de facturación."
+      },
+      "savedAddresses": "Direcciones guardadas",
+      "default": "Predeterminada",
+      "useNewAddress": "Usar nueva dirección",
+      "fullName": "Nombre completo",
+      "fullNamePlaceholder": "Ej. Juan Pérez",
+      "street": "Dirección",
+      "streetPlaceholder": "Calle, número, piso...",
+      "city": "Ciudad",
+      "cityPlaceholder": "Ej. Madrid",
+      "postalCode": "Código Postal",
+      "postalCodePlaceholder": "Ej. 28001",
+      "country": "País",
+      "selectCountry": "Selecciona un país",
+      "phone": "Teléfono",
+      "phoneDescription": "Solo para notificaciones de entrega.",
+      "phoneHelper": "Opcional",
+      "phonePlaceholder": "Ej. +34 600 000 000",
+      "saveAddress": "Guardar esta dirección",
+      "autocompleteHint": "Escribe para buscar tu dirección"
+    },
+    "shippingMethod": {
+      "title": "Método de envío",
+      "subtitle": "Selecciona cómo quieres recibir tu pedido",
+      "freeShipping": "Envío Gratis",
+      "autoApplied": "Aplicado",
+      "estimatedDelivery": "Entrega estimada: {days} días",
+      "changeMethod": "Cambiar método",
+      "deliveryTomorrow": "Entrega mañana",
+      "deliveryBy": "Entrega el {day}",
+      "deliveryInDays": "Entrega en {days} días laborables",
+      "free": {
+        "label": "GRATIS"
+      },
+      "express": {
+        "label": "EXPRESS"
+      },
+      "conditions": {
+        "freeOver50": "Disponible en pedidos superiores a 50€",
+        "expressBefore2pm": "Pide antes de las 14:00 para entrega mañana"
+      },
+      "noMethods": "No hay métodos de envío disponibles",
+      "noMethodsDescription": "No podemos enviar a esta dirección.",
+      "error": "Error al cargar métodos de envío",
+      "fallbackWarning": {
+        "title": "Usando envío estándar",
+        "description": "Hubo un problema calculando el envío exacto.",
+        "retry": "Reintentar"
+      }
+    },
+    "review": {
+      "accept": "Acepto los",
+      "termsOfService": "Términos y Condiciones",
+      "acceptPrivacy": "Acepto la",
+      "privacyPolicy": "Política de Privacidad",
+      "marketingConsent": "Quiero recibir ofertas y novedades",
+      "acceptTerms": "Acepto los"
+    },
+    "validation": {
+      "error": "Error de validación",
+      "acceptTermsRequired": "Debes aceptar los términos y condiciones",
+      "guestInfoInvalid": "Por favor revisa tu información de contacto",
+      "emailRequired": "El email es obligatorio",
+      "emailInvalid": "Email inválido",
+      "fullNameRequired": "El nombre completo es obligatorio",
+      "streetRequired": "La dirección es obligatoria",
+      "cityRequired": "La ciudad es obligatoria",
+      "postalCodeRequired": "El código postal es obligatorio",
+      "countryRequired": "El país es obligatorio",
+      "shippingMethodRequired": "Selecciona un método de envío"
+    },
+    "errors": {
+      "initFailed": "Error al inicializar el checkout",
+      "loadFailed": "No se pudo cargar el checkout",
+      "pleaseTryAgain": "Por favor intenta de nuevo"
+    }
+  }
+}

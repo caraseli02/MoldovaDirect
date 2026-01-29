@@ -46,6 +46,10 @@
       id="checkout-main"
       class="checkout-form-container"
     >
+      <h1 class="sr-only">
+        {{ $t('checkout.title') || 'Checkout' }}
+      </h1>
+
       <!-- Guest/Login Options (for non-authenticated users) -->
       <GuestCheckoutPrompt
         v-if="!user && !showGuestForm"
@@ -54,9 +58,10 @@
       />
 
       <!-- Single Page Checkout Form -->
-      <div
+      <form
         v-if="user || showGuestForm"
         class="grid grid-cols-1 lg:grid-cols-3 gap-8"
+        @submit.prevent="handlePlaceOrderWithValidation"
       >
         <!-- Left Column: Form Sections -->
         <div class="lg:col-span-2 space-y-4">
@@ -218,7 +223,7 @@
             />
           </div>
         </div>
-      </div>
+      </form>
     </div>
 
     <!-- Mobile Sticky Footer -->
@@ -602,7 +607,6 @@ onMounted(async () => {
   background-color: white;
   border-radius: 0.5rem;
   border: 1px solid rgb(229 231 235);
-  overflow: hidden;
 }
 
 :root.dark .checkout-section,

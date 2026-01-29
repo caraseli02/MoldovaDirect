@@ -12,7 +12,7 @@ import type { PaymentMethod, ShippingMethod, Address } from '~/types/checkout'
 
 export interface CheckoutValidationOptions {
   isAddressValid: Ref<boolean>
-  shippingAddress: Ref<Partial<Pick<Address, 'firstName' | 'street'>>>
+  shippingAddress: Ref<Partial<Pick<Address, 'firstName' | 'street' | 'city' | 'postalCode' | 'country'>>>
   selectedMethod: Ref<ShippingMethod | null>
   isGuestInfoValid: Ref<boolean>
   paymentMethod: Ref<PaymentMethod>
@@ -46,6 +46,9 @@ export function useCheckoutValidation(options: CheckoutValidationOptions) {
     return isAddressValid.value
       && !!shippingAddress.value.firstName
       && !!shippingAddress.value.street
+      && !!shippingAddress.value.city
+      && !!shippingAddress.value.postalCode
+      && !!shippingAddress.value.country
   })
 
   /**
