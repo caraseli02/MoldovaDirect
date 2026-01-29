@@ -370,7 +370,9 @@
       "processingPasswordReset": "Procesando tu solicitud de restablecimiento de contraseña",
       "sendResetEmailButton": "Enviar correo de restablecimiento de contraseña",
       "sendingResetEmail": "Enviando correo de restablecimiento",
-      "backToLoginLink": "Volver a la página de inicio de sesión"
+      "backToLoginLink": "Volver a la página de inicio de sesión",
+      "skipToMainContent": "Saltar al contenido principal",
+      "skipToOrderSummary": "Saltar al resumen del pedido"
     },
     "errors": {
       "invalidCredentials": "Correo o contraseña incorrectos",
@@ -1792,6 +1794,9 @@
   "checkout": {
     "title": "Finalizar Compra",
     "secureCheckout": "Compra Segura",
+    "requiredFields": "Indica campo obligatorio",
+    "shippingSectionAvailable": "La sección de métodos de envío está ahora disponible",
+    "paymentSectionAvailable": "La sección de pago está ahora disponible",
     "trust": {
       "secureCheckout": "Compra 100% Segura",
       "sslEncrypted": "Cifrado SSL de 256 bits",
@@ -1849,6 +1854,8 @@
     },
     "continueAsGuest": "Continuar como Invitado",
     "backToCart": "Volver al Carrito",
+    "showItems": "Mostrar artículos",
+    "hideItems": "Ocultar artículos",
     "continueToPayment": "Continuar al Pago",
     "continueToReview": "Revisar tu Pedido",
     "backToShipping": "Volver al Envío",
@@ -1948,7 +1955,10 @@
       "addressInvalid": "Por favor verifica la información de tu dirección",
       "paymentInvalid": "Por favor verifica la información de tu pago",
       "guestInfoInvalid": "Por favor verifica tu información de contacto",
-      "acceptTermsRequired": "Por favor acepta los términos y condiciones"
+      "acceptTermsRequired": "Por favor acepta los términos y condiciones",
+      "termsRequired": "Debes aceptar los términos y condiciones para continuar",
+      "privacyRequired": "Debes aceptar la política de privacidad para continuar",
+      "selectMethod": "Selecciona un método de pago"
     },
     "warnings": {
       "concurrentCheckout": "Múltiples Sesiones de Pago Detectadas",
@@ -1987,7 +1997,10 @@
       "phonePlaceholder": "+34 600 000 000",
       "phoneDescription": "Para contactarte sobre la entrega",
       "saveAddress": "Guardar esta dirección para futuros pedidos",
-      "autocompleteHint": "Comienza a escribir para sugerencias de direcciones"
+      "autocompleteHint": "Comienza a escribir para sugerencias de direcciones",
+      "autocompleteUnavailable": "Sugerencias de dirección no disponibles",
+      "autocompleteUnavailableDescription": "Por favor, introduce tu dirección manualmente.",
+      "suggestionsAvailable": "{count} sugerencias de direcciones disponibles. Usa las flechas para navegar."
     },
     "shippingMethod": {
       "title": "Método de Envío",
@@ -2102,7 +2115,13 @@
         "label": "Pago Contra Entrega",
         "summary": "Paga en efectivo cuando se entregue tu pedido",
         "title": "Pago Contra Entrega",
-        "description": "Pagarás tu pedido en efectivo cuando sea entregado en tu dirección."
+        "description": "Pagarás tu pedido en efectivo cuando sea entregado en tu dirección.",
+        "iconLabel": "Método de pago en efectivo"
+      },
+      "creditCard": {
+        "label": "Tarjeta de Crédito",
+        "summary": "Paga de forma segura con tu tarjeta de crédito o débito",
+        "iconLabel": "Método de pago con tarjeta de crédito o débito"
       },
       "cashInstructions": "Cómo Funciona el Pago Contra Entrega",
       "cashInstruction1": "Realiza tu pedido y lo prepararemos para la entrega",

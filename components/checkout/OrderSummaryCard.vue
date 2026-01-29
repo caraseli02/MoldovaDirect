@@ -1,12 +1,18 @@
 <template>
-  <div class="order-summary-card bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+  <div
+    class="order-summary-card bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
+    data-testid="order-summary"
+  >
     <!-- Header -->
     <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-rose-50 dark:bg-rose-900/20">
       <div class="flex items-center justify-between">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
           {{ $t('common.orderSummary') }}
         </h3>
-        <span class="text-sm text-gray-500 dark:text-gray-400">
+        <span
+          class="text-sm text-gray-500 dark:text-gray-400"
+          data-testid="item-count"
+        >
           {{ items.length }} {{ items.length === 1 ? $t('common.item', 'item') : $t('common.items', 'items') }}
         </span>
       </div>
@@ -42,7 +48,12 @@
     >
       <!-- Cart Items (Collapsed by default) -->
       <div class="mb-4">
-        <UiButton @click="showItems = !showItems">
+        <UiButton
+          :aria-expanded="showItems"
+          aria-controls="cart-items-list"
+          type="button"
+          @click="showItems = !showItems"
+        >
           <span>{{ showItems ? $t('checkout.hideItems', 'Hide items') : $t('checkout.showItems', 'Show items') }}</span>
           <svg
             class="w-4 h-4 transition-transform"
@@ -50,6 +61,7 @@
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -62,12 +74,15 @@
 
         <div
           v-show="showItems"
+          id="cart-items-list"
+          role="list"
           class="mt-3 space-y-3 max-h-64 overflow-y-auto"
         >
           <div
             v-for="item in items"
             :key="item.productId"
             class="flex items-center space-x-3"
+            data-testid="order-item"
           >
             <div class="flex-shrink-0 w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
               <img
@@ -85,6 +100,7 @@
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path
                     stroke-linecap="round"
@@ -111,55 +127,66 @@
       </div>
 
       <!-- Pricing Breakdown -->
-      <div class="space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <!-- Subtotal -->
-        <div class="flex justify-between text-sm">
-          <span class="text-gray-600 dark:text-gray-400">{{ $t('common.subtotal') }}</span>
-          <span class="text-gray-900 dark:text-white">{{ formatPrice(subtotal) }}</span>
-        </div>
+      <ClientOnly>
+        <div class="space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <!-- Subtotal -->
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600 dark:text-gray-400">{{ $t('common.subtotal') }}</span>
+            <span class="text-gray-900 dark:text-white">{{ formatPrice(subtotal) }}</span>
+          </div>
 
-        <!-- Shipping -->
-        <div class="flex justify-between text-sm">
-          <span class="text-gray-600 dark:text-gray-400">
-            {{ $t('common.shipping') }}
-            <span
-              v-if="shippingMethod"
-              class="text-xs text-gray-500"
-            >
-              ({{ shippingMethod.name }})
+          <!-- Shipping -->
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600 dark:text-gray-400">
+              {{ $t('common.shipping') }}
+              <span
+                v-if="shippingMethod"
+                class="text-xs text-gray-500"
+              >
+                ({{ shippingMethod.name }})
+              </span>
             </span>
-          </span>
-          <span class="text-gray-900 dark:text-white">
-            <template v-if="shippingCost === 0">
-              <span class="text-green-600 dark:text-green-400">{{ $t('checkout.freeShipping', 'Free') }}</span>
-            </template>
-            <template v-else-if="shippingCost > 0">
-              {{ formatPrice(shippingCost) }}
-            </template>
-            <template v-else>
-              <span class="text-gray-400">{{ $t('checkout.calculatedAtNextStep', 'Calculated') }}</span>
-            </template>
-          </span>
-        </div>
+            <span class="text-gray-900 dark:text-white">
+              <template v-if="shippingCost === 0">
+                <span class="text-green-600 dark:text-green-400">{{ $t('checkout.freeShipping', 'Free') }}</span>
+              </template>
+              <template v-else-if="shippingCost > 0">
+                {{ formatPrice(shippingCost) }}
+              </template>
+              <template v-else>
+                <span class="text-gray-400">{{ $t('checkout.calculatedAtNextStep', 'Calculated') }}</span>
+              </template>
+            </span>
+          </div>
 
-        <!-- Tax -->
-        <div class="flex justify-between text-sm">
-          <span class="text-gray-600 dark:text-gray-400">{{ $t('common.tax') }}</span>
-          <span class="text-gray-900 dark:text-white">{{ formatPrice(tax) }}</span>
+          <!-- Tax -->
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600 dark:text-gray-400">{{ $t('common.tax') }}</span>
+            <span class="text-gray-900 dark:text-white">{{ formatPrice(tax) }}</span>
+          </div>
         </div>
-      </div>
+      </ClientOnly>
 
       <!-- Total -->
-      <div class="mt-4 pt-4 border-t-2 border-gray-200 dark:border-gray-700">
-        <div class="flex justify-between items-center">
-          <span class="text-base font-semibold text-gray-900 dark:text-white">
-            {{ $t('common.total') }}
-          </span>
-          <span class="text-xl font-bold text-gray-900 dark:text-white">
-            {{ formatPrice(total) }}
-          </span>
+      <ClientOnly>
+        <div class="mt-4 pt-4 border-t-2 border-gray-200 dark:border-gray-700">
+          <div
+            class="flex justify-between items-center"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <span class="text-base font-semibold text-gray-900 dark:text-white">
+              {{ $t('common.total') }}
+            </span>
+            <span
+              class="text-xl font-bold text-gray-900 dark:text-white"
+              data-testid="order-total"
+            >
+              {{ formatPrice(total) }}
+            </span>
+          </div>
         </div>
-      </div>
+      </ClientOnly>
 
       <!-- Shipping Estimate (if method selected) -->
       <div
@@ -172,6 +199,7 @@
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -196,6 +224,7 @@
             class="w-3 h-3 mr-1 text-green-500"
             fill="currentColor"
             viewBox="0 0 20 20"
+            aria-hidden="true"
           >
             <path
               fill-rule="evenodd"
@@ -210,6 +239,7 @@
             class="w-3 h-3 mr-1 text-green-500"
             fill="currentColor"
             viewBox="0 0 20 20"
+            aria-hidden="true"
           >
             <path
               fill-rule="evenodd"
@@ -243,6 +273,7 @@ const props = defineProps<{
   total: number
   shippingMethod?: ShippingMethod | null
   loading?: boolean
+  currency?: string
 }>()
 
 const { locale } = useI18n()
@@ -250,9 +281,10 @@ const { locale } = useI18n()
 const showItems = ref(false)
 
 const formatPrice = (price: number): string => {
-  return new Intl.NumberFormat('es-ES', {
+  const currency = props.currency || 'EUR'
+  return new Intl.NumberFormat(locale.value || 'en-US', {
     style: 'currency',
-    currency: 'EUR',
+    currency,
   }).format(price)
 }
 

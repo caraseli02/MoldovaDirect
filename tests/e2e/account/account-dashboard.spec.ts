@@ -63,11 +63,15 @@ const test = base.extend<{
 test.describe('Account Dashboard', () => {
   test.describe('Unauthenticated State', () => {
     test('should redirect unauthenticated users to login', async ({ page }) => {
-      // Clear any existing auth state
+      // Clear any existing auth state (cookies, localStorage, sessionStorage)
       await page.context().clearCookies()
+      await page.evaluate(() => {
+        localStorage.clear()
+        sessionStorage.clear()
+      })
 
-      await page.goto('/account')
-      await page.waitForLoadState('networkidle')
+      // Force navigation with cache disabled to ensure fresh state
+      await page.goto('/account', { waitUntil: 'networkidle' })
 
       // Should redirect to login
       await expect(page).toHaveURL(/\/auth\/login/, { timeout: 5000 })

@@ -12,6 +12,7 @@
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -57,6 +58,7 @@
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -124,6 +126,7 @@
             class="h-5 w-5 text-yellow-400"
             fill="currentColor"
             viewBox="0 0 20 20"
+            aria-hidden="true"
           >
             <path
               fill-rule="evenodd"
@@ -144,6 +147,7 @@
               variant="link"
               size="sm"
               class="text-sm font-medium text-yellow-800 dark:text-yellow-200 hover:text-yellow-900 dark:hover:text-yellow-100 p-0 h-auto"
+              type="button"
               @click="$emit('retry')"
             >
               {{ $t('checkout.shippingMethod.fallbackWarning.retry') }}
@@ -161,6 +165,8 @@
       <UiRadioGroup
         v-model="selectedMethodId"
         :aria-label="$t('checkout.shippingMethod.title')"
+        :aria-invalid="!!validationError"
+        :aria-describedby="validationError ? 'shipping-method-error' : undefined"
       >
         <div
           v-for="method in availableMethods"
@@ -170,7 +176,7 @@
           <div
             class="p-4 border rounded-lg cursor-pointer transition-all"
             :class="selectedMethodId === method.id
-              ? 'border-rose-500 bg-rose-50 dark:bg-rose-900/20 ring-1 ring-rose-500'
+              ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 ring-1 ring-primary-500'
               : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
             @click="selectedMethodId = method.id"
           >
@@ -178,7 +184,7 @@
               <UiRadioGroupItem
                 :id="`ship-${method.id}`"
                 :value="method.id"
-                class="mt-0.5 flex-shrink-0"
+                class="mt-0.5 flex-shrink-0 border-slate-900 dark:border-slate-100 text-slate-900 dark:text-slate-100"
               />
 
               <div class="flex-1 min-w-0">
@@ -221,6 +227,7 @@
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    aria-hidden="true"
                   >
                     <path
                       stroke-linecap="round"
@@ -260,6 +267,7 @@
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
+        aria-hidden="true"
       >
         <path
           stroke-linecap="round"
@@ -287,6 +295,7 @@
             class="h-5 w-5 text-rose-400"
             fill="currentColor"
             viewBox="0 0 20 20"
+            aria-hidden="true"
           >
             <path
               fill-rule="evenodd"
@@ -307,6 +316,7 @@
               variant="link"
               size="sm"
               class="text-sm font-medium text-rose-800 dark:text-rose-200 hover:text-rose-900 dark:hover:text-rose-100 p-0 h-auto"
+              type="button"
               @click="$emit('retry')"
             >
               {{ $t('common.retry') }}
@@ -319,6 +329,8 @@
     <!-- Validation Error -->
     <p
       v-if="validationError"
+      id="shipping-method-error"
+      role="alert"
       class="mt-2 text-sm text-rose-600 dark:text-rose-400"
     >
       {{ validationError }}
@@ -336,6 +348,7 @@ interface Props {
   error?: string | null
   validationError?: string | null
   autoSelected?: boolean
+  currency?: string
 }
 
 interface Emits {
@@ -348,18 +361,19 @@ const props = withDefaults(defineProps<Props>(), {
   error: null,
   validationError: null,
   autoSelected: false,
+  currency: 'EUR',
 })
 
 // Local state
 const showAllMethods = ref(false)
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
 // Format price helper
 const formatPrice = (price: number): string => {
-  if (price === 0) return 'Free'
-  return new Intl.NumberFormat(locale.value, {
+  if (price === 0) return t('checkout.freeShipping', 'Free')
+  return new Intl.NumberFormat(locale.value || 'en-US', {
     style: 'currency',
-    currency: 'EUR',
+    currency: props.currency || 'EUR',
   }).format(price)
 }
 
@@ -383,23 +397,24 @@ const getDeliveryEstimate = (days: number): string => {
   deliveryDate.setDate(today.getDate() + days)
 
   if (days === 1) {
-    return 'Delivery tomorrow'
+    return t('checkout.shippingMethod.deliveryTomorrow', 'Delivery tomorrow')
   }
   else if (days <= 3) {
-    return `Delivery by ${deliveryDate.toLocaleDateString('en-US', { weekday: 'long' })}`
+    const dayName = deliveryDate.toLocaleDateString(locale.value, { weekday: 'long' })
+    return t('checkout.shippingMethod.deliveryBy', { day: dayName }, `Delivery by ${dayName}`)
   }
   else {
-    return `Delivery in ${days} business days`
+    return t('checkout.shippingMethod.deliveryInDays', { days }, `Delivery in ${days} business days`)
   }
 }
 
 // Get conditions for a shipping method
 const getMethodConditions = (method: ShippingMethod): string => {
   if (method.id === 'free' && method.price === 0) {
-    return 'Available for orders over €50'
+    return t('checkout.shippingMethod.conditions.freeOver50', 'Available for orders over €50')
   }
   else if (method.id === 'express') {
-    return 'Order before 2 PM for next-day delivery'
+    return t('checkout.shippingMethod.conditions.expressBefore2pm', 'Order before 2 PM for next-day delivery')
   }
   return ''
 }

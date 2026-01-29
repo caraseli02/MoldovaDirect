@@ -370,7 +370,9 @@
       "processingPasswordReset": "Processing your password reset request",
       "sendResetEmailButton": "Send password reset email",
       "sendingResetEmail": "Sending reset email",
-      "backToLoginLink": "Back to login page"
+      "backToLoginLink": "Back to login page",
+      "skipToMainContent": "Skip to main content",
+      "skipToOrderSummary": "Skip to order summary"
     },
     "errors": {
       "invalidCredentials": "Invalid email or password",
@@ -1788,6 +1790,9 @@
   "checkout": {
     "title": "Checkout",
     "secureCheckout": "Secure Checkout",
+    "requiredFields": "Indicates required field",
+    "shippingSectionAvailable": "Shipping methods section is now available",
+    "paymentSectionAvailable": "Payment section is now available",
     "trust": {
       "secureCheckout": "100% Secure Checkout",
       "sslEncrypted": "256-bit SSL Encrypted",
@@ -1845,6 +1850,8 @@
     },
     "continueAsGuest": "Continue as Guest",
     "backToCart": "Back to Cart",
+    "showItems": "Show items",
+    "hideItems": "Hide items",
     "continueToPayment": "Continue to Payment",
     "continueToReview": "Review Your Order",
     "backToShipping": "Back to Shipping",
@@ -1944,7 +1951,10 @@
       "addressInvalid": "Please check your address information",
       "paymentInvalid": "Please check your payment information",
       "guestInfoInvalid": "Please check your contact information",
-      "acceptTermsRequired": "Please accept the terms and conditions"
+      "acceptTermsRequired": "Please accept the terms and conditions",
+      "termsRequired": "You must accept the terms and conditions to continue",
+      "privacyRequired": "You must accept the privacy policy to continue",
+      "selectMethod": "Select a payment method"
     },
     "warnings": {
       "concurrentCheckout": "Multiple Checkout Sessions Detected",
@@ -1983,7 +1993,10 @@
       "phonePlaceholder": "+1 555 000 0000",
       "phoneDescription": "We'll contact you about your delivery",
       "saveAddress": "Save this address for future orders",
-      "autocompleteHint": "Start typing for address suggestions"
+      "autocompleteHint": "Start typing for address suggestions",
+      "autocompleteUnavailable": "Address suggestions unavailable",
+      "autocompleteUnavailableDescription": "Please enter your address manually.",
+      "suggestionsAvailable": "{count} address suggestions available. Use arrow keys to navigate."
     },
     "shippingMethod": {
       "title": "Shipping Method",
@@ -2098,7 +2111,13 @@
         "label": "Cash on Delivery",
         "summary": "Pay with cash when your order is delivered",
         "title": "Cash on Delivery",
-        "description": "You will pay for your order in cash when it is delivered to your address."
+        "description": "You will pay for your order in cash when it is delivered to your address.",
+        "iconLabel": "Cash payment method"
+      },
+      "creditCard": {
+        "label": "Credit Card",
+        "summary": "Pay securely with your credit or debit card",
+        "iconLabel": "Credit or debit card payment method"
       },
       "cashInstructions": "How Cash on Delivery Works",
       "cashInstruction1": "Place your order and we'll prepare it for delivery",

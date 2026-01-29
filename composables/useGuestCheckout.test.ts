@@ -49,9 +49,11 @@ describe('useGuestCheckout', () => {
 
       const { showGuestForm, guestInfo } = useGuestCheckout()
 
+      // In dev mode, showGuestForm is true but guestInfo starts empty
+      // User must manually enter their information
       expect(showGuestForm.value).toBe(true)
-      expect(guestInfo.value.email).toBe('john.doe@example.com')
-      expect(guestInfo.value.emailUpdates).toBe(true)
+      expect(guestInfo.value.email).toBe('')
+      expect(guestInfo.value.emailUpdates).toBe(false)
     })
   })
 

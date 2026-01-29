@@ -15,6 +15,25 @@ export class CriticalTestHelpers {
   constructor(private page: Page) {}
 
   /**
+   * Clear authentication state to run as guest
+   * Must be called at the start of tests that need to run as unauthenticated users
+   */
+  async clearAuthState(): Promise<void> {
+    // Clear all cookies
+    await this.page.context().clearCookies()
+    // Clear localStorage and sessionStorage
+    await this.page.evaluate(() => {
+      localStorage.clear()
+      sessionStorage.clear()
+    })
+    // Small wait to ensure clearing takes effect
+    await this.page.waitForTimeout(200)
+    // Reload the page to apply the cleared state
+    await this.page.reload()
+    await this.page.waitForLoadState('networkidle')
+  }
+
+  /**
    * Login as test user
    * Uses TEST_USER_EMAIL and TEST_USER_PASSWORD from environment
    */
@@ -167,7 +186,7 @@ export class CriticalTestHelpers {
         { timeout: 15000 },
       )
     }
-    catch (e) {
+    catch {
       console.warn('Loading state check timed out, continuing with extended verification...')
     }
 
@@ -241,7 +260,7 @@ export class CriticalTestHelpers {
           verificationMethod = 'button text changed (delayed)'
         }
       }
-      catch (_e) {
+      catch {
         // Ignore errors in retry
       }
     }

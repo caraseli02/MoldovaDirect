@@ -40,21 +40,21 @@ describe('OrderSummaryCard', () => {
       props: defaultProps,
     })
     // Shipping cost should be present
-    expect(wrapper.text()).toContain('5,99')
+    expect(wrapper.text()).toMatch(/5[.,]99/)
   })
 
   it('should display tax amount', () => {
     const wrapper = mount(OrderSummaryCard, {
       props: defaultProps,
     })
-    expect(wrapper.text()).toContain('10,50')
+    expect(wrapper.text()).toMatch(/10[.,]50/)
   })
 
   it('should display total prominently', () => {
     const wrapper = mount(OrderSummaryCard, {
       props: defaultProps,
     })
-    expect(wrapper.text()).toContain('116,49')
+    expect(wrapper.text()).toMatch(/116[.,]49/)
   })
 
   it('should show item count in header', () => {

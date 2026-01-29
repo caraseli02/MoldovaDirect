@@ -5,6 +5,7 @@ import type {
   OrderData,
   ShippingInformation,
 } from '~/types/checkout'
+import { getErrorMessage } from '~/utils/errorUtils'
 
 export interface FetchShippingMethodsParams {
   country: string
@@ -48,89 +49,138 @@ export interface SendConfirmationParams {
   email?: string
 }
 
-export async function fetchShippingMethods(params: FetchShippingMethodsParams): Promise<ShippingMethod[]> {
-  const response = await $fetch<{ success: boolean, methods: ShippingMethod[] }>('/api/checkout/shipping-methods', {
-    query: {
-      country: params.country,
-      postalCode: params.postalCode,
-      orderTotal: params.orderTotal.toString(),
-    },
-  })
-
-  if (!response.success) {
-    throw new Error('Failed to load shipping methods')
+function isNetworkError(error: unknown): boolean {
+  // Check for fetch/network errors using type guards and error patterns
+  if (error instanceof TypeError) {
+    // TypeError with fetch-related message indicates network issue
+    const msg = error.message.toLowerCase()
+    return msg.includes('fetch') || msg.includes('network') || msg.includes('connection') || msg.includes('offline')
   }
+  if (error instanceof Error) {
+    // Check for specific network error codes/messages
+    const msg = error.message.toLowerCase()
+    return msg.includes('enetdown') || msg.includes('econnrefused') || msg.includes('timeout')
+  }
+  return false
+}
 
-  return response.methods
+export async function fetchShippingMethods(params: FetchShippingMethodsParams): Promise<ShippingMethod[]> {
+  try {
+    const response = await $fetch<{ success: boolean, methods: ShippingMethod[] }>('/api/checkout/shipping-methods', {
+      query: {
+        country: params.country,
+        postalCode: params.postalCode,
+        orderTotal: params.orderTotal.toString(),
+      },
+    })
+
+    if (!response.success) {
+      throw new Error('Failed to load shipping methods')
+    }
+
+    return response.methods
+  }
+  catch (error: unknown) {
+    if (isNetworkError(error)) {
+      throw new Error('Network error: Could not connect to server. Please check your connection.', { cause: error })
+    }
+    throw error
+  }
 }
 
 export async function createPaymentIntent(params: CreatePaymentIntentParams): Promise<{
   id: string
   clientSecret: string
 }> {
-  const response = await $fetch<{
-    success: boolean
-    paymentIntent: { id: string, client_secret: string }
-  }>('/api/checkout/create-payment-intent', {
-    method: 'POST',
-    body: {
-      amount: params.amount,
-      currency: params.currency,
-      sessionId: params.sessionId,
-    },
-  })
+  try {
+    const response = await $fetch<{
+      success: boolean
+      paymentIntent: { id: string, client_secret: string }
+    }>('/api/checkout/create-payment-intent', {
+      method: 'POST',
+      body: {
+        amount: params.amount,
+        currency: params.currency,
+        sessionId: params.sessionId,
+      },
+    })
 
-  if (!response.success || !response.paymentIntent?.id || !response.paymentIntent?.client_secret) {
-    throw new Error('Failed to create payment intent')
+    if (!response.success || !response.paymentIntent?.id || !response.paymentIntent?.client_secret) {
+      throw new Error('Failed to create payment intent')
+    }
+
+    return {
+      id: response.paymentIntent.id,
+      clientSecret: response.paymentIntent.client_secret,
+    }
   }
-
-  return {
-    id: response.paymentIntent.id,
-    clientSecret: response.paymentIntent.client_secret,
+  catch (error: unknown) {
+    if (isNetworkError(error)) {
+      throw new Error('Network error: Could not connect to payment server. Please check your connection.', { cause: error })
+    }
+    throw error
   }
 }
 
 export async function confirmPaymentIntent(params: ConfirmPaymentParams): Promise<any> {
-  return await $fetch('/api/checkout/confirm-payment', {
-    method: 'POST',
-    body: {
-      paymentIntentId: params.paymentIntentId,
-      paymentMethodId: params.paymentMethodId,
-      sessionId: params.sessionId,
-    },
-  }) as any
+  try {
+    return await $fetch('/api/checkout/confirm-payment', {
+      method: 'POST',
+      body: {
+        paymentIntentId: params.paymentIntentId,
+        paymentMethodId: params.paymentMethodId,
+        sessionId: params.sessionId,
+      },
+    }) as any
+  }
+  catch (error: unknown) {
+    if (isNetworkError(error)) {
+      throw new Error('Network error: Could not confirm payment. Please check your connection.', { cause: error })
+    }
+    throw error
+  }
 }
 
 export async function createOrder(params: CreateOrderParams): Promise<{
   id: number
   orderNumber: string
 }> {
-  const response = await $fetch<{ success: boolean, order: { id: number, orderNumber: string } }>(
-    '/api/checkout/create-order',
-    {
-      method: 'POST',
-      body: {
-        sessionId: params.sessionId,
-        items: params.items,
-        shippingAddress: params.shippingAddress,
-        billingAddress: params.billingAddress,
-        paymentMethod: params.paymentMethod,
-        paymentResult: params.paymentResult,
-        subtotal: params.subtotal,
-        shippingCost: params.shippingCost,
-        tax: params.tax,
-        total: params.total,
-        currency: params.currency,
-        guestEmail: params.guestEmail ?? undefined,
-        customerName: params.customerName,
-        locale: params.locale,
-        marketingConsent: params.marketingConsent,
+  let response
+  try {
+    response = await $fetch<{ success: boolean, order: { id: number, orderNumber: string } }>(
+      '/api/checkout/create-order',
+      {
+        method: 'POST',
+        body: {
+          sessionId: params.sessionId,
+          items: params.items,
+          shippingAddress: params.shippingAddress,
+          billingAddress: params.billingAddress,
+          paymentMethod: params.paymentMethod,
+          paymentResult: params.paymentResult,
+          subtotal: params.subtotal,
+          shippingCost: params.shippingCost,
+          tax: params.tax,
+          total: params.total,
+          currency: params.currency,
+          guestEmail: params.guestEmail ?? undefined,
+          customerName: params.customerName,
+          locale: params.locale,
+          marketingConsent: params.marketingConsent,
+        },
       },
-    },
-  )
+    )
+  }
+  catch (fetchError: unknown) {
+    if (isNetworkError(fetchError)) {
+      throw new Error('Network error: Could not connect to server. Please check your connection.', { cause: fetchError })
+    }
+    const errorMessage = getErrorMessage(fetchError)
+    throw new Error(`Order creation failed: ${errorMessage}`, { cause: fetchError })
+  }
 
-  if (!response.success || !response.order) {
-    throw new Error('Failed to create order')
+  if (!response?.success || !response?.order) {
+    throw new Error('Order creation failed: Invalid server response')
   }
 
   return {
@@ -139,15 +189,22 @@ export async function createOrder(params: CreateOrderParams): Promise<{
   }
 }
 
-export async function sendConfirmationEmail(params: SendConfirmationParams): Promise<void> {
-  await $fetch('/api/checkout/send-confirmation', {
-    method: 'POST',
-    body: {
-      orderId: params.orderId,
-      sessionId: params.sessionId,
-      email: params.email,
-    },
-  }) as any
+export async function sendConfirmationEmail(params: SendConfirmationParams): Promise<boolean> {
+  try {
+    const response = await $fetch<{ success: boolean }>('/api/checkout/send-confirmation', {
+      method: 'POST',
+      body: {
+        orderId: params.orderId,
+        sessionId: params.sessionId,
+        email: params.email,
+      },
+    })
+    return response.success === true
+  }
+  catch {
+    // Return failure indicator - caller decides how to handle
+    return false
+  }
 }
 
 /**

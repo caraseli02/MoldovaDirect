@@ -7,7 +7,7 @@
       <div>
         <UiLabel
           for="guestEmail"
-          class="mb-2 inline-flex items-center gap-1"
+          class="mb-2 inline-flex items-center gap-1 dark:text-white"
         >
           {{ $t('checkout.guestInfo.email') }}
           <span class="text-red-500">*</span>
@@ -18,10 +18,11 @@
           type="email"
           inputmode="email"
           autocomplete="email"
+          aria-required="true"
           :placeholder="$t('checkout.guestInfo.emailPlaceholder')"
           :aria-invalid="!!errors.email"
           :aria-describedby="errors.email ? 'guestEmail-error' : undefined"
-          class="transition-colors h-12 text-base"
+          class="transition-colors h-12 text-base bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           :class="{ 'aria-invalid:border-destructive': !!errors.email }"
           @blur="$emit('validate', 'email')"
           @input="handleEmailInput"
@@ -44,7 +45,7 @@
         />
         <UiLabel
           for="emailUpdates"
-          class="text-sm"
+          class="text-sm dark:text-gray-300"
         >
           {{ $t('checkout.guestInfo.emailUpdates') }}
         </UiLabel>

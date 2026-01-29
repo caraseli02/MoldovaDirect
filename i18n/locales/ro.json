@@ -164,7 +164,9 @@
       "processingPasswordReset": "Procesăm cererea ta de resetare a parolei",
       "sendResetEmailButton": "Trimite email de resetare parolă",
       "sendingResetEmail": "Trimitere email de resetare",
-      "backToLoginLink": "Înapoi la pagina de autentificare"
+      "backToLoginLink": "Înapoi la pagina de autentificare",
+      "skipToMainContent": "Treci la conținutul principal",
+      "skipToOrderSummary": "Treci la rezumatul comenzii"
     },
     "errors": {
       "invalidCredentials": "Email sau parolă incorectă",
@@ -1792,6 +1794,9 @@
   "checkout": {
     "title": "Finalizare Comandă",
     "secureCheckout": "Finalizare Securizată",
+    "requiredFields": "Indică câmp obligatoriu",
+    "shippingSectionAvailable": "Secțiunea metodelor de livrare este acum disponibilă",
+    "paymentSectionAvailable": "Secțiunea de plată este acum disponibilă",
     "trust": {
       "secureCheckout": "Comandă 100% Securizată",
       "sslEncrypted": "Criptare SSL 256-bit",
@@ -1849,6 +1854,8 @@
     },
     "continueAsGuest": "Continuă ca Vizitator",
     "backToCart": "Înapoi la Coș",
+    "showItems": "Afișează articole",
+    "hideItems": "Ascunde articole",
     "continueToPayment": "Continuă la Plată",
     "continueToReview": "Revizuiește Comanda Ta",
     "backToShipping": "Înapoi la Livrare",
@@ -1948,7 +1955,10 @@
       "addressInvalid": "Te rugăm să verifici informațiile adresei",
       "paymentInvalid": "Te rugăm să verifici informațiile de plată",
       "guestInfoInvalid": "Te rugăm să verifici informațiile de contact",
-      "acceptTermsRequired": "Te rugăm să accepți termenii și condițiile"
+      "acceptTermsRequired": "Te rugăm să accepți termenii și condițiile",
+      "termsRequired": "Trebuie să accepți termenii și condițiile pentru a continua",
+      "privacyRequired": "Trebuie să accepți politica de confidențialitate pentru a continua",
+      "selectMethod": "Selectează o metodă de plată"
     },
     "warnings": {
       "concurrentCheckout": "Sesiuni Multiple de Plată Detectate",
@@ -1987,7 +1997,10 @@
       "phonePlaceholder": "+40 700 000 000",
       "phoneDescription": "Te vom contacta despre livrare",
       "saveAddress": "Salvează această adresă pentru comenzi viitoare",
-      "autocompleteHint": "Începe să tastezi pentru sugestii de adrese"
+      "autocompleteHint": "Începe să tastezi pentru sugestii de adrese",
+      "autocompleteUnavailable": "Sugestiile de adresă nu sunt disponibile",
+      "autocompleteUnavailableDescription": "Te rugăm să introduci adresa manual.",
+      "suggestionsAvailable": "{count} sugestii de adrese disponibile. Folosește săgețile pentru a naviga."
     },
     "shippingMethod": {
       "title": "Metodă de Livrare",
@@ -2102,7 +2115,13 @@
         "label": "Plată la Livrare",
         "summary": "Plătește cu numerar când comanda este livrată",
         "title": "Plată la Livrare",
-        "description": "Vei plăti pentru comandă în numerar când va fi livrată la adresa ta."
+        "description": "Vei plăti pentru comandă în numerar când va fi livrată la adresa ta.",
+        "iconLabel": "Metodă de plată în numerar"
+      },
+      "creditCard": {
+        "label": "Card de Credit",
+        "summary": "Plătește în siguranță cu cardul tău de credit sau debit",
+        "iconLabel": "Metodă de plată cu card de credit sau debit"
       },
       "cashInstructions": "Cum Funcționează Plata la Livrare",
       "cashInstruction1": "Plasează comanda și o vom pregăti pentru livrare",

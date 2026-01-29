@@ -1,5 +1,8 @@
 <template>
-  <div class="address-form">
+  <div
+    class="address-form"
+    data-testid="address-form"
+  >
     <!-- Form Header -->
     <div
       v-if="showHeader"
@@ -21,61 +24,70 @@
       <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('checkout.addressForm.savedAddresses') }}
       </h4>
-      <UiRadioGroup
-        v-model="selectedSavedAddressId"
-        :name="`saved-address-${type}`"
-      >
-        <div class="space-y-3">
-          <div
-            v-for="address in savedAddresses"
-            :key="address.id"
-            class="relative"
-          >
-            <div :class="selectedSavedAddressId === address.id ? 'border-slate-500 bg-slate-50 dark:bg-slate-900/20 rounded-lg p-3 border' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border'">
-              <div class="flex items-start gap-3">
-                <UiRadioGroupItem
-                  :value="address.id"
-                  class="shrink-0 mt-0.5"
-                  @click="selectSavedAddress(address)"
-                />
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <p class="text-sm font-medium text-gray-900 dark:text-white">
-                      {{ address.firstName }} {{ address.lastName }}
+      <fieldset>
+        <!-- legend is required for fieldset accessibility - eslint-disable-next-line vue/no-restricted-html-elements -->
+        <legend class="sr-only">
+          {{ $t('checkout.addressForm.savedAddresses') }}
+        </legend>
+        <UiRadioGroup
+          v-model="selectedSavedAddressId"
+          :name="`saved-address-${type}`"
+        >
+          <div class="space-y-3">
+            <div
+              v-for="address in savedAddresses"
+              :key="address.id"
+              class="relative"
+            >
+              <div :class="selectedSavedAddressId === address.id ? 'border-slate-500 bg-slate-50 dark:bg-slate-900/20 rounded-lg p-3 border' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border'">
+                <div class="flex items-start gap-3">
+                  <UiRadioGroupItem
+                    :value="address.id"
+                    class="shrink-0 mt-0.5"
+                    @click="selectSavedAddress(address)"
+                  />
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <p class="text-sm font-medium text-gray-900 dark:text-white">
+                        {{ address.firstName }} {{ address.lastName }}
+                      </p>
+                      <span
+                        v-if="address.isDefault"
+                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-200"
+                      >
+                        {{ $t('checkout.addressForm.default') }}
+                      </span>
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      {{ address.street }}
                     </p>
-                    <span
-                      v-if="address.isDefault"
-                      class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-200"
-                    >
-                      {{ $t('checkout.addressForm.default') }}
-                    </span>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                      {{ address.city }}, {{ address.postalCode }} {{ address.country }}
+                    </p>
                   </div>
-                  <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    {{ address.street }}
-                  </p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ address.city }}, {{ address.postalCode }} {{ address.country }}
-                  </p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Use New Address Option -->
-        <div :class="selectedSavedAddressId === null ? 'border-slate-500 bg-slate-50 dark:bg-slate-900/20 rounded-lg p-3 border mt-3' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border mt-3'">
-          <div class="flex items-center gap-3">
-            <UiRadioGroupItem
-              :value="null"
-              class="shrink-0"
-              @click="useNewAddress"
-            />
-            <span class="text-sm font-medium text-gray-900 dark:text-white">
-              {{ $t('checkout.addressForm.useNewAddress') }}
-            </span>
+          <!-- Use New Address Option -->
+          <div
+            :class="selectedSavedAddressId === null ? 'border-slate-500 bg-slate-50 dark:bg-slate-900/20 rounded-lg p-3 border mt-3' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border mt-3'"
+            data-testid="use-new-address"
+          >
+            <div class="flex items-center gap-3">
+              <UiRadioGroupItem
+                :value="null"
+                class="shrink-0"
+                @click="useNewAddress"
+              />
+              <span class="text-sm font-medium text-gray-900 dark:text-white">
+                {{ $t('checkout.addressForm.useNewAddress') }}
+              </span>
+            </div>
           </div>
-        </div>
-      </UiRadioGroup>
+        </UiRadioGroup>
+      </fieldset>
     </div>
 
     <!-- Address Form -->
@@ -85,7 +97,10 @@
     >
       <!-- Full Name (Single Field) -->
       <div>
-        <UiLabel for="fullName">
+        <UiLabel
+          for="fullName"
+          class="dark:text-white"
+        >
           {{ $t('checkout.addressForm.fullName') }}
           <span class="text-red-500">*</span>
         </UiLabel>
@@ -95,14 +110,18 @@
           type="text"
           name="name"
           autocomplete="name"
+          aria-required="true"
+          :aria-invalid="!!fieldErrors.fullName"
+          :aria-describedby="fieldErrors.fullName ? 'fullName-error' : undefined"
           :placeholder="$t('checkout.addressForm.fullNamePlaceholder')"
-          :class="getFieldClasses('fullName')"
+          :class="[getFieldClasses('fullName'), 'h-12 text-base']"
           @input="handleFullNameInput(($event.target as HTMLInputElement).value)"
           @blur="validateField('fullName')"
-          @focus="clearFieldError('fullName')"
+          @focus="handleFieldFocus('fullName')"
         />
         <p
           v-if="fieldErrors.fullName"
+          id="fullName-error"
           class="mt-1 text-sm text-red-600 dark:text-red-400"
         >
           {{ fieldErrors.fullName }}
@@ -110,21 +129,32 @@
       </div>
 
       <!-- Street Address with Autocomplete -->
-      <div class="relative">
-        <UiLabel for="street">
+      <div
+        ref="streetContainerRef"
+        class="relative"
+      >
+        <UiLabel
+          for="street"
+          class="dark:text-white"
+        >
           {{ $t('checkout.addressForm.street') }}
           <span class="text-red-500">*</span>
         </UiLabel>
         <div class="relative">
           <UiInput
             id="street"
-            ref="streetInputRef"
             :value="localAddress.street"
             type="text"
             name="street-address"
             autocomplete="street-address"
+            aria-required="true"
+            aria-autocomplete="list"
+            :aria-expanded="showSuggestions && addressSuggestions.length > 0"
+            :aria-controls="showSuggestions && addressSuggestions.length > 0 ? 'address-suggestions' : undefined"
+            :aria-invalid="!!fieldErrors.street"
+            :aria-describedby="fieldErrors.street ? 'street-error' : undefined"
             :placeholder="$t('checkout.addressForm.streetPlaceholder')"
-            :class="getFieldClasses('street')"
+            :class="[getFieldClasses('street'), 'h-12 text-base']"
             @input="handleStreetInput(($event.target as HTMLInputElement).value)"
             @blur="validateField('street')"
             @focus="handleStreetFocus"
@@ -141,8 +171,18 @@
         <!-- Autocomplete Suggestions Dropdown -->
         <div
           v-if="showSuggestions && addressSuggestions.length > 0"
+          id="address-suggestions"
+          role="list"
+          :aria-label="$t('checkout.addressForm.suggestionsAvailable', { count: addressSuggestions.length })"
           class="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"
         >
+          <div
+            aria-live="polite"
+            aria-atomic="true"
+            class="sr-only"
+          >
+            {{ $t('checkout.addressForm.suggestionsAvailable', { count: addressSuggestions.length }) }}
+          </div>
           <UiButton
             v-for="(suggestion, index) in addressSuggestions"
             :key="index"
@@ -160,6 +200,7 @@
 
         <p
           v-if="fieldErrors.street"
+          id="street-error"
           class="mt-1 text-sm text-red-600 dark:text-red-400"
         >
           {{ fieldErrors.street }}
@@ -175,7 +216,10 @@
       <!-- City & Postal Code (Side by Side) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <UiLabel for="city">
+          <UiLabel
+            for="city"
+            class="dark:text-white"
+          >
             {{ $t('checkout.addressForm.city') }}
             <span class="text-red-500">*</span>
           </UiLabel>
@@ -185,14 +229,18 @@
             type="text"
             name="address-level2"
             autocomplete="address-level2"
+            aria-required="true"
+            :aria-invalid="!!fieldErrors.city"
+            :aria-describedby="fieldErrors.city ? 'city-error' : undefined"
             :placeholder="$t('checkout.addressForm.cityPlaceholder')"
-            :class="getFieldClasses('city')"
+            :class="[getFieldClasses('city'), 'h-12 text-base']"
             @input="updateField('city', ($event.target as HTMLInputElement).value)"
             @blur="validateField('city')"
             @focus="clearFieldError('city')"
           />
           <p
             v-if="fieldErrors.city"
+            id="city-error"
             class="mt-1 text-sm text-red-600 dark:text-red-400"
           >
             {{ fieldErrors.city }}
@@ -200,7 +248,10 @@
         </div>
 
         <div>
-          <UiLabel for="postalCode">
+          <UiLabel
+            for="postalCode"
+            class="dark:text-white"
+          >
             {{ $t('checkout.addressForm.postalCode') }}
             <span class="text-red-500">*</span>
           </UiLabel>
@@ -210,14 +261,18 @@
             type="text"
             name="postal-code"
             autocomplete="postal-code"
+            aria-required="true"
+            :aria-invalid="!!fieldErrors.postalCode"
+            :aria-describedby="fieldErrors.postalCode ? 'postalCode-error' : undefined"
             :placeholder="$t('checkout.addressForm.postalCodePlaceholder')"
-            :class="getFieldClasses('postalCode')"
+            :class="[getFieldClasses('postalCode'), 'h-12 text-base']"
             @input="updateField('postalCode', ($event.target as HTMLInputElement).value)"
             @blur="validateField('postalCode')"
             @focus="clearFieldError('postalCode')"
           />
           <p
             v-if="fieldErrors.postalCode"
+            id="postalCode-error"
             class="mt-1 text-sm text-red-600 dark:text-red-400"
           >
             {{ fieldErrors.postalCode }}
@@ -227,17 +282,27 @@
 
       <!-- Country -->
       <div>
-        <UiLabel for="country">
+        <UiLabel
+          for="country"
+          class="dark:text-white"
+        >
           {{ $t('checkout.addressForm.country') }}
           <span class="text-red-500">*</span>
         </UiLabel>
         <UiSelect
+          id="country"
           :value="localAddress.country"
-          :class="getFieldClasses('country')"
+          :class="[getFieldClasses('country'), 'h-12 text-base']"
           @update:model-value="updateField('country', $event as string); clearFieldError('country')"
           @blur="validateField('country')"
         >
-          <UiSelectTrigger class="w-full">
+          <UiSelectTrigger
+            class="w-full"
+            aria-required="true"
+            :aria-invalid="!!fieldErrors.country"
+            :aria-describedby="fieldErrors.country ? 'country-error' : undefined"
+            data-testid="country-select"
+          >
             <UiSelectValue :placeholder="$t('checkout.addressForm.selectCountry')" />
           </UiSelectTrigger>
           <UiSelectContent>
@@ -252,6 +317,7 @@
         </UiSelect>
         <p
           v-if="fieldErrors.country"
+          id="country-error"
           class="mt-1 text-sm text-red-600 dark:text-red-400"
         >
           {{ fieldErrors.country }}
@@ -260,9 +326,12 @@
 
       <!-- Phone (Optional but Recommended) -->
       <div>
-        <UiLabel for="phone">
+        <UiLabel
+          for="phone"
+          class="dark:text-white"
+        >
           {{ $t('checkout.addressForm.phone') }}
-          <span class="text-gray-500 text-xs ml-1">({{ $t('checkout.addressForm.phoneHelper') }})</span>
+          <span class="text-gray-500 dark:text-gray-400 text-xs ml-1">({{ $t('checkout.addressForm.phoneHelper') }})</span>
         </UiLabel>
         <UiInput
           id="phone"
@@ -272,6 +341,7 @@
           autocomplete="tel"
           inputmode="tel"
           :placeholder="$t('checkout.addressForm.phonePlaceholder')"
+          class="h-12 text-base bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           @input="updateField('phone', ($event.target as HTMLInputElement).value)"
         />
         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -285,12 +355,13 @@
         class="flex items-center gap-2 pt-2"
       >
         <UiCheckbox
+          :id="`saveAddress-${type}`"
           :checked="localAddress.saveForFuture"
           class="shrink-0"
           @update:checked="updateField('saveForFuture', $event)"
         />
         <UiLabel
-          for="saveAddress"
+          :for="`saveAddress-${type}`"
           class="cursor-pointer"
         >
           {{ $t('checkout.addressForm.saveAddress') }}
@@ -352,17 +423,22 @@ const emit = defineEmits<Emits>()
 // Composables
 const user = useSupabaseUser()
 const { t } = useI18n()
+const toast = useToast()
 
 // Local state
 const selectedSavedAddressId = ref<number | null>(null)
 const fieldErrors = ref<Record<string, string>>({})
-const streetInputRef = ref<HTMLInputElement | null>(null)
+const streetContainerRef = ref<HTMLDivElement | null>(null)
+
+// Track component mount state to prevent memory leaks
+const isMounted = ref(false)
 
 // Autocomplete state
 const addressSuggestions = ref<AddressSuggestion[]>([])
 const showSuggestions = ref(false)
 const isLoadingAutocomplete = ref(false)
 const autocompleteDebounceTimer = ref<NodeJS.Timeout | null>(null)
+const hasShownAutocompleteError = ref(false)
 
 // Computed for the combined full name
 const fullName = computed(() => {
@@ -516,8 +592,16 @@ const searchAddresses = async (query: string) => {
 
     addressSuggestions.value = suggestions
     showSuggestions.value = suggestions.length > 0
+    hasShownAutocompleteError.value = false
   }
   catch (error) {
+    if (!hasShownAutocompleteError.value) {
+      toast.warning(
+        t('checkout.addressForm.autocompleteUnavailable'),
+        t('checkout.addressForm.autocompleteUnavailableDescription'),
+      )
+      hasShownAutocompleteError.value = true
+    }
     // Log error for debugging - autocomplete failure is non-blocking
     // Users can still manually enter their address
     console.error('Address autocomplete error:', error)
@@ -653,6 +737,22 @@ const clearFieldError = (fieldName: string) => {
   }
 }
 
+/**
+ * Handle field focus with scroll-into-view for mobile devices
+ * Ensures the focused field is visible when the mobile keyboard appears
+ */
+const handleFieldFocus = (fieldName: string) => {
+  // Small delay to allow keyboard to appear
+  setTimeout(() => {
+    const input = document.getElementById(
+      fieldName === 'fullName' ? 'fullName' : fieldName,
+    ) as HTMLInputElement
+    if (input && 'scrollIntoView' in input) {
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, 300)
+}
+
 const clearAllErrors = () => {
   fieldErrors.value = {}
 }
@@ -680,9 +780,9 @@ const validateForm = (): boolean => {
   return isValid
 }
 
-// Close suggestions when clicking outside
+// Close suggestions when clicking outside the street input container
 const handleClickOutside = (event: MouseEvent) => {
-  if (streetInputRef.value && !streetInputRef.value.contains(event.target as Node)) {
+  if (streetContainerRef.value && !streetContainerRef.value.contains(event.target as Node)) {
     showSuggestions.value = false
   }
 }
@@ -731,10 +831,12 @@ watch(
 
 // Lifecycle
 onMounted(() => {
+  isMounted.value = true
   document.addEventListener('click', handleClickOutside)
 })
 
 onUnmounted(() => {
+  isMounted.value = false
   document.removeEventListener('click', handleClickOutside)
   if (autocompleteDebounceTimer.value) {
     clearTimeout(autocompleteDebounceTimer.value)

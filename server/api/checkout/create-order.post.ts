@@ -18,7 +18,7 @@ interface ProductSnapshot {
 interface CreateOrderFromCheckoutRequest {
   sessionId: string
   items: Array<{
-    productId: number
+    productId: number | string
     productSnapshot: ProductSnapshot
     quantity: number
     price: number
@@ -119,7 +119,25 @@ export default defineEventHandler(async (event) => {
     // SERVER-SIDE PRICE VERIFICATION (Security)
     // ========================================
     // CRITICAL: Never trust client-sent prices. Always verify against database.
-    const productIds = body.items.map(item => item.productId)
+    const normalizedItems = body.items.map((item) => {
+      const productId = typeof item.productId === 'string'
+        ? Number.parseInt(item.productId, 10)
+        : item.productId
+
+      if (!Number.isFinite(productId)) {
+        throw createError({
+          statusCode: 400,
+          statusMessage: 'Invalid product ID',
+        })
+      }
+
+      return {
+        ...item,
+        productId,
+      }
+    })
+
+    const productIds = normalizedItems.map(item => item.productId)
 
     const { data: dbProducts, error: productsError } = await supabase
       .from('products')
@@ -150,7 +168,7 @@ export default defineEventHandler(async (event) => {
       total: number
     }> = []
 
-    for (const item of body.items) {
+    for (const item of normalizedItems) {
       const dbProduct = productPriceMap.get(item.productId)
 
       if (!dbProduct) {
@@ -348,7 +366,7 @@ export default defineEventHandler(async (event) => {
 
     // Prepare order items for RPC function - use VERIFIED items with server prices
     const orderItemsData = verifiedItems.map(item => ({
-      product_id: typeof item.productId === 'string' ? parseInt(item.productId, 10) : item.productId,
+      product_id: item.productId,
       product_snapshot: item.productSnapshot,
       quantity: item.quantity,
       price_eur: item.price, // Server-verified price

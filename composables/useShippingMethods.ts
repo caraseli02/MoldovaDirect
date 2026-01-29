@@ -20,6 +20,7 @@ import { fetchShippingMethods } from '~/lib/checkout/api'
 export function useShippingMethods(address: Ref<Address>) {
   const { t } = useI18n()
   const checkoutStore = useCheckoutStore()
+  const toast = useToast()
 
   // State
   const availableMethods = ref<ShippingMethod[]>([])
@@ -147,10 +148,10 @@ export function useShippingMethods(address: Ref<Address>) {
 
       // Set fallback methods but notify user they are seeing estimated rates
       availableMethods.value = getFallbackMethods()
-
-      // Note: Toast notification should be handled by the component that uses this composable
-      // to avoid duplicate toasts and allow for proper i18n. The error.value being set
-      // indicates a fallback scenario that the UI can detect and communicate to users.
+      toast.warning(
+        t('checkout.shippingMethod.fallbackWarning.title'),
+        t('checkout.shippingMethod.fallbackWarning.description'),
+      )
     }
     finally {
       loading.value = false

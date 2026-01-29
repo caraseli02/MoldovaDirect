@@ -2,6 +2,7 @@
   <div
     v-if="show"
     class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-5 mb-6"
+    data-testid="guest-checkout-prompt"
   >
     <div class="flex items-start space-x-4">
       <!-- User Icon -->
@@ -96,6 +97,7 @@
           <UiButton
             variant="outline"
             class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+            data-testid="continue-as-guest"
             @click="$emit('continue-as-guest')"
           >
             {{ $t('checkout.guestCheckout.guestButton') }}

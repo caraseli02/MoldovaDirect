@@ -1,35 +1,8 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { ref, computed } from 'vue'
 import ShippingMethodSelector from '~/components/checkout/ShippingMethodSelector.vue'
 
-vi.mock('#imports', () => ({
-  useI18n: vi.fn(() => ({
-    t: (k: string) => k,
-    locale: ref('en'),
-  })),
-  ref,
-  computed,
-}))
-
-// Stub the RadioGroup components
-vi.mock('@/components/ui/radio-group', () => ({
-  RadioGroup: {
-    template: '<div class="radio-group"><slot /></div>',
-    props: ['modelValue'],
-  },
-  RadioGroupItem: {
-    template: '<input type="radio" :id="id" :value="value" />',
-    props: ['value', 'id'],
-  },
-}))
-
-vi.mock('@/components/ui/button', () => ({
-  Button: {
-    template: '<button><slot /></button>',
-    props: ['variant', 'size'],
-  },
-}))
+// Use global mocks from vitest.setup.ts - local mock removed to avoid conflicts
 
 describe('ShippingMethodSelector', () => {
   // Component expects availableMethods and modelValue props
@@ -47,9 +20,26 @@ describe('ShippingMethodSelector', () => {
     autoSelected: false,
   }
 
+  // Stub the RadioGroup components (using actual component names from imports)
+  const globalStubs = {
+    UiRadioGroup: {
+      template: '<div class="radio-group"><slot /></div>',
+      props: ['modelValue'],
+    },
+    UiRadioGroupItem: {
+      template: '<input type="radio" :id="id" :value="value" />',
+      props: ['value', 'id'],
+    },
+    UiButton: {
+      template: '<button><slot /></button>',
+      props: ['variant', 'size'],
+    },
+  }
+
   it('should render shipping methods', () => {
     const wrapper = mount(ShippingMethodSelector, {
       props: defaultProps,
+      global: { stubs: globalStubs },
     })
     expect(wrapper.text()).toContain('Standard Shipping')
     expect(wrapper.text()).toContain('Express Shipping')
@@ -58,6 +48,7 @@ describe('ShippingMethodSelector', () => {
   it('should display shipping prices', () => {
     const wrapper = mount(ShippingMethodSelector, {
       props: defaultProps,
+      global: { stubs: globalStubs },
     })
     // Prices are formatted with Intl.NumberFormat with EUR currency
     // Format depends on locale, could be "€5.99" or "5,99 €"
@@ -68,6 +59,7 @@ describe('ShippingMethodSelector', () => {
   it('should emit update event on selection', async () => {
     const wrapper = mount(ShippingMethodSelector, {
       props: defaultProps,
+      global: { stubs: globalStubs },
     })
     // Find the label for express shipping and click it
     const labels = wrapper.findAll('label')
@@ -84,6 +76,7 @@ describe('ShippingMethodSelector', () => {
         ...defaultProps,
         modelValue: availableMethods[1], // Express selected
       },
+      global: { stubs: globalStubs },
     })
     // Selected method should be rendered
     expect(wrapper.html().length).toBeGreaterThan(0)
@@ -92,8 +85,9 @@ describe('ShippingMethodSelector', () => {
   it('should show estimated delivery time', () => {
     const wrapper = mount(ShippingMethodSelector, {
       props: defaultProps,
+      global: { stubs: globalStubs },
     })
-    // Component displays delivery estimates
-    expect(wrapper.text()).toContain('Delivery')
+    // Component displays delivery estimates (i18n keys with "delivery")
+    expect(wrapper.text()).toContain('checkout.shippingMethod.delivery')
   })
 })

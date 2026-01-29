@@ -213,15 +213,23 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
   }
 
   async function processCreditCardPayment(): Promise<PaymentResult> {
+    if (!paymentIntent.value || !paymentClientSecret.value) {
+      const checkoutError = createPaymentError(
+        'Payment intent not initialized',
+        CheckoutErrorCode.PAYMENT_PROCESSING_ERROR,
+      )
+      logCheckoutError(checkoutError, {
+        sessionId: sessionId.value ?? undefined,
+        step: 'processCreditCardPayment',
+      })
+      throw new Error('Payment intent not initialized')
+    }
+
+    if (!sessionId.value) {
+      session.setSessionId(session.generateSessionId())
+    }
+
     try {
-      if (!paymentIntent.value || !paymentClientSecret.value) {
-        throw new Error('Payment intent not initialized')
-      }
-
-      if (!sessionId.value) {
-        session.setSessionId(session.generateSessionId())
-      }
-
       const response = await confirmPaymentIntent({
         paymentIntentId: paymentIntent.value,
         sessionId: sessionId.value as string,
@@ -238,18 +246,36 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       }
 
       if (response.requiresAction) {
+        const checkoutError = createPaymentError(
+          'Payment requires additional authentication',
+          CheckoutErrorCode.PAYMENT_PROCESSING_ERROR,
+        )
+        logCheckoutError(checkoutError, {
+          sessionId: sessionId.value ?? undefined,
+          step: 'processCreditCardPayment',
+        })
         throw new Error('Payment requires additional authentication')
       }
 
+      const checkoutError = createPaymentError(
+        response.error || 'Payment failed',
+        CheckoutErrorCode.PAYMENT_FAILED,
+      )
+      logCheckoutError(checkoutError, {
+        sessionId: sessionId.value ?? undefined,
+        step: 'processCreditCardPayment',
+      })
       throw new Error(response.error || 'Payment failed')
     }
     catch (error: unknown) {
-      console.error('Credit card payment failed:', getErrorMessage(error))
-      return {
-        success: false,
-        error: error instanceof Error ? getErrorMessage(error) : 'Payment processing failed',
-        paymentMethod: PAYMENT_METHODS.CREDIT_CARD,
-      }
+      const checkoutError = error instanceof Error
+        ? createPaymentError(getErrorMessage(error), CheckoutErrorCode.PAYMENT_PROCESSING_ERROR)
+        : createPaymentError('Payment processing failed', CheckoutErrorCode.PAYMENT_PROCESSING_ERROR)
+      logCheckoutError(checkoutError, {
+        sessionId: sessionId.value ?? undefined,
+        step: 'processCreditCardPayment',
+      }, error)
+      throw error
     }
   }
 
@@ -269,10 +295,16 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
         catch (error: unknown) {
           // Log CSRF errors for monitoring but don't block operation
           const errorMessage = error instanceof Error ? getErrorMessage(error) : String(error)
-          if (errorMessage.includes('CSRF') || errorMessage.includes('csrf')) {
-            console.error('CSRF error when clearing cart - this may indicate a security issue:', getErrorMessage(error))
+          if (errorMessage.toLowerCase().includes('csrf')) {
+            // CSRF errors are security-related - log to error tracking system
+            logCheckoutError(
+              createSystemError('CSRF error when clearing cart', CheckoutErrorCode.CSRF_ERROR),
+              { sessionId: activeSession, step: 'clearCart' },
+              error,
+            )
           }
           else {
+            // Other errors are logged but don't block
             console.warn('Failed to clear remote cart:', error)
           }
         }
@@ -287,8 +319,8 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
     }
   }
 
-  async function sendConfirmationEmail(): Promise<void> {
-    if (!orderData.value) return
+  async function sendConfirmationEmail(): Promise<boolean> {
+    if (!orderData.value) return false
 
     try {
       // Determine the email to use
@@ -305,11 +337,18 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
           sessionId: sessionId.value,
           email,
         })
+        return true
       }
+      return false
     }
     catch (error: unknown) {
-      console.error('Failed to send confirmation email:', getErrorMessage(error))
-      // Don't throw - this is a non-critical operation
+      const errorMsg = getErrorMessage(error)
+      logCheckoutError(
+        createSystemError(`Failed to send confirmation email: ${errorMsg}`, CheckoutErrorCode.EMAIL_SEND_FAILED),
+        { sessionId: sessionId.value ?? undefined, step: 'sendConfirmationEmail' },
+        error,
+      )
+      return false
     }
   }
 
@@ -340,10 +379,8 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
       }
 
       // Prepare customer information
-      // NOTE: Email hardcoded for development/testing with Resend
-      // Resend requires verified email addresses in test mode
-      // This allows monitoring all order confirmations in one inbox for validation
-      const guestEmail = 'caraseli02@gmail.com'
+      // Use the customer's actual email from guest info or fallback
+      const guestEmail = guestInfo.value?.email?.trim() || ''
       const firstName = shippingInfo.value.address.firstName || ''
       const lastName = shippingInfo.value.address.lastName || ''
       const customerName = `${firstName} ${lastName}`.trim() || 'Customer'
@@ -396,22 +433,41 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
     }
   }
 
-  async function completeCheckout(completedOrderData: OrderData): Promise<void> {
+  async function completeCheckout(completedOrderData: OrderData): Promise<{ success: boolean, postProcessingErrors: string[] }> {
+    const postProcessingErrors: string[] = []
+
     try {
-      // Non-blocking post-checkout operations
+      // Non-blocking post-checkout operations - track failures for user notification
       // Note: Cart clearing moved to confirmation page to prevent race condition
       // with navigation. Cart is now cleared after user successfully lands on
       // confirmation page, ensuring middleware doesn't see empty cart during redirect.
 
-      sendConfirmationEmail().catch((error: any) => {
-        console.error('Failed to send confirmation email (non-blocking):', getErrorMessage(error))
+      // Send confirmation email - track if it fails
+      const emailResult = await sendConfirmationEmail().catch((error: unknown) => {
+        const errorMsg = getErrorMessage(error)
+        logCheckoutError(
+          createSystemError(`Failed to send confirmation email: ${errorMsg}`, CheckoutErrorCode.EMAIL_SEND_FAILED),
+          { sessionId: sessionId.value ?? undefined, step: 'sendConfirmationEmail' },
+          error,
+        )
+        postProcessingErrors.push('confirmation email')
+        return false
       })
+
+      if (!emailResult) {
+        postProcessingErrors.push('confirmation email')
+      }
 
       // Unlock the cart after successful checkout
       if (sessionId.value) {
-        cartStore.unlockCart(sessionId.value).catch((error: any) => {
-          console.warn('Failed to unlock cart after checkout:', error)
-          // Continue even if unlock fails - cart will auto-unlock on timeout
+        await cartStore.unlockCart(sessionId.value).catch((error: unknown) => {
+          const errorMsg = getErrorMessage(error)
+          logCheckoutError(
+            createSystemError(`Failed to unlock cart: ${errorMsg}`, CheckoutErrorCode.CART_UNLOCK_FAILED),
+            { sessionId: sessionId.value ?? undefined, step: 'unlockCart' },
+            error,
+          )
+          postProcessingErrors.push('cart unlock')
         })
       }
 
@@ -425,23 +481,50 @@ export const useCheckoutPaymentStore = defineStore('checkout-payment', () => {
         orderData: completedOrderData, // Use the fresh data passed from createOrderRecord
       })
 
-      // Show success message
+      // Show success message (with warning if post-processing had issues)
       try {
-        toast.success(
-          t('checkout.success.orderCompleted'),
-          t('checkout.success.orderConfirmation'),
-        )
+        if (postProcessingErrors.length > 0) {
+          // Some post-processing failed - warn user but confirm order was placed
+          toast.warning(
+            t('checkout.success.orderCompleted'),
+            t('checkout.warnings.postProcessingFailed', 'Order confirmed! Confirmation details may be delayed. Check your email or contact support.'),
+          )
+        }
+        else {
+          toast.success(
+            t('checkout.success.orderCompleted'),
+            t('checkout.success.orderConfirmation'),
+          )
+        }
       }
-      catch (toastError: any) {
+      catch (toastError: unknown) {
         // Toast is non-critical UX feedback - log for debugging but don't fail checkout
-        console.warn('Toast notification failed:', toastError?.message || 'Unknown error')
+        const errorMsg = toastError instanceof Error ? toastError.message : 'Unknown toast error'
+        console.warn('Toast notification failed:', errorMsg)
       }
+
+      return { success: true, postProcessingErrors }
     }
     catch (error: unknown) {
-      // Log error for debugging - order may have been created but post-processing failed
-      console.error('Failed to complete checkout post-processing:', getErrorMessage(error))
-      // Note: At this point the order has likely been created. We don't throw here
-      // to avoid confusing the user - they should check their orders.
+      // Serious error - order may have been created but we can't confirm
+      const errorMsg = getErrorMessage(error)
+      const checkoutError = createSystemError(
+        `Failed to complete checkout post-processing: ${errorMsg}`,
+        CheckoutErrorCode.CHECKOUT_COMPLETION_FAILED,
+      )
+      logCheckoutError(checkoutError, {
+        sessionId: sessionId.value ?? undefined,
+        step: 'completeCheckout',
+        orderId: completedOrderData.orderId,
+      }, error)
+
+      // Show warning to user - they should check their orders
+      toast.warning(
+        t('checkout.success.orderCreated'),
+        t('checkout.warnings.checkOrders', 'Your order was placed but we had trouble confirming. Please check your orders page or contact support.'),
+      )
+
+      return { success: false, postProcessingErrors: [...postProcessingErrors, 'completion failed'] }
     }
   }
 

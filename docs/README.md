@@ -234,6 +234,13 @@ Example:
 
 ## 🔄 Recent Changes
 
+### January 27, 2026 - Product Detail Page Refactoring (PR #365)
+- ✅ Split 1,033-line product detail page into 11 sub-components
+- ✅ Created useProductDetail composable (288 lines)
+- ✅ Added E2E tests (products-detail.spec.ts)
+- ✅ Added visual tests (product-detail-visual.spec.ts - 40 tests)
+- ✅ Documentation: test-infrastructure.md, bug-patterns.md, refactoring/patterns.md
+
 ### January 25, 2026 - Documentation Expansion
 - ✅ Added [Bug Patterns](reference/bug-patterns.md) - Anti-patterns to avoid
 - ✅ Added [Refactoring Patterns](reference/refactoring/patterns.md) - Component decomposition guide
@@ -274,9 +281,9 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 
 ---
 
-**Last Updated:** January 25, 2026  
-**Migration Status:** ✅ Complete  
-**Documentation Version:** 2.0 (Diátaxis)
+**Last Updated:** January 27, 2026
+**Migration Status:** ✅ Complete
+**Documentation Version:** 2.1 (Diátaxis + PR #365 updates)
 
 ---
 

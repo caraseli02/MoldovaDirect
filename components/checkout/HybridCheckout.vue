@@ -1,11 +1,39 @@
 <template>
   <div class="hybrid-checkout">
+    <!-- Skip Navigation Link for Accessibility -->
+    <a
+      href="#checkout-main"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded focus:shadow-lg focus:ring-2 focus:ring-slate-500"
+    >
+      {{ $t('accessibility.skipToMainContent') }}
+    </a>
+    <a
+      href="#order-summary"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-16 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded focus:shadow-lg focus:ring-2 focus:ring-slate-500"
+    >
+      {{ $t('accessibility.skipToOrderSummary') }}
+    </a>
+
+    <!-- Live Regions for Dynamic Content Announcements -->
+    <div
+      aria-live="polite"
+      aria-atomic="true"
+      class="sr-only"
+    >
+      <template v-if="isAddressValid && !showShippingSectionLiveAnnounced">
+        {{ $t('checkout.shippingSectionAvailable') }}
+      </template>
+      <template v-if="selectedMethod && !showPaymentSectionLiveAnnounced">
+        {{ $t('checkout.paymentSectionAvailable') }}
+      </template>
+    </div>
+
     <!-- Express Checkout Banner for Returning Users -->
     <ExpressCheckoutBannerEnhanced
       v-if="showExpressCheckout"
       :default-address="defaultAddress"
       :preferred-shipping-method="preferredShippingMethod"
-      :order-total="formattedTotal"
+      :order-total="formatted"
       :loading="processingOrder"
       @place-order="handleExpressPlaceOrder"
       @edit="dismissExpressCheckout"
@@ -15,8 +43,13 @@
     <!-- Main Checkout Form (shown when express is dismissed or for new users) -->
     <div
       v-show="!showExpressCheckout"
+      id="checkout-main"
       class="checkout-form-container"
     >
+      <h1 class="sr-only">
+        {{ $t('checkout.title') || 'Checkout' }}
+      </h1>
+
       <!-- Guest/Login Options (for non-authenticated users) -->
       <GuestCheckoutPrompt
         v-if="!user && !showGuestForm"
@@ -25,9 +58,10 @@
       />
 
       <!-- Single Page Checkout Form -->
-      <div
+      <form
         v-if="user || showGuestForm"
         class="grid grid-cols-1 lg:grid-cols-3 gap-8"
+        @submit.prevent="handlePlaceOrderWithValidation"
       >
         <!-- Left Column: Form Sections -->
         <div class="lg:col-span-2 space-y-4">
@@ -132,6 +166,7 @@
                 :error="methodsError"
                 :validation-error="shippingMethodValidationError"
                 :auto-selected="shippingMethodAutoSelected"
+                :currency="orderCurrency"
                 @retry="retryLoadingMethods"
               />
             </div>
@@ -159,49 +194,53 @@
 
           <!-- Terms & Place Order Section -->
           <CheckoutTermsSection
-            v-if="canShowPlaceOrder"
+            v-if="true"
             v-model:terms-accepted="termsAccepted"
             v-model:privacy-accepted="privacyAccepted"
             v-model:marketing-consent="marketingConsent"
             :can-place-order="canPlaceOrder"
             :processing-order="processingOrder"
-            :formatted-total="formattedTotal"
+            :formatted-total="formatted"
             :show-terms-error="showTermsError"
             :show-privacy-error="showPrivacyError"
-            @place-order="handlePlaceOrder"
+            @place-order="handlePlaceOrderWithValidation"
           />
         </div>
 
         <!-- Right Column: Sticky Order Summary -->
         <div class="lg:col-span-1">
-          <div class="sticky top-6">
+          <div
+            id="order-summary"
+            class="sticky top-6"
+          >
             <OrderSummaryCard
               :items="cartItems"
-              :subtotal="calculatedSubtotal"
-              :shipping-cost="calculatedShippingCost"
-              :tax="calculatedTax"
-              :total="calculatedTotal"
+              :subtotal="subtotal"
+              :shipping-cost="shippingCost"
+              :tax="tax"
+              :total="total"
               :shipping-method="selectedMethod"
               :loading="loadingOrder"
+              :currency="orderCurrency"
             />
           </div>
         </div>
-      </div>
+      </form>
     </div>
 
     <!-- Mobile Sticky Footer -->
     <CheckoutMobileFooter
-      v-if="(user || showGuestForm) && canShowPlaceOrder && !showExpressCheckout"
+      v-if="(user || showGuestForm) && !showExpressCheckout"
       :can-place-order="canPlaceOrder"
       :processing-order="processingOrder"
-      :formatted-total="formattedTotal"
-      @place-order="handlePlaceOrder"
+      :formatted-total="formatted"
+      @place-order="handlePlaceOrderWithValidation"
     />
 
     <!-- Back to Cart Link -->
     <div
       v-if="!showExpressCheckout && (user || showGuestForm)"
-      class="mt-6 text-center lg:text-left"
+      class="mt-6 text-center lg:text-left pb-28 lg:pb-0"
     >
       <NuxtLink
         :to="localePath('/cart')"
@@ -212,6 +251,7 @@
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path
             stroke-linecap="round"
@@ -227,11 +267,18 @@
 </template>
 
 <script setup lang="ts">
-import type { ShippingInformation, PaymentMethod as PaymentMethodType, ShippingMethod } from '~/types/checkout'
-import type { GuestInfo } from '~/composables/useGuestCheckout'
-import type { Address } from '~/types/address'
+import type { PaymentMethod } from '~/types/checkout'
+import type { ValidatableForm, PaymentForm } from '~/composables/useCheckoutOrder'
 import { useCartStore } from '~/stores/cart'
-import { useCheckoutSessionStore } from '~/stores/checkout/session'
+
+/**
+ * HybridCheckout Component
+ *
+ * Orchestrates the checkout flow by coordinating child components and composables.
+ * Follows the principle of separating business logic from UI presentation.
+ *
+ * @see {CODE_DESIGN_PRINCIPLES.md} Component size limits & three-layer separation
+ */
 
 // Components - with error handling for async loading failures
 const createAsyncComponent = (loader: () => Promise<unknown>, name: string) =>
@@ -297,9 +344,9 @@ const cartStore = useCartStore()
 const { t } = useI18n()
 const toast = useToast()
 
-// Component refs
-const addressFormRef = ref<{ validateForm: () => boolean } | null>(null)
-const paymentSectionRef = ref<{ validateForm: () => boolean, getStripeCardElement: () => any } | null>(null)
+// Component refs with proper types
+const addressFormRef = ref<ValidatableForm | null>(null)
+const paymentSectionRef = ref<PaymentForm | null>(null)
 
 // Guest checkout composable
 const {
@@ -336,25 +383,19 @@ const {
 } = useShippingMethods(shippingAddress)
 
 // Local state
-const processingOrder = ref(false)
 const loadingOrder = ref(false)
 const expressCheckoutDismissed = ref(false)
 const shippingInstructions = ref('')
 const stripeReady = ref(false)
 const stripeError = ref<string | null>(null)
+const showShippingSectionLiveAnnounced = ref(false)
+const showPaymentSectionLiveAnnounced = ref(false)
 
 // Payment state
-const paymentMethod = ref<PaymentMethodType>({
+const paymentMethod = ref<PaymentMethod>({
   type: 'cash',
   saveForFuture: false,
 })
-
-// Terms state
-const termsAccepted = ref(false)
-const privacyAccepted = ref(false)
-const marketingConsent = ref(false)
-const showTermsError = ref(false)
-const showPrivacyError = ref(false)
 
 // Countries with flags for display in dropdown
 const availableCountries = ref([
@@ -366,47 +407,64 @@ const availableCountries = ref([
   { code: 'IT', name: 'Italy', flag: '🇮🇹' },
 ])
 
-// Computed - map cart items to the format expected by OrderSummaryCard
-const cartItems = computed(() => {
-  return (cartStore.items || []).map(item => ({
-    productId: item.product.id,
-    name: item.product.name,
-    quantity: item.quantity,
-    price: item.product.price,
-    images: item.product.images,
-  }))
+// Checkout totals composable
+const { subtotal, shippingCost, tax, total, formatted, cartItems } = useCheckoutTotals(selectedMethod)
+
+// Checkout terms composable
+const {
+  termsAccepted,
+  privacyAccepted,
+  marketingConsent,
+  showTermsError,
+  showPrivacyError,
+  validateTerms,
+} = useCheckoutTerms()
+
+// Checkout validation composable
+const {
+  isAddressComplete,
+  isPaymentValid,
+  shippingMethodValidationError,
+  canShowPlaceOrder,
+  canPlaceOrder,
+} = useCheckoutValidation({
+  isAddressValid,
+  shippingAddress,
+  selectedMethod,
+  isGuestInfoValid,
+  paymentMethod,
+  stripeReady,
+  stripeError,
+  termsAccepted,
+  privacyAccepted,
+  isAuthenticated: computed(() => !!user.value),
 })
 
-const orderData = computed(() => checkoutStore.orderData)
-
-// Calculate order totals directly from cart items (fallback for reactivity issues)
-const calculatedSubtotal = computed(() => {
-  return cartStore.items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+// Checkout order processing composable
+const {
+  processingOrder,
+  handleExpressPlaceOrder,
+  handlePlaceOrder,
+  validateForms,
+} = useCheckoutOrder({
+  total,
+  shippingAddress,
+  selectedMethod,
+  shippingInstructions,
+  paymentMethod,
+  marketingConsent,
+  defaultAddress,
+  addressFormRef,
+  paymentSectionRef,
 })
 
-const calculatedShippingCost = computed(() => {
-  return selectedMethod.value?.price || 0
-})
-
-const calculatedTax = computed(() => {
-  // 21% VAT for Spain
-  return Math.round(calculatedSubtotal.value * 0.21 * 100) / 100
-})
-
-const calculatedTotal = computed(() => {
-  return calculatedSubtotal.value + calculatedShippingCost.value + calculatedTax.value
-})
-
-const formattedTotal = computed(() => {
-  const total = calculatedTotal.value || orderData.value?.total || 0
-  return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'EUR',
-  }).format(total)
-})
-
+// Computed
 const preferredShippingMethod = computed(() => {
   return checkoutStore.preferences?.preferred_shipping_method || null
+})
+
+const orderCurrency = computed(() => {
+  return checkoutStore.orderData?.currency || 'EUR'
 })
 
 const showExpressCheckout = computed(() => {
@@ -414,41 +472,6 @@ const showExpressCheckout = computed(() => {
     && defaultAddress.value
     && !expressCheckoutDismissed.value
     && savedAddresses.value.length > 0
-})
-
-const isAddressComplete = computed(() => {
-  return isAddressValid.value && shippingAddress.value.firstName && shippingAddress.value.street
-})
-
-const isPaymentValid = computed(() => {
-  if (paymentMethod.value.type === 'cash') {
-    return true
-  }
-  if (paymentMethod.value.type === 'credit_card') {
-    return stripeReady.value && !stripeError.value && paymentMethod.value.creditCard?.holderName
-  }
-  return false
-})
-
-const shippingMethodValidationError = computed(() => {
-  if (!selectedMethod.value && isAddressValid.value) {
-    return t('checkout.validation.shippingMethodRequired')
-  }
-  return null
-})
-
-const canShowPlaceOrder = computed(() => {
-  return isAddressValid.value && selectedMethod.value && isPaymentValid.value
-})
-
-const canPlaceOrder = computed(() => {
-  const guestCheckPassed = user.value ? true : isGuestInfoValid.value
-  return guestCheckPassed
-    && isAddressValid.value
-    && selectedMethod.value !== null
-    && isPaymentValid.value
-    && termsAccepted.value
-    && privacyAccepted.value
 })
 
 // Methods
@@ -470,75 +493,25 @@ const onStripeError = (error: string | null) => {
   stripeError.value = error
 }
 
-const handleExpressPlaceOrder = async () => {
-  if (!defaultAddress.value) return
-
-  processingOrder.value = true
-
-  try {
-    // Get default shipping method
-    const defaultMethod: ShippingMethod = {
-      id: 'standard',
-      name: t('checkout.shippingMethod.standard.name', 'Standard Shipping'),
-      description: t('checkout.shippingMethod.standard.description', 'Delivery in 3-5 business days'),
-      price: 5.99,
-      estimatedDays: 4,
-    }
-
-    // Create shipping info
-    const shippingInfo: ShippingInformation = {
-      address: defaultAddress.value,
-      method: defaultMethod,
-      instructions: undefined,
-    }
-
-    // Update checkout store
-    await checkoutStore.updateShippingInfo(shippingInfo)
-    await checkoutStore.updatePaymentMethod({ type: 'cash', saveForFuture: false })
-
-    // Process order
-    await processOrder()
+// Watch for section visibility changes and announce to screen readers
+watch(isAddressValid, (isValid) => {
+  if (isValid) {
+    showShippingSectionLiveAnnounced.value = true
   }
-  catch (error: unknown) {
-    console.error('Express checkout failed:', error)
+})
 
-    // Provide actionable guidance based on error type
-    const errorMessage = getErrorMessage(error)
-    const isNetworkError = errorMessage.includes('network') || errorMessage.includes('fetch') || errorMessage.includes('Failed to fetch')
-    const isSessionError = errorMessage.includes('session') || errorMessage.includes('expired') || errorMessage.includes('unauthorized')
-
-    if (isNetworkError) {
-      toast.error(
-        t('checkout.errors.networkError', 'Connection Error'),
-        t('checkout.errors.checkConnection', 'Please check your internet connection and try again.'),
-      )
-    }
-    else if (isSessionError) {
-      toast.error(
-        t('checkout.errors.sessionExpired', 'Session Expired'),
-        t('checkout.errors.refreshPage', 'Your session has expired. Please refresh the page.'),
-      )
-    }
-    else {
-      toast.error(
-        t('checkout.errors.expressCheckoutFailed', 'Express Checkout Failed'),
-        t('checkout.errors.tryFullCheckout', 'Please use the full checkout form below.'),
-      )
-      // Offer to switch to full checkout
-      dismissExpressCheckout()
-    }
+watch(selectedMethod, (method) => {
+  if (method) {
+    showPaymentSectionLiveAnnounced.value = true
   }
-  finally {
-    processingOrder.value = false
-  }
-}
+})
 
-const handlePlaceOrder = async () => {
+/**
+ * Wrapper for handlePlaceOrder that validates forms and terms first
+ */
+const handlePlaceOrderWithValidation = async () => {
   // Validate terms
-  showTermsError.value = !termsAccepted.value
-  showPrivacyError.value = !privacyAccepted.value
-
-  if (!termsAccepted.value || !privacyAccepted.value) {
+  if (!validateTerms()) {
     toast.error(
       t('checkout.validation.error'),
       t('checkout.validation.acceptTermsRequired'),
@@ -557,200 +530,13 @@ const handlePlaceOrder = async () => {
     }
   }
 
-  // Validate address form
-  if (addressFormRef.value && !addressFormRef.value.validateForm()) {
-    toast.error(
-      t('checkout.validation.error'),
-      t('checkout.validation.addressInvalid'),
-    )
+  // Validate forms
+  if (!(await validateForms())) {
     return
   }
 
-  // Validate payment form (including Stripe validation for credit cards)
-  if (paymentSectionRef.value && !paymentSectionRef.value.validateForm()) {
-    toast.error(
-      t('checkout.validation.error'),
-      t('checkout.validation.paymentInvalid'),
-    )
-    return
-  }
-
-  processingOrder.value = true
-
-  try {
-    // Create shipping information
-    const shippingInfo: ShippingInformation = {
-      address: shippingAddress.value as Address,
-      method: selectedMethod.value!,
-      instructions: shippingInstructions.value || undefined,
-    }
-
-    // Update guest info if needed
-    if (!user.value && showGuestForm.value) {
-      await checkoutStore.updateGuestInfo({
-        email: guestInfo.value.email.trim(),
-        emailUpdates: guestInfo.value.emailUpdates,
-      })
-    }
-
-    // Update checkout store
-    await checkoutStore.updateShippingInfo(shippingInfo)
-    await checkoutStore.updatePaymentMethod(paymentMethod.value)
-
-    // Process order
-    await processOrder()
-  }
-  catch (error: unknown) {
-    console.error('Failed to place order:', error)
-
-    // Provide user-friendly error message without exposing technical details
-    const errorMessage = getErrorMessage(error)
-    const isNetworkError = errorMessage.includes('network') || errorMessage.includes('fetch') || errorMessage.includes('Failed to fetch')
-    const isValidationError = errorMessage.includes('validation') || errorMessage.includes('invalid')
-
-    if (isNetworkError) {
-      toast.error(
-        t('checkout.errors.networkError', 'Connection Error'),
-        t('checkout.errors.checkConnection', 'Please check your internet connection and try again.'),
-      )
-    }
-    else if (isValidationError) {
-      toast.error(
-        t('checkout.errors.validationFailed', 'Please Check Your Information'),
-        t('checkout.errors.reviewFields', 'Some fields may need to be corrected.'),
-      )
-    }
-    else {
-      toast.error(
-        t('checkout.errors.orderFailed', 'Order Failed'),
-        t('checkout.errors.pleaseTryAgain', 'Please try again or contact support if the issue persists.'),
-      )
-    }
-  }
-  finally {
-    processingOrder.value = false
-  }
-}
-
-const processOrder = async () => {
-  // Set terms acceptance in store before processing
-  ;(checkoutStore).setTermsAccepted(true)
-  ;(checkoutStore).setPrivacyAccepted(true)
-  ;(checkoutStore).setMarketingConsent(marketingConsent.value)
-
-  // Set step to review for checkout flow
-  ;(checkoutStore).currentStep = 'review'
-
-  try {
-    // Handle Stripe payment processing for credit cards
-    if (paymentMethod.value.type === 'credit_card') {
-      await processStripePayment()
-    }
-    else {
-      // Process other payment types (cash, etc.) using the unified checkout store method
-      await checkoutStore.processPayment()
-    }
-  }
-  catch (paymentError: any) {
-    // Log error for debugging (production would use proper error tracking)
-    console.error('Payment processing failed:', paymentError)
-    throw paymentError // Re-throw to be handled by caller
-  }
-
-  try {
-    // Navigate to confirmation after successful payment
-    await navigateTo(localePath('/checkout/confirmation'))
-  }
-  catch (navError: any) {
-    // Payment succeeded but navigation failed - critical scenario
-    console.error('Navigation to confirmation failed after successful payment:', navError)
-
-    toast.warning(
-      t('checkout.success.orderCompleted'),
-      t('checkout.errors.redirectManually', 'Please navigate to your orders to see confirmation.'),
-    )
-
-    // Attempt recovery by using window.location
-    setTimeout(() => {
-      window.location.href = localePath('/checkout/confirmation')
-    }, 2000)
-  }
-}
-
-const processStripePayment = async () => {
-  const { useStripe } = await import('~/composables/useStripe')
-  const { stripe, initializeStripe } = useStripe()
-
-  // Ensure Stripe is initialized
-  if (!stripe.value) {
-    await initializeStripe()
-  }
-
-  if (!stripe.value) {
-    throw new Error('Stripe not available')
-  }
-
-  // Get the Stripe card element from the payment form
-  const cardElement = paymentSectionRef.value?.getStripeCardElement()
-  if (!cardElement) {
-    throw new Error('Card element not available')
-  }
-
-  // Create payment intent on server
-  const paymentIntentData = await $fetch('/api/checkout/create-payment-intent', {
-    method: 'POST',
-    body: {
-      amount: Math.round(calculatedTotal.value * 100), // Convert to cents
-      currency: 'eur',
-      sessionId: checkoutStore.sessionId || 'temp-session',
-    },
-  })
-
-  if (!paymentIntentData.success || !paymentIntentData.paymentIntent.client_secret) {
-    throw new Error('Failed to create payment intent')
-  }
-
-  // Confirm payment with Stripe
-  const { error: stripeError, paymentIntent } = await stripe.value.confirmCardPayment(
-    paymentIntentData.paymentIntent.client_secret,
-    {
-      payment_method: {
-        card: cardElement,
-        billing_details: {
-          name: paymentMethod.value.creditCard?.holderName || '',
-          address: {
-            line1: shippingAddress.value.street || '',
-            city: shippingAddress.value.city || '',
-            postal_code: shippingAddress.value.postalCode || '',
-            country: shippingAddress.value.country || '',
-          },
-        },
-      },
-    },
-  )
-
-  if (stripeError) {
-    throw new Error(stripeError.message || 'Payment failed')
-  }
-
-  if (paymentIntent?.status !== 'succeeded') {
-    throw new Error('Payment was not completed successfully')
-  }
-
-  // Store payment intent in checkout session store
-  const sessionStore = useCheckoutSessionStore()
-  sessionStore.setPaymentIntent(paymentIntent.id)
-  sessionStore.setPaymentClientSecret(paymentIntentData.paymentIntent.client_secret)
-
-  // Update payment method with Stripe transaction details
-  await checkoutStore.updatePaymentMethod({
-    ...paymentMethod.value,
-    stripePaymentIntentId: paymentIntent.id,
-    transactionId: paymentIntent.id,
-  })
-
-  // Complete the checkout process
-  await checkoutStore.processPayment()
+  // Process order
+  await handlePlaceOrder(guestInfo.value)
 }
 
 // Initialize
@@ -828,7 +614,6 @@ onMounted(async () => {
   background-color: white;
   border-radius: 0.5rem;
   border: 1px solid rgb(229 231 235);
-  overflow: hidden;
 }
 
 :root.dark .checkout-section,
@@ -920,6 +705,17 @@ onMounted(async () => {
 @media (max-width: 1024px) {
   .checkout-form-container {
     padding-bottom: 120px;
+  }
+}
+
+/* Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in,
+  .checkout-section-highlight,
+  .section-complete,
+  * {
+    animation: none !important;
+    transition: none !important;
   }
 }
 </style>

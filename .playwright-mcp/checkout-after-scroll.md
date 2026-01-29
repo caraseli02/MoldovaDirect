@@ -1,0 +1,220 @@
+- generic [ref=e363]:
+  - banner [ref=e364]:
+    - generic [ref=e366]:
+      - link "Moldova Direct" [ref=e367] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e368]: Moldova Direct
+      - generic [ref=e369]:
+        - generic [ref=e370]: Compra Segura
+        - img [ref=e371]
+      - generic [ref=e374]: 2 artículos
+  - main [ref=e375]:
+    - generic [ref=e379]:
+      - generic [ref=e381]:
+        - generic [ref=e382]:
+          - generic [ref=e383]:
+            - generic [ref=e385]:
+              - generic [ref=e386]: "1"
+              - heading "Contacto" [level=3] [ref=e387]
+            - generic [ref=e389]:
+              - heading "Información de Contacto" [level=3] [ref=e390]
+              - generic [ref=e391]:
+                - generic [ref=e392]:
+                  - generic [ref=e393]:
+                    - text: Dirección de Email
+                    - generic [ref=e394]: "*"
+                  - textbox "Dirección de Email *" [ref=e395]:
+                    - /placeholder: Ingresa tu dirección de email
+                    - text: john.doe@example.com
+                - generic [ref=e396]:
+                  - checkbox "Enviarme actualizaciones por email sobre mi pedido" [ref=e397]
+                  - generic [ref=e398]: Enviarme actualizaciones por email sobre mi pedido
+          - generic [ref=e399]:
+            - generic [ref=e400]:
+              - generic [ref=e401]:
+                - generic [ref=e402]: "2"
+                - heading "Dirección de Envío" [level=3] [ref=e403]
+              - img [ref=e405]
+            - generic [ref=e409]:
+              - generic [ref=e410]:
+                - generic [ref=e411]: Nombre Completo *
+                - textbox "Nombre Completo *" [ref=e412]:
+                  - /placeholder: "Ej: Juan García López"
+                  - text: John Doe
+              - generic [ref=e413]:
+                - generic [ref=e414]: Dirección *
+                - textbox "Dirección *" [ref=e416]:
+                  - /placeholder: Calle, número, piso...
+                  - text: 123 Main Street
+                - paragraph [ref=e417]: Comienza a escribir para sugerencias de direcciones
+              - generic [ref=e418]:
+                - generic [ref=e419]:
+                  - generic [ref=e420]: Ciudad *
+                  - textbox "Ciudad *" [ref=e421]:
+                    - /placeholder: Ingresa tu ciudad
+                    - text: Madrid
+                - generic [ref=e422]:
+                  - generic [ref=e423]: Código Postal *
+                  - textbox "Código Postal *" [ref=e424]:
+                    - /placeholder: "Ej: 28001"
+                    - text: "28001"
+              - generic [ref=e425]:
+                - generic [ref=e426]: País *
+                - combobox [ref=e427]:
+                  - generic: Selecciona un país
+              - generic [ref=e428]:
+                - generic [ref=e429]: Teléfono (para notificaciones de entrega)
+                - textbox "Teléfono (para notificaciones de entrega)" [ref=e430]:
+                  - /placeholder: +34 600 000 000
+                  - text: +34 600 123 456
+                - paragraph [ref=e431]: Para contactarte sobre la entrega
+          - generic [ref=e432]:
+            - generic [ref=e433]:
+              - generic [ref=e434]:
+                - generic [ref=e435]: "3"
+                - heading "Método de Envío" [level=3] [ref=e436]
+              - img [ref=e543]
+            - generic [ref=e438]:
+              - generic [ref=e439]:
+                - heading "Método de Envío" [level=3] [ref=e440]
+                - paragraph [ref=e441]: Elige cómo te gustaría recibir tu pedido
+              - radiogroup "Método de Envío" [ref=e443]:
+                - generic [ref=e446] [cursor=pointer]:
+                  - radio "standard" [checked] [ref=e447]:
+                    - img [ref=e546]
+                  - generic [ref=e448]:
+                    - generic [ref=e449]:
+                      - heading "Envío Estándar" [level=4] [ref=e450]
+                      - generic [ref=e452]: 5,99 €
+                    - paragraph [ref=e453]: Entrega en 3-5 días hábiles
+                    - generic [ref=e454]:
+                      - img [ref=e455]
+                      - generic [ref=e457]: Delivery in 4 business days
+                - generic [ref=e460] [cursor=pointer]:
+                  - radio "express" [ref=e461]
+                  - generic [ref=e462]:
+                    - generic [ref=e463]:
+                      - heading "Envío Express" [level=4] [ref=e464]
+                      - generic [ref=e465]:
+                        - generic [ref=e466]: Express
+                        - generic [ref=e467]: 12,99 €
+                    - paragraph [ref=e468]: Entrega en 1-2 días hábiles
+                    - generic [ref=e469]:
+                      - img [ref=e470]
+                      - generic [ref=e472]: Delivery tomorrow
+                    - paragraph [ref=e474]: Order before 2 PM for next-day delivery
+          - generic [ref=e548]:
+            - generic [ref=e549]:
+              - generic [ref=e550]:
+                - generic [ref=e551]: "4"
+                - heading "Pago" [level=3] [ref=e552]
+              - img [ref=e554]
+            - generic [ref=e556]:
+              - radiogroup [ref=e557]:
+                - generic [ref=e559] [cursor=pointer]:
+                  - radio "cash" [checked] [ref=e560]:
+                    - img [ref=e562]
+                  - generic [ref=e564]:
+                    - generic [ref=e565]: 💵
+                    - generic [ref=e566]:
+                      - paragraph [ref=e567]: Pago Contra Entrega
+                      - paragraph [ref=e568]: Paga en efectivo cuando se entregue tu pedido
+                - generic [ref=e570] [cursor=pointer]:
+                  - radio "credit_card" [ref=e571]
+                  - generic [ref=e572]:
+                    - generic [ref=e573]: 💳
+                    - generic [ref=e574]:
+                      - paragraph [ref=e575]: Tarjeta de Crédito
+                      - paragraph [ref=e576]: Paga con Visa, Mastercard u otras tarjetas
+              - generic [ref=e577]:
+                - paragraph [ref=e578]: Próximamente
+                - generic [ref=e579]:
+                  - generic [ref=e580]: 🅿️ PayPal
+                  - generic [ref=e581]: 🏦 Transferencia Bancaria
+          - generic [ref=e584]:
+            - generic [ref=e585]: Instrucciones de Entrega (Opcional)
+            - textbox "Instrucciones de Entrega (Opcional)" [ref=e586]:
+              - /placeholder: "¿Alguna instrucción especial para la entrega? (ej: dejar en la puerta, tocar timbre, etc.)"
+            - generic [ref=e587]:
+              - paragraph [ref=e588]: Estas instrucciones se compartirán con el servicio de entrega
+              - paragraph [ref=e589]: 0 / 500
+          - generic [ref=e477]:
+            - generic [ref=e478]:
+              - generic [ref=e479]:
+                - checkbox [checked] [ref=e480]:
+                  - generic:
+                    - img
+                - generic [ref=e481]:
+                  - text: Acepto los
+                  - link "Términos y Condiciones" [ref=e482] [cursor=pointer]:
+                    - /url: /terms
+                  - text: "*"
+              - generic [ref=e483]:
+                - checkbox [checked] [ref=e484]:
+                  - generic:
+                    - img
+                - generic [ref=e485]:
+                  - text: Consiento el procesamiento de mis datos personales según la
+                  - link "Política de Privacidad" [ref=e486] [cursor=pointer]:
+                    - /url: /privacy
+                  - text: "*"
+              - generic [ref=e487]:
+                - checkbox [ref=e488]
+                - generic [ref=e489]: Me gustaría recibir comunicaciones de marketing y ofertas especiales
+            - button "Realizar Pedido - 13,23 €" [active] [ref=e590]:
+              - generic [ref=e491]:
+                - text: Realizar Pedido - 13,23 €
+                - img
+        - generic [ref=e494]:
+          - generic [ref=e496]:
+            - heading "Resumen del Pedido" [level=3] [ref=e497]
+            - generic [ref=e498]: 1 artículo
+          - generic [ref=e499]:
+            - button "Mostrar artículos" [ref=e501]:
+              - generic [ref=e502]: Mostrar artículos
+              - img
+            - generic [ref=e503]:
+              - generic [ref=e504]:
+                - generic [ref=e505]: Subtotal
+                - generic [ref=e506]: 5,98 €
+              - generic [ref=e507]:
+                - generic [ref=e508]: Envío (Envío Estándar)
+                - generic [ref=e509]: 5,99 €
+              - generic [ref=e510]:
+                - generic [ref=e511]: Impuestos
+                - generic [ref=e512]: 1,26 €
+            - generic [ref=e514]:
+              - generic [ref=e515]: Total
+              - generic [ref=e516]: 13,23 €
+            - generic [ref=e592]:
+              - img [ref=e593]
+              - generic [ref=e595]:
+                - text: "Entrega estimada:"
+                - strong [ref=e596]: dom, 1 feb
+          - generic [ref=e518]:
+            - generic [ref=e519]:
+              - img [ref=e520]
+              - text: Seguro
+            - generic [ref=e522]:
+              - img [ref=e523]
+              - text: Garantizado
+      - link "Volver al Carrito" [ref=e526] [cursor=pointer]:
+        - /url: /cart
+        - img [ref=e527]
+        - text: Volver al Carrito
+  - contentinfo [ref=e529]:
+    - generic [ref=e531]:
+      - generic [ref=e532]:
+        - generic [ref=e533]:
+          - img [ref=e534]
+          - text: Pago Seguro
+        - generic [ref=e536]:
+          - img [ref=e537]
+          - text: Garantía de Devolución
+      - generic [ref=e539]:
+        - link "¿Necesitas Ayuda?" [ref=e540] [cursor=pointer]:
+          - /url: /contact
+        - link "Ayuda" [ref=e541] [cursor=pointer]:
+          - /url: /faq
+  - region "Notifications alt+T":
+    - list
