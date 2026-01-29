@@ -240,6 +240,8 @@ export function useProductsPage(options: UseProductsPageOptions) {
       }
       catch (fetchError: unknown) {
         console.error('[Products Page] Fallback fetch also failed:', getErrorMessage(fetchError))
+        // Set error state that UI can display to user
+        options.error.value = 'Failed to navigate to requested page. Please try again.'
       }
     }
 
@@ -432,6 +434,12 @@ export function useProductsPage(options: UseProductsPageOptions) {
     }
   }, { immediate: false })
 
+  /**
+   * Build URL query object from current component state
+   *
+   * Syncs search, filters, pagination, and sort to URL for
+   * shareable links and browser history support.
+   */
   const buildQueryFromState = () => {
     const query: Record<string, string> = {}
     if (searchQuery.value.trim()) query.q = searchQuery.value.trim()
@@ -452,11 +460,18 @@ export function useProductsPage(options: UseProductsPageOptions) {
     }
     catch (error: unknown) {
       if (error instanceof Error && !error.message.includes('redundant navigation')) {
-        console.warn('[Products Page] Failed to sync filters to URL:', getErrorMessage(error))
+        console.error('[Products Page] Failed to sync filters to URL:', getErrorMessage(error))
       }
     }
   }
 
+  /**
+   * Apply URL query parameters to component state
+   *
+   * Used when URL changes externally (back/forward, direct links).
+   * The syncingFromRoute flag prevents circular updates where URL changes
+   * trigger state changes that trigger URL changes.
+   */
   const applyRouteState = async () => {
     syncingFromRoute.value = true
     try {

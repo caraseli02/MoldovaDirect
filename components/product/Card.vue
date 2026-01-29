@@ -69,7 +69,7 @@
               aria-hidden="true"
             />
             <span class="relative text-[10px] font-bold tracking-[0.2em] uppercase opacity-40">
-              {{ t('products.comingSoon') }}
+              {{ t('products.noImageAvailable') }}
             </span>
           </div>
         </div>
@@ -360,7 +360,6 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Button } from '@/components/ui/button'
 import type { ProductWithRelations } from '~/types'
 import { useCart } from '~/composables/useCart'
 import type { Translations } from '~/types/database'
@@ -413,8 +412,7 @@ const categoryName = computed(() => {
 })
 
 const placeholderConfig = computed(() => {
-  const categorySlug = props.product.category?.slug
-  return getPlaceholderConfig(categorySlug, categoryName.value || null)
+  return getPlaceholderConfig()
 })
 
 const stockStatusClass = computed(() => {

@@ -103,7 +103,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useCart } from '@/composables/useCart'
+// useCart is auto-imported by Nuxt
 import { useLocalePath } from '#imports'
 
 const route = useRoute()

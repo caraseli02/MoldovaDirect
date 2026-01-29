@@ -522,11 +522,7 @@
 </template>
 
 <script setup lang="ts">
-import { Alert, AlertDescription } from '@/components/ui/alert'
-
-import { Checkbox } from '@/components/ui/checkbox'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+// UiAlert, UiAlertDescription, UiCheckbox, UiInput, UiLabel are auto-imported by Nuxt
 import { AlertCircle, CheckCircle2 } from 'lucide-vue-next'
 import PasswordStrengthMeter from '@/components/auth/PasswordStrengthMeter.vue'
 

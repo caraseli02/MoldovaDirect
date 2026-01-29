@@ -12,7 +12,8 @@ function readLastRunId() {
     const payload = JSON.parse(fs.readFileSync(LAST_RUN_FILE, 'utf-8'))
     return payload.runId || null
   }
-  catch {
+  catch (err) {
+    console.warn('[Check Approvals] Failed to parse last-run.json:', err.message)
     return null
   }
 }
@@ -29,7 +30,14 @@ if (!fs.existsSync(decisionsFile)) {
   process.exit(0)
 }
 
-const payload = JSON.parse(fs.readFileSync(decisionsFile, 'utf-8'))
+let payload
+try {
+  payload = JSON.parse(fs.readFileSync(decisionsFile, 'utf-8'))
+}
+catch (parseError) {
+  console.error(`❌ Failed to parse decisions file at ${decisionsFile}:`, parseError.message)
+  process.exit(1)
+}
 const decisions = payload.decisions || {}
 const rejected = Object.entries(decisions).filter(([, v]) => v?.status === 'rejected')
 

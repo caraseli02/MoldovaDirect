@@ -13,12 +13,12 @@ import fs from 'fs'
 export const VISUAL_TESTING_ROOT = path.join(process.cwd(), '.visual-testing')
 
 // Subdirectories
-export const BASELINES_DIR = path.join(VISUAL_TESTING_ROOT, 'baselines')
-export const SNAPSHOTS_DIR = path.join(VISUAL_TESTING_ROOT, 'snapshots')
-export const REPORTS_DIR = path.join(VISUAL_TESTING_ROOT, 'reports')
-export const DECISIONS_DIR = path.join(VISUAL_TESTING_ROOT, 'decisions')
-export const RUN_ID_FILE = path.join(VISUAL_TESTING_ROOT, '.current-run-id')
-export const LAST_RUN_FILE = path.join(VISUAL_TESTING_ROOT, 'last-run.json')
+export const BASELINES_DIR = path.join(VISUAL_TESTING_ROOT, 'baselines') // Reference screenshots (git tracked)
+export const SNAPSHOTS_DIR = path.join(VISUAL_TESTING_ROOT, 'snapshots') // Current test run (gitignored)
+export const REPORTS_DIR = path.join(VISUAL_TESTING_ROOT, 'reports') // HTML review reports (gitignored)
+export const DECISIONS_DIR = path.join(VISUAL_TESTING_ROOT, 'decisions') // Stores approve/reject decisions
+export const RUN_ID_FILE = path.join(VISUAL_TESTING_ROOT, '.current-run-id') // Coordinates parallel workers
+export const LAST_RUN_FILE = path.join(VISUAL_TESTING_ROOT, 'last-run.json') // Tracks most recent test run
 
 // Viewport definitions
 export const VIEWPORTS = {
@@ -44,8 +44,21 @@ export function getRunId(): string {
         fs.writeFileSync(RUN_ID_FILE, generated, { flag: 'wx' })
         currentRunId = generated
       }
-      catch {
-        currentRunId = fs.readFileSync(RUN_ID_FILE, 'utf-8').trim()
+      catch (err) {
+        // Only treat as shared ID if file exists and is readable
+        if (fs.existsSync(RUN_ID_FILE)) {
+          try {
+            currentRunId = fs.readFileSync(RUN_ID_FILE, 'utf-8').trim()
+          }
+          catch (readErr) {
+            console.error('[Visual Testing] Run ID file exists but unreadable:', readErr)
+            throw readErr
+          }
+        }
+        else {
+          console.error('[Visual Testing] Failed to create run ID file:', err)
+          throw err
+        }
       }
     }
   }
@@ -300,7 +313,10 @@ export function generateVisualReport(feature?: string): string {
         const resp = await fetch('/api/decisions?runId=' + encodeURIComponent(data.runId));
         const payload = await resp.json();
         state.decisions = payload.decisions || {};
-      } catch {}
+      } catch (err) {
+        console.error('Failed to load decisions:', err);
+        state.decisions = {};
+      }
       render();
     }
 
@@ -508,13 +524,26 @@ export function updateBaselines(feature: string): void {
   fs.mkdirSync(baselineDir, { recursive: true })
 
   const files = fs.readdirSync(snapshotDir).filter(f => f.endsWith('.png'))
+  let successCount = 0
+  let failureCount = 0
+
   for (const file of files) {
-    fs.copyFileSync(
-      path.join(snapshotDir, file),
-      path.join(baselineDir, file),
-    )
-    console.log(`  ✓ Updated baseline: ${feature}/${file}`)
+    try {
+      fs.copyFileSync(
+        path.join(snapshotDir, file),
+        path.join(baselineDir, file),
+      )
+      console.log(`  ✓ Updated baseline: ${feature}/${file}`)
+      successCount++
+    }
+    catch (err) {
+      console.error(`  ✗ Failed to copy ${file}:`, err)
+      failureCount++
+    }
   }
 
-  console.log(`\n✅ Updated ${files.length} baselines for ${feature}`)
+  console.log(`\n✅ Updated ${successCount} baselines for ${feature}`)
+  if (failureCount > 0) {
+    console.warn(`⚠️ Failed to update ${failureCount} baselines`)
+  }
 }

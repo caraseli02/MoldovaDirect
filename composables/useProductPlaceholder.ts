@@ -14,17 +14,16 @@ export interface PlaceholderConfig {
 
 /**
  * Get neutral placeholder configuration
- * Avoids category mismatches by using a generic image icon
+ * Uses a generic image placeholder to avoid category mismatches
  */
 export function useProductPlaceholder() {
   /**
-   * Determine placeholder based on category slug or name
+   * Get neutral placeholder configuration
+   *
+   * NOTE: Parameters accepted for API compatibility but not used.
+   * Always returns a neutral placeholder to avoid category-based mismatches.
    */
-  const getPlaceholderConfig = (
-    _categorySlug?: string | null,
-    _categoryName?: string | null,
-  ): PlaceholderConfig => {
-    // Neutral fallback to avoid category-mismatch placeholders
+  const getPlaceholderConfig = (): PlaceholderConfig => {
     return {
       icon: 'lucide:image',
       bgGradient: 'from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900',

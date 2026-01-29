@@ -53,9 +53,8 @@ function readJsonBody(req) {
 function isSafeSegment(segment) {
   return typeof segment === 'string'
     && segment.length > 0
-    && !segment.includes('..')
-    && !segment.includes('/')
-    && !segment.includes('\\')
+    && segment.length < 100
+    && /^[a-zA-Z0-9_-]+$/.test(segment)
 }
 
 function readLastRunId() {
@@ -64,7 +63,8 @@ function readLastRunId() {
     const payload = JSON.parse(fs.readFileSync(LAST_RUN_FILE, 'utf-8'))
     return payload.runId || null
   }
-  catch {
+  catch (err) {
+    console.warn('[Serve] Failed to parse last-run.json:', err.message)
     return null
   }
 }
@@ -77,7 +77,8 @@ function readDecisions(runId) {
   try {
     return JSON.parse(fs.readFileSync(file, 'utf-8'))
   }
-  catch {
+  catch (err) {
+    console.error(`[Serve] Failed to read decisions for run ${runId}:`, err.message)
     return { runId, decisions: {} }
   }
 }
@@ -134,8 +135,9 @@ const server = http.createServer(async (req, res) => {
         const updated = writeDecisions(runId, current.decisions)
         return json(res, 200, updated)
       }
-      catch {
-        return json(res, 400, { error: 'Bad request' })
+      catch (err) {
+        console.error('[API] Request failed:', err)
+        return json(res, 400, { error: 'Bad request', details: err.message })
       }
     }
 
@@ -161,6 +163,7 @@ const server = http.createServer(async (req, res) => {
         res.end('Not Found: ' + req.url)
       }
       else {
+        console.error('[Serve] File read error:', err)
         res.writeHead(500)
         res.end('Server Error')
       }
