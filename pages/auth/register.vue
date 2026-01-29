@@ -476,11 +476,12 @@
             <!-- Submit button with accessibility improvements -->
             <UiButton
               type="submit"
-              :disabled="loading || !isFormValid"
+              :disabled="loading"
               data-testid="register-button"
               class="relative w-full flex justify-center items-center py-4 px-4 min-h-[48px] text-base font-semibold rounded-xl shadow-lg"
               :aria-label="loading ? $t('auth.accessibility.creatingAccount') : $t('auth.accessibility.createAccountButton')"
               :aria-describedby="loading ? 'register-status' : undefined"
+              :aria-disabled="loading"
             >
               <svg
                 v-if="loading"
@@ -521,11 +522,7 @@
 </template>
 
 <script setup lang="ts">
-import { Alert, AlertDescription } from '@/components/ui/alert'
-
-import { Checkbox } from '@/components/ui/checkbox'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+// UiAlert, UiAlertDescription, UiCheckbox, UiInput, UiLabel are auto-imported by Nuxt
 import { AlertCircle, CheckCircle2 } from 'lucide-vue-next'
 import PasswordStrengthMeter from '@/components/auth/PasswordStrengthMeter.vue'
 
@@ -666,6 +663,60 @@ const validateTermsField = () => {
   termsError.value = result.isValid ? '' : result.errors[0]?.message || ''
 }
 
+const validateAllFields = () => {
+  let hasErrors = false
+
+  if (!form.value.name.trim()) {
+    nameError.value = t('auth.validation.name.required')
+    hasErrors = true
+  }
+  else {
+    validateNameField()
+    if (nameError.value) hasErrors = true
+  }
+
+  if (!form.value.email.trim()) {
+    emailError.value = t('auth.validation.email.required')
+    hasErrors = true
+  }
+  else {
+    validateEmailField()
+    if (emailError.value) hasErrors = true
+  }
+
+  if (form.value.phone.trim()) {
+    validatePhoneField()
+    if (phoneError.value) hasErrors = true
+  }
+
+  if (!form.value.password) {
+    passwordError.value = t('auth.validation.password.required')
+    hasErrors = true
+  }
+  else {
+    validatePasswordField()
+    if (passwordError.value) hasErrors = true
+  }
+
+  if (!form.value.confirmPassword) {
+    confirmPasswordError.value = t('auth.validation.password.required')
+    hasErrors = true
+  }
+  else {
+    validateConfirmPasswordField()
+    if (confirmPasswordError.value) hasErrors = true
+  }
+
+  validateTermsField()
+  if (termsError.value) hasErrors = true
+
+  if (hasErrors) {
+    error.value = t('auth.validation.fixErrors')
+  }
+
+  return !hasErrors
+}
+
 // Password visibility toggles with accessibility
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value
@@ -698,6 +749,10 @@ const announcePasswordVisibility = (isVisible: boolean) => {
 const handleRegister = async () => {
   error.value = ''
   success.value = ''
+
+  if (!validateAllFields()) {
+    return
+  }
 
   if (form.value.password !== form.value.confirmPassword) {
     error.value = t('auth.passwordMismatch')

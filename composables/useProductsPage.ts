@@ -62,6 +62,7 @@ export function useProductsPage(options: UseProductsPageOptions) {
   const searchInput = ref<HTMLInputElement>()
   const searchAbortController = ref<AbortController | null>(null)
   const localSortBy = ref<ProductSortOption>(sortBy.value as ProductSortOption)
+  const syncingFromRoute = ref(false)
 
   // Initialize searchQuery from URL query parameter on first load
   // This ensures direct links like /products?q=wine work correctly
@@ -109,6 +110,9 @@ export function useProductsPage(options: UseProductsPageOptions) {
           sort: localSortBy.value,
         })
       }
+      if (!syncingFromRoute.value) {
+        await syncUrlFromState()
+      }
     }
     catch (error: unknown) {
       console.error('[Products Page] Search handler error:', getErrorMessage(error))
@@ -131,6 +135,9 @@ export function useProductsPage(options: UseProductsPageOptions) {
       }
       else {
         await fetchProducts(currentFilters)
+      }
+      if (!syncingFromRoute.value) {
+        await syncUrlFromState()
       }
     }
     catch (error: unknown) {
@@ -160,6 +167,9 @@ export function useProductsPage(options: UseProductsPageOptions) {
       if (closePanel) {
         closeFilterPanel()
       }
+      if (!syncingFromRoute.value) {
+        await syncUrlFromState()
+      }
     }
     catch (error: unknown) {
       console.error('[Products Page] Apply filters failed:', getErrorMessage(error))
@@ -174,6 +184,9 @@ export function useProductsPage(options: UseProductsPageOptions) {
     clearFilters()
     try {
       await fetchProducts({ sort: 'created', page: 1, limit: 12 })
+      if (!syncingFromRoute.value) {
+        await syncUrlFromState()
+      }
     }
     catch (error: unknown) {
       console.error('[Products Page] Clear filters failed:', getErrorMessage(error))
@@ -202,7 +215,7 @@ export function useProductsPage(options: UseProductsPageOptions) {
     try {
       await router.push({
         query: {
-          ...route.query,
+          ...buildQueryFromState(),
           page: validPage.toString(),
           limit: (route.query.limit || '12').toString(),
         },
@@ -227,6 +240,8 @@ export function useProductsPage(options: UseProductsPageOptions) {
       }
       catch (fetchError: unknown) {
         console.error('[Products Page] Fallback fetch also failed:', getErrorMessage(fetchError))
+        // Set error state that UI can display to user
+        options.error.value = 'Failed to navigate to requested page. Please try again.'
       }
     }
 
@@ -362,6 +377,7 @@ export function useProductsPage(options: UseProductsPageOptions) {
 
   // Watch searchQuery and sync to URL
   watch(searchQuery, async (newQuery, oldQuery) => {
+    if (syncingFromRoute.value) return
     // Skip if search query hasn't actually changed
     if (newQuery === oldQuery) return
 
@@ -396,35 +412,20 @@ export function useProductsPage(options: UseProductsPageOptions) {
 
   // Watch URL query parameter changes (critical for Vercel production)
   // Handles browser back/forward, direct links, and external URL changes
-  watch(() => route.query.page, async (newPage, oldPage) => {
-    // Skip if page hasn't actually changed
-    if (newPage === oldPage) return
+  watch(() => ({ ...route.query }), async (newQuery, oldQuery) => {
+    if (syncingFromRoute.value) return
 
-    // Parse and validate page number
-    const pageNum = parseInt((newPage as string) || '1')
-    if (isNaN(pageNum)) return
-
-    // Validate page boundaries
-    const validPage = Math.max(1, Math.min(pageNum, pagination.value.totalPages || 1))
+    const newSerialized = JSON.stringify(newQuery || {})
+    const oldSerialized = JSON.stringify(oldQuery || {})
+    if (newSerialized === oldSerialized) return
 
     try {
-      // Build filters for fetch
-      const currentFilters: ProductFilters = {
-        ...filters.value,
-        sort: localSortBy.value,
-        page: validPage,
-      }
+      const previousPage = Number((oldQuery as Record<string, string>)?.page || 1)
+      const nextPage = Number((newQuery as Record<string, string>)?.page || 1)
 
-      // Fetch products based on current context
-      if (searchQuery.value.trim()) {
-        await search(searchQuery.value.trim(), currentFilters)
-      }
-      else {
-        await fetchProducts(currentFilters)
-      }
+      await applyRouteState()
 
-      // Scroll to top for better UX
-      if (import.meta.client) {
+      if (import.meta.client && previousPage !== nextPage) {
         window.scrollTo({ top: 0, behavior: 'smooth' })
       }
     }
@@ -433,8 +434,85 @@ export function useProductsPage(options: UseProductsPageOptions) {
     }
   }, { immediate: false })
 
+  /**
+   * Build URL query object from current component state
+   *
+   * Syncs search, filters, pagination, and sort to URL for
+   * shareable links and browser history support.
+   */
+  const buildQueryFromState = () => {
+    const query: Record<string, string> = {}
+    if (searchQuery.value.trim()) query.q = searchQuery.value.trim()
+    if (filters.value.category) query.category = String(filters.value.category)
+    if (filters.value.priceMin) query.priceMin = String(filters.value.priceMin)
+    if (filters.value.priceMax) query.priceMax = String(filters.value.priceMax)
+    if (filters.value.inStock) query.inStock = 'true'
+    if (filters.value.featured) query.featured = 'true'
+    if (localSortBy.value) query.sort = String(localSortBy.value)
+    if (pagination.value.page) query.page = String(pagination.value.page)
+    if (pagination.value.limit) query.limit = String(pagination.value.limit)
+    return query
+  }
+
+  const syncUrlFromState = async () => {
+    try {
+      await router.replace({ query: buildQueryFromState() })
+    }
+    catch (error: unknown) {
+      if (error instanceof Error && !error.message.includes('redundant navigation')) {
+        console.error('[Products Page] Failed to sync filters to URL:', getErrorMessage(error))
+      }
+    }
+  }
+
+  /**
+   * Apply URL query parameters to component state
+   *
+   * Used when URL changes externally (back/forward, direct links).
+   * The syncingFromRoute flag prevents circular updates where URL changes
+   * trigger state changes that trigger URL changes.
+   */
+  const applyRouteState = async () => {
+    syncingFromRoute.value = true
+    try {
+      const query = route.query
+      const nextFilters: ProductFilters = {}
+      const q = (query.q as string) || ''
+      searchQuery.value = q
+
+      if (query.category) nextFilters.category = String(query.category)
+      if (query.priceMin) nextFilters.priceMin = Number(query.priceMin)
+      if (query.priceMax) nextFilters.priceMax = Number(query.priceMax)
+      if (query.inStock === 'true') nextFilters.inStock = true
+      if (query.featured === 'true') nextFilters.featured = true
+      if (query.sort) nextFilters.sort = String(query.sort) as ProductSortOption
+      if (query.page) nextFilters.page = Number(query.page)
+      if (query.limit) nextFilters.limit = Number(query.limit)
+
+      filters.value = { ...nextFilters }
+      if (nextFilters.sort) {
+        localSortBy.value = nextFilters.sort
+        sortBy.value = nextFilters.sort
+      }
+
+      if (searchQuery.value.trim()) {
+        await search(searchQuery.value.trim(), { ...filters.value, sort: localSortBy.value })
+      }
+      else {
+        await fetchProducts({ ...filters.value, sort: localSortBy.value })
+      }
+    }
+    catch (error: unknown) {
+      console.error('[Products Page] Failed to apply route state:', getErrorMessage(error))
+    }
+    finally {
+      syncingFromRoute.value = false
+    }
+  }
+
   // Lifecycle hooks that need to be called by the component
   const onMountedHook = async () => {
+    await applyRouteState()
     // Sync local sortBy with store
     localSortBy.value = (sortBy.value as ProductSortOption) || 'created'
 

@@ -6,6 +6,7 @@
         :value="modelValue"
         type="search"
         :placeholder="placeholder"
+        @keydown.enter.prevent
         @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value); $emit('search', ($event.target as HTMLInputElement).value)"
       />
       <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">

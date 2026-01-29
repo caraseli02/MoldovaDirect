@@ -91,8 +91,6 @@ export const useProductCatalog = () => {
       if (productFilters.featured) params.append('featured', 'true')
       if (productFilters.sort) params.append('sort', productFilters.sort)
       if (productFilters.page) params.append('page', productFilters.page.toString())
-      if (productFilters.limit) params.append('limit', productFilters.limit.toString())
-
       // Add attribute filters
       if (productFilters.attributes) {
         Object.entries(productFilters.attributes).forEach(([key, values]) => {
@@ -195,59 +193,28 @@ export const useProductCatalog = () => {
     searchQuery.value = query.trim()
 
     try {
-      const params = new URLSearchParams()
-      params.append('q', query)
+      const normalized = query.trim()
+      if (!normalized) {
+        searchResults.value = []
+        await fetchProducts({ ...searchFilters }, signal)
+        return
+      }
 
-      // Add all filter parameters to search request
-      if (searchFilters.category) params.append('category', searchFilters.category.toString())
-      if (searchFilters.priceMin) params.append('priceMin', searchFilters.priceMin.toString())
-      if (searchFilters.priceMax) params.append('priceMax', searchFilters.priceMax.toString())
-      if (searchFilters.inStock) params.append('inStock', 'true')
-      if (searchFilters.featured) params.append('featured', 'true')
-      if (searchFilters.sort) params.append('sort', searchFilters.sort)
-      if (searchFilters.page) params.append('page', searchFilters.page?.toString() || '1')
-      if (searchFilters.limit) params.append('limit', searchFilters.limit?.toString() || '12')
+      await fetchProducts({
+        ...searchFilters,
+        search: normalized,
+        page: searchFilters.page || 1,
+        limit: searchFilters.limit || pagination.value.limit,
+      }, signal)
 
-      // Add current locale
-      params.append('locale', locale.value)
-
-      const response = await $fetch<{
-        products: ProductWithRelations[]
-        pagination: {
-          page: number
-          limit: number
-          total: number
-          totalPages: number
-          hasNextPage: boolean
-          hasPreviousPage: boolean
-        }
-        suggestions: string[]
-        meta: {
-          query: string
-          returned: number
-          locale: string
-          category: string | null
-        }
-      }>(`/api/search?${params.toString()}`, {
-        signal,
-      })
-
-      searchResults.value = response.products
-      products.value = response.products // Update main products array
-
-      // Update pagination using API response (not recalculating!)
-      pagination.value = response.pagination
-
-      filters.value = { ...searchFilters }
+      searchResults.value = products.value
     }
     catch (err: unknown) {
-      // Check if this is an intentional cancellation (DOMException with name 'AbortError')
       const isAbortError = err instanceof DOMException && err.name === 'AbortError'
       if (isAbortError) {
         return
       }
 
-      // Classify error for better user feedback
       const errorMessage = classifyNetworkError(err)
       if (errorMessage) {
         error.value = errorMessage
