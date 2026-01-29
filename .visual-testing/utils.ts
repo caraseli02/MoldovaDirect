@@ -32,9 +32,24 @@ export type ViewportName = keyof typeof VIEWPORTS
 
 // Get current run ID (timestamp-based)
 let currentRunId: string | null = null
+const processStartTimeMs = Date.now() - (process.uptime() * 1000)
 export function getRunId(): string {
   if (!currentRunId) {
     // Persist run id across parallel Playwright workers
+    if (fs.existsSync(RUN_ID_FILE)) {
+      try {
+        const stats = fs.statSync(RUN_ID_FILE)
+        // If the file predates this process, treat it as stale from a previous run.
+        if (stats.mtimeMs < processStartTimeMs) {
+          fs.rmSync(RUN_ID_FILE, { force: true })
+        }
+      }
+      catch (err) {
+        console.warn('[Visual Testing] Failed to stat run ID file, recreating:', err)
+        fs.rmSync(RUN_ID_FILE, { force: true })
+      }
+    }
+
     if (fs.existsSync(RUN_ID_FILE)) {
       currentRunId = fs.readFileSync(RUN_ID_FILE, 'utf-8').trim()
     }

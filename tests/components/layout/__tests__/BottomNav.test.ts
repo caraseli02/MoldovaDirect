@@ -8,11 +8,14 @@ vi.mock('vue-router', () => ({
   useRoute: vi.fn(() => ({ path: '/', query: {} })),
 }))
 
-// Mock useCart composable
-vi.mock('@/composables/useCart', () => ({
-  useCart: vi.fn(() => ({
-    itemCount: ref(3),
-  })),
+// Mock Nuxt auto-imports used by the component
+vi.mock('#imports', () => ({
+  useLocalePath: vi.fn(() => (path: string) => path),
+}))
+
+// Mock Nuxt auto-imported composable resolved from global scope
+;(global as any).useCart = vi.fn(() => ({
+  itemCount: ref(3),
 }))
 
 describe('Layout BottomNav', () => {
