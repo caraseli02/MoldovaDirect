@@ -144,8 +144,8 @@ test.describe('Full Checkout Flow - Hybrid Progressive', () => {
     console.log('✅ Step 11: Order status progress bar visible')
 
     // 2. View Order Details button
-    const viewDetailsButton = page.locator('button').filter({
-      hasText: /view.*order.*details|ver.*detalles|посмотреть.*детали|vezi.*detalii/i,
+    const viewDetailsButton = page.getByRole('button', {
+      name: /view order details|ver detalles del pedido|vezi detaliile comenzii|посмотреть детали заказа/i,
     })
     await expect(viewDetailsButton).toBeVisible({ timeout: 3000 })
     console.log('✅ Step 12: View Order Details button visible')
@@ -195,9 +195,9 @@ test.describe('Full Checkout Flow - Hybrid Progressive', () => {
     }
 
     // Step 5: Fill guest email (if shown) - uses Resend's test address
-    const emailVisible = await checkoutPage.guestEmailInput.isVisible({ timeout: 3000 }).catch(() => false)
-    if (emailVisible) {
-      await checkoutPage.fillGuestEmail('delivered@resend.dev')
+    await checkoutPage.ensureGuestEmail(TEST_USER_EMAIL)
+    const guestEmailValue = await checkoutPage.guestEmailInput.inputValue().catch(() => '')
+    if (guestEmailValue) {
       console.log('✅ Step 5: Filled guest email')
     }
 
@@ -308,6 +308,7 @@ test.describe('Full Checkout Flow - Hybrid Progressive', () => {
     if (await checkoutPage.isGuestPromptVisible()) {
       await checkoutPage.continueAsGuest()
     }
+    await checkoutPage.ensureGuestEmail(TEST_USER_EMAIL)
 
     // Initially: Address section visible, shipping method section NOT visible
     const addressVisible = await checkoutPage.addressSection.isVisible()
@@ -372,6 +373,7 @@ test.describe('Full Checkout Flow - Hybrid Progressive', () => {
     if (await checkoutPage.isGuestPromptVisible()) {
       await checkoutPage.continueAsGuest()
     }
+    await checkoutPage.ensureGuestEmail(TEST_USER_EMAIL)
 
     // Order summary should be visible (desktop sidebar)
     const viewport = page.viewportSize()
@@ -415,6 +417,8 @@ test.describe('Confirmation Page UI Elements', () => {
       await checkoutPage.continueAsGuest()
     }
 
+    await checkoutPage.ensureGuestEmail(TEST_USER_EMAIL)
+
     await checkoutPage.fillShippingAddress(TEST_ADDRESS)
     await checkoutPage.waitForShippingMethods()
     await checkoutPage.selectShippingMethod(0)
@@ -428,8 +432,8 @@ test.describe('Confirmation Page UI Elements', () => {
     await page.waitForTimeout(2000)
 
     // Find and click View Order Details button
-    const viewDetailsButton = page.locator('button').filter({
-      hasText: /view.*order.*details|ver.*detalles|посмотреть.*детали|vezi.*detalii/i,
+    const viewDetailsButton = page.getByRole('button', {
+      name: /view order details|ver detalles del pedido|vezi detaliile comenzii|посмотреть детали заказа/i,
     })
     await expect(viewDetailsButton).toBeVisible({ timeout: 5000 })
     await viewDetailsButton.click()
@@ -443,7 +447,7 @@ test.describe('Confirmation Page UI Elements', () => {
     }
 
     // Verify at least one expandable section is expanded
-    const expandedSection = page.locator('[aria-expanded="true"]')
+    const expandedSection = orderDetails.locator('[aria-expanded="true"]')
     expect(await expandedSection.count()).toBeGreaterThanOrEqual(1)
     console.log('✅ Expandable sections expanded after clicking View Order Details')
 
@@ -472,6 +476,8 @@ test.describe('Confirmation Page UI Elements', () => {
       await checkoutPage.continueAsGuest()
     }
 
+    await checkoutPage.ensureGuestEmail(TEST_USER_EMAIL)
+
     await checkoutPage.fillShippingAddress(TEST_ADDRESS)
     await checkoutPage.waitForShippingMethods()
     await checkoutPage.selectShippingMethod(0)
@@ -488,12 +494,17 @@ test.describe('Confirmation Page UI Elements', () => {
     console.log('✅ Progress bar visible')
 
     // Verify step indicator shows "Step X of Y" format
-    const stepIndicator = page.locator('text=/\\d+.*\\d+|шаг.*из|paso.*de|step.*of/i')
+    const orderStatusCard = page.getByRole('heading', {
+      name: /order status|estado del pedido|stare comandă|статус заказа/i,
+    }).locator('..').locator('..')
+    const stepIndicator = orderStatusCard.locator('span').filter({
+      hasText: /paso\s+2\s+de\s+3|step\s+2\s+of\s+3|pasul\s+2\s+din\s+3|шаг\s+2\s+из\s+3/i,
+    })
     await expect(stepIndicator).toBeVisible({ timeout: 3000 })
     console.log('✅ Step indicator visible')
 
     // Verify status labels (confirmed, preparing, shipped)
-    const statusLabels = page.locator('text=/confirmed|confirmado|подтверждён|confirmat/i')
+    const statusLabels = orderStatusCard.locator('text=/confirmed|confirmado|подтверждён|confirmat/i')
     await expect(statusLabels.first()).toBeVisible({ timeout: 3000 })
     console.log('✅ Status labels visible')
 
@@ -522,6 +533,8 @@ test.describe('Confirmation Page UI Elements', () => {
       await checkoutPage.continueAsGuest()
     }
 
+    await checkoutPage.ensureGuestEmail(TEST_USER_EMAIL)
+
     await checkoutPage.fillShippingAddress(TEST_ADDRESS)
     await checkoutPage.waitForShippingMethods()
     await checkoutPage.selectShippingMethod(0)
@@ -533,7 +546,8 @@ test.describe('Confirmation Page UI Elements', () => {
     await page.waitForTimeout(2000)
 
     // Find expandable section buttons (Order Items, Shipping Info)
-    const expandableButtons = page.locator('button[aria-expanded]')
+    const orderDetails = page.locator('#order-details')
+    const expandableButtons = orderDetails.locator('button[aria-expanded]')
     const buttonCount = await expandableButtons.count()
 
     if (buttonCount > 0) {
@@ -612,21 +626,24 @@ test.describe('Checkout Validation', () => {
       await checkoutPage.continueAsGuest()
     }
 
+    await checkoutPage.ensureGuestEmail(TEST_USER_EMAIL)
+
     // Fill form
     await checkoutPage.fillShippingAddress(TEST_ADDRESS)
     await checkoutPage.waitForShippingMethods()
     await checkoutPage.selectShippingMethod(0)
     await checkoutPage.selectCashPayment()
 
-    // Place order button should be visible but may be disabled without terms
+    // Place order button should be visible
     const placeOrderButton = checkoutPage.placeOrderButton
     await expect(placeOrderButton).toBeVisible({ timeout: 5000 })
 
-    // Now accept terms
-    await checkoutPage.acceptTerms()
+    // Button should be disabled before accepting terms
+    await expect(placeOrderButton).toBeDisabled()
 
-    // Button should now be enabled
-    await expect(placeOrderButton).toBeEnabled({ timeout: 3000 })
+    // Accept terms and verify button becomes enabled
+    await checkoutPage.acceptTerms()
+    await expect(placeOrderButton).toBeEnabled()
 
     console.log('✅ Terms validation working correctly')
   })

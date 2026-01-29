@@ -18,6 +18,7 @@
           type="email"
           inputmode="email"
           autocomplete="email"
+          aria-required="true"
           :placeholder="$t('checkout.guestInfo.emailPlaceholder')"
           :aria-invalid="!!errors.email"
           :aria-describedby="errors.email ? 'guestEmail-error' : undefined"

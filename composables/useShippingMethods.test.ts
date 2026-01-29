@@ -249,6 +249,10 @@ describe('useShippingMethods', () => {
       expect(error.value).toBe('Network error')
       expect(availableMethods.value).toHaveLength(1) // Fallback method
       expect(availableMethods.value[0].id).toBe('standard')
+      expect(mockToast.warning).toHaveBeenCalledWith(
+        'checkout.shippingMethod.fallbackWarning.title',
+        'checkout.shippingMethod.fallbackWarning.description',
+      )
     })
 
     it('handles non-Error exceptions', async () => {
@@ -263,6 +267,10 @@ describe('useShippingMethods', () => {
 
       expect(error.value).toBe('Failed to load shipping methods')
       expect(availableMethods.value).toHaveLength(1) // Fallback method
+      expect(mockToast.warning).toHaveBeenCalledWith(
+        'checkout.shippingMethod.fallbackWarning.title',
+        'checkout.shippingMethod.fallbackWarning.description',
+      )
     })
   })
 

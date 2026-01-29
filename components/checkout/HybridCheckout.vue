@@ -166,6 +166,7 @@
                 :error="methodsError"
                 :validation-error="shippingMethodValidationError"
                 :auto-selected="shippingMethodAutoSelected"
+                :currency="orderCurrency"
                 @retry="retryLoadingMethods"
               />
             </div>
@@ -220,6 +221,7 @@
               :total="total"
               :shipping-method="selectedMethod"
               :loading="loadingOrder"
+              :currency="orderCurrency"
             />
           </div>
         </div>
@@ -238,7 +240,7 @@
     <!-- Back to Cart Link -->
     <div
       v-if="!showExpressCheckout && (user || showGuestForm)"
-      class="mt-6 text-center lg:text-left"
+      class="mt-6 text-center lg:text-left pb-28 lg:pb-0"
     >
       <NuxtLink
         :to="localePath('/cart')"
@@ -249,6 +251,7 @@
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path
             stroke-linecap="round"
@@ -458,6 +461,10 @@ const {
 // Computed
 const preferredShippingMethod = computed(() => {
   return checkoutStore.preferences?.preferred_shipping_method || null
+})
+
+const orderCurrency = computed(() => {
+  return checkoutStore.orderData?.currency || 'EUR'
 })
 
 const showExpressCheckout = computed(() => {

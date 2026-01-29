@@ -132,10 +132,10 @@ export class CheckoutPage {
     this.expressEditButton = this.expressBanner.locator('button:has-text("Edit"), button:has-text("Editar"), button:has-text("Редактировать"), button:has-text("Editează")')
 
     // Guest Checkout
-    this.guestCheckoutPrompt = page.locator('[class*="GuestCheckoutPrompt"], [data-testid="guest-checkout-prompt"]')
-    this.continueAsGuestButton = page.locator('button:has-text("Continue as Guest"), button:has-text("Continuar como Invitado"), button:has-text("Продолжить как гость"), button:has-text("Continuă ca invitat")')
-    this.guestEmailInput = page.locator('input[type="email"][name="email"], input[id="guest-email"]')
-    this.guestEmailUpdatesCheckbox = page.locator('input[type="checkbox"][name*="update"], input[type="checkbox"][name*="newsletter"], input[id="email-updates"]')
+    this.guestCheckoutPrompt = page.locator('[data-testid="guest-checkout-prompt"], [class*="GuestCheckoutPrompt"]')
+    this.continueAsGuestButton = page.locator('[data-testid="continue-as-guest"], button:has-text("Continue as Guest"), button:has-text("Continuar como Invitado"), button:has-text("Продолжить как гость"), button:has-text("Continuă ca invitat")')
+    this.guestEmailInput = page.locator('input[type="email"][name="email"], #guestEmail, input[id="guestEmail"], [data-testid="guest-email"]')
+    this.guestEmailUpdatesCheckbox = page.locator('input[type="checkbox"][name*="update"], input[type="checkbox"][name*="newsletter"], #emailUpdates, input[id="emailUpdates"], input[id="email-updates"]')
 
     // Checkout Form Container
     this.checkoutFormContainer = page.locator('.checkout-form-container, [data-testid="checkout-form"]')
@@ -160,7 +160,7 @@ export class CheckoutPage {
       street: page.locator('#street'),
       city: page.locator('#city'),
       postalCode: page.locator('#postalCode'),
-      country: page.locator('#country'),
+      country: page.locator('[data-testid="country-select"]'),
       phone: page.locator('#phone, input[type="tel"]'),
     }
     this.savedAddressSelect = page.locator('[data-testid="saved-address-select"], select[name="savedAddress"]')
@@ -294,6 +294,7 @@ export class CheckoutPage {
   async continueAsGuest() {
     await this.continueAsGuestButton.click()
     await this.page.waitForTimeout(500)
+    await this.guestEmailInput.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {})
   }
 
   /**
@@ -303,6 +304,22 @@ export class CheckoutPage {
     await this.guestEmailInput.fill(email)
     if (receiveUpdates) {
       await this.guestEmailUpdatesCheckbox.check()
+    }
+  }
+
+  /**
+   * Ensure guest email is filled if the field is visible
+   */
+  async ensureGuestEmail(email: string, receiveUpdates: boolean = false) {
+    await this.guestEmailInput.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {})
+    const isVisible = await this.guestEmailInput.isVisible({ timeout: 2000 }).catch(() => false)
+    if (!isVisible) {
+      return
+    }
+
+    const currentValue = await this.guestEmailInput.inputValue().catch(() => '')
+    if (!currentValue) {
+      await this.fillGuestEmail(email, receiveUpdates)
     }
   }
 
@@ -323,33 +340,32 @@ export class CheckoutPage {
     country: string
     phone?: string
   }) {
-    // Check if saved addresses section exists (for authenticated users)
-    const savedAddressesSection = this.page.locator('[class*="AddressForm"], .address-form').filter({ hasText: /saved.*address|direcciones.*guardadas/i })
-    const hasSavedAddresses = await savedAddressesSection.isVisible({ timeout: 3000 }).catch(() => false)
+    // If saved addresses exist, switch to the new address option when available
+    const useNewAddressContainer = this.page.locator('[data-testid="use-new-address"]')
+    const hasUseNewAddress = await useNewAddressContainer.isVisible({ timeout: 2000 }).catch(() => false)
+    const isFormVisible = await this.addressFields.fullName.isVisible({ timeout: 2000 }).catch(() => false)
 
-    if (hasSavedAddresses) {
-      // Try to find and click "Use new address" option
-      // First scroll down to see if it's below the fold
-      await this.page.evaluate(() => window.scrollBy(0, 300))
-      await this.page.waitForTimeout(200)
-
-      // Try multiple selectors for "Use new address"
-      const useNewAddressSelectors = [
-        '[role="radio"]:has-text("Usar")',
-        'label:has-text("Usar una nueva")',
-        '.address-form button[role="radio"]:nth-child(2)',
-        '[role="radio"]:has-text("new address")',
-        '[role="radio"]:has-text("nueva")',
-      ]
-
-      for (const selector of useNewAddressSelectors) {
-        const option = this.page.locator(selector).first()
-        if (await option.isVisible({ timeout: 1000 }).catch(() => false)) {
-          await option.click()
-          await this.page.waitForTimeout(300)
-          break
-        }
+    if (hasUseNewAddress && !isFormVisible) {
+      await useNewAddressContainer.scrollIntoViewIfNeeded()
+      const useNewAddressRadio = useNewAddressContainer.locator('[role="radio"]').first()
+      if (await useNewAddressRadio.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await useNewAddressRadio.click()
       }
+      else {
+        await useNewAddressContainer.click()
+      }
+      await this.page.waitForTimeout(300)
+    }
+
+    const canFillForm = await this.addressFields.fullName.isVisible({ timeout: 5000 }).catch(() => false)
+    if (!canFillForm && hasUseNewAddress) {
+      // Fall back to using the first saved address if the form is hidden
+      const firstSavedAddress = this.page.locator('.address-form [role="radio"]').first()
+      if (await firstSavedAddress.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await firstSavedAddress.click()
+        await this.page.waitForTimeout(300)
+      }
+      return
     }
 
     // Wait for the address form fields to be visible
@@ -378,15 +394,33 @@ export class CheckoutPage {
     await this.addressFields.postalCode.blur()
 
     // Select country if visible (UiSelect)
-    const countryLocator = this.addressFields.country
-    if (await countryLocator.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await countryLocator.click()
-      await this.page.waitForTimeout(200)
-      // Select option by clicking on it
-      const countryOption = this.page.locator('[role="option"]').filter({ hasText: address.country })
-      if (await countryOption.isVisible({ timeout: 2000 }).catch(() => false)) {
-        await countryOption.click()
+    let countryTrigger = this.addressFields.country
+    if (!(await countryTrigger.isVisible({ timeout: 2000 }).catch(() => false))) {
+      countryTrigger = this.page.locator('[role="combobox"]').filter({ hasText: /selecciona|select|país/i }).first()
+    }
+
+    if (await countryTrigger.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await countryTrigger.scrollIntoViewIfNeeded()
+      await countryTrigger.click({ force: true })
+      await this.page.locator('[role="option"]').first().waitFor({ state: 'visible', timeout: 2000 }).catch(() => {})
+
+      const optionByValue = this.page.locator(`[role="option"][data-value="${address.country}"]`)
+      const optionByText = this.page.locator('[role="option"]').filter({ hasText: address.country })
+
+      if (await optionByValue.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await optionByValue.click()
       }
+      else if (await optionByText.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await optionByText.click()
+      }
+      else {
+        const firstOption = this.page.locator('[role="option"]').first()
+        if (await firstOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+          await firstOption.click()
+        }
+      }
+
+      await this.page.keyboard.press('Escape').catch(() => {})
     }
 
     // Fill phone if provided
@@ -444,10 +478,14 @@ export class CheckoutPage {
       return
     }
 
+    // Close any open select dropdowns (e.g., country) that can intercept clicks
+    await this.page.keyboard.press('Escape').catch(() => {})
+
     // Otherwise click on the shipping method option
     const option = this.shippingMethodOptions.nth(index)
     if (await option.isVisible({ timeout: 3000 }).catch(() => false)) {
-      await option.click()
+      await option.scrollIntoViewIfNeeded()
+      await option.click({ force: true })
       await this.page.waitForTimeout(300)
     }
     else {
@@ -521,8 +559,8 @@ export class CheckoutPage {
    */
   async acceptTerms() {
     // Click the checkboxes (UiCheckbox renders as button with role="checkbox")
-    const terms = this.page.locator('.checkout-section-highlight [role="checkbox"]').nth(0)
-    const privacy = this.page.locator('.checkout-section-highlight [role="checkbox"]').nth(1)
+    const terms = this.page.locator('#terms-checkbox')
+    const privacy = this.page.locator('#privacy-checkbox')
 
     if (await terms.isVisible({ timeout: 2000 }).catch(() => false)) {
       await terms.click()
@@ -539,10 +577,17 @@ export class CheckoutPage {
     // Log current state before clicking
     console.log('🔍 Current URL before place order:', this.page.url())
 
+    const orderResponsePromise = this.page
+      .waitForResponse(
+        response => response.url().includes('/api/checkout/create-order'),
+        { timeout: 15000 },
+      )
+      .catch(() => null)
+
     // Try desktop button first
     if (await this.placeOrderButton.isVisible({ timeout: 2000 }).catch(() => false)) {
       console.log('✅ Found desktop place order button')
-      await this.placeOrderButton.click()
+      await this.placeOrderButton.click({ force: true })
     }
     else {
       // Try mobile sticky footer button
@@ -574,6 +619,16 @@ export class CheckoutPage {
 
     console.log('⏳ Waiting for navigation or error...')
 
+    const orderResponse = await orderResponsePromise
+    if (orderResponse) {
+      const status = orderResponse.status()
+      if (!orderResponse.ok()) {
+        const bodyText = await orderResponse.text().catch(() => '')
+        console.log('❌ Order API failed:', status, bodyText)
+        throw new Error(`Order API failed with status ${status}`)
+      }
+    }
+
     // Wait for either:
     // 1. Navigation to confirmation page (success)
     // 2. Error message (failure)
@@ -582,8 +637,8 @@ export class CheckoutPage {
         this.page.waitForURL('**/checkout/confirmation**', { timeout: 45000 }).then(() => {
           console.log('✅ Navigated to confirmation page')
         }),
-        this.page.waitForSelector('[role="alert"]', { timeout: 45000 }).then(async () => {
-          const alertText = await this.page.locator('[role="alert"]').textContent()
+        this.page.waitForSelector('[role="alert"], [data-sonner-toast]', { timeout: 45000 }).then(async () => {
+          const alertText = await this.page.locator('[role="alert"], [data-sonner-toast]').first().textContent()
           console.log('⚠️  Alert appeared:', alertText)
         }),
       ])

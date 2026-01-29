@@ -23,6 +23,7 @@
               class="w-5 h-5 ml-2 text-green-500"
               fill="currentColor"
               viewBox="0 0 20 20"
+              aria-hidden="true"
             >
               <path
                 fill-rule="evenodd"
@@ -59,6 +60,7 @@
                 class="w-4 h-4 mr-1 text-green-500"
                 fill="currentColor"
                 viewBox="0 0 20 20"
+                aria-hidden="true"
               >
                 <path
                   fill-rule="evenodd"
@@ -73,6 +75,7 @@
                 class="w-4 h-4 mr-1 text-green-500"
                 fill="currentColor"
                 viewBox="0 0 20 20"
+                aria-hidden="true"
               >
                 <path
                   fill-rule="evenodd"

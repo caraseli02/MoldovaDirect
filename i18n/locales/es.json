@@ -1998,6 +1998,8 @@
       "phoneDescription": "Para contactarte sobre la entrega",
       "saveAddress": "Guardar esta dirección para futuros pedidos",
       "autocompleteHint": "Comienza a escribir para sugerencias de direcciones",
+      "autocompleteUnavailable": "Sugerencias de dirección no disponibles",
+      "autocompleteUnavailableDescription": "Por favor, introduce tu dirección manualmente.",
       "suggestionsAvailable": "{count} sugerencias de direcciones disponibles. Usa las flechas para navegar."
     },
     "shippingMethod": {

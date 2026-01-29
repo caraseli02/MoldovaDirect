@@ -1991,6 +1991,8 @@
       "phoneDescription": "Мы свяжемся с вами по поводу доставки",
       "saveAddress": "Сохранить этот адрес для будущих заказов",
       "autocompleteHint": "Начните вводить для предложений адресов",
+      "autocompleteUnavailable": "Подсказки адреса недоступны",
+      "autocompleteUnavailableDescription": "Пожалуйста, введите адрес вручную.",
       "suggestionsAvailable": "{count} предложений адреса доступны. Используйте стрелки для навигации."
     },
     "shippingMethod": {

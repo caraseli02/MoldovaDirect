@@ -189,6 +189,21 @@ const stripeFailed = computed(() => {
   return initializationAttempted.value && !!stripeError.value && retryCount.value >= 3
 })
 
+const getStripeErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return formatStripeError(error)
+  }
+  if (typeof error === 'string') {
+    return error
+  }
+  return t('checkout.payment.stripeLoadFailedMessage')
+}
+
+const emitStripeError = (error: unknown) => {
+  if (!isMounted.value) return
+  emit('stripe-error', getStripeErrorMessage(error))
+}
+
 // Error helpers
 const hasError = (field: string): boolean => {
   return !!(props.errors[field] || validationErrors.value[field])
@@ -239,12 +254,18 @@ const initializeStripeElements = async () => {
     await initializeStripe()
 
     if (!stripeCardContainer.value) {
-      if (isMounted.value) emit('stripe-ready', false)
+      if (isMounted.value) {
+        emit('stripe-ready', false)
+        emitStripeError(new Error(t('checkout.payment.stripeLoadFailedMessage')))
+      }
       return
     }
 
     if (!elements.value) {
-      if (isMounted.value) emit('stripe-ready', false)
+      if (isMounted.value) {
+        emit('stripe-ready', false)
+        emitStripeError(new Error(t('checkout.payment.stripeLoadFailedMessage')))
+      }
       return
     }
 
@@ -255,7 +276,10 @@ const initializeStripeElements = async () => {
     }
   }
   catch (error) {
-    if (isMounted.value) emit('stripe-ready', false)
+    if (isMounted.value) {
+      emit('stripe-ready', false)
+      emitStripeError(error)
+    }
   }
 }
 

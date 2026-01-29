@@ -125,10 +125,16 @@
           {{ $t('checkout.payment.comingSoon') }}
         </p>
         <div class="flex flex-wrap gap-2">
-          <span class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 flex items-center">
+          <span
+            class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 flex items-center opacity-60 cursor-not-allowed"
+            aria-disabled="true"
+          >
             🅿️ {{ $t('checkout.payment.paypal.label') }}
           </span>
-          <span class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 flex items-center">
+          <span
+            class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 flex items-center opacity-60 cursor-not-allowed"
+            aria-disabled="true"
+          >
             🏦 {{ $t('checkout.payment.bankTransfer.label') }}
           </span>
         </div>
@@ -193,10 +199,14 @@ const onStripeError = (error: string | null) => {
 // Expose methods for parent components
 defineExpose({
   validateForm: () => {
-    if (paymentFormRef.value) {
-      return paymentFormRef.value.validateForm()
+    if (props.modelValue.type === 'cash') {
+      return true
     }
-    return true
+    if (!paymentFormRef.value) {
+      console.error('[PaymentSection] validateForm called but paymentFormRef is null')
+      return false
+    }
+    return paymentFormRef.value.validateForm()
   },
   getStripeCardElement: () => {
     if (paymentFormRef.value) {
@@ -238,7 +248,7 @@ defineExpose({
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 9999px;
-  background-color: rgb(79 70 229);
+  background-color: rgb(225 29 72);
   color: white;
   display: flex;
   align-items: center;

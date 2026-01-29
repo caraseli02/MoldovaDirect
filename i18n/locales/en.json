@@ -1994,6 +1994,8 @@
       "phoneDescription": "We'll contact you about your delivery",
       "saveAddress": "Save this address for future orders",
       "autocompleteHint": "Start typing for address suggestions",
+      "autocompleteUnavailable": "Address suggestions unavailable",
+      "autocompleteUnavailableDescription": "Please enter your address manually.",
       "suggestionsAvailable": "{count} address suggestions available. Use arrow keys to navigate."
     },
     "shippingMethod": {

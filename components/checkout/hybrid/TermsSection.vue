@@ -21,32 +21,39 @@
             class="mt-0.5"
             @update:model-value="$emit('update:termsAccepted', toBoolean($event))"
           />
-          <span class="ml-2 text-sm text-gray-700 dark:text-gray-200">
+          <UiLabel
+            for="terms-checkbox"
+            class="ml-2 text-sm text-gray-700 dark:text-gray-200"
+          >
             <span
               class="text-red-500"
               aria-hidden="true"
             >*</span>
-            <span class="cursor-pointer">
+            <span>
               {{ $t('checkout.review.acceptTerms') }}
               <a
                 href="/terms"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="text-slate-600 dark:text-blue-400 hover:text-slate-700 dark:hover:text-blue-300 underline"
               >
                 {{ $t('checkout.review.termsOfService') }}
+                <span class="sr-only">
+                  ({{ $t('accessibility.opensInNewTab', 'opens in new tab') }})
+                </span>
               </a>
             </span>
-          </span>
-          <span
-            v-if="showTermsError"
-            id="terms-error"
-            role="alert"
-            aria-live="polite"
-            class="sr-only"
-          >
-            {{ $t('checkout.validation.termsRequired') }}
-          </span>
+          </UiLabel>
         </div>
+        <p
+          v-if="showTermsError"
+          id="terms-error"
+          role="alert"
+          aria-live="polite"
+          class="mt-1 text-sm text-red-600 dark:text-red-400"
+        >
+          {{ $t('checkout.validation.termsRequired') }}
+        </p>
 
         <div class="flex items-start">
           <UiCheckbox
@@ -58,32 +65,39 @@
             class="mt-0.5"
             @update:model-value="$emit('update:privacyAccepted', toBoolean($event))"
           />
-          <span class="ml-2 text-sm text-gray-700 dark:text-gray-200">
+          <UiLabel
+            for="privacy-checkbox"
+            class="ml-2 text-sm text-gray-700 dark:text-gray-200"
+          >
             <span
               class="text-red-500"
               aria-hidden="true"
             >*</span>
-            <span class="cursor-pointer">
+            <span>
               {{ $t('checkout.review.acceptPrivacy') }}
               <a
                 href="/privacy"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="text-slate-600 dark:text-blue-400 hover:text-slate-700 dark:hover:text-blue-300 underline"
               >
                 {{ $t('checkout.review.privacyPolicy') }}
+                <span class="sr-only">
+                  ({{ $t('accessibility.opensInNewTab', 'opens in new tab') }})
+                </span>
               </a>
             </span>
-          </span>
-          <span
-            v-if="showPrivacyError"
-            id="privacy-error"
-            role="alert"
-            aria-live="polite"
-            class="sr-only"
-          >
-            {{ $t('checkout.validation.privacyRequired') }}
-          </span>
+          </UiLabel>
         </div>
+        <p
+          v-if="showPrivacyError"
+          id="privacy-error"
+          role="alert"
+          aria-live="polite"
+          class="mt-1 text-sm text-red-600 dark:text-red-400"
+        >
+          {{ $t('checkout.validation.privacyRequired') }}
+        </p>
 
         <div class="flex items-start">
           <UiCheckbox
@@ -99,7 +113,9 @@
 
       <!-- Place Order Button (Desktop) -->
       <UiButton
-        :disabled="processingOrder"
+        type="button"
+        :disabled="!canPlaceOrder || processingOrder"
+        :aria-disabled="!canPlaceOrder || processingOrder"
         class="hidden lg:flex w-full"
         @click="$emit('place-order')"
       >

@@ -8,6 +8,7 @@
     </div>
     <UiButton
       class="bg-green-600 hover:bg-green-700 text-white w-full min-h-[48px]"
+      type="button"
       :disabled="!canPlaceOrder || processingOrder"
       @click="$emit('place-order')"
     >
