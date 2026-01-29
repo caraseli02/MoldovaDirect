@@ -4,65 +4,70 @@
       <!-- Terms Checkboxes -->
       <div class="space-y-3 mb-6">
         <div class="flex items-start">
-          <UiCheckbox
-            :checked="termsAccepted"
-            class="mt-0.5"
-            @update:checked="$emit('update:termsAccepted', $event)"
-          />
-          <span class="ml-2 text-sm text-gray-700 dark:text-gray-200">
-            {{ $t('checkout.review.acceptTerms') }}
+          <div class="flex items-center h-5">
+            <UiCheckbox
+              id="terms-privacy-check"
+              :checked="termsAccepted && privacyAccepted"
+              class="mt-0.5"
+              data-testid="terms-checkbox"
+              aria-label="Terms and Privacy"
+              @update:checked="(val: boolean) => { $emit('update:termsAccepted', val); $emit('update:privacyAccepted', val); }"
+            />
+          </div>
+          <UiLabel
+            for="terms-privacy-check"
+            class="ml-2 text-sm text-gray-700 dark:text-gray-200 cursor-pointer select-none"
+          >
+            {{ $t('checkout.review.accept') }}
             <a
               href="/terms"
               target="_blank"
-              class="text-slate-600 dark:text-blue-400 hover:text-slate-700 dark:hover:text-blue-300 underline"
+              class="font-medium text-rose-600 dark:text-rose-400 hover:text-rose-500 dark:hover:text-rose-300 underline"
             >
               {{ $t('checkout.review.termsOfService') }}
             </a>
-            <span
-              v-if="showTermsError"
-              class="text-red-500 text-xs ml-1"
-            >*</span>
-          </span>
-        </div>
-
-        <div class="flex items-start">
-          <UiCheckbox
-            :checked="privacyAccepted"
-            class="mt-0.5"
-            @update:checked="$emit('update:privacyAccepted', $event)"
-          />
-          <span class="ml-2 text-sm text-gray-700 dark:text-gray-200">
-            {{ $t('checkout.review.acceptPrivacy') }}
+            &
             <a
               href="/privacy"
               target="_blank"
-              class="text-slate-600 dark:text-blue-400 hover:text-slate-700 dark:hover:text-blue-300 underline"
+              class="font-medium text-rose-600 dark:text-rose-400 hover:text-rose-500 dark:hover:text-rose-300 underline"
             >
               {{ $t('checkout.review.privacyPolicy') }}
             </a>
             <span
-              v-if="showPrivacyError"
-              class="text-red-500 text-xs ml-1"
+              v-if="showTermsError || showPrivacyError"
+              class="text-red-500 text-xs ml-1 font-bold"
             >*</span>
-          </span>
+          </UiLabel>
         </div>
 
         <div class="flex items-start">
-          <UiCheckbox
-            :checked="marketingConsent"
-            class="mt-0.5"
-            @update:checked="$emit('update:marketingConsent', $event)"
-          />
-          <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
+          <div class="flex items-center h-5">
+            <UiCheckbox
+              id="marketing-check"
+              :checked="marketingConsent"
+              class="mt-0.5"
+              data-testid="marketing-checkbox"
+              aria-label="Marketing Consent"
+              @update:checked="$emit('update:marketingConsent', $event)"
+            />
+          </div>
+          <UiLabel
+            for="marketing-check"
+            class="ml-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer select-none"
+          >
             {{ $t('checkout.review.marketingConsent') }}
-          </span>
+          </UiLabel>
         </div>
       </div>
 
-      <!-- Place Order Button (Desktop) -->
+      <!-- Place Order Button (Visible on All Devices) -->
       <UiButton
         :disabled="processingOrder"
-        class="hidden lg:flex w-full"
+        class="flex w-full bg-rose-600 hover:bg-rose-700 text-white"
+        size="lg"
+        data-testid="place-order-button"
+        type="submit"
         @click="$emit('place-order')"
       >
         <span
@@ -92,7 +97,7 @@
         </span>
         <span
           v-else
-          class="flex items-center"
+          class="flex items-center font-bold text-lg"
         >
           {{ $t('checkout.placeOrder') }} - {{ formattedTotal }}
           <svg

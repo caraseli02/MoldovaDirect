@@ -129,7 +129,7 @@ export class CheckoutPage {
     this.expressShippingMethod = this.expressBanner.locator('[class*="shipping"], [data-testid="shipping-method"]')
     this.expressOrderTotal = this.expressBanner.locator('[class*="total"], [data-testid="order-total"]')
     this.expressPlaceOrderButton = this.expressBanner.locator('button:has-text("Place Order Now"), button:has-text("Realizar Pedido Ahora"), button:has-text("Оформить заказ"), button:has-text("Plasează comanda")')
-    this.expressEditButton = this.expressBanner.locator('button:has-text("Edit"), button:has-text("Editar"), button:has-text("Редактировать"), button:has-text("Editează")')
+    this.expressEditButton = this.expressBanner.locator('[data-testid="express-edit-button"], button:has-text("Edit Details"), button:has-text("Edit"), button:has-text("Editar"), button:has-text("Editar detalles"), button:has-text("Редактировать"), button:has-text("Editează")')
 
     // Guest Checkout
     this.guestCheckoutPrompt = page.locator('[class*="GuestCheckoutPrompt"], [data-testid="guest-checkout-prompt"]')
@@ -171,20 +171,19 @@ export class CheckoutPage {
     this.shippingMethodError = page.locator('.shipping-method-selector [class*="error"], [data-testid="shipping-method-error"]')
     this.shippingMethodLoading = page.locator('.shipping-method-selector .animate-pulse')
 
-    // Payment Options
-    this.cashPaymentOption = page.locator('input[type="radio"][value="cash"], [data-testid="payment-cash"]')
-    this.creditCardOption = page.locator('input[type="radio"][value="credit_card"], [data-testid="payment-card"]')
-    this.paypalOption = page.locator('input[type="radio"][value="paypal"], [data-testid="payment-paypal"]')
+    // Payment Options - reka-ui RadioGroupItem renders button with data-value
+    this.cashPaymentOption = page.locator('[data-value="cash"], #payment-cash, input[type="radio"][value="cash"]')
+    this.creditCardOption = page.locator('[data-value="credit_card"], #payment-card, input[type="radio"][value="credit_card"]')
+    this.paypalOption = page.locator('[data-value="paypal"], #payment-paypal, input[type="radio"][value="paypal"]')
 
     // Delivery Instructions
     this.deliveryInstructions = page.locator('textarea[name="instructions"], textarea[id="instructions"], [data-testid="delivery-instructions"]')
 
-    // Terms & Order - Support both HybridCheckout (no IDs) and ReviewTermsSection (with IDs)
-    // Match by text content near the checkbox. Also match i18n keys in case translations aren't loaded.
-    this.termsCheckbox = page.locator('label').filter({ hasText: /acceptTerms|Acepto los|I accept the|Accept Termeni|Я принимаю/i }).locator('input[type="checkbox"]').first()
-    this.privacyCheckbox = page.locator('label').filter({ hasText: /acceptPrivacy|privacidad|privacy|confidențialitate|конфиденциальности/i }).locator('input[type="checkbox"]').first()
-    this.marketingCheckbox = page.locator('label').filter({ hasText: /marketingConsent|marketing/i }).locator('input[type="checkbox"]').first()
-    this.placeOrderButton = page.locator('button:has-text("Place Order"), button:has-text("Realizar Pedido"), button:has-text("Оформить заказ"), button:has-text("Plasează comanda")').first()
+    // Terms & Order - Use data-testid for reliable selection
+    this.termsCheckbox = page.locator('[data-testid="terms-checkbox"]')
+    this.privacyCheckbox = page.locator('[data-testid="privacy-checkbox"]')
+    this.marketingCheckbox = page.locator('[data-testid="marketing-checkbox"]')
+    this.placeOrderButton = page.locator('[data-testid="place-order-button"], button:has-text("Place Order"), button:has-text("Realizar Pedido"), button:has-text("Оформить заказ"), button:has-text("Plasează comanda")').first()
 
     // Order Summary (Sidebar)
     this.orderSummary = page.locator('[class*="OrderSummaryCard"], [data-testid="order-summary"]')
@@ -428,6 +427,10 @@ export class CheckoutPage {
    * Select cash payment
    */
   async selectCashPayment() {
+    // First ensure payment section is visible (progressive disclosure)
+    await this.paymentSection.waitFor({ state: 'visible', timeout: 10000 })
+    // Wait for the cash option to be attached
+    await this.cashPaymentOption.waitFor({ state: 'attached', timeout: 5000 })
     await this.cashPaymentOption.click()
     await this.page.waitForTimeout(300)
   }
@@ -445,20 +448,37 @@ export class CheckoutPage {
 
   /**
    * Accept terms and privacy
+   * Uses data-testid selectors for reliable checkbox interaction
    */
   async acceptTerms() {
-    await this.termsCheckbox.check()
-    await this.privacyCheckbox.check()
+    // Get current states
+    const termsState = await this.termsCheckbox.getAttribute('data-state')
+    const privacyState = await this.privacyCheckbox.getAttribute('data-state')
+
+    // Click terms checkbox if unchecked
+    if (termsState !== 'checked') {
+      await this.termsCheckbox.click()
+      // Wait for Vue reactivity to update
+      await this.page.waitForTimeout(200)
+    }
+
+    // Click privacy checkbox if unchecked
+    if (privacyState !== 'checked') {
+      await this.privacyCheckbox.click()
+      await this.page.waitForTimeout(200)
+    }
+
+    console.log('✅ Terms and privacy accepted')
   }
 
   /**
-   * Place order (clicks the Place Order button - handles both desktop and mobile)
+   * Place order (clicks the Place Order button)
    */
   async placeOrder() {
     // Log current state before clicking
     console.log('🔍 Current URL before place order:', this.page.url())
 
-    // Try desktop button first
+    // Find and click the place order button
     if (await this.placeOrderButton.isVisible({ timeout: 2000 }).catch(() => false)) {
       console.log('✅ Found desktop place order button')
       await this.placeOrderButton.click()
@@ -471,65 +491,15 @@ export class CheckoutPage {
         await mobileButton.click()
       }
       else {
-        // Last resort: use JavaScript to find and click any place order button
-        console.log('⚠️  Using JavaScript to find place order button')
-        await this.page.evaluate(() => {
-          const buttons = Array.from(document.querySelectorAll('button'))
-          const placeOrderBtn = buttons.find(b =>
-            b.textContent?.includes('Realizar Pedido')
-            || b.textContent?.includes('Place Order')
-            || b.textContent?.includes('Plasează'),
-          )
-          if (placeOrderBtn) {
-            console.log('Found button:', placeOrderBtn.textContent)
-            placeOrderBtn.click()
-          }
-          else {
-            console.log('❌ No place order button found')
-          }
-        })
+        throw new Error('Place order button not found')
       }
     }
 
-    console.log('⏳ Waiting for navigation or error...')
+    console.log('⏳ Waiting for navigation to confirmation page...')
 
-    // Wait for either:
-    // 1. Navigation to confirmation page (success)
-    // 2. Error message (failure)
-    try {
-      await Promise.race([
-        this.page.waitForURL('**/checkout/confirmation**', { timeout: 45000 }).then(() => {
-          console.log('✅ Navigated to confirmation page')
-        }),
-        this.page.waitForSelector('[role="alert"]', { timeout: 45000 }).then(async () => {
-          const alertText = await this.page.locator('[role="alert"]').textContent()
-          console.log('⚠️  Alert appeared:', alertText)
-        }),
-      ])
-    }
-    catch (error) {
-      // If timeout, log detailed debugging info
-      console.log('❌ Timeout waiting for navigation or error')
-      console.log('   Current URL:', this.page.url())
-
-      // Check for any console errors
-      const consoleErrors = await this.page.evaluate(() => {
-        return (window as any).__testErrors || []
-      })
-      if (consoleErrors.length > 0) {
-        console.log('   Console errors:', consoleErrors)
-      }
-
-      // Check if button is still enabled (might indicate processing stuck)
-      const buttonEnabled = await this.placeOrderButton.isEnabled().catch(() => null)
-      console.log('   Place order button enabled:', buttonEnabled)
-
-      // Take a screenshot for debugging
-      await this.page.screenshot({ path: 'test-results/place-order-timeout.png', fullPage: true })
-      console.log('   Screenshot saved to: test-results/place-order-timeout.png')
-
-      throw error
-    }
+    // Wait for navigation to confirmation page
+    await this.page.waitForURL('**/checkout/confirmation**', { timeout: 30000 })
+    console.log('✅ Navigated to confirmation page')
   }
 
   /**

@@ -247,6 +247,7 @@
           <span class="text-red-500">*</span>
         </UiLabel>
         <UiSelect
+          id="country"
           :value="localAddress.country"
           :class="[getFieldClasses('country'), 'h-12 text-base']"
           @update:model-value="updateField('country', $event as string); clearFieldError('country')"
