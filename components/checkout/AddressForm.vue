@@ -21,61 +21,67 @@
       <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-3">
         {{ $t('checkout.addressForm.savedAddresses') }}
       </h4>
-      <UiRadioGroup
-        v-model="selectedSavedAddressId"
-        :name="`saved-address-${type}`"
-      >
-        <div class="space-y-3">
-          <div
-            v-for="address in savedAddresses"
-            :key="address.id"
-            class="relative"
-          >
-            <div :class="selectedSavedAddressId === address.id ? 'border-slate-500 bg-slate-50 dark:bg-slate-900/20 rounded-lg p-3 border' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border'">
-              <div class="flex items-start gap-3">
-                <UiRadioGroupItem
-                  :value="address.id"
-                  class="shrink-0 mt-0.5"
-                  @click="selectSavedAddress(address)"
-                />
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <p class="text-sm font-medium text-gray-900 dark:text-white">
-                      {{ address.firstName }} {{ address.lastName }}
+      <fieldset>
+        <!-- legend is required for fieldset accessibility - eslint-disable-next-line vue/no-restricted-html-elements -->
+        <legend class="sr-only">
+          {{ $t('checkout.addressForm.savedAddresses') }}
+        </legend>
+        <UiRadioGroup
+          v-model="selectedSavedAddressId"
+          :name="`saved-address-${type}`"
+        >
+          <div class="space-y-3">
+            <div
+              v-for="address in savedAddresses"
+              :key="address.id"
+              class="relative"
+            >
+              <div :class="selectedSavedAddressId === address.id ? 'border-slate-500 bg-slate-50 dark:bg-slate-900/20 rounded-lg p-3 border' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border'">
+                <div class="flex items-start gap-3">
+                  <UiRadioGroupItem
+                    :value="address.id"
+                    class="shrink-0 mt-0.5"
+                    @click="selectSavedAddress(address)"
+                  />
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <p class="text-sm font-medium text-gray-900 dark:text-white">
+                        {{ address.firstName }} {{ address.lastName }}
+                      </p>
+                      <span
+                        v-if="address.isDefault"
+                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-200"
+                      >
+                        {{ $t('checkout.addressForm.default') }}
+                      </span>
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      {{ address.street }}
                     </p>
-                    <span
-                      v-if="address.isDefault"
-                      class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-slate-200"
-                    >
-                      {{ $t('checkout.addressForm.default') }}
-                    </span>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                      {{ address.city }}, {{ address.postalCode }} {{ address.country }}
+                    </p>
                   </div>
-                  <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    {{ address.street }}
-                  </p>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ address.city }}, {{ address.postalCode }} {{ address.country }}
-                  </p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Use New Address Option -->
-        <div :class="selectedSavedAddressId === null ? 'border-slate-500 bg-slate-50 dark:bg-slate-900/20 rounded-lg p-3 border mt-3' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border mt-3'">
-          <div class="flex items-center gap-3">
-            <UiRadioGroupItem
-              :value="null"
-              class="shrink-0"
-              @click="useNewAddress"
-            />
-            <span class="text-sm font-medium text-gray-900 dark:text-white">
-              {{ $t('checkout.addressForm.useNewAddress') }}
-            </span>
+          <!-- Use New Address Option -->
+          <div :class="selectedSavedAddressId === null ? 'border-slate-500 bg-slate-50 dark:bg-slate-900/20 rounded-lg p-3 border mt-3' : 'border-gray-200 dark:border-gray-600 rounded-lg p-3 border mt-3'">
+            <div class="flex items-center gap-3">
+              <UiRadioGroupItem
+                :value="null"
+                class="shrink-0"
+                @click="useNewAddress"
+              />
+              <span class="text-sm font-medium text-gray-900 dark:text-white">
+                {{ $t('checkout.addressForm.useNewAddress') }}
+              </span>
+            </div>
           </div>
-        </div>
-      </UiRadioGroup>
+        </UiRadioGroup>
+      </fieldset>
     </div>
 
     <!-- Address Form -->
@@ -102,7 +108,7 @@
           :class="[getFieldClasses('fullName'), 'h-12 text-base']"
           @input="handleFullNameInput(($event.target as HTMLInputElement).value)"
           @blur="validateField('fullName')"
-          @focus="clearFieldError('fullName')"
+          @focus="handleFieldFocus('fullName')"
         />
         <p
           v-if="fieldErrors.fullName"
@@ -149,12 +155,22 @@
         <!-- Autocomplete Suggestions Dropdown -->
         <div
           v-if="showSuggestions && addressSuggestions.length > 0"
+          role="listbox"
+          :aria-label="$t('checkout.addressForm.suggestionsAvailable', { count: addressSuggestions.length })"
           class="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"
         >
+          <div
+            aria-live="polite"
+            aria-atomic="true"
+            class="sr-only"
+          >
+            {{ $t('checkout.addressForm.suggestionsAvailable', { count: addressSuggestions.length }) }}
+          </div>
           <UiButton
             v-for="(suggestion, index) in addressSuggestions"
             :key="index"
             type="button"
+            role="option"
             @click="selectAddressSuggestion(suggestion)"
           >
             <p class="text-sm font-medium text-gray-900 dark:text-white">
@@ -378,6 +394,9 @@ const { t } = useI18n()
 const selectedSavedAddressId = ref<number | null>(null)
 const fieldErrors = ref<Record<string, string>>({})
 const streetContainerRef = ref<HTMLDivElement | null>(null)
+
+// Track component mount state to prevent memory leaks
+const isMounted = ref(false)
 
 // Autocomplete state
 const addressSuggestions = ref<AddressSuggestion[]>([])
@@ -674,6 +693,22 @@ const clearFieldError = (fieldName: string) => {
   }
 }
 
+/**
+ * Handle field focus with scroll-into-view for mobile devices
+ * Ensures the focused field is visible when the mobile keyboard appears
+ */
+const handleFieldFocus = (fieldName: string) => {
+  // Small delay to allow keyboard to appear
+  setTimeout(() => {
+    const input = document.getElementById(
+      fieldName === 'fullName' ? 'fullName' : fieldName,
+    ) as HTMLInputElement
+    if (input && 'scrollIntoView' in input) {
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, 300)
+}
+
 const clearAllErrors = () => {
   fieldErrors.value = {}
 }
@@ -752,10 +787,12 @@ watch(
 
 // Lifecycle
 onMounted(() => {
+  isMounted.value = true
   document.addEventListener('click', handleClickOutside)
 })
 
 onUnmounted(() => {
+  isMounted.value = false
   document.removeEventListener('click', handleClickOutside)
   if (autocompleteDebounceTimer.value) {
     clearTimeout(autocompleteDebounceTimer.value)

@@ -1993,7 +1993,8 @@
       "phonePlaceholder": "+1 555 000 0000",
       "phoneDescription": "We'll contact you about your delivery",
       "saveAddress": "Save this address for future orders",
-      "autocompleteHint": "Start typing for address suggestions"
+      "autocompleteHint": "Start typing for address suggestions",
+      "suggestionsAvailable": "{count} address suggestions available. Use arrow keys to navigate."
     },
     "shippingMethod": {
       "title": "Shipping Method",

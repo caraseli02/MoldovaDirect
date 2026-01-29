@@ -1990,7 +1990,8 @@
       "phonePlaceholder": "+7 900 000 0000",
       "phoneDescription": "Мы свяжемся с вами по поводу доставки",
       "saveAddress": "Сохранить этот адрес для будущих заказов",
-      "autocompleteHint": "Начните вводить для предложений адресов"
+      "autocompleteHint": "Начните вводить для предложений адресов",
+      "suggestionsAvailable": "{count} предложений адреса доступны. Используйте стрелки для навигации."
     },
     "shippingMethod": {
       "title": "Shipping Method",

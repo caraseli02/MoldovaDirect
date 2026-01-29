@@ -1997,7 +1997,8 @@
       "phonePlaceholder": "+40 700 000 000",
       "phoneDescription": "Te vom contacta despre livrare",
       "saveAddress": "Salvează această adresă pentru comenzi viitoare",
-      "autocompleteHint": "Începe să tastezi pentru sugestii de adrese"
+      "autocompleteHint": "Începe să tastezi pentru sugestii de adrese",
+      "suggestionsAvailable": "{count} sugestii de adrese disponibile. Folosește săgețile pentru a naviga."
     },
     "shippingMethod": {
       "title": "Metodă de Livrare",
