@@ -261,7 +261,8 @@
       "progress": "Free shipping progress",
       "freeShipping": "Free Shipping",
       "qualified": "Your order qualifies for free shipping!",
-      "addMore": "Add {amount} more for free shipping"
+      "addMore": "Add {amount} more for free shipping",
+      "threshold": "Free shipping on orders over {amount}"
     },
     "recommendations": {
       "frequently_bought_together": "Frequently bought together",
@@ -404,6 +405,7 @@
       "invalidLinkMessage": "This magic link is invalid or malformed. Please request a new one from the login page."
     },
     "validation": {
+      "fixErrors": "Please correct the highlighted fields",
       "email": {
         "required": "Email is required",
         "invalid": "Please enter a valid email address",
@@ -1309,6 +1311,7 @@
     "category": "Category",
     "noResults": "No results found",
     "noProducts": "No products available",
+    "loadingTakingLonger": "This is taking longer than usual. Please wait a moment or try again.",
     "tryDifferentFilters": "Try different filters",
     "comingSoon": "We will have products available soon",
     "showingResults": "Showing {start}-{end} of {total} products",
@@ -2215,6 +2218,12 @@
     "expressCheckout": {
       "title": "Express Checkout Available",
       "description": "Use your saved address and preferences for a faster checkout experience.",
+      "unavailableTitle": "Express Checkout Not Ready Yet",
+      "unavailableDescription": "Complete your first order and save your details to unlock express checkout.",
+      "requirementsTitle": "To enable express checkout, you'll need:",
+      "requirementAddress": "A saved default address",
+      "requirementPayment": "A saved payment method",
+      "requirementOrder": "At least one completed order",
       "preferredShipping": "Preferred shipping",
       "useButton": "Use Express Checkout",
       "editButton": "Edit Details",

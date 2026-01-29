@@ -50,6 +50,27 @@
         {{ $t('checkout.title') || 'Checkout' }}
       </h1>
 
+      <div
+        v-if="showExpressEligibilityHint"
+        class="mb-6 rounded-xl border border-slate-200 bg-slate-50 p-4 text-slate-700 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-100"
+        data-testid="express-checkout-unavailable"
+      >
+        <h2 class="text-sm font-semibold">
+          {{ $t('checkout.expressCheckout.unavailableTitle') }}
+        </h2>
+        <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
+          {{ $t('checkout.expressCheckout.unavailableDescription') }}
+        </p>
+        <p class="mt-3 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          {{ $t('checkout.expressCheckout.requirementsTitle') }}
+        </p>
+        <ul class="mt-2 space-y-1 text-sm text-slate-600 dark:text-slate-300">
+          <li>• {{ $t('checkout.expressCheckout.requirementOrder') }}</li>
+          <li>• {{ $t('checkout.expressCheckout.requirementAddress') }}</li>
+          <li>• {{ $t('checkout.expressCheckout.requirementPayment') }}</li>
+        </ul>
+      </div>
+
       <!-- Guest/Login Options (for non-authenticated users) -->
       <GuestCheckoutPrompt
         v-if="!user && !showGuestForm"
@@ -472,6 +493,10 @@ const showExpressCheckout = computed(() => {
     && defaultAddress.value
     && !expressCheckoutDismissed.value
     && savedAddresses.value.length > 0
+})
+
+const showExpressEligibilityHint = computed(() => {
+  return !!user.value && !showExpressCheckout.value
 })
 
 // Methods

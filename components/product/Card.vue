@@ -39,7 +39,7 @@
           v-if="primaryImage && !imageError"
           preset="productThumbnail"
           :src="primaryImage.url"
-          :alt="(primaryImage.altText ? getLocalizedText(primaryImage.altText) : '') || getLocalizedText(product.name)"
+          :alt="(primaryImage.altText ? getLocalizedText(primaryImage.altText) : '') || displayName"
           sizes="100vw sm:50vw md:33vw lg:25vw"
           densities="x1 x2"
           loading="lazy"
@@ -69,7 +69,7 @@
               aria-hidden="true"
             />
             <span class="relative text-[10px] font-bold tracking-[0.2em] uppercase opacity-40">
-              {{ product.category?.nameTranslations ? getLocalizedText(product.category.nameTranslations) : '' }}
+              {{ t('products.comingSoon') }}
             </span>
           </div>
         </div>
@@ -84,7 +84,7 @@
           <!-- Quick View Button -->
           <nuxt-link
             :to="productDetailPath"
-            :aria-label="$t('products.quickViewProduct', { name: getLocalizedText(product.name) })"
+            :aria-label="$t('products.quickViewProduct', { name: displayName })"
             class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium text-gray-900 dark:text-white focus-visible:ring-2 focus-visible:ring-slate-600 focus-visible:ring-offset-2"
           >
             <commonIcon
@@ -164,9 +164,9 @@
         <nuxt-link
           :to="productDetailPath"
           class="hover:text-blue-700 dark:hover:text-blue-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-600 focus-visible:ring-offset-2 rounded"
-          :aria-label="$t('products.viewDetails') + ': ' + getLocalizedText(product.name)"
+          :aria-label="$t('products.viewDetails') + ': ' + displayName"
         >
-          {{ getLocalizedText(product.name) }}
+          {{ displayName }}
         </nuxt-link>
       </h3>
 
@@ -406,12 +406,15 @@ const primaryImage = computed(() => {
   return props.product.images?.find(img => img.isPrimary) || props.product.images?.[0]
 })
 
+const categoryName = computed(() => {
+  return props.product.category?.nameTranslations
+    ? getLocalizedText(props.product.category.nameTranslations)
+    : ''
+})
+
 const placeholderConfig = computed(() => {
   const categorySlug = props.product.category?.slug
-  const categoryName = props.product.category?.nameTranslations
-    ? getLocalizedText(props.product.category.nameTranslations)
-    : null
-  return getPlaceholderConfig(categorySlug, categoryName)
+  return getPlaceholderConfig(categorySlug, categoryName.value || null)
 })
 
 const stockStatusClass = computed(() => {
@@ -466,6 +469,30 @@ const cartStatusAnnouncement = computed(() => {
   return ''
 })
 
+const displayName = computed(() => {
+  const rawName = getLocalizedText(props.product.name).trim()
+
+  if (!rawName) {
+    return t('products.commonProduct')
+  }
+
+  const isGenericName = /^#?\d+$/.test(rawName)
+    || /^product\s*#?\d+$/i.test(rawName)
+    || /^item\s*#?\d+$/i.test(rawName)
+
+  if (!isGenericName) {
+    return rawName
+  }
+
+  const fallbackCategory = categoryName.value?.trim()
+  const suffix = props.product.id ? `#${props.product.id}` : ''
+  if (fallbackCategory) {
+    return `${fallbackCategory} ${suffix}`.trim()
+  }
+
+  return t('products.commonProduct')
+})
+
 // Utility functions
 const getLocalizedText = (text: Translations | Record<string, string> | null | undefined): string => {
   if (!text) return ''
@@ -482,7 +509,7 @@ const formatPrice = (price: string | number) => {
 }
 
 const getCartButtonAriaLabel = () => {
-  const productName = getLocalizedText(props.product.name)
+  const productName = displayName.value
   if (cartLoading.value) {
     return t('products.addingToCart', { name: productName })
   }
@@ -533,13 +560,18 @@ const addToCart = async () => {
     const cartProduct = {
       id: String(props.product.id),
       slug: props.product.slug,
-      name: getLocalizedText(props.product.name),
+      name: displayName.value,
       price: Number(props.product.price),
       images: props.product.images?.map(img => img.url) || [],
       stock: props.product.stockQuantity,
     }
 
     await addItem(cartProduct, 1)
+
+    toast.success(
+      t('cart.success.added'),
+      t('cart.success.productAdded', { product: cartProduct.name }),
+    )
 
     // Success haptic feedback
     if (isMobile.value) {

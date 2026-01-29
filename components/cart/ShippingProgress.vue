@@ -61,6 +61,10 @@
         {{ $t('cart.shipping.addMore', { amount: formatPrice(amountRemaining) }) }}
       </template>
     </p>
+
+    <p class="mt-1 text-[11px] text-zinc-500 dark:text-zinc-400">
+      {{ $t('cart.shipping.threshold', { amount: formatPrice(freeShippingThreshold) }) }}
+    </p>
   </div>
 </template>
 

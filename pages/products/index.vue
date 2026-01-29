@@ -112,6 +112,8 @@
             <LoadingState
               v-else-if="loading"
               :skeleton-count="8"
+              :show-message="loadingStalled"
+              :message="t('products.loadingTakingLonger')"
             />
 
             <!-- Products Grid -->
@@ -155,7 +157,7 @@
  * - Handle user interactions
  */
 
-import { ref, onMounted, onBeforeUnmount, onUnmounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount, onUnmounted, watch } from 'vue'
 
 // Components
 import productFilterMain from '~/components/product/Filter/Main.vue'
@@ -181,6 +183,10 @@ import { useProductStructuredData } from '~/composables/useProductStructuredData
 import { useProductsPage } from '~/composables/useProductsPage'
 
 const { t } = useI18n()
+
+const loadingStalled = ref(false)
+const loadingTimeoutId = ref<ReturnType<typeof setTimeout> | null>(null)
+const LOADING_MESSAGE_DELAY_MS = 4000
 
 // Parse initial page/limit from URL with bounds validation
 const route = useRoute()
@@ -293,6 +299,30 @@ const {
   visiblePages,
   scrollContainer,
   mobileInteractions,
+})
+
+watch(loading, (isLoading) => {
+  if (loadingTimeoutId.value) {
+    clearTimeout(loadingTimeoutId.value)
+    loadingTimeoutId.value = null
+  }
+
+  if (isLoading && import.meta.client) {
+    loadingStalled.value = false
+    loadingTimeoutId.value = setTimeout(() => {
+      loadingStalled.value = true
+    }, LOADING_MESSAGE_DELAY_MS)
+  }
+  else {
+    loadingStalled.value = false
+  }
+})
+
+onBeforeUnmount(() => {
+  if (loadingTimeoutId.value) {
+    clearTimeout(loadingTimeoutId.value)
+    loadingTimeoutId.value = null
+  }
 })
 
 // Update mobile interactions with actual implementations

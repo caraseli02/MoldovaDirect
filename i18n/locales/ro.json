@@ -198,6 +198,7 @@
       "invalidLinkMessage": "Acest link magic este invalid sau malformat. Te rugăm să soliciți unul nou de pe pagina de autentificare."
     },
     "validation": {
+      "fixErrors": "Te rugăm să corectezi câmpurile evidențiate",
       "email": {
         "required": "Email-ul este obligatoriu",
         "invalid": "Introdu un email valid",
@@ -1089,6 +1090,7 @@
     "category": "Categorie",
     "noResults": "Nu s-au găsit rezultate",
     "noProducts": "Nu sunt produse disponibile",
+    "loadingTakingLonger": "Acest lucru durează mai mult decât de obicei. Te rugăm să mai aștepți puțin sau să încerci din nou.",
     "tryDifferentFilters": "Încearcă filtre diferite",
     "comingSoon": "În curând vom avea produse disponibile",
     "showingResults": "Se afișează {start}-{end} din {total} produse",
@@ -1774,7 +1776,8 @@
       "progress": "Progres transport gratuit",
       "freeShipping": "Transport gratuit",
       "qualified": "Comanda ta beneficiază de transport gratuit!",
-      "addMore": "Adaugă încă {amount} pentru transport gratuit"
+      "addMore": "Adaugă încă {amount} pentru transport gratuit",
+      "threshold": "Transport gratuit pentru comenzi peste {amount}"
     },
     "recommendations": {
       "frequently_bought_together": "Cumpărate frecvent împreună",
@@ -2219,6 +2222,12 @@
     "expressCheckout": {
       "title": "Plată Express Disponibilă",
       "description": "Folosiți adresa și preferințele salvate pentru o experiență de plată mai rapidă.",
+      "unavailableTitle": "Plata Express nu este încă disponibilă",
+      "unavailableDescription": "Finalizează prima comandă și salvează detaliile pentru a activa plata express.",
+      "requirementsTitle": "Pentru a activa plata express, ai nevoie de:",
+      "requirementAddress": "O adresă implicită salvată",
+      "requirementPayment": "O metodă de plată salvată",
+      "requirementOrder": "Cel puțin o comandă finalizată",
       "preferredShipping": "Livrare preferată",
       "useButton": "Folosește Plata Express",
       "editButton": "Editează Detalii",

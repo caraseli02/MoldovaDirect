@@ -7,12 +7,12 @@
           <h3 class="text-lg font-semibold mb-4">
             Moldova Direct
           </h3>
-          <p class="text-gray-400 text-sm">
+          <p class="text-gray-200 text-sm">
             {{ $t('footer.info.about') }}
           </p>
           <!-- Trust & Security Badges -->
           <div class="mt-6">
-            <p class="text-xs text-gray-400 mb-3">
+            <p class="text-xs text-gray-200 mb-3">
               {{ $t('footer.trust.title') }}
             </p>
             <div class="flex flex-wrap gap-3">
@@ -31,7 +31,7 @@
                     d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                   />
                 </svg>
-                <span class="text-xs font-medium text-gray-400">{{ $t('footer.trust.sslSecure') }}</span>
+                <span class="text-xs font-medium text-gray-200">{{ $t('footer.trust.sslSecure') }}</span>
               </div>
               <!-- Secure Payment Badge -->
               <div class="flex items-center gap-2 border border-gray-800 px-3 py-2 rounded-lg hover:border-gray-700 transition-colors">
@@ -48,7 +48,7 @@
                     d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
                   />
                 </svg>
-                <span class="text-xs font-medium text-gray-400">{{ $t('footer.trust.securePayment') }}</span>
+                <span class="text-xs font-medium text-gray-200">{{ $t('footer.trust.securePayment') }}</span>
               </div>
             </div>
           </div>
@@ -63,7 +63,7 @@
             <li>
               <NuxtLink
                 :to="localePath('/about')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
+                class="text-gray-200 hover:text-white transition-colors text-sm"
               >
                 {{ $t('footer.info.about') }}
               </NuxtLink>
@@ -71,7 +71,7 @@
             <li>
               <NuxtLink
                 :to="localePath('/terms')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
+                class="text-gray-200 hover:text-white transition-colors text-sm"
               >
                 {{ $t('footer.info.terms') }}
               </NuxtLink>
@@ -79,7 +79,7 @@
             <li>
               <NuxtLink
                 :to="localePath('/privacy')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
+                class="text-gray-200 hover:text-white transition-colors text-sm"
               >
                 {{ $t('footer.info.privacy') }}
               </NuxtLink>
@@ -87,7 +87,7 @@
             <li>
               <NuxtLink
                 :to="localePath('/shipping')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
+                class="text-gray-200 hover:text-white transition-colors text-sm"
               >
                 {{ $t('footer.info.shipping') }}
               </NuxtLink>
@@ -104,7 +104,7 @@
             <li>
               <NuxtLink
                 :to="localePath('/contact')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
+                class="text-gray-200 hover:text-white transition-colors text-sm"
               >
                 {{ $t('footer.help.contact') }}
               </NuxtLink>
@@ -112,7 +112,7 @@
             <li>
               <NuxtLink
                 :to="localePath('/faq')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
+                class="text-gray-200 hover:text-white transition-colors text-sm"
               >
                 {{ $t('footer.help.faq') }}
               </NuxtLink>
@@ -120,7 +120,7 @@
             <li>
               <NuxtLink
                 :to="localePath('/returns')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
+                class="text-gray-200 hover:text-white transition-colors text-sm"
               >
                 {{ $t('footer.help.returns') }}
               </NuxtLink>
@@ -128,7 +128,7 @@
             <li>
               <NuxtLink
                 :to="localePath('/track-order')"
-                class="text-gray-400 hover:text-white transition-colors text-sm"
+                class="text-gray-200 hover:text-white transition-colors text-sm"
               >
                 {{ $t('footer.help.track') }}
               </NuxtLink>
@@ -141,14 +141,21 @@
           <h3 class="text-lg font-semibold mb-4">
             {{ $t('footer.newsletter.title') }}
           </h3>
-          <p class="text-gray-400 text-sm mb-4">
+          <p class="text-gray-200 text-sm mb-4">
             {{ $t('footer.newsletter.description') }}
           </p>
           <form
             class="flex flex-col space-y-2"
             @submit.prevent="subscribeNewsletter"
           >
+            <UiLabel
+              class="sr-only"
+              for="footer-newsletter-email"
+            >
+              {{ $t('footer.newsletter.placeholder') }}
+            </UiLabel>
             <UiInput
+              id="footer-newsletter-email"
               v-model="email"
               type="email"
               :placeholder="$t('footer.newsletter.placeholder')"
@@ -160,6 +167,7 @@
               type="submit"
               :disabled="isSubmitting"
               class="px-4 py-2 bg-slate-600 text-white rounded-xl hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              :aria-label="$t('footer.newsletter.button')"
             >
               <span v-if="!isSubmitting">{{ $t('footer.newsletter.button') }}</span>
               <span
@@ -196,7 +204,7 @@
       <div class="mt-12 pt-8 border-t border-gray-800">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4">
           <div class="text-center md:text-left">
-            <p class="text-xs text-gray-400 mb-2">
+            <p class="text-xs text-gray-200 mb-2">
               {{ $t('footer.payment.title') }}
             </p>
             <div class="flex gap-2 items-center">
@@ -278,7 +286,7 @@
             </div>
           </div>
 
-          <div class="text-center text-gray-400 text-sm">
+          <div class="text-center text-gray-300 text-sm">
             {{ $t('footer.copyright') }}
           </div>
         </div>

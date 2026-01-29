@@ -6,7 +6,7 @@
     aria-label="Primary mobile navigation"
     data-testid="bottom-nav"
   >
-    <div class="flex items-center justify-around h-14 px-1">
+    <div class="flex items-center justify-around h-16 px-1">
       <!-- Home -->
       <NuxtLink
         :to="localePath('/')"
@@ -16,10 +16,10 @@
       >
         <commonIcon
           name="home"
-          :size="20"
+          :size="24"
           class="mb-0.5"
         />
-        <span class="text-[9px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
+        <span class="text-[10px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
           $t('common.home') }}</span>
       </NuxtLink>
 
@@ -32,10 +32,10 @@
       >
         <commonIcon
           name="shopping-bag"
-          :size="20"
+          :size="24"
           class="mb-0.5"
         />
-        <span class="text-[9px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
+        <span class="text-[10px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
           $t('common.shop') }}</span>
       </NuxtLink>
 
@@ -49,7 +49,7 @@
         <div class="relative">
           <commonIcon
             name="shopping-cart"
-            :size="20"
+            :size="24"
             class="mb-0.5"
           />
           <ClientOnly>
@@ -62,7 +62,7 @@
             </span>
           </ClientOnly>
         </div>
-        <span class="text-[9px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
+        <span class="text-[10px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
           $t('common.cart') }}</span>
       </NuxtLink>
 
@@ -74,10 +74,10 @@
       >
         <commonIcon
           name="search"
-          :size="20"
+          :size="24"
           class="mb-0.5"
         />
-        <span class="text-[9px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
+        <span class="text-[10px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
           $t('common.search') }}</span>
       </NuxtLink>
 
@@ -90,10 +90,10 @@
       >
         <commonIcon
           name="user"
-          :size="20"
+          :size="24"
           class="mb-0.5"
         />
-        <span class="text-[9px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
+        <span class="text-[10px] font-semibold uppercase tracking-tight truncate w-full text-center px-1">{{
           $t('common.account') }}</span>
       </NuxtLink>
     </div>

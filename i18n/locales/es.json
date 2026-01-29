@@ -261,7 +261,8 @@
       "progress": "Progreso de envío gratis",
       "freeShipping": "Envío gratis",
       "qualified": "¡Tu pedido califica para envío gratis!",
-      "addMore": "Añade {amount} más para envío gratis"
+      "addMore": "Añade {amount} más para envío gratis",
+      "threshold": "Envío gratis en pedidos superiores a {amount}"
     },
     "recommendations": {
       "frequently_bought_together": "Comprados frecuentemente juntos",
@@ -404,6 +405,7 @@
       "invalidLinkMessage": "Este enlace mágico es inválido o está mal formado. Por favor solicita uno nuevo desde la página de inicio de sesión."
     },
     "validation": {
+      "fixErrors": "Corrige los campos resaltados",
       "email": {
         "required": "El correo es obligatorio",
         "invalid": "Ingresa un correo válido",
@@ -1298,6 +1300,7 @@
     "category": "Categoría",
     "noResults": "No se encontraron resultados",
     "noProducts": "No hay productos disponibles",
+    "loadingTakingLonger": "Esto está tardando más de lo habitual. Espera un momento o inténtalo de nuevo.",
     "tryDifferentFilters": "Intenta con filtros diferentes",
     "comingSoon": "Próximamente tendremos productos disponibles",
     "showingResults": "Mostrando {start}-{end} de {total} productos",
@@ -2219,6 +2222,12 @@
     "expressCheckout": {
       "title": "Pago Express Disponible",
       "description": "Usa tu dirección y preferencias guardadas para una experiencia de pago más rápida.",
+      "unavailableTitle": "Pago Express aún no disponible",
+      "unavailableDescription": "Completa tu primer pedido y guarda tus datos para activar el pago express.",
+      "requirementsTitle": "Para activar el pago express, necesitas:",
+      "requirementAddress": "Una dirección predeterminada guardada",
+      "requirementPayment": "Un método de pago guardado",
+      "requirementOrder": "Al menos un pedido completado",
       "preferredShipping": "Envío preferido",
       "useButton": "Usar Pago Express",
       "editButton": "Editar Detalles",
