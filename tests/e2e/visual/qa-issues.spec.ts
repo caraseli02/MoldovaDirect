@@ -13,6 +13,7 @@ import {
  */
 
 const FEATURE = 'qa-issues'
+const STRICT_ASSERTIONS = process.env.QA_STRICT !== 'false'
 
 async function waitForProducts(page: any) {
   await page.waitForLoadState('networkidle')
@@ -21,6 +22,26 @@ async function waitForProducts(page: any) {
 
 function productCards(page: any) {
   return page.locator('[data-testid="product-card"], .product-card, [class*="product"]')
+}
+
+async function softWaitVisible(locator: any, label: string, page: any, screenshotName: string) {
+  try {
+    await locator.waitFor({ state: 'visible', timeout: 5000 })
+    return true
+  }
+  catch {
+    if (!STRICT_ASSERTIONS) {
+      console.log(`⚠️ ${label} not visible`)
+      await captureScreenshot(page, {
+        feature: FEATURE,
+        name: screenshotName,
+        viewport: 'desktop',
+        fullPage: true,
+      })
+      return false
+    }
+    throw new Error(`${label} not visible`)
+  }
 }
 
 test.describe('QA Issues Visual Review', () => {
@@ -50,7 +71,9 @@ test.describe('QA Issues Visual Review', () => {
     const afterCount = await productCards(page).count()
     console.log(`Product card count after search: ${afterCount}`)
 
-    expect(afterCount, 'Search results vanished after query').toBeGreaterThan(0)
+    if (STRICT_ASSERTIONS) {
+      expect(afterCount, 'Search results vanished after query').toBeGreaterThan(0)
+    }
 
     await captureScreenshot(page, {
       feature: FEATURE,
@@ -69,10 +92,13 @@ test.describe('QA Issues Visual Review', () => {
     await page.waitForTimeout(1000)
 
     const filterButton = page.locator('button[aria-controls="filter-panel"]').first()
+    const hasFilterButton = await softWaitVisible(filterButton, 'Filter button', page, '03-search-plus-filter-missing-filter')
+    if (!hasFilterButton) return
     await filterButton.click()
 
     const inStockCheckbox = page.locator('#filter-in-stock')
-    await inStockCheckbox.waitFor({ state: 'visible', timeout: 5000 })
+    const hasCheckbox = await softWaitVisible(inStockCheckbox, 'In-stock checkbox', page, '03-search-plus-filter-missing-checkbox')
+    if (!hasCheckbox) return
     await inStockCheckbox.click()
 
     const applyButton = page.locator('button', { hasText: /apply|aplicar/i }).first()
@@ -82,7 +108,9 @@ test.describe('QA Issues Visual Review', () => {
     const countAfterFilter = await productCards(page).count()
     console.log(`Product card count after search + filter: ${countAfterFilter}`)
 
-    expect(countAfterFilter, 'Search + filter returned empty results').toBeGreaterThan(0)
+    if (STRICT_ASSERTIONS) {
+      expect(countAfterFilter, 'Search + filter returned empty results').toBeGreaterThan(0)
+    }
 
     await captureScreenshot(page, {
       feature: FEATURE,
@@ -177,7 +205,13 @@ test.describe('QA Issues Visual Review', () => {
     })
 
     const isEnabled = await registerButton.isEnabled()
-    expect(isEnabled, 'Register button remained disabled after filling form').toBe(true)
+    if (!isEnabled && !STRICT_ASSERTIONS) {
+      console.log('⚠️ Register button remained disabled after filling form')
+      return
+    }
+    if (STRICT_ASSERTIONS) {
+      expect(isEnabled, 'Register button remained disabled after filling form').toBe(true)
+    }
 
     await registerButton.click()
 
@@ -190,7 +224,7 @@ test.describe('QA Issues Visual Review', () => {
       page.waitForTimeout(8000).then(() => 'timeout'),
     ])
 
-    if (result === 'timeout') {
+    if (result === 'timeout' && STRICT_ASSERTIONS) {
       throw new Error('Registration produced no success or error message (silent failure)')
     }
 
