@@ -50,9 +50,7 @@ test.describe('QA Issues Visual Review', () => {
     const afterCount = await productCards(page).count()
     console.log(`Product card count after search: ${afterCount}`)
 
-    if (afterCount === 0) {
-      console.log('⚠️ Search results vanished after query')
-    }
+    expect(afterCount, 'Search results vanished after query').toBeGreaterThan(0)
 
     await captureScreenshot(page, {
       feature: FEATURE,
@@ -83,6 +81,8 @@ test.describe('QA Issues Visual Review', () => {
 
     const countAfterFilter = await productCards(page).count()
     console.log(`Product card count after search + filter: ${countAfterFilter}`)
+
+    expect(countAfterFilter, 'Search + filter returned empty results').toBeGreaterThan(0)
 
     await captureScreenshot(page, {
       feature: FEATURE,
@@ -169,17 +169,15 @@ test.describe('QA Issues Visual Review', () => {
     await termsCheckbox.click()
 
     const registerButton = page.locator('[data-testid="register-button"]')
+    await captureScreenshot(page, {
+      feature: FEATURE,
+      name: '06-registration-filled',
+      viewport: 'desktop',
+      fullPage: false,
+    })
+
     const isEnabled = await registerButton.isEnabled()
-    if (!isEnabled) {
-      console.log('⚠️ Register button remained disabled after filling form')
-      await captureScreenshot(page, {
-        feature: FEATURE,
-        name: '06-registration-disabled',
-        viewport: 'desktop',
-        fullPage: false,
-      })
-      return
-    }
+    expect(isEnabled, 'Register button remained disabled after filling form').toBe(true)
 
     await registerButton.click()
 
@@ -193,7 +191,7 @@ test.describe('QA Issues Visual Review', () => {
     ])
 
     if (result === 'timeout') {
-      console.log('⚠️ Registration produced no success or error message (silent failure)')
+      throw new Error('Registration produced no success or error message (silent failure)')
     }
 
     await captureScreenshot(page, {
