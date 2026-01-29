@@ -57,7 +57,13 @@ describe('useCheckoutValidation', () => {
     it('should return true when all required fields present', () => {
       const options = createDefaultOptions()
       options.isAddressValid.value = true
-      options.shippingAddress.value = { firstName: 'John', street: 'Main St' }
+      options.shippingAddress.value = {
+        firstName: 'John',
+        street: 'Main St',
+        city: 'City',
+        postalCode: '12345',
+        country: 'US',
+      }
 
       const { isAddressComplete } = useCheckoutValidation(options)
 
