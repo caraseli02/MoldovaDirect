@@ -294,7 +294,7 @@ export function generateVisualReport(feature?: string): string {
     };
 
     async function loadData() {
-      const data = await fetch('./report-data.json').then(r => r.json());
+      const data = await fetch('/reports/report-data.json').then(r => r.json());
       state.data = data;
       try {
         const resp = await fetch('/api/decisions?runId=' + encodeURIComponent(data.runId));
