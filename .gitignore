@@ -100,6 +100,9 @@ test-screenshots/
 # Visual Testing - snapshots and reports are runtime-only
 .visual-testing/snapshots/
 .visual-testing/reports/
+.visual-testing/decisions/
+.visual-testing/.current-run-id
+.visual-testing/last-run.json
 # Keep baselines tracked
 !.visual-testing/baselines/
 

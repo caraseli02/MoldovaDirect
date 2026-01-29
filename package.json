@@ -53,6 +53,8 @@
     "test:visual:products": "PLAYWRIGHT_TEST=true playwright test tests/e2e/visual/products-catalog.spec.ts --project=chromium-es",
     "test:visual:all": "PLAYWRIGHT_TEST=true playwright test tests/e2e/visual/ --project=chromium-es",
     "visual:serve": "node .visual-testing/serve.mjs",
+    "visual:reset": "node .visual-testing/reset.mjs --force",
+    "visual:check-approvals": "node .visual-testing/check-approvals.mjs",
     "test:report": "playwright show-report",
     "test:setup": "playwright install --with-deps",
     "setup:project": "node scripts/setup-github-project.mjs",
