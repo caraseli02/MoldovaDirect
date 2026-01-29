@@ -25,69 +25,83 @@
       </span>
     </div>
     <div class="section-content">
-      <UiRadioGroup
-        :model-value="modelValue.type"
-        class="space-y-3"
-        @update:model-value="(val) => updatePaymentType(val as any)"
+      <!-- Using role="group" and aria-label for accessibility instead of fieldset/legend -->
+      <div
+        role="group"
+        :aria-label="$t('checkout.payment.selectMethod')"
       >
-        <!-- Cash Payment -->
-        <div
-          class="relative"
+        <UiRadioGroup
+          :model-value="modelValue.type"
+          class="space-y-3"
+          @update:model-value="(val) => updatePaymentType(val as any)"
         >
-          <UiLabel
-            class="flex items-center p-4 border rounded-lg cursor-pointer transition-colors"
-            :class="modelValue.type === 'cash'
-              ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700 ring-1 ring-green-200 dark:ring-green-700'
-              : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
+          <!-- Cash Payment -->
+          <div
+            class="relative"
           >
-            <UiRadioGroupItem
-              id="payment-cash"
-              value="cash"
-              class="mt-0.5 flex-shrink-0 border-slate-900 dark:border-slate-100 text-slate-900 dark:text-slate-100"
-            />
-            <div class="ml-3 flex items-center">
-              <span class="text-xl mr-2">💵</span>
-              <div>
-                <p class="font-medium text-gray-900 dark:text-white cursor-pointer">
-                  {{ $t('checkout.payment.cash.label') }}
-                </p>
-                <p class="text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
-                  {{ $t('checkout.payment.cash.summary') }}
-                </p>
+            <UiLabel
+              class="flex items-center p-4 border rounded-lg cursor-pointer transition-colors"
+              :class="modelValue.type === 'cash'
+                ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700 ring-1 ring-green-200 dark:ring-green-700'
+                : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
+            >
+              <UiRadioGroupItem
+                id="payment-cash"
+                value="cash"
+                class="mt-0.5 flex-shrink-0 border-slate-900 dark:border-slate-100 text-slate-900 dark:text-slate-100"
+              />
+              <div class="ml-3 flex items-center">
+                <span
+                  class="text-xl mr-2"
+                  role="img"
+                  :aria-label="$t('checkout.payment.cash.iconLabel')"
+                >💵</span>
+                <div>
+                  <p class="font-medium text-gray-900 dark:text-white cursor-pointer">
+                    {{ $t('checkout.payment.cash.label') }}
+                  </p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
+                    {{ $t('checkout.payment.cash.summary') }}
+                  </p>
+                </div>
               </div>
-            </div>
-          </UiLabel>
-        </div>
+            </UiLabel>
+          </div>
 
-        <!-- Credit Card Payment (Stripe) -->
-        <div
-          class="relative"
-        >
-          <UiLabel
-            class="flex items-center p-4 border rounded-lg cursor-pointer transition-colors"
-            :class="modelValue.type === 'credit_card'
-              ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700 ring-1 ring-blue-200 dark:ring-blue-700'
-              : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
+          <!-- Credit Card Payment (Stripe) -->
+          <div
+            class="relative"
           >
-            <UiRadioGroupItem
-              id="payment-card"
-              value="credit_card"
-              class="mt-0.5 flex-shrink-0 border-slate-900 dark:border-slate-100 text-slate-900 dark:text-slate-100"
-            />
-            <div class="ml-3 flex items-center">
-              <span class="text-xl mr-2">💳</span>
-              <div>
-                <p class="font-medium text-gray-900 dark:text-white cursor-pointer">
-                  {{ $t('checkout.payment.creditCard.label') }}
-                </p>
-                <p class="text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
-                  {{ $t('checkout.payment.creditCard.summary') }}
-                </p>
+            <UiLabel
+              class="flex items-center p-4 border rounded-lg cursor-pointer transition-colors"
+              :class="modelValue.type === 'credit_card'
+                ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700 ring-1 ring-blue-200 dark:ring-blue-700'
+                : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'"
+            >
+              <UiRadioGroupItem
+                id="payment-card"
+                value="credit_card"
+                class="mt-0.5 flex-shrink-0 border-slate-900 dark:border-slate-100 text-slate-900 dark:text-slate-100"
+              />
+              <div class="ml-3 flex items-center">
+                <span
+                  class="text-xl mr-2"
+                  role="img"
+                  :aria-label="$t('checkout.payment.creditCard.iconLabel')"
+                >💳</span>
+                <div>
+                  <p class="font-medium text-gray-900 dark:text-white cursor-pointer">
+                    {{ $t('checkout.payment.creditCard.label') }}
+                  </p>
+                  <p class="text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
+                    {{ $t('checkout.payment.creditCard.summary') }}
+                  </p>
+                </div>
               </div>
-            </div>
-          </UiLabel>
-        </div>
-      </UiRadioGroup>
+            </UiLabel>
+          </div>
+        </UiRadioGroup>
+      </div>
 
       <!-- Payment Form for Selected Method -->
       <div

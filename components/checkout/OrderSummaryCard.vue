@@ -42,7 +42,11 @@
     >
       <!-- Cart Items (Collapsed by default) -->
       <div class="mb-4">
-        <UiButton @click="showItems = !showItems">
+        <UiButton
+          :aria-expanded="showItems"
+          :aria-controls="showItems ? 'cart-items-list' : undefined"
+          @click="showItems = !showItems"
+        >
           <span>{{ showItems ? $t('checkout.hideItems', 'Hide items') : $t('checkout.showItems', 'Show items') }}</span>
           <svg
             class="w-4 h-4 transition-transform"
@@ -50,6 +54,7 @@
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -62,6 +67,8 @@
 
         <div
           v-show="showItems"
+          id="cart-items-list"
+          role="list"
           class="mt-3 space-y-3 max-h-64 overflow-y-auto"
         >
           <div
@@ -154,7 +161,11 @@
       <!-- Total -->
       <ClientOnly>
         <div class="mt-4 pt-4 border-t-2 border-gray-200 dark:border-gray-700">
-          <div class="flex justify-between items-center">
+          <div
+            class="flex justify-between items-center"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             <span class="text-base font-semibold text-gray-900 dark:text-white">
               {{ $t('common.total') }}
             </span>

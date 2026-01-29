@@ -3,47 +3,85 @@
     <div class="section-content">
       <!-- Terms Checkboxes -->
       <div class="space-y-3 mb-6">
+        <!-- Required field indicator -->
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          <span
+            class="text-red-500"
+            aria-hidden="true"
+          >*</span> {{ $t('checkout.requiredFields') }}
+        </p>
+
         <div class="flex items-start">
           <UiCheckbox
+            id="terms-checkbox"
             :checked="termsAccepted"
+            :aria-invalid="showTermsError"
+            :aria-describedby="showTermsError ? 'terms-error' : undefined"
+            :aria-required="true"
             class="mt-0.5"
             @update:model-value="$emit('update:termsAccepted', toBoolean($event))"
           />
           <span class="ml-2 text-sm text-gray-700 dark:text-gray-200">
-            {{ $t('checkout.review.acceptTerms') }}
-            <a
-              href="/terms"
-              target="_blank"
-              class="text-slate-600 dark:text-blue-400 hover:text-slate-700 dark:hover:text-blue-300 underline"
-            >
-              {{ $t('checkout.review.termsOfService') }}
-            </a>
             <span
-              v-if="showTermsError"
-              class="text-red-500 text-xs ml-1"
+              class="text-red-500"
+              aria-hidden="true"
             >*</span>
+            <span class="cursor-pointer">
+              {{ $t('checkout.review.acceptTerms') }}
+              <a
+                href="/terms"
+                target="_blank"
+                class="text-slate-600 dark:text-blue-400 hover:text-slate-700 dark:hover:text-blue-300 underline"
+              >
+                {{ $t('checkout.review.termsOfService') }}
+              </a>
+            </span>
+          </span>
+          <span
+            v-if="showTermsError"
+            id="terms-error"
+            role="alert"
+            aria-live="polite"
+            class="sr-only"
+          >
+            {{ $t('checkout.validation.termsRequired') }}
           </span>
         </div>
 
         <div class="flex items-start">
           <UiCheckbox
+            id="privacy-checkbox"
             :checked="privacyAccepted"
+            :aria-invalid="showPrivacyError"
+            :aria-describedby="showPrivacyError ? 'privacy-error' : undefined"
+            :aria-required="true"
             class="mt-0.5"
             @update:model-value="$emit('update:privacyAccepted', toBoolean($event))"
           />
           <span class="ml-2 text-sm text-gray-700 dark:text-gray-200">
-            {{ $t('checkout.review.acceptPrivacy') }}
-            <a
-              href="/privacy"
-              target="_blank"
-              class="text-slate-600 dark:text-blue-400 hover:text-slate-700 dark:hover:text-blue-300 underline"
-            >
-              {{ $t('checkout.review.privacyPolicy') }}
-            </a>
             <span
-              v-if="showPrivacyError"
-              class="text-red-500 text-xs ml-1"
+              class="text-red-500"
+              aria-hidden="true"
             >*</span>
+            <span class="cursor-pointer">
+              {{ $t('checkout.review.acceptPrivacy') }}
+              <a
+                href="/privacy"
+                target="_blank"
+                class="text-slate-600 dark:text-blue-400 hover:text-slate-700 dark:hover:text-blue-300 underline"
+              >
+                {{ $t('checkout.review.privacyPolicy') }}
+              </a>
+            </span>
+          </span>
+          <span
+            v-if="showPrivacyError"
+            id="privacy-error"
+            role="alert"
+            aria-live="polite"
+            class="sr-only"
+          >
+            {{ $t('checkout.validation.privacyRequired') }}
           </span>
         </div>
 

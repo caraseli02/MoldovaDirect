@@ -4,10 +4,10 @@
   >
     <div class="flex items-center justify-between mb-3">
       <span class="text-sm text-gray-600 dark:text-gray-400">{{ $t('common.total') }}</span>
-      <span class="text-lg font-bold text-rose-600 dark:text-rose-400">{{ formattedTotal }}</span>
+      <span class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ formattedTotal }}</span>
     </div>
     <UiButton
-      class="bg-rose-600 hover:bg-rose-700 text-white w-full min-h-[48px]"
+      class="bg-green-600 hover:bg-green-700 text-white w-full min-h-[48px]"
       :disabled="!canPlaceOrder || processingOrder"
       @click="$emit('place-order')"
     >
@@ -36,7 +36,7 @@
         </svg>
         {{ $t('checkout.processing') }}
       </span>
-      <span v-else>{{ $t('checkout.placeOrder') }}</span>
+      <span v-else>{{ $t('checkout.placeOrder') }} - {{ formattedTotal }}</span>
     </UiButton>
   </div>
 </template>

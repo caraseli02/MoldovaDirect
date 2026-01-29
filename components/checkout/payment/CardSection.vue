@@ -13,6 +13,7 @@
         v-if="stripeError"
         class="mt-2 text-sm text-destructive"
         role="alert"
+        aria-live="assertive"
       >
         {{ stripeError }}
       </p>
@@ -126,6 +127,9 @@ import { useStripe, formatStripeError } from '~/composables/useStripe'
 
 const { t } = useI18n()
 
+// Track component mount state to prevent race conditions
+const isMounted = ref(false)
+
 interface CardFormData {
   number: string
   expiryMonth: string
@@ -228,26 +232,30 @@ const emitUpdate = () => {
 
 // Initialize Stripe Elements
 const initializeStripeElements = async () => {
+  if (!isMounted.value) return
+
   try {
     initializationAttempted.value = true
     await initializeStripe()
 
     if (!stripeCardContainer.value) {
-      emit('stripe-ready', false)
+      if (isMounted.value) emit('stripe-ready', false)
       return
     }
 
     if (!elements.value) {
-      emit('stripe-ready', false)
+      if (isMounted.value) emit('stripe-ready', false)
       return
     }
 
     await createCardElement(stripeCardContainer.value)
-    emit('stripe-ready', true)
-    emitUpdate()
+    if (isMounted.value) {
+      emit('stripe-ready', true)
+      emitUpdate()
+    }
   }
   catch (error) {
-    emit('stripe-ready', false)
+    if (isMounted.value) emit('stripe-ready', false)
   }
 }
 
@@ -261,7 +269,9 @@ const handleRetry = async () => {
 
 // Watch for Stripe errors
 watch(stripeError, (error) => {
-  emit('stripe-error', error)
+  if (isMounted.value) {
+    emit('stripe-error', error)
+  }
 })
 
 // Watch for prop changes
@@ -273,11 +283,13 @@ watch(() => props.modelValue, (newValue) => {
 
 // Lifecycle
 onMounted(async () => {
+  isMounted.value = true
   await nextTick()
   await initializeStripeElements()
 })
 
 onUnmounted(() => {
+  isMounted.value = false
   if (cardElement.value) {
     cardElement.value.destroy()
   }

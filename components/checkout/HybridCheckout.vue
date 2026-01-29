@@ -1,5 +1,33 @@
 <template>
   <div class="hybrid-checkout">
+    <!-- Skip Navigation Link for Accessibility -->
+    <a
+      href="#checkout-main"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded focus:shadow-lg focus:ring-2 focus:ring-slate-500"
+    >
+      {{ $t('accessibility.skipToMainContent') }}
+    </a>
+    <a
+      href="#order-summary"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-16 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded focus:shadow-lg focus:ring-2 focus:ring-slate-500"
+    >
+      {{ $t('accessibility.skipToOrderSummary') }}
+    </a>
+
+    <!-- Live Regions for Dynamic Content Announcements -->
+    <div
+      aria-live="polite"
+      aria-atomic="true"
+      class="sr-only"
+    >
+      <template v-if="isAddressValid && !showShippingSectionLiveAnnounced">
+        {{ $t('checkout.shippingSectionAvailable') }}
+      </template>
+      <template v-if="selectedMethod && !showPaymentSectionLiveAnnounced">
+        {{ $t('checkout.paymentSectionAvailable') }}
+      </template>
+    </div>
+
     <!-- Express Checkout Banner for Returning Users -->
     <ExpressCheckoutBannerEnhanced
       v-if="showExpressCheckout"
@@ -15,6 +43,7 @@
     <!-- Main Checkout Form (shown when express is dismissed or for new users) -->
     <div
       v-show="!showExpressCheckout"
+      id="checkout-main"
       class="checkout-form-container"
     >
       <!-- Guest/Login Options (for non-authenticated users) -->
@@ -174,7 +203,10 @@
 
         <!-- Right Column: Sticky Order Summary -->
         <div class="lg:col-span-1">
-          <div class="sticky top-6">
+          <div
+            id="order-summary"
+            class="sticky top-6"
+          >
             <OrderSummaryCard
               :items="cartItems"
               :subtotal="subtotal"
@@ -348,6 +380,8 @@ const expressCheckoutDismissed = ref(false)
 const shippingInstructions = ref('')
 const stripeReady = ref(false)
 const stripeError = ref<string | null>(null)
+const showShippingSectionLiveAnnounced = ref(false)
+const showPaymentSectionLiveAnnounced = ref(false)
 
 // Payment state
 const paymentMethod = ref<PaymentMethod>({
@@ -446,6 +480,19 @@ const onStripeReady = (ready: boolean) => {
 const onStripeError = (error: string | null) => {
   stripeError.value = error
 }
+
+// Watch for section visibility changes and announce to screen readers
+watch(isAddressValid, (isValid) => {
+  if (isValid) {
+    showShippingSectionLiveAnnounced.value = true
+  }
+})
+
+watch(selectedMethod, (method) => {
+  if (method) {
+    showPaymentSectionLiveAnnounced.value = true
+  }
+})
 
 /**
  * Wrapper for handlePlaceOrder that validates forms and terms first
@@ -647,6 +694,17 @@ onMounted(async () => {
 @media (max-width: 1024px) {
   .checkout-form-container {
     padding-bottom: 120px;
+  }
+}
+
+/* Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in,
+  .checkout-section-highlight,
+  .section-complete,
+  * {
+    animation: none !important;
+    transition: none !important;
   }
 }
 </style>
