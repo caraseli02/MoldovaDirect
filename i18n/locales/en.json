@@ -69,6 +69,11 @@
     "items": "items",
     "proceedToCheckout": "Proceed to Checkout"
   },
+  "accessibility": {
+    "skipToMainContent": "Skip to main content",
+    "skipToOrderSummary": "Skip to order summary",
+    "opensInNewTab": "Opens in a new tab"
+  },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculated at checkout",
     "success": {

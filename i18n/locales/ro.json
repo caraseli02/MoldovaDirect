@@ -69,6 +69,11 @@
       "seconds": "s"
     }
   },
+  "accessibility": {
+    "skipToMainContent": "Treci la conținutul principal",
+    "skipToOrderSummary": "Treci la rezumatul comenzii",
+    "opensInNewTab": "Se deschide într-o filă nouă"
+  },
   "auth": {
     "signIn": "Autentificare",
     "signUp": "Înregistrare",

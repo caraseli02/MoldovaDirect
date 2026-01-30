@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-4">
-    <!-- Stripe Card Element - One field for card number, expiry, CVC -->
+    <!-- Stripe Card Element -->
     <div>
       <UiLabel class="mb-2 block text-sm font-medium dark:text-white">
         {{ $t('checkout.payment.cardDetails') }}
@@ -91,9 +91,7 @@
       class="flex items-center justify-center py-4"
     >
       <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-slate-600"></div>
-      <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
-        {{ $t('checkout.payment.loadingStripe') }}
-      </span>
+      <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ $t('checkout.payment.loadingStripe') }}</span>
     </div>
 
     <!-- Security Notice -->
@@ -127,9 +125,6 @@ import { useStripe, formatStripeError } from '~/composables/useStripe'
 
 const { t } = useI18n()
 
-// Track component mount state to prevent race conditions
-const isMounted = ref(false)
-
 interface CardFormData {
   number: string
   expiryMonth: string
@@ -150,13 +145,10 @@ interface Emits {
   (e: 'stripe-error', error: string | null): void
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  errors: () => ({}),
-})
-
+const props = withDefaults(defineProps<Props>(), { errors: () => ({}) })
 const emit = defineEmits<Emits>()
 
-// Stripe integration - using unified Card Element
+// Stripe integration
 const {
   stripe,
   elements,
@@ -173,6 +165,7 @@ const {
 const stripeCardContainer = ref<HTMLElement>()
 
 // Local state
+const isMounted = ref(false)
 const creditCardData = ref<CardFormData>({
   number: '',
   expiryMonth: '',
@@ -185,33 +178,16 @@ const validationErrors = ref<Record<string, string>>({})
 const initializationAttempted = ref(false)
 
 // Computed
-const stripeFailed = computed(() => {
-  return initializationAttempted.value && !!stripeError.value && retryCount.value >= 3
-})
-
-const getStripeErrorMessage = (error: unknown): string => {
-  if (error instanceof Error) {
-    return formatStripeError(error)
-  }
-  if (typeof error === 'string') {
-    return error
-  }
-  return t('checkout.payment.stripeLoadFailedMessage')
-}
+const stripeFailed = computed(() =>
+  initializationAttempted.value && !!stripeError.value && retryCount.value >= 3)
 
 const emitStripeError = (error: unknown) => {
   if (!isMounted.value) return
-  emit('stripe-error', getStripeErrorMessage(error))
+  emit('stripe-error', typeof error === 'string' ? error : error instanceof Error ? formatStripeError(error) : t('checkout.payment.stripeLoadFailedMessage'))
 }
 
-// Error helpers
-const hasError = (field: string): boolean => {
-  return !!(props.errors[field] || validationErrors.value[field])
-}
-
-const getError = (field: string): string => {
-  return props.errors[field] || validationErrors.value[field] || ''
-}
+const hasError = (field: string): boolean => !!(props.errors[field] || validationErrors.value[field])
+const getError = (field: string): string => props.errors[field] || validationErrors.value[field] || ''
 
 // Validation
 const validateHolderName = () => {
@@ -227,22 +203,13 @@ const validateHolderName = () => {
   return true
 }
 
-// Input handlers
 const onHolderNameInput = (event: Event) => {
-  const input = event.target as HTMLInputElement
-  creditCardData.value.holderName = input.value
+  creditCardData.value.holderName = (event.target as HTMLInputElement).value
   emitUpdate()
 }
 
 const emitUpdate = () => {
-  emit('update:modelValue', {
-    number: '', // Stripe handles this securely
-    expiryMonth: '', // Stripe handles this securely
-    expiryYear: '', // Stripe handles this securely
-    cvv: '', // Stripe handles this securely
-    holderName: creditCardData.value.holderName,
-    useStripeElements: true, // Flag to indicate Stripe Elements is handling card data
-  })
+  emit('update:modelValue', { number: '', expiryMonth: '', expiryYear: '', cvv: '', holderName: creditCardData.value.holderName, useStripeElements: true })
 }
 
 // Initialize Stripe Elements
@@ -293,9 +260,7 @@ const handleRetry = async () => {
 
 // Watch for Stripe errors
 watch(stripeError, (error) => {
-  if (isMounted.value) {
-    emit('stripe-error', error)
-  }
+  if (isMounted.value) emit('stripe-error', error)
 })
 
 // Watch for prop changes
@@ -314,9 +279,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   isMounted.value = false
-  if (cardElement.value) {
-    cardElement.value.destroy()
-  }
+  if (cardElement.value) cardElement.value.destroy()
 })
 
 // Expose methods
@@ -331,12 +294,7 @@ defineExpose({
 </script>
 
 <style scoped>
-/* Stripe Card Element container - minimal styling */
-.stripe-card-element {
-  width: 100%;
-}
-
-/* Global styles for Stripe elements (not scoped) */
+.stripe-card-element { width: 100%; }
 </style>
 
 <style>
@@ -350,30 +308,20 @@ defineExpose({
   background-color: white;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-
 .stripe-element-focus {
   border-color: #4f46e5;
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
   outline: none;
 }
-
-.stripe-element-invalid {
-  border-color: #ef4444;
-}
-
-/* Dark mode support */
+.stripe-element-invalid { border-color: #ef4444; }
 .dark .stripe-element-base {
   background-color: #1f2937;
   border-color: #4b5563;
   color: white;
 }
-
 .dark .stripe-element-focus {
   border-color: #6366f1;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
-
-.dark .stripe-element-invalid {
-  border-color: #ef4444;
-}
+.dark .stripe-element-invalid { border-color: #ef4444; }
 </style>
