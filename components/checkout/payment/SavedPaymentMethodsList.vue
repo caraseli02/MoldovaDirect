@@ -6,7 +6,7 @@
 
     <UiRadioGroup
       :model-value="selectedId"
-      @update:model-value="$emit('select', $event)"
+      @update:model-value="emitSelectedMethod"
     >
       <div class="space-y-3">
         <div
@@ -17,7 +17,7 @@
             'border-blue-500 bg-blue-50 dark:bg-blue-900/20': selectedId === savedMethod.id,
             'hover:border-gray-300 dark:hover:border-gray-600': selectedId !== savedMethod.id,
           }"
-          @click="$emit('select', savedMethod)"
+          @click="emitSelectedMethod(savedMethod)"
         >
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
@@ -74,12 +74,22 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'select', value: string | SavedPaymentMethod): void
+  (e: 'select', value: SavedPaymentMethod): void
   (e: 'use-new'): void
 }
 
-defineProps<Props>()
-defineEmits<Emits>()
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const emitSelectedMethod = (value: string | SavedPaymentMethod) => {
+  if (typeof value === 'string') {
+    const selectedMethod = props.savedMethods.find(method => method.id === value)
+    if (selectedMethod) emit('select', selectedMethod)
+    return
+  }
+
+  emit('select', value)
+}
 
 const getPaymentMethodIcon = (type: string) => {
   if (type === 'credit_card') return 'lucide:credit-card'

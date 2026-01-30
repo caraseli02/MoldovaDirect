@@ -346,12 +346,50 @@ export class CriticalTestHelpers {
   }
 
   /**
-   * Navigate to checkout page using server-side navigation
-   * Note: This may lose Pinia state - use navigateToCheckoutClientSide() instead
+   * Navigate to checkout page using client-side navigation
+   * This preserves Pinia state (cart items, etc.) during navigation
+   *
+   * IMPORTANT: Uses client-side navigation instead of page.goto() to avoid
+   * losing Pinia state. The full page reload from page.goto() causes cart
+   * items to be lost even though they're saved to cookies with debouncing.
    */
   async goToCheckout(): Promise<void> {
-    await this.page.goto('/checkout')
-    await this.page.waitForURL(/\/checkout/, { timeout: 5000 })
+    // First ensure we're on a page with cart navigation
+    const currentUrl = this.page.url()
+    if (!currentUrl.includes('/products') && !currentUrl.includes('/cart')) {
+      // Navigate to products page first if we're elsewhere
+      await this.page.goto('/products', { waitUntil: 'domcontentloaded' })
+      await this.page.waitForLoadState('networkidle')
+    }
+
+    // Use client-side navigation to preserve Pinia state
+    // Click cart link to navigate to cart page
+    const cartLink = this.page.locator('a[href*="/cart"]').first()
+    await cartLink.waitFor({ state: 'visible', timeout: 5000 })
+    await cartLink.click()
+    await this.page.waitForURL(/\/cart/, { timeout: 10000 })
+    await this.page.waitForLoadState('networkidle')
+
+    // Click checkout button to navigate to checkout
+    const checkoutButton = this.page.locator(
+      'button:has-text("Finalizar"), button:has-text("Checkout"), button:has-text("Оформить")',
+    ).first()
+
+    try {
+      await checkoutButton.waitFor({ state: 'attached', timeout: 5000 })
+      await this.page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+      await this.page.waitForTimeout(500)
+      await checkoutButton.evaluate((el: HTMLElement) => el.click())
+    }
+    catch {
+      // Button might not exist if cart is empty, or text differs
+      // Try direct navigation as fallback
+      await this.page.goto('/checkout')
+    }
+
+    await this.page.waitForURL(/\/checkout/, { timeout: 10000 })
+    await this.page.waitForLoadState('networkidle')
+    await this.page.waitForTimeout(500) // Allow Vue components to mount
   }
 
   /**

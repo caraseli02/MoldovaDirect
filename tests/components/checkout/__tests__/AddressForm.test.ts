@@ -37,8 +37,8 @@ describe('AddressForm', () => {
       },
       global: {
         stubs: {
-          CheckoutSavedAddressesList: { template: '<div class="saved-addresses-stub"></div>' },
-          CheckoutAddressFormFields: { template: '<div class="form-fields-stub"></div>' },
+          SavedAddressesList: { template: '<div class="saved-addresses-stub"></div>' },
+          AddressFormFields: { template: '<div class="form-fields-stub"></div>' },
         },
       },
     })
@@ -54,8 +54,8 @@ describe('AddressForm', () => {
       },
       global: {
         stubs: {
-          CheckoutSavedAddressesList: { template: '<div class="saved-addresses-stub"></div>' },
-          CheckoutAddressFormFields: {
+          SavedAddressesList: { template: '<div class="saved-addresses-stub"></div>' },
+          AddressFormFields: {
             template: '<div class="form-fields-stub"><input type="text" /><input type="text" /></div>',
           },
         },
@@ -72,8 +72,8 @@ describe('AddressForm', () => {
       },
       global: {
         stubs: {
-          CheckoutSavedAddressesList: { template: '<div class="saved-addresses-stub"></div>' },
-          CheckoutAddressFormFields: { template: '<div class="form-fields-stub"></div>' },
+          SavedAddressesList: { template: '<div class="saved-addresses-stub"></div>' },
+          AddressFormFields: { template: '<div class="form-fields-stub"></div>' },
         },
       },
     })
@@ -88,8 +88,8 @@ describe('AddressForm', () => {
       },
       global: {
         stubs: {
-          CheckoutSavedAddressesList: { template: '<div class="saved-addresses-stub"></div>' },
-          CheckoutAddressFormFields: {
+          SavedAddressesList: { template: '<div class="saved-addresses-stub"></div>' },
+          AddressFormFields: {
             template: '<div class="form-fields-stub"><input @input="$emit(\'update:modelValue\', $event.target.value)" /></div>',
           },
         },
@@ -111,8 +111,8 @@ describe('AddressForm', () => {
       },
       global: {
         stubs: {
-          CheckoutSavedAddressesList: { template: '<div class="saved-addresses-stub"></div>' },
-          CheckoutAddressFormFields: { template: '<div class="form-fields-stub"></div>' },
+          SavedAddressesList: { template: '<div class="saved-addresses-stub"></div>' },
+          AddressFormFields: { template: '<div class="form-fields-stub"></div>' },
         },
       },
     })
@@ -127,8 +127,8 @@ describe('AddressForm', () => {
       },
       global: {
         stubs: {
-          CheckoutSavedAddressesList: { template: '<div class="saved-addresses-stub"></div>' },
-          CheckoutAddressFormFields: {
+          SavedAddressesList: { template: '<div class="saved-addresses-stub"></div>' },
+          AddressFormFields: {
             template: '<div class="form-fields-stub"><input autocomplete="name" /><input autocomplete="street-address" /></div>',
           },
         },

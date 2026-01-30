@@ -32,10 +32,16 @@ test.describe('Critical Checkout Flows - Guest', () => {
       { timeout: TIMEOUTS.STANDARD },
     )
 
-    // Checkout form or guest prompt should be visible
-    const checkoutForm = page.locator(SELECTORS.CHECKOUT_FORM)
-    const guestPrompt = page.locator(SELECTORS.GUEST_PROMPT)
+    // Wait for page to fully render
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(TIMEOUTS.SHORT)
 
+    // Checkout form or guest prompt should be visible
+    // Use more specific selectors that match the actual component structure
+    const checkoutForm = page.locator('.checkout-form-container')
+    const guestPrompt = page.locator('[data-testid="guest-checkout-prompt"]')
+
+    // Check for either form or prompt with explicit wait
     const formVisible = await checkoutForm.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)
     const promptVisible = await guestPrompt.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)
 
@@ -67,9 +73,13 @@ test.describe('Critical Checkout Flows - Guest', () => {
       { timeout: TIMEOUTS.STANDARD },
     )
 
+    // Wait for page to fully render
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(TIMEOUTS.SHORT)
+
     // Should see either express checkout banner OR checkout form
-    const expressBanner = page.locator(SELECTORS.EXPRESS_BANNER)
-    const checkoutForm = page.locator(SELECTORS.CHECKOUT_FORM)
+    const expressBanner = page.locator('[data-testid="express-checkout-banner"]')
+    const checkoutForm = page.locator('.checkout-form-container')
 
     const bannerVisible = await expressBanner.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)
     const formVisible = await checkoutForm.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)
@@ -101,16 +111,19 @@ test.describe('Critical Checkout Flows - Guest', () => {
     await page.waitForTimeout(TIMEOUTS.SHORT)
 
     // Handle guest prompt if shown
-    const guestPrompt = page.locator(SELECTORS.GUEST_PROMPT)
+    const guestPrompt = page.locator('[data-testid="guest-checkout-prompt"]')
     if (await guestPrompt.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
-      await page.locator(SELECTORS.CONTINUE_AS_GUEST).click()
+      await page.locator('[data-testid="continue-as-guest"]').click()
       // Wait for sections to render after clicking continue
       await page.waitForTimeout(TIMEOUTS.SHORT)
     }
 
+    // Wait for checkout container to be visible
+    await page.waitForSelector('.checkout-form-container', { state: 'visible', timeout: TIMEOUTS.STANDARD }).catch(() => {})
+
     // Order summary or checkout section should be visible
-    const orderSummary = page.locator(SELECTORS.ORDER_SUMMARY)
-    const checkoutSection = page.locator(SELECTORS.CHECKOUT_SECTION)
+    const orderSummary = page.locator('[data-testid="order-summary"]')
+    const checkoutSection = page.locator('.checkout-section')
 
     // Wait for at least one element to be visible
     const summaryVisible = await orderSummary.isVisible({ timeout: TIMEOUTS.STANDARD }).catch(() => false)
@@ -130,6 +143,7 @@ test.describe('Critical Checkout Flows - Guest', () => {
 
     // Wait for page to be ready
     await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(TIMEOUTS.SHORT)
 
     // Should be on checkout page or redirected appropriately
     const url = page.url()
@@ -137,11 +151,14 @@ test.describe('Critical Checkout Flows - Guest', () => {
 
     if (isOnCheckout) {
       // Handle guest prompt if shown
-      const guestPrompt = page.locator(SELECTORS.GUEST_PROMPT)
+      const guestPrompt = page.locator('[data-testid="guest-checkout-prompt"]')
       if (await guestPrompt.isVisible({ timeout: TIMEOUTS.SHORT }).catch(() => false)) {
-        await page.locator(SELECTORS.CONTINUE_AS_GUEST).click()
+        await page.locator('[data-testid="continue-as-guest"]').click()
         await page.waitForTimeout(TIMEOUTS.VERY_SHORT)
       }
+
+      // Wait for form to be visible before checking for elements
+      await page.waitForSelector('.checkout-form-container', { state: 'visible', timeout: TIMEOUTS.STANDARD }).catch(() => {})
 
       // Look for any interactive elements (form elements or buttons)
       const interactiveElements = page.locator('input, select, button, textarea')

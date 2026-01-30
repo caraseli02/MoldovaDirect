@@ -69,6 +69,11 @@
       "seconds": "s"
     }
   },
+  "accessibility": {
+    "skipToMainContent": "Saltar al contenido principal",
+    "skipToOrderSummary": "Saltar al resumen del pedido",
+    "opensInNewTab": "Abre en una nueva pestaña"
+  },
   "cart": {
     "shippingCalculatedAtCheckout": "Calculado al finalizar",
     "success": {

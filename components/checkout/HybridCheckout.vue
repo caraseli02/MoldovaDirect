@@ -54,11 +54,12 @@
             :guest-errors="guestErrors"
             @continue-as-guest="continueAsGuest"
             @update:guest-info="guestInfo = $event"
-            @validate-guest="validateGuestField"
-            @clear-guest-error="clearGuestFieldError"
+            @validate-guest="handleValidateGuest"
+            @clear-guest-error="handleClearGuestError"
           />
 
           <CheckoutShippingSection
+            ref="shippingSectionRef"
             :step-number="user ? 1 : 2"
             :user="user"
             :shipping-address="shippingAddress"
@@ -165,6 +166,13 @@ import type { PaymentMethod } from '~/types/checkout'
 import type { ValidatableForm, PaymentForm } from '~/composables/useCheckoutOrder'
 import { useCheckoutInit } from '~/composables/checkout/useCheckoutInit'
 import { useCheckoutState } from '~/composables/checkout/useCheckoutState'
+import CheckoutGuestSection from '~/components/checkout/hybrid/GuestSection.vue'
+import CheckoutShippingSection from '~/components/checkout/hybrid/ShippingSection.vue'
+import CheckoutPaymentSection from '~/components/checkout/hybrid/PaymentSection.vue'
+import CheckoutTermsSection from '~/components/checkout/hybrid/TermsSection.vue'
+import CheckoutMobileFooter from '~/components/checkout/hybrid/MobileFooter.vue'
+import OrderSummaryCard from '~/components/checkout/OrderSummaryCard.vue'
+import ExpressCheckoutBannerEnhanced from '~/components/checkout/ExpressCheckoutBannerEnhanced.vue'
 
 const localePath = useLocalePath()
 const user = useSupabaseUser()
@@ -175,6 +183,7 @@ const toast = useToast()
 // Component refs
 const addressFormRef = ref<ValidatableForm | null>(null)
 const paymentSectionRef = ref<PaymentForm | null>(null)
+const shippingSectionRef = ref<{ addressFormRef: ValidatableForm | null } | null>(null)
 
 // Guest checkout
 const {
@@ -295,6 +304,10 @@ const {
   paymentSectionRef,
 })
 
+watchEffect(() => {
+  addressFormRef.value = shippingSectionRef.value?.addressFormRef ?? null
+})
+
 // Methods
 const dismissExpressCheckout = () => {
   expressCheckoutDismissed.value = true
@@ -311,6 +324,10 @@ const onStripeReady = (ready: boolean) => {
 const onStripeError = (error: string | null) => {
   stripeError.value = error
 }
+
+// Wrapper functions to match emit signatures (accept string instead of keyof GuestInfo)
+const handleValidateGuest = (field: string) => validateGuestField(field as keyof GuestInfo)
+const handleClearGuestError = (field: string) => clearGuestFieldError(field)
 
 const handlePlaceOrderWithValidation = async () => {
   if (!validateTerms()) {

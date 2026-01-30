@@ -35,12 +35,15 @@
 
 <script setup lang="ts">
 import type { GuestInfo } from '~/composables/useGuestCheckout'
+import type { User } from '@supabase/supabase-js'
+import GuestCheckoutPrompt from '~/components/checkout/GuestCheckoutPrompt.vue'
+import GuestInfoForm from '~/components/checkout/GuestInfoForm.vue'
 
 interface Props {
-  user: ReturnType<typeof useSupabaseUser>
+  user: User | null
   showGuestForm: boolean
   guestInfo: GuestInfo
-  guestErrors: Ref<Record<string, string>>
+  guestErrors: Record<string, string>
 }
 
 interface Emits {

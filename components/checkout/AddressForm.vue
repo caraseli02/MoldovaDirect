@@ -17,7 +17,7 @@
     </div>
 
     <!-- Saved Addresses (for authenticated users) -->
-    <CheckoutSavedAddressesList
+    <SavedAddressesList
       :saved-addresses="savedAddresses"
       :selected-id="selectedSavedAddressId"
       :type="type"
@@ -27,7 +27,7 @@
     />
 
     <!-- Address Form Fields -->
-    <CheckoutAddressFormFields
+    <AddressFormFields
       v-if="showForm"
       :address="localAddress"
       :field-errors="fieldErrors"
@@ -49,6 +49,8 @@
 import type { Address } from '~/types/address'
 import type { AddressSuggestion } from '~/composables/checkout/useAddressAutocomplete'
 import { useAddressAutocomplete } from '~/composables/checkout/useAddressAutocomplete'
+import SavedAddressesList from '~/components/checkout/address/SavedAddressesList.vue'
+import AddressFormFields from '~/components/checkout/address/AddressFormFields.vue'
 
 // Extended Address type for checkout with optional UI fields
 interface CheckoutAddress extends Address {

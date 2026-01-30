@@ -254,6 +254,7 @@
 
 <script setup lang="ts">
 import type { ShippingMethod } from '~/types/checkout'
+import ShippingMethodCard from '~/components/checkout/shipping/ShippingMethodCard.vue'
 
 interface Props {
   modelValue: ShippingMethod | null

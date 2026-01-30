@@ -69,6 +69,11 @@
       "seconds": "с"
     }
   },
+  "accessibility": {
+    "skipToMainContent": "Перейти к основному содержимому",
+    "skipToOrderSummary": "Перейти к сводке заказа",
+    "opensInNewTab": "Открывается в новой вкладке"
+  },
   "cart": {
     "shippingCalculatedAtCheckout": "Рассчитывается при оформлении",
     "success": {
