@@ -104,7 +104,7 @@
 <script setup lang="ts">
 import type { Address, ShippingMethod } from '~/types/checkout'
 import type { ValidatableForm } from '~/composables/useCheckoutOrder'
-import type { User } from '@supabase/supabase-js'
+import type { User, JwtPayload } from '@supabase/supabase-js'
 import AddressForm from '~/components/checkout/AddressForm.vue'
 import ShippingMethodSelector from '~/components/checkout/ShippingMethodSelector.vue'
 import ShippingInstructions from '~/components/checkout/ShippingInstructions.vue'
@@ -117,7 +117,7 @@ interface Country {
 
 interface Props {
   stepNumber: number
-  user: User | null
+  user: User | JwtPayload | null
   shippingAddress: Address
   savedAddresses: readonly Address[]
   availableCountries: Country[]
