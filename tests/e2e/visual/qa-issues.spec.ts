@@ -277,7 +277,7 @@ test.describe('QA Issues Visual Review', () => {
 })
 
 // Generate report after all tests
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
+
 test.afterAll(async () => {
   const reportPath = generateVisualReport(FEATURE)
   console.log(`\n✅ QA visual tests complete!`)
