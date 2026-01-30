@@ -7,8 +7,7 @@
         @update:model-value="$emit('update:modelValue', { type: $event as PaymentMethod['type'], saveForFuture: false })"
       >
         <div
-          class="border border-green-200 dark:border-green-700 rounded-lg p-4 bg-green-50 dark:bg-green-900/20 cursor-pointer"
-          @click="$emit('update:modelValue', { type: 'cash', saveForFuture: false })"
+          class="border border-green-200 dark:border-green-700 rounded-lg p-4 bg-green-50 dark:bg-green-900/20"
         >
           <div class="flex items-center space-x-3">
             <UiRadioGroupItem

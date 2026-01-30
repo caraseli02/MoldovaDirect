@@ -6,7 +6,7 @@
  * @see {CODE_DESIGN_PRINCIPLES.md} Three-layer separation
  */
 
-import { ref, type Ref, onUnmounted } from 'vue'
+import { ref, type Ref } from 'vue'
 import type { Address, PaymentMethod, ShippingInformation, ShippingMethod } from '~/types/checkout'
 import { useCheckoutStore } from '~/stores/checkout'
 import { useCheckoutSessionStore } from '~/stores/checkout/session'
@@ -61,12 +61,18 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
 
   // State
   const processingOrder = ref(false)
-  const navigationTimeout = ref<ReturnType<typeof setTimeout> | null>(null)
+  const paymentCompleted = ref(false)
 
   /**
    * Process order and navigate to confirmation
    */
   const processOrder = async (): Promise<void> => {
+    // Prevent double-payment if already completed
+    if (paymentCompleted.value) {
+      toast.info(t('checkout.errors.orderAlreadyCompleted', 'Your order has already been processed.'))
+      return
+    }
+
     checkoutStore.setTermsAccepted(true)
     checkoutStore.setPrivacyAccepted(true)
     checkoutStore.setMarketingConsent(marketingConsent.value)
@@ -95,17 +101,17 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
       throw paymentError
     }
 
+    // Mark payment as completed before navigation
+    paymentCompleted.value = true
+
     try {
       await navigateTo(localePath('/checkout/confirmation'))
     }
     catch (navError: unknown) {
       const checkoutError = createSystemError('Navigation failed after payment', CheckoutErrorCode.SYSTEM_ERROR)
       logCheckoutError(checkoutError, { sessionId: checkoutStore.sessionId ?? undefined, step: 'navigation' }, navError)
-      toast.warning(t('checkout.success.orderCompleted'), t('checkout.errors.redirectManually', 'Please navigate to your orders to see confirmation.'))
-      navigationTimeout.value = setTimeout(() => {
-        window.location.href = localePath('/checkout/confirmation')
-      }, 2000)
-      throw new Error('Payment succeeded but navigation failed', { cause: navError })
+      // Payment succeeded - don't throw error, just show success message
+      toast.success(t('checkout.success.orderCompleted'), t('checkout.errors.redirectManually', 'Please navigate to your orders to see confirmation.'))
     }
   }
 
@@ -236,11 +242,6 @@ export function useCheckoutOrder(options: CheckoutOrderOptions) {
 
     return true
   }
-
-  // Cleanup
-  onUnmounted(() => {
-    if (navigationTimeout.value) clearTimeout(navigationTimeout.value)
-  })
 
   return {
     processingOrder,
