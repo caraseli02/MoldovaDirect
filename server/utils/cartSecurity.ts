@@ -6,20 +6,19 @@
  * - Rate limiting utilities
  * - CSRF token management (imported from csrfProtection.ts)
  * - Input sanitization
- *
- * NOTE: CSRF functions (generateCSRFToken, validateCSRFToken, cleanupExpiredCSRFTokens)
- * are imported from csrfProtection.ts to avoid duplication
  */
 
 import { z } from 'zod'
 import crypto from 'crypto'
 import {
+  generateCSRFToken as generateCSRFTokenImport,
   validateCSRFToken as validateCSRFTokenImport,
   cleanupExpiredCSRFTokens as cleanupExpiredCSRFTokensImport,
 } from './csrfProtection'
 
-// Re-export CSRF functions from csrfProtection.ts for backward compatibility
-export { generateCSRFToken, cleanupExpiredCSRFTokens } from './csrfProtection'
+// Re-export CSRF functions from csrfProtection.ts for convenience
+export const generateCSRFToken = generateCSRFTokenImport
+export const cleanupExpiredCSRFTokens = cleanupExpiredCSRFTokensImport
 
 // Wrapper for validateCSRFToken to maintain API compatibility
 // The csrfProtection version returns { valid: boolean, reason?: string }
@@ -221,7 +220,7 @@ export const securityHeaders = {
  * Periodic cleanup function (should be called by a cron job or similar)
  */
 export function performSecurityCleanup(): void {
-  cleanupExpiredCSRFTokensImport()
+  cleanupExpiredCSRFTokens()
   cleanupExpiredRateLimits()
 }
 
