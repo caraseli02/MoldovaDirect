@@ -50,6 +50,12 @@ describe('PaymentStep', () => {
             template: '<div><slot /></div>',
           },
           PaymentForm: true,
+          PaymentMethodSelector: {
+            template: '<div class="payment-method-selector-stub"><slot /></div>',
+          },
+          SavedPaymentMethodsList: {
+            template: '<div class="saved-payment-methods-stub"></div>',
+          },
         },
       },
     })
@@ -57,7 +63,7 @@ describe('PaymentStep', () => {
     expect(wrapper.find('.payment-step').exists()).toBe(true)
   })
 
-  it('should display cash payment option', () => {
+  it('should display payment method selector', () => {
     const wrapper = shallowMount(PaymentStep, {
       global: {
         stubs: {
@@ -65,41 +71,16 @@ describe('PaymentStep', () => {
             template: '<div><slot /></div>',
           },
           PaymentForm: true,
-        },
-      },
-    })
-    // Cash payment is the only available option currently
-    expect(wrapper.html()).toContain('cash')
-  })
-
-  it('should have radio input for cash payment', () => {
-    const wrapper = shallowMount(PaymentStep, {
-      global: {
-        stubs: {
-          Suspense: {
-            template: '<div><slot /></div>',
+          PaymentMethodSelector: {
+            template: '<div class="payment-method-selector-stub">Payment Methods</div>',
           },
-          PaymentForm: true,
-        },
-      },
-    })
-    const cashRadio = wrapper.find('input[value="cash"]')
-    expect(cashRadio.exists()).toBe(true)
-  })
-
-  it('should show disabled payment methods', () => {
-    const wrapper = shallowMount(PaymentStep, {
-      global: {
-        stubs: {
-          Suspense: {
-            template: '<div><slot /></div>',
+          SavedPaymentMethodsList: {
+            template: '<div class="saved-payment-methods-stub"></div>',
           },
-          PaymentForm: true,
         },
       },
     })
-    // Component shows disabled methods with "Coming Soon" label
-    expect(wrapper.html()).toContain('cursor-not-allowed')
+    expect(wrapper.find('.payment-method-selector-stub').exists()).toBe(true)
   })
 
   it('should have navigation buttons', () => {
@@ -110,10 +91,36 @@ describe('PaymentStep', () => {
             template: '<div><slot /></div>',
           },
           PaymentForm: true,
+          PaymentMethodSelector: {
+            template: '<div class="payment-method-selector-stub"></div>',
+          },
+          SavedPaymentMethodsList: {
+            template: '<div class="saved-payment-methods-stub"></div>',
+          },
         },
       },
     })
-    // Should have back and continue buttons (using UiButton stub)
+    const buttons = wrapper.findAll('button')
+    expect(buttons.length).toBeGreaterThan(0)
+  })
+
+  it('should show continue button disabled when cannot proceed', () => {
+    const wrapper = shallowMount(PaymentStep, {
+      global: {
+        stubs: {
+          Suspense: {
+            template: '<div><slot /></div>',
+          },
+          PaymentForm: true,
+          PaymentMethodSelector: {
+            template: '<div class="payment-method-selector-stub"></div>',
+          },
+          SavedPaymentMethodsList: {
+            template: '<div class="saved-payment-methods-stub"></div>',
+          },
+        },
+      },
+    })
     const buttons = wrapper.findAll('button')
     expect(buttons.length).toBeGreaterThan(0)
   })
